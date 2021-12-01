@@ -16,9 +16,9 @@ export function HotReloadClass(module: NodeModule): ClassDecorator {
 
       let previousPrototypes: Map<string, Prototype>;
 
-      const moduleHotData = module.hot.data as ModuleHotData;
+      const moduleHotData = module.hot.data as ModuleHotData | undefined;
 
-      if (moduleHotData.previousPrototypes) {
+      if (moduleHotData?.previousPrototypes) {
         previousPrototypes = moduleHotData.previousPrototypes;
       } else {
         previousPrototypes = new Map<string, Prototype>();
@@ -39,6 +39,34 @@ export function HotReloadClass(module: NodeModule): ClassDecorator {
       }
 
       previousPrototypes.set(targetName, targetPrototype);
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const overridenClass = class extends Target {
+        constructor(...args: unknown[]) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+          super(...args);
+          if (!window.hotReloadedClassInstances) {
+            window.hotReloadedClassInstances = {};
+          }
+
+          if (!window.hotReloadedClassInstances[module.id]) {
+            window.hotReloadedClassInstances[module.id] = {};
+          }
+
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          window.hotReloadedClassInstances[module.id]![targetName] = [
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            ...(window.hotReloadedClassInstances[module.id]![targetName] || []),
+            this,
+          ];
+        }
+      };
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
+      return overridenClass as any;
     }
+
+    return undefined;
   };
 }

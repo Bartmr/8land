@@ -54,7 +54,7 @@ export class LandScene extends Phaser.Scene {
     this.load.image('tileset', 'land-scene-tileset.png');
     this.load.tilemapTiledJSON('map', 'land-scene-map.json');
 
-    this.load.spritesheet('player', 'assets/player.png', {
+    this.load.spritesheet('player', 'player.png', {
       frameWidth: 16,
       frameHeight: 16,
     });
