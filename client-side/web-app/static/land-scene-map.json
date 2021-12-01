@@ -1,0 +1,660 @@
+{
+  "compressionlevel": -1,
+  "height": 9,
+  "infinite": false,
+  "layers": [
+    {
+      "data": [
+        263, 263, 263, 263, 263, 263, 263, 263, 263, 263, 263, 26, 26, 26, 26,
+        26, 26, 26, 56, 263, 263, 26, 26, 26, 26, 26, 26, 26, 56, 263, 263, 26,
+        26, 26, 26, 26, 26, 26, 56, 263, 263, 26, 26, 26, 26, 26, 26, 26, 56,
+        263, 263, 26, 26, 26, 26, 26, 26, 26, 56, 263, 263, 223, 223, 223, 223,
+        223, 223, 223, 223, 263, 263, 243, 243, 243, 243, 243, 243, 243, 243,
+        263, 263, 263, 263, 263, 263, 263, 263, 263, 263, 263
+      ],
+      "height": 9,
+      "id": 1,
+      "name": "Tile Layer 1",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 10,
+      "x": 0,
+      "y": 0
+    }
+  ],
+  "nextlayerid": 2,
+  "nextobjectid": 1,
+  "orientation": "orthogonal",
+  "properties": [
+    {
+      "name": "collision",
+      "type": "bool",
+      "value": true
+    }
+  ],
+  "renderorder": "right-down",
+  "tiledversion": "1.7.2",
+  "tileheight": 16,
+  "tilesets": [
+    {
+      "columns": 20,
+      "firstgid": 1,
+      "image": "land-scene-tileset.png",
+      "imageheight": 288,
+      "imagewidth": 320,
+      "margin": 0,
+      "name": "land-scene-tileset",
+      "spacing": 0,
+      "tilecount": 360,
+      "tileheight": 16,
+      "tiles": [
+        {
+          "id": 15,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 17,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 35,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 36,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 37,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 55,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 56,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 57,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 75,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 76,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 77,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 96,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 97,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 116,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 117,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 136,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 137,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 156,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 157,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 176,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 177,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 196,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 197,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 216,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 217,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 236,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 237,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 242,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 243,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 244,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 245,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 246,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 247,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 248,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 249,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 250,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 251,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 252,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 253,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 254,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 255,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 256,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 257,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 262,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 263,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 264,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 265,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 266,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 267,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 268,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 269,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 270,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 271,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 272,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 273,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 274,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 275,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 276,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 277,
+          "properties": [
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "tilewidth": 16
+    }
+  ],
+  "tilewidth": 16,
+  "type": "map",
+  "version": "1.6",
+  "width": 10
+}

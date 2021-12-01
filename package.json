@@ -69,6 +69,7 @@
     "glob": "^7.2.0",
     "not-me": "^4.3.3",
     "pg": "^8.7.1",
+    "phaser": "^3.55.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.4.0",
@@ -78,6 +79,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.16.4",
     "@nestjs/cli": "^8.1.2",
     "@nestjs/schematics": "^8.0.3",
     "@nestjs/testing": "^8.0.11",
