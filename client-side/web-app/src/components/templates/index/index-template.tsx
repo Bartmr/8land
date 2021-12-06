@@ -4,9 +4,14 @@ import { INDEX_ROUTE } from './index-routes';
 
 function Content() {
   const [started, replaceStarted] = useState(false);
+
   useEffect(() => {
     (async () => {
-      if (!started) {
+      if (started) {
+        if (module.hot) {
+          import('./game');
+        }
+      } else {
         replaceStarted(true);
 
         const { runGame } = await import('./game');
@@ -14,8 +19,19 @@ function Content() {
         await runGame();
       }
     })();
-  }, []);
-  return <div id="game-root"></div>;
+  });
+
+  return (
+    <div className="row justify-content-center">
+      <div className="col-12 col-md-9 col-lg-6">
+        <div id="game-root"></div>
+        <div
+          id="youtube-player"
+          style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}
+        ></div>
+      </div>
+    </div>
+  );
 }
 
 export const IndexTemplate = () => (

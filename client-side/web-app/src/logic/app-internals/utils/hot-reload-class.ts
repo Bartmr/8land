@@ -1,7 +1,7 @@
 type Prototype = { [key: string]: unknown };
 
 type ModuleHotData = {
-  previousPrototypes?: Map<string, Prototype>;
+  firstPrototypes?: Map<string, Prototype>;
 };
 
 export function HotReloadClass(module: NodeModule): ClassDecorator {
@@ -14,31 +14,31 @@ export function HotReloadClass(module: NodeModule): ClassDecorator {
         throw new Error();
       }
 
-      let previousPrototypes: Map<string, Prototype>;
+      let firstPrototypes: Map<string, Prototype>;
 
       const moduleHotData = module.hot.data as ModuleHotData | undefined;
 
-      if (moduleHotData?.previousPrototypes) {
-        previousPrototypes = moduleHotData.previousPrototypes;
+      if (moduleHotData?.firstPrototypes) {
+        firstPrototypes = moduleHotData.firstPrototypes;
       } else {
-        previousPrototypes = new Map<string, Prototype>();
+        firstPrototypes = new Map<string, Prototype>();
       }
 
       module.hot.dispose((data: ModuleHotData) => {
-        data.previousPrototypes = previousPrototypes;
+        data.firstPrototypes = firstPrototypes;
       });
 
-      const previousPrototype = previousPrototypes.get(targetName);
+      const firstPrototype = firstPrototypes.get(targetName);
 
-      if (previousPrototype) {
+      if (firstPrototype) {
         Object.getOwnPropertyNames(targetPrototype).forEach((k) => {
           const value = targetPrototype[k];
 
-          previousPrototype[k] = value;
+          firstPrototype[k] = value;
         });
+      } else {
+        firstPrototypes.set(targetName, targetPrototype);
       }
-
-      previousPrototypes.set(targetName, targetPrototype);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let overridenClass: any;
