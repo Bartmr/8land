@@ -40,31 +40,26 @@ export function HotReloadClass(module: NodeModule): ClassDecorator {
 
       previousPrototypes.set(targetName, targetPrototype);
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const overridenClass = class extends Target {
-        constructor(...args: unknown[]) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let overridenClass: any;
+
+      // eslint-disable-next-line no-eval
+      eval(`overridenClass = class ${targetName} extends Target {
+        constructor(...args) {
           super(...args);
           if (!window.hotReloadedClassInstances) {
             window.hotReloadedClassInstances = {};
           }
 
-          if (!window.hotReloadedClassInstances[module.id]) {
-            window.hotReloadedClassInstances[module.id] = {};
-          }
-
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          window.hotReloadedClassInstances[module.id]![targetName] = [
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            ...(window.hotReloadedClassInstances[module.id]![targetName] || []),
+          window.hotReloadedClassInstances[module.id] = [
+            ...(window.hotReloadedClassInstances[module.id] || []),
             this,
           ];
         }
-      };
+      };`);
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
-      return overridenClass as any;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return overridenClass;
     }
 
     return undefined;
