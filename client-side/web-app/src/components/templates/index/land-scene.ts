@@ -3,6 +3,7 @@ import { HotReloadClass } from 'src/logic/app-internals/utils/hot-reload-class';
 import { GridControls } from './grid-controls';
 import { GridPhysics } from './grid-physics';
 import { Direction } from './grid.types';
+import { MusicProvider } from './music-provider.types';
 import { Player } from './player';
 
 const SCENE_CONFIG: Phaser.Types.Scenes.SettingsConfig = {
@@ -13,9 +14,9 @@ const SCENE_CONFIG: Phaser.Types.Scenes.SettingsConfig = {
 
 @HotReloadClass(module)
 export class LandScene extends Phaser.Scene {
-  static readonly TILE_SIZE = 48;
   private gridControls?: GridControls;
   private gridPhysics?: GridPhysics;
+  protected musicProvider: MusicProvider;
 
   // Populated when loading plugin
   private animatedTiles = null as unknown as {
@@ -26,8 +27,10 @@ export class LandScene extends Phaser.Scene {
     pause(layerIndex: number, mapIndex: number): void;
   };
 
-  constructor() {
+  constructor(musicProvider: MusicProvider) {
     super(SCENE_CONFIG);
+
+    this.musicProvider = musicProvider;
   }
 
   public create() {
@@ -45,9 +48,12 @@ export class LandScene extends Phaser.Scene {
 
     const playerSprite = this.add.sprite(0, 0, 'player');
     playerSprite.setDepth(2);
+
     this.cameras.main.startFollow(playerSprite);
     this.cameras.main.roundPixels = true;
-    const player = new Player(playerSprite, new Phaser.Math.Vector2(6, 6));
+    this.cameras.main.setBounds(0, 0, layer.width, layer.height);
+
+    const player = new Player(playerSprite, new Phaser.Math.Vector2(6, 13));
 
     this.gridPhysics = new GridPhysics(player, map);
     this.gridControls = new GridControls(this.input, this.gridPhysics);
@@ -77,9 +83,14 @@ export class LandScene extends Phaser.Scene {
     */
     this.load.scenePlugin(
       'AnimatedTiles',
-      'animated-tiles.js',
+      'AnimatedTiles.js',
       'animatedTiles',
       'animatedTiles',
+    );
+
+    // https://soundcloud.com/radion-alexievich-drozdov/spacedandywave?in=eliud-makaveli-zavala/sets/vaporwave
+    this.musicProvider.playFromSoundcloud(
+      'https://api.soundcloud.com/tracks/256813580',
     );
   }
 
