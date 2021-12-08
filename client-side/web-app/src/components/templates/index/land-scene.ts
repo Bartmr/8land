@@ -5,18 +5,26 @@ import { GridPhysics } from './grid-physics';
 import { Direction } from './grid.types';
 import { MusicProvider } from './music-provider.types';
 import { Player } from './player';
-
-const SCENE_CONFIG: Phaser.Types.Scenes.SettingsConfig = {
-  active: false,
-  visible: false,
-  key: 'LandScene',
-};
+import { TiledJSON } from './tiled.types';
 
 @HotReloadClass(module)
 export class LandScene extends Phaser.Scene {
   private gridControls?: GridControls;
   private gridPhysics?: GridPhysics;
-  protected musicProvider: MusicProvider;
+
+  protected arguments: {
+    previousLandSceneKey: string | null;
+    player: {
+      spritesheetUrl: string;
+    };
+    landScene: {
+      id: string;
+      backgroundMusicUrl: string;
+      tilesetUrl: string;
+      tilemapTiledJSONUrl: string;
+    };
+  };
+  protected dependencies: { musicProvider: MusicProvider };
 
   // Populated when loading plugin
   private animatedTiles = null as unknown as {
@@ -27,21 +35,28 @@ export class LandScene extends Phaser.Scene {
     pause(layerIndex: number, mapIndex: number): void;
   };
 
-  constructor(musicProvider: MusicProvider) {
-    super(SCENE_CONFIG);
+  constructor(args: LandScene['arguments'], deps: LandScene['dependencies']) {
+    super({
+      active: false,
+      visible: false,
+    });
 
-    this.musicProvider = musicProvider;
+    this.arguments = args;
+    this.dependencies = deps;
   }
 
   public create() {
-    const map = this.make.tilemap({ key: 'map' });
-    map.addTilesetImage(
-      // tileset name in Tiled json
-      'land-scene-tileset',
-      'tileset',
-    );
+    const tiledJSON = (
+      this.cache.tilemap.get('map') as { data: TiledJSON } | undefined
+    )?.data;
 
-    const layer = map.createLayer(0, 'land-scene-tileset', 0, 0);
+    const firstTileset =
+      (tiledJSON || throwError()).tilesets[0] || throwError();
+
+    const map = this.make.tilemap({ key: 'map' });
+    map.addTilesetImage(firstTileset.name, 'tileset');
+
+    const layer = map.createLayer(0, firstTileset.name, 0, 0);
     layer.setDepth(0);
 
     this.animatedTiles.init(map);
@@ -70,9 +85,12 @@ export class LandScene extends Phaser.Scene {
   }
 
   public preload() {
-    this.load.image('tileset', 'land-scene-tileset.png');
-    this.load.tilemapTiledJSON('map', 'land-scene-map.json');
-    this.load.spritesheet('player', 'player.png', {
+    this.load.image('tileset', this.arguments.landScene.tilesetUrl);
+    this.load.tilemapTiledJSON(
+      'map',
+      this.arguments.landScene.tilemapTiledJSONUrl,
+    );
+    this.load.spritesheet('player', this.arguments.player.spritesheetUrl, {
       frameWidth: 16,
       frameHeight: 16,
     });
@@ -89,8 +107,8 @@ export class LandScene extends Phaser.Scene {
     );
 
     // https://soundcloud.com/radion-alexievich-drozdov/spacedandywave?in=eliud-makaveli-zavala/sets/vaporwave
-    this.musicProvider.playFromSoundcloud(
-      'https://api.soundcloud.com/tracks/256813580',
+    this.dependencies.musicProvider.playFromSoundcloud(
+      this.arguments.landScene.backgroundMusicUrl,
     );
   }
 
