@@ -28,7 +28,16 @@ class GridPhysics {
 
   constructor(
     private player: Player,
-    private tileMap: Phaser.Tilemaps.Tilemap,
+    private context: {
+      land: {
+        tilemap: Phaser.Tilemaps.Tilemap;
+      };
+      territories: Array<{
+        startX: number;
+        startY: number;
+        tilemap: Phaser.Tilemaps.Tilemap;
+      }>;
+    },
   ) {}
 
   movePlayer(direction: Direction): void {
@@ -128,10 +137,15 @@ class GridPhysics {
   }
 
   private hasBlockingTile(pos: Phaser.Math.Vector2): boolean {
-    if (this.hasNoTile(pos)) return true;
+    if (this.hasNoTileInLand(pos)) return true;
 
-    return this.tileMap.layers.some((layer) => {
-      const tile = this.tileMap.getTileAt(pos.x, pos.y, false, layer.name);
+    const landCollides = this.context.land.tilemap.layers.some((layer) => {
+      const tile = this.context.land.tilemap.getTileAt(
+        pos.x,
+        pos.y,
+        false,
+        layer.name,
+      );
 
       const tileProps = object({
         collides: boolean(),
@@ -145,12 +159,43 @@ class GridPhysics {
 
       return tileProps.value.collides;
     });
+
+    if (landCollides) {
+      return true;
+    }
+
+    return this.context.territories.some((territory) => {
+      return territory.tilemap.layers.some((layer) => {
+        const tile = territory.tilemap.getTileAt(
+          pos.x - territory.startX,
+          pos.y - territory.startY,
+          false,
+          layer.name,
+        ) as Phaser.Tilemaps.Tile | null;
+
+        if (!tile) {
+          return false;
+        }
+
+        const tileProps = object({
+          collides: boolean(),
+        })
+          .required()
+          .validate(tile.properties);
+
+        if (tileProps.errors) {
+          throw new Error(JSON.stringify(tileProps.messagesTree));
+        }
+
+        return tileProps.value.collides;
+      });
+    });
   }
 
-  private hasNoTile(pos: Phaser.Math.Vector2): boolean {
-    return !this.tileMap.layers.some((layer) =>
-      this.tileMap.hasTileAt(pos.x, pos.y, layer.name),
-    );
+  private hasNoTileInLand(pos: Phaser.Math.Vector2): boolean {
+    return !this.context.land.tilemap.layers.some((layer) => {
+      return this.context.land.tilemap.hasTileAt(pos.x, pos.y, layer.name);
+    });
   }
 }
 

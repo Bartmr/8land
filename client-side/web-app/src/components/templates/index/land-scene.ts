@@ -1,8 +1,16 @@
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { HotReloadClass } from 'src/logic/app-internals/utils/hot-reload-class';
+import { TILE_SIZE } from './game-constants';
 import { GridControls } from './grid-controls';
 import { GridPhysics } from './grid-physics';
 import { Direction } from './grid.types';
+import {
+  getLandSceneTiledJSONKey,
+  getLandSceneTilesetKey,
+  getTerritoryTiledJSONKey,
+  getTerritoryTilesetKey,
+} from './keys';
+import { LandSceneArguments } from './land-scene.types';
 import { MusicProvider } from './music-provider.types';
 import { Player } from './player';
 import { TiledJSON } from './tiled.types';
@@ -12,18 +20,8 @@ export class LandScene extends Phaser.Scene {
   private gridControls?: GridControls;
   private gridPhysics?: GridPhysics;
 
-  protected arguments: {
-    previousLandSceneKey: string | null;
-    player: {
-      spritesheetUrl: string;
-    };
-    landScene: {
-      id: string;
-      backgroundMusicUrl: string;
-      tilesetUrl: string;
-      tilemapTiledJSONUrl: string;
-    };
-  };
+  protected previousLandSceneArguments: LandSceneArguments | null;
+  protected arguments: LandSceneArguments;
   protected dependencies: { musicProvider: MusicProvider };
 
   // Populated when loading plugin
@@ -35,42 +33,105 @@ export class LandScene extends Phaser.Scene {
     pause(layerIndex: number, mapIndex: number): void;
   };
 
-  constructor(args: LandScene['arguments'], deps: LandScene['dependencies']) {
+  constructor(
+    previousLandSceneArguments: LandScene['previousLandSceneArguments'],
+    args: LandScene['arguments'],
+    deps: LandScene['dependencies'],
+  ) {
     super({
       active: false,
       visible: false,
     });
 
+    this.previousLandSceneArguments = previousLandSceneArguments;
     this.arguments = args;
     this.dependencies = deps;
   }
 
   public create() {
-    const tiledJSON = (
-      this.cache.tilemap.get('map') as { data: TiledJSON } | undefined
+    // LAND
+    const landTiledJSON = (
+      this.cache.tilemap.get(getLandSceneTiledJSONKey(this.arguments.land)) as
+        | { data: TiledJSON }
+        | undefined
     )?.data;
 
-    const firstTileset =
-      (tiledJSON || throwError()).tilesets[0] || throwError();
+    const landFirstTileset =
+      (landTiledJSON || throwError()).tilesets[0] || throwError();
 
-    const map = this.make.tilemap({ key: 'map' });
-    map.addTilesetImage(firstTileset.name, 'tileset');
+    const landMap = this.make.tilemap({
+      key: getLandSceneTiledJSONKey(this.arguments.land),
+    });
+    landMap.addTilesetImage(
+      landFirstTileset.name,
+      getLandSceneTilesetKey(this.arguments.land),
+    );
 
-    const layer = map.createLayer(0, firstTileset.name, 0, 0);
-    layer.setDepth(0);
+    const landLayer = landMap.createLayer(0, landFirstTileset.name, 0, 0);
+    landLayer.setDepth(0);
 
-    this.animatedTiles.init(map);
+    this.animatedTiles.init(landMap);
+    //
+
+    // PROPERTIES
+    const territoryContexts: Array<{
+      startX: number;
+      startY: number;
+      tilemap: Phaser.Tilemaps.Tilemap;
+    }> = [];
+    for (let i = 0; i < this.arguments.land.territories.length; i++) {
+      const territory = this.arguments.land.territories[i] || throwError();
+
+      const territoryTiledJSON = (
+        this.cache.tilemap.get(getTerritoryTiledJSONKey(territory)) as
+          | { data: TiledJSON }
+          | undefined
+      )?.data;
+
+      const territoryFirstTileset =
+        (territoryTiledJSON || throwError()).tilesets[0] || throwError();
+
+      const territoryMap = this.make.tilemap({
+        key: getTerritoryTiledJSONKey(territory),
+      });
+      territoryMap.addTilesetImage(
+        territoryFirstTileset.name,
+        getTerritoryTilesetKey(territory),
+      );
+      territoryContexts.push({
+        startX: territory.startX,
+        startY: territory.startY,
+        tilemap: territoryMap,
+      });
+
+      const territoryLayer = territoryMap.createLayer(
+        0,
+        territoryFirstTileset.name,
+        territory.startX * TILE_SIZE,
+        territory.startY * TILE_SIZE,
+      );
+
+      territoryLayer.setDepth(1 + i);
+
+      this.animatedTiles.init(territoryMap);
+    }
+    //
 
     const playerSprite = this.add.sprite(0, 0, 'player');
     playerSprite.setDepth(2);
 
     this.cameras.main.startFollow(playerSprite);
     this.cameras.main.roundPixels = true;
-    this.cameras.main.setBounds(0, 0, layer.width, layer.height);
+    this.cameras.main.setBounds(0, 0, landLayer.width, landLayer.height);
 
-    const player = new Player(playerSprite, new Phaser.Math.Vector2(6, 13));
+    const player = new Player(playerSprite, new Phaser.Math.Vector2(6, 14));
 
-    this.gridPhysics = new GridPhysics(player, map);
+    this.gridPhysics = new GridPhysics(player, {
+      land: {
+        tilemap: landMap,
+      },
+      territories: territoryContexts,
+    });
     this.gridControls = new GridControls(this.input, this.gridPhysics);
 
     this.createPlayerAnimation(Direction.UP, 9, 8);
@@ -85,11 +146,25 @@ export class LandScene extends Phaser.Scene {
   }
 
   public preload() {
-    this.load.image('tileset', this.arguments.landScene.tilesetUrl);
-    this.load.tilemapTiledJSON(
-      'map',
-      this.arguments.landScene.tilemapTiledJSONUrl,
+    this.load.image(
+      getLandSceneTilesetKey(this.arguments.land),
+      this.arguments.land.tilesetUrl,
     );
+    this.load.tilemapTiledJSON(
+      getLandSceneTiledJSONKey(this.arguments.land),
+      this.arguments.land.tilemapTiledJSONUrl,
+    );
+
+    for (const territory of this.arguments.land.territories) {
+      this.load.image(getTerritoryTilesetKey(territory), territory.tilesetUrl);
+      this.load.tilemapTiledJSON(
+        getTerritoryTiledJSONKey(territory),
+        territory.tilemapTiledJSONUrl,
+      );
+    }
+
+    //
+
     this.load.spritesheet('player', this.arguments.player.spritesheetUrl, {
       frameWidth: 16,
       frameHeight: 16,
@@ -106,10 +181,15 @@ export class LandScene extends Phaser.Scene {
       'animatedTiles',
     );
 
-    // https://soundcloud.com/radion-alexievich-drozdov/spacedandywave?in=eliud-makaveli-zavala/sets/vaporwave
-    this.dependencies.musicProvider.playFromSoundcloud(
-      this.arguments.landScene.backgroundMusicUrl,
-    );
+    if (
+      this.arguments.land.backgroundMusicUrl !== null &&
+      this.previousLandSceneArguments?.land.backgroundMusicUrl !==
+        this.arguments.land.backgroundMusicUrl
+    ) {
+      this.dependencies.musicProvider.playFromSoundcloud(
+        this.arguments.land.backgroundMusicUrl,
+      );
+    }
   }
 
   private createPlayerAnimation(

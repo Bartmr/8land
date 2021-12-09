@@ -25,31 +25,33 @@ export async function runGame(dependencies: { musicProvider: MusicProvider }) {
     spritesheetUrl: 'player.png',
   };
 
-  const landScene = {
+  const land = {
     id: '1',
     backgroundMusicUrl: 'https://api.soundcloud.com/tracks/256813580',
     tilesetUrl: 'land-scene-tileset.png',
     tilemapTiledJSONUrl: 'land-scene-map.json',
-    // territories: [
-    //   {
-    //     id: '1',
-    //     tilesetUrl: 'land-scene-tileset.png',
-    //     tilemapTiledJSONUrl: 'land-scene-map.json',
-    //   }
-    // ]
+    territories: [
+      {
+        id: '1',
+        tilesetUrl: 'territory-tileset.png',
+        tilemapTiledJSONUrl: 'territory-map.json',
+        startX: 5,
+        startY: 6,
+      },
+    ],
   };
 
   const game = new Phaser.Game(gameConfig);
 
-  const sceneKey = `land-scene:${landScene.id}`;
+  const sceneKey = `land-scene:scene:${land.id}`;
 
   game.scene.add(
     sceneKey,
     new LandScene(
+      null,
       {
-        previousLandSceneKey: null,
         player,
-        landScene,
+        land,
       },
       {
         musicProvider: dependencies.musicProvider,
