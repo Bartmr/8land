@@ -27,16 +27,27 @@ function Game() {
             () => {
               soundcloudPlayer.seekTo(0);
               soundcloudPlayer.play();
+
+              const gameElement = document.querySelector(
+                '#game-root canvas',
+              ) as HTMLCanvasElement;
+
+              gameElement.focus();
             },
           );
         }
 
+        let lastSong: string | null;
+
         // https://soundcloud.com/radion-alexievich-drozdov/spacedandywave?in=eliud-makaveli-zavala/sets/vaporwave
         await runGame({
           musicProvider: {
-            playFromSoundcloud: (url: string) => {
+            playFromSoundcloud: (url: string | null) => {
               if (soundcloudPlayer) {
-                soundcloudPlayer.load(url, { auto_play: true });
+                if (url && url !== lastSong) {
+                  soundcloudPlayer.load(url, { auto_play: true });
+                  lastSong = url;
+                }
               }
             },
           },

@@ -5,12 +5,14 @@ import { GridControls } from './grid-controls';
 import { GridPhysics } from './grid-physics';
 import { Direction } from './grid.types';
 import {
+  getLandSceneKey,
   getLandSceneTiledJSONKey,
   getLandSceneTilesetKey,
   getTerritoryTiledJSONKey,
   getTerritoryTilesetKey,
 } from './keys';
-import { LandSceneArguments } from './land-scene.types';
+import { Block, DoorBlock, LandSceneArguments } from './land-scene.types';
+import { getLandById } from './mocks';
 import { MusicProvider } from './music-provider.types';
 import { Player } from './player';
 import { TiledJSON } from './tiled.types';
@@ -39,6 +41,7 @@ export class LandScene extends Phaser.Scene {
     deps: LandScene['dependencies'],
   ) {
     super({
+      key: getLandSceneKey(args.land),
       active: false,
       visible: false,
     });
@@ -49,15 +52,19 @@ export class LandScene extends Phaser.Scene {
   }
 
   public create() {
-    // LAND
-    const landTiledJSON = (
-      this.cache.tilemap.get(getLandSceneTiledJSONKey(this.arguments.land)) as
-        | { data: TiledJSON }
-        | undefined
-    )?.data;
+    if (this.previousLandSceneArguments) {
+      this.scene.remove(getLandSceneKey(this.previousLandSceneArguments.land));
+    }
 
-    const landFirstTileset =
-      (landTiledJSON || throwError()).tilesets[0] || throwError();
+    // LAND
+    const landTiledJSON =
+      (
+        this.cache.tilemap.get(
+          getLandSceneTiledJSONKey(this.arguments.land),
+        ) as { data: TiledJSON } | undefined
+      )?.data || throwError();
+
+    const landFirstTileset = landTiledJSON.tilesets[0] || throwError();
 
     const landMap = this.make.tilemap({
       key: getLandSceneTiledJSONKey(this.arguments.land),
@@ -75,9 +82,11 @@ export class LandScene extends Phaser.Scene {
 
     // PROPERTIES
     const territoryContexts: Array<{
+      id: string;
       startX: number;
       startY: number;
       tilemap: Phaser.Tilemaps.Tilemap;
+      blocks: Block[];
     }> = [];
     for (let i = 0; i < this.arguments.land.territories.length; i++) {
       const territory = this.arguments.land.territories[i] || throwError();
@@ -99,9 +108,11 @@ export class LandScene extends Phaser.Scene {
         getTerritoryTilesetKey(territory),
       );
       territoryContexts.push({
+        id: territory.id,
         startX: territory.startX,
         startY: territory.startY,
         tilemap: territoryMap,
+        blocks: territory.blocks,
       });
 
       const territoryLayer = territoryMap.createLayer(
@@ -117,6 +128,80 @@ export class LandScene extends Phaser.Scene {
     }
     //
 
+    let position: { x: number; y: number } | undefined;
+
+    // Search for tile that matches this.previousLandSceneArguments.comingFromDoorBlock
+    // and get its position. start sprite from there
+    for (const layer of landMap.layers) {
+      for (const row of layer.data) {
+        for (const tile of row) {
+          const properties = Object.keys(
+            tile.properties as { [key: string]: unknown },
+          ).filter(
+            (key) => !!(tile.properties as { [key: string]: unknown })[key],
+          );
+
+          if (properties.includes(this.arguments.comingFromDoorBlock.id)) {
+            position = {
+              x: tile.x,
+              y: tile.y,
+            };
+            break;
+          }
+
+          if (position) {
+            break;
+          }
+        }
+
+        if (position) {
+          break;
+        }
+      }
+
+      if (position) {
+        break;
+      }
+    }
+
+    for (const territoryContext of territoryContexts) {
+      for (const layer of territoryContext.tilemap.layers) {
+        for (const row of layer.data) {
+          for (const tile of row) {
+            const properties = Object.keys(
+              tile.properties as { [key: string]: unknown },
+            ).filter(
+              (key) => !!(tile.properties as { [key: string]: unknown })[key],
+            );
+
+            if (properties.includes(this.arguments.comingFromDoorBlock.id)) {
+              position = {
+                x: tile.x + territoryContext.startX,
+                y: tile.y + territoryContext.startY,
+              };
+              break;
+            }
+
+            if (position) {
+              break;
+            }
+          }
+
+          if (position) {
+            break;
+          }
+        }
+
+        if (position) {
+          break;
+        }
+      }
+
+      if (position) {
+        break;
+      }
+    }
+
     const playerSprite = this.add.sprite(0, 0, 'player');
     playerSprite.setDepth(2);
 
@@ -124,13 +209,25 @@ export class LandScene extends Phaser.Scene {
     this.cameras.main.roundPixels = true;
     this.cameras.main.setBounds(0, 0, landLayer.width, landLayer.height);
 
-    const player = new Player(playerSprite, new Phaser.Math.Vector2(6, 14));
+    if (!position) {
+      throw new Error('theres no start block');
+    }
+
+    const player = new Player(
+      playerSprite,
+      new Phaser.Math.Vector2(position.x, position.y),
+    );
 
     this.gridPhysics = new GridPhysics(player, {
       land: {
+        id: this.arguments.land.id,
+        blocks: this.arguments.land.blocks,
         tilemap: landMap,
       },
       territories: territoryContexts,
+      onStepIntoDoor: (block: DoorBlock) => {
+        this.handleStepIntoDoor(block);
+      },
     });
     this.gridControls = new GridControls(this.input, this.gridPhysics);
 
@@ -181,15 +278,9 @@ export class LandScene extends Phaser.Scene {
       'animatedTiles',
     );
 
-    if (
-      this.arguments.land.backgroundMusicUrl !== null &&
-      this.previousLandSceneArguments?.land.backgroundMusicUrl !==
-        this.arguments.land.backgroundMusicUrl
-    ) {
-      this.dependencies.musicProvider.playFromSoundcloud(
-        this.arguments.land.backgroundMusicUrl,
-      );
-    }
+    this.dependencies.musicProvider.playFromSoundcloud(
+      this.arguments.land.backgroundMusicUrl,
+    );
   }
 
   private createPlayerAnimation(
@@ -208,4 +299,52 @@ export class LandScene extends Phaser.Scene {
       yoyo: true,
     });
   }
+
+  private handleStepIntoDoor(block: DoorBlock) {
+    let nextLandId: string;
+
+    if (this.arguments.land.id === block.land_a) {
+      nextLandId = block.land_b;
+    } else if (this.arguments.land.id === block.land_b) {
+      nextLandId = block.land_a;
+    } else {
+      throw new Error();
+    }
+
+    if (nextLandId === this.arguments.land.id) {
+      // it's the start block
+      return;
+    }
+
+    const nextLand = getLandById(nextLandId);
+
+    if (!nextLand) {
+      // TODO: deal with 404 of lands
+      throw new Error();
+    }
+
+    const sceneKey = getLandSceneKey(nextLand);
+
+    this.scene.add(
+      sceneKey,
+      new LandScene(
+        this.arguments,
+        {
+          player: this.arguments.player,
+          land: nextLand,
+          lastBaseLandDoorBlock: nextLand.isBaseLand ? null : block,
+          comingFromDoorBlock: block,
+        },
+        {
+          musicProvider: this.dependencies.musicProvider,
+        },
+      ),
+    );
+
+    this.scene.stop(this.scene.key);
+
+    this.scene.start(sceneKey);
+  }
 }
+
+// TODO: remove previous scene assets and scene instance to avoid memory leaks

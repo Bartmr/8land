@@ -1,5 +1,7 @@
 import * as Phaser from 'phaser';
+import { getLandSceneKey } from './keys';
 import { LandScene } from './land-scene';
+import { LAND_1, START_BLOCK } from './mocks';
 import { MusicProvider } from './music-provider.types';
 
 export async function runGame(dependencies: { musicProvider: MusicProvider }) {
@@ -18,32 +20,18 @@ export async function runGame(dependencies: { musicProvider: MusicProvider }) {
       mode: Phaser.Scale.WIDTH_CONTROLS_HEIGHT,
     },
     parent: 'game-root',
-    backgroundColor: '#000000',
+    backgroundColor: 'transparent',
+    canvasStyle:
+      'border-color: var(--body-contrasting-color); border-width: 3px; border-style: solid;',
   };
 
   const player = {
     spritesheetUrl: 'player.png',
   };
 
-  const land = {
-    id: '1',
-    backgroundMusicUrl: 'https://api.soundcloud.com/tracks/256813580',
-    tilesetUrl: 'land-scene-tileset.png',
-    tilemapTiledJSONUrl: 'land-scene-map.json',
-    territories: [
-      {
-        id: '1',
-        tilesetUrl: 'territory-tileset.png',
-        tilemapTiledJSONUrl: 'territory-map.json',
-        startX: 5,
-        startY: 6,
-      },
-    ],
-  };
-
   const game = new Phaser.Game(gameConfig);
 
-  const sceneKey = `land-scene:scene:${land.id}`;
+  const sceneKey = getLandSceneKey(LAND_1);
 
   game.scene.add(
     sceneKey,
@@ -51,7 +39,9 @@ export async function runGame(dependencies: { musicProvider: MusicProvider }) {
       null,
       {
         player,
-        land,
+        land: LAND_1,
+        lastBaseLandDoorBlock: null,
+        comingFromDoorBlock: START_BLOCK,
       },
       {
         musicProvider: dependencies.musicProvider,

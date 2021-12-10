@@ -1,0 +1,152 @@
+{
+  "compressionlevel": -1,
+  "height": 9,
+  "infinite": false,
+  "layers": [
+    {
+      "data": [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 13, 14, 15, 16, 17, 18, 19, 0, 0,
+        22, 23, 24, 25, 26, 27, 28, 29, 0, 0, 32, 33, 34, 35, 36, 37, 38, 39, 0,
+        0, 42, 43, 44, 45, 46, 47, 48, 49, 0, 0, 52, 53, 54, 55, 56, 57, 58, 59,
+        0, 0, 62, 63, 64, 65, 66, 67, 68, 69, 0, 0, 72, 73, 74, 75, 76, 77, 78,
+        79, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+      ],
+      "height": 9,
+      "id": 1,
+      "name": "Tile Layer 1",
+      "opacity": 1,
+      "type": "tilelayer",
+      "visible": true,
+      "width": 10,
+      "x": 0,
+      "y": 0
+    }
+  ],
+  "nextlayerid": 2,
+  "nextobjectid": 1,
+  "orientation": "orthogonal",
+  "renderorder": "right-down",
+  "tiledversion": "1.7.2",
+  "tileheight": 16,
+  "tilesets": [
+    {
+      "columns": 10,
+      "firstgid": 1,
+      "image": "land-scene-2-tileset.png",
+      "imageheight": 144,
+      "imagewidth": 160,
+      "margin": 0,
+      "name": "land-scene-2-tileset",
+      "spacing": 0,
+      "tilecount": 90,
+      "tileheight": 16,
+      "tiles": [
+        {
+          "id": 11,
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 17,
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 18,
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 74,
+          "properties": [
+            {
+              "name": "2",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 75,
+          "properties": [
+            {
+              "name": "2",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 84,
+          "properties": [
+            {
+              "name": "1",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 85,
+          "properties": [
+            {
+              "name": "1",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "tilewidth": 16
+    }
+  ],
+  "tilewidth": 16,
+  "type": "map",
+  "version": "1.6",
+  "width": 10
+}

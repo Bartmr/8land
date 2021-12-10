@@ -209,6 +209,26 @@
           ]
         },
         {
+          "id": 21,
+          "properties": [
+            {
+              "name": "2",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 22,
+          "properties": [
+            {
+              "name": "2",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
           "id": 23,
           "properties": [
             {

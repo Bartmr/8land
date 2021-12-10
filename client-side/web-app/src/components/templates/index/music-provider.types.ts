@@ -1,3 +1,3 @@
 export type MusicProvider = {
-  playFromSoundcloud(url: string): void;
+  playFromSoundcloud(url: string | null): void;
 };

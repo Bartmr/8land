@@ -1,9 +1,11 @@
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
+import { objectOf } from 'not-me/lib/schemas/object/object-of-schema';
 import { HotReloadClass } from 'src/logic/app-internals/utils/hot-reload-class';
 import { TILE_SIZE } from './game-constants';
 import { Direction } from './grid.types';
+import { Block, BlockType, DoorBlock } from './land-scene.types';
 import { Player } from './player';
 
 const Vector2 = Phaser.Math.Vector2;
@@ -30,19 +32,25 @@ class GridPhysics {
     private player: Player,
     private context: {
       land: {
+        id: string;
         tilemap: Phaser.Tilemaps.Tilemap;
+        blocks: Block[];
       };
       territories: Array<{
+        id: string;
+        blocks: Block[];
         startX: number;
         startY: number;
         tilemap: Phaser.Tilemaps.Tilemap;
       }>;
+      onStepIntoDoor: (block: DoorBlock) => void;
     },
   ) {}
 
   movePlayer(direction: Direction): void {
     this.lastMovementIntent = direction;
     if (this.isMoving()) return;
+
     if (this.isBlockingDirection(direction)) {
       this.player.stopAnimation(direction);
     } else {
@@ -72,12 +80,16 @@ class GridPhysics {
 
     if (!this.willCrossTileBorderThisUpdate(pixelsToWalkThisUpdate)) {
       this.movePlayerSprite(pixelsToWalkThisUpdate);
-    } else if (this.shouldContinueMoving()) {
-      this.movePlayerSprite(pixelsToWalkThisUpdate);
-      this.updatePlayerTilePos();
     } else {
-      this.movePlayerSprite(TILE_SIZE - this.tileSizePixelsWalked);
-      this.stopMoving();
+      if (this.shouldContinueMoving()) {
+        this.movePlayerSprite(pixelsToWalkThisUpdate);
+        this.updatePlayerTilePos();
+      } else {
+        this.movePlayerSprite(TILE_SIZE - this.tileSizePixelsWalked);
+        this.stopMoving();
+      }
+
+      this.reactToLandBlockTouch();
     }
   }
 
@@ -145,7 +157,11 @@ class GridPhysics {
         pos.y,
         false,
         layer.name,
-      );
+      ) as Phaser.Tilemaps.Tile | null;
+
+      if (!tile) {
+        throw new Error();
+      }
 
       const tileProps = object({
         collides: boolean(),
@@ -196,6 +212,89 @@ class GridPhysics {
     return !this.context.land.tilemap.layers.some((layer) => {
       return this.context.land.tilemap.hasTileAt(pos.x, pos.y, layer.name);
     });
+  }
+
+  /*
+    LAND BLOCK METHODS
+  */
+  private reactToLandBlockTouch() {
+    const pos = this.player.getTilePos();
+
+    let blockToReactTo: Block | undefined;
+
+    this.context.land.tilemap.layers.forEach((layer) => {
+      const tile = this.context.land.tilemap.getTileAt(
+        pos.x,
+        pos.y,
+        false,
+        layer.name,
+      ) as Phaser.Tilemaps.Tile | null;
+
+      if (!tile) {
+        throw new Error();
+      }
+
+      const tileProps = objectOf(boolean())
+        .required()
+        .validate(tile.properties);
+
+      if (tileProps.errors) {
+        throw new Error(JSON.stringify(tileProps.messagesTree));
+      }
+
+      const blockId = Object.keys(tileProps.value).filter(
+        (key) => tileProps.value[key],
+      )[0];
+
+      if (blockId) {
+        const block = this.context.land.blocks.find((b) => blockId === b.id);
+
+        if (block) {
+          blockToReactTo = block;
+        }
+      }
+    });
+
+    this.context.territories.forEach((territory) => {
+      return territory.tilemap.layers.forEach((layer) => {
+        const tile = territory.tilemap.getTileAt(
+          pos.x - territory.startX,
+          pos.y - territory.startY,
+          false,
+          layer.name,
+        ) as Phaser.Tilemaps.Tile | null;
+
+        if (!tile) {
+          return;
+        }
+
+        const tileProps = objectOf(boolean())
+          .required()
+          .validate(tile.properties);
+
+        if (tileProps.errors) {
+          throw new Error(JSON.stringify(tileProps.messagesTree));
+        }
+
+        const blockId = Object.keys(tileProps.value).filter(
+          (key) => tileProps.value[key],
+        )[0];
+
+        if (blockId) {
+          const block = territory.blocks.find((b) => blockId === b.id);
+
+          if (block) {
+            blockToReactTo = block;
+          }
+        }
+      });
+    });
+
+    if (blockToReactTo) {
+      if (blockToReactTo.type === BlockType.Door) {
+        this.context.onStepIntoDoor(blockToReactTo);
+      }
+    }
   }
 }
 
