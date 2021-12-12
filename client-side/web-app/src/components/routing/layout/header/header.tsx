@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import * as styles from './header.module.scss';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
-import { INDEX_ROUTE } from 'src/components/templates/index/index-routes';
+import { CLIENT_SIDE_INDEX_ROUTE } from 'src/components/templates/client-side/index/index-routes';
 import { Nav } from 'react-bootstrap';
 import { PROJECT_NAME } from '@app/shared/project-details';
 import { missingCssClass } from 'src/components/ui-kit/core/utils/missing-css-class';
@@ -55,7 +55,10 @@ export function Header(props: Props) {
           >
             <FontAwesomeIcon icon={faBars} />
           </Navbar.Toggle>
-          <LinkAnchor className="navbar-brand" href={INDEX_ROUTE.getHref()}>
+          <LinkAnchor
+            className="navbar-brand"
+            href={CLIENT_SIDE_INDEX_ROUTE.getHref()}
+          >
             <span className="badge badge-primary">
               <span className="h5">{PROJECT_NAME}</span>
             </span>

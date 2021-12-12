@@ -2,6 +2,9 @@
 import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
+import { NodeEnv } from './node-env';
+
+const isIntegrityCheck = !!process.env.IS_INTEGRITY_CHECK;
 
 const schema = object({
   HOST_URL: string()
@@ -31,6 +34,12 @@ const schema = object({
   DISABLE_ERROR_BOUNDARIES: boolean(),
   LOG_DEBUG: boolean(),
   MAIN_API_URL: string().filled(),
+  FIREBASE_AUTH_EMULATOR_URL:
+    [NodeEnv.Development, NodeEnv.Test].includes(
+      process.env.NODE_ENV as NodeEnv,
+    ) || isIntegrityCheck
+      ? string().filled()
+      : string(),
 }).required();
 
 const environmentVariablesValidationResult = schema.validate({
@@ -41,6 +50,7 @@ const environmentVariablesValidationResult = schema.validate({
   DISABLE_ERROR_BOUNDARIES: process.env.GATSBY_DISABLE_ERROR_BOUNDARIES,
   LOG_DEBUG: process.env.GATSBY_LOG_DEBUG,
   MAIN_API_URL: process.env.GATSBY_MAIN_API_URL,
+  FIREBASE_AUTH_EMULATOR_URL: process.env.GATSBY_FIREBASE_AUTH_EMULATOR_URL,
 });
 
 if (environmentVariablesValidationResult.errors) {

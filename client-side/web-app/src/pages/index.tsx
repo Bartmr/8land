@@ -1,3 +1,3 @@
-import { IndexTemplate } from 'src/components/templates/index/index-template';
+const Component = () => <div></div>;
 
-export default IndexTemplate;
+export default Component;

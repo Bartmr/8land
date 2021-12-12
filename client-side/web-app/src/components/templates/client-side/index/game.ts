@@ -1,4 +1,5 @@
 import * as Phaser from 'phaser';
+import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { getLandSceneKey } from './keys';
 import { LandScene } from './land-scene';
 import { LAND_1, START_BLOCK } from './mocks';
@@ -20,9 +21,12 @@ export async function runGame(dependencies: { musicProvider: MusicProvider }) {
       mode: Phaser.Scale.WIDTH_CONTROLS_HEIGHT,
     },
     parent: 'game-root',
-    backgroundColor: 'transparent',
+    backgroundColor: '#000000',
     canvasStyle:
       'border-color: var(--body-contrasting-color); border-width: 3px; border-style: solid;',
+    loader: {
+      baseURL: EnvironmentVariables.HOST_URL,
+    },
   };
 
   const player = {

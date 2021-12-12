@@ -56,3 +56,7 @@ _graphql-generated_
 
 # Temporary files
 /_tmp
+
+# Firebase
+.firebaserc
+firebase.json

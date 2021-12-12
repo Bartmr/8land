@@ -1,7 +1,7 @@
 import { PreRenderHTMLArgs } from 'gatsby';
 import { attachFontsProviders } from './components/ui-kit/fonts-ssr-apis';
 import sortBy from 'lodash/sortBy';
-import { attachBackgroundMusicProviders } from './components/templates/index/attach-music-providers';
+import { attachBackgroundMusicProviders } from './components/templates/client-side/index/attach-music-providers';
 
 export function onPreRenderHTML(args: PreRenderHTMLArgs) {
   attachFontsProviders(args);

@@ -61,4 +61,10 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
         return value;
       }
     }),
+
+  FIREBASE_AUTH_EMULATOR_HOST: [NodeEnv.Development, NodeEnv.Test].includes(
+    NODE_ENV as NodeEnv,
+  )
+    ? string().filled()
+    : string(),
 }).required();
