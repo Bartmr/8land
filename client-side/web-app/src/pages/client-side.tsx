@@ -29,9 +29,15 @@ const Component = () => {
           data: ep,
         });
       } catch (err) {
-        replaceEntrypoint({
-          status: TransportFailure.ConnectionFailure,
-        });
+        const error = err as { name?: string };
+
+        if (error.name === 'ChunkLoadError') {
+          replaceEntrypoint({
+            status: TransportFailure.ConnectionFailure,
+          });
+        } else {
+          throw error;
+        }
       }
     })();
   }, []);

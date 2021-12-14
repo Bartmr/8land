@@ -59,6 +59,9 @@ The core version of `estirador` can be enhanced with some pre-made layers that c
   - Login with your Google Account: `firebase login`
   - Setup the emulators: `firebase init emulators`
   - Start the emulators: `firebase emulators:start`
+- Setup the project's secrets
+  - Create an API secrets file called `.env.secret.development` in the root of the project and fill it with the necessary secrets
+  - Create a Web App secrets file called `.env.secret.development` in `client-side/web-app` and fill it with the necessary secrets
 - Seed the development database with sample data by running `NODE_ENV=development npm run seed`
 - Start the server with `npm run start:dev`, or `npm run start:debug` if you want to debug the API in the Chrome Developer Tools
 - To run the web app:

@@ -5,6 +5,9 @@ if (
   require('dotenv').config({
     path: '.env.development',
   });
+  require('dotenv').config({
+    path: '.env.secrets.development',
+  });
 }
 
 const tsConfigFileName = 'tsconfig.typecheck.json';
