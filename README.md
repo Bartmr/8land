@@ -52,16 +52,14 @@ The core version of `estirador` can be enhanced with some pre-made layers that c
 ### Start development environment
 
 - `npm run install:all`
-- Start your project's infrastructure (example: databases, Redis, etc.)
-  - `docker-compose -f infrastructure/docker-compose.yml -f infrastructure/docker-compose.dev.yml up`
 - Setup and start the Firebase Emulator Suite
   - Install the Firebase CLI: `npm install -g firebase-tools`
   - Login with your Google Account: `firebase login`
   - Setup the emulators: `firebase init emulators`
-  - Start the emulators: `firebase emulators:start`
 - Setup the project's secrets
   - Create an API secrets file called `.env.secret.development` in the root of the project and fill it with the necessary secrets
   - Create a Web App secrets file called `.env.secret.development` in `client-side/web-app` and fill it with the necessary secrets
+- From now on you can just run `npm run start:dev:infrastructure` in order to start all the services and infrastructure
 - Seed the development database with sample data by running `NODE_ENV=development npm run seed`
 - Start the server with `npm run start:dev`, or `npm run start:debug` if you want to debug the API in the Chrome Developer Tools
 - To run the web app:

@@ -60,3 +60,4 @@ _graphql-generated_
 # Firebase
 .firebaserc
 firebase.json
+.firebase-data
