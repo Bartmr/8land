@@ -16,32 +16,28 @@ class MainApiSession {
     private localStorage: ReturnType<typeof useLocalStorage>,
   ) {}
 
-  async login(args: { email: string; password: string }) {
+  async login(args: { firebaseIdToken: string }) {
     const res = await this.mainApi.post<
-      { status: 201; body: LoginResponse } | { status: 404; body: undefined },
+      { status: 201; body: LoginResponse },
       undefined,
       ToJSON<LoginRequestDTO>
     >({
       path: '/auth',
       query: undefined,
       body: args,
-      acceptableStatusCodes: [201, 404],
+      acceptableStatusCodes: [201],
     });
 
     if (res.failure) {
       return res.failure;
     } else {
-      if (res.response.status === 404) {
-        return 'wrong-credentials' as const;
-      } else {
-        this.localStorage.setItem(
-          MAIN_API_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY,
-          res.response.body.authTokenId,
-        );
-        this.setSession(res.response.body.session);
+      this.localStorage.setItem(
+        MAIN_API_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY,
+        res.response.body.authTokenId,
+      );
+      this.setSession(res.response.body.session);
 
-        return 'ok' as const;
-      }
+      return 'ok' as const;
     }
   }
 

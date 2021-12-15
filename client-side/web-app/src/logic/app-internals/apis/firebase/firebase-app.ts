@@ -7,12 +7,7 @@ if (!RUNNING_IN_CLIENT) {
 }
 
 const app = initializeApp({
-  apiKey: EnvironmentVariables.FIREBASE_API_KEY,
-  authDomain: EnvironmentVariables.FIREBASE_AUTH_DOMAIN,
-  projectId: EnvironmentVariables.FIREBASE_PROJECT_ID,
-  storageBucket: EnvironmentVariables.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: EnvironmentVariables.FIREBASE_MESSAGING_SENDER_ID,
-  appId: EnvironmentVariables.FIREBASE_APP_ID,
+  ...EnvironmentVariables.FIREBASE_CONFIG,
 });
 
 export const FirebaseApp = app;

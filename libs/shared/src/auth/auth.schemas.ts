@@ -4,6 +4,5 @@ import { string } from 'not-me/lib/schemas/string/string-schema';
 import { LoginRequestDTO } from './auth.dto';
 
 export const loginRequestSchema: Schema<LoginRequestDTO> = object({
-  email: string().filled(),
-  password: string().filled(),
+  firebaseIdToken: string().filled(),
 }).required();

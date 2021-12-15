@@ -1,4 +1,5 @@
 /* eslint-disable node/no-process-env */
+import { throwError } from '@app/shared/internals/utils/throw-error';
 import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
@@ -40,12 +41,14 @@ const schema = object({
     ) || isIntegrityCheck
       ? string().filled()
       : string(),
-  FIREBASE_API_KEY: string().filled(),
-  FIREBASE_AUTH_DOMAIN: string().filled(),
-  FIREBASE_PROJECT_ID: string().filled(),
-  FIREBASE_STORAGE_BUCKET: string().filled(),
-  FIREBASE_MESSAGING_SENDER_ID: string().filled(),
-  FIREBASE_APP_ID: string().filled(),
+  FIREBASE_CONFIG: object({
+    apiKey: string().filled(),
+    authDomain: string().filled(),
+    projectId: string().filled(),
+    storageBucket: string().filled(),
+    messagingSenderId: string().filled(),
+    appId: string().filled(),
+  }).required(),
 }).required();
 
 const environmentVariablesValidationResult = schema.validate({
@@ -57,12 +60,9 @@ const environmentVariablesValidationResult = schema.validate({
   LOG_DEBUG: process.env.GATSBY_LOG_DEBUG,
   MAIN_API_URL: process.env.GATSBY_MAIN_API_URL,
   FIREBASE_AUTH_EMULATOR_URL: process.env.GATSBY_FIREBASE_AUTH_EMULATOR_URL,
-  FIREBASE_API_KEY: process.env.GATSBY_FIREBASE_API_KEY,
-  FIREBASE_AUTH_DOMAIN: process.env.GATSBY_FIREBASE_AUTH_DOMAIN,
-  FIREBASE_PROJECT_ID: process.env.GATSBY_FIREBASE_PROJECT_ID,
-  FIREBASE_STORAGE_BUCKET: process.env.GATSBY_FIREBASE_STORAGE_BUCKET,
-  FIREBASE_MESSAGING_SENDER_ID: process.env.GATSBY_FIREBASE_MESSAGING_SENDER_ID,
-  FIREBASE_APP_ID: process.env.GATSBY_FIREBASE_APP_ID,
+  FIREBASE_CONFIG: JSON.parse(
+    process.env.GATSBY_FIREBASE_CONFIG || throwError(),
+  ) as unknown,
 });
 
 if (environmentVariablesValidationResult.errors) {

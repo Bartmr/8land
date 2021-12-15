@@ -8,6 +8,11 @@ import { NodeEnv } from 'src/internals/environment/node-env.types';
 import { ProcessContextManager } from 'src/internals/process/process-context-manager';
 import { ProcessType } from 'src/internals/process/process-context';
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
+import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
+import * as firebaseAdmin from 'firebase-admin';
+import { UsersRepository } from 'src/users/users.repository';
+import { AuditContext } from 'src/internals/auditing/audit-context';
+import { Role } from 'src/auth/roles/roles';
 
 async function seed() {
   if (NODE_ENV === NodeEnv.Development) {
@@ -29,6 +34,46 @@ async function seed() {
     await tearDownDatabases([defaultDBConnection]);
 
     await defaultDBConnection.runMigrations();
+
+    if (!EnvironmentVariablesService.variables.FIREBASE_AUTH_EMULATOR_HOST) {
+      throw new Error();
+    }
+
+    const app = firebaseAdmin.initializeApp({ projectId: `8land-${NODE_ENV}` });
+
+    const usersRepository =
+      defaultDBConnection.getCustomRepository(UsersRepository);
+
+    const auditContext = new AuditContext({
+      operationId: generateRandomUUID(),
+      requestMethod: undefined,
+      requestPath: undefined,
+      authContext: undefined,
+    });
+
+    await usersRepository.create(
+      {
+        firebaseUid: (
+          await app
+            .auth()
+            .createUser({ email: 'end-user@8land.com', emailVerified: true })
+        ).uid,
+        role: Role.EndUser,
+      },
+      auditContext,
+    );
+
+    await usersRepository.create(
+      {
+        firebaseUid: (
+          await app
+            .auth()
+            .createUser({ email: 'admin@8land.com', emailVerified: true })
+        ).uid,
+        role: Role.Admin,
+      },
+      auditContext,
+    );
 
     await Promise.all([defaultDBConnection.close()]);
   } else {

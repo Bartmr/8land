@@ -3,8 +3,7 @@ import { loginRequestSchema } from './auth.schemas';
 
 @ValidationSchema(loginRequestSchema)
 export class LoginRequestDTO {
-  email!: string;
-  password!: string;
+  firebaseIdToken!: string;
 }
 
 export class AuthSessionDTO {

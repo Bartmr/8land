@@ -7,9 +7,14 @@ import { AuthTokensService } from './tokens/auth-tokens.service';
 import { JobsConfigModule } from 'src/internals/jobs/config/jobs-config.module';
 import { AuthToken } from './tokens/typeorm/auth-token.entity';
 import { User } from 'src/users/typeorm/user.entity';
+import { FirebaseModule } from 'src/internals/apis/firebase/firebase.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([AuthToken, User]), JobsConfigModule],
+  imports: [
+    TypeOrmModule.forFeature([AuthToken, User]),
+    JobsConfigModule,
+    FirebaseModule,
+  ],
   providers: [
     {
       provide: APP_GUARD,

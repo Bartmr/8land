@@ -13,6 +13,10 @@ class MainApiSessionLogout {
   ) {}
 
   async logout() {
+    const { FirebaseAuth } = await import('src/logic/auth/firebase-auth');
+
+    await FirebaseAuth.signOut();
+
     this.localStorage.wipeAll();
     this.sessionStorage.wipeAll();
 
