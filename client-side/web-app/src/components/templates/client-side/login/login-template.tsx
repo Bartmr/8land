@@ -1,5 +1,4 @@
 import { RouteComponentProps } from '@reach/router';
-import { useEffect } from 'react';
 import { Layout } from 'src/components/routing/layout/layout';
 import { LOGIN_ROUTE } from './login-routes';
 
