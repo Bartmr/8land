@@ -67,4 +67,9 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   )
     ? string().filled()
     : string(),
+  FIREBASE_PROJECT_ID: [NodeEnv.Development, NodeEnv.Test].includes(
+    NODE_ENV as NodeEnv,
+  )
+    ? string().filled()
+    : string(),
 }).required();

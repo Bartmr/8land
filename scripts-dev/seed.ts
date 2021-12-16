@@ -13,9 +13,16 @@ import * as firebaseAdmin from 'firebase-admin';
 import { UsersRepository } from 'src/users/users.repository';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { Role } from 'src/auth/roles/roles';
+import { JSONApiBase } from 'src/internals/apis/json-api-base';
+import { LoggingServiceSingleton } from 'src/internals/logging/logging.service.singleton';
+import { object } from 'not-me/lib/schemas/object/object-schema';
+import { equals } from 'not-me/lib/schemas/equals/equals-schema';
+import { throwError } from 'src/internals/utils/throw-error';
 
 async function seed() {
-  if (NODE_ENV === NodeEnv.Development) {
+  const FIREBASE_AUTH_EMULATOR_HOST =
+    EnvironmentVariablesService.variables.FIREBASE_AUTH_EMULATOR_HOST;
+  if (NODE_ENV === NodeEnv.Development && FIREBASE_AUTH_EMULATOR_HOST) {
     ProcessContextManager.setContext({
       type: ProcessType.Script,
       name: 'scripts-dev:seed',
@@ -33,13 +40,35 @@ async function seed() {
 
     await tearDownDatabases([defaultDBConnection]);
 
-    await defaultDBConnection.runMigrations();
+    const firebaseProjectId =
+      EnvironmentVariablesService.variables.FIREBASE_PROJECT_ID || throwError();
 
-    if (!EnvironmentVariablesService.variables.FIREBASE_AUTH_EMULATOR_HOST) {
-      throw new Error();
+    const firebaseApp = firebaseAdmin.initializeApp({
+      projectId: firebaseProjectId,
+    });
+    const firebaseAuth = firebaseApp.auth();
+
+    const firebaseAuthEmulatorHost = FIREBASE_AUTH_EMULATOR_HOST;
+
+    class FirebaseAuthEmulatorApi extends JSONApiBase {
+      protected apiUrl = `http://${firebaseAuthEmulatorHost}/emulator/v1/projects/${firebaseProjectId}`;
+      protected loggingService = LoggingServiceSingleton.makeInstance();
+      protected getDefaultHeaders = () => ({});
     }
 
-    const app = firebaseAdmin.initializeApp({ projectId: `8land-${NODE_ENV}` });
+    const firebaseEmulatorApi = new FirebaseAuthEmulatorApi();
+
+    await firebaseEmulatorApi.delete(
+      object({
+        status: equals([200] as const).required(),
+        body: object({}).required(),
+      }).required(),
+      {
+        path: `/accounts`,
+      },
+    );
+
+    await defaultDBConnection.runMigrations();
 
     const usersRepository =
       defaultDBConnection.getCustomRepository(UsersRepository);
@@ -54,9 +83,11 @@ async function seed() {
     await usersRepository.create(
       {
         firebaseUid: (
-          await app
-            .auth()
-            .createUser({ email: 'end-user@8land.com', emailVerified: true })
+          await firebaseAuth.createUser({
+            email: 'end-user@8land.com',
+            emailVerified: true,
+            password: 'password123',
+          })
         ).uid,
         role: Role.EndUser,
       },
@@ -66,9 +97,11 @@ async function seed() {
     await usersRepository.create(
       {
         firebaseUid: (
-          await app
-            .auth()
-            .createUser({ email: 'admin@8land.com', emailVerified: true })
+          await firebaseAuth.createUser({
+            email: 'admin@8land.com',
+            emailVerified: true,
+            password: 'password123',
+          })
         ).uid,
         role: Role.Admin,
       },

@@ -81,7 +81,9 @@ function Content() {
 
             (async () => {
               await mainApiSession.login({
-                firebaseIdToken: authResult.user.uid,
+                firebaseIdToken: await (
+                  FirebaseAuth.currentUser || throwError()
+                ).getIdToken(),
               });
             })();
           } else {
@@ -111,7 +113,6 @@ function Content() {
             onClick={resendConfirmationEmail}
             className="btn btn-default"
           >
-            FirebaseAuth.currentUser
             {resendconfirmationEmailState.status ===
             TransportedDataStatus.Loading ? (
               <span
@@ -138,7 +139,7 @@ function FirebaseSessionGate() {
     (async () => {
       await FirebaseAuth.signOut();
 
-      replaceIsSigningOut(true);
+      replaceIsSigningOut(false);
     })();
   }, []);
 
