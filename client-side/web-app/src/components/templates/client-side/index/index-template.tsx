@@ -4,8 +4,13 @@ import { Layout } from 'src/components/routing/layout/layout';
 import { CLIENT_SIDE_INDEX_ROUTE } from './index-routes';
 import { RouteComponentProps } from '@reach/router';
 import { runGame } from './game';
+import * as styles from './index.module.scss';
+import { missingCssClass } from 'src/components/ui-kit/core/utils/missing-css-class';
+import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import ReactTicker from 'react-ticker';
+import { SoundcloudSong } from './soundcloud-types';
 
-function Game() {
+function GameCanvas(props: { onSongChange: (song: SoundcloudSong) => void }) {
   const [started, replaceStarted] = useState(false);
 
   useEffect(() => {
@@ -14,8 +19,11 @@ function Game() {
 
       replaceStarted(true);
 
+      const soundcloudPlayerIframe =
+        document.querySelector('#soundcloud-player') || throwError();
+
       const soundcloudPlayer = window.SC
-        ? window.SC.Widget('soundcloud-player')
+        ? window.SC.Widget(soundcloudPlayerIframe as HTMLIFrameElement)
         : undefined;
 
       if (soundcloudPlayer) {
@@ -40,9 +48,18 @@ function Game() {
       await runGame({
         musicProvider: {
           playFromSoundcloud: (url: string | null) => {
+            console.log(url);
             if (soundcloudPlayer) {
               if (url && url !== lastSong) {
-                soundcloudPlayer.load(url, { auto_play: true });
+                soundcloudPlayer.load(url, {
+                  callback: () => {
+                    soundcloudPlayer.getCurrentSound((s) =>
+                      props.onSongChange(s),
+                    );
+                    soundcloudPlayer.play();
+                  },
+                });
+
                 lastSong = url;
               }
             }
@@ -53,21 +70,52 @@ function Game() {
   }, []);
 
   return (
-    <div className="row justify-content-center">
-      <div className="col-12 col-md-9 col-lg-6">
-        <div id="game-root"></div>
-        <div style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}>
-          <iframe
-            title="soundcloud-player"
-            id="soundcloud-player"
-            width="100%"
-            height="166"
-            frameBorder="no"
-            scrolling="no"
-            allow="autoplay"
-            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/189845017"
-          ></iframe>
-        </div>
+    <>
+      <div id="game-root"></div>
+      <div style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}>
+        <iframe
+          title="soundcloud-player"
+          id="soundcloud-player"
+          width="100%"
+          height="166"
+          frameBorder="no"
+          scrolling="no"
+          allow="autoplay"
+          src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/189845017"
+        ></iframe>
+      </div>
+    </>
+  );
+}
+
+function Ticker({ song }: { song: SoundcloudSong }) {
+  return (
+    <LinkAnchor
+      style={{ textDecoration: 'underline' }}
+      className="link-unstyled"
+      href={song.permalink_url}
+    >
+      {song.title} - {song.user.username}
+    </LinkAnchor>
+  );
+}
+
+function Game() {
+  const [song, replaceSong] = useState<SoundcloudSong | undefined>(undefined);
+  return (
+    <div className={styles['gameSize'] || missingCssClass()}>
+      <GameCanvas onSongChange={replaceSong} />
+      <div
+        className="bg-secondary d-flex align-items-center"
+        style={{ textTransform: 'uppercase' }}
+      >
+        <span className="p-1 bg-secondary">Now playing: </span>
+
+        {song ? (
+          <div>
+            <Ticker song={song} />
+          </div>
+        ) : null}
       </div>
     </div>
   );

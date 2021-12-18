@@ -25,6 +25,8 @@ $spinner-width-lg: 3rem;
 $spinner-height-lg: 3rem;
 $spinner-border-width-lg: 0.3em;
 
+$card-bg: transparent;
+
 $navbar-bg: $body-bg;
 $navbar-bg-inverted: $body-bg-inverted;
 
@@ -56,6 +58,15 @@ $navbar-light-brand-color: get-contrasting-color('body');
 $navbar-light-brand-hover-color: get-contrasting-color('body-hover');
 $navbar-dark-brand-color: get-contrasting-color('body');
 $navbar-dark-brand-hover-color: get-contrasting-color('body-hover');
+
+$form-select-indicator-color: $lightest;
+
+$input-btn-focus-color-opacity: 0.25;
+$input-btn-focus-color: set-contrasting-color-alpha(
+  'primary',
+  $input-btn-focus-color-opacity
+);
+$input-focus-border-color: get-contrasting-color('primary');
 
 @import 'node_modules/bootstrap/scss/bootstrap';
 

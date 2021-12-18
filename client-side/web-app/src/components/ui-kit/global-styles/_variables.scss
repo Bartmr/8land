@@ -1,7 +1,7 @@
 @import 'src/components/ui-kit/global-styles/additional-functions/color-info-functions';
 
-$primary: #8133ff;
-$secondary: #ff6b00;
+$primary: #0000ff;
+$secondary: #9ab05d;
 $success: #28a745;
 $info: #007bff;
 $warning: #ffc107;
@@ -211,10 +211,9 @@ $grid-breakpoints: (
 $grid-gutter-width: 0;
 $container-padding-x: $spacer;
 
-$font-1: 'Open Sans', sans-serif;
+$font-1: 'VT323', monospace;
 
-$font-family-sans-serif: $font-1;
-$font-family-base: $font-family-sans-serif;
+$font-family-base: $font-1;
 
 $font-size-base: 1rem;
 
@@ -232,9 +231,9 @@ $opacity-subtle: 0.1;
 
 $border-color: set-contrasting-color-alpha('body', 0.3);
 
-$border-radius: 0.7rem;
-$border-radius-lg: 1.5rem;
-$border-radius-sm: 0.4rem;
+$border-radius: 0;
+$border-radius-lg: 0;
+$border-radius-sm: 0;
 
 $box-shadow-sm-dimensions: 0 0.125rem 0.25rem;
 $box-shadow-sm-opacity: 0.2;

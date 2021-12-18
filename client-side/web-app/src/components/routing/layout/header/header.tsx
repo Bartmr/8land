@@ -57,12 +57,10 @@ export function Header(props: Props) {
               <FontAwesomeIcon icon={faBars} />
             </Navbar.Toggle>
             <LinkAnchor
-              className="navbar-brand"
+              className="navbar-brand me-0 me-lg-3"
               href={CLIENT_SIDE_INDEX_ROUTE.getHref()}
             >
-              <span className="badge badge-primary">
-                <span className="h5">{PROJECT_NAME}</span>
-              </span>
+              <span className="h5">{PROJECT_NAME}</span>
             </LinkAnchor>
             <Navbar.Collapse id={props.menuHtmlId}>
               <Nav>

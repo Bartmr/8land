@@ -17,7 +17,7 @@ import { JSONApiBase } from 'src/internals/apis/json-api-base';
 import { LoggingServiceSingleton } from 'src/internals/logging/logging.service.singleton';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
-import { throwError } from 'src/internals/utils/throw-error';
+import { getFirebaseEmulatorProjectId } from 'src/internals/apis/firebase/firebase.constants';
 
 async function seed() {
   const FIREBASE_AUTH_EMULATOR_HOST =
@@ -40,8 +40,7 @@ async function seed() {
 
     await tearDownDatabases([defaultDBConnection]);
 
-    const firebaseProjectId =
-      EnvironmentVariablesService.variables.FIREBASE_PROJECT_ID || throwError();
+    const firebaseProjectId = getFirebaseEmulatorProjectId();
 
     const firebaseApp = firebaseAdmin.initializeApp({
       projectId: firebaseProjectId,
