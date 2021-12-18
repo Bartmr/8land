@@ -7,7 +7,6 @@ import { runGame } from './game';
 import * as styles from './index.module.scss';
 import { missingCssClass } from 'src/components/ui-kit/core/utils/missing-css-class';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
-import ReactTicker from 'react-ticker';
 import { SoundcloudSong } from './soundcloud-types';
 
 function GameCanvas(props: { onSongChange: (song: SoundcloudSong) => void }) {
@@ -48,7 +47,6 @@ function GameCanvas(props: { onSongChange: (song: SoundcloudSong) => void }) {
       await runGame({
         musicProvider: {
           playFromSoundcloud: (url: string | null) => {
-            console.log(url);
             if (soundcloudPlayer) {
               if (url && url !== lastSong) {
                 soundcloudPlayer.load(url, {

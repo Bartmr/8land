@@ -47,7 +47,7 @@ interface Visuals {
   urn: string;
   enabled: boolean;
   visuals: Visual[];
-  tracking?: any;
+  tracking?: unknown;
 }
 
 interface Badges {
@@ -64,7 +64,7 @@ interface User {
   created_at: Date;
   creator_subscriptions: CreatorSubscription[];
   creator_subscription: CreatorSubscription2;
-  description?: any;
+  description?: unknown;
   followers_count: number;
   followings_count: number;
   first_name: string;
@@ -79,7 +79,7 @@ interface User {
   permalink: string;
   permalink_url: string;
   playlist_count: number;
-  reposts_count?: any;
+  reposts_count?: unknown;
   track_count: number;
   uri: string;
   urn: string;
@@ -96,7 +96,7 @@ export interface SoundcloudSong {
   resource_type: string;
   playable: boolean;
   artwork_url: string;
-  caption?: any;
+  caption?: unknown;
   commentable: boolean;
   comment_count: number;
   created_at: Date;
@@ -109,7 +109,7 @@ export interface SoundcloudSong {
   genre: string;
   has_downloads_left: boolean;
   kind: string;
-  label_name?: any;
+  label_name?: unknown;
   last_modified: Date;
   license: string;
   likes_count: number;
@@ -118,11 +118,11 @@ export interface SoundcloudSong {
   playback_count: number;
   public: boolean;
   publisher_metadata: PublisherMetadata;
-  purchase_title?: any;
-  purchase_url?: any;
-  release_date?: any;
+  purchase_title?: unknown;
+  purchase_url?: unknown;
+  release_date?: unknown;
   reposts_count: number;
-  secret_token?: any;
+  secret_token?: unknown;
   sharing: string;
   state: string;
   streamable: boolean;
@@ -132,7 +132,7 @@ export interface SoundcloudSong {
   uri: string;
   urn: string;
   user_id: number;
-  visuals?: any;
+  visuals?: unknown;
   waveform_url: string;
   display_date: Date;
   media: Media;
