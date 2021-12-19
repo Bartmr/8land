@@ -80,11 +80,19 @@ function Content() {
             });
 
             (async () => {
-              await mainApiSession.login({
+              const res = await mainApiSession.login({
                 firebaseIdToken: await (
                   FirebaseAuth.currentUser || throwError()
                 ).getIdToken(),
               });
+
+              if (res === 'ok') {
+                return;
+              } else {
+                replaceLoginState({
+                  status: res,
+                });
+              }
             })();
           } else {
             replaceNeedsEmailVerification(true);

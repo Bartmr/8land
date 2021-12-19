@@ -1,10 +1,4 @@
-import { NODE_ENV } from 'src/internals/environment/node-env.constants';
-import { NodeEnv } from 'src/internals/environment/node-env.types';
+import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
 
-export const getFirebaseEmulatorProjectId = () => {
-  if (NODE_ENV === NodeEnv.Development || NODE_ENV === NodeEnv.Test) {
-    return `emulator-project-${NODE_ENV}`;
-  } else {
-    throw new Error();
-  }
-};
+export const FIREBASE_EMULATOR_PROJECT_ID =
+  EnvironmentVariablesService.variables.FIREBASE_PROJECT_ID;

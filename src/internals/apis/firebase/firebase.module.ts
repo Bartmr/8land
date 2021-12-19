@@ -2,7 +2,8 @@ import { Module } from '@nestjs/common';
 import * as firebaseAdmin from 'firebase-admin';
 import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
-import { getFirebaseEmulatorProjectId } from './firebase.constants';
+import { throwError } from 'src/internals/utils/throw-error';
+import { FIREBASE_EMULATOR_PROJECT_ID } from './firebase.constants';
 import { FirebaseService } from './firebase.service';
 
 type FirebaseApp = ReturnType<typeof firebaseAdmin['initializeApp']>;
@@ -17,7 +18,7 @@ type FirebaseApp = ReturnType<typeof firebaseAdmin['initializeApp']>;
         if (EnvironmentVariablesService.variables.FIREBASE_AUTH_EMULATOR_HOST) {
           app = firebaseAdmin.initializeApp(
             {
-              projectId: getFirebaseEmulatorProjectId(),
+              projectId: FIREBASE_EMULATOR_PROJECT_ID || throwError(),
             },
             generateRandomUUID(),
           );
