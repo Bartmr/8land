@@ -9,9 +9,9 @@ export class LandAssets extends SimpleEntity {
   @UpdateDateColumn()
   updatedAt!: Date;
 
-  @Column()
+  @Column('text')
   tiledJsonUrl!: string;
 
-  @Column()
+  @Column('text')
   tilesetImageUrl!: string;
 }

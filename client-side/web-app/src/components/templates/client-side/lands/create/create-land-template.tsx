@@ -133,10 +133,11 @@ const tiledJSONSchema = object({
   });
 
 export function CreateLandTemplate(_props: RouteComponentProps) {
-  // invalidated file input
+  // raw file, without any validation
   const [file, replaceFile] = useState<undefined | File>(undefined);
-  const [incompatibleFileFormat, replaceIncompatibleFileFormat] =
-    useState(false);
+  const [incompatibleFileFormat, replaceIncompatibleFileFormat] = useState<
+    undefined | 'incompatible-file-format' | 'file-size-exceeded'
+  >(undefined);
   const [fileValidationErrors, replaceFileJSONValidationErrors] = useState<
     AnyErrorMessagesTree | undefined
   >(undefined);
@@ -153,7 +154,7 @@ export function CreateLandTemplate(_props: RouteComponentProps) {
     undefined,
   );
   const [incompatibleTilesetFileFormat, replaceIncompatibleTilesetFileFormat] =
-    useState<undefined | 'name-doesnt-match' | 'wrong-file-format'>(undefined);
+    useState<undefined | 'wrong-file-format' | 'file-size-exceeded'>(undefined);
 
   //
   //
@@ -164,6 +165,8 @@ export function CreateLandTemplate(_props: RouteComponentProps) {
 
   useEffect(() => {
     (async () => {
+      replaceFileJSONValidationErrors(undefined);
+      replaceIncompatibleFileFormat(undefined);
       replaceFileJSON(undefined);
 
       if (file) {
@@ -173,14 +176,18 @@ export function CreateLandTemplate(_props: RouteComponentProps) {
           if (
             !(file.name.endsWith('.json') && file.type === 'application/json')
           ) {
-            throw new Error();
+            throw new Error('incompatible-file-format');
+          }
+
+          if (file.size > 512000) {
+            throw new Error('file-size-exceeded');
           }
 
           const text = await file.text();
 
           parsedFile = JSON.parse(text) as unknown;
 
-          replaceIncompatibleFileFormat(false);
+          replaceIncompatibleFileFormat(undefined);
 
           const validationResult = tiledJSONSchema.validate(parsedFile);
 
@@ -191,17 +198,22 @@ export function CreateLandTemplate(_props: RouteComponentProps) {
             replaceFileJSON(validationResult.value);
           }
         } catch (err) {
-          replaceIncompatibleFileFormat(true);
+          if (err instanceof Error && err.message === 'file-size-exceeded') {
+            replaceIncompatibleFileFormat('file-size-exceeded');
+            return;
+          }
+
+          replaceIncompatibleFileFormat('incompatible-file-format');
           return;
         }
-      } else {
-        replaceIncompatibleFileFormat(false);
       }
     })();
   }, [file]);
 
   useEffect(() => {
     (async () => {
+      replaceIncompatibleTilesetFileFormat(undefined);
+
       if (tilesetFile && fileJSON) {
         if (
           !(
@@ -213,14 +225,11 @@ export function CreateLandTemplate(_props: RouteComponentProps) {
           return;
         }
 
-        const tilesetImageFilename = fileJSON.tilesets[0]?.image;
-        if (tilesetFile.name !== tilesetImageFilename) {
-          replaceIncompatibleTilesetFileFormat('name-doesnt-match');
+        if (tilesetFile.size > 512000) {
+          replaceIncompatibleTilesetFileFormat('file-size-exceeded');
           return;
         }
       }
-
-      replaceIncompatibleTilesetFileFormat(undefined);
     })();
   }, [tilesetFile, fileJSON]);
 
@@ -252,8 +261,9 @@ export function CreateLandTemplate(_props: RouteComponentProps) {
                   />
                   {incompatibleFileFormat ? (
                     <div className="invalid-feedback">
-                      Incompatible file format. Make sure you&apos;re uploading
-                      a JSON Tiled file
+                      {incompatibleFileFormat === 'incompatible-file-format'
+                        ? "Incompatible file format. Make sure you're uploading a JSON Tiled file"
+                        : 'File size cannot exceed 512k'}
                     </div>
                   ) : null}
                   {fileValidationErrors ? (
@@ -290,15 +300,18 @@ export function CreateLandTemplate(_props: RouteComponentProps) {
                       />
                       {incompatibleTilesetFileFormat ? (
                         <div className="invalid-feedback">
-                          Incompatible file format. Make sure you&apos;re
-                          uploading a JSON Tiled file
+                          {incompatibleTilesetFileFormat === 'wrong-file-format'
+                            ? "Incompatible file format. Make sure you're uploading a PNG image"
+                            : 'File size cannot exceed 512k'}
                         </div>
                       ) : null}
                     </div>
                   </>
                 ) : null}
 
-                {fileJSON && incompatibleTilesetFileFormat === undefined ? (
+                {fileJSON &&
+                tilesetFile &&
+                incompatibleTilesetFileFormat === undefined ? (
                   <div className="mt-3">
                     <button
                       className="d-block w-100 btn btn-success"

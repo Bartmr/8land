@@ -3,9 +3,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToMany,
   OneToOne,
   UpdateDateColumn,
 } from 'typeorm';
+import { BlockEntry } from './block-entry.entity';
 import { LandAssets } from './land-assets.entity';
 
 @Entity()
@@ -16,9 +19,13 @@ export class Land extends SimpleEntity {
   @UpdateDateColumn()
   updatedAt!: Date;
 
-  @OneToOne(() => LandAssets, { nullable: true })
+  @OneToOne(() => LandAssets, { nullable: true, eager: true })
+  @JoinColumn()
   assets?: LandAssets;
 
-  @Column()
+  @Column('text')
   name!: string;
+
+  @OneToMany(() => BlockEntry, (e) => e.land, { eager: true })
+  blocks!: BlockEntry[];
 }
