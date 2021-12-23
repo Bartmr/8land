@@ -1,17 +1,17 @@
 import { SimpleEntity } from 'src/internals/databases/simple-entity/simple.entity';
-import { Column, CreateDateColumn, Entity, UpdateDateColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 
 @Entity()
 export class LandAssets extends SimpleEntity {
-  @CreateDateColumn()
-  createdAt!: Date;
-
-  @UpdateDateColumn()
-  updatedAt!: Date;
+  @Column('text')
+  tiledJsonStorageKey!: string;
 
   @Column('text')
-  tiledJsonUrl!: string;
+  tiledJsonURL!: string;
 
   @Column('text')
-  tilesetImageUrl!: string;
+  tilesetImageStorageKey!: string;
+
+  @Column('text')
+  tilesetImageURL!: string;
 }

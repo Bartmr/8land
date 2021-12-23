@@ -5,6 +5,7 @@ import { LoggingServiceSingleton } from './internals/logging/logging.service.sin
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DEFAULT_DATABASE_TYPEORM_CONNECTION_OPTIONS } from './internals/databases/default-database-typeorm-connection-options';
 import { AuthModule } from './auth/auth.module';
+import { LandModule } from './land/land.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AuthModule } from './auth/auth.module';
       autoLoadEntities: true,
     }),
     AuthModule,
+    LandModule,
   ],
   providers: [...CROSS_CUTTING_PROVIDERS],
 })

@@ -72,11 +72,7 @@ export abstract class SimpleEntityRepository<
 > extends AbstractRepository<Entity> {
   _EntityCreationAttributes!: Omit<
     Entity,
-    | keyof SimpleEntity
-    | FieldsOmittedBeforePersistence
-    | 'toJSON'
-    | 'createdAt'
-    | 'updatedAt'
+    keyof SimpleEntity | FieldsOmittedBeforePersistence | 'toJSON'
   >;
 
   findOne(

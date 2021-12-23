@@ -1,0 +1,6 @@
+import { SimpleEntityRepository } from 'src/internals/databases/simple-entity/simple-entity.repository';
+import { EntityRepository } from 'typeorm';
+import { DoorBlock } from './door-block.entity';
+
+@EntityRepository(DoorBlock)
+export class DoorBlockRepository extends SimpleEntityRepository<DoorBlock> {}

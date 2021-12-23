@@ -7,8 +7,8 @@ import React, { Suspense } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
 import { TransportedDataStatus } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
-import { CreateLandTemplate } from './lands/create/create-land-template';
-import { CREATE_LAND_ROUTE } from './lands/create/create-land-routes';
+import { EditLandTemplate } from './lands/create/edit-land-template';
+import { EDIT_LAND_ROUTE } from './lands/create/edit-land-routes';
 import { LANDS_ROUTE } from './lands/lands-routes';
 
 function Game(_props: RouteComponentProps) {
@@ -35,15 +35,15 @@ function Game(_props: RouteComponentProps) {
 export function ClientSideTemplate() {
   return (
     <Router>
+      <Game path="/client-side/" />
       <AuthenticatedRoute
         authenticationRules={{
           mainApiSession: { access: AuthenticatedRouteAccess.Allow },
         }}
         path="/client-side"
       >
-        <Game path="/" />
-        <CreateLandTemplate
-          path={`${LANDS_ROUTE.pathSegment}${CREATE_LAND_ROUTE.pathSegment}`}
+        <EditLandTemplate
+          path={`${LANDS_ROUTE.pathSegment}${EDIT_LAND_ROUTE.pathSegment}`}
         />
         <NotFoundTemplate default />
       </AuthenticatedRoute>

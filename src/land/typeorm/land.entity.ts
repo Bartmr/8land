@@ -6,12 +6,14 @@ import {
   JoinColumn,
   OneToMany,
   OneToOne,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { BlockEntry } from './block-entry.entity';
 import { LandAssets } from './land-assets.entity';
 
 @Entity()
+@Unique(['searchableName'])
 export class Land extends SimpleEntity {
   @CreateDateColumn()
   createdAt!: Date;
@@ -26,6 +28,12 @@ export class Land extends SimpleEntity {
   @Column('text')
   name!: string;
 
-  @OneToMany(() => BlockEntry, (e) => e.land, { eager: true })
-  blocks!: BlockEntry[];
+  @Column('text')
+  searchableName!: string;
+
+  @OneToMany(() => BlockEntry, (e) => e.land, { lazy: true })
+  blocks!: Promise<BlockEntry[]>;
+
+  @Column('text', { nullable: true })
+  backgroundMusicUrl?: string;
 }

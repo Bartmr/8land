@@ -26,6 +26,8 @@ function GameCanvas(props: { onSongChange: (song: SoundcloudSong) => void }) {
         : undefined;
 
       if (soundcloudPlayer) {
+        soundcloudPlayer.pause();
+
         soundcloudPlayer.bind(
           (window.SC || throwError()).Widget.Events.FINISH,
           () => {
