@@ -7,6 +7,10 @@ import path from 'path';
 import { StorageService } from './storage.service';
 import { DevStorageService } from './dev-storage.service';
 import { throwError } from 'libs/shared/src/internals/utils/throw-error';
+import fs from 'fs';
+import { promisify } from 'util';
+
+const mkdir = promisify(fs.mkdir);
 
 export const USE_DEV_STORAGE =
   NODE_ENV === NodeEnv.Development || NODE_ENV === NodeEnv.Test;
@@ -23,8 +27,12 @@ export const USE_DEV_STORAGE =
   exports: [StorageService],
 })
 export class StorageModule {
-  configure(consumer: MiddlewareConsumer) {
+  async configure(consumer: MiddlewareConsumer) {
     if (USE_DEV_STORAGE) {
+      await mkdir(path.join(LOCAL_TEMPORARY_FILES_PATH, 'storage'), {
+        recursive: true,
+      });
+
       consumer
         .apply(express.static(path.join(LOCAL_TEMPORARY_FILES_PATH, 'storage')))
         .forRoutes('/tmp/storage');

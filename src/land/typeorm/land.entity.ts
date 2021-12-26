@@ -36,4 +36,7 @@ export class Land extends SimpleEntity {
 
   @Column('text', { nullable: true })
   backgroundMusicUrl?: string;
+
+  @Column('text', { nullable: true })
+  soundcloudBackgroundMusicApiUrl?: string;
 }

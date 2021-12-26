@@ -23,6 +23,7 @@ export class Land1640016172054 implements MigrationInterface {
                 "searchableName" text NOT NULL,
                 "assetsId" uuid,
                 "backgroundMusicUrl" text,
+                "soundcloudBackgroundMusicApiUrl" text,
                 CONSTRAINT "UQ_searchable_name" UNIQUE ("searchableName"),
                 CONSTRAINT "REL_8881982e557d3f2119abf6b0bd" UNIQUE ("assetsId"),
                 CONSTRAINT "PK_a6b43171b11dc6bab4a449e7b79" PRIMARY KEY ("id")

@@ -31,19 +31,27 @@ import { Connection } from 'typeorm';
 import { BlockEntryRepository } from './typeorm/block-entry.repository';
 import { DoorBlockRepository } from './typeorm/door-block.repository';
 import { LandRepository } from './typeorm/land.repository';
-import { fileTypeFromBuffer } from 'file-type';
+import fileType from 'file-type';
 import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
 import { LandAssetsRepository } from './typeorm/land-assets.repository';
-import { readChunk } from 'read-chunk';
-import fs from 'fs';
-import { promisify } from 'util';
 import { StorageService } from 'src/internals/storage/storage.service';
 import { InferType } from 'not-me/lib/schemas/schema';
 import { throwError } from 'src/internals/utils/throw-error';
-
-const readFile = promisify(fs.readFile);
+import { ApiBody, ApiConsumes, ApiProperty } from '@nestjs/swagger';
+import {
+  EditLandBodyDTO,
+  EditLandDTO,
+  EditLandParametersDTO,
+} from 'libs/shared/src/land/edit/edit-land.dto';
 
 const TiledJSONSchema = createTiledJSONSchema();
+
+class LandAssetsRequestDTO {
+  @ApiProperty({ type: 'string', format: 'binary' })
+  map!: unknown;
+  @ApiProperty({ type: 'string', format: 'binary' })
+  tileset!: unknown;
+}
 
 @Controller('land')
 export class LandController {
@@ -87,6 +95,7 @@ export class LandController {
     });
   }
 
+  @RolesUpAndIncluding(Role.Admin)
   @HttpCode(201)
   @Put(':landId/assets')
   @UseInterceptors(
@@ -95,6 +104,10 @@ export class LandController {
       { name: 'tileset', maxCount: 1 },
     ]),
   )
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    type: LandAssetsRequestDTO,
+  })
   async uploadLandAssets(
     @Param() params: UploadLandAssetsParameters,
     @UploadedFiles()
@@ -122,10 +135,8 @@ export class LandController {
       });
     }
 
-    const tilesetChunk = await readChunk(tileset.path, { length: 4100 });
-
     const tilesetFormat =
-      (await fileTypeFromBuffer(tilesetChunk)) ||
+      (await fileType.fromBuffer(tileset.buffer)) ||
       (() => {
         throw new BadRequestException({ error: 'unrecognized-tileset-format' });
       })();
@@ -137,7 +148,7 @@ export class LandController {
     let mapJSON;
 
     try {
-      const string = await readFile(map.path, { encoding: 'utf-8' });
+      const string = map.buffer.toString();
 
       mapJSON = JSON.parse(string) as unknown;
     } catch (err) {
@@ -155,12 +166,6 @@ export class LandController {
       const tilesetStorageKey = `${params.landId}/tileset.png`;
       const mapStorageKey = `${params.landId}/tiled.json`;
 
-      const tilesetStream = fs.createReadStream(tileset.path);
-      const tilesetUrl = await this.storageService.saveStream(
-        tilesetStorageKey,
-        tilesetStream,
-      );
-
       const toSave: InferType<typeof TiledJSONSchema> = {
         ...tiledJSONValidationResult.value,
         tilesets: [
@@ -170,10 +175,6 @@ export class LandController {
           },
         ],
       };
-      const mapUrl = await this.storageService.saveText(
-        mapStorageKey,
-        JSON.stringify(toSave),
-      );
 
       await this.connection.transaction(async (e) => {
         const landRepo = e.getCustomRepository(LandRepository);
@@ -188,6 +189,16 @@ export class LandController {
         if (!land) {
           throw new ResourceNotFoundException();
         }
+
+        const tilesetUrl = await this.storageService.saveBuffer(
+          tilesetStorageKey,
+          tileset.buffer,
+        );
+
+        const mapUrl = await this.storageService.saveText(
+          mapStorageKey,
+          JSON.stringify(toSave, undefined, 2),
+        );
 
         if (!land.assets) {
           const landAssets = await landAssetsRepo.create(
@@ -304,7 +315,44 @@ export class LandController {
     });
   }
 
-  // TODO upload land assets
+  @Put(':landId')
+  @RolesUpAndIncluding(Role.Admin)
+  editLand(
+    @Param() param: EditLandParametersDTO,
+    @Body() body: EditLandBodyDTO,
+    @WithAuditContext() auditContext: AuditContext,
+  ): Promise<EditLandDTO> {
+    return this.connection.transaction(async (e) => {
+      const landRepository = e.getCustomRepository(LandRepository);
+
+      const land = await landRepository.findOne({
+        where: {
+          id: param.landId,
+        },
+      });
+
+      if (!land) {
+        throw new ResourceNotFoundException();
+      }
+
+      if (body.name && body.name !== land.name) {
+        land.name = body.name;
+      }
+
+      if (body.backgroundMusicUrl != land.backgroundMusicUrl) {
+        land.backgroundMusicUrl = body.backgroundMusicUrl;
+
+        // TODO: resolve soundcloud api url
+      }
+
+      await landRepository.save(land, auditContext);
+
+      return {
+        id: land.id,
+        name: land.name,
+      };
+    });
+  }
 
   // TODO edit land
 

@@ -30,4 +30,11 @@ export class User extends SimpleEntity {
     enum: getEnumValues(Role),
   })
   role!: Role;
+
+  toJSON() {
+    return {
+      ...this,
+      firebaseUid: undefined,
+    };
+  }
 }

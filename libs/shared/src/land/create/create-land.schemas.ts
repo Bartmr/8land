@@ -3,10 +3,18 @@ import { Schema } from 'not-me/lib/schemas/schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { CreateLandRequestDTO } from './create-land.dto';
 
-export const CreateLandRequestSchema: Schema<CreateLandRequestDTO> = object({
+export const CreateLandRequestSchemaObj = {
   name: string()
     .filled()
+    .transform((s) => s.trim())
+    .test((n) =>
+      n.length < 1 ? 'Land name must have at least 1 character' : null,
+    )
     .test((n) =>
       n.length > 64 ? 'Land name cannot be more than 64 characters' : null,
     ),
-}).required();
+};
+
+export const CreateLandRequestSchema: Schema<CreateLandRequestDTO> = object(
+  CreateLandRequestSchemaObj,
+).required();

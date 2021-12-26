@@ -1,5 +1,5 @@
 import fs from 'fs';
-import path from 'path/win32';
+import path from 'path';
 import { Readable } from 'stream';
 import { promisify } from 'util';
 import { LOCAL_TEMPORARY_FILES_PATH } from '../local-temporary-files/local-temporary-files-path';
@@ -21,6 +21,19 @@ export class DevStorageService implements StorageService {
       fsStream.on('error', reject);
       fsStream.on('finish', resolve);
     });
+
+    return {
+      url: `http://localhost:3000/tmp/storage/${fsKey}`,
+    };
+  }
+
+  async saveBuffer(key: string, buffer: Buffer) {
+    const fsKey = key.split('/').join('_');
+
+    await writeFile(
+      path.resolve(LOCAL_TEMPORARY_FILES_PATH, 'storage', fsKey),
+      buffer,
+    );
 
     return {
       url: `http://localhost:3000/tmp/storage/${fsKey}`,
