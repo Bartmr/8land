@@ -75,9 +75,9 @@ async function seed() {
 
     const auditContext = new AuditContext({
       operationId: generateRandomUUID(),
-      requestMethod: undefined,
-      requestPath: undefined,
-      authContext: undefined,
+      requestMethod: null,
+      requestPath: null,
+      authContext: null,
     });
 
     await usersRepository.create(

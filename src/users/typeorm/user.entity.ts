@@ -23,7 +23,7 @@ export class User extends SimpleEntity {
   updatedAt!: Date;
 
   @DeleteDateColumn()
-  deletedAt?: Date;
+  deletedAt!: Date | null;
 
   @Column({
     type: 'enum',
