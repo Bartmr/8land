@@ -14,11 +14,11 @@ export class BlockEntry extends SimpleEntity {
   @CreateDateColumn()
   createdAt!: Date;
 
-  @ManyToOne(() => Land, { nullable: false })
+  @ManyToOne(() => Land)
   @JoinColumn()
   land!: Land;
 
   @OneToOne(() => DoorBlock, { nullable: true, eager: true })
   @JoinColumn()
-  door?: DoorBlock;
+  door!: DoorBlock | null;
 }

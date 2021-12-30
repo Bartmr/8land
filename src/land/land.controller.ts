@@ -84,6 +84,8 @@ export class LandController {
           name: body.name,
           searchableName: getSearchableName(body.name),
           blocks: Promise.resolve([]),
+          backgroundMusicUrl: null,
+          assets: null,
         },
         auditContext,
       );
@@ -339,10 +341,11 @@ export class LandController {
         land.name = body.name;
       }
 
-      if (body.backgroundMusicUrl != land.backgroundMusicUrl) {
+      if (
+        typeof body.backgroundMusicUrl !== 'undefined' &&
+        body.backgroundMusicUrl != land.backgroundMusicUrl
+      ) {
         land.backgroundMusicUrl = body.backgroundMusicUrl;
-
-        // TODO: resolve soundcloud api url
       }
 
       await landRepository.save(land, auditContext);
@@ -353,8 +356,6 @@ export class LandController {
       };
     });
   }
-
-  // TODO edit land
 
   // TODO get land + blocks + assets
 }

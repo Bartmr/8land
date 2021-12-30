@@ -23,7 +23,7 @@ export class Land extends SimpleEntity {
 
   @OneToOne(() => LandAssets, { nullable: true, eager: true })
   @JoinColumn()
-  assets?: LandAssets;
+  assets!: LandAssets | null;
 
   @Column('text')
   name!: string;
@@ -35,8 +35,7 @@ export class Land extends SimpleEntity {
   blocks!: Promise<BlockEntry[]>;
 
   @Column('text', { nullable: true })
-  backgroundMusicUrl?: string;
+  backgroundMusicUrl!: string | null;
 
-  @Column('text', { nullable: true })
-  soundcloudBackgroundMusicApiUrl?: string;
+  // TODO: territory relationship nullable column
 }
