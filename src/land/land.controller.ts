@@ -4,10 +4,12 @@ import {
   ConflictException,
   Controller,
   Delete,
+  Get,
   HttpCode,
   Param,
   Post,
   Put,
+  Query,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -43,6 +45,14 @@ import {
   EditLandDTO,
   EditLandParametersDTO,
 } from 'libs/shared/src/land/edit/edit-land.dto';
+import {
+  IndexLandsDTO,
+  IndexLandsQueryDTO,
+} from 'libs/shared/src/land/index/index-lands.dto';
+import {
+  GetLandDTO,
+  GetLandParametersDTO,
+} from 'libs/shared/src/land/get/get-land.dto';
 
 const TiledJSONSchema = createTiledJSONSchema();
 
@@ -338,7 +348,20 @@ export class LandController {
       }
 
       if (body.name && body.name !== land.name) {
+        const searchableName = getSearchableName(body.name);
+
+        const landWithSameName = await landRepository.findOne({
+          where: {
+            searchableName,
+          },
+        });
+
+        if (landWithSameName) {
+          throw new ConflictException();
+        }
+
         land.name = body.name;
+        land.searchableName = searchableName;
       }
 
       if (
@@ -357,5 +380,52 @@ export class LandController {
     });
   }
 
-  // TODO get land + blocks + assets
+  @Get()
+  @RolesUpAndIncluding(Role.Admin)
+  async indexLands(@Query() query: IndexLandsQueryDTO): Promise<IndexLandsDTO> {
+    const landsRepository = this.connection.getCustomRepository(LandRepository);
+
+    const results = await landsRepository.find({
+      order: {
+        createdAt: 'DESC',
+      },
+      skip: query.skip,
+    });
+
+    return {
+      total: results.total,
+      limit: results.limit,
+      lands: results.rows.map((c) => ({
+        id: c.id,
+        name: c.name,
+      })),
+    };
+  }
+
+  @Get()
+  async getLand(
+    @Param() parameters: GetLandParametersDTO,
+  ): Promise<GetLandDTO> {
+    const landsRepository = this.connection.getCustomRepository(LandRepository);
+
+    const land = await landsRepository.findOne({
+      where: {
+        id: parameters.id,
+      },
+    });
+
+    if (!land) {
+      throw new ResourceNotFoundException();
+    }
+
+    return {
+      id: land.id,
+      name: land.name,
+      backgroundMusicUrl: land.backgroundMusicUrl,
+      mapUrl: land.assets?.tiledJsonURL,
+      tilesetUrl: land.assets?.tilesetImageURL,
+      doorBlocksReferencing: [], // TODO
+      doorBlocks: [], // TODO
+    };
+  }
 }
