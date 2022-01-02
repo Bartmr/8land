@@ -1,20 +1,14 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AUTH_MODULE_ENTITIES } from './auth-module-entities';
 import { AuthController } from './auth.controller';
 import { AuthGuard } from './auth.guard';
 import { AuthTokensService } from './tokens/auth-tokens.service';
-import { JobsConfigModule } from 'src/internals/jobs/config/jobs-config.module';
-import { AuthToken } from './tokens/typeorm/auth-token.entity';
-import { User } from 'src/users/typeorm/user.entity';
 import { FirebaseModule } from 'src/internals/apis/firebase/firebase.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([AuthToken, User]),
-    JobsConfigModule,
-    FirebaseModule,
-  ],
+  imports: [TypeOrmModule.forFeature(AUTH_MODULE_ENTITIES), FirebaseModule],
   providers: [
     {
       provide: APP_GUARD,
