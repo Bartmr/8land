@@ -3,11 +3,18 @@ import Navbar from 'react-bootstrap/Navbar';
 import * as styles from './header.module.scss';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { CLIENT_SIDE_INDEX_ROUTE } from 'src/components/templates/client-side/index/index-routes';
-import { Nav } from 'react-bootstrap';
 import { PROJECT_NAME } from '@app/shared/project-details';
 import { missingCssClass } from 'src/components/ui-kit/core/utils/missing-css-class';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  TransportedDataGate,
+  TransportedDataGateLayout,
+} from 'src/components/shared/transported-data-gate/transported-data-gate';
+import { LANDS_ROUTE } from 'src/components/templates/client-side/lands/lands-routes';
+import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
+import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
+import { useMainApiSessionLogout } from 'src/logic/app-internals/apis/main/session/use-main-api-session-logout';
 
 type Props = {
   menuHtmlId: string;
@@ -20,6 +27,20 @@ type Props = {
 
 export function Header(props: Props) {
   const [expanded, replaceExpanded] = useState<boolean>(false);
+
+  const logout = useMainApiSessionLogout();
+  const session = useStoreSelector(
+    { mainApi: mainApiReducer },
+    (s) => s.mainApi.session,
+  );
+
+  const onLogOutClick = async () => {
+    const confirmed = window.confirm('Do you want to log out?');
+
+    if (confirmed) {
+      await logout.logout();
+    }
+  };
 
   const expandMenu = () => {
     replaceExpanded(true);
@@ -67,7 +88,53 @@ export function Header(props: Props) {
               <span className="h5">{PROJECT_NAME}</span>
             </LinkAnchor>
             <Navbar.Collapse id={props.menuHtmlId}>
-              <Nav></Nav>
+              <ul className="navbar-nav me-3 my-2 my-lg-0">
+                <TransportedDataGate
+                  layout={TransportedDataGateLayout.Tape}
+                  dataWrapper={session}
+                >
+                  {({ data }) => {
+                    return (
+                      <>
+                        {data ? (
+                          <li className="nav-item">
+                            <LinkAnchor
+                              className="nav-link"
+                              href={LANDS_ROUTE.geHref()}
+                            >
+                              {LANDS_ROUTE.label}
+                            </LinkAnchor>
+                          </li>
+                        ) : null}
+                      </>
+                    );
+                  }}
+                </TransportedDataGate>
+              </ul>
+
+              <ul className="navbar-nav ms-auto">
+                <TransportedDataGate
+                  layout={TransportedDataGateLayout.Tape}
+                  dataWrapper={session}
+                >
+                  {({ data }) => {
+                    return (
+                      <>
+                        {data ? (
+                          <li className="nav-item d-flex justify-content-end">
+                            <button
+                              onClick={onLogOutClick}
+                              className="btn btn-default"
+                            >
+                              Log Out
+                            </button>
+                          </li>
+                        ) : null}
+                      </>
+                    );
+                  }}
+                </TransportedDataGate>
+              </ul>
             </Navbar.Collapse>
           </div>
         </Navbar>

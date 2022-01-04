@@ -10,6 +10,7 @@ import { TransportedDataStatus } from 'src/logic/app-internals/transports/transp
 import { EditLandTemplate } from './lands/create/edit-land-template';
 import { EDIT_LAND_ROUTE } from './lands/create/edit-land-routes';
 import { LANDS_ROUTE } from './lands/lands-routes';
+import { LandsTemplate } from './lands/lands-template';
 
 function Game(_props: RouteComponentProps) {
   const LazyLoadedRoute = React.lazy(async () => {
@@ -42,6 +43,7 @@ export function ClientSideTemplate() {
         }}
         path="/client-side"
       >
+        <LandsTemplate path={`${LANDS_ROUTE.pathSegment}`} />
         <EditLandTemplate
           path={`${LANDS_ROUTE.pathSegment}${EDIT_LAND_ROUTE.pathSegment}`}
         />

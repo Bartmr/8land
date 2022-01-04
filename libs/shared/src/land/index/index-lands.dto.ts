@@ -4,6 +4,7 @@ import { IndexLandsQuerySchema } from './index-lands.schemas';
 class LandFromIndex {
   id!: string;
   name!: string;
+  published!: boolean;
 }
 
 export class IndexLandsDTO {

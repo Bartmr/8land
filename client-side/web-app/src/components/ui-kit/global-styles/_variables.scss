@@ -3,7 +3,7 @@
 $primary: #0000ff;
 $secondary: #9ab05d;
 $highlight: #00ffff;
-$success: #28a745;
+$success: #00ff00;
 $info: #007bff;
 $warning: #ffc107;
 $danger: #dc3545;
@@ -182,6 +182,8 @@ $light-contrasting-colors: (
 
 $hovered-bg: set-contrasting-color-alpha('body', 0.15);
 $selected-bg: set-contrasting-color-alpha('body', 0.3);
+
+$component-active-bg: $primary;
 
 $spacer: 1rem;
 $spacers: (

@@ -63,7 +63,7 @@ class LandAssetsRequestDTO {
   tileset!: unknown;
 }
 
-@Controller('land')
+@Controller('lands')
 export class LandController {
   constructor(
     @InjectConnection() private connection: Connection,
@@ -398,11 +398,12 @@ export class LandController {
       lands: results.rows.map((c) => ({
         id: c.id,
         name: c.name,
+        published: !!c.assets,
       })),
     };
   }
 
-  @Get()
+  @Get('/:id')
   async getLand(
     @Param() parameters: GetLandParametersDTO,
   ): Promise<GetLandDTO> {

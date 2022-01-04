@@ -1,6 +1,6 @@
 @use 'sass:math';
 
-$yiq-contrasted-threshold: 150;
+$yiq-contrasted-threshold: 130;
 
 @function is-color-dark($color) {
   $r: red($color);
