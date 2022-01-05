@@ -108,7 +108,7 @@ export class LandController {
   }
 
   @RolesUpAndIncluding(Role.Admin)
-  @HttpCode(201)
+  @HttpCode(204)
   @Put(':landId/assets')
   @UseInterceptors(
     FileFieldsInterceptor([

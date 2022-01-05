@@ -1,6 +1,5 @@
 import { createTiledJSONSchema } from '@app/shared/land/upload-assets/upload-land-assets.schemas';
 import { AnyErrorMessagesTree } from 'not-me/lib/error-messages/error-messages-tree';
-import { InferType } from 'not-me/lib/schemas/schema';
 import { useEffect, useState } from 'react';
 
 const schema = createTiledJSONSchema();
@@ -11,7 +10,7 @@ export type TiledJSONFieldState =
   | { error: 'invalid-json'; messageTree: AnyErrorMessagesTree }
   | {
       error: false;
-      value: InferType<ReturnType<typeof createTiledJSONSchema>>;
+      value: File;
     };
 
 export function TiledJSONField(props: {
@@ -47,7 +46,7 @@ export function TiledJSONField(props: {
             messageTree: validationResult.messagesTree,
           });
         } else {
-          props.onChange({ error: false, value: validationResult.value });
+          props.onChange({ error: false, value: file });
         }
       } else {
         props.onChange(undefined);

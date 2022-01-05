@@ -1,77 +1,102 @@
 import { Layout } from 'src/components/routing/layout/layout';
 import { EDIT_LAND_ROUTE } from './edit-land-routes';
 import { RouteComponentProps } from '@reach/router';
-import { useState } from 'react';
+import { AssetsSection } from './components/assets-section/assets-section';
+import { useEffect, useState } from 'react';
 import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
-import { TiledJSONFieldState } from './components/tiled-json-form-field';
-import { TilesetImageFieldState } from './components/tileset-image-form-field';
-import { TiledJSONField } from './components/tiled-json-form-field';
-import { TilesetImageFormField } from './components/tileset-image-form-field';
+import { useParams } from '@reach/router';
+import { object } from 'not-me/lib/schemas/object/object-schema';
+import { uuid } from '@app/shared/internals/validation/schemas/uuid.schema';
+import NotFoundTemplate from 'src/pages/404';
+import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
+import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
+import { Toast } from 'react-bootstrap';
+
+export function EditLandTemplateWithRouteProps(props: { id: string }) {
+  const api = useMainJSONApi();
+
+  const [land, replaceLand] = useState<TransportedData<GetLandDTO>>({
+    status: TransportedDataStatus.NotInitialized,
+  });
+
+  const [successfulSave, replaceSuccessfulSave] = useState(false);
+
+  const fetchLand = async () => {
+    replaceLand({ status: TransportedDataStatus.Loading });
+
+    const res = await api.get<
+      { status: 200; body: ToIndexedType<GetLandDTO> },
+      undefined
+    >({
+      path: `/lands/${props.id}`,
+      query: undefined,
+      acceptableStatusCodes: [200],
+    });
+
+    if (res.failure) {
+      replaceLand({ status: res.failure });
+    } else {
+      replaceLand({
+        status: TransportedDataStatus.Done,
+        data: res.response.body,
+      });
+    }
+  };
+
+  const onSuccessfulSave = async () => {
+    replaceSuccessfulSave(true);
+
+    await fetchLand();
+  };
+
+  useEffect(() => {
+    (async () => {
+      await fetchLand();
+    })();
+  }, []);
+
+  return (
+    <>
+      <Toast
+        onClose={() => replaceSuccessfulSave(false)}
+        show={successfulSave}
+        delay={10000}
+        autohide
+      >
+        <Toast.Header closeButton={false}>Changes saved</Toast.Header>
+      </Toast>
+      <TransportedDataGate dataWrapper={land}>
+        {({ data }) => {
+          return (
+            <AssetsSection onSuccessfulSave={onSuccessfulSave} land={data} />
+          );
+        }}
+      </TransportedDataGate>
+    </>
+  );
+}
 
 export function EditLandTemplate(_props: RouteComponentProps) {
-  const [tiledJSONFieldState, replaceTiledJSONFieldState] =
-    useState<TiledJSONFieldState>(undefined);
-  const [tilesetImageFieldState, replaceTilesetImageFieldState] =
-    useState<TilesetImageFieldState>(undefined);
+  const routeParams = useParams() as unknown;
 
-  const [formSubmissionStatus, replaceFormSubmissionStatus] = useState<
-    TransportedData<undefined>
-  >({ status: TransportedDataStatus.NotInitialized });
+  const validationResult = object({
+    id: uuid().required(),
+  })
+    .required()
+    .validate(routeParams);
 
   return (
     <Layout title={EDIT_LAND_ROUTE.label}>
       {() => {
-        return (
-          <>
-            <h2>Map and Graphics</h2>
-            <div className="card">
-              <div className="card-body">
-                <div className="mb-3"></div>
-                <TiledJSONField
-                  state={tiledJSONFieldState}
-                  onChange={replaceTiledJSONFieldState}
-                />
-                {!tiledJSONFieldState?.error && tiledJSONFieldState?.value ? (
-                  <TilesetImageFormField
-                    state={tilesetImageFieldState}
-                    onChange={replaceTilesetImageFieldState}
-                  />
-                ) : null}
-
-                {!tiledJSONFieldState?.error &&
-                tiledJSONFieldState?.value &&
-                !tilesetImageFieldState?.error &&
-                tilesetImageFieldState?.value ? (
-                  <div className="mt-3">
-                    <button
-                      className="d-block w-100 btn btn-success"
-                      disabled={
-                        formSubmissionStatus.status ===
-                        TransportedDataStatus.Loading
-                      }
-                      onClick={() => {
-                        replaceFormSubmissionStatus({
-                          status: TransportedDataStatus.Loading,
-                        });
-                      }}
-                    >
-                      Upload
-                    </button>
-                    <TransportedDataGate
-                      className="ms-3"
-                      dataWrapper={formSubmissionStatus}
-                    >
-                      {() => null}
-                    </TransportedDataGate>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-          </>
+        return validationResult.errors ? (
+          <NotFoundTemplate />
+        ) : (
+          <EditLandTemplateWithRouteProps id={validationResult.value.id} />
         );
       }}
     </Layout>

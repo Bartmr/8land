@@ -23,6 +23,8 @@ export function TilesetImageFormField(props: {
           props.onChange({ error: 'file-size-exceeded' });
           return;
         }
+
+        props.onChange({ error: false, value: file });
       } else {
         props.onChange(undefined);
       }

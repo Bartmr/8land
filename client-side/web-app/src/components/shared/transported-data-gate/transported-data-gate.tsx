@@ -114,12 +114,10 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
         return (
           <div className={flexClassName}>
             <FontAwesomeIcon
-              className={`text-primary ${iconSizeClassName}`}
+              className={`${iconSizeClassName}`}
               icon={faSearch}
             />
-            <p
-              className={`${textClassName} text-primary font-weight-bold mb-0`}
-            >
+            <p className={`${textClassName} font-weight-bold mb-0`}>
               404 Not Found
             </p>
           </div>

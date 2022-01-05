@@ -16,6 +16,8 @@ import { Layout } from 'src/components/routing/layout/layout';
 import { LANDS_ROUTE } from './lands-routes';
 import { CreateLandRequestDTO } from '@app/shared/land/create/create-land.dto';
 import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
+import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { EDIT_LAND_ROUTE } from './create/edit-land-routes';
 
 export function LandsTemplate(_props: RouteComponentProps) {
   const api = useMainJSONApi();
@@ -138,9 +140,11 @@ export function LandsTemplate(_props: RouteComponentProps) {
                       id="add-land-name-input"
                       className={`form-control ${data ? 'is-invalid' : ''}`}
                     />
-                    <div className="invalid-feedback position-absolute">
-                      This name is already taken
-                    </div>
+                    {data === 'name-already-taken' ? (
+                      <div className="invalid-feedback position-absolute">
+                        This name is already taken
+                      </div>
+                    ) : null}
                   </div>
                   <button
                     disabled={!newLandName.trim()}
@@ -157,19 +161,22 @@ export function LandsTemplate(_props: RouteComponentProps) {
           <TransportedDataGate dataWrapper={lands}>
             {({ data }) => {
               return (
-                <ul className="list-group">
+                <div className="list-group">
                   {data.lands.map((land) => {
                     return (
-                      <li
+                      <LinkAnchor
+                        href={EDIT_LAND_ROUTE.getHref(land.id)}
                         key={land.id}
                         className="list-group-item d-flex justify-content-between"
                       >
                         <span>{land.name}</span>{' '}
-                        <span className="badge bg-success">Published</span>
-                      </li>
+                        {land.published ? (
+                          <span className="badge bg-success">Published</span>
+                        ) : null}
+                      </LinkAnchor>
                     );
                   })}
-                </ul>
+                </div>
               );
             }}
           </TransportedDataGate>
