@@ -10,6 +10,7 @@ import { TiledJSONField } from './components/tiled-json-form-field';
 import { TilesetImageFormField } from './components/tileset-image-form-field';
 import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
+import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 
 export function AssetsSection(props: {
   land: GetLandDTO;
@@ -65,6 +66,21 @@ export function AssetsSection(props: {
 
       <div className="card">
         <div className="card-body">
+          {props.land.mapUrl ? (
+            <LinkAnchor href={props.land.mapUrl} className="text-success">
+              Download current Tiled map JSON file
+            </LinkAnchor>
+          ) : null}
+          {props.land.tilesetUrl ? (
+            <>
+              <br />{' '}
+              <LinkAnchor href={props.land.tilesetUrl} className="text-success">
+                Download current Tileset picture
+              </LinkAnchor>
+            </>
+          ) : null}
+
+          <hr />
           <TiledJSONField
             state={tiledJSONFieldState}
             onChange={replaceTiledJSONFieldState}

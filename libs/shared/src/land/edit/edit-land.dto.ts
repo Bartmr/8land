@@ -8,7 +8,7 @@ export class EditLandParametersDTO {
 }
 
 export class EditLandBodyDTO extends CreateLandRequestDTO {
-  backgroundMusicUrl?: string;
+  backgroundMusicUrl?: string | null;
 }
 
 export class EditLandDTO extends CreateLandResponseDTO {}

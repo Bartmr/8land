@@ -357,7 +357,7 @@ export class LandController {
         });
 
         if (landWithSameName) {
-          throw new ConflictException('Land with same name already exists');
+          throw new ConflictException('name-already-taken');
         }
 
         land.name = body.name;

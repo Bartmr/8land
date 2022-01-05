@@ -34,7 +34,13 @@ export class StorageModule {
       });
 
       consumer
-        .apply(express.static(path.join(LOCAL_TEMPORARY_FILES_PATH, 'storage')))
+        .apply(
+          express.static(path.join(LOCAL_TEMPORARY_FILES_PATH, 'storage'), {
+            setHeaders: (res) => {
+              res.setHeader('Content-Disposition', 'attachment');
+            },
+          }),
+        )
         .forRoutes('/tmp/storage');
     }
   }

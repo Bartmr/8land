@@ -16,6 +16,7 @@ import NotFoundTemplate from 'src/pages/404';
 import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
 import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { Toast } from 'react-bootstrap';
+import { MainSection } from './components/main-section/main-section';
 
 export function EditLandTemplateWithRouteProps(props: { id: string }) {
   const api = useMainJSONApi();
@@ -63,6 +64,7 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
   return (
     <>
       <Toast
+        className="bg-success w-100 mb-4"
         onClose={() => replaceSuccessfulSave(false)}
         show={successfulSave}
         delay={10000}
@@ -73,7 +75,15 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
       <TransportedDataGate dataWrapper={land}>
         {({ data }) => {
           return (
-            <AssetsSection onSuccessfulSave={onSuccessfulSave} land={data} />
+            <>
+              <MainSection onSuccessfulSave={onSuccessfulSave} land={data} />
+              <div className="mt-4">
+                <AssetsSection
+                  onSuccessfulSave={onSuccessfulSave}
+                  land={data}
+                />
+              </div>
+            </>
           );
         }}
       </TransportedDataGate>

@@ -6,32 +6,32 @@ import { CreateLandRequestSchemaObj } from '../create/create-land.schemas';
 import { EditLandBodyDTO, EditLandParametersDTO } from './edit-land.dto';
 import { number } from 'not-me/lib/schemas/number/number-schema';
 
+export const SoundcloudSongApiUrlSchema = string().test((s) => {
+  if (s) {
+    const splittedApiUrl = s.split('/');
+    const isIdANumber = number().required().validate(splittedApiUrl.pop());
+    const hostPart = splittedApiUrl.join('/');
+
+    if (
+      !isIdANumber.errors &&
+      hostPart === 'https://api.soundcloud.com/tracks'
+    ) {
+      return null;
+    } else {
+      return 'Invalid Soundcloud API song url';
+    }
+  } else {
+    return null;
+  }
+});
+
 export const EditLandParametersSchema: Schema<EditLandParametersDTO> = object({
   landId: uuid().required(),
 }).required();
 
 export const EditLandBodySchema: Schema<EditLandBodyDTO> = object({
   ...CreateLandRequestSchemaObj,
-  backgroundMusicUrl: string()
-    .notNull()
-    .test((s) => {
-      if (s) {
-        const splittedApiUrl = s.split('/');
-        const isIdANumber = number().required().validate(splittedApiUrl.pop());
-        const hostPart = splittedApiUrl.join('/');
-
-        if (
-          !isIdANumber.errors &&
-          hostPart === 'https://api.soundcloud.com/tracks/'
-        ) {
-          return null;
-        } else {
-          return 'Invalid Soundcloud API song url';
-        }
-      } else {
-        return null;
-      }
-    }),
+  backgroundMusicUrl: SoundcloudSongApiUrlSchema,
 }).required();
 
 // .notNull()
