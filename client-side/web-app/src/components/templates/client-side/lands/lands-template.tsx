@@ -10,12 +10,12 @@ import {
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import { RouteComponentProps } from '@reach/router';
 import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
-import { ToJSON } from '@app/shared/internals/transports/json-type-converters';
 import { Logger } from 'src/logic/app-internals/logging/logger';
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 import { Layout } from 'src/components/routing/layout/layout';
 import { LANDS_ROUTE } from './lands-routes';
 import { CreateLandRequestDTO } from '@app/shared/land/create/create-land.dto';
+import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 
 export function LandsTemplate(_props: RouteComponentProps) {
   const api = useMainJSONApi();
@@ -37,8 +37,8 @@ export function LandsTemplate(_props: RouteComponentProps) {
     replaceLands({ status: TransportedDataStatus.Loading });
 
     const res = await api.get<
-      { status: 200; body: ToJSON<IndexLandsDTO> },
-      ToJSON<IndexLandsQueryDTO>
+      { status: 200; body: ToIndexedType<IndexLandsDTO> },
+      ToIndexedType<IndexLandsQueryDTO>
     >({
       path: '/lands',
       query: {
@@ -82,7 +82,7 @@ export function LandsTemplate(_props: RouteComponentProps) {
       | { status: 201; body: undefined }
       | { status: 409; body: { error: 'name-already-taken' } },
       undefined,
-      ToJSON<CreateLandRequestDTO>
+      ToIndexedType<CreateLandRequestDTO>
     >({
       path: '/lands',
       query: undefined,
