@@ -77,10 +77,10 @@ export function AssetsSection(props: {
               <LinkAnchor href={props.land.tilesetUrl} className="text-success">
                 Download current Tileset picture
               </LinkAnchor>
+              <hr />
             </>
           ) : null}
 
-          <hr />
           <TiledJSONField
             state={tiledJSONFieldState}
             onChange={replaceTiledJSONFieldState}

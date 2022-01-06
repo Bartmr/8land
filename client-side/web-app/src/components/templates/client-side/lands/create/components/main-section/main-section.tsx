@@ -16,11 +16,16 @@ import { number } from 'not-me/lib/schemas/number/number-schema';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { or } from 'not-me/lib/schemas/or/or-schema';
 import { SoundcloudSongApiUrlSchema } from '@app/shared/land/edit/edit-land.schema';
+import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
+import { JSONData } from '@app/shared/internals/transports/json-types';
+import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 
 export function MainSection(props: {
   land: GetLandDTO;
   onSuccessfulSave: () => void;
 }) {
+  const api = useMainJSONApi();
+
   const form = useForm<EditLandBodyDTO>({
     resolver: notMeReactHookFormResolver(
       object({
@@ -100,9 +105,11 @@ export function MainSection(props: {
   });
   const formUtils = useFormUtils(form);
 
-  const [formSubmission] = useState<
+  const [formSubmission, replaceFormSubmission] = useState<
     TransportedData<undefined | 'name-already-taken'>
   >({ status: TransportedDataStatus.Done, data: undefined });
+
+  const backgroundMusicUrl = form.watch('backgroundMusicUrl');
 
   return (
     <div className="card">
@@ -111,8 +118,39 @@ export function MainSection(props: {
           {({ data }) => {
             return (
               <form
-                onSubmit={form.handleSubmit(async () => {
-                  props.onSuccessfulSave();
+                onSubmit={form.handleSubmit(async (formData) => {
+                  const res = await api.put<
+                    | { status: 200; body: JSONData }
+                    | { status: 409; body: { error: 'name-already-taken' } },
+                    undefined,
+                    ToIndexedType<EditLandBodyDTO>
+                  >({
+                    path: `/lands/${props.land.id}`,
+                    query: undefined,
+                    body: {
+                      name: formData.name,
+                      backgroundMusicUrl: formData.backgroundMusicUrl,
+                    },
+                    acceptableStatusCodes: [200, 409],
+                  });
+
+                  if (res.failure) {
+                    replaceFormSubmission({ status: res.failure });
+                  } else {
+                    if (res.response.status === 409) {
+                      replaceFormSubmission({
+                        status: TransportedDataStatus.Done,
+                        data: res.response.body.error,
+                      });
+                    } else {
+                      replaceFormSubmission({
+                        status: TransportedDataStatus.Done,
+                        data: undefined,
+                      });
+
+                      props.onSuccessfulSave();
+                    }
+                  }
                 })}
               >
                 <div className="mb-3">
@@ -154,7 +192,7 @@ export function MainSection(props: {
                   <textarea
                     {...form.register('backgroundMusicUrl')}
                     className={`form-control ${
-                      data || formUtils.hasErrors('backgroundMusicUrl')
+                      formUtils.hasErrors('backgroundMusicUrl')
                         ? 'is-invalid'
                         : ''
                     }`}
@@ -162,9 +200,6 @@ export function MainSection(props: {
                   />
 
                   <div className="invalid-feedback">
-                    {data === 'name-already-taken'
-                      ? 'This name is already taken'
-                      : null}
                     {Object.keys(
                       formUtils.getErrorTypesFromField('backgroundMusicUrl'),
                     ).map((e) => {
@@ -177,6 +212,31 @@ export function MainSection(props: {
                     })}
                   </div>
                 </div>
+
+                {backgroundMusicUrl &&
+                !formUtils.hasErrors('backgroundMusicUrl') ? (
+                  backgroundMusicUrl.startsWith('https://') ? (
+                    <div className="mb-3">
+                      <iframe
+                        title="soundcloud-player"
+                        id="soundcloud-player"
+                        width="100%"
+                        height="166"
+                        frameBorder="no"
+                        scrolling="no"
+                        allow="autoplay"
+                        src={`https://w.soundcloud.com/player/?url=${encodeURIComponent(
+                          backgroundMusicUrl,
+                        )}`}
+                      ></iframe>
+                    </div>
+                  ) : (
+                    <div
+                      dangerouslySetInnerHTML={{ __html: backgroundMusicUrl }}
+                      className="mb-3"
+                    ></div>
+                  )
+                ) : null}
 
                 <button
                   disabled={form.formState.isSubmitting}
