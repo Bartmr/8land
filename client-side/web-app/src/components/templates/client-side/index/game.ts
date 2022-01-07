@@ -1,11 +1,17 @@
+import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 import * as Phaser from 'phaser';
+import { JSONApiBase } from 'src/logic/app-internals/apis/json-api-base';
+import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { getLandSceneKey } from './keys';
 import { LandScene } from './land-scene';
 import { LAND_1, START_BLOCK } from './mocks';
 import { MusicProvider } from './music-provider.types';
 
-export async function runGame(dependencies: { musicProvider: MusicProvider }) {
+export async function runGame(
+  args: { land: GetLandDTO; session: null | MainApiSessionData },
+  dependencies: { musicProvider: MusicProvider; api: JSONApiBase },
+) {
   const gameConfig: Phaser.Types.Core.GameConfig = {
     title: 'Sample',
     render: {

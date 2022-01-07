@@ -405,6 +405,26 @@ export class LandController {
     };
   }
 
+  @Get('/resume')
+  async resume(): Promise<GetLandDTO> {
+    const landsRepository = this.connection.getCustomRepository(LandRepository);
+
+    const results = await landsRepository.find({
+      order: {
+        createdAt: 'DESC',
+      },
+      skip: 0,
+    });
+
+    const firstLand = results.rows[0];
+
+    if (!firstLand) {
+      throw new Error();
+    }
+
+    return this.getLand({ id: firstLand.id });
+  }
+
   @Get('/:id')
   async getLand(
     @Param() parameters: GetLandParametersDTO,

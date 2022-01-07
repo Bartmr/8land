@@ -8,8 +8,25 @@ import * as styles from './index.module.scss';
 import { missingCssClass } from 'src/components/ui-kit/core/utils/missing-css-class';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { SoundcloudSong } from './soundcloud-types';
+import {
+  TransportedData,
+  TransportedDataStatus,
+} from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
+import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
+import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
+import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
+import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
+import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
+import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
 
-function GameCanvas(props: { onSongChange: (song: SoundcloudSong) => void }) {
+function GameCanvas(props: {
+  onSongChange: (song: SoundcloudSong) => void;
+  land: GetLandDTO;
+  session: null | MainApiSessionData;
+}) {
+  const api = useMainJSONApi();
+
   const [started, replaceStarted] = useState(false);
 
   useEffect(() => {
@@ -46,26 +63,30 @@ function GameCanvas(props: { onSongChange: (song: SoundcloudSong) => void }) {
       let lastSong: string | null;
 
       // https://soundcloud.com/radion-alexievich-drozdov/spacedandywave?in=eliud-makaveli-zavala/sets/vaporwave
-      await runGame({
-        musicProvider: {
-          playFromSoundcloud: (url: string | null) => {
-            if (soundcloudPlayer) {
-              if (url && url !== lastSong) {
-                soundcloudPlayer.load(url, {
-                  callback: () => {
-                    soundcloudPlayer.getCurrentSound((s) =>
-                      props.onSongChange(s),
-                    );
-                    soundcloudPlayer.play();
-                  },
-                });
+      await runGame(
+        { land: props.land, session: props.session },
+        {
+          api,
+          musicProvider: {
+            playFromSoundcloud: (url: string | null) => {
+              if (soundcloudPlayer) {
+                if (url && url !== lastSong) {
+                  soundcloudPlayer.load(url, {
+                    callback: () => {
+                      soundcloudPlayer.getCurrentSound((s) =>
+                        props.onSongChange(s),
+                      );
+                      soundcloudPlayer.play();
+                    },
+                  });
 
-                lastSong = url;
+                  lastSong = url;
+                }
               }
-            }
+            },
           },
         },
-      });
+      );
     })();
   }, []);
 
@@ -100,13 +121,29 @@ function Ticker({ song }: { song: SoundcloudSong }) {
   );
 }
 
-function Game() {
+function Game(props: { land: GetLandDTO; session: null | MainApiSessionData }) {
   const [song, replaceSong] = useState<SoundcloudSong | undefined>(undefined);
   return (
     <div className={styles['gameSize'] || missingCssClass()}>
-      <GameCanvas onSongChange={replaceSong} />
+      <GameCanvas
+        session={props.session}
+        land={props.land}
+        onSongChange={replaceSong}
+      />
       <div
-        className="bg-secondary d-flex align-items-center"
+        className="p-1 bg-secondary d-flex align-items-center"
+        style={{ textTransform: 'uppercase' }}
+      >
+        <span>
+          {props.session ? (
+            <>You are in: </>
+          ) : (
+            'Login in order to save your progress'
+          )}
+        </span>
+      </div>
+      <div
+        className="mt-2 bg-secondary d-flex align-items-center"
         style={{ textTransform: 'uppercase' }}
       >
         <span className="p-1 bg-secondary">Now playing: </span>
@@ -122,19 +159,64 @@ function Game() {
 }
 
 function Content() {
+  const api = useMainJSONApi();
+
+  const session = useStoreSelector(
+    { mainApi: mainApiReducer },
+    (s) => s.mainApi.session,
+  );
+
   const [pressedStart, replacePressedStart] = useState(false);
 
-  return pressedStart ? (
-    <Game />
-  ) : (
-    <div className="d-flex justify-content-center">
-      <button
-        className="btn btn-primary"
-        onClick={() => replacePressedStart(true)}
-      >
-        Start
-      </button>
-    </div>
+  const [landToResumeFrom, replaceLandToResumeFrom] = useState<
+    TransportedData<GetLandDTO>
+  >({ status: TransportedDataStatus.NotInitialized });
+
+  useEffect(() => {
+    (async () => {
+      replaceLandToResumeFrom({ status: TransportedDataStatus.Loading });
+
+      const res = await api.get<
+        { status: 200; body: ToIndexedType<GetLandDTO> },
+        undefined
+      >({
+        path: '/lands/resume',
+        query: undefined,
+        acceptableStatusCodes: [200],
+      });
+
+      if (res.failure) {
+        replaceLandToResumeFrom({ status: res.failure });
+      } else {
+        replaceLandToResumeFrom({
+          status: TransportedDataStatus.Done,
+          data: res.response.body,
+        });
+      }
+    })();
+  }, []);
+
+  return (
+    <TransportedDataGate dataWrapper={session}>
+      {({ data: sessionData }) => (
+        <TransportedDataGate dataWrapper={landToResumeFrom}>
+          {({ data: landData }) =>
+            pressedStart ? (
+              <Game session={sessionData} land={landData} />
+            ) : (
+              <div className="d-flex justify-content-center">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => replacePressedStart(true)}
+                >
+                  Start
+                </button>
+              </div>
+            )
+          }
+        </TransportedDataGate>
+      )}
+    </TransportedDataGate>
   );
 }
 
