@@ -46,16 +46,25 @@ export const AuthenticatedRoute = (props: Props) => {
       } else {
         return (
           <Redirect
-            href={mainApiAuthRule.hrefToRedirectTo || LOGIN_ROUTE.getHref()}
+            href={
+              mainApiAuthRule.hrefToRedirectTo ||
+              LOGIN_ROUTE.getHref({ next: window.location.href })
+            }
           />
         );
       }
     } else {
       if (session) {
+        const searchParams = new URLSearchParams(window.location.search);
+
+        const nextEnconded = searchParams.get('next');
+        const next = nextEnconded ? decodeURIComponent(nextEnconded) : '';
+
         return (
           <Redirect
             href={
               mainApiAuthRule.hrefToRedirectTo ||
+              next ||
               CLIENT_SIDE_INDEX_ROUTE.getHref()
             }
           />

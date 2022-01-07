@@ -31,7 +31,7 @@ export class Land1640016172054 implements MigrationInterface {
     await queryRunner.query(`
             CREATE TABLE "door_block" (
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
-                "toLandId" uuid NOT NULL,
+                "toLandId" uuid,
                 CONSTRAINT "PK_807d55b046288e491692f3262e2" PRIMARY KEY ("id")
             )
         `);
@@ -39,7 +39,7 @@ export class Land1640016172054 implements MigrationInterface {
             CREATE TABLE "block_entry" (
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
-                "landId" uuid NOT NULL,
+                "landId" uuid,
                 "doorId" uuid,
                 CONSTRAINT "REL_47a3086a222bb23da2406b20ae" UNIQUE ("doorId"),
                 CONSTRAINT "PK_65e0c6aacd370399e6952aa8bc7" PRIMARY KEY ("id")

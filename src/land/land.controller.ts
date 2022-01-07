@@ -319,13 +319,13 @@ export class LandController {
         throw new ResourceNotFoundException();
       }
 
+      await blockEntriesRepository.remove(block, auditContext);
+
       if (block.door) {
         const doorBlockRepository = e.getCustomRepository(DoorBlockRepository);
 
         await doorBlockRepository.remove(block.door, auditContext);
       }
-
-      await blockEntriesRepository.remove(block, auditContext);
     });
   }
 
