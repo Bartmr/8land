@@ -17,6 +17,7 @@ import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-
 import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { Toast } from 'react-bootstrap';
 import { MainSection } from './components/main-section/main-section';
+import { BlocksSection } from './components/blocks-section/blocks-section';
 
 export function EditLandTemplateWithRouteProps(props: { id: string }) {
   const api = useMainJSONApi();
@@ -77,6 +78,9 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
           return (
             <>
               <MainSection onSuccessfulSave={onSuccessfulSave} land={data} />
+              <div className="mt-4">
+                <BlocksSection onBlockCreated={onSuccessfulSave} land={data} />
+              </div>
               <div className="mt-4">
                 <AssetsSection
                   onSuccessfulSave={onSuccessfulSave}

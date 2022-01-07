@@ -53,6 +53,8 @@ import {
   GetLandDTO,
   GetLandParametersDTO,
 } from 'libs/shared/src/land/get/get-land.dto';
+import { BlockEntry } from './typeorm/block-entry.entity';
+import { NonNullableFields } from 'libs/shared/src/internals/utils/types/nullable-types';
 
 const TiledJSONSchema = createTiledJSONSchema();
 
@@ -266,13 +268,13 @@ export class LandController {
 
         const toLand = await landRepository.findOne({
           where: {
-            id: body.data.toLandId,
+            searchableName: getSearchableName(body.data.destinationLandName),
           },
         });
 
         if (!toLand) {
           throw new ResourceNotFoundException({
-            error: 'destination land not found',
+            error: 'destination-land-not-found',
           });
         }
 
@@ -408,6 +410,8 @@ export class LandController {
     @Param() parameters: GetLandParametersDTO,
   ): Promise<GetLandDTO> {
     const landsRepository = this.connection.getCustomRepository(LandRepository);
+    const blockEntriesRepository =
+      this.connection.getCustomRepository(BlockEntryRepository);
 
     const land = await landsRepository.findOne({
       where: {
@@ -419,14 +423,60 @@ export class LandController {
       throw new ResourceNotFoundException();
     }
 
+    const blockEntries = await blockEntriesRepository.find({
+      skip: 0,
+      where: {
+        land: land.id,
+      },
+    });
+
+    if (blockEntries.total > blockEntries.limit) {
+      throw new Error();
+    }
+
+    const doorBlocksReferencing = await blockEntriesRepository.getManyAndCount(
+      {
+        alias: 'block',
+        skip: 0,
+      },
+      (qb) => {
+        return qb
+          .leftJoinAndSelect('block.door', 'door')
+          .leftJoinAndSelect('block.land', 'land')
+          .where('door.toLand = :toLandId', { toLandId: land.id });
+      },
+    );
+
+    if (doorBlocksReferencing.total > doorBlocksReferencing.limit) {
+      throw new Error();
+    }
+
     return {
       id: land.id,
       name: land.name,
       backgroundMusicUrl: land.backgroundMusicUrl,
       mapUrl: land.assets?.tiledJsonURL,
       tilesetUrl: land.assets?.tilesetImageURL,
-      doorBlocksReferencing: [], // TODO
-      doorBlocks: [], // TODO
+      doorBlocksReferencing: doorBlocksReferencing.rows
+        .filter((b): b is NonNullableFields<BlockEntry, 'door'> => !!b.door)
+        .map((b) => {
+          return {
+            id: b.id,
+            fromLandId: b.land.id,
+            fromLandName: b.land.name,
+          };
+        }),
+      doorBlocks: blockEntries.rows
+        .filter((b): b is NonNullableFields<BlockEntry, 'door'> => !!b.door)
+        .map((b) => {
+          return {
+            id: b.id,
+            toLand: {
+              id: b.door.toLand.id,
+              name: b.door.toLand.name,
+            },
+          };
+        }),
     };
   }
 }

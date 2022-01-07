@@ -119,9 +119,13 @@ export function MainSection(props: {
             return (
               <form
                 onSubmit={form.handleSubmit(async (formData) => {
+                  replaceFormSubmission({
+                    status: TransportedDataStatus.Loading,
+                  });
+
                   const res = await api.put<
                     | { status: 200; body: JSONData }
-                    | { status: 409; body: { error: 'name-already-taken' } },
+                    | { status: 409; body: undefined | { error: string } },
                     undefined,
                     ToIndexedType<EditLandBodyDTO>
                   >({
@@ -138,10 +142,16 @@ export function MainSection(props: {
                     replaceFormSubmission({ status: res.failure });
                   } else {
                     if (res.response.status === 409) {
-                      replaceFormSubmission({
-                        status: TransportedDataStatus.Done,
-                        data: res.response.body.error,
-                      });
+                      if (res.response.body?.error === 'name-already-taken') {
+                        replaceFormSubmission({
+                          status: TransportedDataStatus.Done,
+                          data: res.response.body.error,
+                        });
+                      } else {
+                        replaceFormSubmission({
+                          status: res.logAndReturnAsUnexpected().failure,
+                        });
+                      }
                     } else {
                       replaceFormSubmission({
                         status: TransportedDataStatus.Done,

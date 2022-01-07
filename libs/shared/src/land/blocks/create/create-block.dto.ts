@@ -1,20 +1,12 @@
 import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger';
 import { ValidationSchema } from '../../../internals/validation/validation-schema.decorator';
 import { BlockType } from './create-block.enums';
-import {
-  CreateBlockParametersSchema,
-  CreateBlockRequestSchema,
-} from './create-block.schemas';
+import { CreateBlockRequestSchema } from './create-block.schemas';
 
 class CreateDoorBlockDTO {
   landId!: string;
   type!: BlockType.Door;
-  toLandId!: string;
-}
-
-@ValidationSchema(CreateBlockParametersSchema)
-export class CreateBlockParametersDTO {
-  landId!: string;
+  destinationLandName!: string;
 }
 
 @ApiExtraModels(CreateDoorBlockDTO)

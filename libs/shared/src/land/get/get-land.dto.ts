@@ -1,9 +1,20 @@
 import { ValidationSchema } from '../../internals/validation/validation-schema.decorator';
 import { GetLandParametersSchema } from './get-land-schemas';
 
+class GetLandDoorReferencingDTO {
+  id!: string;
+  fromLandId!: string;
+  fromLandName!: string;
+}
+
+class GetLandDoorBlockDestinationDTO {
+  id!: string;
+  name!: string;
+}
+
 class GetLandDoorBlockEntryDTO {
   id!: string;
-  toLand!: string;
+  toLand!: GetLandDoorBlockDestinationDTO;
 }
 
 export class GetLandDTO {
@@ -12,7 +23,7 @@ export class GetLandDTO {
   backgroundMusicUrl!: string | null;
   mapUrl?: string;
   tilesetUrl?: string;
-  doorBlocksReferencing!: GetLandDoorBlockEntryDTO[];
+  doorBlocksReferencing!: GetLandDoorReferencingDTO[];
   doorBlocks!: GetLandDoorBlockEntryDTO[];
 }
 
