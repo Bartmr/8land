@@ -60,13 +60,7 @@ export async function runGame(
       id: el.id,
     };
   } else if (args.land.doorBlocks.length > 0) {
-    const selfReferencingDoor = args.land.doorBlocks.find(
-      (b) => b.toLand.id === args.land.id,
-    );
-
-    const el = selfReferencingDoor
-      ? selfReferencingDoor
-      : sample(args.land.doorBlocks) || throwError();
+    const el = sample(args.land.doorBlocks) || throwError();
 
     comingFromDoorBlock = {
       type: BlockType.Door,
