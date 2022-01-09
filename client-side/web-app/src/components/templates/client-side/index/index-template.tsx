@@ -24,6 +24,7 @@ function GameCanvas(props: {
   onSongChange: (song: SoundcloudSong) => void;
   land: GetLandDTO;
   session: null | MainApiSessionData;
+  changeLandNameDisplay: (landName: string) => void;
 }) {
   const api = useMainJSONApi();
 
@@ -35,6 +36,9 @@ function GameCanvas(props: {
 
       replaceStarted(true);
 
+      let lastSong: string | null;
+      let soundcloudPlayerIsReady = false;
+
       const soundcloudPlayerIframe =
         document.querySelector('#soundcloud-player') || throwError();
 
@@ -43,7 +47,25 @@ function GameCanvas(props: {
         : undefined;
 
       if (soundcloudPlayer) {
-        soundcloudPlayer.pause();
+        soundcloudPlayer.bind(
+          (window.SC || throwError()).Widget.Events.READY,
+          () => {
+            soundcloudPlayer.pause();
+
+            if (lastSong && !soundcloudPlayerIsReady) {
+              soundcloudPlayer.load(lastSong, {
+                callback: () => {
+                  soundcloudPlayer.getCurrentSound((s) =>
+                    props.onSongChange(s),
+                  );
+                  soundcloudPlayer.play();
+                },
+              });
+            }
+
+            soundcloudPlayerIsReady = true;
+          },
+        );
 
         soundcloudPlayer.bind(
           (window.SC || throwError()).Widget.Events.FINISH,
@@ -60,8 +82,6 @@ function GameCanvas(props: {
         );
       }
 
-      let lastSong: string | null;
-
       // https://soundcloud.com/radion-alexievich-drozdov/spacedandywave?in=eliud-makaveli-zavala/sets/vaporwave
       await runGame(
         { land: props.land, session: props.session },
@@ -71,20 +91,23 @@ function GameCanvas(props: {
             playFromSoundcloud: (url: string | null) => {
               if (soundcloudPlayer) {
                 if (url && url !== lastSong) {
-                  soundcloudPlayer.load(url, {
-                    callback: () => {
-                      soundcloudPlayer.getCurrentSound((s) =>
-                        props.onSongChange(s),
-                      );
-                      soundcloudPlayer.play();
-                    },
-                  });
+                  if (soundcloudPlayerIsReady) {
+                    soundcloudPlayer.load(url, {
+                      callback: () => {
+                        soundcloudPlayer.getCurrentSound((s) =>
+                          props.onSongChange(s),
+                        );
+                        soundcloudPlayer.play();
+                      },
+                    });
+                  }
 
                   lastSong = url;
                 }
               }
             },
           },
+          changeLandNameDisplay: props.changeLandNameDisplay,
         },
       );
     })();
@@ -123,12 +146,15 @@ function Ticker({ song }: { song: SoundcloudSong }) {
 
 function Game(props: { land: GetLandDTO; session: null | MainApiSessionData }) {
   const [song, replaceSong] = useState<SoundcloudSong | undefined>(undefined);
+  const [landName, replaceLandName] = useState<string>('');
+
   return (
     <div className={styles['gameSize'] || missingCssClass()}>
       <GameCanvas
         session={props.session}
         land={props.land}
         onSongChange={replaceSong}
+        changeLandNameDisplay={replaceLandName}
       />
       <div
         className="p-1 bg-secondary d-flex align-items-center"
@@ -136,7 +162,7 @@ function Game(props: { land: GetLandDTO; session: null | MainApiSessionData }) {
       >
         <span>
           {props.session ? (
-            <>You are in: </>
+            <>You are in: {landName}</>
           ) : (
             'Login in order to save your progress'
           )}
@@ -149,7 +175,13 @@ function Game(props: { land: GetLandDTO; session: null | MainApiSessionData }) {
         <span className="p-1 bg-secondary">Now playing: </span>
 
         {song ? (
-          <div>
+          <div
+            style={{
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
             <Ticker song={song} />
           </div>
         ) : null}

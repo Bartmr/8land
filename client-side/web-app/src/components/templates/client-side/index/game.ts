@@ -5,12 +5,18 @@ import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/ma
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { getLandSceneKey } from './keys';
 import { LandScene } from './land-scene';
-import { LAND_1, START_BLOCK } from './mocks';
 import { MusicProvider } from './music-provider.types';
+import sample from 'lodash/sample';
+import { BlockType, DoorBlock } from './land-scene.types';
+import { throwError } from '@app/shared/internals/utils/throw-error';
 
 export async function runGame(
   args: { land: GetLandDTO; session: null | MainApiSessionData },
-  dependencies: { musicProvider: MusicProvider; api: JSONApiBase },
+  dependencies: {
+    musicProvider: MusicProvider;
+    api: JSONApiBase;
+    changeLandNameDisplay: (landName: string) => void;
+  },
 ) {
   const gameConfig: Phaser.Types.Core.GameConfig = {
     title: 'Sample',
@@ -36,12 +42,40 @@ export async function runGame(
   };
 
   const player = {
-    spritesheetUrl: 'player.png',
+    spritesheetUrl: `${EnvironmentVariables.HOST_URL}/player.png`,
   };
 
   const game = new Phaser.Game(gameConfig);
 
-  const sceneKey = getLandSceneKey(LAND_1);
+  const sceneKey = getLandSceneKey(args.land);
+
+  let comingFromDoorBlock: DoorBlock;
+
+  if (args.land.doorBlocksReferencing.length > 0) {
+    const el = sample(args.land.doorBlocksReferencing) || throwError();
+
+    comingFromDoorBlock = {
+      type: BlockType.Door,
+      toLandId: el.fromLandId,
+      id: el.id,
+    };
+  } else if (args.land.doorBlocks.length > 0) {
+    const selfReferencingDoor = args.land.doorBlocks.find(
+      (b) => b.toLand.id === args.land.id,
+    );
+
+    const el = selfReferencingDoor
+      ? selfReferencingDoor
+      : sample(args.land.doorBlocks) || throwError();
+
+    comingFromDoorBlock = {
+      type: BlockType.Door,
+      toLandId: el.toLand.id,
+      id: el.id,
+    };
+  } else {
+    throw new Error();
+  }
 
   game.scene.add(
     sceneKey,
@@ -49,13 +83,10 @@ export async function runGame(
       null,
       {
         player,
-        land: LAND_1,
-        lastBaseLandDoorBlock: null,
-        comingFromDoorBlock: START_BLOCK,
+        land: args.land,
+        comingFromDoorBlock,
       },
-      {
-        musicProvider: dependencies.musicProvider,
-      },
+      dependencies,
     ),
   );
 

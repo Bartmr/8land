@@ -35,7 +35,6 @@ import { DoorBlockRepository } from './typeorm/door-block.repository';
 import { LandRepository } from './typeorm/land.repository';
 import fileType from 'file-type';
 import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
-import { LandAssetsRepository } from './typeorm/land-assets.repository';
 import { StorageService } from 'src/internals/storage/storage.service';
 import { InferType } from 'not-me/lib/schemas/schema';
 import { throwError } from 'src/internals/utils/throw-error';
@@ -55,6 +54,7 @@ import {
 } from 'libs/shared/src/land/get/get-land.dto';
 import { BlockEntry } from './typeorm/block-entry.entity';
 import { NonNullableFields } from 'libs/shared/src/internals/utils/types/nullable-types';
+import { PublicRoute } from 'src/auth/public-route.decorator';
 
 const TiledJSONSchema = createTiledJSONSchema();
 
@@ -97,7 +97,7 @@ export class LandController {
           searchableName: getSearchableName(body.name),
           blocks: Promise.resolve([]),
           backgroundMusicUrl: null,
-          assets: null,
+          hasAssets: null,
         },
         auditContext,
       );
@@ -178,21 +178,10 @@ export class LandController {
       });
     } else {
       const tilesetStorageKey = `${params.landId}/tileset.png`;
-      const mapStorageKey = `${params.landId}/tiled.json`;
-
-      const toSave: InferType<typeof TiledJSONSchema> = {
-        ...tiledJSONValidationResult.value,
-        tilesets: [
-          {
-            ...(tiledJSONValidationResult.value.tilesets[0] || throwError()),
-            image: 'tiled.json',
-          },
-        ],
-      };
+      const mapStorageKey = `${params.landId}/map.json`;
 
       await this.connection.transaction(async (e) => {
         const landRepo = e.getCustomRepository(LandRepository);
-        const landAssetsRepo = e.getCustomRepository(LandAssetsRepository);
 
         const land = await landRepo.findOne({
           where: {
@@ -204,28 +193,31 @@ export class LandController {
           throw new ResourceNotFoundException();
         }
 
-        const tilesetUrl = await this.storageService.saveBuffer(
-          tilesetStorageKey,
-          tileset.buffer,
-        );
+        await this.storageService.saveBuffer(tilesetStorageKey, tileset.buffer);
 
-        const mapUrl = await this.storageService.saveText(
-          mapStorageKey,
-          JSON.stringify(toSave, undefined, 2),
-        );
+        try {
+          const toSave: InferType<typeof TiledJSONSchema> = {
+            ...tiledJSONValidationResult.value,
+            tilesets: [
+              {
+                ...(tiledJSONValidationResult.value.tilesets[0] ||
+                  throwError()),
+                image: 'tileset.png',
+              },
+            ],
+          };
 
-        if (!land.assets) {
-          const landAssets = await landAssetsRepo.create(
-            {
-              tiledJsonURL: mapUrl.url,
-              tiledJsonStorageKey: mapStorageKey,
-              tilesetImageURL: tilesetUrl.url,
-              tilesetImageStorageKey: tilesetStorageKey,
-            },
-            auditContext,
+          await this.storageService.saveText(
+            mapStorageKey,
+            JSON.stringify(toSave),
           );
+        } catch (err) {
+          await this.storageService.removeFile(tilesetStorageKey);
+          throw err;
+        }
 
-          land.assets = landAssets;
+        if (!land.hasAssets) {
+          land.hasAssets = true;
 
           await landRepo.save(land, auditContext);
         } else {
@@ -400,18 +392,19 @@ export class LandController {
       lands: results.rows.map((c) => ({
         id: c.id,
         name: c.name,
-        published: !!c.assets,
+        published: !!c.hasAssets,
       })),
     };
   }
 
   @Get('/resume')
+  @PublicRoute()
   async resume(): Promise<GetLandDTO> {
     const landsRepository = this.connection.getCustomRepository(LandRepository);
 
     const results = await landsRepository.find({
       order: {
-        createdAt: 'DESC',
+        createdAt: 'ASC',
       },
       skip: 0,
     });
@@ -426,6 +419,7 @@ export class LandController {
   }
 
   @Get('/:id')
+  @PublicRoute()
   async getLand(
     @Param() parameters: GetLandParametersDTO,
   ): Promise<GetLandDTO> {
@@ -475,8 +469,9 @@ export class LandController {
       id: land.id,
       name: land.name,
       backgroundMusicUrl: land.backgroundMusicUrl,
-      mapUrl: land.assets?.tiledJsonURL,
-      tilesetUrl: land.assets?.tilesetImageURL,
+      assetsUrlPrefix: land.hasAssets
+        ? this.storageService.getHostUrl()
+        : undefined,
       doorBlocksReferencing: doorBlocksReferencing.rows
         .filter((b): b is NonNullableFields<BlockEntry, 'door'> => !!b.door)
         .map((b) => {
@@ -497,6 +492,7 @@ export class LandController {
             },
           };
         }),
+      territories: [],
     };
   }
 }

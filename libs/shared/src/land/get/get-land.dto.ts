@@ -17,14 +17,22 @@ class GetLandDoorBlockEntryDTO {
   toLand!: GetLandDoorBlockDestinationDTO;
 }
 
+class GetLandTerritoryDTO {
+  id!: string;
+  startX!: number;
+  startY!: number;
+  doorBlocks!: GetLandDoorBlockEntryDTO[];
+  assetsUrlPrefix!: string | undefined;
+}
+
 export class GetLandDTO {
   id!: string;
   name!: string;
   backgroundMusicUrl!: string | null;
-  mapUrl?: string;
-  tilesetUrl?: string;
   doorBlocksReferencing!: GetLandDoorReferencingDTO[];
   doorBlocks!: GetLandDoorBlockEntryDTO[];
+  territories!: GetLandTerritoryDTO[];
+  assetsUrlPrefix: undefined | string;
 }
 
 @ValidationSchema(GetLandParametersSchema)

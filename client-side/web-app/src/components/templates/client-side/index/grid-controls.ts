@@ -4,12 +4,26 @@ import { Direction } from './grid.types';
 
 @HotReloadClass(module)
 export class GridControls {
+  private locked = false;
+
   constructor(
     private input: Phaser.Input.InputPlugin,
     private gridPhysics: GridPhysics,
   ) {}
 
+  lockControls() {
+    this.locked = true;
+  }
+
+  unlockControls() {
+    this.locked = false;
+  }
+
   update() {
+    if (this.locked) {
+      return;
+    }
+
     const cursors = this.input.keyboard.createCursorKeys();
     if (cursors.left.isDown) {
       this.gridPhysics.movePlayer(Direction.LEFT);

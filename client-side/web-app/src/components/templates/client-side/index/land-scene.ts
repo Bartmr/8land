@@ -1,4 +1,10 @@
+import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { throwError } from '@app/shared/internals/utils/throw-error';
+import { BlockType } from '@app/shared/land/blocks/create/create-block.enums';
+import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
+import { JSONApiBase } from 'src/logic/app-internals/apis/json-api-base';
+import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
+import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 import { HotReloadClass } from 'src/logic/app-internals/utils/hot-reload-class';
 import { TILE_SIZE } from './game-constants';
 import { GridControls } from './grid-controls';
@@ -12,7 +18,6 @@ import {
   getTerritoryTilesetKey,
 } from './keys';
 import { Block, DoorBlock, LandSceneArguments } from './land-scene.types';
-import { getLandById } from './mocks';
 import { MusicProvider } from './music-provider.types';
 import { Player } from './player';
 import { TiledJSON } from './tiled.types';
@@ -23,8 +28,12 @@ export class LandScene extends Phaser.Scene {
   private gridPhysics?: GridPhysics;
 
   protected previousLandSceneArguments: LandSceneArguments | null;
-  protected arguments: LandSceneArguments;
-  protected dependencies: { musicProvider: MusicProvider };
+  protected args: LandSceneArguments;
+  protected dependencies: {
+    musicProvider: MusicProvider;
+    api: JSONApiBase;
+    changeLandNameDisplay: (landName: string) => void;
+  };
 
   // Populated when loading plugin
   private animatedTiles = null as unknown as {
@@ -37,7 +46,7 @@ export class LandScene extends Phaser.Scene {
 
   constructor(
     previousLandSceneArguments: LandScene['previousLandSceneArguments'],
-    args: LandScene['arguments'],
+    args: LandScene['args'],
     deps: LandScene['dependencies'],
   ) {
     super({
@@ -47,7 +56,7 @@ export class LandScene extends Phaser.Scene {
     });
 
     this.previousLandSceneArguments = previousLandSceneArguments;
-    this.arguments = args;
+    this.args = args;
     this.dependencies = deps;
   }
 
@@ -56,22 +65,24 @@ export class LandScene extends Phaser.Scene {
       this.scene.remove(getLandSceneKey(this.previousLandSceneArguments.land));
     }
 
+    this.dependencies.changeLandNameDisplay(this.args.land.name);
+
     // LAND
     const landTiledJSON =
       (
-        this.cache.tilemap.get(
-          getLandSceneTiledJSONKey(this.arguments.land),
-        ) as { data: TiledJSON } | undefined
+        this.cache.tilemap.get(getLandSceneTiledJSONKey(this.args.land)) as
+          | { data: TiledJSON }
+          | undefined
       )?.data || throwError();
 
     const landFirstTileset = landTiledJSON.tilesets[0] || throwError();
 
     const landMap = this.make.tilemap({
-      key: getLandSceneTiledJSONKey(this.arguments.land),
+      key: getLandSceneTiledJSONKey(this.args.land),
     });
     landMap.addTilesetImage(
       landFirstTileset.name,
-      getLandSceneTilesetKey(this.arguments.land),
+      getLandSceneTilesetKey(this.args.land),
     );
 
     const landLayer = landMap.createLayer(0, landFirstTileset.name, 0, 0);
@@ -88,8 +99,8 @@ export class LandScene extends Phaser.Scene {
       tilemap: Phaser.Tilemaps.Tilemap;
       blocks: Block[];
     }> = [];
-    for (let i = 0; i < this.arguments.land.territories.length; i++) {
-      const territory = this.arguments.land.territories[i] || throwError();
+    for (let i = 0; i < this.args.land.territories.length; i++) {
+      const territory = this.args.land.territories[i] || throwError();
 
       const territoryTiledJSON = (
         this.cache.tilemap.get(getTerritoryTiledJSONKey(territory)) as
@@ -112,7 +123,13 @@ export class LandScene extends Phaser.Scene {
         startX: territory.startX,
         startY: territory.startY,
         tilemap: territoryMap,
-        blocks: territory.blocks,
+        blocks: territory.doorBlocks.map((dB) => {
+          return {
+            type: BlockType.Door,
+            toLandId: dB.toLand.id,
+            id: dB.id,
+          };
+        }),
       });
 
       const territoryLayer = territoryMap.createLayer(
@@ -141,7 +158,7 @@ export class LandScene extends Phaser.Scene {
             (key) => !!(tile.properties as { [key: string]: unknown })[key],
           );
 
-          if (properties.includes(this.arguments.comingFromDoorBlock.id)) {
+          if (properties.includes(this.args.comingFromDoorBlock.id)) {
             position = {
               x: tile.x,
               y: tile.y,
@@ -164,6 +181,7 @@ export class LandScene extends Phaser.Scene {
       }
     }
 
+    // Returning block might be present in territory instead
     for (const territoryContext of territoryContexts) {
       for (const layer of territoryContext.tilemap.layers) {
         for (const row of layer.data) {
@@ -174,7 +192,7 @@ export class LandScene extends Phaser.Scene {
               (key) => !!(tile.properties as { [key: string]: unknown })[key],
             );
 
-            if (properties.includes(this.arguments.comingFromDoorBlock.id)) {
+            if (properties.includes(this.args.comingFromDoorBlock.id)) {
               position = {
                 x: tile.x + territoryContext.startX,
                 y: tile.y + territoryContext.startY,
@@ -220,13 +238,28 @@ export class LandScene extends Phaser.Scene {
 
     this.gridPhysics = new GridPhysics(player, {
       land: {
-        id: this.arguments.land.id,
-        blocks: this.arguments.land.blocks,
+        id: this.args.land.id,
+        blocks: [
+          ...this.args.land.doorBlocks.map((dB) => {
+            return {
+              type: BlockType.Door as const,
+              toLandId: dB.toLand.id,
+              id: dB.id,
+            };
+          }),
+          ...this.args.land.doorBlocksReferencing.map((dB) => {
+            return {
+              type: BlockType.Door as const,
+              toLandId: dB.fromLandId,
+              id: dB.id,
+            };
+          }),
+        ],
         tilemap: landMap,
       },
       territories: territoryContexts,
-      onStepIntoDoor: (block: DoorBlock) => {
-        this.handleStepIntoDoor(block);
+      onStepIntoDoor: async (block: DoorBlock) => {
+        await this.handleStepIntoDoor(block);
       },
     });
     this.gridControls = new GridControls(this.input, this.gridPhysics);
@@ -243,26 +276,30 @@ export class LandScene extends Phaser.Scene {
   }
 
   public preload() {
+    this.load.setBaseURL(`${this.args.land.assetsUrlPrefix || throwError()}/`);
     this.load.image(
-      getLandSceneTilesetKey(this.arguments.land),
-      this.arguments.land.tilesetUrl,
+      getLandSceneTilesetKey(this.args.land),
+      `${this.args.land.id}/tileset.png`,
     );
     this.load.tilemapTiledJSON(
-      getLandSceneTiledJSONKey(this.arguments.land),
-      this.arguments.land.tilemapTiledJSONUrl,
+      getLandSceneTiledJSONKey(this.args.land),
+      `${this.args.land.id}/map.json`,
     );
 
-    for (const territory of this.arguments.land.territories) {
-      this.load.image(getTerritoryTilesetKey(territory), territory.tilesetUrl);
+    for (const territory of this.args.land.territories) {
+      this.load.image(
+        getTerritoryTilesetKey(territory),
+        `${this.args.land.id}/${territory.id}/tileset.png`,
+      );
       this.load.tilemapTiledJSON(
         getTerritoryTiledJSONKey(territory),
-        territory.tilemapTiledJSONUrl,
+        `${this.args.land.id}/${territory.id}/map.json`,
       );
     }
 
     //
 
-    this.load.spritesheet('player', this.arguments.player.spritesheetUrl, {
+    this.load.spritesheet('player', this.args.player.spritesheetUrl, {
       frameWidth: 16,
       frameHeight: 16,
     });
@@ -273,13 +310,13 @@ export class LandScene extends Phaser.Scene {
     */
     this.load.scenePlugin(
       'AnimatedTiles',
-      'AnimatedTiles.js',
+      `${EnvironmentVariables.HOST_URL}/AnimatedTiles.js`,
       'animatedTiles',
       'animatedTiles',
     );
 
     this.dependencies.musicProvider.playFromSoundcloud(
-      this.arguments.land.backgroundMusicUrl,
+      this.args.land.backgroundMusicUrl,
     );
   }
 
@@ -300,44 +337,58 @@ export class LandScene extends Phaser.Scene {
     });
   }
 
-  private handleStepIntoDoor(block: DoorBlock) {
-    let nextLandId: string;
+  private async handleStepIntoDoor(block: DoorBlock) {
+    const nextLandId = block.toLandId;
 
-    if (this.arguments.land.id === block.land_a) {
-      nextLandId = block.land_b;
-    } else if (this.arguments.land.id === block.land_b) {
-      nextLandId = block.land_a;
-    } else {
-      throw new Error();
-    }
-
-    if (nextLandId === this.arguments.land.id) {
-      // it's the start block
+    if (this.args.land.id === nextLandId) {
       return;
     }
 
-    const nextLand = getLandById(nextLandId);
+    (this.gridControls || throwError()).lockControls();
+    this.dependencies.changeLandNameDisplay('-- Loading --');
 
-    if (!nextLand) {
-      // TODO: deal with 404 of lands
-      throw new Error();
+    const res = await this.dependencies.api.get<
+      { status: 200; body: ToIndexedType<GetLandDTO> },
+      undefined
+    >({
+      path: `/lands/${nextLandId}`,
+      query: undefined,
+      acceptableStatusCodes: [200],
+    });
+
+    if (res.failure) {
+      if (res.failure === TransportFailure.ConnectionFailure) {
+        window.alert(
+          "Couldn't connect to the Internet. Check your connection and enter the door again.",
+        );
+      } else if (res.failure === TransportFailure.NotFound) {
+        window.alert("This path's destination no longer exists.");
+      } else {
+        window.alert(
+          "There was an error loading what's further down this path. Try to enter it again later.",
+        );
+      }
+
+      (this.gridControls || throwError()).unlockControls();
+      this.dependencies.changeLandNameDisplay(this.args.land.name);
+
+      return;
     }
+
+    const nextLand = res.response.body;
 
     const sceneKey = getLandSceneKey(nextLand);
 
     this.scene.add(
       sceneKey,
       new LandScene(
-        this.arguments,
+        this.args,
         {
-          player: this.arguments.player,
+          player: this.args.player,
           land: nextLand,
-          lastBaseLandDoorBlock: nextLand.isBaseLand ? null : block,
           comingFromDoorBlock: block,
         },
-        {
-          musicProvider: this.dependencies.musicProvider,
-        },
+        this.dependencies,
       ),
     );
 

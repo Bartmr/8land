@@ -8,12 +8,25 @@ import { StorageService } from './storage.service';
 const writeFile = promisify(fs.writeFile);
 const removeFile = promisify(fs.rm);
 
+const mkdir = promisify(fs.mkdir);
+
 export class DevStorageService implements StorageService {
+  async createDirectory(key: string) {
+    const directoryFragments = key.split('/');
+    directoryFragments.pop();
+
+    await mkdir(
+      path.join(LOCAL_TEMPORARY_FILES_PATH, 'storage', ...directoryFragments),
+      {
+        recursive: true,
+      },
+    );
+  }
   async saveStream(key: string, stream: Readable) {
-    const fsKey = key.split('/').join('_');
+    await this.createDirectory(key);
 
     const fsStream = fs.createWriteStream(
-      path.resolve(LOCAL_TEMPORARY_FILES_PATH, 'storage', fsKey),
+      path.resolve(LOCAL_TEMPORARY_FILES_PATH, 'storage', key),
     );
 
     await new Promise((resolve, reject) => {
@@ -21,40 +34,32 @@ export class DevStorageService implements StorageService {
       fsStream.on('error', reject);
       fsStream.on('finish', resolve);
     });
-
-    return {
-      url: `http://localhost:3000/tmp/storage/${fsKey}`,
-    };
   }
 
   async saveBuffer(key: string, buffer: Buffer) {
-    const fsKey = key.split('/').join('_');
+    await this.createDirectory(key);
 
     await writeFile(
-      path.resolve(LOCAL_TEMPORARY_FILES_PATH, 'storage', fsKey),
+      path.resolve(LOCAL_TEMPORARY_FILES_PATH, 'storage', key),
       buffer,
     );
-
-    return {
-      url: `http://localhost:3000/tmp/storage/${fsKey}`,
-    };
   }
 
-  async saveText(key: string, text: string): Promise<{ url: string }> {
-    const fsKey = key.split('/').join('_');
-    const filePath = path.resolve(LOCAL_TEMPORARY_FILES_PATH, 'storage', fsKey);
+  async saveText(key: string, text: string) {
+    await this.createDirectory(key);
+
+    const filePath = path.resolve(LOCAL_TEMPORARY_FILES_PATH, 'storage', key);
 
     await writeFile(filePath, text);
-
-    return {
-      url: `http://localhost:3000/tmp/storage/${fsKey}`,
-    };
   }
 
   async removeFile(key: string): Promise<void> {
-    const fsKey = key.split('/').join('_');
-    const filePath = path.resolve(LOCAL_TEMPORARY_FILES_PATH, 'storage', fsKey);
+    const filePath = path.resolve(LOCAL_TEMPORARY_FILES_PATH, 'storage', key);
 
     await removeFile(filePath);
+  }
+
+  getHostUrl() {
+    return 'http://localhost:3000/tmp/storage';
   }
 }

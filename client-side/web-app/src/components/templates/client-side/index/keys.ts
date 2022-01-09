@@ -1,23 +1,25 @@
-import { Land } from './land-scene.types';
+import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 
-export function getLandSceneKey(land: Land) {
+export function getLandSceneKey(land: GetLandDTO) {
   return `land-scene:${land.id}:scene`;
 }
 
-export function getLandSceneTilesetKey(land: Land) {
+export function getLandSceneTilesetKey(land: GetLandDTO) {
   return `land-scene:${land.id}:tileset`;
 }
 
-export function getLandSceneTiledJSONKey(land: Land) {
+export function getLandSceneTiledJSONKey(land: GetLandDTO) {
   return `land-scene:${land.id}:tiled-json`;
 }
 
-export function getTerritoryTilesetKey(territory: Land['territories'][number]) {
+export function getTerritoryTilesetKey(
+  territory: GetLandDTO['territories'][number],
+) {
   return `land-scene:territory:${territory.id}:tileset`;
 }
 
 export function getTerritoryTiledJSONKey(
-  territory: Land['territories'][number],
+  territory: GetLandDTO['territories'][number],
 ) {
   return `land-scene:territory:${territory.id}:tiled-json`;
 }

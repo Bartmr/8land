@@ -3,14 +3,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   OneToMany,
-  OneToOne,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { BlockEntry } from './block-entry.entity';
-import { LandAssets } from './land-assets.entity';
 
 @Entity()
 @Unique(['searchableName'])
@@ -20,10 +17,6 @@ export class Land extends SimpleEntity {
 
   @UpdateDateColumn()
   updatedAt!: Date;
-
-  @OneToOne(() => LandAssets, { nullable: true, eager: true })
-  @JoinColumn()
-  assets!: LandAssets | null;
 
   @Column('text')
   name!: string;
@@ -36,6 +29,9 @@ export class Land extends SimpleEntity {
 
   @Column('text', { nullable: true })
   backgroundMusicUrl!: string | null;
+
+  @Column('boolean', { nullable: true })
+  hasAssets!: boolean | null;
 
   // TODO: territory relationship nullable column
 }

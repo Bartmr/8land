@@ -32,7 +32,7 @@
     {
       "columns": 10,
       "firstgid": 1,
-      "image": "land-scene-2-tileset.png",
+      "image": "expectations-beach-house-tileset.png",
       "imageheight": 144,
       "imagewidth": 160,
       "margin": 0,
@@ -105,7 +105,7 @@
           "id": 74,
           "properties": [
             {
-              "name": "2",
+              "name": "01d928b9-bf17-4f0a-b0fc-3b5be6dde9cc",
               "type": "bool",
               "value": true
             }
@@ -115,7 +115,7 @@
           "id": 75,
           "properties": [
             {
-              "name": "2",
+              "name": "01d928b9-bf17-4f0a-b0fc-3b5be6dde9cc",
               "type": "bool",
               "value": true
             }

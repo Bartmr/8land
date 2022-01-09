@@ -1,20 +1,37 @@
 {
   "compressionlevel": -1,
-  "height": 7,
+  "height": 21,
   "infinite": false,
   "layers": [
     {
       "data": [
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-        21, 22, 23, 24, 25, 26, 27, 28
+        71, 71, 71, 71, 71, 67, 41, 41, 67, 71, 71, 71, 71, 71, 71, 71, 71, 71,
+        71, 71, 71, 67, 43, 43, 67, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71,
+        71, 67, 43, 43, 67, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 67,
+        43, 43, 67, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 67, 43, 43,
+        67, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 67, 43, 43, 67, 71,
+        71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 48, 48, 48, 48, 71, 71, 71,
+        71, 71, 71, 71, 71, 71, 71, 71, 71, 48, 48, 48, 48, 71, 71, 71, 71, 71,
+        71, 71, 71, 71, 71, 71, 71, 48, 48, 48, 48, 71, 71, 71, 71, 71, 71, 71,
+        71, 71, 71, 67, 67, 48, 48, 48, 48, 71, 71, 71, 71, 71, 71, 71, 71, 71,
+        71, 67, 48, 48, 48, 48, 48, 48, 48, 48, 67, 71, 71, 71, 71, 71, 71, 67,
+        48, 48, 48, 48, 48, 48, 48, 48, 67, 71, 71, 71, 71, 71, 71, 67, 48, 48,
+        48, 48, 48, 48, 48, 48, 67, 71, 71, 71, 71, 71, 71, 67, 48, 48, 48, 48,
+        48, 54, 48, 48, 67, 71, 71, 71, 71, 71, 71, 67, 48, 48, 47, 48, 48, 48,
+        48, 48, 67, 71, 71, 71, 71, 71, 71, 43, 43, 43, 43, 42, 43, 43, 43, 43,
+        43, 71, 71, 71, 71, 71, 71, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 71,
+        71, 71, 71, 71, 71, 61, 61, 61, 61, 61, 61, 61, 61, 61, 61, 71, 71, 71,
+        71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71,
+        71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71,
+        71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71, 71
       ],
-      "height": 7,
+      "height": 21,
       "id": 1,
       "name": "Tile Layer 1",
       "opacity": 1,
       "type": "tilelayer",
       "visible": true,
-      "width": 4,
+      "width": 16,
       "x": 0,
       "y": 0
     }
@@ -27,19 +44,49 @@
   "tileheight": 16,
   "tilesets": [
     {
-      "columns": 4,
+      "columns": 10,
       "firstgid": 1,
-      "image": "territory-tileset.png",
-      "imageheight": 112,
-      "imagewidth": 64,
+      "image": "expectations-beach-tileset.png",
+      "imageheight": 128,
+      "imagewidth": 160,
       "margin": 0,
-      "name": "main",
+      "name": "land-scene-tileset",
       "spacing": 0,
-      "tilecount": 28,
+      "tilecount": 80,
       "tileheight": 16,
       "tiles": [
         {
-          "id": 4,
+          "id": 40,
+          "properties": [
+            {
+              "name": "01d928b9-bf17-4f0a-b0fc-3b5be6dde9cc",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 41,
+          "properties": [
+            {
+              "name": "5414b0c9-c5fe-4fcd-a108-6f9009f52895",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 46,
+          "properties": [
+            {
+              "name": "1",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 53,
           "properties": [
             {
               "name": "collides",
@@ -49,7 +96,7 @@
           ]
         },
         {
-          "id": 5,
+          "id": 60,
           "properties": [
             {
               "name": "collides",
@@ -59,7 +106,7 @@
           ]
         },
         {
-          "id": 6,
+          "id": 61,
           "properties": [
             {
               "name": "collides",
@@ -69,7 +116,7 @@
           ]
         },
         {
-          "id": 7,
+          "id": 62,
           "properties": [
             {
               "name": "collides",
@@ -79,7 +126,7 @@
           ]
         },
         {
-          "id": 8,
+          "id": 63,
           "properties": [
             {
               "name": "collides",
@@ -89,7 +136,7 @@
           ]
         },
         {
-          "id": 9,
+          "id": 64,
           "properties": [
             {
               "name": "collides",
@@ -99,7 +146,7 @@
           ]
         },
         {
-          "id": 10,
+          "id": 65,
           "properties": [
             {
               "name": "collides",
@@ -109,7 +156,7 @@
           ]
         },
         {
-          "id": 11,
+          "id": 66,
           "properties": [
             {
               "name": "collides",
@@ -119,7 +166,7 @@
           ]
         },
         {
-          "id": 12,
+          "id": 67,
           "properties": [
             {
               "name": "collides",
@@ -129,7 +176,7 @@
           ]
         },
         {
-          "id": 13,
+          "id": 68,
           "properties": [
             {
               "name": "collides",
@@ -139,7 +186,7 @@
           ]
         },
         {
-          "id": 14,
+          "id": 69,
           "properties": [
             {
               "name": "collides",
@@ -149,7 +196,60 @@
           ]
         },
         {
-          "id": 15,
+          "animation": [
+            {
+              "duration": 200,
+              "tileid": 70
+            },
+            {
+              "duration": 200,
+              "tileid": 71
+            },
+            {
+              "duration": 200,
+              "tileid": 72
+            },
+            {
+              "duration": 200,
+              "tileid": 73
+            },
+            {
+              "duration": 200,
+              "tileid": 74
+            },
+            {
+              "duration": 200,
+              "tileid": 75
+            },
+            {
+              "duration": 200,
+              "tileid": 76
+            },
+            {
+              "duration": 200,
+              "tileid": 77
+            },
+            {
+              "duration": 200,
+              "tileid": 78
+            },
+            {
+              "duration": 200,
+              "tileid": 79
+            },
+            {
+              "duration": 200,
+              "tileid": 79
+            },
+            {
+              "duration": 200,
+              "tileid": 79
+            }
+          ],
+          "id": 70
+        },
+        {
+          "id": 71,
           "properties": [
             {
               "name": "collides",
@@ -159,7 +259,7 @@
           ]
         },
         {
-          "id": 16,
+          "id": 72,
           "properties": [
             {
               "name": "collides",
@@ -169,7 +269,7 @@
           ]
         },
         {
-          "id": 17,
+          "id": 73,
           "properties": [
             {
               "name": "collides",
@@ -179,7 +279,7 @@
           ]
         },
         {
-          "id": 18,
+          "id": 74,
           "properties": [
             {
               "name": "collides",
@@ -189,7 +289,7 @@
           ]
         },
         {
-          "id": 19,
+          "id": 75,
           "properties": [
             {
               "name": "collides",
@@ -199,7 +299,7 @@
           ]
         },
         {
-          "id": 20,
+          "id": 76,
           "properties": [
             {
               "name": "collides",
@@ -209,27 +309,27 @@
           ]
         },
         {
-          "id": 21,
+          "id": 77,
           "properties": [
             {
-              "name": "2",
+              "name": "collides",
               "type": "bool",
               "value": true
             }
           ]
         },
         {
-          "id": 22,
+          "id": 78,
           "properties": [
             {
-              "name": "2",
+              "name": "collides",
               "type": "bool",
               "value": true
             }
           ]
         },
         {
-          "id": 23,
+          "id": 79,
           "properties": [
             {
               "name": "collides",
@@ -245,5 +345,5 @@
   "tilewidth": 16,
   "type": "map",
   "version": "1.6",
-  "width": 4
+  "width": 16
 }

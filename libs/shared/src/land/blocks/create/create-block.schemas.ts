@@ -2,7 +2,6 @@ import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { Schema } from 'not-me/lib/schemas/schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
-import { getEnumValues } from '../../../internals/utils/enums/get-enum-values';
 import { uuid } from '../../../internals/validation/schemas/uuid.schema';
 import { CreateBlockRequestDTO } from './create-block.dto';
 import { BlockType } from './create-block.enums';
@@ -10,7 +9,7 @@ import { BlockType } from './create-block.enums';
 export const CreateBlockRequestSchema: Schema<CreateBlockRequestDTO> = object({
   data: object({
     landId: uuid().required(),
-    type: equals(getEnumValues(BlockType)).required(),
+    type: equals([BlockType.Door]).required(),
   })
     .required()
     .union<

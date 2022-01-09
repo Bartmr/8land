@@ -291,6 +291,7 @@ class GridPhysics {
     });
 
     if (blockToReactTo) {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (blockToReactTo.type === BlockType.Door) {
         this.context.onStepIntoDoor(blockToReactTo);
       }

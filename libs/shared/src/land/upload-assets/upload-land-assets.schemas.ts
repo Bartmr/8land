@@ -3,7 +3,6 @@ import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { number } from 'not-me/lib/schemas/number/number-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
-import { or } from 'not-me/lib/schemas/or/or-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { uuid } from '../../internals/validation/schemas/uuid.schema';
 
@@ -13,6 +12,7 @@ export const UploadLandAssetsParametersSchema = object({
 
 export const createTiledJSONSchema = () =>
   object({
+    compressionlevel: number().required(),
     height: number()
       .integer()
       .required()
@@ -65,30 +65,27 @@ export const createTiledJSONSchema = () =>
         spacing: number().integer().required(),
         tilecount: number().integer().required(),
         tileheight: equals([16], 'Must be set to 16').required(),
+        tilewidth: equals([16], 'Must be set to 16').required(),
         tiles: array(
           object({
             id: number().integer().required(),
             properties: array(
-              or([
-                object({
-                  animation: equals([]).notNull(),
-                  name: string().filled(),
-                  type: equals(
-                    ['bool'],
-                    'Only boolean tile properties are allowed',
-                  ).required(),
-                  value: boolean().required(),
-                }).required(),
-                object({
-                  animation: array(
-                    object({
-                      duration: number().integer().required(),
-                      tileid: number().integer().required(),
-                    }).required(),
-                  ).required(),
-                }).required(),
-              ]).required(),
-            ).required(),
+              object({
+                animation: equals([]).notNull(),
+                name: string().filled(),
+                type: equals(
+                  ['bool'],
+                  'Only boolean tile properties are allowed',
+                ).required(),
+                value: boolean().required(),
+              }).required(),
+            ).notNull(),
+            animation: array(
+              object({
+                duration: number().integer().required(),
+                tileid: number().integer().required(),
+              }).required(),
+            ).notNull(),
           }).required(),
         ).required(),
       }).required(),
@@ -122,12 +119,10 @@ export const createTiledJSONSchema = () =>
 
       for (const tileset of o.tilesets) {
         for (const tile of tileset.tiles) {
-          for (const property of tile.properties) {
-            if (property.animation) {
-              for (const animation of property.animation) {
-                if (animation.tileid > tileset.tilecount) {
-                  return `${animation.tileid} is bigger than the total tiles in the tileset`;
-                }
+          if (tile.animation) {
+            for (const animation of tile.animation) {
+              if (animation.tileid > tileset.tilecount) {
+                return `${animation.tileid} is bigger than the total tiles in the tileset`;
               }
             }
           }
