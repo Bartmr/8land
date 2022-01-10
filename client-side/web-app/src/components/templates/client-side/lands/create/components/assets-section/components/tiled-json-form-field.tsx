@@ -29,7 +29,7 @@ export function TiledJSONField(props: {
           return;
         }
 
-        if (file.size > 512000) {
+        if (file.size > 128000) {
           props.onChange({ error: 'file-size-exceeded' });
           return;
         }

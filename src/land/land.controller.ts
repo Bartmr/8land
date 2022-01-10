@@ -139,11 +139,11 @@ export class LandController {
         throw new BadRequestException({ error: 'no-tileset-file' });
       })();
 
-    if (map.size > 512000) {
+    if (map.size > 128000) {
       throw new BadRequestException({ error: 'map-exceeds-file-size-limit' });
     }
 
-    if (tileset.size > 512000) {
+    if (tileset.size > 64000) {
       throw new BadRequestException({
         error: 'tileset-exceeds-file-size-limit',
       });
