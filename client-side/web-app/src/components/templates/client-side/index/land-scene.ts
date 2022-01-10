@@ -220,16 +220,23 @@ export class LandScene extends Phaser.Scene {
       }
     }
 
+    if (!position) {
+      window.alert(
+        'This territory does not have any exits. You should use the escape button to go back to the outdoors',
+      );
+
+      position = {
+        x: 0,
+        y: 0,
+      };
+    }
+
     const playerSprite = this.add.sprite(0, 0, 'player');
     playerSprite.setDepth(2);
 
     this.cameras.main.startFollow(playerSprite);
     this.cameras.main.roundPixels = true;
     this.cameras.main.setBounds(0, 0, landLayer.width, landLayer.height);
-
-    if (!position) {
-      throw new Error('theres no start block');
-    }
 
     const player = new Player(
       playerSprite,

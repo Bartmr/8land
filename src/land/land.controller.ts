@@ -406,6 +406,9 @@ export class LandController {
       order: {
         createdAt: 'ASC',
       },
+      where: {
+        hasAssets: true,
+      },
       skip: 0,
     });
 
