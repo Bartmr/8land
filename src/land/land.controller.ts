@@ -408,6 +408,7 @@ export class LandController {
       },
       where: {
         hasAssets: true,
+        // TODO territoryId: IsNull()
       },
       skip: 0,
     });
