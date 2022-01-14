@@ -14,6 +14,8 @@ type Props = {
   noContainment?: boolean;
   noTopPadding?: boolean;
   noBottomPadding?: boolean;
+  disableScroll?: boolean;
+  noHeader?: boolean;
 };
 
 export function Layout(props: Props) {
@@ -37,8 +39,22 @@ export function Layout(props: Props) {
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      <div className="min-vh-100 d-flex flex-column align-items-stretch">
-        <Header menuHtmlId="page-header-menu" className="sticky-top" />
+      <div
+        className={`${
+          props.disableScroll ? '' : 'min-vh-100'
+        } d-flex flex-column align-items-stretch`}
+      >
+        {props.disableScroll ? (
+          <style>
+            {`body {
+              overscroll-behavior: contain;
+              overflow: hidden;
+            }`}
+          </style>
+        ) : null}
+        {props.noHeader ? null : (
+          <Header menuHtmlId="page-header-menu" className="sticky-top" />
+        )}
         <main
           className={`flex-fill ${props.noContainment ? '' : 'container'} ${
             props.noTopPadding ? '' : 'pt-3'

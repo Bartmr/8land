@@ -15,7 +15,10 @@ import {
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { InjectConnection } from '@nestjs/typeorm';
-import { CreateBlockRequestDTO } from 'libs/shared/src/land/blocks/create/create-block.dto';
+import {
+  CreateBlockRequestDTO,
+  CreateBlockURLParameters,
+} from 'libs/shared/src/land/blocks/create/create-block.dto';
 import { BlockType } from 'libs/shared/src/land/blocks/create/create-block.enums';
 import { DeleteBlockURLParameters } from 'libs/shared/src/land/blocks/delete/delete-block.dto';
 import {
@@ -229,9 +232,10 @@ export class LandController {
     }
   }
 
-  @Post('blocks')
+  @Post(':landId/blocks')
   @RolesUpAndIncluding(Role.Admin)
   createBlock(
+    @Param() param: CreateBlockURLParameters,
     @Body() body: CreateBlockRequestDTO,
     @WithAuditContext() auditContext: AuditContext,
   ) {
@@ -241,7 +245,7 @@ export class LandController {
         e.getCustomRepository(BlockEntryRepository);
 
       const land = await landRepository.findOne({
-        where: { id: body.data.landId },
+        where: { id: param.landId },
       });
 
       if (!land) {
@@ -293,7 +297,7 @@ export class LandController {
   }
 
   @HttpCode(204)
-  @Delete('blocks/:id')
+  @Delete(':landId/blocks/:blockId')
   @RolesUpAndIncluding(Role.Admin)
   deleteBlock(
     @Param() param: DeleteBlockURLParameters,
@@ -304,7 +308,7 @@ export class LandController {
         e.getCustomRepository(BlockEntryRepository);
 
       const block = await blockEntriesRepository.findOne({
-        where: { id: param.id },
+        where: { land: param.landId, id: param.blockId },
       });
 
       if (!block) {

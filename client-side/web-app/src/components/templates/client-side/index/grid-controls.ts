@@ -1,6 +1,8 @@
+import { throwError } from '@app/shared/internals/utils/throw-error';
 import { HotReloadClass } from 'src/logic/app-internals/utils/hot-reload-class';
 import { GridPhysics } from './grid-physics';
 import { Direction } from './grid.types';
+import { JoystickSingleton } from './joystick-singleton';
 
 @HotReloadClass(module)
 export class GridControls {
@@ -25,13 +27,24 @@ export class GridControls {
     }
 
     const cursors = this.input.keyboard.createCursorKeys();
-    if (cursors.left.isDown) {
+    const joystick = JoystickSingleton.getInstance() || throwError();
+
+    const pressingLeft =
+      cursors.left.isDown || joystick.getDirection() === Direction.LEFT;
+    const pressingRight =
+      cursors.right.isDown || joystick.getDirection() === Direction.RIGHT;
+    const pressingUp =
+      cursors.up.isDown || joystick.getDirection() === Direction.UP;
+    const pressingDown =
+      cursors.down.isDown || joystick.getDirection() === Direction.DOWN;
+
+    if (pressingLeft) {
       this.gridPhysics.movePlayer(Direction.LEFT);
-    } else if (cursors.right.isDown) {
+    } else if (pressingRight) {
       this.gridPhysics.movePlayer(Direction.RIGHT);
-    } else if (cursors.up.isDown) {
+    } else if (pressingUp) {
       this.gridPhysics.movePlayer(Direction.UP);
-    } else if (cursors.down.isDown) {
+    } else if (pressingDown) {
       this.gridPhysics.movePlayer(Direction.DOWN);
     }
   }

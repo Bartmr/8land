@@ -3,5 +3,6 @@ import { DeleteBlockURLParamsSchema } from './delete-block.schema';
 
 @ValidationSchema(DeleteBlockURLParamsSchema)
 export class DeleteBlockURLParameters {
-  id!: string;
+  landId!: string;
+  blockId!: string;
 }

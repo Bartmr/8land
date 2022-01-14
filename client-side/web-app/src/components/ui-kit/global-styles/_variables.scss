@@ -6,9 +6,9 @@ $success: #00ff00;
 $info: #007bff;
 $warning: #ffc107;
 $danger: #dc3545;
-$light: darken(#ffffff, 3);
+$light: #aaa;
 $lightest: #ffffff;
-$dark: #4d4d4d;
+$dark: #aaa;
 $darkest: #262626;
 
 $body-bg: $darkest;
@@ -21,11 +21,11 @@ $default: null;
 $default-inverted: null;
 
 @if ($inverted-is-dark-mode) {
-  $default: $light;
+  $default: $lightest;
   $default-inverted: $dark;
 } @else {
   $default: $dark;
-  $default-inverted: $light;
+  $default-inverted: $lightest;
 }
 
 $theme-colors: (

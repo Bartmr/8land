@@ -3,12 +3,19 @@ import { object } from 'not-me/lib/schemas/object/object-schema';
 import { Schema } from 'not-me/lib/schemas/schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { uuid } from '../../../internals/validation/schemas/uuid.schema';
-import { CreateBlockRequestDTO } from './create-block.dto';
+import {
+  CreateBlockRequestDTO,
+  CreateBlockURLParameters,
+} from './create-block.dto';
 import { BlockType } from './create-block.enums';
+
+export const CreateBlockURLParametersSchema: Schema<CreateBlockURLParameters> =
+  object({
+    landId: uuid().required(),
+  }).required();
 
 export const CreateBlockRequestSchema: Schema<CreateBlockRequestDTO> = object({
   data: object({
-    landId: uuid().required(),
     type: equals([BlockType.Door]).required(),
   })
     .required()

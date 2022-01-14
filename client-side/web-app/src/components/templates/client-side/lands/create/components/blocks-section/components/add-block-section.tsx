@@ -26,7 +26,6 @@ export function AddBlockSection(props: {
     defaultValues: {
       data: {
         type: BlockType.Door,
-        landId: props.land.id,
       },
     },
   });
@@ -52,7 +51,7 @@ export function AddBlockSection(props: {
                 undefined,
                 ToIndexedType<CreateBlockRequestDTO>
               >({
-                path: '/lands/blocks',
+                path: `/lands/${props.land.id}/blocks`,
                 query: undefined,
                 acceptableStatusCodes: [201, 404, 409],
                 body: formData,

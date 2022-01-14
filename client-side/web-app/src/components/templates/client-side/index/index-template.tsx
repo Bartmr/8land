@@ -19,6 +19,12 @@ import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
 import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMusic } from '@fortawesome/free-solid-svg-icons';
+import { LOGIN_ROUTE } from '../login/login-routes';
+import nipplejs from 'nipplejs';
+import { JoystickSingleton } from './joystick-singleton';
+import { Direction } from './grid.types';
 
 function GameCanvas(props: {
   onSongChange: (song: SoundcloudSong) => void;
@@ -33,8 +39,37 @@ function GameCanvas(props: {
   useEffect(() => {
     (async () => {
       if (started) return;
-
       replaceStarted(true);
+      const nippleZone = document.querySelector('#game-nipple') || throwError();
+
+      if (!(nippleZone instanceof HTMLElement)) {
+        throwError();
+      }
+      const nipple = nipplejs.create({
+        zone: nippleZone,
+      });
+
+      const joystick = JoystickSingleton.getInstance() || throwError();
+
+      nipple.on('dir:up', () => {
+        joystick.setDirection(Direction.UP);
+      });
+
+      nipple.on('dir:down', () => {
+        joystick.setDirection(Direction.DOWN);
+      });
+
+      nipple.on('dir:left', () => {
+        joystick.setDirection(Direction.LEFT);
+      });
+
+      nipple.on('dir:right', () => {
+        joystick.setDirection(Direction.RIGHT);
+      });
+
+      nipple.on('end', () => {
+        joystick.setDirection(Direction.NONE);
+      });
 
       let lastSong: string | null;
       let soundcloudPlayerIsReady = false;
@@ -83,7 +118,7 @@ function GameCanvas(props: {
       }
 
       // https://soundcloud.com/radion-alexievich-drozdov/spacedandywave?in=eliud-makaveli-zavala/sets/vaporwave
-      await runGame(
+      const game = await runGame(
         { land: props.land, session: props.session },
         {
           api,
@@ -110,6 +145,13 @@ function GameCanvas(props: {
           changeLandNameDisplay: props.changeLandNameDisplay,
         },
       );
+
+      return () => {
+        if (!module.hot) {
+          game.destroy(true);
+          nipple.destroy();
+        }
+      };
     })();
   }, []);
 
@@ -157,14 +199,26 @@ function Game(props: { land: GetLandDTO; session: null | MainApiSessionData }) {
         changeLandNameDisplay={replaceLandName}
       />
       <div
-        className="p-1 bg-secondary d-flex align-items-center"
+        className={`p-1 bg-${
+          props.session ? 'secondary' : 'warning'
+        } d-flex align-items-center`}
         style={{ textTransform: 'uppercase' }}
       >
-        <span>
+        <span
+          style={{
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
           {props.session ? (
-            <>You are in: {landName}</>
+            <>{landName}</>
           ) : (
-            'Login in order to save your progress'
+            <LinkAnchor
+              href={LOGIN_ROUTE.getHref({ next: window.location.href })}
+            >
+              Login in to save your progress
+            </LinkAnchor>
           )}
         </span>
       </div>
@@ -172,7 +226,12 @@ function Game(props: { land: GetLandDTO; session: null | MainApiSessionData }) {
         className="mt-2 bg-secondary d-flex align-items-center"
         style={{ textTransform: 'uppercase' }}
       >
-        <span className="p-1 bg-secondary">Now playing: </span>
+        <span
+          className="py-1 px-2 bg-secondary"
+          style={{ whiteSpace: 'nowrap' }}
+        >
+          <FontAwesomeIcon icon={faMusic} />
+        </span>
 
         {song ? (
           <div
@@ -185,6 +244,23 @@ function Game(props: { land: GetLandDTO; session: null | MainApiSessionData }) {
             <Ticker song={song} />
           </div>
         ) : null}
+      </div>
+      <div className="d-xl-none me-3 mt-3 d-flex flex-row-reverse">
+        <div
+          style={{ position: 'absolute', width: '100px', height: '100px' }}
+          id="game-nipple"
+        ></div>
+        <div
+          style={{ width: '100px', height: '100px' }}
+          className="bg-light d-flex align-items-center justify-content-center text-center small"
+        >
+          DRAG HERE
+          <br />
+          TO MOVE
+        </div>
+      </div>
+      <div className="d-xl-block mt-3">
+        Instructions: Use the arrow keys to move
       </div>
     </div>
   );
@@ -253,7 +329,7 @@ function Content() {
 }
 
 export const ClientSideIndexTemplate = (_props: RouteComponentProps) => (
-  <Layout title={CLIENT_SIDE_INDEX_ROUTE.label}>
+  <Layout noHeader disableScroll title={CLIENT_SIDE_INDEX_ROUTE.label}>
     {() => {
       return <Content />;
     }}

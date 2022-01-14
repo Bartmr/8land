@@ -23,7 +23,7 @@ export async function runGame(
     render: {
       antialias: false,
     },
-    // pixelArt: true,
+    pixelArt: true,
     type: Phaser.AUTO,
 
     scale: {
