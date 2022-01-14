@@ -38,8 +38,7 @@
     "redux": "^4.1.2",
     "redux-devtools-extension": "^2.13.9",
     "sass": "^1.45.1",
-    "tinycolor2": "^1.4.2",
-    "uuid": "^8.3.2"
+    "tinycolor2": "^1.4.2"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.5",
@@ -49,12 +48,12 @@
     "@graphql-codegen/typescript-operations": "^2.2.1",
     "@hookform/devtools": "^4.0.1",
     "@types/lodash": "^4.14.178",
+    "@types/node": "16.x",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
     "@types/react-helmet": "^6.1.5",
     "@types/react-redux": "^7.1.21",
     "@types/tinycolor2": "^1.4.3",
-    "@types/uuid": "^8.3.3",
     "@types/webpack-env": "^1.16.3",
     "@typescript-eslint/eslint-plugin": "^5.8.0",
     "@typescript-eslint/parser": "^5.8.0",
@@ -90,7 +89,6 @@
     "lint": "eslint --ext .ts,.tsx --max-warnings 0 .",
     "lint:fix": "eslint --ext .ts,.tsx --max-warnings 0 --fix .",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing \"",
-    "integrity-check": "npm run clean && IS_INTEGRITY_CHECK=true concurrently \"npm run typecheck:declaration-files\" \"npm run build\" -n \"typecheck:declaration-files,build\" && npm run typecheck && npm run lint",
-    "update-all-dependencies": "npm-check-updates -u && rimraf package-lock.json node_modules && npm install"
+    "integrity-check": "npm run clean && IS_INTEGRITY_CHECK=true concurrently \"npm run typecheck:declaration-files\" \"npm run build\" -n \"typecheck:declaration-files,build\" && npm run typecheck && npm run lint"
   }
 }
