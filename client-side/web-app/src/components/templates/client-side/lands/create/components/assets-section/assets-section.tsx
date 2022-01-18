@@ -66,19 +66,19 @@ export function AssetsSection(props: {
 
       <div className="card">
         <div className="card-body">
-          {props.land.assetsUrlPrefix ? (
+          {props.land.assets ? (
             <LinkAnchor
-              href={`${props.land.assetsUrlPrefix}/${props.land.id}map.json`}
+              href={`${props.land.assets.baseUrl}/${props.land.assets.mapKey}`}
               className="text-success"
             >
               Download current Tiled map JSON file
             </LinkAnchor>
           ) : null}
-          {props.land.assetsUrlPrefix ? (
+          {props.land.assets ? (
             <>
               <br />{' '}
               <LinkAnchor
-                href={`${props.land.assetsUrlPrefix}/${props.land.id}/tileset.png`}
+                href={`${props.land.assets.baseUrl}/${props.land.assets.tilesetKey}`}
                 className="text-success"
               >
                 Download current Tileset picture

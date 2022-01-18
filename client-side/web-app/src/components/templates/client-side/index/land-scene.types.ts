@@ -1,5 +1,5 @@
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
-import { BlockType } from '@app/shared/land/blocks/create/create-block.enums';
+import { BlockType } from '@app/shared/blocks/create/create-block.enums';
 
 export type LandSceneArguments = {
   player: {

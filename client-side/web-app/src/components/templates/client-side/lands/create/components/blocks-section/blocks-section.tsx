@@ -22,10 +22,18 @@ export function BlocksSection(props: {
   >({ status: TransportedDataStatus.Done, data: undefined });
 
   const deleteBlock = async (blockId: string) => {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this block?',
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
     replaceDeletionState({ status: TransportedDataStatus.Loading });
 
     const res = await api.delete<{ status: 204; body: undefined }, undefined>({
-      path: `/lands/${props.land.id}/blocks/${blockId}`,
+      path: `/blocks/${blockId}`,
       query: undefined,
       acceptableStatusCodes: [204],
     });

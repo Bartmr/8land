@@ -1,6 +1,6 @@
 import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { throwError } from '@app/shared/internals/utils/throw-error';
-import { BlockType } from '@app/shared/land/blocks/create/create-block.enums';
+import { BlockType } from '@app/shared/blocks/create/create-block.enums';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 import { JSONApiBase } from 'src/logic/app-internals/apis/json-api-base';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
@@ -283,24 +283,24 @@ export class LandScene extends Phaser.Scene {
   }
 
   public preload() {
-    this.load.setBaseURL(`${this.args.land.assetsUrlPrefix || throwError()}/`);
+    this.load.setBaseURL(`${(this.args.land.assets || throwError()).baseUrl}/`);
     this.load.image(
       getLandSceneTilesetKey(this.args.land),
-      `${this.args.land.id}/tileset.png`,
+      (this.args.land.assets || throwError()).tilesetKey,
     );
     this.load.tilemapTiledJSON(
       getLandSceneTiledJSONKey(this.args.land),
-      `${this.args.land.id}/map.json`,
+      (this.args.land.assets || throwError()).mapKey,
     );
 
     for (const territory of this.args.land.territories) {
       this.load.image(
         getTerritoryTilesetKey(territory),
-        `${this.args.land.id}/${territory.id}/tileset.png`,
+        (territory.assets || throwError()).tilesetKey,
       );
       this.load.tilemapTiledJSON(
         getTerritoryTiledJSONKey(territory),
-        `${this.args.land.id}/${territory.id}/map.json`,
+        (territory.assets || throwError()).mapKey,
       );
     }
 

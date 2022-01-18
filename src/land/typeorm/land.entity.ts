@@ -7,7 +7,7 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { BlockEntry } from './block-entry.entity';
+import { BlockEntry } from '../../blocks/typeorm/block-entry.entity';
 
 @Entity()
 @Unique(['searchableName'])

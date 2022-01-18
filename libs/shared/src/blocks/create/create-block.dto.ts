@@ -1,24 +1,17 @@
 import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger';
-import { ValidationSchema } from '../../../internals/validation/validation-schema.decorator';
+import { ValidationSchema } from '../../internals/validation/validation-schema.decorator';
 import { BlockType } from './create-block.enums';
-import {
-  CreateBlockRequestSchema,
-  CreateBlockURLParametersSchema,
-} from './create-block.schemas';
+import { CreateBlockRequestSchema } from './create-block.schemas';
 
 class CreateDoorBlockDTO {
   type!: BlockType.Door;
   destinationLandName!: string;
 }
 
-@ValidationSchema(CreateBlockURLParametersSchema)
-export class CreateBlockURLParameters {
-  landId!: string;
-}
-
 @ApiExtraModels(CreateDoorBlockDTO)
 @ValidationSchema(CreateBlockRequestSchema)
 export class CreateBlockRequestDTO {
+  landId!: string;
   @ApiProperty({
     oneOf: [{ $ref: getSchemaPath(CreateDoorBlockDTO) }],
   })

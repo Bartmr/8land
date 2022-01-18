@@ -1,8 +1,8 @@
 import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { JSONData } from '@app/shared/internals/transports/json-types';
-import { CreateBlockRequestDTO } from '@app/shared/land/blocks/create/create-block.dto';
-import { BlockType } from '@app/shared/land/blocks/create/create-block.enums';
-import { CreateBlockRequestSchema } from '@app/shared/land/blocks/create/create-block.schemas';
+import { CreateBlockRequestDTO } from '@app/shared/blocks/create/create-block.dto';
+import { BlockType } from '@app/shared/blocks/create/create-block.enums';
+import { CreateBlockRequestSchema } from '@app/shared/blocks/create/create-block.schemas';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -51,7 +51,7 @@ export function AddBlockSection(props: {
                 undefined,
                 ToIndexedType<CreateBlockRequestDTO>
               >({
-                path: `/lands/${props.land.id}/blocks`,
+                path: `/blocks`,
                 query: undefined,
                 acceptableStatusCodes: [201, 404, 409],
                 body: formData,

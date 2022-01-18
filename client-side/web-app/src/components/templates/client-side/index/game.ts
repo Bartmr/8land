@@ -36,9 +36,6 @@ export async function runGame(
     backgroundColor: '#000000',
     canvasStyle:
       'border-color: var(--body-contrasting-color); border-width: 3px; border-style: solid;',
-    loader: {
-      baseURL: EnvironmentVariables.HOST_URL,
-    },
   };
 
   const player = {

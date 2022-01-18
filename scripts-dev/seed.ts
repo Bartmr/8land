@@ -21,8 +21,8 @@ import { FIREBASE_EMULATOR_PROJECT_ID } from 'src/internals/apis/firebase/fireba
 import { throwError } from 'src/internals/utils/throw-error';
 import { LandRepository } from 'src/land/typeorm/land.repository';
 import { getSearchableName } from 'src/internals/utils/get-searchable-name';
-import { BlockEntryRepository } from 'src/land/typeorm/block-entry.repository';
-import { DoorBlockRepository } from 'src/land/typeorm/door-block.repository';
+import { BlockEntryRepository } from 'src/blocks/typeorm/block-entry.repository';
+import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
 import fs from 'fs';
 import { promisify } from 'util';
 import path from 'path';

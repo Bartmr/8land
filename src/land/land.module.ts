@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { StorageModule } from 'src/internals/storage/storage.module';
 import { LandController } from './land.controller';
-import { BlockEntry } from './typeorm/block-entry.entity';
-import { DoorBlock } from './typeorm/door-block.entity';
+import { BlockEntry } from '../blocks/typeorm/block-entry.entity';
+import { DoorBlock } from '../blocks/typeorm/door-block.entity';
 import { Land } from './typeorm/land.entity';
 
 @Module({

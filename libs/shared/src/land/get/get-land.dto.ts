@@ -22,7 +22,13 @@ class GetLandTerritoryDTO {
   startX!: number;
   startY!: number;
   doorBlocks!: GetLandDoorBlockEntryDTO[];
-  assetsUrlPrefix!: string | undefined;
+  assets: undefined | GetLandAssetsDTO;
+}
+
+export class GetLandAssetsDTO {
+  baseUrl!: string;
+  mapKey!: string;
+  tilesetKey!: string;
 }
 
 export class GetLandDTO {
@@ -32,7 +38,8 @@ export class GetLandDTO {
   doorBlocksReferencing!: GetLandDoorReferencingDTO[];
   doorBlocks!: GetLandDoorBlockEntryDTO[];
   territories!: GetLandTerritoryDTO[];
-  assetsUrlPrefix: undefined | string;
+
+  assets: undefined | GetLandAssetsDTO;
 }
 
 @ValidationSchema(GetLandParametersSchema)

@@ -3,7 +3,6 @@ import {
   Body,
   ConflictException,
   Controller,
-  Delete,
   Get,
   HttpCode,
   Param,
@@ -16,12 +15,6 @@ import {
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { InjectConnection } from '@nestjs/typeorm';
 import {
-  CreateBlockRequestDTO,
-  CreateBlockURLParameters,
-} from 'libs/shared/src/land/blocks/create/create-block.dto';
-import { BlockType } from 'libs/shared/src/land/blocks/create/create-block.enums';
-import { DeleteBlockURLParameters } from 'libs/shared/src/land/blocks/delete/delete-block.dto';
-import {
   CreateLandRequestDTO,
   CreateLandResponseDTO,
 } from 'libs/shared/src/land/create/create-land.dto';
@@ -33,8 +26,7 @@ import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
 import { getSearchableName } from 'src/internals/utils/get-searchable-name';
 import { Connection } from 'typeorm';
-import { BlockEntryRepository } from './typeorm/block-entry.repository';
-import { DoorBlockRepository } from './typeorm/door-block.repository';
+import { BlockEntryRepository } from '../blocks/typeorm/block-entry.repository';
 import { LandRepository } from './typeorm/land.repository';
 import fileType from 'file-type';
 import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
@@ -55,7 +47,7 @@ import {
   GetLandDTO,
   GetLandParametersDTO,
 } from 'libs/shared/src/land/get/get-land.dto';
-import { BlockEntry } from './typeorm/block-entry.entity';
+import { BlockEntry } from '../blocks/typeorm/block-entry.entity';
 import { NonNullableFields } from 'libs/shared/src/internals/utils/types/nullable-types';
 import { PublicRoute } from 'src/auth/public-route.decorator';
 
@@ -232,99 +224,6 @@ export class LandController {
     }
   }
 
-  @Post(':landId/blocks')
-  @RolesUpAndIncluding(Role.Admin)
-  createBlock(
-    @Param() param: CreateBlockURLParameters,
-    @Body() body: CreateBlockRequestDTO,
-    @WithAuditContext() auditContext: AuditContext,
-  ) {
-    return this.connection.transaction(async (e) => {
-      const landRepository = e.getCustomRepository(LandRepository);
-      const blockEntriesRepository =
-        e.getCustomRepository(BlockEntryRepository);
-
-      const land = await landRepository.findOne({
-        where: { id: param.landId },
-      });
-
-      if (!land) {
-        throw new ResourceNotFoundException({ error: 'land-not-found' });
-      }
-
-      const landBlocks = await land.blocks;
-
-      if (landBlocks.length > 10) {
-        throw new BadRequestException({ error: 'block-limit-exceeded' });
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      if (body.data.type === BlockType.Door) {
-        const doorBlockRepository = e.getCustomRepository(DoorBlockRepository);
-
-        const toLand = await landRepository.findOne({
-          where: {
-            searchableName: getSearchableName(body.data.destinationLandName),
-          },
-        });
-
-        if (!toLand) {
-          throw new ResourceNotFoundException({
-            error: 'destination-land-not-found',
-          });
-        }
-
-        const doorBlock = await doorBlockRepository.create(
-          {
-            toLand,
-          },
-          auditContext,
-        );
-
-        await blockEntriesRepository.create(
-          {
-            door: doorBlock,
-            land,
-          },
-          auditContext,
-        );
-
-        return;
-      } else {
-        throw new BadRequestException();
-      }
-    });
-  }
-
-  @HttpCode(204)
-  @Delete(':landId/blocks/:blockId')
-  @RolesUpAndIncluding(Role.Admin)
-  deleteBlock(
-    @Param() param: DeleteBlockURLParameters,
-    @WithAuditContext() auditContext: AuditContext,
-  ) {
-    return this.connection.transaction(async (e) => {
-      const blockEntriesRepository =
-        e.getCustomRepository(BlockEntryRepository);
-
-      const block = await blockEntriesRepository.findOne({
-        where: { land: param.landId, id: param.blockId },
-      });
-
-      if (!block) {
-        throw new ResourceNotFoundException();
-      }
-
-      await blockEntriesRepository.remove(block, auditContext);
-
-      if (block.door) {
-        const doorBlockRepository = e.getCustomRepository(DoorBlockRepository);
-
-        await doorBlockRepository.remove(block.door, auditContext);
-      }
-    });
-  }
-
   @Put(':landId')
   @RolesUpAndIncluding(Role.Admin)
   editLand(
@@ -477,8 +376,12 @@ export class LandController {
       id: land.id,
       name: land.name,
       backgroundMusicUrl: land.backgroundMusicUrl,
-      assetsUrlPrefix: land.hasAssets
-        ? this.storageService.getHostUrl()
+      assets: land.hasAssets
+        ? {
+            baseUrl: this.storageService.getHostUrl(),
+            mapKey: `${land.id}/map.json`,
+            tilesetKey: `${land.id}/tileset.png`,
+          }
         : undefined,
       doorBlocksReferencing: doorBlocksReferencing.rows
         .filter((b): b is NonNullableFields<BlockEntry, 'door'> => !!b.door)

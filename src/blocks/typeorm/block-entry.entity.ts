@@ -1,4 +1,5 @@
 import { SimpleEntity } from 'src/internals/databases/simple-entity/simple.entity';
+import { Land } from 'src/land/typeorm/land.entity';
 import {
   CreateDateColumn,
   Entity,
@@ -7,7 +8,6 @@ import {
   OneToOne,
 } from 'typeorm';
 import { DoorBlock } from './door-block.entity';
-import { Land } from './land.entity';
 
 @Entity()
 export class BlockEntry extends SimpleEntity {

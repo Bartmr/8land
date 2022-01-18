@@ -18,6 +18,7 @@ import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { Toast } from 'react-bootstrap';
 import { MainSection } from './components/main-section/main-section';
 import { BlocksSection } from './components/blocks-section/blocks-section';
+import { TerritoriesSection } from './components/territories-section/territories-section';
 
 export function EditLandTemplateWithRouteProps(props: { id: string }) {
   const api = useMainJSONApi();
@@ -90,6 +91,9 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
                   onSuccessfulSave={onSuccessfulSave}
                   land={data}
                 />
+              </div>
+              <div className="mt-4">
+                <TerritoriesSection land={data} />
               </div>
             </>
           );
