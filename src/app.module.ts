@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DEFAULT_DB_TYPEORM_CONN_OPTS } from './internals/databases/default-db-typeorm-conn-opts';
 import { AuthModule } from './auth/auth.module';
 import { LandModule } from './land/land.module';
+import { BlocksModule } from './blocks/blocks.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { LandModule } from './land/land.module';
     }),
     AuthModule,
     LandModule,
+    BlocksModule,
   ],
   providers: [...CROSS_CUTTING_PROVIDERS],
 })
