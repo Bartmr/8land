@@ -10,8 +10,6 @@ import { LOGIN_ROUTE } from 'src/components/templates/client-side/login/login-ro
 import { CLIENT_SIDE_INDEX_ROUTE } from 'src/components/templates/client-side/index/index-routes';
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { RouteComponentProps } from '@reach/router';
-import { isTransportFailure } from 'src/logic/app-internals/transports/transported-data/is-transport-failure';
-import { TransportedDataStatus } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import { RequiredFields } from '@app/shared/internals/utils/types/requirement-types';
 
 type Props = RequiredFields<RouteComponentProps, 'path'> & {
@@ -26,13 +24,8 @@ export const AuthenticatedRoute = (props: Props) => {
   );
 
   if (typeof sessionWrapper.data === 'undefined') {
-    return null;
-  } else if (
-    isTransportFailure(sessionWrapper.status) ||
-    sessionWrapper.status === TransportedDataStatus.Loading
-  ) {
     return (
-      <TransportedDataGate dataWrapper={sessionWrapper}>
+      <TransportedDataGate className="py-3" dataWrapper={sessionWrapper}>
         {() => null}
       </TransportedDataGate>
     );
