@@ -172,8 +172,8 @@ export class LandController {
         messageTree: tiledJSONValidationResult.messagesTree,
       });
     } else {
-      const tilesetStorageKey = `${params.landId}/tileset.png`;
-      const mapStorageKey = `${params.landId}/map.json`;
+      const tilesetStorageKey = `lands/${params.landId}/tileset.png`;
+      const mapStorageKey = `lands/${params.landId}/map.json`;
 
       await this.connection.transaction(async (e) => {
         const landRepo = e.getCustomRepository(LandRepository);
@@ -379,8 +379,8 @@ export class LandController {
       assets: land.hasAssets
         ? {
             baseUrl: this.storageService.getHostUrl(),
-            mapKey: `${land.id}/map.json`,
-            tilesetKey: `${land.id}/tileset.png`,
+            mapKey: `lands/${land.id}/map.json`,
+            tilesetKey: `lands/${land.id}/tileset.png`,
           }
         : undefined,
       doorBlocksReferencing: doorBlocksReferencing.rows

@@ -93,6 +93,12 @@ export function TerritoriesSection(props: { land: GetLandDTO }) {
             })}
           >
             <div className="text-danger mb-3">
+              {formSubmission.data === 'intersects-existing-territory' ? (
+                <Fragment>
+                  <br />
+                  This territory coordinates intersect an existing territory
+                </Fragment>
+              ) : null}
               {Object.keys(formUtils.getErrorTypesFromField('data')).map(
                 (e) => {
                   return (

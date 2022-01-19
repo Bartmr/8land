@@ -216,13 +216,13 @@ async function seed() {
       ),
     );
     await storageService.saveText(
-      `${expectationsBeach.id}/map.json`,
+      `lands/${expectationsBeach.id}/map.json`,
       expectationsBeachMap
         .replaceAll('<door-1>', expectationsBeachDoor1.id)
         .replaceAll('<door-2>', expectationsBeachDoor2.id),
     );
     await storageService.saveBuffer(
-      `${expectationsBeach.id}/tileset.png`,
+      `lands/${expectationsBeach.id}/tileset.png`,
       expectationsBeachTileset,
     );
 
@@ -268,14 +268,14 @@ async function seed() {
       ),
     );
     await storageService.saveText(
-      `${townOfHumbleBeginnings.id}/map.json`,
+      `lands/${townOfHumbleBeginnings.id}/map.json`,
       townOfHumbleBeginningsMap
         .replaceAll('<door-1>', expectationsBeachDoor2.id)
         .replaceAll('<door-2>', townOfHumbleBeginningsDoor1.id)
         .replaceAll('<door-3>', townOfHumbleBeginningsDoor2.id),
     );
     await storageService.saveBuffer(
-      `${townOfHumbleBeginnings.id}/tileset.png`,
+      `lands/${townOfHumbleBeginnings.id}/tileset.png`,
       townOfHumbleBeginningsTileset,
     );
 
@@ -309,13 +309,13 @@ async function seed() {
       ),
     );
     await storageService.saveText(
-      `${townOfHumbleBeginningsUnderground1.id}/map.json`,
+      `lands/${townOfHumbleBeginningsUnderground1.id}/map.json`,
       townOfHumbleBeginningsUnderground1Map
         .replaceAll('<door-1>', townOfHumbleBeginningsDoor1.id)
         .replaceAll('<door-2>', townOfHumbleBeginningsUnderground1Door1.id),
     );
     await storageService.saveBuffer(
-      `${townOfHumbleBeginningsUnderground1.id}/tileset.png`,
+      `lands/${townOfHumbleBeginningsUnderground1.id}/tileset.png`,
       townOfHumbleBeginningsUnderground1Tileset,
     );
 
@@ -335,13 +335,13 @@ async function seed() {
       ),
     );
     await storageService.saveText(
-      `${townOfHumbleBeginningsUnderground2.id}/map.json`,
+      `lands/${townOfHumbleBeginningsUnderground2.id}/map.json`,
       townOfHumbleBeginningsUnderground2Map
         .replaceAll('<door-1>', townOfHumbleBeginningsUnderground1Door1.id)
         .replaceAll('<door-2>', townOfHumbleBeginningsDoor2.id),
     );
     await storageService.saveBuffer(
-      `${townOfHumbleBeginningsUnderground2.id}/tileset.png`,
+      `lands/${townOfHumbleBeginningsUnderground2.id}/tileset.png`,
       townOfHumbleBeginningsUnderground2Tileset,
     );
 
