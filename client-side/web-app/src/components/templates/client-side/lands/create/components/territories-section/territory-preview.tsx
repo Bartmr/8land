@@ -27,13 +27,24 @@ export function TerritoryPreview(props: {
     endX: number;
     endY: number;
   };
+  maxHeight?: string;
+  onScreenshotTaken?: (blob: Blob) => void;
 }) {
   const jsonHttp = useJSONHttp();
 
-  const [scene, replaceScene] = useState<TransportedData<Phaser.Scene>>({
+  const [previewFrame, replacePreviewFrame] = useState<
+    TransportedData<{
+      scene: Phaser.Scene;
+      game: Phaser.Game;
+    }>
+  >({
     status: TransportedDataStatus.NotInitialized,
   });
   const [previousRectangles] = useState<Phaser.GameObjects.Rectangle[]>([]);
+  const [pendingIntervalRectangle, replacePendingIntervalRectangle] =
+    useState<Phaser.GameObjects.Rectangle>();
+
+  const [elementId] = useState(v4());
 
   useEffect(() => {
     let _game: Phaser.Game;
@@ -50,7 +61,7 @@ export function TerritoryPreview(props: {
       });
 
       if (map.failure) {
-        replaceScene({ status: map.failure });
+        replacePreviewFrame({ status: map.failure });
         return;
       }
 
@@ -67,10 +78,12 @@ export function TerritoryPreview(props: {
           scale: {
             width: map.response.body.width * TILE_SIZE,
             height: map.response.body.height * TILE_SIZE,
-            mode: Phaser.Scale.WIDTH_CONTROLS_HEIGHT,
+            mode: props.onScreenshotTaken
+              ? Phaser.Scale.ZOOM_2X
+              : Phaser.Scale.WIDTH_CONTROLS_HEIGHT,
             autoCenter: Phaser.Scale.Center.CENTER_HORIZONTALLY,
           },
-          parent: 'preview-root',
+          parent: elementId,
           backgroundColor: '#000000',
           canvasStyle:
             'border-color: var(--body-contrasting-color); border-width: 3px; border-style: solid;',
@@ -78,7 +91,7 @@ export function TerritoryPreview(props: {
 
         _game = new Phaser.Game(gameConfig);
       } catch (err) {
-        replaceScene({ status: TransportFailure.ConnectionFailure });
+        replacePreviewFrame({ status: TransportFailure.ConnectionFailure });
         return;
       }
 
@@ -99,11 +112,6 @@ export function TerritoryPreview(props: {
           );
         }
         create() {
-          replaceScene({
-            status: TransportedDataStatus.Done,
-            data: this,
-          });
-
           const landTiledJSON =
             (
               this.cache.tilemap.get(`${sceneKey}-map`) as
@@ -120,6 +128,13 @@ export function TerritoryPreview(props: {
 
           const landLayer = landMap.createLayer(0, landFirstTileset.name, 0, 0);
           landLayer.setDepth(0);
+
+          setTimeout(() => {
+            replacePreviewFrame({
+              status: TransportedDataStatus.Done,
+              data: { scene: this, game: _game },
+            });
+          }, 1000);
         }
       }
 
@@ -141,11 +156,17 @@ export function TerritoryPreview(props: {
   }, []);
 
   useEffect(() => {
-    if (scene.data) {
-      const _scene = scene.data;
+    if (previewFrame.data) {
+      const _scene = previewFrame.data.scene;
+      const _game = previewFrame.data.game;
 
       for (const previousRectangle of previousRectangles) {
         _scene.children.remove(previousRectangle);
+      }
+
+      if (pendingIntervalRectangle) {
+        _scene.children.remove(pendingIntervalRectangle);
+        replacePendingIntervalRectangle(undefined);
       }
 
       for (const interval of props.intervals) {
@@ -155,18 +176,53 @@ export function TerritoryPreview(props: {
           (interval.endX - interval.startX) * TILE_SIZE,
           (interval.endY - interval.startY) * TILE_SIZE,
           0xff0000,
-          0.8,
+          0.6,
         );
 
         rectangle.setStrokeStyle(1, 0xffffff);
 
-        rectangle.setBlendMode(Phaser.BlendModes.MULTIPLY);
-
         previousRectangles.push(rectangle);
+      }
+
+      if (props.pendingInterval) {
+        const _pendingIntervalRectangle = _scene.add.rectangle(
+          props.pendingInterval.startX * TILE_SIZE,
+          props.pendingInterval.startY * TILE_SIZE,
+          (props.pendingInterval.endX - props.pendingInterval.startX) *
+            TILE_SIZE,
+          (props.pendingInterval.endY - props.pendingInterval.startY) *
+            TILE_SIZE,
+          0x00ff00,
+          0.6,
+        );
+
+        _pendingIntervalRectangle.setStrokeStyle(1, 0xffffff);
+
+        replacePendingIntervalRectangle(_pendingIntervalRectangle);
+      }
+
+      if (props.onScreenshotTaken) {
+        setTimeout(() => {
+          _game.canvas.toBlob(
+            (blob) => {
+              if (!blob) {
+                throw new Error();
+              }
+
+              if (!props.onScreenshotTaken) {
+                throw new Error();
+              }
+
+              props.onScreenshotTaken(blob);
+            },
+            'image/png',
+            1,
+          );
+        }, 1000);
       }
     }
   }, [
-    scene,
+    previewFrame,
     JSON.stringify({
       intervals: props.intervals,
       pendingInterval: props.pendingInterval,
@@ -175,7 +231,7 @@ export function TerritoryPreview(props: {
 
   return (
     <div>
-      <div id="preview-root"></div>
+      <div id={elementId}></div>
     </div>
   );
 }
