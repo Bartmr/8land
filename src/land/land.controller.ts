@@ -93,6 +93,7 @@ export class LandController {
           blocks: Promise.resolve([]),
           backgroundMusicUrl: null,
           hasAssets: null,
+          territories: [],
         },
         auditContext,
       );
@@ -386,6 +387,10 @@ export class LandController {
       doorBlocksReferencing: doorBlocksReferencing.rows
         .filter((b): b is NonNullableFields<BlockEntry, 'door'> => !!b.door)
         .map((b) => {
+          if (!b.land) {
+            throw new Error();
+          }
+
           return {
             id: b.id,
             fromLandId: b.land.id,
@@ -403,7 +408,23 @@ export class LandController {
             },
           };
         }),
-      territories: [],
+      territories: land.territories.map((territory) => {
+        return {
+          id: territory.id,
+          startX: territory.startX,
+          startY: territory.startY,
+          endX: territory.endX,
+          endY: territory.endY,
+          assets: territory.hasAssets
+            ? {
+                baseUrl: this.storageService.getHostUrl(),
+                mapKey: `territories/${land.id}/map.json`,
+                tilesetKey: `territories/${land.id}/tileset.png`,
+              }
+            : undefined,
+          doorBlocks: [],
+        };
+      }),
     };
   }
 }

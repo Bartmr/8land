@@ -7,6 +7,7 @@ import { DEFAULT_DB_TYPEORM_CONN_OPTS } from './internals/databases/default-db-t
 import { AuthModule } from './auth/auth.module';
 import { LandModule } from './land/land.module';
 import { BlocksModule } from './blocks/blocks.module';
+import { TerritoriesModule } from './territories/territories.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { BlocksModule } from './blocks/blocks.module';
     AuthModule,
     LandModule,
     BlocksModule,
+    TerritoriesModule,
   ],
   providers: [...CROSS_CUTTING_PROVIDERS],
 })

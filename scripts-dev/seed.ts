@@ -133,6 +133,7 @@ async function seed() {
         backgroundMusicUrl: 'https://api.soundcloud.com/tracks/256813580',
         blocks: Promise.resolve([]),
         hasAssets: true,
+        territories: [],
       },
       auditContext,
     );
@@ -144,6 +145,7 @@ async function seed() {
         backgroundMusicUrl: 'https://api.soundcloud.com/tracks/566456658',
         blocks: Promise.resolve([]),
         hasAssets: true,
+        territories: [],
       },
       auditContext,
     );
@@ -157,6 +159,7 @@ async function seed() {
         backgroundMusicUrl: null,
         blocks: Promise.resolve([]),
         hasAssets: true,
+        territories: [],
       },
       auditContext,
     );
@@ -170,6 +173,7 @@ async function seed() {
         backgroundMusicUrl: null,
         blocks: Promise.resolve([]),
         hasAssets: true,
+        territories: [],
       },
       auditContext,
     );
@@ -178,6 +182,7 @@ async function seed() {
 
     const expectationsBeachDoor1 = await blockEntriesRepository.create(
       {
+        territory: null,
         land: expectationsBeach,
         door: await doorBlocksRepository.create(
           {
@@ -191,6 +196,7 @@ async function seed() {
 
     const expectationsBeachDoor2 = await blockEntriesRepository.create(
       {
+        territory: null,
         land: expectationsBeach,
         door: await doorBlocksRepository.create(
           {
@@ -230,6 +236,7 @@ async function seed() {
 
     const townOfHumbleBeginningsDoor1 = await blockEntriesRepository.create(
       {
+        territory: null,
         land: townOfHumbleBeginnings,
         door: await doorBlocksRepository.create(
           {
@@ -243,6 +250,7 @@ async function seed() {
 
     const townOfHumbleBeginningsDoor2 = await blockEntriesRepository.create(
       {
+        territory: null,
         land: townOfHumbleBeginnings,
         door: await doorBlocksRepository.create(
           {
@@ -284,6 +292,7 @@ async function seed() {
     const townOfHumbleBeginningsUnderground1Door1 =
       await blockEntriesRepository.create(
         {
+          territory: null,
           land: townOfHumbleBeginningsUnderground1,
           door: await doorBlocksRepository.create(
             {

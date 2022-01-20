@@ -1,5 +1,6 @@
+import { throwError } from '@app/shared/internals/utils/throw-error';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
-import { number } from 'not-me/lib/schemas/number/number-schema';
+import { CreateTerritoryRequestJSONSchemaObj } from '@app/shared/territories/territories.schemas';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -7,6 +8,7 @@ import {
   TransportedDataGate,
   TransportedDataGateLayout,
 } from 'src/components/shared/transported-data-gate/transported-data-gate';
+import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
 import { useFormUtils } from 'src/logic/app-internals/forms/form-utils';
 import { notMeReactHookFormResolver } from 'src/logic/app-internals/forms/not-me-react-hook-form-resolver';
 import {
@@ -16,39 +18,16 @@ import {
 import { TerritoryPreview } from './territory-preview';
 
 const schema = object({
-  data: object({
-    startX: number()
-      .required()
-      .integer()
-      .test((n) => (n >= 0 ? null : 'Must be a positive number')),
-    startY: number()
-      .required()
-      .integer()
-      .test((n) => (n >= 0 ? null : 'Must be a positive number')),
-    endX: number()
-      .required()
-      .integer()
-      .test((n) => (n >= 0 ? null : 'Must be a positive number')),
-    endY: number()
-      .required()
-      .integer()
-      .test((n) => (n >= 0 ? null : 'Must be a positive number')),
-  })
-    .required()
-    .test((v) =>
-      v.endX > v.startX
-        ? null
-        : 'End X coordinate must be bigger than Start X coordinate',
-    )
-    .test((v) =>
-      v.endX > v.startX
-        ? null
-        : 'End Y coordinate must be bigger than Start Y coordinate',
-    ),
+  ...CreateTerritoryRequestJSONSchemaObj,
 }).required();
 
-export function TerritoriesSection(props: { land: GetLandDTO }) {
-  const [formSubmission] = useState<
+export function TerritoriesSection(props: {
+  land: GetLandDTO;
+  onSuccessfulSave: () => void;
+}) {
+  const api = useMainJSONApi();
+
+  const [formSubmission, replaceFormSubmission] = useState<
     TransportedData<undefined | 'intersects-existing-territory'>
   >({ status: TransportedDataStatus.Done, data: undefined });
   const [territoryThumbnail, replaceTerritoryThumbnail] = useState<
@@ -84,11 +63,68 @@ export function TerritoriesSection(props: { land: GetLandDTO }) {
       <div className="row g-3">
         <div className="col-6">
           <form
-            onSubmit={form.handleSubmit(async () => {
+            onSubmit={form.handleSubmit(async (data) => {
               const confirmation = window.confirm('Create the territory?');
 
               if (!confirmation) {
                 return;
+              }
+
+              const body = new FormData();
+
+              body.set(
+                'data',
+                new Blob(
+                  [
+                    JSON.stringify({
+                      ...data,
+                      landId: props.land.id,
+                    }),
+                  ],
+                  {
+                    type: 'text/plain',
+                  },
+                ),
+              );
+
+              body.set('thumbnail', territoryThumbnail || throwError());
+
+              const res = await api.post<
+                | { status: 201; body: undefined }
+                | { status: 409; body: { error: string } },
+                undefined,
+                FormData
+              >({
+                path: '/territories',
+                body,
+                query: undefined,
+                acceptableStatusCodes: [201, 409],
+              });
+
+              if (res.failure) {
+                replaceFormSubmission({ status: res.failure });
+              } else {
+                if (res.response.status === 409) {
+                  if (
+                    res.response.body.error === 'intersects-existing-territory'
+                  ) {
+                    replaceFormSubmission({
+                      status: TransportedDataStatus.Done,
+                      data: res.response.body.error,
+                    });
+                  } else {
+                    replaceFormSubmission({
+                      status: res.logAndReturnAsUnexpected().failure,
+                    });
+                  }
+                } else {
+                  replaceFormSubmission({
+                    status: TransportedDataStatus.Done,
+                    data: undefined,
+                  });
+
+                  props.onSuccessfulSave();
+                }
               }
             })}
           >
@@ -253,14 +289,7 @@ export function TerritoriesSection(props: { land: GetLandDTO }) {
           <div className="mt-3">
             <TerritoryPreview
               land={props.land}
-              intervals={[
-                {
-                  startX: 5,
-                  startY: 5,
-                  endX: 9,
-                  endY: 9,
-                },
-              ]}
+              intervals={props.land.territories}
               pendingInterval={
                 pendingIntervalValidation.errors
                   ? undefined

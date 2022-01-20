@@ -31,6 +31,12 @@ export class User extends SimpleEntity {
   })
   role!: Role;
 
+  /*
+    TODO: create app id for identifying user in apps
+    must be unique and hidden (strip appId in toJSON())
+    should only be visible in the session object
+  */
+
   toJSON() {
     return {
       ...this,

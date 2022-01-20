@@ -93,7 +93,10 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
                 />
               </div>
               <div className="mt-4">
-                <TerritoriesSection land={data} />
+                <TerritoriesSection
+                  land={data}
+                  onSuccessfulSave={onSuccessfulSave}
+                />
               </div>
             </>
           );

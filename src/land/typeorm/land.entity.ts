@@ -1,4 +1,5 @@
 import { SimpleEntity } from 'src/internals/databases/simple-entity/simple.entity';
+import { Territory } from 'src/territories/typeorm/territory.entity';
 import {
   Column,
   CreateDateColumn,
@@ -33,5 +34,8 @@ export class Land extends SimpleEntity {
   @Column('boolean', { nullable: true })
   hasAssets!: boolean | null;
 
-  // TODO: territory relationship nullable column
+  // TODO: territory relationship nullable column, when land is indoors of territory
+
+  @OneToMany(() => Territory, (e) => e.inLand, { eager: true })
+  territories!: Territory[];
 }

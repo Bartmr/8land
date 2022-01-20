@@ -78,6 +78,7 @@ export class BlocksController {
           {
             door: doorBlock,
             land,
+            territory: null,
           },
           auditContext,
         );

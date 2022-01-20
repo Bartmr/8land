@@ -21,6 +21,8 @@ class GetLandTerritoryDTO {
   id!: string;
   startX!: number;
   startY!: number;
+  endX!: number;
+  endY!: number;
   doorBlocks!: GetLandDoorBlockEntryDTO[];
   assets: undefined | GetLandAssetsDTO;
 }

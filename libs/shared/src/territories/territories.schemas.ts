@@ -1,7 +1,8 @@
 import { number } from 'not-me/lib/schemas/number/number-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
+import { uuid } from '../internals/validation/schemas/uuid.schema';
 
-export const CreateTerritoryRequestJSONSchema = object({
+export const CreateTerritoryRequestJSONSchemaObj = {
   data: object({
     startX: number()
       .required()
@@ -31,4 +32,9 @@ export const CreateTerritoryRequestJSONSchema = object({
         ? null
         : 'End Y coordinate must be bigger than Start Y coordinate',
     ),
+};
+
+export const CreateTerritoryRequestJSONSchema = object({
+  ...CreateTerritoryRequestJSONSchemaObj,
+  landId: uuid().required(),
 }).required();
