@@ -182,7 +182,7 @@ async function seed() {
 
     const expectationsBeachDoor1 = await blockEntriesRepository.create(
       {
-        territory: null,
+        territory: Promise.resolve(null),
         land: expectationsBeach,
         door: await doorBlocksRepository.create(
           {
@@ -196,7 +196,7 @@ async function seed() {
 
     const expectationsBeachDoor2 = await blockEntriesRepository.create(
       {
-        territory: null,
+        territory: Promise.resolve(null),
         land: expectationsBeach,
         door: await doorBlocksRepository.create(
           {
@@ -236,7 +236,7 @@ async function seed() {
 
     const townOfHumbleBeginningsDoor1 = await blockEntriesRepository.create(
       {
-        territory: null,
+        territory: Promise.resolve(null),
         land: townOfHumbleBeginnings,
         door: await doorBlocksRepository.create(
           {
@@ -250,7 +250,7 @@ async function seed() {
 
     const townOfHumbleBeginningsDoor2 = await blockEntriesRepository.create(
       {
-        territory: null,
+        territory: Promise.resolve(null),
         land: townOfHumbleBeginnings,
         door: await doorBlocksRepository.create(
           {
@@ -292,7 +292,7 @@ async function seed() {
     const townOfHumbleBeginningsUnderground1Door1 =
       await blockEntriesRepository.create(
         {
-          territory: null,
+          territory: Promise.resolve(null),
           land: townOfHumbleBeginningsUnderground1,
           door: await doorBlocksRepository.create(
             {

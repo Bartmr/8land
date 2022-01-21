@@ -78,7 +78,7 @@ export class BlocksController {
           {
             door: doorBlock,
             land,
-            territory: null,
+            territory: Promise.resolve(null),
           },
           auditContext,
         );

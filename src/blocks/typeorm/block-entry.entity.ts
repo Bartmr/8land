@@ -19,9 +19,9 @@ export class BlockEntry extends SimpleEntity {
   @JoinColumn()
   land?: Land | null;
 
-  @ManyToOne(() => Territory, { nullable: true })
+  @ManyToOne(() => Territory, { nullable: true, lazy: true })
   @JoinColumn()
-  territory!: Territory | null;
+  territory!: Promise<Territory | null>;
 
   @OneToOne(() => DoorBlock, { nullable: true, eager: true })
   @JoinColumn()

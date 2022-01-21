@@ -162,7 +162,7 @@ export class TerritoriesController {
           endY: data.data.endY,
           hasAssets: true,
           inLand: Promise.resolve(land),
-          blocks: Promise.resolve([]),
+          blocks: [],
         },
         auditContext,
       );

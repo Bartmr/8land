@@ -422,7 +422,17 @@ export class LandController {
                 tilesetKey: `territories/${land.id}/tileset.png`,
               }
             : undefined,
-          doorBlocks: [],
+          doorBlocks: territory.blocks
+            .filter((b): b is NonNullableFields<BlockEntry, 'door'> => !!b.door)
+            .map((b) => {
+              return {
+                id: b.id,
+                toLand: {
+                  id: b.door.toLand.id,
+                  name: b.door.toLand.name,
+                },
+              };
+            }),
         };
       }),
     };

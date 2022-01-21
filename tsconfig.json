@@ -6,9 +6,14 @@
     "type-declarations",
     "test-environment-impl",
     "scripts",
-    "scripts-dev"
+    "scripts-dev",
+    "hardhat.config.ts"
   ],
+  "exclude": ["libs/smart-contracts/artifacts", "libs/smart-contracts/cache"],
   "compilerOptions": {
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "paths": {
+      "hardhat/src*": ["node_modules/hardhat*"]
+    }
   }
 }

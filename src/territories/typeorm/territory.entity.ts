@@ -38,6 +38,6 @@ export class Territory extends SimpleEntity {
   @Column()
   endY!: number;
 
-  @OneToMany(() => BlockEntry, (e) => e.territory, { lazy: true })
-  blocks!: Promise<BlockEntry[]>;
+  @OneToMany(() => BlockEntry, (e) => e.territory, { eager: true })
+  blocks!: BlockEntry[];
 }
