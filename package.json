@@ -64,6 +64,7 @@
     "build:smart-contracts": "npm run hardhat compile"
   },
   "dependencies": {
+    "@alch/alchemy-web3": "^1.1.9",
     "@nestjs/common": "^8.2.4",
     "@nestjs/core": "^8.2.4",
     "@nestjs/platform-express": "^8.2.4",
@@ -92,6 +93,7 @@
     "@nestjs/cli": "^8.1.6",
     "@nestjs/schematics": "^8.0.5",
     "@nestjs/testing": "^8.2.4",
+    "@nomiclabs/hardhat-ethers": "^2.0.4",
     "@nomiclabs/hardhat-waffle": "^2.0.2",
     "@typechain/ethers-v5": "^9.0.0",
     "@typechain/hardhat": "^4.0.0",
@@ -112,6 +114,7 @@
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-node": "^11.1.0",
+    "ethers": "^5.5.3",
     "hardhat": "^2.8.3",
     "husky": "^7.0.4",
     "jest": "^27.4.5",

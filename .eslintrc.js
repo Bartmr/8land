@@ -35,9 +35,23 @@ module.exports = {
             except: ['./libs/shared', './node_modules'],
           },
           {
+            target: './libs/smart-contracts',
+            from: '.',
+            except: [
+              './libs/shared',
+              './libs/smart-contracts',
+              './node_modules',
+            ],
+          },
+          {
             target: './src',
             from: '.',
-            except: ['./src', './libs/shared', './node_modules'],
+            except: [
+              './src',
+              './libs/shared',
+              './libs/smart-contracts',
+              './node_modules',
+            ],
           },
         ],
       },

@@ -408,33 +408,37 @@ export class LandController {
             },
           };
         }),
-      territories: land.territories.map((territory) => {
-        return {
-          id: territory.id,
-          startX: territory.startX,
-          startY: territory.startY,
-          endX: territory.endX,
-          endY: territory.endY,
-          assets: territory.hasAssets
-            ? {
-                baseUrl: this.storageService.getHostUrl(),
-                mapKey: `territories/${land.id}/map.json`,
-                tilesetKey: `territories/${land.id}/tileset.png`,
-              }
-            : undefined,
-          doorBlocks: territory.blocks
-            .filter((b): b is NonNullableFields<BlockEntry, 'door'> => !!b.door)
-            .map((b) => {
-              return {
-                id: b.id,
-                toLand: {
-                  id: b.door.toLand.id,
-                  name: b.door.toLand.name,
-                },
-              };
-            }),
-        };
-      }),
+      territories: land.territories
+        .filter((t) => t.hasAssets)
+        .map((territory) => {
+          return {
+            id: territory.id,
+            startX: territory.startX,
+            startY: territory.startY,
+            endX: territory.endX,
+            endY: territory.endY,
+            assets: territory.hasAssets
+              ? {
+                  baseUrl: this.storageService.getHostUrl(),
+                  mapKey: `territories/${land.id}/map.json`,
+                  tilesetKey: `territories/${land.id}/tileset.png`,
+                }
+              : undefined,
+            doorBlocks: territory.blocks
+              .filter(
+                (b): b is NonNullableFields<BlockEntry, 'door'> => !!b.door,
+              )
+              .map((b) => {
+                return {
+                  id: b.id,
+                  toLand: {
+                    id: b.door.toLand.id,
+                    name: b.door.toLand.name,
+                  },
+                };
+              }),
+          };
+        }),
     };
   }
 }

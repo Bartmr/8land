@@ -11,6 +11,7 @@ import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { CreateTerritoryRequest } from 'libs/shared/src/territories/territories.dto';
 import { CreateTerritoryRequestJSONSchema } from 'libs/shared/src/territories/territories.schemas';
 import { Role } from 'src/auth/roles/roles';
+// import { AbiItem } from 'web3-utils';
 import { RolesUpAndIncluding } from 'src/auth/roles/roles.decorator';
 import fileType from 'file-type';
 import { InjectConnection } from '@nestjs/typeorm';
@@ -22,12 +23,16 @@ import { StorageService } from 'src/internals/storage/storage.service';
 import { TerritoriesRepository } from './typeorm/territories.repository';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { AuditContext } from 'src/internals/auditing/audit-context';
+import { AlchemyWeb3Service } from 'src/internals/apis/alchemy/alchemy-web3.service';
+// import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
+// import territoryNFTContract from 'libs/smart-contracts/artifacts/contracts/TerritoryNFT.sol/TerritoryNFT.json'
 
 @Controller('territories')
 export class TerritoriesController {
   constructor(
     @InjectConnection() private connection: Connection,
     private storageService: StorageService,
+    private alchemyWeb3Service: AlchemyWeb3Service,
   ) {}
 
   @Post()
@@ -160,7 +165,7 @@ export class TerritoriesController {
           startY: data.data.startY,
           endX: data.data.endX,
           endY: data.data.endY,
-          hasAssets: true,
+          hasAssets: false,
           inLand: Promise.resolve(land),
           blocks: [],
         },
@@ -170,6 +175,26 @@ export class TerritoriesController {
       const thumbnailStorageKey = `territories/${territory.id}/thumbnail.jpg`;
 
       await this.storageService.saveBuffer(thumbnailStorageKey, imgResized);
+
+      const nftMetadataStorageKey = `territories/${territory.id}/nft-metadata.json`;
+
+      try {
+        await this.storageService.saveText(
+          nftMetadataStorageKey,
+          JSON.stringify({
+            attributes: [],
+            description: `8Land territory at ${land.name}`,
+            image: `${this.storageService.getHostUrl()}/${thumbnailStorageKey}`,
+            name: `${land.name} - territory ${land.territories.length + 1}`,
+          }),
+        );
+      } catch (err) {
+        await this.storageService.removeFile(thumbnailStorageKey);
+        throw err;
+      }
+
+      // const web3 = this.alchemyWeb3Service.getAlchemyWeb3()
+      // const nftContract = new web3.eth.Contract(territoryNFTContract.abi as unknown as AbiItem, EnvironmentVariablesService.variables.TERRITORY_NFT_CONTRACT_ADDRESS)
     });
   }
 }

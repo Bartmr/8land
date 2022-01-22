@@ -1,27 +1,16 @@
 /* eslint-disable node/no-process-env */
 import 'tsconfig-paths/register';
-// import { task } from "hardhat/config";
+
+import 'src/internals/environment/load-environment-variables';
+
 import '@nomiclabs/hardhat-waffle';
 import '@typechain/hardhat';
-import { object } from 'not-me/lib/schemas/object/object-schema';
-import { string } from 'not-me/lib/schemas/string/string-schema';
 
 import path from 'path';
 
-import dotenv from 'dotenv';
+import { SmartContractsEnvironmentVariables } from 'libs/smart-contracts/src/smart-contracts-environment-variables';
 
-if (
-  process.env['NODE_ENV'] === 'development' ||
-  process.env['IS_INTEGRITY_CHECK'] === 'true'
-) {
-  dotenv.config({
-    path: path.join(process.cwd(), `.env.development`),
-  });
-  dotenv.config({
-    path: path.join(process.cwd(), `.env.secrets.development`),
-  });
-}
-
+// import { task } from "hardhat/config";
 // // This is a sample Hardhat task. To learn how to create your own go to
 // // https://hardhat.org/guides/create-task.html
 // task("accounts", "Prints the list of accounts", async (args, hre) => {
@@ -35,19 +24,6 @@ if (
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
-const environmentVariablesValidationResult = object({
-  WALLET_PRIVATE_KEY: string().filled(),
-})
-  .required()
-  // eslint-disable-next-line node/no-process-env
-  .validate({ ...process.env });
-
-if (environmentVariablesValidationResult.errors) {
-  throw new Error(
-    JSON.stringify(environmentVariablesValidationResult.messagesTree),
-  );
-}
-
 export default {
   solidity: '0.8.0',
   paths: {
@@ -56,7 +32,8 @@ export default {
   defaultNetwork: 'matic',
   networks: {
     matic: {
-      url: 'https://rpc-mumbai.maticvigil.com',
+      url: SmartContractsEnvironmentVariables.ALCHEMY_URL,
+      accounts: [SmartContractsEnvironmentVariables.WALLET_PRIVATE_KEY],
     },
   },
 };

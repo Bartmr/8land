@@ -67,4 +67,10 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
       return v;
     }
   }),
+
+  WALLET_PUBLIC_KEY: string().filled(),
+  WALLET_PRIVATE_KEY: string().filled(),
+  ALCHEMY_URL: string().filled(),
+
+  TERRITORY_NFT_CONTRACT_ADDRESS: string().filled(),
 }).required();
