@@ -26,7 +26,6 @@ import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
 import { getSearchableName } from 'src/internals/utils/get-searchable-name';
 import { Connection } from 'typeorm';
-import { BlockEntryRepository } from '../blocks/typeorm/block-entry.repository';
 import { LandRepository } from './typeorm/land.repository';
 import fileType from 'file-type';
 import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
@@ -47,9 +46,8 @@ import {
   GetLandDTO,
   GetLandParametersDTO,
 } from 'libs/shared/src/land/get/get-land.dto';
-import { BlockEntry } from '../blocks/typeorm/block-entry.entity';
-import { NonNullableFields } from 'libs/shared/src/internals/utils/types/nullable-types';
 import { PublicRoute } from 'src/auth/public-route.decorator';
+import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
 
 const TiledJSONSchema = createTiledJSONSchema();
 
@@ -90,10 +88,11 @@ export class LandController {
         {
           name: body.name,
           searchableName: getSearchableName(body.name),
-          blocks: Promise.resolve([]),
+          doorBlocks: Promise.resolve([]),
+          doorBlocksReferencing: Promise.resolve([]),
           backgroundMusicUrl: null,
           hasAssets: null,
-          territories: [],
+          territories: Promise.resolve([]),
         },
         auditContext,
       );
@@ -332,8 +331,8 @@ export class LandController {
     @Param() parameters: GetLandParametersDTO,
   ): Promise<GetLandDTO> {
     const landsRepository = this.connection.getCustomRepository(LandRepository);
-    const blockEntriesRepository =
-      this.connection.getCustomRepository(BlockEntryRepository);
+    const doorBlocksRepository =
+      this.connection.getCustomRepository(DoorBlockRepository);
 
     const land = await landsRepository.findOne({
       where: {
@@ -345,33 +344,11 @@ export class LandController {
       throw new ResourceNotFoundException();
     }
 
-    const blockEntries = await blockEntriesRepository.find({
-      skip: 0,
-      where: {
-        land: land.id,
-      },
-    });
-
-    if (blockEntries.total > blockEntries.limit) {
-      throw new Error();
-    }
-
-    const doorBlocksReferencing = await blockEntriesRepository.getManyAndCount(
-      {
-        alias: 'block',
-        skip: 0,
-      },
-      (qb) => {
-        return qb
-          .leftJoinAndSelect('block.door', 'door')
-          .leftJoinAndSelect('block.land', 'land')
-          .where('door.toLand = :toLandId', { toLandId: land.id });
-      },
-    );
-
-    if (doorBlocksReferencing.total > doorBlocksReferencing.limit) {
-      throw new Error();
-    }
+    const [doorBlocksReferencing, doorBlocks, territories] = await Promise.all([
+      doorBlocksRepository.dangerouslyFindAll({ where: { toLand: land.id } }),
+      doorBlocksRepository.dangerouslyFindAll({ where: { inLand: land.id } }),
+      land.territories,
+    ]);
 
     return {
       id: land.id,
@@ -384,31 +361,25 @@ export class LandController {
             tilesetKey: `lands/${land.id}/tileset.png`,
           }
         : undefined,
-      doorBlocksReferencing: doorBlocksReferencing.rows
-        .filter((b): b is NonNullableFields<BlockEntry, 'door'> => !!b.door)
-        .map((b) => {
-          if (!b.land) {
-            throw new Error();
-          }
+      doorBlocksReferencing: doorBlocksReferencing.map((b) => {
+        if (!b.inLand) throwError();
 
-          return {
-            id: b.id,
-            fromLandId: b.land.id,
-            fromLandName: b.land.name,
-          };
-        }),
-      doorBlocks: blockEntries.rows
-        .filter((b): b is NonNullableFields<BlockEntry, 'door'> => !!b.door)
-        .map((b) => {
-          return {
-            id: b.id,
-            toLand: {
-              id: b.door.toLand.id,
-              name: b.door.toLand.name,
-            },
-          };
-        }),
-      territories: land.territories
+        return {
+          id: b.id,
+          fromLandId: b.inLand.id,
+          fromLandName: b.inLand.name,
+        };
+      }),
+      doorBlocks: doorBlocks.map((b) => {
+        return {
+          id: b.id,
+          toLand: {
+            id: b.toLand.id,
+            name: b.toLand.name,
+          },
+        };
+      }),
+      territories: territories
         .filter((t) => t.hasAssets)
         .map((territory) => {
           return {
@@ -424,19 +395,15 @@ export class LandController {
                   tilesetKey: `territories/${land.id}/tileset.png`,
                 }
               : undefined,
-            doorBlocks: territory.blocks
-              .filter(
-                (b): b is NonNullableFields<BlockEntry, 'door'> => !!b.door,
-              )
-              .map((b) => {
-                return {
-                  id: b.id,
-                  toLand: {
-                    id: b.door.toLand.id,
-                    name: b.door.toLand.name,
-                  },
-                };
-              }),
+            doorBlocks: territory.doorBlocks.map((b) => {
+              return {
+                id: b.id,
+                toLand: {
+                  id: b.toLand.id,
+                  name: b.toLand.name,
+                },
+              };
+            }),
           };
         }),
     };

@@ -19,7 +19,6 @@ import { ResourceNotFoundException } from 'src/internals/server/resource-not-fou
 import { getSearchableName } from 'src/internals/utils/get-searchable-name';
 import { LandRepository } from 'src/land/typeorm/land.repository';
 import { Connection } from 'typeorm';
-import { BlockEntryRepository } from './typeorm/block-entry.repository';
 import { DoorBlockRepository } from './typeorm/door-block.repository';
 
 @Controller('blocks')
@@ -34,8 +33,6 @@ export class BlocksController {
   ) {
     return this.connection.transaction(async (e) => {
       const landRepository = e.getCustomRepository(LandRepository);
-      const blockEntriesRepository =
-        e.getCustomRepository(BlockEntryRepository);
 
       const land = await landRepository.findOne({
         where: { id: body.landId },
@@ -45,7 +42,7 @@ export class BlocksController {
         throw new ResourceNotFoundException({ error: 'land-not-found' });
       }
 
-      const landBlocks = await land.blocks;
+      const landBlocks = await land.doorBlocks;
 
       if (landBlocks.length > 10) {
         throw new BadRequestException({ error: 'block-limit-exceeded' });
@@ -67,18 +64,11 @@ export class BlocksController {
           });
         }
 
-        const doorBlock = await doorBlockRepository.create(
+        await doorBlockRepository.create(
           {
+            inLand: land,
+            inTerritory: Promise.resolve(null),
             toLand,
-          },
-          auditContext,
-        );
-
-        await blockEntriesRepository.create(
-          {
-            door: doorBlock,
-            land,
-            territory: Promise.resolve(null),
           },
           auditContext,
         );
@@ -91,17 +81,16 @@ export class BlocksController {
   }
 
   @HttpCode(204)
-  @Delete(':blockId')
+  @Delete('/doors/:blockId')
   @RolesUpAndIncluding(Role.Admin)
   deleteBlock(
     @Param() param: DeleteBlockURLParameters,
     @WithAuditContext() auditContext: AuditContext,
   ) {
     return this.connection.transaction(async (e) => {
-      const blockEntriesRepository =
-        e.getCustomRepository(BlockEntryRepository);
+      const doorBlocksRepository = e.getCustomRepository(DoorBlockRepository);
 
-      const block = await blockEntriesRepository.findOne({
+      const block = await doorBlocksRepository.findOne({
         where: { id: param.blockId },
       });
 
@@ -109,13 +98,7 @@ export class BlocksController {
         throw new ResourceNotFoundException();
       }
 
-      await blockEntriesRepository.remove(block, auditContext);
-
-      if (block.door) {
-        const doorBlockRepository = e.getCustomRepository(DoorBlockRepository);
-
-        await doorBlockRepository.remove(block.door, auditContext);
-      }
+      await doorBlocksRepository.remove(block, auditContext);
     });
   }
 }

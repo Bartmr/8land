@@ -1,4 +1,4 @@
-import { BlockEntry } from 'src/blocks/typeorm/block-entry.entity';
+import { DoorBlock } from 'src/blocks/typeorm/door-block.entity';
 import { SimpleEntity } from 'src/internals/databases/simple-entity/simple.entity';
 import { Land } from 'src/land/typeorm/land.entity';
 import {
@@ -38,6 +38,6 @@ export class Territory extends SimpleEntity {
   @Column()
   endY!: number;
 
-  @OneToMany(() => BlockEntry, (e) => e.territory, { eager: true })
-  blocks!: BlockEntry[];
+  @OneToMany(() => DoorBlock, (e) => e.inTerritory, { eager: true })
+  doorBlocks!: DoorBlock[];
 }

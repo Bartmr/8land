@@ -1,3 +1,4 @@
+import { DoorBlock } from 'src/blocks/typeorm/door-block.entity';
 import { SimpleEntity } from 'src/internals/databases/simple-entity/simple.entity';
 import { Territory } from 'src/territories/typeorm/territory.entity';
 import {
@@ -8,7 +9,6 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { BlockEntry } from '../../blocks/typeorm/block-entry.entity';
 
 @Entity()
 @Unique(['searchableName'])
@@ -25,8 +25,11 @@ export class Land extends SimpleEntity {
   @Column('text')
   searchableName!: string;
 
-  @OneToMany(() => BlockEntry, (e) => e.land, { lazy: true })
-  blocks!: Promise<BlockEntry[]>;
+  @OneToMany(() => DoorBlock, (b) => b.inLand, { lazy: true })
+  doorBlocks!: Promise<DoorBlock[]>;
+
+  @OneToMany(() => DoorBlock, (b) => b.toLand, { lazy: true })
+  doorBlocksReferencing!: Promise<DoorBlock[]>;
 
   @Column('text', { nullable: true })
   backgroundMusicUrl!: string | null;
@@ -36,6 +39,6 @@ export class Land extends SimpleEntity {
 
   // TODO: territory relationship nullable column, when land is indoors of territory
 
-  @OneToMany(() => Territory, (e) => e.inLand, { eager: true })
-  territories!: Territory[];
+  @OneToMany(() => Territory, (e) => e.inLand, { lazy: true })
+  territories!: Promise<Territory[]>;
 }

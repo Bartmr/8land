@@ -33,7 +33,7 @@ export function BlocksSection(props: {
     replaceDeletionState({ status: TransportedDataStatus.Loading });
 
     const res = await api.delete<{ status: 204; body: undefined }, undefined>({
-      path: `/blocks/${blockId}`,
+      path: `/blocks/doors/${blockId}`,
       query: undefined,
       acceptableStatusCodes: [204],
     });

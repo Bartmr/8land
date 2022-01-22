@@ -21,7 +21,6 @@ import { FIREBASE_EMULATOR_PROJECT_ID } from 'src/internals/apis/firebase/fireba
 import { throwError } from 'src/internals/utils/throw-error';
 import { LandRepository } from 'src/land/typeorm/land.repository';
 import { getSearchableName } from 'src/internals/utils/get-searchable-name';
-import { BlockEntryRepository } from 'src/blocks/typeorm/block-entry.repository';
 import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
 import fs from 'fs';
 import { promisify } from 'util';
@@ -120,8 +119,6 @@ async function seed() {
 
     const landsRepository =
       defaultDBConnection.getCustomRepository(LandRepository);
-    const blockEntriesRepository =
-      defaultDBConnection.getCustomRepository(BlockEntryRepository);
     const doorBlocksRepository =
       defaultDBConnection.getCustomRepository(DoorBlockRepository);
     const storageService = new DevStorageService();
@@ -131,9 +128,10 @@ async function seed() {
         name: 'Expectations Beach',
         searchableName: getSearchableName('Expectations Beach'),
         backgroundMusicUrl: 'https://api.soundcloud.com/tracks/256813580',
-        blocks: Promise.resolve([]),
+        doorBlocks: Promise.resolve([]),
+        doorBlocksReferencing: Promise.resolve([]),
         hasAssets: true,
-        territories: [],
+        territories: Promise.resolve([]),
       },
       auditContext,
     );
@@ -143,9 +141,10 @@ async function seed() {
         name: 'Town of Humble Beginnings',
         searchableName: getSearchableName('Town of Humble Beginnings'),
         backgroundMusicUrl: 'https://api.soundcloud.com/tracks/566456658',
-        blocks: Promise.resolve([]),
+        doorBlocks: Promise.resolve([]),
+        doorBlocksReferencing: Promise.resolve([]),
         hasAssets: true,
-        territories: [],
+        territories: Promise.resolve([]),
       },
       auditContext,
     );
@@ -157,9 +156,10 @@ async function seed() {
           'Town of Humble Beginnings - Underground 1',
         ),
         backgroundMusicUrl: null,
-        blocks: Promise.resolve([]),
+        doorBlocks: Promise.resolve([]),
+        doorBlocksReferencing: Promise.resolve([]),
         hasAssets: true,
-        territories: [],
+        territories: Promise.resolve([]),
       },
       auditContext,
     );
@@ -171,39 +171,30 @@ async function seed() {
           'Town of Humble Beginnings - Underground 2',
         ),
         backgroundMusicUrl: null,
-        blocks: Promise.resolve([]),
+        doorBlocks: Promise.resolve([]),
+        doorBlocksReferencing: Promise.resolve([]),
         hasAssets: true,
-        territories: [],
+        territories: Promise.resolve([]),
       },
       auditContext,
     );
 
     /* ----- */
 
-    const expectationsBeachDoor1 = await blockEntriesRepository.create(
+    const expectationsBeachDoor1 = await doorBlocksRepository.create(
       {
-        territory: Promise.resolve(null),
-        land: expectationsBeach,
-        door: await doorBlocksRepository.create(
-          {
-            toLand: expectationsBeach,
-          },
-          auditContext,
-        ),
+        inTerritory: Promise.resolve(null),
+        inLand: expectationsBeach,
+        toLand: expectationsBeach,
       },
       auditContext,
     );
 
-    const expectationsBeachDoor2 = await blockEntriesRepository.create(
+    const expectationsBeachDoor2 = await doorBlocksRepository.create(
       {
-        territory: Promise.resolve(null),
-        land: expectationsBeach,
-        door: await doorBlocksRepository.create(
-          {
-            toLand: townOfHumbleBeginnings,
-          },
-          auditContext,
-        ),
+        inTerritory: Promise.resolve(null),
+        inLand: expectationsBeach,
+        toLand: townOfHumbleBeginnings,
       },
       auditContext,
     );
@@ -234,30 +225,20 @@ async function seed() {
 
     /* ----- */
 
-    const townOfHumbleBeginningsDoor1 = await blockEntriesRepository.create(
+    const townOfHumbleBeginningsDoor1 = await doorBlocksRepository.create(
       {
-        territory: Promise.resolve(null),
-        land: townOfHumbleBeginnings,
-        door: await doorBlocksRepository.create(
-          {
-            toLand: townOfHumbleBeginningsUnderground1,
-          },
-          auditContext,
-        ),
+        inTerritory: Promise.resolve(null),
+        inLand: townOfHumbleBeginnings,
+        toLand: townOfHumbleBeginningsUnderground1,
       },
       auditContext,
     );
 
-    const townOfHumbleBeginningsDoor2 = await blockEntriesRepository.create(
+    const townOfHumbleBeginningsDoor2 = await doorBlocksRepository.create(
       {
-        territory: Promise.resolve(null),
-        land: townOfHumbleBeginnings,
-        door: await doorBlocksRepository.create(
-          {
-            toLand: townOfHumbleBeginningsUnderground2,
-          },
-          auditContext,
-        ),
+        inTerritory: Promise.resolve(null),
+        inLand: townOfHumbleBeginnings,
+        toLand: townOfHumbleBeginningsUnderground2,
       },
       auditContext,
     );
@@ -290,16 +271,11 @@ async function seed() {
     /* ----- */
 
     const townOfHumbleBeginningsUnderground1Door1 =
-      await blockEntriesRepository.create(
+      await doorBlocksRepository.create(
         {
-          territory: Promise.resolve(null),
-          land: townOfHumbleBeginningsUnderground1,
-          door: await doorBlocksRepository.create(
-            {
-              toLand: townOfHumbleBeginningsUnderground2,
-            },
-            auditContext,
-          ),
+          inTerritory: Promise.resolve(null),
+          inLand: townOfHumbleBeginningsUnderground1,
+          toLand: townOfHumbleBeginningsUnderground2,
         },
         auditContext,
       );
