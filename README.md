@@ -32,9 +32,9 @@ The core version of `estirador` can be enhanced with some pre-made layers that c
 - From now on you can just run `npm run start:dev:infrastructure` in order to start all the services and infrastructure
 - Set up an Alchemy account at <https://www.alchemy.com/>
 - Create a Metamask Wallet
-- Build the smart-contracts by running `npm run build:smart-contracts`
+- Build the smart-contracts by running `NODE_ENV=development npm run build:smart-contracts`
 - Deploy smart-contracts into a testnet
-  - run `NODE_ENV=development npm run hardhat -- --network matic run libs/smart-contracts/scripts/deploy.ts`
+  - run `NODE_ENV=development npm run ts-node ./dist/scripts/deploy.ts`
   - take note of the contracts addresses and place them in `.env.secrets.development` to be used environment variables
 - Seed the development database with sample data by running `NODE_ENV=development npm run seed`
 - Start the server with `npm run start:dev`, or `npm run start:debug` if you want to debug the API in the Chrome Developer Tools
@@ -68,12 +68,12 @@ _Typeorm_ entities should always be placed in directories named `typeorm` and ha
 #### Smart contracts
 
 - Deploy
-  - Development `NODE_ENV=development npm run hardhat -- --network matic run libs/smart-contracts/scripts/deploy.ts`
+  - Development `NODE_ENV=development npm run ts-node ./dist/scripts/deploy.ts`
     - Take note of the deployed contracts addresses
     - Set those addresses as environment variables in `.env.secrets.development`
   - Production
     - Set the necessary environment variables in your terminal
-    - `NODE_ENV=production npm run hardhat -- --network matic run libs/smart-contracts/scripts/deploy.ts`
+    - `NODE_ENV=production node ./dist/scripts/deploy.ts`
     - Take note of the deployed contracts addresses
       - Set those addresses as environment variables in your production server
       - Do not replace environment variables, but instead, try to version them, in order to avoid downtime or errors

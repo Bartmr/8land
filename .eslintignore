@@ -14,3 +14,8 @@ node_modules
 
 # Temporary files
 /_tmp
+
+/libs/smart-contracts/typechain
+/libs/smart-contracts/typechain-types
+/libs/smart-contracts/cache
+/libs/smart-contracts/artifacts

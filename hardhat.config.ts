@@ -3,12 +3,11 @@ import 'tsconfig-paths/register';
 
 import 'src/internals/environment/load-environment-variables';
 
-import '@nomiclabs/hardhat-waffle';
 import '@typechain/hardhat';
 
 import path from 'path';
 
-import { SmartContractsEnvironmentVariables } from 'libs/smart-contracts/src/smart-contracts-environment-variables';
+import { SmartContractsEnvironmentVariables } from 'src/internals/databases/smart-contracts-environment-variables';
 
 // import { task } from "hardhat/config";
 // // This is a sample Hardhat task. To learn how to create your own go to

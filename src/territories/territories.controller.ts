@@ -22,7 +22,9 @@ import { StorageService } from 'src/internals/storage/storage.service';
 import { TerritoriesRepository } from './typeorm/territories.repository';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { AuditContext } from 'src/internals/auditing/audit-context';
-import { AlchemyWeb3Service } from 'src/internals/apis/alchemy/alchemy-web3.service';
+import { AlchemyWeb3Service } from 'src/internals/smart-contracts/alchemy/alchemy-web3.service';
+// import { ethers } from 'ethers';
+// import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
 
 @Controller('territories')
 export class TerritoriesController {
@@ -192,6 +194,14 @@ export class TerritoriesController {
         await this.storageService.removeFile(thumbnailStorageKey);
         throw err;
       }
+
+      // const provider = new ethers.providers.AlchemyProvider("maticmum", (() => {
+      //   const splitAlchemyUrl = EnvironmentVariablesService.variables.ALCHEMY_URL.split('/')
+
+      //   return splitAlchemyUrl[splitAlchemyUrl.length - 1] || throwError()
+      // })())
+
+      // const wallet = new ethers.Wallet(EnvironmentVariablesService.variables.WALLET_PUBLIC_KEY, provider)
     });
   }
 }
