@@ -25,20 +25,20 @@ export class Land extends SimpleEntity {
   @Column('text')
   searchableName!: string;
 
-  @OneToMany(() => DoorBlock, (b) => b.inLand, { lazy: true })
-  doorBlocks!: Promise<DoorBlock[]>;
-
-  @OneToMany(() => DoorBlock, (b) => b.toLand, { lazy: true })
-  doorBlocksReferencing!: Promise<DoorBlock[]>;
-
   @Column('text', { nullable: true })
   backgroundMusicUrl!: string | null;
 
   @Column('boolean', { nullable: true })
   hasAssets!: boolean | null;
 
-  // TODO: territory relationship nullable column, when land is indoors of territory
+  @OneToMany(() => DoorBlock, (b) => b.inLand, { lazy: true })
+  doorBlocks!: Promise<DoorBlock[]>;
+
+  @OneToMany(() => DoorBlock, (b) => b.toLand, { lazy: true })
+  doorBlocksReferencing!: Promise<DoorBlock[]>;
 
   @OneToMany(() => Territory, (e) => e.inLand, { lazy: true })
   territories!: Promise<Territory[]>;
+
+  // TODO: territory relationship nullable column, when land is indoors of territory
 }

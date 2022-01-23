@@ -35,4 +35,7 @@ export default {
       accounts: [SmartContractsEnvironmentVariables.WALLET_PRIVATE_KEY],
     },
   },
+  typechain: {
+    target: 'web3-v1',
+  },
 };

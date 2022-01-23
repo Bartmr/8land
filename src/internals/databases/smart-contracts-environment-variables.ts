@@ -3,6 +3,7 @@ import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 
 const schema = object({
+  WALLET_PUBLIC_KEY: string().filled(),
   WALLET_PRIVATE_KEY: string().filled(),
   ALCHEMY_URL: string().filled(),
 }).required();

@@ -1,4 +1,5 @@
-/* eslint-disable node/no-process-env */
+import 'src/internals/environment/load-environment-variables';
+
 import { ethers } from 'ethers';
 import { SmartContractsEnvironmentVariables } from 'src/internals/databases/smart-contracts-environment-variables';
 import territoryNFTMetadata from 'libs/smart-contracts/artifacts/contracts/TerritoryNFT.sol/TerritoryNFT.json';

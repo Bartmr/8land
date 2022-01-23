@@ -23,8 +23,10 @@ import { TerritoriesRepository } from './typeorm/territories.repository';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { AlchemyWeb3Service } from 'src/internals/smart-contracts/alchemy/alchemy-web3.service';
-// import { ethers } from 'ethers';
-// import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
+import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
+import territoryNFTContractJSON from 'libs/smart-contracts/artifacts/contracts/TerritoryNFT.sol/TerritoryNFT.json';
+import { TerritoryNFT } from 'libs/smart-contracts/typechain-types/TerritoryNFT';
+import { AbiItem } from 'web3-utils';
 
 @Controller('territories')
 export class TerritoriesController {
@@ -195,13 +197,46 @@ export class TerritoriesController {
         throw err;
       }
 
-      // const provider = new ethers.providers.AlchemyProvider("maticmum", (() => {
-      //   const splitAlchemyUrl = EnvironmentVariablesService.variables.ALCHEMY_URL.split('/')
+      const web3 = this.alchemyWeb3Service.getAlchemyWeb3();
 
-      //   return splitAlchemyUrl[splitAlchemyUrl.length - 1] || throwError()
-      // })())
+      const nftContract = new web3.eth.Contract(
+        territoryNFTContractJSON.abi as unknown as AbiItem,
+        EnvironmentVariablesService.variables.TERRITORY_NFT_CONTRACT_ADDRESS,
+      ) as unknown as TerritoryNFT;
 
-      // const wallet = new ethers.Wallet(EnvironmentVariablesService.variables.WALLET_PUBLIC_KEY, provider)
+      const nonce = await web3.eth.getTransactionCount(
+        EnvironmentVariablesService.variables.WALLET_PUBLIC_KEY,
+        'latest',
+      );
+
+      const txBase = {
+        from: EnvironmentVariablesService.variables.WALLET_PUBLIC_KEY,
+        to: EnvironmentVariablesService.variables
+          .TERRITORY_NFT_CONTRACT_ADDRESS,
+        nonce,
+        data: nftContract.methods
+          .mintNFT(
+            EnvironmentVariablesService.variables.WALLET_PUBLIC_KEY,
+            `${this.storageService.getHostUrl()}/${nftMetadataStorageKey}`,
+          )
+          .encodeABI(),
+      };
+
+      const gas = await web3.eth.estimateGas(txBase);
+
+      const tx = {
+        ...txBase,
+        gas,
+      };
+
+      const signedTx = await web3.eth.accounts.signTransaction(
+        tx,
+        EnvironmentVariablesService.variables.WALLET_PRIVATE_KEY,
+      );
+
+      await web3.eth.sendSignedTransaction(
+        signedTx.rawTransaction || throwError(),
+      );
     });
   }
 }

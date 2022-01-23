@@ -22,10 +22,6 @@ export class Territory extends SimpleEntity {
   @Column('boolean', { nullable: true })
   hasAssets!: boolean | null;
 
-  @ManyToOne(() => Land, (e) => e.territories, { lazy: true })
-  @JoinColumn()
-  inLand!: Promise<Land>;
-
   @Column()
   startX!: number;
 
@@ -37,6 +33,10 @@ export class Territory extends SimpleEntity {
 
   @Column()
   endY!: number;
+
+  @ManyToOne(() => Land, (e) => e.territories, { lazy: true })
+  @JoinColumn()
+  inLand!: Promise<Land>;
 
   @OneToMany(() => DoorBlock, (e) => e.inTerritory, { eager: true })
   doorBlocks!: DoorBlock[];
