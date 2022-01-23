@@ -11,6 +11,9 @@
   "compilerOptions": {
     "skipLibCheck": false,
     "tsBuildInfoFile": "./dist/declaration-files.tsbuildinfo",
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "paths": {
+      "hardhat/src*": ["node_modules/hardhat*"]
+    }
   }
 }
