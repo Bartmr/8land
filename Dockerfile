@@ -1,6 +1,7 @@
 FROM node:16-alpine
 
 COPY ./libs/shared/src/ /usr/src/app/libs/shared/src/
+COPY ./libs/smart-contracts/contracts/ /usr/src/app/libs/smart-contracts/contracts/
 COPY ./src/ /usr/src/app/src/
 COPY ./scripts/ /usr/src/app/scripts/
 COPY ./type-declarations/ /usr/src/app/type-declarations/
