@@ -26,12 +26,17 @@ import { EnvironmentVariablesService } from 'src/internals/environment/environme
 import territoryNFTContractJSON from 'libs/smart-contracts/artifacts/contracts/TerritoryNFT.sol/TerritoryNFT.json';
 import { ethers } from 'ethers';
 import { TerritoryNFT } from 'libs/smart-contracts/typechain-types';
+import { ItselfStorageApi } from 'src/internals/apis/itself/itself-storage.api';
+import { object } from 'not-me/lib/schemas/object/object-schema';
+import { equals } from 'not-me/lib/schemas/equals/equals-schema';
+import { number } from 'not-me/lib/schemas/number/number-schema';
 
 @Controller('territories')
 export class TerritoriesController {
   constructor(
     @InjectConnection() private connection: Connection,
     private storageService: StorageService,
+    private itselfStorageApi: ItselfStorageApi,
   ) {}
 
   @Post()
@@ -160,7 +165,27 @@ export class TerritoriesController {
         }
       }
 
-      // TODO: stop if territory end coordinates surpass land width or height
+      const landMap = await this.itselfStorageApi.get(
+        object({
+          status: equals([200]).required(),
+          body: object({
+            height: number().required(),
+            width: number().required(),
+          }).required(),
+        }).required(),
+        {
+          path: `/lands/${land.id}/map.json`,
+        },
+      );
+
+      if (
+        data.data.startX > landMap.body.width ||
+        data.data.startY > landMap.body.height ||
+        data.data.endX > landMap.body.width ||
+        data.data.endY > landMap.body.height
+      ) {
+        throw new ConflictException('coordinates-exceeds-bounds');
+      }
 
       const territory = await territoriesRepository.create(
         {

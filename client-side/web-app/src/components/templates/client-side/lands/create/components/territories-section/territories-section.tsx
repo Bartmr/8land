@@ -28,7 +28,9 @@ export function TerritoriesSection(props: {
   const api = useMainJSONApi();
 
   const [formSubmission, replaceFormSubmission] = useState<
-    TransportedData<undefined | 'intersects-existing-territory'>
+    TransportedData<
+      undefined | 'intersects-existing-territory' | 'coordinates-exceeds-bounds'
+    >
   >({ status: TransportedDataStatus.Done, data: undefined });
   const [territoryThumbnail, replaceTerritoryThumbnail] = useState<
     undefined | Blob
@@ -69,6 +71,8 @@ export function TerritoriesSection(props: {
               if (!confirmation) {
                 return;
               }
+
+              replaceFormSubmission({ status: TransportedDataStatus.Loading });
 
               const body = new FormData();
 
@@ -133,6 +137,12 @@ export function TerritoriesSection(props: {
                 <Fragment>
                   <br />
                   This territory coordinates intersect an existing territory
+                </Fragment>
+              ) : null}
+              {formSubmission.data === 'coordinates-exceeds-bounds' ? (
+                <Fragment>
+                  <br />
+                  This territory coordinates are outside the bounds of the land
                 </Fragment>
               ) : null}
               {Object.keys(formUtils.getErrorTypesFromField('data')).map(
