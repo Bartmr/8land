@@ -3,17 +3,10 @@ import 'src/internals/environment/load-environment-variables';
 import { ethers } from 'ethers';
 import { SmartContractsEnvironmentVariables } from 'src/internals/databases/smart-contracts-environment-variables';
 import territoryNFTMetadata from 'libs/smart-contracts/artifacts/contracts/TerritoryNFT.sol/TerritoryNFT.json';
-import { throwError } from 'src/internals/utils/throw-error';
 
 async function main() {
-  const provider = new ethers.providers.AlchemyProvider(
-    'maticmum',
-    (() => {
-      const splitAlchemyUrl =
-        SmartContractsEnvironmentVariables.ALCHEMY_URL.split('/');
-
-      return splitAlchemyUrl[splitAlchemyUrl.length - 1] || throwError();
-    })(),
+  const provider = new ethers.providers.JsonRpcProvider(
+    SmartContractsEnvironmentVariables.MORALIS_SPEEDY_NODE,
   );
 
   const wallet = new ethers.Wallet(

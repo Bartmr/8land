@@ -70,7 +70,9 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
 
   WALLET_PUBLIC_KEY: string().filled(),
   WALLET_PRIVATE_KEY: string().filled(),
-  ALCHEMY_URL: string().filled(),
+
+  MORALIS_SERVER_URL: string().filled(),
+  MORALIS_APP_ID: string().filled(),
 
   TERRITORY_NFT_CONTRACT_ADDRESS: string().filled(),
 }).required();

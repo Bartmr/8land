@@ -22,18 +22,16 @@ import { StorageService } from 'src/internals/storage/storage.service';
 import { TerritoriesRepository } from './typeorm/territories.repository';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { AuditContext } from 'src/internals/auditing/audit-context';
-import { AlchemyWeb3Service } from 'src/internals/smart-contracts/alchemy/alchemy-web3.service';
+import { MoralisService } from 'src/internals/smart-contracts/moralis/alchemy-web3.service';
 import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
 import territoryNFTContractJSON from 'libs/smart-contracts/artifacts/contracts/TerritoryNFT.sol/TerritoryNFT.json';
-import { TerritoryNFT } from 'libs/smart-contracts/typechain-types/TerritoryNFT';
-import { AbiItem } from 'web3-utils';
 
 @Controller('territories')
 export class TerritoriesController {
   constructor(
     @InjectConnection() private connection: Connection,
     private storageService: StorageService,
-    private alchemyWeb3Service: AlchemyWeb3Service,
+    private alchemyWeb3Service: MoralisService,
   ) {}
 
   @Post()
@@ -186,7 +184,27 @@ export class TerritoriesController {
         await this.storageService.saveText(
           nftMetadataStorageKey,
           JSON.stringify({
-            attributes: [],
+            attributes: [
+              {
+                trait_type: 'Territory ID',
+                value: `${territory.id}`,
+              },
+              {
+                trait_type: 'Width',
+                value: `${territory.endX - territory.startX}`,
+              },
+              {
+                trait_type: 'Height',
+                value: `${territory.endY - territory.startY}`,
+              },
+              {
+                trait_type: 'Total Area',
+                value: `${
+                  (territory.endX - territory.startX) *
+                  (territory.endY - territory.startY)
+                }`,
+              },
+            ],
             description: `8Land territory at ${land.name}. This is territory number ${territoryNumber}.`,
             image: `${this.storageService.getHostUrl()}/${thumbnailStorageKey}`,
             name: `${land.name} - territory ${territoryNumber}`,
@@ -197,46 +215,46 @@ export class TerritoriesController {
         throw err;
       }
 
-      const web3 = this.alchemyWeb3Service.getAlchemyWeb3();
+      // const web3 = this.alchemyWeb3Service.getAlchemyWeb3();
 
-      const nftContract = new web3.eth.Contract(
-        territoryNFTContractJSON.abi as unknown as AbiItem,
-        EnvironmentVariablesService.variables.TERRITORY_NFT_CONTRACT_ADDRESS,
-      ) as unknown as TerritoryNFT;
+      // const nftContract = new web3.eth.Contract(
+      //   territoryNFTContractJSON.abi as unknown as AbiItem,
+      //   EnvironmentVariablesService.variables.TERRITORY_NFT_CONTRACT_ADDRESS,
+      // ) as unknown as TerritoryNFT;
 
-      const nonce = await web3.eth.getTransactionCount(
-        EnvironmentVariablesService.variables.WALLET_PUBLIC_KEY,
-        'latest',
-      );
+      // const nonce = await web3.eth.getTransactionCount(
+      //   EnvironmentVariablesService.variables.WALLET_PUBLIC_KEY,
+      //   'latest',
+      // );
 
-      const txBase = {
-        from: EnvironmentVariablesService.variables.WALLET_PUBLIC_KEY,
-        to: EnvironmentVariablesService.variables
-          .TERRITORY_NFT_CONTRACT_ADDRESS,
-        nonce,
-        data: nftContract.methods
-          .mintNFT(
-            EnvironmentVariablesService.variables.WALLET_PUBLIC_KEY,
-            `${this.storageService.getHostUrl()}/${nftMetadataStorageKey}`,
-          )
-          .encodeABI(),
-      };
+      // const txBase = {
+      //   from: EnvironmentVariablesService.variables.WALLET_PUBLIC_KEY,
+      //   to: EnvironmentVariablesService.variables
+      //     .TERRITORY_NFT_CONTRACT_ADDRESS,
+      //   nonce,
+      //   data: nftContract.methods
+      //     .mintNFT(
+      //       EnvironmentVariablesService.variables.WALLET_PUBLIC_KEY,
+      //       `${this.storageService.getHostUrl()}/${nftMetadataStorageKey}`,
+      //     )
+      //     .encodeABI(),
+      // };
 
-      const gas = await web3.eth.estimateGas(txBase);
+      // const gas = await web3.eth.estimateGas(txBase);
 
-      const tx = {
-        ...txBase,
-        gas,
-      };
+      // const tx = {
+      //   ...txBase,
+      //   gas,
+      // };
 
-      const signedTx = await web3.eth.accounts.signTransaction(
-        tx,
-        EnvironmentVariablesService.variables.WALLET_PRIVATE_KEY,
-      );
+      // const signedTx = await web3.eth.accounts.signTransaction(
+      //   tx,
+      //   EnvironmentVariablesService.variables.WALLET_PRIVATE_KEY,
+      // );
 
-      await web3.eth.sendSignedTransaction(
-        signedTx.rawTransaction || throwError(),
-      );
+      // await web3.eth.sendSignedTransaction(
+      //   signedTx.rawTransaction || throwError(),
+      // );
     });
   }
 }

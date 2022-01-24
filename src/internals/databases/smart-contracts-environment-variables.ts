@@ -5,7 +5,9 @@ import { string } from 'not-me/lib/schemas/string/string-schema';
 const schema = object({
   WALLET_PUBLIC_KEY: string().filled(),
   WALLET_PRIVATE_KEY: string().filled(),
-  ALCHEMY_URL: string().filled(),
+  MORALIS_SERVER_URL: string().filled(),
+  MORALIS_APP_ID: string().filled(),
+  MORALIS_SPEEDY_NODE: string().filled(),
 }).required();
 
 const environmentVariablesValidationResult = schema.validate({

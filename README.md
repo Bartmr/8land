@@ -1,5 +1,6 @@
 ## Quick stuff
 
+- Web3 Provider: https://moralis.io/
 - Polygon Testnet scanner: https://mumbai.polygonscan.com/
 - Polygon Faucet: https://faucet.polygon.technology/
 - OpenSea for Testnets: https://testnets.opensea.io/
@@ -69,11 +70,14 @@ _Typeorm_ entities should always be placed in directories named `typeorm` and ha
 #### Smart contracts
 
 - Deploy
-  - Development `NODE_ENV=development npm run ts-node ./scripts/deploy.ts`
+  - Development
+    - Build the smart contracts
+    - `NODE_ENV=development npm run ts-node ./scripts/deploy.ts`
     - Take note of the deployed contracts addresses
     - Set those addresses as environment variables in `.env.secrets.development`
   - Production
     - Set the necessary environment variables in your terminal
+    - Build the smart contracts
     - `NODE_ENV=production node ./dist/scripts/deploy.js`
     - Take note of the deployed contracts addresses
       - Set those addresses as environment variables in your production server

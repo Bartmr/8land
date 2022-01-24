@@ -11,7 +11,7 @@ contract TerritoryNFT is ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
-    constructor() ERC721("8Land Territory", "8LANDTERRITORY") {}
+    constructor() ERC721("8Land Territory", "8LANDTRT") {}
 
     function mintNFT(address recipient, string memory tokenURI)
         public onlyOwner

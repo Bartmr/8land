@@ -7,8 +7,6 @@ import '@typechain/hardhat';
 
 import path from 'path';
 
-import { SmartContractsEnvironmentVariables } from 'src/internals/databases/smart-contracts-environment-variables';
-
 // import { task } from "hardhat/config";
 // // This is a sample Hardhat task. To learn how to create your own go to
 // // https://hardhat.org/guides/create-task.html
@@ -28,14 +26,7 @@ export default {
   paths: {
     root: path.resolve(__dirname, 'libs', 'smart-contracts'),
   },
-  defaultNetwork: 'matic',
-  networks: {
-    matic: {
-      url: SmartContractsEnvironmentVariables.ALCHEMY_URL,
-      accounts: [SmartContractsEnvironmentVariables.WALLET_PRIVATE_KEY],
-    },
-  },
   typechain: {
-    target: 'web3-v1',
+    target: 'ethers-v5',
   },
 };
