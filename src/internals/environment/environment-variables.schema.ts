@@ -74,5 +74,7 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   MORALIS_SERVER_URL: string().filled(),
   MORALIS_APP_ID: string().filled(),
 
+  MORALIS_SPEEDY_NODE: string().filled(),
+
   TERRITORY_NFT_CONTRACT_ADDRESS: string().filled(),
 }).required();
