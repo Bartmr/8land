@@ -20,12 +20,16 @@ import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { FIREBASE_EMULATOR_PROJECT_ID } from 'src/internals/apis/firebase/firebase.constants';
 import { throwError } from 'src/internals/utils/throw-error';
 import { LandRepository } from 'src/land/typeorm/land.repository';
+import { TerritoriesRepository } from 'src/territories/typeorm/territories.repository';
 import { getSearchableName } from 'src/internals/utils/get-searchable-name';
 import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
 import fs from 'fs';
 import { promisify } from 'util';
 import path from 'path';
 import { DevStorageService } from 'src/internals/storage/dev-storage.service';
+import { ethers } from 'ethers';
+import territoryNFTContractJSON from 'libs/smart-contracts/artifacts/contracts/TerritoryNFT.sol/TerritoryNFT.json';
+import { TerritoryNFT } from 'libs/smart-contracts/typechain-types';
 
 const readFile = promisify(fs.readFile);
 
@@ -330,6 +334,108 @@ async function seed() {
       townOfHumbleBeginningsUnderground2Tileset,
     );
 
+    /* --- */
+    const territoriesRepository = defaultDBConnection.getCustomRepository(
+      TerritoriesRepository,
+    );
+
+    const territory1 = await territoriesRepository.create(
+      {
+        doorBlocks: [],
+        hasAssets: true,
+        inLand: Promise.resolve(townOfHumbleBeginnings),
+        startX: 3,
+        startY: 3,
+        endX: 7,
+        endY: 6,
+      },
+      auditContext,
+    );
+
+    const territory1Map = await readFile(
+      path.resolve(process.cwd(), 'src/territories/spec/territory-map.json'),
+      { encoding: 'utf-8' },
+    );
+    const terrritory1Tileset = await readFile(
+      path.resolve(process.cwd(), 'src/territories/spec/territory-tileset.png'),
+    );
+    const terrritory1Thumbnail = await readFile(
+      path.resolve(
+        process.cwd(),
+        'src/territories/spec/territory-thumbnail.jpg',
+      ),
+    );
+    await storageService.saveText(
+      `territories/${territory1.id}/map.json`,
+      territory1Map,
+    );
+    await storageService.saveBuffer(
+      `territories/${territory1.id}/tileset.png`,
+      terrritory1Tileset,
+    );
+    await storageService.saveBuffer(
+      `territories/${territory1.id}/thumbnail.jpg`,
+      terrritory1Thumbnail,
+    );
+
+    const nftMetadataStorageKey = `territories/${territory1.id}/nft-metadata.json`;
+
+    await storageService.saveText(
+      nftMetadataStorageKey,
+      JSON.stringify({
+        attributes: [
+          {
+            trait_type: 'Territory ID',
+            value: `${territory1.id}`,
+          },
+          {
+            trait_type: 'In Land',
+            value: `${townOfHumbleBeginnings.name}`,
+          },
+          {
+            trait_type: 'Width',
+            value: `${territory1.endX - territory1.startX}`,
+          },
+          {
+            trait_type: 'Height',
+            value: `${territory1.endY - territory1.startY}`,
+          },
+          {
+            trait_type: 'Total Area',
+            value: `${
+              (territory1.endX - territory1.startX) *
+              (territory1.endY - territory1.startY)
+            }`,
+          },
+        ],
+        description: `8Land territory at ${townOfHumbleBeginnings.name}`,
+        image: `${storageService.getHostUrl()}/territories/${
+          territory1.id
+        }/thumbnail.jpg`,
+        name: `${townOfHumbleBeginnings.name} - territory 1`,
+      }),
+    );
+
+    const provider = new ethers.providers.JsonRpcProvider(
+      EnvironmentVariablesService.variables.MORALIS_SPEEDY_NODE,
+    );
+
+    const wallet = new ethers.Wallet(
+      EnvironmentVariablesService.variables.WALLET_PRIVATE_KEY,
+      provider,
+    );
+
+    const nftContract = new ethers.Contract(
+      EnvironmentVariablesService.variables.TERRITORY_NFT_CONTRACT_ADDRESS,
+      territoryNFTContractJSON.abi,
+      wallet,
+    ) as TerritoryNFT;
+
+    await nftContract.mintNFT(
+      wallet.address,
+      `${storageService.getHostUrl()}/${nftMetadataStorageKey}`,
+    );
+    /* --- */
     await Promise.all([defaultDBConnection.close()]);
   } else {
     throw new Error('Seed command is only for development');

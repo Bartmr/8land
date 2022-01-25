@@ -151,12 +151,12 @@ export class TerritoriesController {
       for (const territory of existingTerritories) {
         if (
           (data.data.startX >= territory.startX &&
-            data.data.startX <= territory.endX) ||
-          (data.data.endX >= territory.startX &&
+            data.data.startX < territory.endX) ||
+          (data.data.endX > territory.startX &&
             data.data.endX <= territory.endX) ||
           (data.data.startY >= territory.startY &&
-            data.data.startY <= territory.endY) ||
-          (data.data.endY >= territory.startY &&
+            data.data.startY < territory.endY) ||
+          (data.data.endY > territory.startY &&
             data.data.endY <= territory.endY)
         ) {
           throw new ConflictException({
@@ -236,7 +236,7 @@ export class TerritoriesController {
                 }`,
               },
             ],
-            description: `8Land territory at ${land.name}. This is territory number ${territoryNumber}.`,
+            description: `8Land territory at ${land.name}.`,
             image: `${this.storageService.getHostUrl()}/${thumbnailStorageKey}`,
             name: `${land.name} - territory ${territoryNumber}`,
           }),

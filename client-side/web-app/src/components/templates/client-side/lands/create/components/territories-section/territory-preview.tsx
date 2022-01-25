@@ -179,6 +179,9 @@ export function TerritoryPreview(props: {
           0.6,
         );
 
+        rectangle.displayOriginX = 0;
+        rectangle.displayOriginY = 0;
+
         rectangle.setStrokeStyle(1, 0xffffff);
 
         previousRectangles.push(rectangle);
@@ -195,6 +198,9 @@ export function TerritoryPreview(props: {
           0x00ff00,
           0.6,
         );
+
+        _pendingIntervalRectangle.displayOriginX = 0;
+        _pendingIntervalRectangle.displayOriginY = 0;
 
         _pendingIntervalRectangle.setStrokeStyle(1, 0xffffff);
 

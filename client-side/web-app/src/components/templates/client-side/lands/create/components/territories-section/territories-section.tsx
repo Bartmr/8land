@@ -295,7 +295,7 @@ export function TerritoriesSection(props: {
             </div>
           </form>
         </div>
-        <div className="col-4">
+        <div className="col-6">
           <div className="mt-3">
             <TerritoryPreview
               land={props.land}
