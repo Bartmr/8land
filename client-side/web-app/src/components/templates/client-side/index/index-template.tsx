@@ -259,7 +259,7 @@ function Game(props: { land: GetLandDTO; session: null | MainApiSessionData }) {
           TO MOVE
         </div>
       </div>
-      <div className="d-xl-block mt-3">
+      <div className="d-none d-xl-block mt-3">
         Instructions: Use the arrow keys to move
       </div>
     </div>

@@ -21,8 +21,9 @@ function Content() {
   const mainApiSession = useMainApiSession();
 
   const [resendconfirmationEmailState, replaceResendConfirmationEmailState] =
-    useState<TransportedData<undefined>>({
-      status: TransportedDataStatus.NotInitialized,
+    useState<TransportedData<undefined | 'done'>>({
+      status: TransportedDataStatus.Done,
+      data: undefined,
     });
 
   const [needsEmailVerification, replaceNeedsEmailVerification] =
@@ -38,7 +39,8 @@ function Content() {
     });
     await auth.sendEmailVerification(FirebaseAuth.currentUser || throwError());
     replaceResendConfirmationEmailState({
-      status: TransportedDataStatus.NotInitialized,
+      status: TransportedDataStatus.Done,
+      data: undefined,
     });
   };
 
@@ -113,24 +115,34 @@ function Content() {
             <br /> After you verified your account, reload this page and login
             again.
           </p>
-          <button
-            disabled={
-              resendconfirmationEmailState.status ===
-              TransportedDataStatus.Loading
+          <TransportedDataGate dataWrapper={resendconfirmationEmailState}>
+            {({ data }) =>
+              data ? (
+                <span className="text-success">
+                  Confirmation email was sent
+                </span>
+              ) : (
+                <button
+                  disabled={
+                    resendconfirmationEmailState.status ===
+                    TransportedDataStatus.Loading
+                  }
+                  onClick={resendConfirmationEmail}
+                  className="btn btn-default"
+                >
+                  {resendconfirmationEmailState.status ===
+                  TransportedDataStatus.Loading ? (
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                  ) : null}{' '}
+                  Re-send confirmation email
+                </button>
+              )
             }
-            onClick={resendConfirmationEmail}
-            className="btn btn-default"
-          >
-            {resendconfirmationEmailState.status ===
-            TransportedDataStatus.Loading ? (
-              <span
-                className="spinner-border spinner-border-sm"
-                role="status"
-                aria-hidden="true"
-              ></span>
-            ) : null}{' '}
-            Re-send confirmation email
-          </button>
+          </TransportedDataGate>
         </div>
       ) : null}
       <TransportedDataGate dataWrapper={loginState}>

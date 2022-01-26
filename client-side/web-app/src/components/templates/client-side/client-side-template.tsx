@@ -11,6 +11,8 @@ import { EditLandTemplate } from './lands/create/edit-land-template';
 import { EDIT_LAND_ROUTE } from './lands/create/edit-land-routes';
 import { LANDS_ROUTE } from './lands/lands-routes';
 import { LandsTemplate } from './lands/lands-template';
+import { UserTemplate } from './user/user-template';
+import { USER_ROUTE } from './user/user-routes';
 
 function Game(_props: RouteComponentProps) {
   const LazyLoadedRoute = React.lazy(async () => {
@@ -47,6 +49,7 @@ export function ClientSideTemplate() {
         <EditLandTemplate
           path={`${LANDS_ROUTE.pathSegment}${EDIT_LAND_ROUTE.pathSegment}/:id`}
         />
+        <UserTemplate path={USER_ROUTE.pathSegment} />
         <NotFoundTemplate default />
       </AuthenticatedRoute>
       <AuthenticatedRoute

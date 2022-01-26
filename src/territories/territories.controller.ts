@@ -30,6 +30,7 @@ import { ItselfStorageApi } from 'src/internals/apis/itself/itself-storage.api';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { number } from 'not-me/lib/schemas/number/number-schema';
+import { LoggingService } from 'src/internals/logging/logging.service';
 
 @Controller('territories')
 export class TerritoriesController {
@@ -37,6 +38,7 @@ export class TerritoriesController {
     @InjectConnection() private connection: Connection,
     private storageService: StorageService,
     private itselfStorageApi: ItselfStorageApi,
+    private loggingService: LoggingService,
   ) {}
 
   @Post()
@@ -196,6 +198,7 @@ export class TerritoriesController {
           hasAssets: false,
           inLand: Promise.resolve(land),
           doorBlocks: [],
+          nftTransactionHash: null,
         },
         auditContext,
       );
@@ -261,10 +264,14 @@ export class TerritoriesController {
         wallet,
       ) as TerritoryNFT;
 
-      await nftContract.mintNFT(
+      const territoryNFTTransaction = await nftContract.mintNFT(
         wallet.address,
         `${this.storageService.getHostUrl()}/${nftMetadataStorageKey}`,
       );
+
+      territory.nftTransactionHash = territoryNFTTransaction.hash;
+
+      await territoriesRepository.save(territory, auditContext);
     });
   }
 }

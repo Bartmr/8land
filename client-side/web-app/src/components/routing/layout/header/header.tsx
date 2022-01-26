@@ -15,6 +15,7 @@ import { LANDS_ROUTE } from 'src/components/templates/client-side/lands/lands-ro
 import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { useMainApiSessionLogout } from 'src/logic/app-internals/apis/main/session/use-main-api-session-logout';
+import { Role } from '@app/shared/auth/auth.enums';
 
 type Props = {
   menuHtmlId: string;
@@ -97,14 +98,16 @@ export function Header(props: Props) {
                     return (
                       <>
                         {data ? (
-                          <li className="nav-item">
-                            <LinkAnchor
-                              className="nav-link"
-                              href={LANDS_ROUTE.geHref()}
-                            >
-                              {LANDS_ROUTE.label}
-                            </LinkAnchor>
-                          </li>
+                          data.role === Role.Admin ? (
+                            <li className="nav-item">
+                              <LinkAnchor
+                                className="nav-link"
+                                href={LANDS_ROUTE.geHref()}
+                              >
+                                {LANDS_ROUTE.label}
+                              </LinkAnchor>
+                            </li>
+                          ) : null
                         ) : null}
                       </>
                     );

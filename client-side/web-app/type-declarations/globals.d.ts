@@ -1,4 +1,10 @@
 import { SoundcloudSong } from 'src/components/templates/client-side/index/soundcloud-types';
+import {
+  ProviderMessage,
+  ProviderRpcError,
+  ProviderConnectInfo,
+  RequestArguments,
+} from 'hardhat/types';
 
 declare global {
   interface Window {
@@ -55,5 +61,41 @@ declare global {
         isPaused(callback: (...args: unknown[]) => void): void;
       });
     };
+  }
+}
+
+interface EthereumEvent {
+  connect: ProviderConnectInfo;
+  disconnect: ProviderRpcError;
+  accountsChanged: Array<string>;
+  chainChanged: string;
+  message: ProviderMessage;
+}
+
+type EthereumEventKeys = keyof EthereumEvent;
+type EthereumEventHandler<K extends EthereumEventKeys> = (
+  event: EthereumEvent[K],
+) => void;
+
+declare global {
+  interface Window {
+    ethereum?:
+      | { isMetaMask: false }
+      | {
+          autoRefreshOnNetworkChange: boolean;
+          chainId: string;
+          isMetaMask?: true;
+          isStatus?: boolean;
+          networkVersion: string;
+
+          on<K extends EthereumEventKeys>(
+            event: K,
+            eventHandler: EthereumEventHandler<K>,
+          ): void;
+          request: (request: {
+            method: 'eth_requestAccounts';
+          }) => Promise<string[]>;
+          sendAsync: (request: RequestArguments) => Promise<unknown>;
+        };
   }
 }

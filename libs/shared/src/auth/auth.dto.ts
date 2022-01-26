@@ -1,4 +1,5 @@
 import { ValidationSchema } from '../internals/validation/validation-schema.decorator';
+import { Role } from './auth.enums';
 import { loginRequestSchema } from './auth.schemas';
 
 @ValidationSchema(loginRequestSchema)
@@ -8,6 +9,7 @@ export class LoginRequestDTO {
 
 export class AuthSessionDTO {
   userId!: string;
+  role!: Role;
 }
 
 export class LoginResponseDTO {

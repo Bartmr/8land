@@ -37,6 +37,9 @@ export class User extends SimpleEntity {
     should only be visible in the session object
   */
 
+  @Column('text')
+  walletPublicKey!: string | null;
+
   toJSON() {
     return {
       ...this,

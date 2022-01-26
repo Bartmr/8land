@@ -17,6 +17,7 @@ export class FirstMigration1642874083482 implements MigrationInterface {
                 "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
                 "deletedAt" TIMESTAMP,
                 "role" "public"."user_role_enum" NOT NULL,
+                "walletPublicKey" text,
                 CONSTRAINT "UQ_905432b2c46bdcfe1a0dd3cdeff" UNIQUE ("firebaseUid"),
                 CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id")
             )
@@ -41,6 +42,7 @@ export class FirstMigration1642874083482 implements MigrationInterface {
                 "endX" integer NOT NULL,
                 "endY" integer NOT NULL,
                 "inLandId" uuid,
+                "nftTransactionHash" text,
                 CONSTRAINT "PK_2250448f958bc52a8d040b48f82" PRIMARY KEY ("id")
             )
         `);

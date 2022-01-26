@@ -10,16 +10,25 @@ export const UploadLandAssetsParametersSchema = object({
   landId: uuid().required(),
 }).required();
 
-export const createTiledJSONSchema = () =>
-  object({
+export const createTiledJSONSchema = ({
+  maxWidth: _maxWidth,
+  maxHeight: _maxHeight,
+}: {
+  maxWidth: number | null;
+  maxHeight: number | null;
+}) => {
+  const maxWidth = _maxWidth ? _maxWidth + 1 : 41;
+  const maxHeight = _maxHeight ? _maxHeight + 1 : 41;
+
+  return object({
     compressionlevel: number().required(),
     height: number()
       .integer()
       .required()
       .test((h) =>
-        h > 0 && h < 41
+        h > 0 && h < maxHeight
           ? null
-          : 'height must be greater than 0 and less than 41',
+          : `Must be greater than 0 and less than ${maxHeight}`,
       ),
     infinite: boolean()
       .required()
@@ -27,13 +36,27 @@ export const createTiledJSONSchema = () =>
     layers: array(
       object({
         data: array(number().required()).required(),
-        height: number().integer().required(),
+        height: number()
+          .integer()
+          .required()
+          .test((h) =>
+            h > 0 && h < maxHeight
+              ? null
+              : `Must be greater than 0 and less than ${maxHeight}`,
+          ),
         id: number().integer().required(),
         name: string().filled(),
         opacity: number().required(),
         type: equals(['tilelayer']).required(),
         visible: equals([true], 'Must be set to true'),
-        width: number().integer().required(),
+        width: number()
+          .integer()
+          .required()
+          .test((w) =>
+            w > 0 && w < maxWidth
+              ? null
+              : `Must be greater than 0 and less than ${maxWidth}`,
+          ),
         x: equals([0], 'Must be set to 0').required(),
         y: equals([0], 'Must be set to 0').required(),
       }).required(),
@@ -100,9 +123,9 @@ export const createTiledJSONSchema = () =>
       .integer()
       .required()
       .test((w) =>
-        w > 0 && w < 41
+        w > 0 && w < maxWidth
           ? null
-          : 'width must be greater than 0 and less than 41',
+          : `Must be greater than 0 and less than ${maxWidth}`,
       ),
   })
     .required()
@@ -131,3 +154,4 @@ export const createTiledJSONSchema = () =>
 
       return null;
     });
+};

@@ -103,6 +103,8 @@ async function seed() {
           })
         ).uid,
         role: Role.EndUser,
+        walletPublicKey:
+          EnvironmentVariablesService.variables.WALLET_PUBLIC_KEY,
       },
       auditContext,
     );
@@ -117,6 +119,7 @@ async function seed() {
           })
         ).uid,
         role: Role.Admin,
+        walletPublicKey: null,
       },
       auditContext,
     );
@@ -348,6 +351,7 @@ async function seed() {
         startY: 3,
         endX: 7,
         endY: 6,
+        nftTransactionHash: null,
       },
       auditContext,
     );
@@ -431,10 +435,14 @@ async function seed() {
       wallet,
     ) as TerritoryNFT;
 
-    await nftContract.mintNFT(
+    const territory1NFTTransaction = await nftContract.mintNFT(
       wallet.address,
       `${storageService.getHostUrl()}/${nftMetadataStorageKey}`,
     );
+
+    territory1.nftTransactionHash = territory1NFTTransaction.hash;
+
+    await territoriesRepository.save(territory1, auditContext);
     /* --- */
     await Promise.all([defaultDBConnection.close()]);
   } else {

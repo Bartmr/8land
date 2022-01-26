@@ -48,8 +48,12 @@ import {
 } from 'libs/shared/src/land/get/get-land.dto';
 import { PublicRoute } from 'src/auth/public-route.decorator';
 import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
+import { TerritoriesRepository } from 'src/territories/typeorm/territories.repository';
 
-const TiledJSONSchema = createTiledJSONSchema();
+const TiledJSONSchema = createTiledJSONSchema({
+  maxWidth: null,
+  maxHeight: null,
+});
 
 class LandAssetsRequestDTO {
   @ApiProperty({ type: 'string', format: 'binary' })
@@ -333,6 +337,9 @@ export class LandController {
     const landsRepository = this.connection.getCustomRepository(LandRepository);
     const doorBlocksRepository =
       this.connection.getCustomRepository(DoorBlockRepository);
+    const territoriesRepository = this.connection.getCustomRepository(
+      TerritoriesRepository,
+    );
 
     const land = await landsRepository.findOne({
       where: {
@@ -347,7 +354,7 @@ export class LandController {
     const [doorBlocksReferencing, doorBlocks, territories] = await Promise.all([
       doorBlocksRepository.dangerouslyFindAll({ where: { toLand: land.id } }),
       doorBlocksRepository.dangerouslyFindAll({ where: { inLand: land.id } }),
-      land.territories,
+      territoriesRepository.dangerouslyFindAll({ where: { inLand: land.id } }),
     ]);
 
     return {
@@ -391,8 +398,8 @@ export class LandController {
             assets: territory.hasAssets
               ? {
                   baseUrl: this.storageService.getHostUrl(),
-                  mapKey: `territories/${land.id}/map.json`,
-                  tilesetKey: `territories/${land.id}/tileset.png`,
+                  mapKey: `territories/${territory.id}/map.json`,
+                  tilesetKey: `territories/${territory.id}/tileset.png`,
                 }
               : undefined,
             doorBlocks: territory.doorBlocks.map((b) => {

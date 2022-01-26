@@ -99,7 +99,7 @@ export class AuthController {
 
       return {
         authTokenId: token.id,
-        session: { userId: user.id },
+        session: { userId: user.id, role: user.role },
       };
     } else {
       // TODO: implement sign up
@@ -116,6 +116,7 @@ export class AuthController {
     if (authContext) {
       return {
         userId: authContext.user.id,
+        role: authContext.user.role,
       };
     } else {
       throw new NotFoundException();

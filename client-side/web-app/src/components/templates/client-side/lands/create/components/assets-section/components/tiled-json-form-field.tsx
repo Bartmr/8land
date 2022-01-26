@@ -2,7 +2,7 @@ import { createTiledJSONSchema } from '@app/shared/land/upload-assets/upload-lan
 import { AnyErrorMessagesTree } from 'not-me/lib/error-messages/error-messages-tree';
 import { useEffect, useState } from 'react';
 
-const schema = createTiledJSONSchema();
+const schema = createTiledJSONSchema({ maxWidth: null, maxHeight: null });
 
 export type TiledJSONFieldState =
   | undefined
