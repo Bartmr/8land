@@ -13,7 +13,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { InjectConnection } from '@nestjs/typeorm';
+import { InjectConnection } from 'nestjs-typeorm-bartmr';
 import {
   CreateLandRequestDTO,
   CreateLandResponseDTO,
@@ -25,7 +25,7 @@ import { AuditContext } from 'src/internals/auditing/audit-context';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
 import { getSearchableName } from 'src/internals/utils/get-searchable-name';
-import { Connection } from 'typeorm';
+import { Connection } from 'typeorm-bartmr';
 import { LandRepository } from './typeorm/land.repository';
 import fileType from 'file-type';
 import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';

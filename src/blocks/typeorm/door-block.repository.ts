@@ -1,5 +1,5 @@
 import { SimpleEntityRepository } from 'src/internals/databases/simple-entity/simple-entity.repository';
-import { EntityRepository } from 'typeorm';
+import { EntityRepository } from 'typeorm-bartmr';
 import { DoorBlock } from './door-block.entity';
 
 @EntityRepository(DoorBlock)

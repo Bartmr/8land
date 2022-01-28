@@ -8,7 +8,7 @@ import {
   Entity,
   Unique,
   UpdateDateColumn,
-} from 'typeorm';
+} from 'typeorm-bartmr';
 
 @Entity()
 @Unique(['firebaseUid'])

@@ -13,8 +13,8 @@ import { CreateTerritoryRequestJSONSchema } from 'libs/shared/src/territories/te
 import { Role } from 'src/auth/roles/roles';
 import { RolesUpAndIncluding } from 'src/auth/roles/roles.decorator';
 import fileType from 'file-type';
-import { InjectConnection } from '@nestjs/typeorm';
-import { Connection } from 'typeorm';
+import { InjectConnection } from 'nestjs-typeorm-bartmr';
+import { Connection } from 'typeorm-bartmr';
 import { LandRepository } from 'src/land/typeorm/land.repository';
 import sharp from 'sharp';
 import { throwError } from 'src/internals/utils/throw-error';

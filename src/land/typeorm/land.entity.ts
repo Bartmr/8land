@@ -8,7 +8,7 @@ import {
   OneToMany,
   Unique,
   UpdateDateColumn,
-} from 'typeorm';
+} from 'typeorm-bartmr';
 
 @Entity()
 @Unique(['searchableName'])

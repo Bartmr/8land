@@ -1,5 +1,10 @@
 import { User } from 'src/users/typeorm/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm-bartmr';
 
 @Entity()
 export class AuthToken {

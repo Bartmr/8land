@@ -4,7 +4,7 @@ import {
   EntityRepository,
   LessThan,
   MoreThan,
-} from 'typeorm';
+} from 'typeorm-bartmr';
 import { AuthToken } from './typeorm/auth-token.entity';
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
 

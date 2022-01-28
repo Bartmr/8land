@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule } from 'nestjs-typeorm-bartmr';
 import { ItselfModule } from 'src/internals/apis/itself/itself.module';
 import { MoralisModule } from 'src/internals/smart-contracts/moralis/moralis.module';
 import { StorageModule } from 'src/internals/storage/storage.module';
