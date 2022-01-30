@@ -103,8 +103,8 @@ async function seed() {
           })
         ).uid,
         role: Role.EndUser,
-        walletPublicKey:
-          EnvironmentVariablesService.variables.WALLET_PUBLIC_KEY,
+        walletAddress: EnvironmentVariablesService.variables.WALLET_PUBLIC_KEY,
+        walletNonce: generateRandomUUID(),
       },
       auditContext,
     );
@@ -119,7 +119,8 @@ async function seed() {
           })
         ).uid,
         role: Role.Admin,
-        walletPublicKey: null,
+        walletAddress: null,
+        walletNonce: generateRandomUUID(),
       },
       auditContext,
     );

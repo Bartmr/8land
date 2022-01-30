@@ -6,6 +6,19 @@ import {
   RequestArguments,
 } from 'hardhat/types';
 
+interface EthereumEvent {
+  connect: ProviderConnectInfo;
+  disconnect: ProviderRpcError;
+  accountsChanged: Array<string>;
+  chainChanged: string;
+  message: ProviderMessage;
+}
+
+type EthereumEventKeys = keyof EthereumEvent;
+type EthereumEventHandler<K extends EthereumEventKeys> = (
+  event: EthereumEvent[K],
+) => void;
+
 declare global {
   interface Window {
     // https://developers.soundcloud.com/docs/api/html5-widget#resources
@@ -61,24 +74,8 @@ declare global {
         isPaused(callback: (...args: unknown[]) => void): void;
       });
     };
-  }
-}
 
-interface EthereumEvent {
-  connect: ProviderConnectInfo;
-  disconnect: ProviderRpcError;
-  accountsChanged: Array<string>;
-  chainChanged: string;
-  message: ProviderMessage;
-}
-
-type EthereumEventKeys = keyof EthereumEvent;
-type EthereumEventHandler<K extends EthereumEventKeys> = (
-  event: EthereumEvent[K],
-) => void;
-
-declare global {
-  interface Window {
+    web3?: {};
     ethereum?:
       | { isMetaMask: false }
       | {

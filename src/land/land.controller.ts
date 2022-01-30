@@ -47,8 +47,6 @@ import {
   GetLandParametersDTO,
 } from 'libs/shared/src/land/get/get-land.dto';
 import { PublicRoute } from 'src/auth/public-route.decorator';
-import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
-import { TerritoriesRepository } from 'src/territories/typeorm/territories.repository';
 
 const TiledJSONSchema = createTiledJSONSchema({
   maxWidth: null,
@@ -335,11 +333,6 @@ export class LandController {
     @Param() parameters: GetLandParametersDTO,
   ): Promise<GetLandDTO> {
     const landsRepository = this.connection.getCustomRepository(LandRepository);
-    const doorBlocksRepository =
-      this.connection.getCustomRepository(DoorBlockRepository);
-    const territoriesRepository = this.connection.getCustomRepository(
-      TerritoriesRepository,
-    );
 
     const land = await landsRepository.findOne({
       where: {
@@ -352,9 +345,9 @@ export class LandController {
     }
 
     const [doorBlocksReferencing, doorBlocks, territories] = await Promise.all([
-      doorBlocksRepository.dangerouslyFindAll({ where: { toLand: land.id } }),
-      doorBlocksRepository.dangerouslyFindAll({ where: { inLand: land.id } }),
-      territoriesRepository.dangerouslyFindAll({ where: { inLand: land.id } }),
+      land.doorBlocksReferencing,
+      land.doorBlocks,
+      land.territories,
     ]);
 
     return {
@@ -386,33 +379,31 @@ export class LandController {
           },
         };
       }),
-      territories: territories
-        .filter((t) => t.hasAssets)
-        .map((territory) => {
-          return {
-            id: territory.id,
-            startX: territory.startX,
-            startY: territory.startY,
-            endX: territory.endX,
-            endY: territory.endY,
-            assets: territory.hasAssets
-              ? {
-                  baseUrl: this.storageService.getHostUrl(),
-                  mapKey: `territories/${territory.id}/map.json`,
-                  tilesetKey: `territories/${territory.id}/tileset.png`,
-                }
-              : undefined,
-            doorBlocks: territory.doorBlocks.map((b) => {
-              return {
-                id: b.id,
-                toLand: {
-                  id: b.toLand.id,
-                  name: b.toLand.name,
-                },
-              };
-            }),
-          };
-        }),
+      territories: territories.map((territory) => {
+        return {
+          id: territory.id,
+          startX: territory.startX,
+          startY: territory.startY,
+          endX: territory.endX,
+          endY: territory.endY,
+          assets: territory.hasAssets
+            ? {
+                baseUrl: this.storageService.getHostUrl(),
+                mapKey: `territories/${territory.id}/map.json`,
+                tilesetKey: `territories/${territory.id}/tileset.png`,
+              }
+            : undefined,
+          doorBlocks: territory.doorBlocks.map((b) => {
+            return {
+              id: b.id,
+              toLand: {
+                id: b.toLand.id,
+                name: b.toLand.name,
+              },
+            };
+          }),
+        };
+      }),
     };
   }
 }

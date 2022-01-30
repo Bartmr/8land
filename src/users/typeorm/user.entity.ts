@@ -38,12 +38,17 @@ export class User extends SimpleEntity {
   */
 
   @Column('text')
-  walletPublicKey!: string | null;
+  walletAddress!: string | null;
+
+  @Column('text')
+  walletNonce!: string;
 
   toJSON() {
     return {
       ...this,
       firebaseUid: undefined,
+      walletNonce: undefined,
+      walletAddress: undefined,
     };
   }
 }

@@ -17,7 +17,8 @@ export class FirstMigration1642874083482 implements MigrationInterface {
                 "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
                 "deletedAt" TIMESTAMP,
                 "role" "public"."user_role_enum" NOT NULL,
-                "walletPublicKey" text,
+                "walletAddress" text,
+                "walletNonce" text NOT NULL,
                 CONSTRAINT "UQ_905432b2c46bdcfe1a0dd3cdeff" UNIQUE ("firebaseUid"),
                 CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id")
             )

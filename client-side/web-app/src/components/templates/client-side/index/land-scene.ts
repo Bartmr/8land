@@ -392,7 +392,10 @@ export class LandScene extends Phaser.Scene {
         this.args,
         {
           player: this.args.player,
-          land: nextLand,
+          land: {
+            ...nextLand,
+            territories: nextLand.territories.filter((t) => !!t.assets),
+          },
           comingFromDoorBlock: block,
         },
         this.dependencies,

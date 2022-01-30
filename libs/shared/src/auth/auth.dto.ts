@@ -10,6 +10,7 @@ export class LoginRequestDTO {
 export class AuthSessionDTO {
   userId!: string;
   role!: Role;
+  walletAddress!: string | null;
 }
 
 export class LoginResponseDTO {

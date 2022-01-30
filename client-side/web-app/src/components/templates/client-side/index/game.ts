@@ -74,7 +74,10 @@ export async function runGame(
       null,
       {
         player,
-        land: args.land,
+        land: {
+          ...args.land,
+          territories: args.land.territories.filter((t) => !!t.assets),
+        },
         comingFromDoorBlock,
       },
       dependencies,

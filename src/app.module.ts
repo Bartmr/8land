@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { LandModule } from './land/land.module';
 import { BlocksModule } from './blocks/blocks.module';
 import { TerritoriesModule } from './territories/territories.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { TerritoriesModule } from './territories/territories.module';
     LandModule,
     BlocksModule,
     TerritoriesModule,
+    UsersModule,
   ],
   providers: [...CROSS_CUTTING_PROVIDERS],
 })

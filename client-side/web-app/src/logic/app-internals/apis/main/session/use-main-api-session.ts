@@ -84,6 +84,33 @@ class MainApiSession {
       }
     }
   }
+
+  async refreshSession() {
+    const res = await this.mainApi.get<
+      | { status: 200; body: MainApiSessionData }
+      | { status: 404; body: undefined },
+      undefined
+    >({
+      path: '/auth',
+      query: undefined,
+      acceptableStatusCodes: [200, 404],
+    });
+
+    if (res.failure) {
+      this.dispatch({
+        type: 'UPDATE_MAIN_API_SESSION',
+        payload: {
+          status: res.failure,
+        },
+      });
+    } else {
+      if (res.response.status === 404) {
+        this.setSession(null);
+      } else {
+        this.setSession(res.response.body);
+      }
+    }
+  }
 }
 
 export function useMainApiSession() {
