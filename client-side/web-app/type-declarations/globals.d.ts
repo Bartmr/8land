@@ -75,7 +75,6 @@ declare global {
       });
     };
 
-    web3?: {};
     ethereum?:
       | { isMetaMask: false }
       | {
@@ -89,9 +88,13 @@ declare global {
             event: K,
             eventHandler: EthereumEventHandler<K>,
           ): void;
-          request: (request: {
+          request(request: {
             method: 'eth_requestAccounts';
-          }) => Promise<string[]>;
+          }): Promise<string[]>;
+          request(request: {
+            method: 'personal_sign';
+            params: [string, string];
+          }): Promise<string>;
           sendAsync: (request: RequestArguments) => Promise<unknown>;
         };
   }

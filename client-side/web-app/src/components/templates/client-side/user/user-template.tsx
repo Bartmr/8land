@@ -31,18 +31,16 @@ export function WalletSectionWithNonce(props: {
   const mainApi = useMainJSONApi();
 
   const [nonceSignState, replaceNonceSignState] = useState<
-    TransportedData<undefined | 'done' | 'not-detected' | 'already-requested'>
+    TransportedData<
+      undefined | 'done' | 'not-detected' | 'already-requested' | 'denied'
+    >
   >({
     status: TransportedDataStatus.Done,
     data: undefined,
   });
 
   const signNonce = async () => {
-    if (
-      typeof window.ethereum === 'undefined' ||
-      typeof window.web3 === 'undefined' ||
-      !window.ethereum.isMetaMask
-    ) {
+    if (typeof window.ethereum === 'undefined' || !window.ethereum.isMetaMask) {
       replaceNonceSignState({
         status: TransportedDataStatus.Done,
         data: 'not-detected',
@@ -90,8 +88,31 @@ export function WalletSectionWithNonce(props: {
         return;
       }
 
-      // TODO
-      const signedNonce = address;
+      let signedNonce: string;
+
+      try {
+        signedNonce = await window.ethereum.request({
+          method: 'personal_sign',
+          params: [address, props.nonce],
+        });
+      } catch (err) {
+        const errorValidation = object({
+          code: equals([4001] as const).required(),
+        })
+          .required()
+          .validate(err);
+
+        if (errorValidation.errors) {
+          throw err;
+        } else {
+          replaceNonceSignState({
+            status: TransportedDataStatus.Done,
+            data: 'denied',
+          });
+        }
+
+        return;
+      }
 
       const res = await mainApi.patch<
         { status: 204; body: undefined },
@@ -185,6 +206,13 @@ export function WalletSectionWithNonce(props: {
                     <p className="mb-0 text-danger">
                       Could not detect Metamask. Install and setup Metamask, or
                       insert the wallet&apos;s public address manually below.
+                    </p>
+                  ) : null}
+                  {data === 'denied' ? (
+                    <p className="mb-0 text-danger">
+                      Permission to sign the nonce was rejected. Try again and
+                      accept the request to sign the nonce, in order to verify
+                      that you own this wallet.
                     </p>
                   ) : null}
                   {data === 'done' ? (

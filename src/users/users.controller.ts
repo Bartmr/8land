@@ -8,7 +8,7 @@ import { Connection } from 'typeorm-bartmr';
 import { UsersRepository } from './users.repository';
 import { GetUserWalletNonce } from 'libs/shared/src/users/me/get-user-wallet-nonce.dto';
 import { ReceiveSignedUserNonceRequestDTO } from 'libs/shared/src/users/me/receive-signed-user-nonce.dto';
-import ethUtil from 'ethereumjs-util';
+import * as ethUtil from 'ethereumjs-util';
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
 
 @Controller('users')
