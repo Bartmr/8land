@@ -83,10 +83,7 @@ export class BlocksController {
   @HttpCode(204)
   @Delete('/doors/:blockId')
   @RolesUpAndIncluding(Role.Admin)
-  deleteBlock(
-    @Param() param: DeleteBlockURLParameters,
-    @WithAuditContext() auditContext: AuditContext,
-  ) {
+  deleteBlock(@Param() param: DeleteBlockURLParameters) {
     return this.connection.transaction(async (e) => {
       const doorBlocksRepository = e.getCustomRepository(DoorBlockRepository);
 
@@ -98,7 +95,7 @@ export class BlocksController {
         throw new ResourceNotFoundException();
       }
 
-      await doorBlocksRepository.remove(block, auditContext);
+      await doorBlocksRepository.remove(block);
     });
   }
 }
