@@ -21,10 +21,11 @@ import {
 import { USER_ROUTE } from './user-routes';
 import { GetUserWalletNonce } from '@app/shared/users/me/get-user-wallet-nonce.dto';
 import { ReceiveSignedUserNonceRequestDTO } from '@app/shared/users/me/receive-signed-user-nonce.dto';
+import { Logger } from 'src/logic/app-internals/logging/logger';
 
 export function WalletSectionWithNonce(props: {
   session: null | MainApiSessionData;
-  refreshSession: () => void;
+  refreshSession: () => Promise<MainApiSessionData | null | undefined>;
   nonce: string;
   walletAddress: null | string;
 }) {
@@ -137,7 +138,19 @@ export function WalletSectionWithNonce(props: {
           data: 'done',
         });
 
-        props.refreshSession();
+        const sessionRes = await props.refreshSession();
+
+        if (!sessionRes) {
+          return;
+        }
+
+        if (sessionRes.walletAddress !== address) {
+          Logger.logError('wallet-mismatch-after-verification', new Error(), {
+            addressObtainedFromWebApp: address,
+            addressAfterVerification: sessionRes.walletAddress,
+            userId: sessionRes.userId,
+          });
+        }
       }
     }
   };
@@ -230,7 +243,7 @@ export function WalletSectionWithNonce(props: {
 
 export function WalletSection(props: {
   session: null | MainApiSessionData;
-  refreshSession: () => void;
+  refreshSession: () => Promise<MainApiSessionData | null | undefined>;
 }) {
   const mainApi = useMainJSONApi();
   const [nonce, replaceNonce] = useState<TransportedData<string>>({

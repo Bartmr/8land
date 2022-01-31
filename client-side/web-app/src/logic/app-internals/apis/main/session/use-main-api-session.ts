@@ -103,11 +103,15 @@ class MainApiSession {
           status: res.failure,
         },
       });
+
+      return undefined;
     } else {
       if (res.response.status === 404) {
         this.setSession(null);
+        return null;
       } else {
         this.setSession(res.response.body);
+        return res.response.body;
       }
     }
   }
