@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from 'nestjs-typeorm-bartmr';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { StorageModule } from 'src/internals/storage/storage.module';
 import { LandController } from './land.controller';
 import { DoorBlock } from '../blocks/typeorm/door-block.entity';

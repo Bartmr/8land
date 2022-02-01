@@ -1,10 +1,10 @@
 import { Body, Controller, Get, HttpCode, Patch } from '@nestjs/common';
-import { InjectConnection } from 'nestjs-typeorm-bartmr';
+import { InjectConnection } from '@nestjs/typeorm';
 import { AuthContext } from 'src/auth/auth-context';
 import { WithAuthContext } from 'src/auth/auth-context.decorator';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
-import { Connection } from 'typeorm-bartmr';
+import { Connection } from 'typeorm';
 import { UsersRepository } from './users.repository';
 import { GetUserWalletNonce } from 'libs/shared/src/users/me/get-user-wallet-nonce.dto';
 import { ReceiveSignedUserNonceRequestDTO } from 'libs/shared/src/users/me/receive-signed-user-nonce.dto';

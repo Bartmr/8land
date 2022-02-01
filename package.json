@@ -70,6 +70,7 @@
     "@nestjs/core": "^8.2.4",
     "@nestjs/platform-express": "^8.2.4",
     "@nestjs/swagger": "^5.1.5",
+    "@nestjs/typeorm": "^8.0.3",
     "@openzeppelin/contracts": "^4.4.2",
     "cookie-parser": "^1.4.6",
     "dotenv": "^10.0.0",
@@ -78,7 +79,6 @@
     "firebase-admin": "^10.0.1",
     "glob": "^7.2.0",
     "moralis": "^1.1.0",
-    "nestjs-typeorm-bartmr": "^8.1.0",
     "not-me": "^4.3.6",
     "pg": "^8.7.1",
     "read-chunk": "^3.2.0",
@@ -88,7 +88,7 @@
     "sharp": "^0.29.3",
     "source-map-support": "^0.5.21",
     "swagger-ui-express": "^4.3.0",
-    "typeorm-bartmr": "^0.3.5",
+    "typeorm": "^0.2.42-dev.1446e02",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -116,6 +116,7 @@
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-node": "^11.1.0",
+    "hardhat": "^2.8.3",
     "husky": "^7.0.4",
     "jest": "^27.4.5",
     "lint-staged": "^12.1.4",

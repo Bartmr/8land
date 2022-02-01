@@ -9,7 +9,7 @@ import {
   ManyToOne,
   OneToMany,
   UpdateDateColumn,
-} from 'typeorm-bartmr';
+} from 'typeorm';
 
 @Entity()
 export class Territory extends SimpleEntity {

@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from 'typeorm-bartmr';
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class FirstMigration1642874083482 implements MigrationInterface {
   name = 'FirstMigration1642874083482';

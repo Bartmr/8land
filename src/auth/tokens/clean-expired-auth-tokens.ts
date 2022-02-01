@@ -1,5 +1,5 @@
 import { DEFAULT_DB_TYPEORM_CONN_OPTS } from 'src/internals/databases/default-db-typeorm-conn-opts';
-import { ConnectionManager } from 'typeorm-bartmr';
+import { ConnectionManager } from 'typeorm';
 import { AUTH_MODULE_ENTITIES } from '../auth-module-entities';
 import { AuthTokensRepository } from './auth-token.repository';
 

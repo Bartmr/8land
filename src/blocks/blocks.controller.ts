@@ -7,7 +7,7 @@ import {
   Param,
   Post,
 } from '@nestjs/common';
-import { InjectConnection } from 'nestjs-typeorm-bartmr';
+import { InjectConnection } from '@nestjs/typeorm';
 import { CreateBlockRequestDTO } from 'libs/shared/src/blocks/create/create-block.dto';
 import { BlockType } from 'libs/shared/src/blocks/create/create-block.enums';
 import { DeleteBlockURLParameters } from 'libs/shared/src/blocks/delete/delete-block.dto';
@@ -18,7 +18,7 @@ import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
 import { getSearchableName } from 'src/internals/utils/get-searchable-name';
 import { LandRepository } from 'src/land/typeorm/land.repository';
-import { Connection } from 'typeorm-bartmr';
+import { Connection } from 'typeorm';
 import { DoorBlockRepository } from './typeorm/door-block.repository';
 
 @Controller('blocks')

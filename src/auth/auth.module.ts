@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { TypeOrmModule } from 'nestjs-typeorm-bartmr';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AUTH_MODULE_ENTITIES } from './auth-module-entities';
 import { AuthController } from './auth.controller';
 import { AuthGuard } from './auth.guard';

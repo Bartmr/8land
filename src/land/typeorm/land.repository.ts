@@ -1,5 +1,5 @@
 import { SimpleEntityRepository } from 'src/internals/databases/simple-entity/simple-entity.repository';
-import { EntityRepository } from 'typeorm-bartmr';
+import { EntityRepository } from 'typeorm';
 import { Land } from './land.entity';
 
 @EntityRepository(Land)

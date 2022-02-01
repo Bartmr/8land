@@ -1,9 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { InjectConnection } from 'nestjs-typeorm-bartmr';
+import { InjectConnection } from '@nestjs/typeorm';
 import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
 import { User } from 'src/users/typeorm/user.entity';
 import { AuthTokensRepository } from './auth-token.repository';
-import { Connection, EntityManager } from 'typeorm-bartmr';
+import { Connection, EntityManager } from 'typeorm';
 
 @Injectable()
 export class AuthTokensService {
