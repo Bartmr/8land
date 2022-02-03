@@ -17,7 +17,7 @@ import { LANDS_ROUTE } from './lands-routes';
 import { CreateLandRequestDTO } from '@app/shared/land/create/create-land.dto';
 import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
-import { EDIT_LAND_ROUTE } from './create/edit-land-routes';
+import { EDIT_LAND_ROUTE } from './edit/edit-land-routes';
 
 export function LandsTemplate(_props: RouteComponentProps) {
   const api = useMainJSONApi();
