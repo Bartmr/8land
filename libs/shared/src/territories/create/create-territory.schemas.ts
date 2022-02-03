@@ -1,6 +1,6 @@
 import { number } from 'not-me/lib/schemas/number/number-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
-import { uuid } from '../internals/validation/schemas/uuid.schema';
+import { uuid } from '../../internals/validation/schemas/uuid.schema';
 
 export const CreateTerritoryRequestJSONSchemaObj = {
   data: object({

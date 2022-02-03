@@ -8,8 +8,8 @@ import {
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
-import { CreateTerritoryRequest } from 'libs/shared/src/territories/territories.dto';
-import { CreateTerritoryRequestJSONSchema } from 'libs/shared/src/territories/territories.schemas';
+import { CreateTerritoryRequest } from 'libs/shared/src/territories/create/create-territory.dto';
+import { CreateTerritoryRequestJSONSchema } from 'libs/shared/src/territories/create/create-territory.schemas';
 import { Role } from 'src/auth/roles/roles';
 import { RolesUpAndIncluding } from 'src/auth/roles/roles.decorator';
 import fileType from 'file-type';
@@ -30,7 +30,6 @@ import { ItselfStorageApi } from 'src/internals/apis/itself/itself-storage.api';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { number } from 'not-me/lib/schemas/number/number-schema';
-import { LoggingService } from 'src/internals/logging/logging.service';
 
 @Controller('territories')
 export class TerritoriesController {
@@ -38,7 +37,6 @@ export class TerritoriesController {
     @InjectConnection() private connection: Connection,
     private storageService: StorageService,
     private itselfStorageApi: ItselfStorageApi,
-    private loggingService: LoggingService,
   ) {}
 
   @Post()

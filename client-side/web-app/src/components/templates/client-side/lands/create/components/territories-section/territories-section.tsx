@@ -1,6 +1,6 @@
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
-import { CreateTerritoryRequestJSONSchemaObj } from '@app/shared/territories/territories.schemas';
+import { CreateTerritoryRequestJSONSchemaObj } from '@app/shared/territories/create/create-territory.schemas';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';

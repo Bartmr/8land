@@ -30,8 +30,10 @@ import { DevStorageService } from 'src/internals/storage/dev-storage.service';
 import { ethers } from 'ethers';
 import territoryNFTContractJSON from 'libs/smart-contracts/artifacts/contracts/TerritoryNFT.sol/TerritoryNFT.json';
 import { TerritoryNFT } from 'libs/smart-contracts/typechain-types';
+import { LOCAL_TEMPORARY_FILES_PATH } from 'src/internals/local-temporary-files/local-temporary-files-path';
 
 const readFile = promisify(fs.readFile);
+const rm = promisify(fs.rm);
 
 async function seed() {
   const FIREBASE_AUTH_EMULATOR_HOST =
@@ -53,6 +55,7 @@ async function seed() {
     });
 
     await tearDownDatabases([defaultDBConnection]);
+    await rm(LOCAL_TEMPORARY_FILES_PATH, { recursive: true });
 
     const firebaseProjectId = FIREBASE_EMULATOR_PROJECT_ID || throwError();
 

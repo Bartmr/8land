@@ -4,6 +4,7 @@ import { ItselfModule } from 'src/internals/apis/itself/itself.module';
 import { MoralisModule } from 'src/internals/smart-contracts/moralis/moralis.module';
 import { StorageModule } from 'src/internals/storage/storage.module';
 import { TerritoriesController } from './territories.controller';
+import { TerritoriesEndUserController } from './territories.end-user.controller';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { TerritoriesController } from './territories.controller';
     MoralisModule,
     ItselfModule,
   ],
-  controllers: [TerritoriesController],
+  controllers: [TerritoriesController, TerritoriesEndUserController],
 })
 export class TerritoriesModule {}

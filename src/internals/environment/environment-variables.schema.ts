@@ -76,5 +76,7 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
 
   MORALIS_SPEEDY_NODE: string().filled(),
 
+  WEB3_CHAIN: equals(['mumbai', 'polygon'] as const).required(),
+
   TERRITORY_NFT_CONTRACT_ADDRESS: string().filled(),
 }).required();

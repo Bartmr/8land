@@ -3,7 +3,7 @@
 $primary: #aa00cc;
 $secondary: #9ab05d;
 $success: #00ff00;
-$info: #007bff;
+$info: #006aff;
 $warning: #ffc107;
 $danger: #dc3545;
 $light: #aaa;
@@ -217,7 +217,7 @@ $font-family-base: $font-1;
 
 $font-size-base: 1rem;
 
-$link-color: get-contrasting-color('primary');
+$link-color: get-contrasting-color('info');
 $link-hover-color: get-contrasting-color('primary-hover');
 $link-decoration: underline;
 
