@@ -11,6 +11,7 @@ import { CLIENT_SIDE_INDEX_ROUTE } from 'src/components/templates/client-side/in
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { RouteComponentProps } from '@reach/router';
 import { RequiredFields } from '@app/shared/internals/utils/types/requirement-types';
+import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
 
 type Props = RequiredFields<RouteComponentProps, 'path'> & {
   authenticationRules: AuthenticatedRouteRules;
@@ -41,7 +42,7 @@ export const AuthenticatedRoute = (props: Props) => {
           <Redirect
             href={
               mainApiAuthRule.hrefToRedirectTo ||
-              LOGIN_ROUTE.getHref({ next: window.location.href })
+              LOGIN_ROUTE.getHref({ next: getCurrentLocalHref() })
             }
           />
         );
@@ -50,8 +51,7 @@ export const AuthenticatedRoute = (props: Props) => {
       if (session) {
         const searchParams = new URLSearchParams(window.location.search);
 
-        const nextEnconded = searchParams.get('next');
-        const next = nextEnconded ? decodeURIComponent(nextEnconded) : '';
+        const next = searchParams.get('next') || '';
 
         return (
           <Redirect

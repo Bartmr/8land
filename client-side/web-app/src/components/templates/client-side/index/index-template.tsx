@@ -25,6 +25,7 @@ import { LOGIN_ROUTE } from '../login/login-routes';
 import nipplejs from 'nipplejs';
 import { JoystickSingleton } from './joystick-singleton';
 import { Direction } from './grid.types';
+import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
 
 function GameCanvas(props: {
   onSongChange: (song: SoundcloudSong) => void;
@@ -215,7 +216,7 @@ function Game(props: { land: GetLandDTO; session: null | MainApiSessionData }) {
             <>{landName}</>
           ) : (
             <LinkAnchor
-              href={LOGIN_ROUTE.getHref({ next: window.location.href })}
+              href={LOGIN_ROUTE.getHref({ next: getCurrentLocalHref() })}
             >
               Login in to save your progress
             </LinkAnchor>
