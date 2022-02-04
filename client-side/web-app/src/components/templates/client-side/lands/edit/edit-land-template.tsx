@@ -12,13 +12,13 @@ import { TransportedDataGate } from 'src/components/shared/transported-data-gate
 import { useParams } from '@reach/router';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { uuid } from '@app/shared/internals/validation/schemas/uuid.schema';
-import NotFoundTemplate from 'src/pages/404';
 import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
 import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { Toast } from 'react-bootstrap';
 import { MainSection } from './components/main-section/main-section';
 import { BlocksSection } from './components/blocks-section/blocks-section';
 import { TerritoriesSection } from './components/territories-section/territories-section';
+import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 
 export function EditLandTemplateWithRouteProps(props: { id: string }) {
   const api = useMainJSONApi();
@@ -119,7 +119,11 @@ export function EditLandTemplate(_props: RouteComponentProps) {
     <Layout title={EDIT_LAND_ROUTE.label}>
       {() => {
         return validationResult.errors ? (
-          <NotFoundTemplate />
+          <TransportedDataGate
+            dataWrapper={{ status: TransportFailure.NotFound }}
+          >
+            {() => null}
+          </TransportedDataGate>
         ) : (
           <EditLandTemplateWithRouteProps id={validationResult.value.id} />
         );

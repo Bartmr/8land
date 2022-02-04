@@ -10,11 +10,7 @@ import {
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import { FirebaseAuth } from 'src/logic/auth/firebase-auth';
 import { throwError } from '@app/shared/internals/utils/throw-error';
-import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
-import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
-import { Redirect } from 'src/components/routing/redirect/redirect';
-import { CLIENT_SIDE_INDEX_ROUTE } from '../index/index-routes';
 import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use-main-api-session';
 
 function Content() {
@@ -177,24 +173,7 @@ function FirebaseSessionGate() {
 }
 
 export function LoginTemplate(_props: RouteComponentProps) {
-  const session = useStoreSelector(
-    { mainApi: mainApiReducer },
-    (s) => s.mainApi.session,
-  );
-
   return (
-    <Layout title={LOGIN_ROUTE.title}>
-      {() => (
-        <TransportedDataGate dataWrapper={session}>
-          {({ data }) => {
-            if (data) {
-              return <Redirect href={CLIENT_SIDE_INDEX_ROUTE.getHref()} />;
-            } else {
-              return <FirebaseSessionGate />;
-            }
-          }}
-        </TransportedDataGate>
-      )}
-    </Layout>
+    <Layout title={LOGIN_ROUTE.title}>{() => <FirebaseSessionGate />}</Layout>
   );
 }

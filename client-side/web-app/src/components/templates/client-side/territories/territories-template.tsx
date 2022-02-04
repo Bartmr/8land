@@ -56,16 +56,30 @@ function TerritoriesTemplateContent() {
       <TransportedDataGate dataWrapper={territories}>
         {({ data }) => {
           return (
-            <div className="list-group">
-              {data.map((territory) => {
+            <div className="row g-3">
+              {[...data, ...data].map((territory) => {
                 return (
-                  <LinkAnchor
-                    href={EDIT_TERRITORY_ROUTE.getHref(territory.id)}
-                    key={territory.id}
-                    className="list-group-item d-flex justify-content-between"
-                  >
-                    <span>{territory.name}</span>
-                  </LinkAnchor>
+                  <div key={territory.id} className="col-12 col-md-6 col-lg-4">
+                    <LinkAnchor
+                      href={EDIT_TERRITORY_ROUTE.getHref(territory.id)}
+                      className="card"
+                    >
+                      <img
+                        style={{
+                          objectPosition: 'center',
+                          objectFit: 'cover',
+                          height: '200px',
+                        }}
+                        src={territory.thumbnailUrl}
+                        className="card-img-top"
+                        alt={territory.name}
+                      />
+                      <div className="card-body">
+                        <p className="card-title">{territory.name}</p>
+                        <div className="card-text">Hello</div>
+                      </div>
+                    </LinkAnchor>
+                  </div>
                 );
               })}
             </div>

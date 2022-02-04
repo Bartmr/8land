@@ -1,10 +1,7 @@
 import { TERRITORIES_ROUTE } from '../territories-routes';
 
-const pathSegment = '/territories';
-
 export const EDIT_TERRITORY_ROUTE = {
-  pathSegment,
-  title: 'My territories',
-  path: `${TERRITORIES_ROUTE.path}${pathSegment}`,
+  label: 'My territories',
+  path: `${TERRITORIES_ROUTE.path}`,
   getHref: (id: string) => `${EDIT_TERRITORY_ROUTE.path}/${id}`,
 };
