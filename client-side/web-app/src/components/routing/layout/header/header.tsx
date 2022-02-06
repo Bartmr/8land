@@ -16,6 +16,7 @@ import { useStoreSelector } from 'src/logic/app-internals/store/use-store-select
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { useMainApiSessionLogout } from 'src/logic/app-internals/apis/main/session/use-main-api-session-logout';
 import { Role } from '@app/shared/auth/auth.enums';
+import { TERRITORIES_ROUTE } from 'src/components/templates/client-side/territories/territories-routes';
 
 type Props = {
   menuHtmlId: string;
@@ -109,6 +110,14 @@ export function Header(props: Props) {
                             </li>
                           ) : null
                         ) : null}
+                        <li className="nav-item">
+                          <LinkAnchor
+                            className="nav-link"
+                            href={TERRITORIES_ROUTE.getHref()}
+                          >
+                            {TERRITORIES_ROUTE.title}
+                          </LinkAnchor>
+                        </li>
                       </>
                     );
                   }}

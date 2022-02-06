@@ -52,7 +52,7 @@ export function TilesetImageFormField(props: {
           <div className="invalid-feedback">
             {props.state.error === 'incompatible-file-format'
               ? "Incompatible file format. Make sure you're uploading a PNG image"
-              : 'File size cannot exceed 512k'}
+              : 'File size cannot exceed 64k'}
           </div>
         ) : null}
       </div>

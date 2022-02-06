@@ -13,9 +13,13 @@ export const UploadLandAssetsParametersSchema = object({
 export const createTiledJSONSchema = ({
   maxWidth: _maxWidth,
   maxHeight: _maxHeight,
+  maxWidthMessage,
+  maxHeightMessage,
 }: {
   maxWidth: number | null;
   maxHeight: number | null;
+  maxWidthMessage?: string;
+  maxHeightMessage?: string;
 }) => {
   const maxWidth = _maxWidth ? _maxWidth + 1 : 41;
   const maxHeight = _maxHeight ? _maxHeight + 1 : 41;
@@ -28,7 +32,8 @@ export const createTiledJSONSchema = ({
       .test((h) =>
         h > 0 && h < maxHeight
           ? null
-          : `Must be greater than 0 and less than ${maxHeight}`,
+          : maxHeightMessage ||
+            `Must be greater than 0 and less than ${maxHeight}`,
       ),
     infinite: boolean()
       .required()
@@ -42,7 +47,8 @@ export const createTiledJSONSchema = ({
           .test((h) =>
             h > 0 && h < maxHeight
               ? null
-              : `Must be greater than 0 and less than ${maxHeight}`,
+              : maxHeightMessage ||
+                `Must be greater than 0 and less than ${maxHeight}`,
           ),
         id: number().integer().required(),
         name: string().filled(),
@@ -55,7 +61,8 @@ export const createTiledJSONSchema = ({
           .test((w) =>
             w > 0 && w < maxWidth
               ? null
-              : `Must be greater than 0 and less than ${maxWidth}`,
+              : maxWidthMessage ||
+                `Must be greater than 0 and less than ${maxWidth}`,
           ),
         x: equals([0], 'Must be set to 0').required(),
         y: equals([0], 'Must be set to 0').required(),
@@ -125,7 +132,8 @@ export const createTiledJSONSchema = ({
       .test((w) =>
         w > 0 && w < maxWidth
           ? null
-          : `Must be greater than 0 and less than ${maxWidth}`,
+          : maxWidthMessage ||
+            `Must be greater than 0 and less than ${maxWidth}`,
       ),
   })
     .required()

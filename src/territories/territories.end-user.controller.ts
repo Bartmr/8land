@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/typeorm';
 import { AuthContext } from 'src/auth/auth-context';
 import { WithAuthContext } from 'src/auth/auth-context.decorator';
@@ -12,6 +12,13 @@ import superagent from 'superagent';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { array } from 'not-me/lib/schemas/array/array-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
+import {
+  GetTerritoryDTO,
+  GetTerritoryParametersDTO,
+} from 'libs/shared/src/territories/get/get-territory.dto';
+import { TerritoriesRepository } from './typeorm/territories.repository';
+import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
+import { StorageService } from 'src/internals/storage/storage.service';
 
 @Controller('territories')
 export class TerritoriesEndUserController {
@@ -19,6 +26,7 @@ export class TerritoriesEndUserController {
     @InjectConnection() private connection: Connection,
     private moralisService: MoralisService,
     private itselfStorageApi: ItselfStorageApi,
+    private storageService: StorageService,
   ) {}
 
   @Get()
@@ -105,5 +113,48 @@ export class TerritoriesEndUserController {
     );
 
     return territoriesAndTheirData.filter((n): n is TerritoryFromIndex => !!n);
+  }
+
+  @Get(':id')
+  async getTerritory(
+    @Param() params: GetTerritoryParametersDTO,
+  ): Promise<GetTerritoryDTO> {
+    const territoriesRepository = this.connection.getCustomRepository(
+      TerritoriesRepository,
+    );
+
+    const territory = await territoriesRepository.findOne({
+      where: {
+        id: params.id,
+      },
+    });
+
+    if (!territory) {
+      throw new ResourceNotFoundException();
+    }
+
+    const land = await territory.inLand;
+
+    return {
+      id: territory.id,
+      startX: territory.startX,
+      startY: territory.startY,
+      endX: territory.endX,
+      endY: territory.endY,
+      doorBlocks: [],
+      assets: territory.hasAssets
+        ? {
+            baseUrl: this.storageService.getHostUrl(),
+            mapKey: `territories/${territory.id}/map.json`,
+            tilesetKey: `territories/${territory.id}/tileset.png`,
+          }
+        : undefined,
+      inLand: {
+        name: land.name,
+      },
+      thumbnailUrl: `${this.storageService.getHostUrl()}/territories/${
+        territory.id
+      }/thumbnail.jpg`,
+    };
   }
 }

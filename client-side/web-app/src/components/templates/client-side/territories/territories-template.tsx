@@ -57,7 +57,7 @@ function TerritoriesTemplateContent() {
         {({ data }) => {
           return (
             <div className="row g-3">
-              {[...data, ...data].map((territory) => {
+              {data.map((territory) => {
                 return (
                   <div key={territory.id} className="col-12 col-md-6 col-lg-4">
                     <LinkAnchor
@@ -76,7 +76,6 @@ function TerritoriesTemplateContent() {
                       />
                       <div className="card-body">
                         <p className="card-title">{territory.name}</p>
-                        <div className="card-text">Hello</div>
                       </div>
                     </LinkAnchor>
                   </div>

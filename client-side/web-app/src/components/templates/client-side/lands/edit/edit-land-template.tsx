@@ -61,7 +61,7 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
     (async () => {
       await fetchLand();
     })();
-  }, []);
+  }, [props.id]);
 
   return (
     <>
