@@ -102,6 +102,7 @@ export function Header(props: Props) {
                           data.role === Role.Admin ? (
                             <li className="nav-item">
                               <LinkAnchor
+                                activeClassName="active"
                                 className="nav-link"
                                 href={LANDS_ROUTE.geHref()}
                               >
@@ -112,6 +113,7 @@ export function Header(props: Props) {
                         ) : null}
                         <li className="nav-item">
                           <LinkAnchor
+                            activeClassName="active"
                             className="nav-link"
                             href={TERRITORIES_ROUTE.getHref()}
                           >
