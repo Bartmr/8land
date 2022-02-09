@@ -208,7 +208,10 @@ $font-1: 'VT323', monospace;
 // See https://github.com/sass/sass/issues/2383#issuecomment-336349172
 $font-family-base: inspect($font-1);
 
-$font-size-base: 1rem;
+$font-size-base: 1.25rem;
+$line-height-base: 1;
+$line-height-sm: 0.8;
+$line-height-lg: 1.2;
 
 $link-color: get-contrasting-color('info');
 $link-hover-color: get-contrasting-color('primary-hover');
