@@ -22,6 +22,7 @@ import { USER_ROUTE } from './user-routes';
 import { GetUserWalletNonce } from '@app/shared/users/me/get-user-wallet-nonce.dto';
 import { ReceiveSignedUserNonceRequestDTO } from '@app/shared/users/me/receive-signed-user-nonce.dto';
 import { Logger } from 'src/logic/app-internals/logging/logger';
+import { useMainApiSessionLogout } from 'src/logic/app-internals/apis/main/session/use-main-api-session-logout';
 
 export function WalletSectionWithNonce(props: {
   session: null | MainApiSessionData;
@@ -299,6 +300,7 @@ export function UserTemplate(_props: RouteComponentProps) {
     { mainApi: mainApiReducer },
     (s) => s.mainApi.session,
   );
+  const logout = useMainApiSessionLogout();
 
   return (
     <Layout title={USER_ROUTE.label}>
@@ -311,10 +313,22 @@ export function UserTemplate(_props: RouteComponentProps) {
           }
         >
           {({ data: sessionData }) => (
-            <WalletSection
-              session={sessionData}
-              refreshSession={() => mainApiSession.refreshSession()}
-            />
+            <>
+              <div className="card mb-3">
+                <div className="card-body d-flex justify-content-end">
+                  <button
+                    onClick={() => logout.logout()}
+                    className="btn btn-default"
+                  >
+                    Log out
+                  </button>
+                </div>
+              </div>
+              <WalletSection
+                session={sessionData}
+                refreshSession={() => mainApiSession.refreshSession()}
+              />
+            </>
           )}
         </TransportedDataGate>
       )}

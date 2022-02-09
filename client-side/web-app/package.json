@@ -80,6 +80,7 @@
   ],
   "scripts": {
     "postinstall": "node ./polyfill-types-mocha.js",
+    "clean:typings": "rimraf dist _graphql-generated_/**/*.ts **/*._graphql-generated_.ts",
     "clean": "gatsby clean && rimraf dist .webpack-bundle-analyzer _graphql-generated_ **/*._graphql-generated_.ts",
     "build": "gatsby build --prefix-paths",
     "build:ci": "CI=true npm run build",
@@ -90,6 +91,7 @@
     "lint": "eslint --ext .ts,.tsx --max-warnings 0 .",
     "lint:fix": "eslint --ext .ts,.tsx --max-warnings 0 --fix .",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing \"",
-    "integrity-check": "npm run clean && IS_INTEGRITY_CHECK=true concurrently \"npm run typecheck:declaration-files\" \"npm run build\" -n \"typecheck:declaration-files,build\" && npm run typecheck && npm run lint"
+    "integrity-check": "npm run clean && IS_INTEGRITY_CHECK=true concurrently \"npm run typecheck:declaration-files\" \"npm run build\" -n \"typecheck:declaration-files,build\" && npm run typecheck && npm run lint",
+    "integrity-check:fast": "npm run clean:typings && graphql-codegen --config codegen.yml && npm run typecheck && npm run lint"  
   }
 }

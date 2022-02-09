@@ -267,7 +267,7 @@ function Game(props: { land: GetLandDTO; session: null | MainApiSessionData }) {
   );
 }
 
-function Content() {
+function Content(props: { showHeader: () => void; hideHeader: () => void }) {
   const api = useMainJSONApi();
 
   const session = useStoreSelector(
@@ -305,6 +305,10 @@ function Content() {
     })();
   }, []);
 
+  useEffect(() => {
+    props.showHeader();
+  }, []);
+
   return (
     <TransportedDataGate dataWrapper={session}>
       {({ data: sessionData }) => (
@@ -316,7 +320,10 @@ function Content() {
               <div className="d-flex justify-content-center">
                 <button
                   className="btn btn-primary"
-                  onClick={() => replacePressedStart(true)}
+                  onClick={() => {
+                    props.hideHeader();
+                    replacePressedStart(true);
+                  }}
                 >
                   Start
                 </button>
@@ -330,9 +337,9 @@ function Content() {
 }
 
 export const ClientSideIndexTemplate = (_props: RouteComponentProps) => (
-  <Layout noHeader disableScroll title={CLIENT_SIDE_INDEX_ROUTE.label}>
-    {() => {
-      return <Content />;
+  <Layout disableScroll title={CLIENT_SIDE_INDEX_ROUTE.label}>
+    {(renderProps) => {
+      return <Content {...renderProps} />;
     }}
   </Layout>
 );

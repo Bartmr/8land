@@ -1,4 +1,14 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  BadRequestException,
+  Controller,
+  ForbiddenException,
+  Get,
+  HttpCode,
+  Param,
+  Put,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common';
 import { InjectConnection } from '@nestjs/typeorm';
 import { AuthContext } from 'src/auth/auth-context';
 import { WithAuthContext } from 'src/auth/auth-context.decorator';
@@ -19,6 +29,21 @@ import {
 import { TerritoriesRepository } from './typeorm/territories.repository';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
 import { StorageService } from 'src/internals/storage/storage.service';
+import {
+  UploadTerritoryAssetsParametersDTO,
+  UploadTerritoryAssetsRequestDTO,
+} from 'libs/shared/src/territories/upload-assets/upload-assets.dto';
+import { ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
+import { AuditContext } from 'src/internals/auditing/audit-context';
+import {
+  TERRITORY_MAP_SIZE_LIMIT,
+  TERRITORY_TILESET_SIZE_LIMIT,
+} from 'libs/shared/src/territories/edit/edit-territory.constants';
+import fileType from 'file-type';
+import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
+import { InferType } from 'not-me/lib/schemas/schema';
 
 @Controller('territories')
 export class TerritoriesEndUserController {
@@ -156,5 +181,169 @@ export class TerritoriesEndUserController {
         territory.id
       }/thumbnail.jpg`,
     };
+  }
+
+  @HttpCode(204)
+  @Put(':id/assets')
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'map', maxCount: 1 },
+      { name: 'tileset', maxCount: 1 },
+    ]),
+  )
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    type: UploadTerritoryAssetsRequestDTO,
+  })
+  async uploadTerritoryAssets(
+    @Param() params: UploadTerritoryAssetsParametersDTO,
+    @UploadedFiles()
+    files: { map?: Express.Multer.File[]; tileset?: Express.Multer.File[] },
+    @WithAuditContext() auditContext: AuditContext,
+    @WithAuthContext() authContext: AuthContext,
+  ): Promise<void> {
+    const moralis = this.moralisService.getMoralis();
+    const territoriesRepository_NO_TRANSACTION =
+      this.connection.getCustomRepository(TerritoriesRepository);
+
+    const walletAddress = authContext.user.walletAddress;
+
+    if (!walletAddress) {
+      throw new ForbiddenException();
+    }
+
+    const territory_UNSAFE = await territoriesRepository_NO_TRANSACTION.findOne(
+      {
+        where: {
+          id: params.id,
+        },
+      },
+    );
+
+    if (!territory_UNSAFE) {
+      throw new ResourceNotFoundException();
+    }
+
+    const nftsFromUser = await moralis.Web3API.account.getNFTsForContract({
+      address: walletAddress,
+      chain: EnvironmentVariablesService.variables.WEB3_CHAIN,
+      token_address:
+        EnvironmentVariablesService.variables.TERRITORY_NFT_CONTRACT_ADDRESS,
+    });
+
+    if (
+      (nftsFromUser.total || throwError()) >
+      (nftsFromUser.page_size || throwError())
+    ) {
+      throw new Error();
+    }
+
+    const nft = (nftsFromUser.result || throwError()).find((n) => {
+      return (
+        n.token_uri ===
+        `${this.storageService.getHostUrl()}/territories/${
+          territory_UNSAFE.id
+        }/nft-metadata.json`
+      );
+    });
+
+    if (!nft) {
+      throw new ForbiddenException();
+    }
+
+    const map =
+      files.map?.[0] ||
+      (() => {
+        throw new BadRequestException({ error: 'no-map-file' });
+      })();
+    const tileset =
+      files.tileset?.[0] ||
+      (() => {
+        throw new BadRequestException({ error: 'no-tileset-file' });
+      })();
+
+    if (map.size > TERRITORY_MAP_SIZE_LIMIT) {
+      throw new BadRequestException({ error: 'map-exceeds-file-size-limit' });
+    }
+
+    if (tileset.size > TERRITORY_TILESET_SIZE_LIMIT) {
+      throw new BadRequestException({
+        error: 'tileset-exceeds-file-size-limit',
+      });
+    }
+
+    const tilesetFormat =
+      (await fileType.fromBuffer(tileset.buffer)) ||
+      (() => {
+        throw new BadRequestException({ error: 'unrecognized-tileset-format' });
+      })();
+
+    if (tilesetFormat.ext !== 'png' || tilesetFormat.mime !== 'image/png') {
+      throw new BadRequestException('tileset-not-a-png-file');
+    }
+
+    let mapJSON;
+
+    try {
+      const jsonString = map.buffer.toString();
+
+      mapJSON = JSON.parse(jsonString) as unknown;
+    } catch (err) {
+      throw new BadRequestException({ error: 'unparsable-map-json' });
+    }
+    const tiledJSONSchema = createTiledJSONSchema({
+      maxWidth: territory_UNSAFE.endX - territory_UNSAFE.startX,
+      maxHeight: territory_UNSAFE.endY - territory_UNSAFE.startY,
+    });
+
+    const tiledJSONValidationResult = tiledJSONSchema.validate(mapJSON);
+
+    if (tiledJSONValidationResult.errors) {
+      throw new BadRequestException({
+        error: 'tiled-json-validation-error',
+        messageTree: tiledJSONValidationResult.messagesTree,
+      });
+    } else {
+      const tilesetStorageKey = `territories/${territory_UNSAFE.id}/tileset.png`;
+      const mapStorageKey = `territories/${territory_UNSAFE.id}/map.json`;
+
+      await this.connection.transaction(async (e) => {
+        const territoriesRepo = e.getCustomRepository(TerritoriesRepository);
+
+        const territory = await territoriesRepo.findOne({
+          where: {
+            id: params.id,
+          },
+        });
+
+        if (!territory) {
+          throw new ResourceNotFoundException();
+        }
+
+        await this.storageService.saveBuffer(tilesetStorageKey, tileset.buffer);
+
+        const toSave: InferType<typeof tiledJSONSchema> = {
+          ...tiledJSONValidationResult.value,
+          tilesets: [
+            {
+              ...(tiledJSONValidationResult.value.tilesets[0] || throwError()),
+              image: 'tileset.png',
+            },
+          ],
+        };
+
+        await this.storageService.saveText(
+          mapStorageKey,
+          JSON.stringify(toSave),
+        );
+
+        if (!territory.hasAssets) {
+          territory.hasAssets = true;
+        }
+        territory.updatedAt = new Date();
+
+        await territoriesRepo.save(territory, auditContext);
+      });
+    }
   }
 }

@@ -192,36 +192,27 @@ export class LandController {
 
         await this.storageService.saveBuffer(tilesetStorageKey, tileset.buffer);
 
-        try {
-          const toSave: InferType<typeof TiledJSONSchema> = {
-            ...tiledJSONValidationResult.value,
-            tilesets: [
-              {
-                ...(tiledJSONValidationResult.value.tilesets[0] ||
-                  throwError()),
-                image: 'tileset.png',
-              },
-            ],
-          };
+        const toSave: InferType<typeof TiledJSONSchema> = {
+          ...tiledJSONValidationResult.value,
+          tilesets: [
+            {
+              ...(tiledJSONValidationResult.value.tilesets[0] || throwError()),
+              image: 'tileset.png',
+            },
+          ],
+        };
 
-          await this.storageService.saveText(
-            mapStorageKey,
-            JSON.stringify(toSave),
-          );
-        } catch (err) {
-          await this.storageService.removeFile(tilesetStorageKey);
-          throw err;
-        }
+        await this.storageService.saveText(
+          mapStorageKey,
+          JSON.stringify(toSave),
+        );
 
         if (!land.hasAssets) {
           land.hasAssets = true;
-
-          await landRepo.save(land, auditContext);
-        } else {
-          land.updatedAt = new Date();
-
-          await landRepo.save(land, auditContext);
         }
+        land.updatedAt = new Date();
+
+        await landRepo.save(land, auditContext);
       });
     }
   }

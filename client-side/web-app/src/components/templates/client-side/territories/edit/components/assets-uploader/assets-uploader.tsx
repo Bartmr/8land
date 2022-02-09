@@ -55,7 +55,7 @@ export function AssetsUploader(props: {
       undefined,
       FormData
     >({
-      path: `/lands/${props.territory.id}/assets`,
+      path: `/territories/${props.territory.id}/assets`,
       query: undefined,
       acceptableStatusCodes: [204],
       body: formData,
@@ -67,9 +67,6 @@ export function AssetsUploader(props: {
       replaceFormSubmissionStatus({
         status: TransportedDataStatus.NotInitialized,
       });
-
-      replaceMapFile(undefined);
-      replaceTilesetFile(undefined);
 
       props.fetchTerritory();
     }

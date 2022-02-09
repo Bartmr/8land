@@ -1,7 +1,7 @@
 import 'src/components/ui-kit/global-styles/global-styles';
 
 import { graphql, useStaticQuery } from 'gatsby';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { throwError } from 'src/logic/app-internals/utils/throw-error';
 import { Header } from './header/header';
@@ -9,13 +9,15 @@ import { GQLLayoutQuery } from './layout._graphql-generated_';
 import SSRProvider from 'react-bootstrap/SSRProvider';
 
 type Props = {
-  children: () => ReactNode;
+  children: (renderProps: {
+    hideHeader: () => void;
+    showHeader: () => void;
+  }) => ReactNode;
   title: string;
   noContainment?: boolean;
   noTopPadding?: boolean;
   noBottomPadding?: boolean;
   disableScroll?: boolean;
-  noHeader?: boolean;
 };
 
 export function Layout(props: Props) {
@@ -33,6 +35,8 @@ export function Layout(props: Props) {
   const siteTitle = siteMetadata.title || throwError();
 
   const title = `${props.title} - ${siteTitle}`;
+
+  const [hideHeader, replaceHideHeader] = useState(false);
 
   return (
     <SSRProvider>
@@ -52,7 +56,7 @@ export function Layout(props: Props) {
             }`}
           </style>
         ) : null}
-        {props.noHeader ? null : (
+        {hideHeader ? null : (
           <Header menuHtmlId="page-header-menu" className="sticky-top" />
         )}
         <main
@@ -60,7 +64,10 @@ export function Layout(props: Props) {
             props.noTopPadding ? '' : 'pt-3'
           } ${props.noBottomPadding ? '' : 'pb-3'}`}
         >
-          {props.children()}
+          {props.children({
+            showHeader: () => replaceHideHeader(false),
+            hideHeader: () => replaceHideHeader(true),
+          })}
         </main>
         {/* TODO: Footer goes here */}
       </div>

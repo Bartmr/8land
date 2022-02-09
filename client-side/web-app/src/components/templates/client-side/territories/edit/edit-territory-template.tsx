@@ -4,7 +4,7 @@ import { GetTerritoryDTO } from '@app/shared/territories/get/get-territory.dto';
 import { RouteComponentProps, useParams } from '@reach/router';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { useEffect, useState } from 'react';
-import { Accordion } from 'react-bootstrap';
+import { Accordion, Toast } from 'react-bootstrap';
 import { Layout } from 'src/components/routing/layout/layout';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
 import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
@@ -20,6 +20,14 @@ function EditTerritoryWithTerritory(props: {
   territory: GetTerritoryDTO;
   fetchTerritory: () => void;
 }) {
+  const [successfulSave, replaceSuccessfulSave] = useState(false);
+
+  const onSuccessfulSave = async () => {
+    replaceSuccessfulSave(true);
+
+    props.fetchTerritory();
+  };
+
   return (
     <div>
       <h1>Territory @ {props.territory.inLand.name}</h1>
@@ -55,9 +63,18 @@ function EditTerritoryWithTerritory(props: {
           />
         </div>
         <div className="col-12 col-md-9">
+          <Toast
+            className="bg-success w-100 mb-4"
+            onClose={() => replaceSuccessfulSave(false)}
+            show={successfulSave}
+            delay={10000}
+            autohide
+          >
+            <Toast.Header closeButton={false}>Changes saved</Toast.Header>
+          </Toast>
           <AssetsUploader
             territory={props.territory}
-            fetchTerritory={props.fetchTerritory}
+            fetchTerritory={onSuccessfulSave}
           />
         </div>
       </div>

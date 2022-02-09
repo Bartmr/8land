@@ -10,6 +10,7 @@ import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+import { USER_ROUTE } from '../user/user-routes';
 import { EDIT_TERRITORY_ROUTE } from './edit/edit-territory-routes';
 import { TERRITORIES_ROUTE } from './territories-routes';
 
@@ -57,30 +58,42 @@ function TerritoriesTemplateContent() {
         {({ data }) => {
           return (
             <div className="row g-3">
-              {data.map((territory) => {
-                return (
-                  <div key={territory.id} className="col-12 col-md-6 col-lg-4">
-                    <LinkAnchor
-                      href={EDIT_TERRITORY_ROUTE.getHref(territory.id)}
-                      className="card"
+              {data.length === 0 ? (
+                <p>
+                  {"Don't see any of your territories? Maybe you just need to"}{' '}
+                  <LinkAnchor href={USER_ROUTE.getHref()}>
+                    connect your wallet
+                  </LinkAnchor>
+                </p>
+              ) : (
+                data.map((territory) => {
+                  return (
+                    <div
+                      key={territory.id}
+                      className="col-12 col-md-6 col-lg-4"
                     >
-                      <img
-                        style={{
-                          objectPosition: 'center',
-                          objectFit: 'cover',
-                          height: '200px',
-                        }}
-                        src={territory.thumbnailUrl}
-                        className="card-img-top"
-                        alt={territory.name}
-                      />
-                      <div className="card-body">
-                        <p className="card-title">{territory.name}</p>
-                      </div>
-                    </LinkAnchor>
-                  </div>
-                );
-              })}
+                      <LinkAnchor
+                        href={EDIT_TERRITORY_ROUTE.getHref(territory.id)}
+                        className="card d-block h-100"
+                      >
+                        <img
+                          style={{
+                            objectPosition: 'center',
+                            objectFit: 'cover',
+                            height: '200px',
+                          }}
+                          src={territory.thumbnailUrl}
+                          className="card-img-top"
+                          alt={territory.name}
+                        />
+                        <div className="card-body">
+                          <p className="card-title">{territory.name}</p>
+                        </div>
+                      </LinkAnchor>
+                    </div>
+                  );
+                })
+              )}
             </div>
           );
         }}
