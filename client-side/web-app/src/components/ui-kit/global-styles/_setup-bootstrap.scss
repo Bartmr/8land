@@ -17,7 +17,7 @@ $component-active-color: get-contrasting-color-absolute-value(
 $card-bg: transparent;
 $card-bg-inverted: transparent;
 
-$hr-border-width: 1px;
+$hr-border-width: 3px;
 $hr-border-color: $border-color;
 
 $spinner-width-lg: 3rem;
@@ -177,4 +177,12 @@ $offcanvas-color: get-contrasting-color('body');
 
 @import 'node_modules/bootstrap/scss/functions';
 @import 'node_modules/bootstrap/scss/variables';
+
+$display-font-sizes: (
+  1: 5rem,
+  2: 4rem,
+  3: 3rem,
+  4: 2rem,
+);
+
 @import 'node_modules/bootstrap/scss/mixins';

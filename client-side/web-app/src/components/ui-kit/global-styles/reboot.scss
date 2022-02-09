@@ -16,7 +16,7 @@ body {
     @include with-contrasting-colors($body-bg-inverted);
   }
 
-  @include media-breakpoint-up(lg) {
+  @include media-breakpoint-up(md) {
     font-size: 1.25rem;
   }
 }

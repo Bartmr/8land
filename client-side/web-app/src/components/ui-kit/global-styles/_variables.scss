@@ -120,7 +120,7 @@ $contrasting-color-css-custom-properties: ();
 $dark-contrasting-colors: (
   'default': $dark,
   'primary': $primary,
-  'secondary': $secondary,
+  'secondary': change-color($secondary, $lightness: 40%),
   'success': $success,
   'info': $info,
   'warning': $warning,
@@ -224,6 +224,7 @@ $text-subtle-opacity: 0.15;
 $opacity-muted: 0.4;
 $opacity-subtle: 0.1;
 
+$border-width: 3px;
 $border-color: set-contrasting-color-alpha('body', 0.3);
 
 $border-radius: 0;

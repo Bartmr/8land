@@ -4,6 +4,10 @@
 @import 'contrasting-colors-mixins';
 
 .btn {
+  @include media-breakpoint-up(md) {
+    font-size: 1.25rem;
+  }
+
   &:disabled,
   &.disabled {
     filter: grayscale(100%);

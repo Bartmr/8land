@@ -2,7 +2,7 @@ import { throwError } from '@app/shared/internals/utils/throw-error';
 import React, { useEffect, useState } from 'react';
 import { Layout } from 'src/components/routing/layout/layout';
 import { CLIENT_SIDE_INDEX_ROUTE } from './index-routes';
-import { RouteComponentProps } from '@reach/router';
+import { RouteComponentProps, globalHistory } from '@reach/router';
 import { runGame } from './game';
 import * as styles from './index.module.scss';
 import { missingCssClass } from 'src/components/ui-kit/core/utils/missing-css-class';
@@ -147,12 +147,13 @@ function GameCanvas(props: {
         },
       );
 
-      return () => {
-        if (!module.hot) {
-          game.destroy(true);
-          nipple.destroy();
-        }
-      };
+      const listener = globalHistory.listen(() => {
+        // TODO fix bug where everything freezes when pressing back button
+        game.destroy(true);
+        nipple.destroy();
+
+        listener();
+      });
     })();
   }, []);
 
@@ -210,6 +211,7 @@ function Game(props: { land: GetLandDTO; session: null | MainApiSessionData }) {
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
+            fontSize: '1rem',
           }}
         >
           {props.session ? (
@@ -225,7 +227,7 @@ function Game(props: { land: GetLandDTO; session: null | MainApiSessionData }) {
       </div>
       <div
         className="mt-2 bg-secondary d-flex align-items-center"
-        style={{ textTransform: 'uppercase' }}
+        style={{ textTransform: 'uppercase', fontSize: '1rem' }}
       >
         <span
           className="py-1 px-2 bg-secondary"
@@ -246,7 +248,7 @@ function Game(props: { land: GetLandDTO; session: null | MainApiSessionData }) {
           </div>
         ) : null}
       </div>
-      <div className="d-xl-none me-3 mt-3 d-flex flex-row-reverse">
+      <div className="d-xl-none me-4 mt-3 d-flex flex-row-reverse">
         <div
           style={{ position: 'absolute', width: '100px', height: '100px' }}
           id="game-nipple"

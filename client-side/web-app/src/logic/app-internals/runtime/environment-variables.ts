@@ -49,6 +49,7 @@ const schema = object({
     messagingSenderId: string().filled(),
     appId: string().filled(),
   }).required(),
+  OPENSEA_STORE_URL: string().filled(),
 }).required();
 
 const environmentVariablesValidationResult = schema.validate({
@@ -63,6 +64,7 @@ const environmentVariablesValidationResult = schema.validate({
   FIREBASE_CONFIG: JSON.parse(
     process.env.GATSBY_FIREBASE_CONFIG || throwError(),
   ) as unknown,
+  OPENSEA_STORE_URL: process.env.GATSBY_OPENSEA_STORE_URL,
 });
 
 if (environmentVariablesValidationResult.errors) {
