@@ -1,0 +1,59 @@
+import {
+  faHandHolding,
+  faPen,
+  faProjectDiagram,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Layout } from 'src/components/routing/layout/layout';
+import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { SUPPORT_ROUTE } from './support-routes';
+
+export const SupportTemplate = () => {
+  return (
+    <Layout title={SUPPORT_ROUTE.title}>
+      {() => (
+        <div>
+          <h2>Support</h2>
+          <div className="row g-3">
+            {[
+              {
+                icon: <FontAwesomeIcon icon={faHandHolding} />,
+                title: 'How to acquire territory?',
+                href: '',
+              },
+              {
+                icon: <FontAwesomeIcon icon={faPen} />,
+                title: 'How to edit my territory?',
+                href: '',
+              },
+              {
+                icon: <FontAwesomeIcon icon={faProjectDiagram} />,
+                title: 'About 8Land',
+                href: '',
+                color: 'info',
+              },
+            ].map((c) => {
+              return (
+                <div key={c.title} className="col-6 col-md-4">
+                  <div
+                    className={`h-100 d-block text-center bg-${
+                      c.color || 'lightest'
+                    }`}
+                  >
+                    <LinkAnchor
+                      href={c.href}
+                      className="h-100 link-unstyled selectable d-block p-3"
+                    >
+                      <div className="icon-badge mb-2">{c.icon}</div>
+                      {c.title}
+                    </LinkAnchor>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </Layout>
+  );
+};

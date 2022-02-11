@@ -17,6 +17,9 @@ import { Role } from '@app/shared/auth/auth.enums';
 import { TERRITORIES_ROUTE } from 'src/components/templates/client-side/territories/territories-routes';
 import { USER_ROUTE } from 'src/components/templates/client-side/user/user-routes';
 import { INDEX_ROUTE } from 'src/components/templates/index-template/index-routes';
+import { LOGIN_ROUTE } from 'src/components/templates/client-side/login/login-routes';
+import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
+import { SUPPORT_ROUTE } from 'src/components/templates/support/support-routes';
 
 type Props = {
   menuHtmlId: string;
@@ -124,6 +127,15 @@ export function Header(props: Props) {
                           </LinkAnchor>
                         </li>
                       ) : null}
+                      <li className="nav-item">
+                        <LinkAnchor
+                          activeClassName="active"
+                          className="nav-link"
+                          href={SUPPORT_ROUTE.getHref()}
+                        >
+                          {SUPPORT_ROUTE.title}
+                        </LinkAnchor>
+                      </li>
                     </ul>
                   );
                 }}
@@ -146,7 +158,18 @@ export function Header(props: Props) {
                               <FontAwesomeIcon icon={faUser} />
                             </LinkAnchor>
                           </li>
-                        ) : null}
+                        ) : (
+                          <li className="nav-item">
+                            <LinkAnchor
+                              href={LOGIN_ROUTE.getHref({
+                                next: getCurrentLocalHref(),
+                              })}
+                              className="nav-link"
+                            >
+                              Login
+                            </LinkAnchor>
+                          </li>
+                        )}
                       </>
                     );
                   }}

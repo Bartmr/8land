@@ -10,7 +10,7 @@ import sample from 'lodash/sample';
 import { BlockType, DoorBlock } from './land-scene.types';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 
-export async function runGame(
+export async function runLandGame(
   args: { land: GetLandDTO; session: null | MainApiSessionData },
   dependencies: {
     musicProvider: MusicProvider;
@@ -36,6 +36,8 @@ export async function runGame(
     backgroundColor: '#000000',
     canvasStyle:
       'border-color: var(--body-contrasting-color); border-width: 3px; border-style: solid;',
+    input: false,
+    powerPreference: 'low-power',
   };
 
   const player = {

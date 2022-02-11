@@ -1,3 +1,5 @@
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layout } from 'src/components/routing/layout/layout';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
@@ -80,7 +82,7 @@ did with old RPG games."
                 build?
                 <br />
                 <span className="display-3 text-body">
-                  Well, build your territory in a single afternoon
+                  Well, build your 2D territory in a single afternoon
                 </span>
               </p>
               <p className="mt-4">
@@ -97,6 +99,52 @@ did with old RPG games."
                   8Land keeps it simple, just like the old times
                 </p>
               </div>
+            </div>
+          </div>
+          <div
+            style={{ backgroundColor: '#198754' }}
+            className="with-light-contrasting-colors py-5"
+          >
+            <div className="container">
+              <p className="display-4 text-body">
+                Art first, tokenomics second
+              </p>
+              <p className="mt-4">
+                8Land uses NFTs as a way for distributing and exchanging
+                territories.
+              </p>
+            </div>
+          </div>
+          <div
+            style={{ backgroundColor: '#ffc107' }}
+            className="with-dark-contrasting-colors py-5"
+          >
+            <div className="container">
+              <p className="display-4 text-body">The Roadmap</p>
+              <ul className="mt-4">
+                <li>
+                  First Release <FontAwesomeIcon icon={faCheck} />
+                </li>
+                <li>Territory owners can build their own explorable indoors</li>
+                <li>
+                  Create a developer API so anyone can create games and
+                  interactive screens
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="py-5">
+            <div className="container text-center">
+              <p className="display-4 text-white">
+                What are you waiting for?
+                <br />
+              </p>
+              <LinkAnchor
+                className="btn btn-primary"
+                href={CLIENT_SIDE_INDEX_ROUTE.getHref()}
+              >
+                Dive in!
+              </LinkAnchor>
             </div>
           </div>
         </>
