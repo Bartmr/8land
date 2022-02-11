@@ -50,6 +50,7 @@ const schema = object({
     appId: string().filled(),
   }).required(),
   OPENSEA_STORE_URL: string().filled(),
+  TERRITORIES_CONTRACT_ADDRESS: string().filled(),
 }).required();
 
 const environmentVariablesValidationResult = schema.validate({
@@ -65,6 +66,7 @@ const environmentVariablesValidationResult = schema.validate({
     process.env.GATSBY_FIREBASE_CONFIG || throwError(),
   ) as unknown,
   OPENSEA_STORE_URL: process.env.GATSBY_OPENSEA_STORE_URL,
+  TERRITORIES_CONTRACT_ADDRESS: process.env.GATSBY_TERRITORIES_CONTRACT_ADDRESS,
 });
 
 if (environmentVariablesValidationResult.errors) {

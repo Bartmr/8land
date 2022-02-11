@@ -6,6 +6,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layout } from 'src/components/routing/layout/layout';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { ACQUIRING_TERRITORIES_ROUTE } from './acquiring-territories/acquiring-territories-routes';
 import { SUPPORT_ROUTE } from './support-routes';
 
 export const SupportTemplate = () => {
@@ -19,7 +20,7 @@ export const SupportTemplate = () => {
               {
                 icon: <FontAwesomeIcon icon={faHandHolding} />,
                 title: 'How to acquire territory?',
-                href: '',
+                href: ACQUIRING_TERRITORIES_ROUTE.getHref(),
               },
               {
                 icon: <FontAwesomeIcon icon={faPen} />,

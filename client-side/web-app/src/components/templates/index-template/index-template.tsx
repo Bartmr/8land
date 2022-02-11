@@ -126,6 +126,7 @@ did with old RPG games."
                   First Release <FontAwesomeIcon icon={faCheck} />
                 </li>
                 <li>Territory owners can build their own explorable indoors</li>
+                <li>Release new lands on a regular basis</li>
                 <li>
                   Create a developer API so anyone can create games and
                   interactive screens
