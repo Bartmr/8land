@@ -3,19 +3,15 @@ import { Direction } from './grid.types';
 class Gamepad {
   private currentDirection: Direction = Direction.NONE;
 
-  pressedDirections: {
-    [K in Direction]?: boolean;
-  } = {};
+  lastPressedDirection: Direction = Direction.NONE;
 
   directionWasPressed(direction: Direction) {
-    this.pressedDirections[direction] = true;
+    this.lastPressedDirection = direction;
     this.currentDirection = direction;
   }
 
   directionWasReleased(direction: Direction) {
-    this.pressedDirections[direction] = false;
-
-    if (Object.values(this.pressedDirections).filter((c) => c).length === 0) {
+    if (this.lastPressedDirection === direction) {
       this.currentDirection = Direction.NONE;
     }
   }

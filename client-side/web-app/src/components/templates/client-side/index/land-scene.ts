@@ -95,7 +95,9 @@ export class LandScene extends Phaser.Scene {
     const territoryContexts: Array<{
       id: string;
       startX: number;
+      endX: number;
       startY: number;
+      endY: number;
       tilemap: Phaser.Tilemaps.Tilemap;
       blocks: Block[];
     }> = [];
@@ -121,7 +123,9 @@ export class LandScene extends Phaser.Scene {
       territoryContexts.push({
         id: territory.id,
         startX: territory.startX,
+        endX: territory.endX,
         startY: territory.startY,
+        endY: territory.endY,
         tilemap: territoryMap,
         blocks: territory.doorBlocks.map((dB) => {
           return {

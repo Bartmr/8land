@@ -10,6 +10,17 @@ import { Player } from './player';
 
 const Vector2 = Phaser.Math.Vector2;
 
+/**
+ * TODO
+ * if user hasnt walked over a tile that isnt the door it left
+ * do not go back into the previous land again
+ *
+ * have a boolean like walkedOverSafeTile
+ *
+ * if it didnt, dont go enter the indoor again
+ *
+ */
+
 @HotReloadClass(module)
 class GridPhysics {
   private movementDirectionVectors: {
@@ -28,6 +39,8 @@ class GridPhysics {
 
   private lastMovementIntent = Direction.NONE;
 
+  private hasSteppedOnSafeTile = false;
+
   constructor(
     private player: Player,
     private context: {
@@ -40,7 +53,9 @@ class GridPhysics {
         id: string;
         blocks: Block[];
         startX: number;
+        endX: number;
         startY: number;
+        endY: number;
         tilemap: Phaser.Tilemaps.Tilemap;
       }>;
       onStepIntoDoor: (block: DoorBlock) => void;
@@ -139,19 +154,69 @@ class GridPhysics {
   }
 
   private isBlockingDirection(direction: Direction): boolean {
-    return this.hasBlockingTile(this.tilePosInDirection(direction));
+    return this.isBlockingTile(this.nextTileInDirection(direction));
   }
 
-  private tilePosInDirection(direction: Direction): Phaser.Math.Vector2 {
+  private nextTileInDirection(direction: Direction): Phaser.Math.Vector2 {
     return this.player
       .getTilePos()
       .add(this.movementDirectionVectors[direction] || throwError());
   }
 
-  private hasBlockingTile(pos: Phaser.Math.Vector2): boolean {
+  private isBlockingTile(pos: Phaser.Math.Vector2): boolean {
     if (this.hasNoTileInLand(pos)) return true;
 
-    const landCollides = this.context.land.tilemap.layers.some((layer) => {
+    let landCollides = false;
+
+    for (const territory of this.context.territories) {
+      if (
+        !(
+          (pos.x >= territory.startX || pos.x <= territory.endX) &&
+          (pos.y >= territory.startY || pos.y <= territory.endY)
+        )
+      ) {
+        continue;
+      }
+
+      for (const layer of territory.tilemap.layers) {
+        const tile = territory.tilemap.getTileAt(
+          pos.x - territory.startX,
+          pos.y - territory.startY,
+          false,
+          layer.name,
+        ) as Phaser.Tilemaps.Tile | null;
+
+        if (!tile) {
+          continue;
+        }
+
+        const tileProps = object({
+          collides: boolean(),
+        })
+          .required()
+          .validate(tile.properties);
+
+        if (tileProps.errors) {
+          throw new Error(JSON.stringify(tileProps.messagesTree));
+        }
+
+        landCollides = !!tileProps.value.collides;
+
+        if (landCollides) {
+          break;
+        }
+      }
+
+      if (landCollides) {
+        break;
+      }
+    }
+
+    if (landCollides) {
+      return landCollides;
+    }
+
+    for (const layer of this.context.land.tilemap.layers) {
       const tile = this.context.land.tilemap.getTileAt(
         pos.x,
         pos.y,
@@ -173,39 +238,14 @@ class GridPhysics {
         throw new Error(JSON.stringify(tileProps.messagesTree));
       }
 
-      return tileProps.value.collides;
-    });
+      landCollides = !!tileProps.value.collides;
 
-    if (landCollides) {
-      return true;
+      if (landCollides) {
+        break;
+      }
     }
 
-    return this.context.territories.some((territory) => {
-      return territory.tilemap.layers.some((layer) => {
-        const tile = territory.tilemap.getTileAt(
-          pos.x - territory.startX,
-          pos.y - territory.startY,
-          false,
-          layer.name,
-        ) as Phaser.Tilemaps.Tile | null;
-
-        if (!tile) {
-          return false;
-        }
-
-        const tileProps = object({
-          collides: boolean(),
-        })
-          .required()
-          .validate(tile.properties);
-
-        if (tileProps.errors) {
-          throw new Error(JSON.stringify(tileProps.messagesTree));
-        }
-
-        return tileProps.value.collides;
-      });
-    });
+    return landCollides;
   }
 
   private hasNoTileInLand(pos: Phaser.Math.Vector2): boolean {
@@ -222,41 +262,17 @@ class GridPhysics {
 
     let blockToReactTo: Block | undefined;
 
-    this.context.land.tilemap.layers.forEach((layer) => {
-      const tile = this.context.land.tilemap.getTileAt(
-        pos.x,
-        pos.y,
-        false,
-        layer.name,
-      ) as Phaser.Tilemaps.Tile | null;
-
-      if (!tile) {
-        throw new Error();
+    for (const territory of this.context.territories) {
+      if (
+        !(
+          (pos.x >= territory.startX || pos.x <= territory.endX) &&
+          (pos.y >= territory.startY || pos.y <= territory.endY)
+        )
+      ) {
+        continue;
       }
 
-      const tileProps = objectOf(boolean())
-        .required()
-        .validate(tile.properties);
-
-      if (tileProps.errors) {
-        throw new Error(JSON.stringify(tileProps.messagesTree));
-      }
-
-      const blockId = Object.keys(tileProps.value).filter(
-        (key) => tileProps.value[key],
-      )[0];
-
-      if (blockId) {
-        const block = this.context.land.blocks.find((b) => blockId === b.id);
-
-        if (block) {
-          blockToReactTo = block;
-        }
-      }
-    });
-
-    this.context.territories.forEach((territory) => {
-      return territory.tilemap.layers.forEach((layer) => {
+      for (const layer of territory.tilemap.layers) {
         const tile = territory.tilemap.getTileAt(
           pos.x - territory.startX,
           pos.y - territory.startY,
@@ -265,7 +281,7 @@ class GridPhysics {
         ) as Phaser.Tilemaps.Tile | null;
 
         if (!tile) {
-          return;
+          continue;
         }
 
         const tileProps = objectOf(boolean())
@@ -285,10 +301,51 @@ class GridPhysics {
 
           if (block) {
             blockToReactTo = block;
+            break;
           }
         }
-      });
-    });
+      }
+
+      if (blockToReactTo) {
+        break;
+      }
+    }
+
+    if (!blockToReactTo) {
+      for (const layer of this.context.land.tilemap.layers) {
+        const tile = this.context.land.tilemap.getTileAt(
+          pos.x,
+          pos.y,
+          false,
+          layer.name,
+        ) as Phaser.Tilemaps.Tile | null;
+
+        if (!tile) {
+          throw new Error();
+        }
+
+        const tileProps = objectOf(boolean())
+          .required()
+          .validate(tile.properties);
+
+        if (tileProps.errors) {
+          throw new Error(JSON.stringify(tileProps.messagesTree));
+        }
+
+        const blockId = Object.keys(tileProps.value).filter(
+          (key) => tileProps.value[key],
+        )[0];
+
+        if (blockId) {
+          const block = this.context.land.blocks.find((b) => blockId === b.id);
+
+          if (block) {
+            blockToReactTo = block;
+            break;
+          }
+        }
+      }
+    }
 
     if (blockToReactTo) {
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition

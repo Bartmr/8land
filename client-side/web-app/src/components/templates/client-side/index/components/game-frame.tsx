@@ -53,7 +53,7 @@ export function GameFrame(props: {
         </span>
       </div>
       <div
-        className="mt-2 bg-secondary d-flex align-items-center py-1"
+        className="mt-1 bg-secondary d-flex align-items-center py-1"
         style={{ textTransform: 'uppercase', fontSize: '1rem' }}
       >
         <div className="px-2 bg-secondary" style={{ whiteSpace: 'nowrap' }}>
