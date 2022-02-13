@@ -79,19 +79,22 @@ export function AssetsUploader(props: {
 
         {props.territory.assets ? (
           <>
-            <LinkAnchor
-              href={`${props.territory.assets.baseUrl}/${props.territory.assets.mapKey}`}
-              className="text-success"
-            >
-              Download current Tiled map JSON file
-            </LinkAnchor>
-            <br />{' '}
-            <LinkAnchor
-              href={`${props.territory.assets.baseUrl}/${props.territory.assets.tilesetKey}`}
-              className="text-success"
-            >
-              Download current Tileset picture
-            </LinkAnchor>
+            <p>
+              <LinkAnchor
+                href={`${props.territory.assets.baseUrl}/${props.territory.assets.mapKey}`}
+                className="text-success"
+              >
+                Download current Tiled map JSON file
+              </LinkAnchor>
+            </p>
+            <p>
+              <LinkAnchor
+                href={`${props.territory.assets.baseUrl}/${props.territory.assets.tilesetKey}`}
+                className="text-success"
+              >
+                Download current Tileset picture
+              </LinkAnchor>
+            </p>
             <hr />
           </>
         ) : null}

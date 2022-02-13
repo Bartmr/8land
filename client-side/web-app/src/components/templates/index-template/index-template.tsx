@@ -88,15 +88,22 @@ did with old RPG games."
               <p className="mt-4">
                 Sketching in 2D is faster than conceptualizing in 3D.
                 <br />
-                And if you express yourself in little squares, you can position
-                yourself in the metaverse in no time.
+                Just by drawing pixelart and laying it out on a map, you can
+                position yourself in the metaverse in no time.
+              </p>
+
+              <p>
+                And the best part,{' '}
+                <span style={{ textDecoration: 'underline' }}>
+                  no code needed!
+                </span>
               </p>
               <div>
                 <p
                   style={{ textDecoration: 'underline' }}
                   className="mt-4 display-4 text-body text-end"
                 >
-                  8Land keeps it simple, just like the old times
+                  8Land keeps it simple, just like nostalgy
                 </p>
               </div>
             </div>

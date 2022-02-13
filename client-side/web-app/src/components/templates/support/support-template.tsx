@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layout } from 'src/components/routing/layout/layout';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { ACQUIRING_TERRITORIES_ROUTE } from './acquiring-territories/acquiring-territories-routes';
+import { HOW_TO_EDIT_TERRITORY_ROUTE } from './edit-territory/edit-territory-routes';
 import { SUPPORT_ROUTE } from './support-routes';
 
 export const SupportTemplate = () => {
@@ -25,7 +26,7 @@ export const SupportTemplate = () => {
               {
                 icon: <FontAwesomeIcon icon={faPen} />,
                 title: 'How to edit my territory?',
-                href: '',
+                href: HOW_TO_EDIT_TERRITORY_ROUTE.getHref(),
               },
               {
                 icon: <FontAwesomeIcon icon={faProjectDiagram} />,
