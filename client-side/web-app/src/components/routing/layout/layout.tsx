@@ -7,6 +7,8 @@ import { throwError } from 'src/logic/app-internals/utils/throw-error';
 import { Header } from './header/header';
 import { GQLLayoutQuery } from './layout._graphql-generated_';
 import SSRProvider from 'react-bootstrap/SSRProvider';
+import { useLocation } from '@reach/router';
+import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 
 type Props = {
   children: (renderProps: {
@@ -21,12 +23,28 @@ type Props = {
 };
 
 export function Layout(props: Props) {
-  const { site } = useStaticQuery<GQLLayoutQuery>(graphql`
+  const location = useLocation();
+
+  const { site, siteThumbnail } = useStaticQuery<GQLLayoutQuery>(graphql`
     query Layout {
       site {
         siteMetadata {
           title
+          siteUrl
         }
+      }
+      siteThumbnail: file(
+        sourceInstanceName: { eq: "src-assets" }
+        relativePath: { eq: "vendors/this-project/logo.png" }
+      ) {
+        childImageSharp {
+          original {
+            src
+            height
+            width
+          }
+        }
+        extension
       }
     }
   `);
@@ -36,12 +54,55 @@ export function Layout(props: Props) {
 
   const title = `${props.title} - ${siteTitle}`;
 
+  const description = 'a simple and nostalgic metaverse';
+
+  const siteUrl = siteMetadata.siteUrl || throwError();
+
+  const url = EnvironmentVariables.HOST_URL + location.pathname;
+
+  const thumbnail = {
+    src: siteThumbnail?.childImageSharp?.original?.src || throwError(),
+    width: siteThumbnail?.childImageSharp?.original?.width ?? throwError(),
+    height: siteThumbnail?.childImageSharp?.original?.height ?? throwError(),
+    extension: siteThumbnail?.extension ?? throwError(),
+  };
+
   const [hideHeader, replaceHideHeader] = useState(false);
 
   return (
     <SSRProvider>
       <Helmet>
+        <html lang="en" />
         <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta name="robots" content="index, follow" />
+
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+
+        <meta property="og:type" content="website" />
+
+        <meta property="og:image" content={`${siteUrl}${thumbnail.src}`} />
+        <meta
+          property="og:image:secure_url"
+          content={`${siteUrl}${thumbnail.src}`}
+        />
+        <meta
+          property="og:image:type"
+          content={`image/${thumbnail.extension}`}
+        />
+        <meta property="og:image:width" content={`${thumbnail.width}`} />
+        <meta property="og:image:height" content={`${thumbnail.height}`} />
+        <meta property="og:image:alt" content="Website Thumbnail" />
+        <meta property="og:url" content={url} />
+        <meta property="og:locale" content="en" />
+        <meta property="og:site_name" content={siteTitle} />
+
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:url" content={url} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={`${siteUrl}${thumbnail.src}`} />
       </Helmet>
       <div
         className={`${

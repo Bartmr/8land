@@ -45,17 +45,17 @@ export const GATSBY_CONFIG = {
       },
     },
     // TODO: enable this when the project gets an icon
-    // {
-    //   resolve: `gatsby-plugin-manifest`,
-    //   options: {
-    //     name: projectName,
-    //     start_url: `${pathPrefix}/`,
-    //     background_color: `#ffffff`,
-    //     theme_color: `#000000`,
-    //     display: `browser`,
-    //     icon: "src/assets/vendors/this-project/vendor-icon.png",
-    //   },
-    // },
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: PROJECT_NAME,
+        start_url: `${pathPrefix}/`,
+        background_color: `#262626`,
+        theme_color: `#262626`,
+        display: `browser`,
+        icon: 'src/assets/vendors/this-project/logo.png',
+      },
+    },
     //
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // Must be placed after gatsby-plugin-manifest
