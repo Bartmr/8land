@@ -15,12 +15,7 @@ import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use
 
 function Content() {
   const mainApiSession = useMainApiSession();
-
-  const [resendconfirmationEmailState, replaceResendConfirmationEmailState] =
-    useState<TransportedData<undefined | 'done'>>({
-      status: TransportedDataStatus.Done,
-      data: undefined,
-    });
+  const [hasStarted, replaceHasStarted] = useState(false);
 
   const [needsEmailVerification, replaceNeedsEmailVerification] =
     useState(false);
@@ -29,6 +24,12 @@ function Content() {
     status: TransportedDataStatus.NotInitialized,
   });
 
+  const [resendconfirmationEmailState, replaceResendConfirmationEmailState] =
+    useState<TransportedData<undefined | 'done'>>({
+      status: TransportedDataStatus.Done,
+      data: undefined,
+    });
+
   const resendConfirmationEmail = async () => {
     replaceResendConfirmationEmailState({
       status: TransportedDataStatus.Loading,
@@ -36,43 +37,43 @@ function Content() {
     await auth.sendEmailVerification(FirebaseAuth.currentUser || throwError());
     replaceResendConfirmationEmailState({
       status: TransportedDataStatus.Done,
-      data: undefined,
+      data: 'done',
     });
   };
 
   useEffect(() => {
-    FirebaseAuthUI.start('#firebase-ui', {
-      signInOptions: [
-        {
-          provider: auth.EmailAuthProvider.PROVIDER_ID,
-          requireDisplayName: false,
-        },
-      ],
-      callbacks: {
-        signInSuccessWithAuthResult: function (authResult: {
-          user: {
-            uid: string;
-            email: string;
-            emailVerified: boolean;
-            isAnonymous: boolean;
-            providerData: [];
-            stsTokenManager: {
-              refreshToken: string;
-              accessToken: string;
-              expirationTime: number;
+    if (!hasStarted) {
+      FirebaseAuthUI.start('#firebase-ui', {
+        signInOptions: [
+          {
+            provider: auth.EmailAuthProvider.PROVIDER_ID,
+            requireDisplayName: false,
+          },
+        ],
+        callbacks: {
+          signInSuccessWithAuthResult: function (_authResult: {
+            user: {
+              uid: string;
+              email: string;
+              emailVerified: boolean;
+              isAnonymous: boolean;
+              providerData: [];
+              stsTokenManager: {
+                refreshToken: string;
+                accessToken: string;
+                expirationTime: number;
+              };
+              apiKey: string;
+              appName: string;
             };
-            apiKey: string;
-            appName: string;
-          };
-          credential: null;
-          operationType: string;
-          additionalUserInfo: {
-            isNewUser: boolean;
-            providerId: string;
-            profile: {};
-          };
-        }) {
-          if (authResult.user.emailVerified) {
+            credential: null;
+            operationType: string;
+            additionalUserInfo: {
+              isNewUser: boolean;
+              providerId: string;
+              profile: {};
+            };
+          }) {
             replaceLoginState({
               status: TransportedDataStatus.Loading,
             });
@@ -86,20 +87,33 @@ function Content() {
 
               if (res === 'ok') {
                 return;
+              }
+              if (res.error === 'needs-verification') {
+                if (res.createdNewUser) {
+                  await auth.sendEmailVerification(
+                    FirebaseAuth.currentUser || throwError(),
+                  );
+                }
+
+                replaceNeedsEmailVerification(true);
+                replaceLoginState({
+                  status: TransportedDataStatus.Done,
+                  data: undefined,
+                });
               } else {
                 replaceLoginState({
-                  status: res,
+                  status: res.error,
                 });
               }
             })();
-          } else {
-            replaceNeedsEmailVerification(true);
-          }
 
-          return false;
+            return false;
+          },
         },
-      },
-    });
+      });
+
+      replaceHasStarted(true);
+    }
   }, []);
   return (
     <>
@@ -107,9 +121,9 @@ function Content() {
       {needsEmailVerification ? (
         <div className="text-center">
           <p>
-            We sent you a confirmation email for you to verify your new account.{' '}
-            <br /> After you verified your account, reload this page and login
-            again.
+            We&apos;ve sent you a confirmation email for you to verify your new
+            account. <br /> After you verified your account, reload this page
+            and login again.
           </p>
           <TransportedDataGate dataWrapper={resendconfirmationEmailState}>
             {({ data }) =>

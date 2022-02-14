@@ -10,7 +10,6 @@ import {
   Controller,
   Get,
   HttpCode,
-  InternalServerErrorException,
   NotFoundException,
   Post,
   Request,
@@ -30,6 +29,10 @@ import { AuthTokensService } from './tokens/auth-tokens.service';
 import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
 import { NODE_ENV } from 'src/internals/environment/node-env.constants';
 import { NodeEnv } from 'src/internals/environment/node-env.types';
+import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
+import { Role } from './roles/roles';
+import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
+import { AuditContext } from 'src/internals/auditing/audit-context';
 
 @Controller('auth')
 export class AuthController {
@@ -46,6 +49,7 @@ export class AuthController {
     @Body() body: LoginRequestDTO,
     @Request() request: AppServerRequest,
     @Response({ passthrough: true }) response: AppServerResponse,
+    @WithAuditContext() auditContext: AuditContext,
     @WithOptionalAuthContext() authContext?: AuthContext,
   ): Promise<LoginResponseDTO> {
     const hostname = request.hostname;
@@ -72,10 +76,6 @@ export class AuthController {
 
     const firebaseUser = await firebaseAuth.getUser(decodedToken.uid);
 
-    if (!firebaseUser.emailVerified) {
-      throw new ConflictException();
-    }
-
     const repository = this.connection.getCustomRepository(UsersRepository);
 
     const user = await repository.findOne({
@@ -85,6 +85,10 @@ export class AuthController {
     });
 
     if (user) {
+      if (!firebaseUser.emailVerified) {
+        throw new ConflictException({ error: 'needs-verification' });
+      }
+
       const token = await this.tokensService.createAuthToken(
         this.connection.manager,
         user,
@@ -106,9 +110,20 @@ export class AuthController {
         },
       };
     } else {
-      // TODO: implement sign up
+      await repository.create(
+        {
+          firebaseUid: decodedToken.uid,
+          role: Role.EndUser,
+          walletAddress: null,
+          walletNonce: generateRandomUUID(),
+        },
+        auditContext,
+      );
 
-      throw new InternalServerErrorException();
+      throw new ConflictException({
+        error: 'needs-verification',
+        createdNewUser: true,
+      });
     }
   }
 

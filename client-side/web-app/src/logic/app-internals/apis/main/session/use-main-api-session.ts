@@ -18,18 +18,35 @@ class MainApiSession {
 
   async login(args: { firebaseIdToken: string }) {
     const res = await this.mainApi.post<
-      { status: 201; body: LoginResponse },
+      | { status: 201; body: LoginResponse }
+      | {
+          status: 409;
+          body: undefined | { error?: string; createdNewUser?: boolean };
+        },
       undefined,
       ToIndexedType<LoginRequestDTO>
     >({
       path: '/auth',
       query: undefined,
       body: args,
-      acceptableStatusCodes: [201],
+      acceptableStatusCodes: [201, 409],
     });
 
     if (res.failure) {
-      return res.failure;
+      return {
+        error: res.failure,
+      } as const;
+    } else if (res.response.status === 409) {
+      if (res.response.body?.error === 'needs-verification') {
+        return {
+          error: 'needs-verification',
+          createdNewUser: !!res.response.body.createdNewUser,
+        } as const;
+      } else {
+        return {
+          error: res.logAndReturnAsUnexpected().failure,
+        } as const;
+      }
     } else {
       this.localStorage.setItem(
         MAIN_API_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY,
