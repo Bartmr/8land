@@ -348,10 +348,16 @@ class GridPhysics {
     }
 
     if (blockToReactTo) {
+      if (!this.hasSteppedOnSafeTile) {
+        return;
+      }
+
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (blockToReactTo.type === BlockType.Door) {
         this.context.onStepIntoDoor(blockToReactTo);
       }
+    } else {
+      this.hasSteppedOnSafeTile = true;
     }
   }
 }

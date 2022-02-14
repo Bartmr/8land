@@ -5,11 +5,37 @@ import { TERRITORIES_ROUTE } from '../../client-side/territories/territories-rou
 import { ACQUIRING_TERRITORIES_ROUTE } from '../acquiring-territories/acquiring-territories-routes';
 import { HOW_TO_EDIT_TERRITORY_ROUTE } from './edit-territory-routes';
 
+import gimpImg1 from './tileset/image-1.jpg';
+import gimpImg2 from './tileset/image-2.jpg';
+import gimpImg3 from './tileset/image-3.jpg';
+import gimpImg4 from './tileset/image-4.jpg';
+import gimpImg5 from './tileset/image-5.jpg';
+import gimpImg6 from './tileset/image-6.jpg';
+import gimpImg7 from './tileset/image-7.jpg';
+
+import tiledImg1 from './map/image-1.png';
+import tiledImg2 from './map/image-2.png';
+import tiledImg3 from './map/image-3.png';
+import tiledImg4 from './map/image-4.png';
+import tiledImg5 from './map/image-5.png';
+import tiledImg6 from './map/image-6.png';
+import tiledImg7 from './map/image-7.png';
+
 export function HowToEditTerritoryTemplate() {
   return (
     <Layout title={HOW_TO_EDIT_TERRITORY_ROUTE.title}>
       {() => (
         <>
+          <style>{`
+          .tutorial-list > li {
+            margin-top: calc(var(--spacer-4) / 2);
+            padding-bottom: calc(var(--spacer-4) / 2);
+          }
+
+          .tutorial-list > li:not(:last-child) {
+            border-bottom: var(--border);
+          }
+          `}</style>
           <h2>Editing a territory</h2>
           <div className="alert alert-info" role="alert">
             In order to edit a territory, you must first own a territory. You
@@ -21,7 +47,7 @@ export function HowToEditTerritoryTemplate() {
               here
             </LinkAnchor>
           </div>
-          <ol>
+          <ol className="tutorial-list">
             <li>
               In 8Land, a territory is composed of
               <ul>
@@ -69,15 +95,189 @@ export function HowToEditTerritoryTemplate() {
                 <br />
                 So let&apos;s create our tileset in GIMP
               </p>
+              <p>
+                <LinkAnchor
+                  openInNewTab
+                  className="w-75 d-block"
+                  href={gimpImg1}
+                >
+                  <img src={gimpImg1} alt={'screenshot'} width={'100%'} />
+                </LinkAnchor>
+              </p>
+              <p>
+                <LinkAnchor
+                  openInNewTab
+                  className="w-50 d-block"
+                  href={gimpImg2}
+                >
+                  <img src={gimpImg2} alt={'screenshot'} width={'100%'} />
+                </LinkAnchor>
+              </p>
             </li>
             <li>
-              In order to keep the game fast in any platform, we&apos;ve limited
-              the tilesets file size to {TERRITORY_TILESET_SIZE_LIMIT / 1000}{' '}
-              KB.
-              <br />
-              We might allow more in the future, but for now you can cut most of
-              the file size by converting the tileset colors to &quot;Indexed
-              Mode&quot;. Here&apos;s how you can do that with GIMP:
+              <p>
+                You might want to get a grid to help you to draw each
+                tile/square in your territory. Here are the steps to do it:
+              </p>
+              <p>
+                <LinkAnchor
+                  openInNewTab
+                  className="w-75 d-block"
+                  href={gimpImg3}
+                >
+                  <img src={gimpImg3} alt={'screenshot'} width={'100%'} />
+                </LinkAnchor>
+              </p>
+              <p>
+                <LinkAnchor
+                  openInNewTab
+                  className="w-25 d-block"
+                  href={gimpImg4}
+                >
+                  <img src={gimpImg4} alt={'screenshot'} width={'100%'} />
+                </LinkAnchor>
+              </p>
+              <p>
+                <LinkAnchor
+                  openInNewTab
+                  className="w-75 d-block"
+                  href={gimpImg5}
+                >
+                  <img src={gimpImg5} alt={'screenshot'} width={'100%'} />
+                </LinkAnchor>
+              </p>
+            </li>
+            <li>
+              <p>
+                In order to keep the game fast in any platform, we&apos;ve
+                limited the tilesets file size to{' '}
+                {TERRITORY_TILESET_SIZE_LIMIT / 1000} KB.
+                <br />
+                We might allow more in the future, but for now you can cut most
+                of the file size by converting the tileset colors to
+                &quot;Indexed Mode&quot;. Here&apos;s how you can do that with
+                GIMP:
+              </p>
+              <p>
+                <LinkAnchor
+                  openInNewTab
+                  className="w-75 d-block"
+                  href={gimpImg6}
+                >
+                  <img src={gimpImg6} alt={'screenshot'} width={'100%'} />
+                </LinkAnchor>
+              </p>
+              <p>
+                <LinkAnchor
+                  openInNewTab
+                  className="w-50 d-block"
+                  href={gimpImg7}
+                >
+                  <img src={gimpImg7} alt={'screenshot'} width={'100%'} />
+                </LinkAnchor>
+              </p>
+            </li>
+            <li>
+              <p>
+                Now that we&apos;ve got our tileset done, it&apos;s time to lay
+                it out on a map with Tiled, the map editor.
+                <br /> Let&apos;s open Tiled and create a new map
+              </p>
+              <p>
+                <LinkAnchor
+                  openInNewTab
+                  className="w-75 d-block"
+                  href={tiledImg1}
+                >
+                  <img src={tiledImg1} alt={'screenshot'} width={'100%'} />
+                </LinkAnchor>
+              </p>
+              <p>
+                <LinkAnchor
+                  openInNewTab
+                  className="w-75 d-block"
+                  href={tiledImg2}
+                >
+                  <img src={tiledImg2} alt={'screenshot'} width={'100%'} />
+                </LinkAnchor>
+              </p>
+            </li>
+            <li>
+              <p>
+                This time, you can put the 8Land territory dimensions as width
+                and height, but you need to set the tile size to 16x16 px
+              </p>
+              <p>
+                <LinkAnchor
+                  openInNewTab
+                  className="w-50 d-block"
+                  href={tiledImg3}
+                >
+                  <img src={tiledImg3} alt={'screenshot'} width={'100%'} />
+                </LinkAnchor>
+              </p>
+            </li>
+            <li>
+              <p>
+                Our map file is created. Let&apos;s now import our tileset into
+                the map, and add some interactions
+              </p>
+              <p>
+                <LinkAnchor
+                  openInNewTab
+                  className="w-75 d-block"
+                  href={tiledImg4}
+                >
+                  <img src={tiledImg4} alt={'screenshot'} width={'100%'} />
+                </LinkAnchor>
+              </p>
+              <p>
+                <LinkAnchor
+                  openInNewTab
+                  className="w-50 d-block"
+                  href={tiledImg5}
+                >
+                  <img src={tiledImg5} alt={'screenshot'} width={'100%'} />
+                </LinkAnchor>
+              </p>
+              <p>
+                <LinkAnchor
+                  openInNewTab
+                  className="w-75 d-block"
+                  href={tiledImg6}
+                >
+                  <img src={tiledImg6} alt={'screenshot'} width={'100%'} />
+                </LinkAnchor>
+              </p>
+            </li>
+            <li>
+              <p>
+                We don&apos;t want our players walking over our building, so
+                we&apos;ll be adding some collisions, that will stop the user
+                from walking further.
+              </p>
+              <p>
+                With the Ctrl key pressed, let&apos;s select the blocks that we
+                want to make &quot;solid&quot;.
+              </p>
+              <p>
+                <LinkAnchor
+                  openInNewTab
+                  className="w-75 d-block"
+                  href={tiledImg7}
+                >
+                  <img src={tiledImg7} alt={'screenshot'} width={'100%'} />
+                </LinkAnchor>
+              </p>
+            </li>
+            <li>
+              <p>
+                Interactions are set by adding properties to the tiles in our
+                tileset. To make a tile &quot;solid&quot;, we add a property
+                named{' '}
+                <span style={{ textDecoration: 'underline' }}>collides</span>{' '}
+                and set it to true
+              </p>
             </li>
           </ol>
         </>
