@@ -9,6 +9,7 @@ import { GQLLayoutQuery } from './layout._graphql-generated_';
 import SSRProvider from 'react-bootstrap/SSRProvider';
 import { useLocation } from '@reach/router';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
+import { PROJECT_SLOGAN } from '@app/shared/project-details';
 
 type Props = {
   children: (renderProps: {
@@ -54,7 +55,7 @@ export function Layout(props: Props) {
 
   const title = `${props.title} - ${siteTitle}`;
 
-  const description = 'a simple and nostalgic metaverse';
+  const description = PROJECT_SLOGAN;
 
   const siteUrl = siteMetadata.siteUrl || throwError();
 

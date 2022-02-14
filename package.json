@@ -92,7 +92,8 @@
     "source-map-support": "^0.5.21",
     "swagger-ui-express": "^4.3.0",
     "typeorm": "^0.2.42-dev.1446e02",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.16.5",
@@ -111,6 +112,7 @@
     "@types/sharp": "^0.29.5",
     "@types/supertest": "^2.0.11",
     "@types/uuid": "^8.3.3",
+    "@types/validator": "^13.7.1",
     "@types/webpack-env": "^1.16.3",
     "@typescript-eslint/eslint-plugin": "^5.8.0",
     "@typescript-eslint/parser": "^5.8.0",

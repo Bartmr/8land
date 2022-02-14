@@ -1,3 +1,4 @@
+import { PROJECT_SLOGAN } from '@app/shared/project-details';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layout } from 'src/components/routing/layout/layout';
@@ -19,12 +20,12 @@ export function IndexTemplate() {
               <h1 className="display-1">8Land</h1>
               <div className="bg-secondary">
                 <p className="mb-0 display-4 text-body text-center">
-                  a simple and nostalgic metaverse
+                  {PROJECT_SLOGAN}
                 </p>
               </div>
               <hr style={{ width: '3rem' }}></hr>
               <p className="text-center">
-                8Land is a pixelart metaverse where people build their own
+                8Land is a 2D pixelart metaverse where people build their own
                 RPG-like territories
                 {/* TODO enable when indoors are built <br /> and indoors */}
               </p>
@@ -119,6 +120,16 @@ did with old RPG games."
               <p className="mt-4">
                 8Land uses NFTs as a way for distributing and exchanging
                 territories.
+              </p>
+            </div>
+          </div>
+          <div className="bg-danger py-5">
+            <div className="container">
+              <p className="display-4 text-body">The metaverse, anywhere</p>
+              <p className="mt-4">
+                Contrary to most metaverses which can only run in powerful
+                desktops or VR headsets, 8Land was made to run anywhere, from
+                your phone to your desktop.
               </p>
             </div>
           </div>

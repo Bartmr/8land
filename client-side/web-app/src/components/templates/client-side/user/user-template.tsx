@@ -23,6 +23,7 @@ import { GetUserWalletNonce } from '@app/shared/users/me/get-user-wallet-nonce.d
 import { ReceiveSignedUserNonceRequestDTO } from '@app/shared/users/me/receive-signed-user-nonce.dto';
 import { Logger } from 'src/logic/app-internals/logging/logger';
 import { useMainApiSessionLogout } from 'src/logic/app-internals/apis/main/session/use-main-api-session-logout';
+import { ChangeEmail } from './components/change-email';
 
 export function WalletSectionWithNonce(props: {
   session: null | MainApiSessionData;
@@ -159,7 +160,7 @@ export function WalletSectionWithNonce(props: {
   return (
     <div className="card">
       <div className="card-body">
-        <h3>Ethereum / Polygon Wallet</h3>
+        <h2 className="card-title h3">Ethereum / Polygon Wallet</h2>
         {props.walletAddress ? (
           <>
             <p className="text-success">
@@ -218,8 +219,7 @@ export function WalletSectionWithNonce(props: {
                   ) : null}
                   {data === 'not-detected' ? (
                     <p className="mb-0 text-danger">
-                      Could not detect Metamask. Install and setup Metamask, or
-                      insert the wallet&apos;s public address manually below.
+                      Could not detect Metamask. Install and setup Metamask.
                     </p>
                   ) : null}
                   {data === 'denied' ? (
@@ -328,6 +328,9 @@ export function UserTemplate(_props: RouteComponentProps) {
                 session={sessionData}
                 refreshSession={() => mainApiSession.refreshSession()}
               />
+              <div className="mt-3">
+                <ChangeEmail />
+              </div>
             </>
           )}
         </TransportedDataGate>
