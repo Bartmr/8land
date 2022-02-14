@@ -213,8 +213,14 @@ $line-height-base: 1;
 $line-height-sm: 0.8;
 $line-height-lg: 1.2;
 
+$font-weight-lighter: 300;
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-bold: 400;
+$font-weight-bolder: 400;
+
 $link-color: get-contrasting-color('info');
-$link-hover-color: get-contrasting-color('primary-hover');
+$link-hover-color: get-contrasting-color('info-hover');
 $link-decoration: underline;
 
 $code-color: get-contrasting-color('secondary');
@@ -234,20 +240,20 @@ $border-radius: 0;
 $border-radius-lg: 0;
 $border-radius-sm: 0;
 
-$box-shadow-inset: inset 0 1px 2px rgba($darkest, 0.5);
+$box-shadow-inset: inset 0 1px 2px rgba(#000000, 0.5);
 
 $box-shadow-sm-dimensions: 0 0.125rem 0.25rem;
-$box-shadow-sm-opacity: 0.2;
+$box-shadow-sm-opacity: 0.3;
 
 $box-shadow-dimensions: 0 0.5rem 1rem;
-$box-shadow-opacity: 0.2;
+$box-shadow-opacity: 0.4;
 
 $box-shadow-lg-dimensions: 0 1rem 3rem;
-$box-shadow-lg-opacity: 0.3;
+$box-shadow-lg-opacity: 0.5;
 
-$box-shadow-sm: #{$box-shadow-sm-dimensions} set-contrasting-color-alpha('darkest', $box-shadow-sm-opacity);
-$box-shadow: #{$box-shadow-dimensions} set-contrasting-color-alpha('darkest', $box-shadow-opacity);
-$box-shadow-lg: #{$box-shadow-lg-dimensions} set-contrasting-color-alpha('darkest', $box-shadow-lg-opacity);
+$box-shadow-sm: #{$box-shadow-sm-dimensions} rgba(#000000, $box-shadow-sm-opacity);
+$box-shadow: #{$box-shadow-dimensions} rgba(#000000, $box-shadow-opacity);
+$box-shadow-lg: #{$box-shadow-lg-dimensions} rgba(#000000, $box-shadow-lg-opacity);
 
 $text-shadow-sm-dimensions: 0 0.05rem 0.2rem;
 $text-shadow-sm-opacity: 1;

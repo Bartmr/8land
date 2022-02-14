@@ -20,6 +20,9 @@ import tiledImg4 from './map/image-4.png';
 import tiledImg5 from './map/image-5.png';
 import tiledImg6 from './map/image-6.png';
 import tiledImg7 from './map/image-7.png';
+import tiledImg8 from './map/image-8.png';
+import tiledImg9 from './map/image-9.png';
+import tiledImg10 from './map/image-10.png';
 
 export function HowToEditTerritoryTemplate() {
   return (
@@ -277,6 +280,57 @@ export function HowToEditTerritoryTemplate() {
                 named{' '}
                 <span style={{ textDecoration: 'underline' }}>collides</span>{' '}
                 and set it to true
+              </p>
+              <p>
+                <LinkAnchor
+                  openInNewTab
+                  className="w-75 d-block"
+                  href={tiledImg8}
+                >
+                  <img src={tiledImg8} alt={'screenshot'} width={'100%'} />
+                </LinkAnchor>
+              </p>
+              <p>
+                <LinkAnchor
+                  openInNewTab
+                  className="w-75 d-block"
+                  href={tiledImg9}
+                >
+                  <img src={tiledImg9} alt={'screenshot'} width={'100%'} />
+                </LinkAnchor>
+              </p>
+            </li>
+            <li>
+              <p>
+                Now it&apos;s time to place the tiles in your territory. Pick a
+                tile (or many) from the right sidebar, and click on the squares
+                where you want to place the selected tiles
+              </p>
+              <p>
+                <LinkAnchor
+                  openInNewTab
+                  className="w-75 d-block"
+                  href={tiledImg10}
+                >
+                  <img src={tiledImg10} alt={'screenshot'} width={'100%'} />
+                </LinkAnchor>
+              </p>
+            </li>
+            <li>
+              <p>
+                After you finished all these steps, it&apos;s time to upload the
+                tileset and the map.
+              </p>
+              <p>
+                Just go to your{' '}
+                <LinkAnchor
+                  className="alert-link"
+                  href={TERRITORIES_ROUTE.getHref()}
+                >
+                  territory page
+                </LinkAnchor>{' '}
+                and upload your files in the asset section. That&apos;s it!
+                Enjoy your new presence in the metaverse!
               </p>
             </li>
           </ol>

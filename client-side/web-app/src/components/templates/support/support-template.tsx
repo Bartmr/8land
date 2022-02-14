@@ -6,6 +6,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layout } from 'src/components/routing/layout/layout';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { ABOUT_ROUTE } from './about/about-routes';
 import { ACQUIRING_TERRITORIES_ROUTE } from './acquiring-territories/acquiring-territories-routes';
 import { HOW_TO_EDIT_TERRITORY_ROUTE } from './edit-territory/edit-territory-routes';
 import { SUPPORT_ROUTE } from './support-routes';
@@ -31,7 +32,7 @@ export const SupportTemplate = () => {
               {
                 icon: <FontAwesomeIcon icon={faProjectDiagram} />,
                 title: 'About 8Land',
-                href: '',
+                href: ABOUT_ROUTE.getHref(),
                 color: 'info',
               },
             ].map((c) => {
