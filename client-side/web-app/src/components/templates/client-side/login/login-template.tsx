@@ -12,6 +12,9 @@ import { FirebaseAuth } from 'src/logic/auth/firebase-auth';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
 import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use-main-api-session';
+import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
+import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
 
 function Content() {
   const mainApiSession = useMainApiSession();
@@ -118,6 +121,7 @@ function Content() {
   return (
     <>
       <div id="firebase-ui"></div>
+
       {needsEmailVerification ? (
         <div className="text-center">
           <p>
@@ -155,6 +159,18 @@ function Content() {
           </TransportedDataGate>
         </div>
       ) : null}
+      <p className="mt-4 text-center">
+        By signing in or confirming your email address, you are agreeing with
+        8Land&apos;s{' '}
+        <LinkAnchor href={TERMS_OF_USE_ROUTE.getHref()}>
+          Terms of Use
+        </LinkAnchor>{' '}
+        and{' '}
+        <LinkAnchor href={PRIVACY_POLICY_ROUTE.getHref()}>
+          Privacy Policy
+        </LinkAnchor>
+      </p>
+
       <TransportedDataGate dataWrapper={loginState}>
         {() => null}
       </TransportedDataGate>

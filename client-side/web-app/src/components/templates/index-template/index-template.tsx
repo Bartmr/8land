@@ -128,7 +128,7 @@ did with old RPG games."
               <p className="display-4 text-body">The metaverse, anywhere</p>
               <p className="mt-4">
                 Contrary to most metaverses which can only run in powerful
-                desktops or VR headsets, 8Land was made to run anywhere, from
+                desktops and VR headsets, 8Land was made to run anywhere, from
                 your phone to your desktop.
               </p>
             </div>

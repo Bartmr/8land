@@ -10,11 +10,14 @@ import SSRProvider from 'react-bootstrap/SSRProvider';
 import { useLocation } from '@reach/router';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { PROJECT_SLOGAN } from '@app/shared/project-details';
+import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { PRIVACY_POLICY_ROUTE } from 'src/components/templates/privacy-policy/privacy-policy-routes';
+import logo from 'src/assets/vendors/this-project/logo.svg';
 
 type Props = {
   children: (renderProps: {
-    hideHeader: () => void;
-    showHeader: () => void;
+    hideHeaderAndFooter: () => void;
+    showHeaderAndFooter: () => void;
   }) => ReactNode;
   title: string;
   noContainment?: boolean;
@@ -127,11 +130,39 @@ export function Layout(props: Props) {
           } ${props.noBottomPadding ? '' : 'pb-3'}`}
         >
           {props.children({
-            showHeader: () => replaceHideHeader(false),
-            hideHeader: () => replaceHideHeader(true),
+            showHeaderAndFooter: () => replaceHideHeader(false),
+            hideHeaderAndFooter: () => replaceHideHeader(true),
           })}
         </main>
-        {/* TODO: Footer goes here */}
+        {hideHeader || props.disableScroll ? null : (
+          <footer className="border-top py-4">
+            <div className="container">
+              <div className="row g-3 flex-lg-row-reverse align-items-center justify-content-center">
+                <div className="col-12 col-lg-6">
+                  <ul className="list-unstyled m-0">
+                    <li className="text-lg-end">
+                      <LinkAnchor
+                        className="link-body-shade"
+                        href={PRIVACY_POLICY_ROUTE.getHref()}
+                      >
+                        Privacy Policy
+                      </LinkAnchor>
+                    </li>
+                  </ul>
+                </div>
+                <div className="col-12 col-lg-6">
+                  <div className="mt-4 mt-lg-0 d-flex align-items-center">
+                    <img height={'48px'} src={logo} alt="8Land Logo" />
+                    <div className="ms-2">
+                      <span style={{ fontFamily: 'sans-serif' }}>&copy;</span>{' '}
+                      {new Date().getFullYear()} 8Land
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </footer>
+        )}
       </div>
     </SSRProvider>
   );

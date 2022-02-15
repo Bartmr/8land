@@ -35,6 +35,9 @@ export const SupportTemplate = () => {
                 href: ABOUT_ROUTE.getHref(),
                 color: 'info',
               },
+
+              // TODO Report bug
+              // TODO Get help
             ].map((c) => {
               return (
                 <div key={c.title} className="col-6 col-md-4">

@@ -22,13 +22,13 @@ export function PrivacyPolicyTemplate() {
             Site and the Tools. The aim of this Privacy Policy is to help you
             understand how your personal information is used and your choices
             regarding said use. By using the Site or the Tools, you agree that
-            the Foundation can collect, use, disclose, and process your
-            information as described in this Privacy Policy. This Privacy Policy
-            only applies to the Site and the Tools, and not to any other
-            websites, products or services you may be able to access or link to
-            via the Site or the Tools. We encourage you to read the privacy
-            policies of any other websites you visit before providing your
-            information to them.
+            the Project can collect, use, disclose, and process your information
+            as described in this Privacy Policy. This Privacy Policy only
+            applies to the Site and the Tools, and not to any other websites,
+            products or services you may be able to access or link to via the
+            Site or the Tools. We encourage you to read the privacy policies of
+            any other websites you visit before providing your information to
+            them.
           </p>
           <p>
             The Site and the Tools may evolve over time, and this Privacy Policy
@@ -109,7 +109,7 @@ export function PrivacyPolicyTemplate() {
           </p>
           <p>
             3.4 Public blockchains provide transparency into transactions and
-            the Foundation is not responsible for preventing or managing
+            the Project is not responsible for preventing or managing
             information broadcasted on a blockchain.
           </p>
           <h2 id="what-is-done-with-your-information">
@@ -153,17 +153,17 @@ export function PrivacyPolicyTemplate() {
             efforts to keep your personal information secure.
           </p>
           <p>
-            4.5 The Foundation also reserves the right to disclose personal
+            4.5 The Project also reserves the right to disclose personal
             information that it believes, in good faith, is appropriate or
             necessary to enforce the Terms of Use, take precautions against
             liability or harm, to investigate and respond to third-party claims
             or allegations, to respond to court orders or official requests, to
             protect the security or integrity of the Site or the Tools, and to
-            protect the rights, property, or safety of the Foundation, the 8Land
+            protect the rights, property, or safety of the Project, the 8Land
             community of users and 8LT owners, or others.
           </p>
           <p>
-            4.6 In the event that the Foundation is involved in a merger,
+            4.6 In the event that the Project is involved in a merger,
             acquisition, sale, bankruptcy, insolvency, reorganization,
             receivership, assignment for the benefit of creditors, or the
             application of laws or equitable principles affecting
@@ -185,7 +185,7 @@ export function PrivacyPolicyTemplate() {
           <h2 id="information-not-collected">7. Information Not Collected</h2>
           <p>
             Any other personally-identifiable information about you shall not be
-            collected, unless you give it to the Foundation directly: by filling
+            collected, unless you give it to the Project directly: by filling
             out a form, giving written feedback, communicating via third party
             social media sites, or otherwise communicating via the Site, the
             Tools or any other means.
@@ -201,12 +201,11 @@ export function PrivacyPolicyTemplate() {
           </p>
           <h2 id="information-security">8. Information Security</h2>
           <p>
-            Whilst neither the Foundation, nor any other organization, can
-            guarantee the security of information processed online, the
-            Foundation has appropriate security measures in place to protect
-            your personal information. For example, the personal information you
-            provide is stored on computer systems with limited access,
-            encryption, or both.
+            Whilst neither the Project, nor any other organization, can
+            guarantee the security of information processed online, the Project
+            has appropriate security measures in place to protect your personal
+            information. For example, the personal information you provide is
+            stored on computer systems with limited access, encryption, or both.
           </p>
           <h2 id="privacy-rights">9. Privacy Rights</h2>
           <p>

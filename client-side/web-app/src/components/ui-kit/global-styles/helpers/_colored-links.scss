@@ -1,6 +1,22 @@
-@each $color, $value in $theme-colors {
+$colors: join(
+  $theme-colors,
+  (
+    'body': $body-bg,
+  )
+);
+
+@each $color, $value in $colors {
   .link-#{$color} {
     color: get-contrasting-color($color) !important;
+
+    &:hover,
+    &:focus {
+      color: get-contrasting-color(#{$color}-hover) !important;
+    }
+  }
+
+  .link-#{$color}-shade {
+    color: set-contrasting-color-alpha($color, 0.7) !important;
 
     &:hover,
     &:focus {

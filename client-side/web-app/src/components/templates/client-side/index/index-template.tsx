@@ -13,8 +13,14 @@ import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
 import { GameFrame } from './components/game-frame';
+import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
+import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
 
-function Content(props: { showHeader: () => void; hideHeader: () => void }) {
+function Content(props: {
+  showHeaderAndFooter: () => void;
+  hideHeaderAndFooter: () => void;
+}) {
   const api = useMainJSONApi();
 
   const session = useStoreSelector(
@@ -53,7 +59,7 @@ function Content(props: { showHeader: () => void; hideHeader: () => void }) {
   }, []);
 
   useEffect(() => {
-    props.showHeader();
+    props.showHeaderAndFooter();
   }, []);
 
   return (
@@ -64,11 +70,22 @@ function Content(props: { showHeader: () => void; hideHeader: () => void }) {
             pressedStart ? (
               <GameFrame session={sessionData} land={landData} />
             ) : (
-              <div className="d-flex justify-content-center">
+              <div className="text-center">
+                <p>
+                  By pressing &quot;Start&quot;, you are agreeing with
+                  8Land&apos;s{' '}
+                  <LinkAnchor href={TERMS_OF_USE_ROUTE.getHref()}>
+                    Terms of Use
+                  </LinkAnchor>{' '}
+                  and{' '}
+                  <LinkAnchor href={PRIVACY_POLICY_ROUTE.getHref()}>
+                    Privacy Policy
+                  </LinkAnchor>
+                </p>
                 <button
-                  className="btn btn-primary"
+                  className="mt-5 btn btn-primary"
                   onClick={() => {
-                    props.hideHeader();
+                    props.hideHeaderAndFooter();
                     replacePressedStart(true);
                   }}
                 >

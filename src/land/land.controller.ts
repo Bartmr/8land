@@ -51,6 +51,7 @@ import { PublicRoute } from 'src/auth/public-route.decorator';
 const TiledJSONSchema = createTiledJSONSchema({
   maxWidth: null,
   maxHeight: null,
+  allowBackgroundColor: true,
 });
 
 class LandAssetsRequestDTO {

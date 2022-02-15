@@ -294,6 +294,7 @@ export class TerritoriesEndUserController {
     const tiledJSONSchema = createTiledJSONSchema({
       maxWidth: territory_UNSAFE.endX - territory_UNSAFE.startX,
       maxHeight: territory_UNSAFE.endY - territory_UNSAFE.startY,
+      allowBackgroundColor: false,
     });
 
     const tiledJSONValidationResult = tiledJSONSchema.validate(mapJSON);
