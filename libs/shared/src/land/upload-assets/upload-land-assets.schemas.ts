@@ -34,7 +34,9 @@ export const createTiledJSONSchema = ({
           .test((s) =>
             s ? (isHexColor(s) ? null : 'Not a valid hex color') : null,
           )
-      : equals([]).notNull(),
+      : equals([]).test((v) =>
+          v === undefined ? null : 'Background color is not allowed',
+        ),
     compressionlevel: number().required(),
     height: number()
       .integer()
@@ -101,7 +103,9 @@ export const createTiledJSONSchema = ({
               .test((s) =>
                 s ? (isHexColor(s) ? null : 'Not a valid hex color') : null,
               )
-          : equals([]).notNull(),
+          : equals([]).test((v) =>
+              v === undefined ? null : 'Background color is not allowed',
+            ),
         columns: number().integer(),
         firstgid: number().integer().required(),
         image: string().filled(),
