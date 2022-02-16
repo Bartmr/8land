@@ -14,7 +14,7 @@ import { S3Client } from '@aws-sdk/client-s3';
 const mkdir = promisify(fs.mkdir);
 
 export const USE_DEV_STORAGE =
-  !!EnvironmentVariablesService.variables.AWS_ENDPOINT;
+  !EnvironmentVariablesService.variables.AWS_ENDPOINT;
 
 @Module({
   providers: [
