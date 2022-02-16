@@ -6,6 +6,9 @@ import { string } from 'not-me/lib/schemas/string/string-schema';
 import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 
+const stringFailIfEmptyInProd =
+  NODE_ENV === NodeEnv.Production ? string().filled() : string();
+
 export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   HOT_RELOAD_DATABASE_MIGRATIONS_ROLLBACK_STEPS: (() => {
     if (NODE_ENV === NodeEnv.Development || NODE_ENV === NodeEnv.Test) {
@@ -79,4 +82,11 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   WEB3_CHAIN: equals(['mumbai', 'polygon'] as const).required(),
 
   TERRITORY_NFT_CONTRACT_ADDRESS: string().filled(),
+
+  AWS_ENDPOINT: stringFailIfEmptyInProd.test((s) =>
+    s ? (s.endsWith('/') ? 'Cannot have trailling slash' : null) : null,
+  ),
+  AWS_REGION: stringFailIfEmptyInProd,
+  AWS_ACCESS_KEY_ID: stringFailIfEmptyInProd,
+  AWS_SECRET_ACCESS_KEY: stringFailIfEmptyInProd,
 }).required();

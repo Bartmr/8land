@@ -1,6 +1,4 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { NODE_ENV } from '../environment/node-env.constants';
-import { NodeEnv } from '../environment/node-env.types';
 import { LOCAL_TEMPORARY_FILES_PATH } from '../local-temporary-files/local-temporary-files-path';
 import express from 'express';
 import path from 'path';
@@ -9,19 +7,42 @@ import { DevStorageService } from './dev-storage.service';
 import { throwError } from 'libs/shared/src/internals/utils/throw-error';
 import fs from 'fs';
 import { promisify } from 'util';
+import { EnvironmentVariablesService } from '../environment/environment-variables.service';
+import { ProdStorageService } from './prod-storage.service';
+import { S3Client } from '@aws-sdk/client-s3';
 
 const mkdir = promisify(fs.mkdir);
 
 export const USE_DEV_STORAGE =
-  NODE_ENV === NodeEnv.Development || NODE_ENV === NodeEnv.Test;
+  !!EnvironmentVariablesService.variables.AWS_ENDPOINT;
 
 @Module({
   providers: [
     {
       provide: StorageService,
-      useClass: USE_DEV_STORAGE
-        ? DevStorageService
-        : throwError('Not Implemented'),
+      useFactory: () => {
+        if (USE_DEV_STORAGE) {
+          return new DevStorageService();
+        } else {
+          const s3Client = new S3Client({
+            endpoint:
+              EnvironmentVariablesService.variables.AWS_ENDPOINT ||
+              throwError(),
+            region:
+              EnvironmentVariablesService.variables.AWS_REGION || throwError(),
+            credentials: {
+              accessKeyId:
+                EnvironmentVariablesService.variables.AWS_ACCESS_KEY_ID ||
+                throwError(),
+              secretAccessKey:
+                EnvironmentVariablesService.variables.AWS_SECRET_ACCESS_KEY ||
+                throwError(),
+            },
+          });
+
+          return new ProdStorageService(s3Client);
+        }
+      },
     },
   ],
   exports: [StorageService],

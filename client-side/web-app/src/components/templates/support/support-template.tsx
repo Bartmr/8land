@@ -1,3 +1,4 @@
+import { CONTACT_CTA_PRESENT } from '@app/shared/project-details';
 import {
   faHandHolding,
   faPen,
@@ -57,6 +58,10 @@ export const SupportTemplate = () => {
                 </div>
               );
             })}
+          </div>
+          <div className="mt-4">
+            <p>For individual support, {CONTACT_CTA_PRESENT}</p>
+            <p>To report a bug, {CONTACT_CTA_PRESENT}</p>
           </div>
         </div>
       )}
