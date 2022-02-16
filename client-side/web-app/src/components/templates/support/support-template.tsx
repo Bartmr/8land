@@ -60,8 +60,18 @@ export const SupportTemplate = () => {
             })}
           </div>
           <div className="mt-4">
-            <p>For individual support, {CONTACT_CTA_PRESENT}</p>
-            <p>To report a bug, {CONTACT_CTA_PRESENT}</p>
+            <p>
+              For individual support,{' '}
+              <span
+                dangerouslySetInnerHTML={{ __html: CONTACT_CTA_PRESENT }}
+              ></span>
+            </p>
+            <p>
+              To report a bug,{' '}
+              <span
+                dangerouslySetInnerHTML={{ __html: CONTACT_CTA_PRESENT }}
+              ></span>
+            </p>
           </div>
         </div>
       )}

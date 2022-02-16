@@ -4,6 +4,10 @@ import {
   CONTACT_CTA_PRESENT,
 } from '@app/shared/project-details';
 import { Layout } from 'src/components/routing/layout/layout';
+import {
+  LOG_SERVICE_COMPANY,
+  LOG_SERVICE_NAME,
+} from 'src/logic/app-internals/logging/logger';
 import { PRIVACY_POLICY_ROUTE } from './privacy-policy-routes';
 
 export function PrivacyPolicyTemplate() {
@@ -86,8 +90,8 @@ export function PrivacyPolicyTemplate() {
           <p>2.3. Your email and Ether address.</p>
           <p>
             2.5 Your interactions with the Site are documented via Google
-            Analytics, Firebase and LogRocket, and that information is processed
-            by Google and LogRocket.
+            Analytics, Firebase and {LOG_SERVICE_NAME}, and that information is
+            processed by Google and {LOG_SERVICE_COMPANY}.
           </p>
           <h2 id="the-way-your-personal-information-is-used">
             3. The Way your Personal Information is used
@@ -103,9 +107,10 @@ export function PrivacyPolicyTemplate() {
             controlled by Google.
           </p>
           <p>
-            3.3 LogRocket is used for purposes of monitoring errors. Any
-            identifying information collected via LogRocket is controlled by
-            LogRocket, Inc.
+            3.3 {LOG_SERVICE_NAME} is used for purposes of monitoring errors.
+            Any identifying information collected via {LOG_SERVICE_NAME} is
+            controlled by
+            {LOG_SERVICE_COMPANY}.
           </p>
           <p>
             3.4 Public blockchains provide transparency into transactions and

@@ -24,6 +24,7 @@ import { ReceiveSignedUserNonceRequestDTO } from '@app/shared/users/me/receive-s
 import { Logger } from 'src/logic/app-internals/logging/logger';
 import { useMainApiSessionLogout } from 'src/logic/app-internals/apis/main/session/use-main-api-session-logout';
 import { ChangeEmail } from './components/change-email';
+import { getWalletSignMessage } from '@app/shared/users/me/receive-signed-user-nonce.utils';
 
 export function WalletSectionWithNonce(props: {
   session: null | MainApiSessionData;
@@ -96,7 +97,7 @@ export function WalletSectionWithNonce(props: {
       try {
         signedNonce = await window.ethereum.request({
           method: 'personal_sign',
-          params: [address, props.nonce],
+          params: [address, getWalletSignMessage(props.nonce)],
         });
       } catch (err) {
         const errorValidation = object({

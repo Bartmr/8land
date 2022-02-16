@@ -13,6 +13,8 @@ import { PROJECT_SLOGAN } from '@app/shared/project-details';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { PRIVACY_POLICY_ROUTE } from 'src/components/templates/privacy-policy/privacy-policy-routes';
 import logo from 'src/assets/vendors/this-project/logo.svg';
+import { TERMS_OF_USE_ROUTE } from 'src/components/templates/terms-of-use/terms-of-use-routes';
+import { CONTENT_POLICY_ROUTE } from 'src/components/templates/content-policy/content-policy-routes';
 
 type Props = {
   children: (renderProps: {
@@ -140,12 +142,28 @@ export function Layout(props: Props) {
               <div className="row g-3 flex-lg-row-reverse align-items-center justify-content-center">
                 <div className="col-12 col-lg-6">
                   <ul className="list-unstyled m-0">
-                    <li className="text-lg-end">
+                    <li className="text-lg-end mb-3">
                       <LinkAnchor
                         className="link-body-shade"
                         href={PRIVACY_POLICY_ROUTE.getHref()}
                       >
                         Privacy Policy
+                      </LinkAnchor>
+                    </li>
+                    <li className="text-lg-end mb-3">
+                      <LinkAnchor
+                        className="link-body-shade"
+                        href={TERMS_OF_USE_ROUTE.getHref()}
+                      >
+                        Terms of User
+                      </LinkAnchor>
+                    </li>
+                    <li className="text-lg-end">
+                      <LinkAnchor
+                        className="link-body-shade"
+                        href={CONTENT_POLICY_ROUTE.getHref()}
+                      >
+                        Content Policy
                       </LinkAnchor>
                     </li>
                   </ul>

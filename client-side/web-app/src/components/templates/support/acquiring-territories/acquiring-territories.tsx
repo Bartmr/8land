@@ -36,7 +36,7 @@ export function AcquiringTerritoriesTemplate() {
                 the size and location of said territory.
               </p>
             </li>
-            <li>
+            <li className="mb-4">
               <div className="mt-3 alert alert-warning">
                 {
                   "Before you buy a territory NFT it's important to check if the NFT \
@@ -47,9 +47,14 @@ was created by 8Land"
                 NFTs created by 8Land have the{' '}
                 <span className="text-highlight">8LT</span> symbol and were
                 created by the contract address{' '}
-                <span className="text-highlight">
+                <span className="text-highlight text-success">
                   {EnvironmentVariables.TERRITORIES_CONTRACT_ADDRESS}
                 </span>
+              </p>
+              {/* TODO replace with production address */}
+              <p>
+                (The pictures below are just an example, and are not showing the
+                real address. The real address is the one above.)
               </p>
               <div>
                 <img src={image1} className="w-75" alt={'1'} />

@@ -125,12 +125,21 @@ did with old RPG games."
           </div>
           <div className="bg-danger py-5">
             <div className="container">
-              <p className="display-4 text-body">The metaverse, anywhere</p>
+              <p className="display-4 text-body">
+                The metaverse, for everyone anywhere
+              </p>
               <p className="mt-4">
                 Contrary to most metaverses which can only run in powerful
                 desktops and VR headsets, 8Land was made to run anywhere, from
                 your phone to your desktop.
               </p>
+              <p>---</p>
+              <p>
+                8Land also does not require a crypto wallet, so that both crypto
+                and non-crypto users can enjoy the metaverse.
+              </p>
+
+              <p>You will only need a wallet to buy and manage territories.</p>
             </div>
           </div>
           <div

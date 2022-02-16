@@ -10,6 +10,7 @@ import { GetUserWalletNonce } from 'libs/shared/src/users/me/get-user-wallet-non
 import { ReceiveSignedUserNonceRequestDTO } from 'libs/shared/src/users/me/receive-signed-user-nonce.dto';
 import * as ethUtil from 'ethereumjs-util';
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
+import { getWalletSignMessage } from 'libs/shared/src/users/me/receive-signed-user-nonce.utils';
 
 @Controller('users')
 export class UsersController {
@@ -32,8 +33,10 @@ export class UsersController {
     @Body() body: ReceiveSignedUserNonceRequestDTO,
   ): Promise<void> {
     let nonce = authContext.user.walletNonce;
+
+    const message = getWalletSignMessage(nonce);
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-    nonce = '\x19Ethereum Signed Message:\n' + nonce.length + nonce;
+    nonce = '\x19Ethereum Signed Message:\n' + message.length + message;
 
     const nonceBuffer = ethUtil.keccak(Buffer.from(nonce, 'utf-8'));
     const { v, r, s } = ethUtil.fromRpcSig(body.signedNonce);

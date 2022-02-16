@@ -4,6 +4,9 @@ import { RUNNING_IN_CLIENT, RUNNING_IN_SERVER } from '../runtime/running-in';
 
 const LOG_ENTRIES_LIMIT = 3;
 
+export const LOG_SERVICE_NAME = 'LogRocket';
+export const LOG_SERVICE_COMPANY = 'LogRocket, Inc.';
+
 class LoggerImpl {
   private loggedErrors: { [key: string]: undefined | number } = {};
   private loggedWarnings: { [key: string]: undefined | number } = {};
