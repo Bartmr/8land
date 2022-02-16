@@ -1,17 +1,51 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  OnModuleDestroy,
+  OnModuleInit,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectConnection } from '@nestjs/typeorm';
 import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
 import { User } from 'src/users/typeorm/user.entity';
 import { AuthTokensRepository } from './auth-token.repository';
 import { Connection, EntityManager } from 'typeorm';
+import { LoggingService } from 'src/internals/logging/logging.service';
+import { cleanExpiredAuthTokens } from './clean-expired-auth-tokens';
+import { IS_MAIN_SERVER_PROCESS } from 'src/internals/server/server.constants';
+import { throwError } from 'src/internals/utils/throw-error';
 
 @Injectable()
-export class AuthTokensService {
+export class AuthTokensService implements OnModuleInit, OnModuleDestroy {
+  private loggingService: LoggingService;
   private tokensRepository: AuthTokensRepository;
+  private tokensCleanupInterval?: NodeJS.Timer;
 
-  constructor(@InjectConnection() connection: Connection) {
+  constructor(
+    loggingService: LoggingService,
+    @InjectConnection() connection: Connection,
+  ) {
+    this.loggingService = loggingService;
     this.tokensRepository =
       connection.getCustomRepository(AuthTokensRepository);
+  }
+
+  onModuleInit() {
+    if (IS_MAIN_SERVER_PROCESS) {
+      this.tokensCleanupInterval = setInterval(() => {
+        cleanExpiredAuthTokens().catch((err) => {
+          this.loggingService.logError(
+            'auth-tokens-service:token-cleanup-error',
+            err,
+          );
+        });
+      }, 1000 * 60 * 60);
+    }
+  }
+
+  onModuleDestroy() {
+    if (IS_MAIN_SERVER_PROCESS) {
+      clearInterval(this.tokensCleanupInterval ?? throwError());
+    }
   }
 
   async createAuthToken(manager: EntityManager, user: User) {

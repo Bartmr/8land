@@ -3,11 +3,6 @@ import { ConnectionManager } from 'typeorm';
 import { AUTH_MODULE_ENTITIES } from '../auth-module-entities';
 import { AuthTokensRepository } from './auth-token.repository';
 
-/*
-  TODO
-  setup as cron job
-*/
-
 export async function cleanExpiredAuthTokens() {
   const connectionManager = new ConnectionManager();
 

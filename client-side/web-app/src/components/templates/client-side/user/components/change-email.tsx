@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   TransportedDataGate,
   TransportedDataGateLayout,
@@ -35,6 +35,16 @@ export function ChangeEmail() {
 
     replaceFormStatus({ status: TransportedDataStatus.Done, data: undefined });
   };
+
+  useEffect(() => {
+    (async () => {
+      const firebaseUser = FirebaseAuth.currentUser;
+
+      if (!firebaseUser) {
+        await logout.logout();
+      }
+    })();
+  }, []);
 
   return (
     <div className="card">
