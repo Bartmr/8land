@@ -13,7 +13,10 @@ COPY ./.nvmrc \
 ./package.json \
 ./tsconfig.base.json \
 ./tsconfig.declaration-files.json \
-./tsconfig.build.json /usr/src/app/
+./tsconfig.build.json \
+./polyfill-types-mocha.js \
+./firebase-env-to-file.js \
+./hardhat.config.ts /usr/src/app/
 
 WORKDIR /usr/src/app
 
