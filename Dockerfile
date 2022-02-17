@@ -22,6 +22,9 @@ WORKDIR /usr/src/app
 
 RUN npm ci
 
+ARG FIREBASE_JSON
+ENV FIREBASE_JSON=${FIREBASE_JSON}
+
 RUN node ./firebase-env-to-file.js
 
 ENV NODE_ENV=production
