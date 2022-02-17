@@ -77,6 +77,8 @@ export class ProdStorageService extends StorageService {
   }
 
   getHostUrl(): string {
-    return EnvironmentVariablesService.variables.AWS_ENDPOINT || throwError();
+    return `https://8land.${
+      EnvironmentVariablesService.variables.AWS_ENDPOINT || throwError()
+    }`;
   }
 }

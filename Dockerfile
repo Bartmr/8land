@@ -19,8 +19,12 @@ WORKDIR /usr/src/app
 
 RUN npm ci
 
-ENV NODE_ENV=production
+RUN node ./firebase-env-to-file.js
 
+ENV NODE_ENV=production
+ENV GOOGLE_APPLICATION_CREDENTIALS=/usr/src/app/service-account-file.json
+
+RUN npm run build:smart-contracts
 RUN npm run build:api
 
 CMD npm run start:prod

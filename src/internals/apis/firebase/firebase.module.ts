@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import * as firebaseAdmin from 'firebase-admin';
+import { applicationDefault } from 'firebase-admin/app';
 import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
 import { throwError } from 'src/internals/utils/throw-error';
@@ -23,7 +24,9 @@ type FirebaseApp = ReturnType<typeof firebaseAdmin['initializeApp']>;
             generateRandomUUID(),
           );
         } else {
-          throw new Error('Not implemented');
+          app = firebaseAdmin.initializeApp({
+            credential: applicationDefault(),
+          });
         }
 
         return new FirebaseService(app);
