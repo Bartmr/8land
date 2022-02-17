@@ -22,12 +22,14 @@ WORKDIR /usr/src/app
 
 RUN npm ci
 
+ENV NODE_ENV=production
+ENV TS_NODE_PROJECT=tsconfig.build.json
+
 ARG FIREBASE_JSON
 ENV FIREBASE_JSON=${FIREBASE_JSON}
 
 RUN node ./firebase-env-to-file.js
 
-ENV NODE_ENV=production
 ENV GOOGLE_APPLICATION_CREDENTIALS=/usr/src/app/service-account-file.json
 
 RUN npm run build:smart-contracts
