@@ -66,8 +66,8 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   GOOGLE_APPLICATION_CREDENTIALS: [NodeEnv.Development, NodeEnv.Test].includes(
     NODE_ENV as NodeEnv,
   )
-    ? equals(['/usr/src/app/service-account-file.json']).required()
-    : string(),
+    ? string()
+    : equals(['/usr/src/app/service-account-file.json']).required(),
 
   API_PORT: number().transform((v) => {
     if (v == null) {

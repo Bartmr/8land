@@ -77,7 +77,8 @@ _Typeorm_ entities should always be placed in directories named `typeorm` and ha
     - Set those addresses as environment variables in `.env.secrets.development`
   - Production
     - Set the necessary environment variables in your terminal
-    - Build the smart contracts
+    - Build the smart contracts: `npm run build:smart-contracts`
+    - Build the api: `npm run build:api`
     - `NODE_ENV=production node ./dist/scripts/deploy.js`
     - Take note of the deployed contracts addresses
       - Set those addresses as environment variables in your production server
