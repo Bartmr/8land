@@ -9,7 +9,7 @@
   },
   "scripts": {
     "postinstall": "node ./polyfill-types-mocha.js",
-    "install:all": "npm install -g concurrently && concurrently \"npm install\" \"npm run install:web-app\" -n \"install,install:web-app\" && node polyfill-types-mocha.js",
+    "install:all": "npm install -g concurrently && concurrently \"npm install\" \"npm run install:web-app\" -n \"install,install:web-app\"",
     "install:web-app": "cd client-side/web-app && npm install",
     "seed": "npm run ts-node ./scripts-dev/seed.ts",
     "tear-down-databases": "npm run ts-node ./scripts-dev/tear-down-databases.ts",
