@@ -15,6 +15,7 @@ import { PRIVACY_POLICY_ROUTE } from 'src/components/templates/privacy-policy/pr
 import logo from 'src/assets/vendors/this-project/logo.svg';
 import { TERMS_OF_USE_ROUTE } from 'src/components/templates/terms-of-use/terms-of-use-routes';
 import { CONTENT_POLICY_ROUTE } from 'src/components/templates/content-policy/content-policy-routes';
+import { dom } from '@fortawesome/fontawesome-svg-core';
 
 type Props = {
   children: (renderProps: {
@@ -109,6 +110,7 @@ export function Layout(props: Props) {
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={`${siteUrl}${thumbnail.src}`} />
+        <style type="text/css">{dom.css()}</style>
       </Helmet>
       <div
         className={`${
