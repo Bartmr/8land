@@ -41,6 +41,8 @@ class GridPhysics {
 
   private hasSteppedOnSafeTile = false;
 
+  private isLocked = false;
+
   constructor(
     private player: Player,
     private context: {
@@ -62,7 +64,19 @@ class GridPhysics {
     },
   ) {}
 
+  lock() {
+    this.isLocked = true;
+  }
+
+  unlock() {
+    this.isLocked = false;
+  }
+
   movePlayer(direction: Direction): void {
+    if (this.isLocked) {
+      return;
+    }
+
     this.lastMovementIntent = direction;
     if (this.isMoving()) return;
 
@@ -74,6 +88,10 @@ class GridPhysics {
   }
 
   update(delta: number) {
+    if (this.isLocked) {
+      return;
+    }
+
     if (this.isMoving()) {
       this.updatePlayerPosition(delta);
     }

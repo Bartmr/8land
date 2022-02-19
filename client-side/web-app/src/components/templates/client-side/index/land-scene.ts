@@ -270,6 +270,13 @@ export class LandScene extends Phaser.Scene {
       },
       territories: territoryContexts,
       onStepIntoDoor: async (block: DoorBlock) => {
+        if (this.args.land.id === block.toLandId) {
+          return;
+        }
+
+        (this.gridControls || throwError()).lockControls();
+        (this.gridPhysics || throwError()).lock();
+
         await this.handleStepIntoDoor(block);
       },
     });
@@ -351,11 +358,6 @@ export class LandScene extends Phaser.Scene {
   private async handleStepIntoDoor(block: DoorBlock) {
     const nextLandId = block.toLandId;
 
-    if (this.args.land.id === nextLandId) {
-      return;
-    }
-
-    (this.gridControls || throwError()).lockControls();
     this.dependencies.changeLandNameDisplay('-- Loading --');
 
     const res = await this.dependencies.api.get<
@@ -381,6 +383,8 @@ export class LandScene extends Phaser.Scene {
       }
 
       (this.gridControls || throwError()).unlockControls();
+      (this.gridPhysics || throwError()).unlock();
+
       this.dependencies.changeLandNameDisplay(this.args.land.name);
 
       return;
