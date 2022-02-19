@@ -82,7 +82,7 @@ export class ProdStorageService extends StorageService {
 
   getHostUrl(): string {
     return `https://${
-      EnvironmentVariablesService.variables.S3_BUCKET_NAME || throwError()
-    }.${EnvironmentVariablesService.variables.AWS_ENDPOINT || throwError()}`;
+      EnvironmentVariablesService.variables.AWS_ENDPOINT || throwError()
+    }`;
   }
 }
