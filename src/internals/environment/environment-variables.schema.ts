@@ -41,6 +41,8 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   DATABASE_NAME: string().filled(),
   DATABASE_USER: string().filled(),
   DATABASE_PASSWORD: string().filled(),
+  DATABASE_CA_CERTIFICATE:
+    NODE_ENV === NodeEnv.Production ? string().filled() : string(),
 
   AUTH_TOKEN_TTL: number()
     .notNull()

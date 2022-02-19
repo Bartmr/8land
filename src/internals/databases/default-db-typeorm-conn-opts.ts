@@ -22,4 +22,9 @@ export const DEFAULT_DB_TYPEORM_CONN_OPTS: ConnectionOptions = {
   */
   migrationsRun: false,
   installExtensions: false,
+  ssl: EnvironmentVariablesService.variables.DATABASE_CA_CERTIFICATE
+    ? {
+        ca: EnvironmentVariablesService.variables.DATABASE_CA_CERTIFICATE,
+      }
+    : undefined,
 };
