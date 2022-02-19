@@ -74,5 +74,6 @@ export const GATSBY_CONFIG = {
         ),
       },
     },
+    `gatsby-plugin-netlify`,
   ],
 };

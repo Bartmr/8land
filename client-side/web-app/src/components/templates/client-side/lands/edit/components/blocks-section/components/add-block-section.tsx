@@ -24,6 +24,7 @@ export function AddBlockSection(props: {
   const form = useForm({
     resolver: notMeReactHookFormResolver(CreateBlockRequestSchema),
     defaultValues: {
+      landId: props.land.id,
       data: {
         type: BlockType.Door,
       },
