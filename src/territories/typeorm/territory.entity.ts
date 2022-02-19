@@ -13,9 +13,6 @@ import {
 
 @Entity()
 export class Territory extends SimpleEntity {
-  @Column('text', { nullable: true })
-  nftTransactionHash!: string | null;
-
   @CreateDateColumn()
   createdAt!: Date;
 

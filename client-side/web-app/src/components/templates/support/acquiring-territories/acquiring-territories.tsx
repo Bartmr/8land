@@ -1,12 +1,12 @@
 import { Layout } from 'src/components/routing/layout/layout';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
-import { TERRITORIES_ROUTE } from '../../client-side/territories/territories-routes';
 import { USER_ROUTE } from '../../client-side/user/user-routes';
 import { ACQUIRING_TERRITORIES_ROUTE } from './acquiring-territories-routes';
-import image1 from './image-1.jpg';
-import image2 from './image-2.jpg';
-import image3 from './image-3.jpg';
+
+// TODO update for rarible
+
+// should have an input box where you put a rarible url and it tells you if its a valid territory
 
 export function AcquiringTerritoriesTemplate() {
   return (
@@ -26,7 +26,7 @@ export function AcquiringTerritoriesTemplate() {
                 can be exchanged exactly in the same way other NFTs do. You can
                 get a territory by exchanging with somebody who already has one,
                 or buy one directly from 8Land{' '}
-                <LinkAnchor href={EnvironmentVariables.OPENSEA_STORE_URL}>
+                <LinkAnchor href={EnvironmentVariables.TERRITORIES_STORE_URL}>
                   here
                 </LinkAnchor>
                 .
@@ -43,32 +43,7 @@ export function AcquiringTerritoriesTemplate() {
 was created by 8Land"
                 }
               </div>
-              <p>
-                NFTs created by 8Land have the{' '}
-                <span className="text-highlight">8LT</span> symbol and were
-                created by the contract address{' '}
-                <span className="text-highlight text-success">
-                  {EnvironmentVariables.TERRITORIES_CONTRACT_ADDRESS}
-                </span>
-              </p>
-              {/* TODO replace with production address */}
-              <p>
-                (The pictures below are just an example, and are not showing the
-                real address. The real address is the one above.)
-              </p>
-              <div>
-                <img src={image1} className="w-75" alt={'1'} />
-              </div>
-              <div className="mt-4">
-                <img src={image2} className="w-75" alt={'2'} />
-              </div>
-            </li>
-            <li className="mb-4">
-              After you bought or received a territory, it should be listed{' '}
-              <LinkAnchor href={TERRITORIES_ROUTE.getHref()}>here</LinkAnchor>
-              <div className="mt-4">
-                <img src={image3} className="w-75" alt={'2'} />
-              </div>
+              ! TO BE WRITTEN !
             </li>
           </ol>
         </>

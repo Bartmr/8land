@@ -33,7 +33,7 @@ export function IndexTemplate() {
                 <div className="col-12 col-md-4 col-lg-3">
                   <LinkAnchor
                     className="d-block btn btn-default"
-                    href={EnvironmentVariables.OPENSEA_STORE_URL}
+                    href={EnvironmentVariables.TERRITORIES_STORE_URL}
                   >
                     Own Territory (NFTs)
                   </LinkAnchor>

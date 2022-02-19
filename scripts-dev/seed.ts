@@ -27,9 +27,6 @@ import fs from 'fs';
 import { promisify } from 'util';
 import path from 'path';
 import { DevStorageService } from 'src/internals/storage/dev-storage.service';
-import { ethers } from 'ethers';
-import territoryNFTContractJSON from 'libs/smart-contracts/artifacts/contracts/TerritoryNFT.sol/TerritoryNFT.json';
-import { TerritoryNFT } from 'libs/smart-contracts/typechain-types';
 import { LOCAL_TEMPORARY_FILES_PATH } from 'src/internals/local-temporary-files/local-temporary-files-path';
 
 const readFile = promisify(fs.readFile);
@@ -355,7 +352,6 @@ async function seed() {
         startY: 3,
         endX: 7,
         endY: 6,
-        nftTransactionHash: null,
       },
       auditContext,
     );
@@ -423,28 +419,6 @@ async function seed() {
         name: `${townOfHumbleBeginnings.name} - territory 1`,
       }),
     );
-
-    const provider = new ethers.providers.JsonRpcProvider(
-      EnvironmentVariablesService.variables.MORALIS_SPEEDY_NODE,
-    );
-
-    const wallet = new ethers.Wallet(
-      EnvironmentVariablesService.variables.WALLET_PRIVATE_KEY,
-      provider,
-    );
-
-    const nftContract = new ethers.Contract(
-      EnvironmentVariablesService.variables.TERRITORY_NFT_CONTRACT_ADDRESS,
-      territoryNFTContractJSON.abi,
-      wallet,
-    ) as TerritoryNFT;
-
-    const territory1NFTTransaction = await nftContract.mintNFT(
-      wallet.address,
-      `${storageService.getHostUrl()}/${nftMetadataStorageKey}`,
-    );
-
-    territory1.nftTransactionHash = territory1NFTTransaction.hash;
 
     await territoriesRepository.save(territory1, auditContext);
     /* --- */

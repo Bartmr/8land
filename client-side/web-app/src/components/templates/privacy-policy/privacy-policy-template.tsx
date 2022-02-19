@@ -198,11 +198,10 @@ export function PrivacyPolicyTemplate() {
           <p>
             Your Ethereum public address is collected, and you should understand
             that transactions that take place using the Site and the Tools are
-            confirmed and managed via the Ethereum and the Polygon / MATIC
-            blockchain. You understand that your Ethereum public address will be
-            made publicly visible whenever you engage in a transaction that is
-            confirmed and managed via the Ethereum and Polygon / MATIC
-            blockchain.
+            confirmed and managed via the Ethereum blockchain. You understand
+            that your Ethereum public address will be made publicly visible
+            whenever you engage in a transaction that is confirmed and managed
+            via the Ethereum blockchain.
           </p>
           <h2 id="information-security">8. Information Security</h2>
           <p>

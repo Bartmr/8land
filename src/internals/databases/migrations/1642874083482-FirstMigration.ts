@@ -43,7 +43,6 @@ export class FirstMigration1642874083482 implements MigrationInterface {
                 "endX" integer NOT NULL,
                 "endY" integer NOT NULL,
                 "inLandId" uuid,
-                "nftTransactionHash" text,
                 CONSTRAINT "PK_2250448f958bc52a8d040b48f82" PRIMARY KEY ("id")
             )
         `);

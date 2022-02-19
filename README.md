@@ -1,10 +1,5 @@
 ## Quick stuff
 
-- Web3 Provider: https://moralis.io/
-- Polygon Testnet scanner: https://mumbai.polygonscan.com/
-- Polygon Faucet: https://faucet.polygon.technology/
-- OpenSea for Testnets: https://testnets.opensea.io/
-
 ## Updating the project's boilerplate
 
 To update the project's boilerplate, just run `update-project-boilerplate.sh` and input the _Git_ repository URL of the boilerplate your project is based on. In this case `https://github.com/Bartmr/estirador.git`

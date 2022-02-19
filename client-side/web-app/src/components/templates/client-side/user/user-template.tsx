@@ -161,7 +161,7 @@ export function WalletSectionWithNonce(props: {
   return (
     <div className="card">
       <div className="card-body">
-        <h2 className="card-title h3">Ethereum / Polygon Wallet</h2>
+        <h2 className="card-title h3">Ethereum Wallet</h2>
         {props.walletAddress ? (
           <>
             <p className="text-success">

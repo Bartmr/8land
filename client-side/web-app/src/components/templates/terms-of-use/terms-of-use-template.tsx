@@ -158,9 +158,9 @@ export function TermsOfUseTemplate() {
             </p>
             <p>
               Transactions that take place using the Tools are confirmed and
-              managed via the Polygon and Ethereum blockchain. You understand
-              that your Ethereum public address will be made publicly visible
-              whenever you engage in a transaction using the Tools.
+              managed via the Ethereum blockchain. You understand that your
+              Ethereum public address will be made publicly visible whenever you
+              engage in a transaction using the Tools.
             </p>
             <p>
               If you reside in a jurisdiction where online gambling is banned
@@ -204,9 +204,8 @@ export function TermsOfUseTemplate() {
               cryptographic systems; and warrant that you have an understanding
               of the usage, risks, potential bugs based on novel technology
               (where applicable), and intricacies of native cryptographic
-              tokens, like Polygon (MATIC), Ether (ETH) and Bitcoin (BTC), smart
-              contract based tokens such as those that follow the Ethereum Token
-              Standard (
+              tokens, like Ether (ETH) and Bitcoin (BTC), smart contract based
+              tokens such as those that follow the Ethereum Token Standard (
               <a href="https://github.com/ethereum/EIPs/issues/20">
                 https://github.com/ethereum/EIPs/issues/20
               </a>
@@ -217,10 +216,10 @@ export function TermsOfUseTemplate() {
               5.3 Risk of Regulatory Actions in One or More Jurisdictions
             </h3>
             <p>
-              The Project, 8LT, MATIC and ETH could be impacted by one or more
+              The Project, 8LT and ETH could be impacted by one or more
               regulatory inquiries or regulatory action, which could impede or
-              limit your ability to access or use the Tools, the Polygon
-              blockchain, or the Ethereum blockchain.
+              limit your ability to access or use the Tools, or the Ethereum
+              blockchain.
             </p>
             <h3 id="risk-of-weaknesses-or-exploits-in-the-field-of-cryptography">
               5.4 Risk of Weaknesses or Exploits in the Field of Cryptography
@@ -236,18 +235,18 @@ export function TermsOfUseTemplate() {
             </p>
             <h3 id="use-of-crypto-assets">5.5 Use of Crypto Assets</h3>
             <p>
-              Some Tools allow the use of 8LT, ETH, MATIC or other similar
-              blockchain technologies. You acknowledge and agree that 8LT,
-              Polygon, Ether and blockchain technologies and associated assets,
-              and other assets are highly volatile due to many factors including
-              but not limited to popularity, adoption, speculation, regulation,
-              technology and security risks. You also acknowledge and agree that
-              the cost of transacting on such technologies is variable and may
-              increase at any time causing impact to any activities taking place
-              on the Ethereum blockchain. The Project does not invite or make
-              any offer to acquire, purchase, sell, transfer or otherwise deal
-              in any crypto asset. Third parties may provide services involving
-              the acquisition, purchase, sale, transfer or exchange of
+              Some Tools allow the use of 8LT, ETH, or other similar blockchain
+              technologies. You acknowledge and agree that 8LT, Ether and
+              blockchain technologies and associated assets, and other assets
+              are highly volatile due to many factors including but not limited
+              to popularity, adoption, speculation, regulation, technology and
+              security risks. You also acknowledge and agree that the cost of
+              transacting on such technologies is variable and may increase at
+              any time causing impact to any activities taking place on the
+              Ethereum blockchain. The Project does not invite or make any offer
+              to acquire, purchase, sell, transfer or otherwise deal in any
+              crypto asset. Third parties may provide services involving the
+              acquisition, purchase, sale, transfer or exchange of
               crypto-assets; the Project does not provide any such service and
               does not undertake any liability in connection thereto. You
               acknowledge and
@@ -313,20 +312,19 @@ export function TermsOfUseTemplate() {
               You acknowledge and agree that the Tools do not store, send, or
               receive 8LT. This is because 8LT exist only by virtue of the
               ownership record maintained on the Tools&apos; supporting
-              blockchain in the Polygon or Ethereum network. Any transfer of a
-              8LT occurs within the supporting blockchain in the Polygon or
-              Ethereum network, and not within the Tools.
+              blockchain in the Ethereum network. Any transfer of a 8LT occurs
+              within the supporting blockchain in the Ethereum network, and not
+              within the Tools.
             </p>
             <h3 id="risks-of-changes-to-ethereum-platform">
-              5.10 Risks of Changes to Polygon or Ethereum Platform
+              5.10 Risks of Changes to Ethereum Platform
             </h3>
             <p>
-              Upgrades by Polygon or Ethereum to the Polygon or Ethereum
-              platform, a hard fork in the Polygon or Ethereum platform, or a
-              change in how transactions are confirmed on the Polygon or
-              Ethereum platform may have unintended, adverse effects on all
-              blockchains using the ERC-20 standard, ERC-721 standard, or any
-              other future Polygon or Ethereum standard.
+              Upgrades by Ethereum to the Ethereum platform, a hard fork in the
+              Ethereum platform, or a change in how transactions are confirmed
+              on the Ethereum platform may have unintended, adverse effects on
+              all blockchains using the ERC-20 standard, ERC-721 standard, or
+              any other future Ethereum standard.
             </p>
             <h3 id="Wearables Curation">5.11 Territories Curation</h3>
             <p>
@@ -353,14 +351,14 @@ export function TermsOfUseTemplate() {
               Layer 2 solutions or Web3 providers.
             </p>
             <p>
-              6.2 Ethereum and Polygon requires the payment of a transaction fee
-              (a &quot;<b>Gas Fee</b>&quot;) for every transaction that occurs
-              on the Ethereum network. The Gas Fee funds the network of
-              computers that run the decentralized Ethereum network. This means
-              that you will need to pay a Gas Fee for each transaction that
-              occurs via the Tools. You accept that the payment of the Gas Fee
-              is inherent to the nature of the Ethereum network and alien to the
-              Project or due to the use of the Tools.
+              6.2 Ethereum requires the payment of a transaction fee (a &quot;
+              <b>Gas Fee</b>&quot;) for every transaction that occurs on the
+              Ethereum network. The Gas Fee funds the network of computers that
+              run the decentralized Ethereum network. This means that you will
+              need to pay a Gas Fee for each transaction that occurs via the
+              Tools. You accept that the payment of the Gas Fee is inherent to
+              the nature of the Ethereum network and alien to the Project or due
+              to the use of the Tools.
             </p>
             <p>
               6.3 Transactions in third-party NFT marketplaces (inside or
@@ -527,30 +525,30 @@ export function TermsOfUseTemplate() {
             <p>
               10.6 8LT, WEARABLES AND ANY AND ALL ERC-721 TOKENS ARE INTANGIBLE
               DIGITAL ASSETS THAT EXIST ONLY BY VIRTUE OF THE OWNERSHIP RECORD
-              MAINTAINED IN THE POLYGON AND ETHEREUM NETWORK. ALL SMART
-              CONTRACTS ARE CONDUCTED AND OCCUR ON THE DECENTRALIZED LEDGER
-              WITHIN THE POLYGON AND ETHEREUM PLATFORM. THE PROJECT HAS NO
-              CONTROL OVER AND MAKES NO GUARANTEES OR PROMISES WITH RESPECT TO
-              THE OWNERSHIP RECORD OR SMART CONTRACTS.
+              MAINTAINED IN THE ETHEREUM NETWORK. ALL SMART CONTRACTS ARE
+              CONDUCTED AND OCCUR ON THE DECENTRALIZED LEDGER WITHIN THE
+              ETHEREUM PLATFORM. THE PROJECT HAS NO CONTROL OVER AND MAKES NO
+              GUARANTEES OR PROMISES WITH RESPECT TO THE OWNERSHIP RECORD OR
+              SMART CONTRACTS.
             </p>
             <p>
               10.7 8LT ARE INTANGIBLE DIGITAL ASSETS THAT EXIST ONLY BY VIRTUE
-              OF THE OWNERSHIP RECORD MAINTAINED IN THE POLYGON AND ETHEREUM
-              NETWORK. ALL SMART CONTRACTS ARE
+              OF THE OWNERSHIP RECORD MAINTAINED IN THE ETHEREUM NETWORK. ALL
+              SMART CONTRACTS ARE
             </p>
             <p>
-              CONDUCTED AND OCCUR ON THE DECENTRALIZED LEDGER WITHIN THE POLYGON
-              AND ETHEREUM PLATFORM. THE PROJECT HAS NO CONTROL OVER AND MAKE NO
+              CONDUCTED AND OCCUR ON THE DECENTRALIZED LEDGER WITHIN THE
+              ETHEREUM PLATFORM. THE PROJECT HAS NO CONTROL OVER AND MAKE NO
               GUARANTEES OR PROMISES WITH RESPECT TO THE OWNERSHIP RECORD OR
               SMART CONTRACTS. THE PROJECT MAKES NO OFFER OR INVITATION TO
               ACQUIRE, PURCHASE, TRANSFER, SELL OR OTHERWISE DEAL IN 8LT.
             </p>
             <p>
               10.8. THE PROJECT IS NOT RESPONSIBLE FOR LOSSES DUE TO BLOCKCHAIN
-              OR ANY OTHER FEATURES OF THE POLYGON OR ETHEREUM NETWORK OR THE
-              METAMASK OR OTHER ELECTRONIC WALLET, INCLUDING BUT NOT LIMITED TO
-              LATE REPORT BY DEVELOPERS OR REPRESENTATIVES (OR NO REPORT AT ALL)
-              OF ANY ISSUES WITH THE BLOCKCHAIN SUPPORTING THE ETHEREUM NETWORK,
+              OR ANY OTHER FEATURES OF THE ETHEREUM NETWORK OR THE METAMASK OR
+              OTHER ELECTRONIC WALLET, INCLUDING BUT NOT LIMITED TO LATE REPORT
+              BY DEVELOPERS OR REPRESENTATIVES (OR NO REPORT AT ALL) OF ANY
+              ISSUES WITH THE BLOCKCHAIN SUPPORTING THE ETHEREUM NETWORK,
               INCLUDING FORKS, TECHNICAL NODE ISSUES, OR ANY OTHER ISSUES HAVING
               FUND LOSSES AS A RESULT.
             </p>
