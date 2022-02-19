@@ -48,7 +48,7 @@ export class ProdStorageService extends StorageService {
 
     await this.s3Client.send(
       new PutObjectCommand({
-        Bucket: `${parsedKey.path}/`,
+        Bucket: `${parsedKey.path}`,
         Key: parsedKey.filename,
         Body: stream,
         ACL: 'public-read',
@@ -70,7 +70,7 @@ export class ProdStorageService extends StorageService {
 
     await this.s3Client.send(
       new DeleteObjectCommand({
-        Bucket: `${parsedKey.path}/`,
+        Bucket: `${parsedKey.path}`,
         Key: parsedKey.filename,
       }),
     );
