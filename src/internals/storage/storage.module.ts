@@ -25,9 +25,9 @@ export const USE_DEV_STORAGE =
           return new DevStorageService();
         } else {
           const s3Client = new S3Client({
-            endpoint:
-              EnvironmentVariablesService.variables.AWS_ENDPOINT ||
-              throwError(),
+            endpoint: `https://${
+              EnvironmentVariablesService.variables.AWS_ENDPOINT || throwError()
+            }`,
             region:
               EnvironmentVariablesService.variables.AWS_REGION || throwError(),
             credentials: {
