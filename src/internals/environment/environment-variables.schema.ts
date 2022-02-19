@@ -89,4 +89,5 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   AWS_REGION: stringFailIfEmptyInProd,
   AWS_ACCESS_KEY_ID: stringFailIfEmptyInProd,
   AWS_SECRET_ACCESS_KEY: stringFailIfEmptyInProd,
+  S3_BUCKET_NAME: stringFailIfEmptyInProd,
 }).required();

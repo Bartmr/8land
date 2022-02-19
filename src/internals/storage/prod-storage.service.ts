@@ -14,6 +14,14 @@ export class ProdStorageService extends StorageService {
   }
 
   private parseKey(key: string) {
+    if (!key) {
+      throw new Error();
+    }
+
+    if (key.endsWith('/')) {
+      throw new Error();
+    }
+
     const split = key.split('/');
     const filename = split.pop();
     const path = split.join('/');
@@ -23,14 +31,6 @@ export class ProdStorageService extends StorageService {
     }
 
     if (filename.indexOf('/') !== -1) {
-      throw new Error();
-    }
-
-    if (!key) {
-      throw new Error();
-    }
-
-    if (key.endsWith('/')) {
       throw new Error();
     }
 
@@ -48,8 +48,10 @@ export class ProdStorageService extends StorageService {
 
     await this.s3Client.send(
       new PutObjectCommand({
-        Bucket: `${parsedKey.path}`,
-        Key: parsedKey.filename,
+        Bucket: `${
+          EnvironmentVariablesService.variables.S3_BUCKET_NAME || throwError()
+        }`,
+        Key: `${parsedKey.path}/${parsedKey.filename}`,
         Body: stream,
         ACL: 'public-read',
       }),
@@ -70,15 +72,17 @@ export class ProdStorageService extends StorageService {
 
     await this.s3Client.send(
       new DeleteObjectCommand({
-        Bucket: `${parsedKey.path}`,
-        Key: parsedKey.filename,
+        Bucket: `${
+          EnvironmentVariablesService.variables.S3_BUCKET_NAME || throwError()
+        }`,
+        Key: `${parsedKey.path}/${parsedKey.filename}`,
       }),
     );
   }
 
   getHostUrl(): string {
-    return `https://8land.${
-      EnvironmentVariablesService.variables.AWS_ENDPOINT || throwError()
-    }`;
+    return `https://${
+      EnvironmentVariablesService.variables.S3_BUCKET_NAME || throwError()
+    }.${EnvironmentVariablesService.variables.AWS_ENDPOINT || throwError()}`;
   }
 }
