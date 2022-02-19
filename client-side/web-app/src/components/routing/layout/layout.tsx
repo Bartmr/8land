@@ -110,7 +110,7 @@ export function Layout(props: Props) {
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={`${siteUrl}${thumbnail.src}`} />
-        <style type="text/css">{dom.css()}</style>
+        <style>{dom.css()}</style>
       </Helmet>
       <div
         className={`${
