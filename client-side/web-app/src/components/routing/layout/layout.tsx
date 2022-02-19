@@ -42,7 +42,7 @@ export function Layout(props: Props) {
       }
       siteThumbnail: file(
         sourceInstanceName: { eq: "src-assets" }
-        relativePath: { eq: "vendors/this-project/logo.png" }
+        relativePath: { eq: "vendors/this-project/thumbnail.jpeg" }
       ) {
         childImageSharp {
           original {
