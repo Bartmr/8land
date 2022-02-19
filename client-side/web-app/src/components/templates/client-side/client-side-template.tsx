@@ -1,3 +1,5 @@
+import 'src/components/ui-kit/global-styles/global-styles';
+
 import { Router } from '@reach/router';
 import { AuthenticatedRoute } from 'src/components/routing/authenticated-route/authenticated-route';
 import { AuthenticatedRouteAccess } from 'src/components/routing/authenticated-route/authenticated-route-types';

@@ -81,7 +81,7 @@ export class ProdStorageService extends StorageService {
   }
 
   getHostUrl(): string {
-    return `https://${
+    return `${
       EnvironmentVariablesService.variables.AWS_ENDPOINT || throwError()
     }`;
   }
