@@ -34,7 +34,9 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
     }
   }),
 
-  WEB_APP_ORIGIN: string().filled(),
+  WEB_APP_ORIGIN: string()
+    .filled()
+    .transform((s) => s.split(',')),
 
   DATABASE_HOST: string().filled(),
   DATABASE_PORT: number().required(),
