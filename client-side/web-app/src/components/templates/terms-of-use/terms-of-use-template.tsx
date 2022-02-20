@@ -23,7 +23,8 @@ export function TermsOfUseTemplate() {
               materials made available from time to time by the Project, and are
               referred to herein as the &quot;
               <b>Tools</b>&quot; and (b) the website{' '}
-              <a href="https://8Land.com">https://8Land.com</a> (the &quot;
+              <a href="https://explore8land.com">https://explore8land.com</a>{' '}
+              (the &quot;
               <b>Site</b>&quot;). Please read these Terms of Use (the &quot;
               <b>Terms</b>&quot; or &quot;<b>Terms of Use</b>&quot;) carefully
               before using the Tools and the Site. By using or otherwise
@@ -35,12 +36,12 @@ export function TermsOfUseTemplate() {
               below; (4) consent to the collection, use, disclosure and other
               handling of information as described in the Privacy Policy,
               available here{' '}
-              <a href="https://8Land.com/privacy-policy">
-                https://8Land.com/privacy-policy
+              <a href="https://explore8land.com/privacy-policy">
+                https://explore8land.com/privacy-policy
               </a>{' '}
               ; (5) accept and agree (5.1.) the Content Policy, available here{' '}
-              <a href="https://8Land.com/content-policy">
-                https://8Land.com/content-policy
+              <a href="https://explore8land.com/content-policy">
+                https://explore8land.com/content-policy
               </a>
               , and (5.2.) any additional terms and conditions of participation
               issued by the Project from time to time. If you do not agree to
