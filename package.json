@@ -53,7 +53,7 @@
     "integrity-check:web-app": "cd client-side/web-app && npm run integrity-check",
     "integrity-check:web-app:fast": "cd client-side/web-app && npm run integrity-check:fast",
     "_integrity-check:all": "npm run build:smart-contracts && concurrently \"npm run integrity-check:api\" \"npm run integrity-check:web-app\" -n \"api,web-app\"",
-    "_integrity-check:all:fast": "npm run build:smart-contracts && concurrently \"npm run integrity-check:api:fast\" \"npm run integrity-check:web-app:fast\" -n \"api,web-app\"",
+    "_integrity-check:all:fast": "npm run build:smart-contracts:fast && concurrently \"npm run integrity-check:api:fast\" \"npm run integrity-check:web-app:fast\" -n \"api,web-app\"",
     "integrity-check:all": "IS_INTEGRITY_CHECK=true npm run _integrity-check:all",
     "integrity-check:all:fast": "IS_INTEGRITY_CHECK=true npm run _integrity-check:all:fast",
     "precommit": "lint-staged && npm run integrity-check:all:fast",
@@ -67,7 +67,8 @@
     "prepare": "husky install",
     "hardhat": "TS_NODE_TRANSPILE_ONLY=1 npx hardhat",
     "clean:smart-contracts": "npm run hardhat clean && rimraf libs/smart-contracts/{cache,artifacts,typechain,typechain-types}",
-    "build:smart-contracts": "npm run clean:smart-contracts && npm run hardhat compile"
+    "build:smart-contracts": "npm run clean:smart-contracts && npm run build:smart-contracts:fast",
+    "build:smart-contracts:fast": "npm run hardhat compile"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.51.0",
