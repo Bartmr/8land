@@ -210,6 +210,10 @@ export function TermsOfUseTemplate() {
               <a href="https://github.com/ethereum/EIPs/issues/20">
                 https://github.com/ethereum/EIPs/issues/20
               </a>
+              ), Ethereum Non-fungible Token Standard (
+              <a href="https://github.com/ethereum/EIPs/issues/721">
+                https://github.com/ethereum/EIPs/issues/721
+              </a>
               ) and blockchain-based software systems.
             </p>
             <h3 id="risk-of-regulatory-actions-in-one-or-more-jurisdictions">
