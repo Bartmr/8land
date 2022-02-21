@@ -23,11 +23,11 @@ export function AcquiringTerritoriesTemplate() {
             <li className="mb-4">
               <p>
                 8Land territories are represented by NFTs. That means that they
-                can be exchanged exactly in the same way other NFTs do. You can
-                get a territory by exchanging with somebody who already has one,
-                or buy one directly from 8Land{' '}
+                can be exchanged exactly in the same way other NFTs are. You can
+                get a territory by buying one directly from 8Land or exchanging
+                with somebody who already has one.{' '}
                 <LinkAnchor href={EnvironmentVariables.TERRITORIES_STORE_URL}>
-                  here
+                  Click here to see all 8Land territories available out there
                 </LinkAnchor>
                 .
               </p>
@@ -35,15 +35,6 @@ export function AcquiringTerritoriesTemplate() {
                 8Land territory NFTs have useful information as attributes, like
                 the size and location of said territory.
               </p>
-            </li>
-            <li className="mb-4">
-              <div className="mt-3 alert alert-warning">
-                {
-                  "Before you buy a territory NFT it's important to check if the NFT \
-was created by 8Land"
-                }
-              </div>
-              ! TO BE WRITTEN !
             </li>
           </ol>
         </>

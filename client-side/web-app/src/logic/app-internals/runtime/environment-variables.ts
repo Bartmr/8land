@@ -1,6 +1,7 @@
 /* eslint-disable node/no-process-env */
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
+import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { NodeEnv } from './node-env';
@@ -57,6 +58,8 @@ const schema = object({
     appId: string().filled(),
   }).required(),
   TERRITORIES_STORE_URL: string().filled(),
+  WALLET_PUBLIC_ADDRESS: string().filled(),
+  WEB3_ENVIRONMENT: equals(['prod', 'dev'] as const).required(),
 }).required();
 
 const environmentVariablesValidationResult = schema.validate({
@@ -72,6 +75,8 @@ const environmentVariablesValidationResult = schema.validate({
     process.env.GATSBY_FIREBASE_CONFIG || throwError(),
   ) as unknown,
   TERRITORIES_STORE_URL: process.env.GATSBY_TERRITORIES_STORE_URL,
+  WALLET_PUBLIC_ADDRESS: process.env.GATSBY_WALLET_PUBLIC_URL,
+  WEB3_NET: process.env.GATSBY_WEB3_ENVIRONMENT,
 });
 
 if (environmentVariablesValidationResult.errors) {

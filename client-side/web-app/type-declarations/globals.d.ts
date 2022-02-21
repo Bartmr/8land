@@ -76,14 +76,13 @@ declare global {
     };
 
     ethereum?:
-      | { isMetaMask: false }
+      | { isMetaMask?: false }
       | {
+          isMetaMask: true;
           autoRefreshOnNetworkChange: boolean;
           chainId: string;
-          isMetaMask?: true;
           isStatus?: boolean;
           networkVersion: string;
-
           on<K extends EthereumEventKeys>(
             event: K,
             eventHandler: EthereumEventHandler<K>,

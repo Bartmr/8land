@@ -16,6 +16,7 @@ import {
   TransportedDataStatus,
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import { TerritoryPreview } from './territory-preview';
+import { useMintTerritory } from './use-mint-territory';
 
 const schema = object({
   ...CreateTerritoryRequestJSONSchemaObj,
@@ -58,6 +59,8 @@ export function TerritoriesSection(props: {
       endY,
     },
   });
+
+  const mintTerritory = useMintTerritory();
 
   return props.land.assets ? (
     <div>
@@ -122,12 +125,12 @@ export function TerritoriesSection(props: {
                     });
                   }
                 } else {
+                  await mintTerritory();
+
                   replaceFormSubmission({
                     status: TransportedDataStatus.Done,
                     data: undefined,
                   });
-
-                  props.onSuccessfulSave();
                 }
               }
             })}
