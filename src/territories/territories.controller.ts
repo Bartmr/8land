@@ -109,6 +109,7 @@ export class TerritoriesController {
   //     /* --- */
   //     const img = sharp(thumbnailFile.buffer);
   //     const imgMetadata = await img.metadata();
+  //     // TODO Resize image without anti-aliasing or any kind of smoothing 
   //     const imgResized = await img
   //       .resize({
   //         width: (imgMetadata.width || throwError()) * 2,
@@ -128,7 +129,7 @@ export class TerritoriesController {
   //       if (!land) {
   //         throw new Error();
   //       }
-  //       const existingTerritories = await land.territories;
+  //       const existingTerritories = // Count all existing territories
   //       for (const territory of existingTerritories) {
   //         if (
   //           (data.data.startX >= territory.startX &&
@@ -211,9 +212,9 @@ export class TerritoriesController {
   //                 }`,
   //               },
   //             ],
-  //             description: `8Land territory at ${land.name}.`,
+  //             description: `8Land territory at ${land.name}`,
   //             image: `${this.storageService.getHostUrl()}/${thumbnailStorageKey}`,
-  //             name: `${land.name} - territory ${territoryNumber}`,
+  //             name: `8Land Territory #${territoryNumber}`,
   //           }),
   //         );
   //       } catch (err) {
