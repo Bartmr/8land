@@ -46,8 +46,7 @@ export function ContentPolicyTemplate() {
               proprietary rights arising under the laws of any jurisdiction
             </p>
             <p>
-              &quot;<b>NFT</b>&quot; means non-fungible token, including, 8LT
-              and any other kind of NFTs available in 8Land. All NFTs must
+              &quot;<b>NFT</b>&quot; means non-fungible token. All NFTs must
               comply with this Content Policy in accordance with section 12.4 of
               the Terms of Use.
             </p>

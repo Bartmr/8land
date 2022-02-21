@@ -67,7 +67,7 @@ export function IndexTemplate() {
                 <br />
                 {
                   "It's open enough for people to build their own pixelised world,\
-but simple enough for anyone to just explore aimlessly, like we\
+but simple enough for anyone to just explore aimlessly, like we \
 did with old RPG games."
                 }
               </p>
@@ -153,7 +153,7 @@ did with old RPG games."
                   First Release <FontAwesomeIcon icon={faClock} />
                 </li>
                 <li>
-                  Rarible Store and Territory Sales
+                  Rarible Store and Territory Sales{' '}
                   <FontAwesomeIcon icon={faClock} />
                 </li>
                 <li>Territory owners can build their own explorable indoors</li>

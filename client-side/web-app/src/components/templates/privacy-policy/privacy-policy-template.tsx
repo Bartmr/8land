@@ -165,7 +165,7 @@ export function PrivacyPolicyTemplate() {
             or allegations, to respond to court orders or official requests, to
             protect the security or integrity of the Site or the Tools, and to
             protect the rights, property, or safety of the Project, the 8Land
-            community of users and 8LT owners, or others.
+            community of users and 8Land NFT owners, or others.
           </p>
           <p>
             4.6 In the event that the Project is involved in a merger,

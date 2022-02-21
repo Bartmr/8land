@@ -180,9 +180,9 @@ export function TermsOfUseTemplate() {
               for a particular purpose or non-infringement. You acknowledge and
               agree that the Project has no obligation to take any action
               regarding: which users gain access to or use the Tools; what
-              effects the Tools may have on you; the 8LT you own; how you may
-              interpret or use the Tools; or what actions you may take or fail
-              to take as a result of having been exposed to the Tools. You
+              effects the Tools may have on you; the 8Land NFTs you own; how you
+              may interpret or use the Tools; or what actions you may take or
+              fail to take as a result of having been exposed to the Tools. You
               release the Project from all liability for your inability to
               access to the Site, Tools or any Content therein. The Project is
               not and cannot be responsible for and makes no representations,
@@ -210,14 +210,13 @@ export function TermsOfUseTemplate() {
               <a href="https://github.com/ethereum/EIPs/issues/20">
                 https://github.com/ethereum/EIPs/issues/20
               </a>
-              ), 8LT (the ERC-721 token, associating each 8Land territory x and
-              y coordinates) and blockchain-based software systems.
+              ) and blockchain-based software systems.
             </p>
             <h3 id="risk-of-regulatory-actions-in-one-or-more-jurisdictions">
               5.3 Risk of Regulatory Actions in One or More Jurisdictions
             </h3>
             <p>
-              The Project, 8LT and ETH could be impacted by one or more
+              The Project, 8Land NFTs and ETH could be impacted by one or more
               regulatory inquiries or regulatory action, which could impede or
               limit your ability to access or use the Tools, or the Ethereum
               blockchain.
@@ -236,18 +235,18 @@ export function TermsOfUseTemplate() {
             </p>
             <h3 id="use-of-crypto-assets">5.5 Use of Crypto Assets</h3>
             <p>
-              Some Tools allow the use of 8LT, ETH, or other similar blockchain
-              technologies. You acknowledge and agree that 8LT, Ether and
-              blockchain technologies and associated assets, and other assets
-              are highly volatile due to many factors including but not limited
-              to popularity, adoption, speculation, regulation, technology and
-              security risks. You also acknowledge and agree that the cost of
-              transacting on such technologies is variable and may increase at
-              any time causing impact to any activities taking place on the
-              Ethereum blockchain. The Project does not invite or make any offer
-              to acquire, purchase, sell, transfer or otherwise deal in any
-              crypto asset. Third parties may provide services involving the
-              acquisition, purchase, sale, transfer or exchange of
+              Some Tools allow the use of 8Land NFTs, ETH, or other similar
+              blockchain technologies. You acknowledge and agree that 8Land
+              NFTs, Ether and blockchain technologies and associated assets, and
+              other assets are highly volatile due to many factors including but
+              not limited to popularity, adoption, speculation, regulation,
+              technology and security risks. You also acknowledge and agree that
+              the cost of transacting on such technologies is variable and may
+              increase at any time causing impact to any activities taking place
+              on the Ethereum blockchain. The Project does not invite or make
+              any offer to acquire, purchase, sell, transfer or otherwise deal
+              in any crypto asset. Third parties may provide services involving
+              the acquisition, purchase, sale, transfer or exchange of
               crypto-assets; the Project does not provide any such service and
               does not undertake any liability in connection thereto. You
               acknowledge and
@@ -300,22 +299,23 @@ export function TermsOfUseTemplate() {
             <h3 id="taxes">5.8 Taxes</h3>
             <p>
               You are solely responsible for determining what, if any, Taxes
-              apply to your 8LT related transactions, and any other transaction
-              conducted by you. The Project does not, and will not, have any
-              insight into or control over any transactions conducted by you in
-              8Land, and thus is not responsible for determining the Taxes that
-              apply to your transactions entered through the Tools or otherwise
-              involving any 8LT, or any other related transaction, and is not to
-              act as a withholding Tax agent in any circumstances whatsoever.
+              apply to your 8Land NFT related transactions, and any other
+              transaction conducted by you. The Project does not, and will not,
+              have any insight into or control over any transactions conducted
+              by you in 8Land, and thus is not responsible for determining the
+              Taxes that apply to your transactions entered through the Tools or
+              otherwise involving any 8Land NFTs, or any other related
+              transaction, and is not to act as a withholding Tax agent in any
+              circumstances whatsoever.
             </p>
             <h3 id="uses-of-the-tools">5.9 Uses of the Tools</h3>
             <p>
               You acknowledge and agree that the Tools do not store, send, or
-              receive 8LT. This is because 8LT exist only by virtue of the
-              ownership record maintained on the Tools&apos; supporting
-              blockchain in the Ethereum network. Any transfer of a 8LT occurs
-              within the supporting blockchain in the Ethereum network, and not
-              within the Tools.
+              receive 8Land NFTs. This is because 8Land NFTs exist only by
+              virtue of the ownership record maintained on the Tools&apos;
+              supporting blockchain in the Ethereum network. Any transfer of a
+              8Land NFT occurs within the supporting blockchain in the Ethereum
+              network, and not within the Tools.
             </p>
             <h3 id="risks-of-changes-to-ethereum-platform">
               5.10 Risks of Changes to Ethereum Platform
@@ -524,7 +524,7 @@ export function TermsOfUseTemplate() {
               METAMASK OR OTHER ELECTRONIC WALLET.
             </p>
             <p>
-              10.6 8LT, WEARABLES AND ANY AND ALL ERC-721 TOKENS ARE INTANGIBLE
+              10.6 8LAND NFTS AND ANY AND ALL ERC-721 TOKENS ARE INTANGIBLE
               DIGITAL ASSETS THAT EXIST ONLY BY VIRTUE OF THE OWNERSHIP RECORD
               MAINTAINED IN THE ETHEREUM NETWORK. ALL SMART CONTRACTS ARE
               CONDUCTED AND OCCUR ON THE DECENTRALIZED LEDGER WITHIN THE
@@ -533,16 +533,16 @@ export function TermsOfUseTemplate() {
               SMART CONTRACTS.
             </p>
             <p>
-              10.7 8LT ARE INTANGIBLE DIGITAL ASSETS THAT EXIST ONLY BY VIRTUE
-              OF THE OWNERSHIP RECORD MAINTAINED IN THE ETHEREUM NETWORK. ALL
-              SMART CONTRACTS ARE
+              10.7 8LAND NFTS ARE INTANGIBLE DIGITAL ASSETS THAT EXIST ONLY BY
+              VIRTUE OF THE OWNERSHIP RECORD MAINTAINED IN THE ETHEREUM NETWORK.
+              ALL SMART CONTRACTS ARE
             </p>
             <p>
               CONDUCTED AND OCCUR ON THE DECENTRALIZED LEDGER WITHIN THE
               ETHEREUM PLATFORM. THE PROJECT HAS NO CONTROL OVER AND MAKE NO
               GUARANTEES OR PROMISES WITH RESPECT TO THE OWNERSHIP RECORD OR
               SMART CONTRACTS. THE PROJECT MAKES NO OFFER OR INVITATION TO
-              ACQUIRE, PURCHASE, TRANSFER, SELL OR OTHERWISE DEAL IN 8LT.
+              ACQUIRE, PURCHASE, TRANSFER, SELL OR OTHERWISE DEAL IN 8LAND NFTS.
             </p>
             <p>
               10.8. THE PROJECT IS NOT RESPONSIBLE FOR LOSSES DUE TO BLOCKCHAIN
@@ -617,19 +617,19 @@ export function TermsOfUseTemplate() {
               on or through the Site and the Tools. The Project reserves all
               rights in and to the Project Materials not expressly granted to
               you in the Terms. For the sake of clarity, you understand and
-              agree: (i) that any &quot;purchase&quot; of 8LT, whether via the
-              Tools or otherwise, does not give you any rights or licenses in or
-              to the Project Materials (including, without limitation, the
-              Project&rsquo;s copyright in and to the art and drawings
-              associated with the Tools and content therein) other than those
-              expressly contained in these Terms; and (ii) that you do not have
-              the right to reproduce, distribute, or otherwise commercialize any
-              elements of the Project Materials (including, without limitation,
-              the Project&rsquo;s copyright in and to the art and drawings
-              associated with the Tools and content therein) in any way without
-              the Project&rsquo;s prior written consent in each case, which
-              consent the Project may withhold in its sole and absolute
-              discretion.
+              agree: (i) that any &quot;purchase&quot; of 8Land NFTs, whether
+              via the Tools or otherwise, does not give you any rights or
+              licenses in or to the Project Materials (including, without
+              limitation, the Project&rsquo;s copyright in and to the art and
+              drawings associated with the Tools and content therein) other than
+              those expressly contained in these Terms; and (ii) that you do not
+              have the right to reproduce, distribute, or otherwise
+              commercialize any elements of the Project Materials (including,
+              without limitation, the Project&rsquo;s copyright in and to the
+              art and drawings associated with the Tools and content therein) in
+              any way without the Project&rsquo;s prior written consent in each
+              case, which consent the Project may withhold in its sole and
+              absolute discretion.
             </p>
             <p>
               12.2 You may choose to submit comments, bug reports, ideas or
@@ -710,9 +710,9 @@ export function TermsOfUseTemplate() {
             </p>
 
             <p>
-              The Project holds the Intellectual Property Rights over the 8LT
-              smart contract but does not have any Intellectual Property Right
-              over the Content introduced by each user.
+              The Project holds the Intellectual Property Rights over the 8Land
+              NFTs but does not have any Intellectual Property Right over the
+              Content introduced by each user.
             </p>
 
             <h2 id="links">13. Links</h2>
