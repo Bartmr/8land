@@ -6,7 +6,6 @@ import { Helmet } from 'react-helmet';
 import { throwError } from 'src/logic/app-internals/utils/throw-error';
 import { Header } from './header/header';
 import { GQLLayoutQuery } from './layout._graphql-generated_';
-import SSRProvider from 'react-bootstrap/SSRProvider';
 import { useLocation } from '@reach/router';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { PROJECT_SLOGAN } from '@app/shared/project-details';
@@ -76,7 +75,7 @@ export function Layout(props: Props) {
   const [hideHeader, replaceHideHeader] = useState(false);
 
   return (
-    <SSRProvider>
+    <>
       <Helmet>
         <html lang="en" />
         <title>{title}</title>
@@ -182,6 +181,6 @@ export function Layout(props: Props) {
           </footer>
         )}
       </div>
-    </SSRProvider>
+    </>
   );
 }

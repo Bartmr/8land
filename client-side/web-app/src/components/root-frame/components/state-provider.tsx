@@ -13,6 +13,7 @@ import { RUNNING_IN_CLIENT } from 'src/logic/app-internals/runtime/running-in';
 import { useStoreDispatch } from 'src/logic/app-internals/store/use-store-dispatch';
 import { navigate } from 'gatsby';
 import { LOGIN_ROUTE } from 'src/components/templates/client-side/login/login-routes';
+import { SSRProvider } from 'react-bootstrap';
 
 type ModuleHotData = {
   storeManager?: ReturnType<typeof createStoreManager>;
@@ -46,10 +47,10 @@ const FrameWithState = (props: { children: ReactNode }) => {
     })();
   }, [mainApiState.session.status]);
 
-  return <>{props.children}</>;
+  return <SSRProvider>{props.children}</SSRProvider>;
 };
 
-export function StatefulFrame(props: { children: ReactNode }) {
+export function StateProvider(props: { children: ReactNode }) {
   const [storeManager] = useState(() => {
     const storeManagerFromPreviousRuntime = (
       module.hot?.data as ModuleHotData | undefined
