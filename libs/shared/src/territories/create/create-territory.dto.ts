@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { JSONData } from '../../internals/transports/json-types';
 
 export class CreateTerritoryRequestDTO {
   @ApiProperty({ type: 'string', format: 'binary' })
@@ -8,5 +9,6 @@ export class CreateTerritoryRequestDTO {
 }
 
 export class CreateTerritoryResponseDTO {
-  nftMetadataURL!: string;
+  territoryId!: string;
+  nftMetadata!: JSONData;
 }

@@ -154,7 +154,7 @@ export function Layout(props: Props) {
                         className="link-body-shade"
                         href={TERMS_OF_USE_ROUTE.getHref()}
                       >
-                        Terms of User
+                        Terms of Use
                       </LinkAnchor>
                     </li>
                     <li className="text-lg-end">

@@ -1,5 +1,7 @@
+import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
+import { CreateTerritoryResponseDTO } from '@app/shared/territories/create/create-territory.dto';
 import { CreateTerritoryRequestJSONSchemaObj } from '@app/shared/territories/create/create-territory.schemas';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { Fragment, useState } from 'react';
@@ -97,7 +99,10 @@ export function TerritoriesSection(props: {
               body.set('thumbnail', territoryThumbnail || throwError());
 
               const res = await api.post<
-                | { status: 201; body: undefined }
+                | {
+                    status: 201;
+                    body: ToIndexedType<CreateTerritoryResponseDTO>;
+                  }
                 | { status: 409; body: { error: string } },
                 undefined,
                 FormData
@@ -125,7 +130,10 @@ export function TerritoriesSection(props: {
                     });
                   }
                 } else {
-                  await mintTerritory();
+                  await mintTerritory({
+                    territoryId: res.response.body.territoryId,
+                    nftMetadata: res.response.body.nftMetadata,
+                  });
 
                   replaceFormSubmission({
                     status: TransportedDataStatus.Done,

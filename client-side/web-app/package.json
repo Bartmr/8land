@@ -11,8 +11,6 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.16",
-    "@rarible/sdk": "^0.8.38",
-    "@rarible/web3-ethereum": "^0.12.47",
     "bootstrap": "^5.1.3",
     "date-fns": "^2.27.0",
     "firebase": "^9.6.1",
@@ -30,6 +28,7 @@
     "gatsby-source-filesystem": "^4.4.0",
     "gatsby-transformer-sharp": "^4.4.0",
     "lodash": "^4.17.21",
+    "moralis": "^1.3.2",
     "nipplejs": "^0.9.0",
     "not-me": "^4.3.7",
     "phaser": "^3.55.2",
@@ -44,8 +43,7 @@
     "sass": "^1.45.1",
     "tinycolor2": "^1.4.2",
     "uuid": "^8.3.2",
-    "validator": "^13.7.0",
-    "web3": "^1.7.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.5",

@@ -40,4 +40,10 @@ export class Territory extends SimpleEntity {
 
   @OneToMany(() => DoorBlock, (e) => e.inTerritory, { eager: true })
   doorBlocks!: DoorBlock[];
+
+  @Column('text', { nullable: true })
+  tokenAddress!: string | null;
+
+  @Column('text', { nullable: true })
+  tokenId!: string | null;
 }

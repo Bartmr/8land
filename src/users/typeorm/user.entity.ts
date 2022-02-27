@@ -37,7 +37,7 @@ export class User extends SimpleEntity {
     should only be visible in the session object
   */
 
-  @Column('text')
+  @Column('text', { nullable: true })
   walletAddress!: string | null;
 
   @Column('text')

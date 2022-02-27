@@ -1,14 +1,21 @@
 import {
   BadRequestException,
+  Body,
   ConflictException,
   Controller,
+  HttpCode,
+  Param,
+  Patch,
   Post,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
-import { CreateTerritoryRequestDTO } from 'libs/shared/src/territories/create/create-territory.dto';
+import {
+  CreateTerritoryRequestDTO,
+  CreateTerritoryResponseDTO,
+} from 'libs/shared/src/territories/create/create-territory.dto';
 import { CreateTerritoryRequestJSONSchema } from 'libs/shared/src/territories/create/create-territory.schemas';
 import { Role } from 'src/auth/roles/roles';
 import { RolesUpAndIncluding } from 'src/auth/roles/roles.decorator';
@@ -26,6 +33,11 @@ import { ItselfStorageApi } from 'src/internals/apis/itself/itself-storage.api';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { number } from 'not-me/lib/schemas/number/number-schema';
+import {
+  UpdateTerritoryRaribleMetadataParametersDTO,
+  UpdateTerritoryRaribleMetadataRequestDTO,
+} from 'libs/shared/src/territories/update-rarible/update-territory-rarible-metadata.dto';
+import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
 
 @Controller('territories')
 export class TerritoriesController {
@@ -34,6 +46,7 @@ export class TerritoriesController {
     private storageService: StorageService,
     private itselfStorageApi: ItselfStorageApi,
   ) {}
+
   @Post()
   @RolesUpAndIncluding(Role.Admin)
   @UseInterceptors(
@@ -53,7 +66,7 @@ export class TerritoriesController {
       thumbnail?: Express.Multer.File[];
     },
     @WithAuditContext() auditContext: AuditContext,
-  ) {
+  ): Promise<CreateTerritoryResponseDTO> {
     const dataFile =
       files.data?.[0] ||
       (() => {
@@ -174,57 +187,83 @@ export class TerritoriesController {
           hasAssets: false,
           inLand: Promise.resolve(land),
           doorBlocks: [],
+          tokenId: null,
+          tokenAddress: null,
         },
         auditContext,
       );
       const thumbnailStorageKey = `territories/${territory.id}/thumbnail.jpg`;
       await this.storageService.saveBuffer(thumbnailStorageKey, imgResized);
-      const nftMetadataStorageKey = `territories/${territory.id}/nft-metadata.json`;
-      try {
-        const territoryNumber = totalTerritories + 1;
-        await this.storageService.saveText(
-          nftMetadataStorageKey,
-          JSON.stringify({
-            name: `8Land Territory #${territoryNumber}`,
-            description: `8Land territory at ${land.name}`,
-            image: `${this.storageService.getHostUrl()}/${thumbnailStorageKey}`,
-            attributes: [
-              {
-                trait_type: 'Territory ID',
-                value: `${territory.id}`,
-              },
-              {
-                trait_type: 'In Land',
-                value: `${land.name}`,
-              },
-              {
-                trait_type: 'Width',
-                value: `${territory.endX - territory.startX}`,
-              },
-              {
-                trait_type: 'Height',
-                value: `${territory.endY - territory.startY}`,
-              },
-              {
-                trait_type: 'Total Area',
-                value: `${
-                  (territory.endX - territory.startX) *
-                  (territory.endY - territory.startY)
-                }`,
-              },
-            ],
-          }),
-        );
-      } catch (err) {
-        await this.storageService.removeFile(thumbnailStorageKey);
-        throw err;
-      }
+
+      const territoryNumber = totalTerritories + 1;
+
+      const nftMetadata = {
+        name: `8Land Territory #${territoryNumber}`,
+        description: `8Land territory at ${land.name}`,
+        image: `${this.storageService.getHostUrl()}/${thumbnailStorageKey}`,
+        attributes: [
+          {
+            trait_type: 'Territory ID',
+            value: `${territory.id}`,
+          },
+          {
+            trait_type: 'In Land',
+            value: `${land.name}`,
+          },
+          {
+            trait_type: 'Width',
+            value: `${territory.endX - territory.startX}`,
+          },
+          {
+            trait_type: 'Height',
+            value: `${territory.endY - territory.startY}`,
+          },
+          {
+            trait_type: 'Total Area',
+            value: `${
+              (territory.endX - territory.startX) *
+              (territory.endY - territory.startY)
+            }`,
+          },
+        ],
+      };
 
       await territoriesRepository.save(territory, auditContext);
 
       return {
-        nftMetadataURL: `${this.storageService.getHostUrl()}/${nftMetadataStorageKey}`,
+        territoryId: territory.id,
+        nftMetadata: nftMetadata,
       };
+    });
+  }
+
+  @Patch(':id/rarible')
+  @RolesUpAndIncluding(Role.Admin)
+  @HttpCode(204)
+  async updateRaribleMetadata(
+    @Param() params: UpdateTerritoryRaribleMetadataParametersDTO,
+    @Body() body: UpdateTerritoryRaribleMetadataRequestDTO,
+    @WithAuditContext() auditContext: AuditContext,
+  ) {
+    return this.connection.transaction(async (eM) => {
+      const territoriesRepository = eM.getCustomRepository(
+        TerritoriesRepository,
+      );
+
+      const territory = await territoriesRepository.findOne({
+        where: {
+          id: params.id,
+        },
+      });
+
+      if (!territory) {
+        throw new ResourceNotFoundException();
+      }
+
+      territory.tokenId = body.tokenId;
+      territory.tokenAddress = body.tokenAddress;
+
+      await territoriesRepository.save(territory, auditContext);
     });
   }
 }

@@ -352,6 +352,8 @@ async function seed() {
         startY: 3,
         endX: 7,
         endY: 6,
+        tokenId: null,
+        tokenAddress: null,
       },
       auditContext,
     );

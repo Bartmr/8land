@@ -58,8 +58,11 @@ const schema = object({
     appId: string().filled(),
   }).required(),
   TERRITORIES_STORE_URL: string().filled(),
-  WALLET_PUBLIC_ADDRESS: string().filled(),
-  WEB3_ENVIRONMENT: equals(['prod', 'dev'] as const).required(),
+
+  MORALIS_SERVER_URL: string().filled(),
+  MORALIS_APP_ID: string().filled(),
+
+  WEB3_NET: equals(['rinkeby', 'eth']).required(),
 }).required();
 
 const environmentVariablesValidationResult = schema.validate({
@@ -75,8 +78,11 @@ const environmentVariablesValidationResult = schema.validate({
     process.env.GATSBY_FIREBASE_CONFIG || throwError(),
   ) as unknown,
   TERRITORIES_STORE_URL: process.env.GATSBY_TERRITORIES_STORE_URL,
-  WALLET_PUBLIC_ADDRESS: process.env.GATSBY_WALLET_PUBLIC_URL,
-  WEB3_NET: process.env.GATSBY_WEB3_ENVIRONMENT,
+
+  MORALIS_SERVER_URL: process.env.GATSBY_MORALIS_SERVER_URL,
+  MORALIS_APP_ID: process.env.GATSBY_MORALIS_APP_ID,
+
+  WEB3_NET: process.env.GATSBY_WEB3_NET,
 });
 
 if (environmentVariablesValidationResult.errors) {

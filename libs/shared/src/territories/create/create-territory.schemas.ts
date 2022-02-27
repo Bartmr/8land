@@ -28,7 +28,7 @@ export const CreateTerritoryRequestJSONSchemaObj = {
         : 'End X coordinate must be bigger than Start X coordinate',
     )
     .test((v) =>
-      v.endX > v.startX
+      v.endY > v.startY
         ? null
         : 'End Y coordinate must be bigger than Start Y coordinate',
     ),
