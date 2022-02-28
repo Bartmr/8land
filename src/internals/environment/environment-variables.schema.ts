@@ -81,8 +81,6 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
     }
   }),
 
-  WALLET_PUBLIC_KEY: string().filled(),
-
   AWS_ENDPOINT: stringFailIfEmptyInProd.test((s) =>
     s ? (s.endsWith('/') ? 'Cannot have trailling slash' : null) : null,
   ),
@@ -90,4 +88,6 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   AWS_ACCESS_KEY_ID: stringFailIfEmptyInProd,
   AWS_SECRET_ACCESS_KEY: stringFailIfEmptyInProd,
   S3_BUCKET_NAME: stringFailIfEmptyInProd,
+
+  RARIBLE_ENVIRONMENT: equals(['prod', 'dev'] as const).required(),
 }).required();

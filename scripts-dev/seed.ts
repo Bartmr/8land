@@ -103,7 +103,7 @@ async function seed() {
           })
         ).uid,
         role: Role.EndUser,
-        walletAddress: EnvironmentVariablesService.variables.WALLET_PUBLIC_KEY,
+        walletAddress: null,
         walletNonce: generateRandomUUID(),
       },
       auditContext,
