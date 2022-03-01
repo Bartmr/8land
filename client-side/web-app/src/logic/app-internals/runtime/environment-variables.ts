@@ -63,6 +63,8 @@ const schema = object({
   MORALIS_APP_ID: string().filled(),
 
   WEB3_NET: equals(['rinkeby', 'eth']).required(),
+
+  RARIBLE_URL: string().filled(),
 }).required();
 
 const environmentVariablesValidationResult = schema.validate({
@@ -83,6 +85,8 @@ const environmentVariablesValidationResult = schema.validate({
   MORALIS_APP_ID: process.env.GATSBY_MORALIS_APP_ID,
 
   WEB3_NET: process.env.GATSBY_WEB3_NET,
+
+  RARIBLE_URL: process.env.GATSBY_RARIBLE_URL,
 });
 
 if (environmentVariablesValidationResult.errors) {

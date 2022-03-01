@@ -4,7 +4,7 @@ const pathSegment = '/territories';
 
 export const TERRITORIES_ROUTE = {
   pathSegment,
-  title: 'My territories',
+  title: 'Build Territories',
   path: `${CLIENT_SIDE_ROUTES.path}${pathSegment}`,
   getHref: () => `${TERRITORIES_ROUTE.path}`,
 };

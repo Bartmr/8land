@@ -1,6 +1,7 @@
 import { Layout } from 'src/components/routing/layout/layout';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { ABOUT_ROUTE } from './about-routes';
+import raribleLogo from './rarible-logo.svg';
 import tiledLogo from './tiled-logo-white.png';
 import soundcloudLogo from './soundcloud-logo.png';
 import bart from './bart.jpg';
@@ -29,7 +30,7 @@ export function AboutTemplate() {
                   </p>
                 </div>
               </div>
-              <div className="row g-3 d-flex align-items-center">
+              <div className="row g-3 d-flex align-items-center mb-4">
                 <div className="col-3 col-md-2 col-lg-1">
                   <img src={soundcloudLogo} width={'100%'} alt={'Soundcloud'} />
                 </div>
@@ -39,6 +40,20 @@ export function AboutTemplate() {
                       Soundcloud
                     </LinkAnchor>{' '}
                     as source and player of background music
+                  </p>
+                </div>
+              </div>
+              <div className="row g-3 align-items-center">
+                <div className="col-3 col-md-2 col-lg-1">
+                  <img src={raribleLogo} width={'80%'} alt={'Rarible'} />
+                </div>
+                <div className="col-9 col-md-10 col-lg-11">
+                  <p className="mb-0">
+                    <LinkAnchor href={'https://rarible.com/'}>
+                      Rarible
+                    </LinkAnchor>{' '}
+                    for making it easy to sell, manage and authenticate 8Land
+                    NFTs
                   </p>
                 </div>
               </div>

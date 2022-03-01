@@ -228,8 +228,6 @@ export class TerritoriesController {
         ],
       };
 
-      await territoriesRepository.save(territory, auditContext);
-
       return {
         territoryId: territory.id,
         nftMetadata: nftMetadata,

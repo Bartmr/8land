@@ -54,7 +54,7 @@ export function useMintTerritory() {
       tokenUri: '/ipfs/' + (file as unknown as { hash: () => string }).hash(),
     });
 
-    await api.patch<
+    return api.patch<
       { status: 204; body: undefined },
       undefined,
       ToIndexedType<UpdateTerritoryRaribleMetadataRequestDTO>

@@ -45,6 +45,7 @@ import fileType from 'file-type';
 import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
 import { InferType } from 'not-me/lib/schemas/schema';
 import { throwError } from 'src/internals/utils/throw-error';
+import { or } from 'not-me/lib/schemas/or/or-schema';
 
 @Controller('territories')
 export class TerritoriesEndUserController {
@@ -56,20 +57,26 @@ export class TerritoriesEndUserController {
 
   async isAllowedToEditProject(itemId: string, walletAddress: string) {
     const res = await this.raribleApi.get(
-      object({
-        status: equals([200, 404] as const).required(),
-        body: object({
-          owner: string().required(),
-          tokenId: string().required(),
-        }).required(),
-      }).required(),
+      or([
+        object({
+          status: equals([200] as const).required(),
+          body: object({
+            owner: string().required(),
+            tokenId: string().required(),
+          }).required(),
+        }),
+        object({
+          status: equals([404] as const).required(),
+          body: object({}).required(),
+        }),
+      ]).required(),
       {
         path: `/ownerships/ETHEREUM:${itemId}:${walletAddress}`,
       },
     );
 
     if (res.status === 404) {
-      throw new ForbiddenException();
+      return false;
     }
 
     return res.body.owner.replace('ETHEREUM:', '') === walletAddress;
@@ -98,32 +105,29 @@ export class TerritoriesEndUserController {
       throw new BadRequestException();
     }
 
+    const territoriesRepository = this.connection.getCustomRepository(
+      TerritoriesRepository,
+    );
+
+    const territory = await territoriesRepository.findOne({
+      where: {
+        tokenId: tokenId,
+      },
+    });
+
+    if (!territory) {
+      throw new ResourceNotFoundException();
+    }
+
     const allowedToEditProject = await this.isAllowedToEditProject(
       param.itemId,
       walletAddress,
     );
 
-    if (allowedToEditProject) {
-      const territoriesRepository = this.connection.getCustomRepository(
-        TerritoriesRepository,
-      );
-
-      const territory = await territoriesRepository.findOne({
-        where: {
-          tokenId: tokenId,
-        },
-      });
-
-      if (!territory) {
-        throw new Error();
-      } else {
-        return {
-          id: territory.id,
-        };
-      }
-    } else {
-      throw new ForbiddenException();
-    }
+    return {
+      id: territory.id,
+      owned: allowedToEditProject,
+    };
   }
 
   @Get(':id')

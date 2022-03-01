@@ -130,15 +130,18 @@ export function TerritoriesSection(props: {
                     });
                   }
                 } else {
-                  await mintTerritory({
+                  const mintRes = await mintTerritory({
                     territoryId: res.response.body.territoryId,
                     nftMetadata: res.response.body.nftMetadata,
                   });
 
-                  replaceFormSubmission({
-                    status: TransportedDataStatus.Done,
-                    data: undefined,
-                  });
+                  if (mintRes.failure) {
+                    replaceFormSubmission({
+                      status: mintRes.failure,
+                    });
+                  } else {
+                    props.onSuccessfulSave();
+                  }
                 }
               }
             })}

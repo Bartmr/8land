@@ -1,5 +1,5 @@
 import { PROJECT_SLOGAN } from '@app/shared/project-details';
-import { faClock } from '@fortawesome/free-solid-svg-icons';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layout } from 'src/components/routing/layout/layout';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
@@ -150,11 +150,11 @@ did with old RPG games."
               <p className="display-4 text-body">The Roadmap</p>
               <ul className="mt-4">
                 <li>
-                  First Release <FontAwesomeIcon icon={faClock} />
+                  First Release <FontAwesomeIcon icon={faCheck} />
                 </li>
                 <li>
                   Rarible Store and Territory Sales{' '}
-                  <FontAwesomeIcon icon={faClock} />
+                  <FontAwesomeIcon icon={faCheck} />
                 </li>
                 <li>Territory owners can build their own explorable indoors</li>
                 <li>Release new lands on a regular basis</li>

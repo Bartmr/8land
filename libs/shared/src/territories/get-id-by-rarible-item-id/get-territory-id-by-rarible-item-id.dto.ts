@@ -8,4 +8,5 @@ export class GetTerritoryIdByRaribleItemIdParamsDTO {
 
 export class GetTerritoryIdByRaribleItemIdDTO {
   id!: string;
+  owned!: boolean;
 }
