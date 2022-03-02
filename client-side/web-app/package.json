@@ -17,6 +17,7 @@
     "firebase": "^9.6.1",
     "firebaseui": "^6.0.0",
     "gatsby": "^4.4.0",
+    "gatsby-plugin-google-analytics": "^4.9.0",
     "gatsby-plugin-image": "^2.4.0",
     "gatsby-plugin-manifest": "^4.4.0",
     "gatsby-plugin-netlify": "^4.1.0",

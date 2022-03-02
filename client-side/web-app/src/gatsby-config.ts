@@ -81,5 +81,17 @@ export const GATSBY_CONFIG = {
         dsn: EnvironmentVariables.SENTRY_DSN,
       },
     },
+    ...(EnvironmentVariables.GOOGLE_ANALYTICS_TRACKING_ID
+      ? [
+          {
+            resolve: `gatsby-plugin-google-analytics`,
+            options: {
+              trackingId: EnvironmentVariables.GOOGLE_ANALYTICS_TRACKING_ID,
+              anonymize: true,
+              respectDNT: true,
+            },
+          },
+        ]
+      : []),
   ],
 };

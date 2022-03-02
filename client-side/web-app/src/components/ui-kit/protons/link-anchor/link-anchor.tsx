@@ -1,6 +1,7 @@
 import { Link } from 'gatsby';
 import React, { ReactNode, SyntheticEvent } from 'react';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
+import { OutboundLink } from 'gatsby-plugin-google-analytics';
 
 type Props = {
   children: ReactNode;
@@ -35,14 +36,14 @@ export function LinkAnchor(props: Props) {
 
   if (props.href.includes('://') || props.openInNewTab) {
     return (
-      <a
+      <OutboundLink
         rel="noopener noreferrer"
         href={props.href}
         target={props.openExternalLinkInSameTab ? undefined : '_blank'}
         {...commonProps}
       >
         {props.children}
-      </a>
+      </OutboundLink>
     );
   } else if (
     props.href.startsWith('mailto:') ||
