@@ -5,7 +5,6 @@ import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { NodeEnv } from './node-env';
-import { RUNNING_IN_SERVER } from './running-in';
 
 const isIntegrityCheck = !!process.env.IS_INTEGRITY_CHECK;
 
@@ -72,20 +71,6 @@ const schema = object({
     process.env.IS_INTEGRITY_CHECK !== 'true'
       ? string().filled()
       : equals([]),
-
-  ...(process.env.NODE_ENV === NodeEnv.Production &&
-  process.env.IS_INTEGRITY_CHECK !== 'true' &&
-  RUNNING_IN_SERVER
-    ? {
-        SENTRY_AUTH_TOKEN: string().filled(),
-        SENTRY_ORG: string().filled(),
-        SENTRY_PROJECT: string().filled(),
-      }
-    : {
-        SENTRY_AUTH_TOKEN: equals([]),
-        SENTRY_ORG: equals([]),
-        SENTRY_PROJECT: equals([]),
-      }),
 }).required();
 
 const environmentVariablesValidationResult = schema.validate({
@@ -110,10 +95,6 @@ const environmentVariablesValidationResult = schema.validate({
   RARIBLE_URL: process.env.GATSBY_RARIBLE_URL,
 
   SENTRY_DSN: process.env.GATSBY_SENTRY_DSN,
-
-  SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
-  SENTRY_ORG: process.env.SENTRY_ORG,
-  SENTRY_PROJECT: process.env.SENTRY_PROJECT,
 });
 
 if (environmentVariablesValidationResult.errors) {
