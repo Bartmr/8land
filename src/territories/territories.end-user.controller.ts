@@ -111,6 +111,7 @@ export class TerritoriesEndUserController {
 
     const territory = await territoriesRepository.findOne({
       where: {
+        tokenAddress: contractAddress,
         tokenId: tokenId,
       },
     });

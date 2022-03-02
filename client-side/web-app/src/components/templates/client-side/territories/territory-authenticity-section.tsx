@@ -13,6 +13,7 @@ import {
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 
 export function TerritoryAuthenticitySection(props: {
+  buttonLabel: string;
   onResult: (
     result:
       | {
@@ -164,7 +165,7 @@ export function TerritoryAuthenticitySection(props: {
             !(validation && !validation.errors)
           }
         >
-          Edit Territory
+          {props.buttonLabel}
         </button>
       </div>
     </form>

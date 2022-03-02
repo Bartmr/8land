@@ -1,6 +1,10 @@
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
 import { Layout } from 'src/components/routing/layout/layout';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
+import { TerritoryAuthenticitySection } from '../../client-side/territories/territory-authenticity-section';
 import { USER_ROUTE } from '../../client-side/user/user-routes';
 import { ACQUIRING_TERRITORIES_ROUTE } from './acquiring-territories-routes';
 
@@ -9,6 +13,10 @@ import { ACQUIRING_TERRITORIES_ROUTE } from './acquiring-territories-routes';
 // should have an input box where you put a rarible url and it tells you if its a valid territory
 
 export function AcquiringTerritoriesTemplate() {
+  const [isTerritoryNFT, replaceIsTerritoryNFT] = useState<
+    undefined | boolean
+  >();
+
   return (
     <Layout title={ACQUIRING_TERRITORIES_ROUTE.title}>
       {() => (
@@ -51,6 +59,31 @@ export function AcquiringTerritoriesTemplate() {
                 Rarible NFT URLs generally start with{' '}
                 {EnvironmentVariables.RARIBLE_URL}/token
               </p>
+              <TerritoryAuthenticitySection
+                buttonLabel="Validate NFT"
+                onResult={(r) => {
+                  replaceIsTerritoryNFT(
+                    r.status === 'not-owned' || r.status === 'owned',
+                  );
+                }}
+              />
+              <div className="mt-3">
+                {isTerritoryNFT === true ? (
+                  <div className="alert alert-success">
+                    This NFT is a valid 8Land Territory NFT
+                  </div>
+                ) : null}
+                {isTerritoryNFT === false ? (
+                  <div className="alert alert-danger">
+                    <FontAwesomeIcon
+                      icon={faExclamationTriangle}
+                    ></FontAwesomeIcon>{' '}
+                    This NFT is{' '}
+                    <span style={{ textDecoration: 'underline' }}>NOT</span> an
+                    authentic 8Land Territory NFT.
+                  </div>
+                ) : null}
+              </div>
             </li>
           </ol>
         </>

@@ -43,6 +43,7 @@ function TerritoriesTemplateContent() {
             <span className="text-success">{session.walletAddress}</span>
           </span>
           <TerritoryAuthenticitySection
+            buttonLabel="Validate NFT"
             onResult={async (r) => {
               if (r.status === 'owned') {
                 await navigate(EDIT_TERRITORY_ROUTE.getHref(r.id));
