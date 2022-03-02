@@ -1,0 +1,6 @@
+[[plugins]]
+  package = "@sentry/netlify-build-plugin"
+
+  [plugins.inputs]
+    deployPreviews = false
+    sourceMapPath = "dist/sourcemaps"

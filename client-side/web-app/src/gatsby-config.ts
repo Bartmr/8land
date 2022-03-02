@@ -75,5 +75,11 @@ export const GATSBY_CONFIG = {
       },
     },
     `gatsby-plugin-netlify`,
+    {
+      resolve: '@sentry/gatsby',
+      options: {
+        dsn: EnvironmentVariables.SENTRY_DSN,
+      },
+    },
   ],
 };

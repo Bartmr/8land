@@ -1,18 +1,25 @@
 /* eslint-disable no-console */
 import { EnvironmentVariables } from '../runtime/environment-variables';
 import { RUNNING_IN_SERVER } from '../runtime/running-in';
+import * as Sentry from '@sentry/react';
 
 const LOG_ENTRIES_LIMIT = 3;
 
-export const LOG_SERVICE_NAME = 'LogRocket';
-export const LOG_SERVICE_COMPANY = 'LogRocket, Inc.';
+export const LOG_SERVICE_NAME = 'Sentry';
+export const LOG_SERVICE_COMPANY = 'Functional Software, Inc.';
+
+let sentryInstance: typeof Sentry | undefined;
+
+if (EnvironmentVariables.SENTRY_DSN) {
+  sentryInstance = Sentry;
+}
 
 class LoggerImpl {
   private loggedErrors: { [key: string]: undefined | number } = {};
   private loggedWarnings: { [key: string]: undefined | number } = {};
   private loggedDebug: { [key: string]: undefined | number } = {};
 
-  logDebug(key: string, extraData?: unknown) {
+  logDebug(key: string, extraData?: { [key: string]: unknown }) {
     if (EnvironmentVariables.LOG_DEBUG) {
       const numberOfTimesLogged = this.loggedDebug[key] || 0;
 
@@ -35,7 +42,11 @@ class LoggerImpl {
     }
   }
 
-  logWarning(key: string, message: string, extraData?: unknown) {
+  logWarning(
+    key: string,
+    message: string,
+    extraData?: { [key: string]: unknown },
+  ) {
     const numberOfTimesLogged = this.loggedWarnings[key] || 0;
 
     if (
@@ -52,8 +63,18 @@ class LoggerImpl {
         and not both, so we don't get twice the events.
       */
 
-      console.warn('Logged warning with key: ' + key + '. ' + message);
-      console.warn('Extra data:', extraData);
+      if (sentryInstance) {
+        Sentry.captureMessage(key, {
+          level: Sentry.Severity.Warning,
+          extra: {
+            message,
+            data: extraData,
+          },
+        });
+      } else {
+        console.warn('Logged warning with key: ' + key + '. ' + message);
+        console.warn('Extra data:', extraData);
+      }
     }
   }
 
@@ -64,7 +85,7 @@ class LoggerImpl {
       so we don't know if a caught value is actually an Error instance.
     */
     caughtValue: unknown,
-    extraData?: unknown,
+    extraData?: { [key: string]: unknown },
   ) {
     const caughtValueIsInstanceOfError = caughtValue instanceof Error;
     const error = caughtValueIsInstanceOfError ? caughtValue : new Error();
@@ -98,13 +119,23 @@ class LoggerImpl {
         and not both, so we don't get twice the events.
       */
 
-      this.logErrorToConsole(
-        errorKey,
-        caughtValue,
-        error,
-        caughtValueIsInstanceOfError,
-        extraData,
-      );
+      if (sentryInstance) {
+        Sentry.captureException(error, {
+          extra: {
+            key: errorKey,
+            data: extraData,
+            caughtValue: caughtValueIsInstanceOfError ? undefined : caughtValue,
+          },
+        });
+      } else {
+        this.logErrorToConsole(
+          errorKey,
+          caughtValue,
+          error,
+          caughtValueIsInstanceOfError,
+          extraData,
+        );
+      }
     }
   }
 
