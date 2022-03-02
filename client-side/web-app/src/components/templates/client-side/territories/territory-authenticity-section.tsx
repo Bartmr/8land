@@ -139,7 +139,7 @@ export function TerritoryAuthenticitySection(props: {
     >
       <div>
         <input
-          className={`form-control ${validation?.errors ? 'invalid' : 'valid'}`}
+          className={`form-control ${validation?.errors ? 'is-invalid' : ''}`}
           value={url}
           onChange={(e) => replaceUrl(e.target.value)}
           placeholder={'Rarible item URL'}
