@@ -62,16 +62,21 @@ const schema = object({
   MORALIS_SERVER_URL: string().filled(),
   MORALIS_APP_ID: string().filled(),
 
-  WEB3_NET: equals(
-    process.env.CI === 'true' ? ['eth'] : ['rinkeby', 'eth'],
-  ).required(),
+  WEB3_NET: equals(['rinkeby', 'eth']).required(),
 
   RARIBLE_URL: string().filled(),
 
-  SENTRY_DSN: process.env.CI === 'true' ? string().filled() : equals([]),
+  SENTRY_DSN:
+    process.env.NODE_ENV === NodeEnv.Production &&
+    process.env.IS_INTEGRITY_CHECK !== 'true'
+      ? string().filled()
+      : equals([]),
 
   GOOGLE_ANALYTICS_TRACKING_ID:
-    process.env.CI === 'true' ? string().filled() : string(),
+    process.env.NODE_ENV === NodeEnv.Production &&
+    process.env.IS_INTEGRITY_CHECK !== 'true'
+      ? string().filled()
+      : equals([]),
 }).required();
 
 const environmentVariablesValidationResult = schema.validate({
