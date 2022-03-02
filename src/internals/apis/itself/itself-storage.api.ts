@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
 import { LoggingService } from 'src/internals/logging/logging.service';
 import { JSONApiBase } from '../json-api-base';
 
@@ -9,9 +8,9 @@ export class ItselfStorageApi extends JSONApiBase {
   protected getDefaultHeaders: () => { [key: string]: string | undefined };
   protected loggingService: LoggingService;
 
-  constructor(loggingService: LoggingService) {
+  constructor(loggingService: LoggingService, apiUrl: string) {
     super();
-    this.apiUrl = `http://localhost:${EnvironmentVariablesService.variables.API_PORT}/tmp/storage`;
+    this.apiUrl = apiUrl;
     this.getDefaultHeaders = () => ({});
     this.loggingService = loggingService;
   }
