@@ -9,6 +9,7 @@ import { runLandGame } from '../../land-game';
 import { Direction } from '../../grid.types';
 import { globalHistory } from '@reach/router';
 import { GamepadSingleton } from '../../gamepad-singleton';
+import { Logger } from 'src/logic/app-internals/logging/logger';
 
 export function GameScreen(props: {
   onSongChange: (song: SoundcloudSong) => void;
@@ -100,14 +101,22 @@ export function GameScreen(props: {
             soundcloudPlayer.pause();
 
             if (lastSong && !soundcloudPlayerIsReady) {
-              soundcloudPlayer.load(lastSong, {
-                callback: () => {
-                  soundcloudPlayer.getCurrentSound((s) =>
-                    props.onSongChange(s),
-                  );
-                  soundcloudPlayer.play();
-                },
-              });
+              try {
+                soundcloudPlayer.load(lastSong, {
+                  callback: () => {
+                    try {
+                      soundcloudPlayer.getCurrentSound((s) =>
+                        props.onSongChange(s),
+                      );
+                      soundcloudPlayer.play();
+                    } catch (err) {
+                      Logger.logError('soundcloud-player:load:callback', err);
+                    }
+                  },
+                });
+              } catch (err) {
+                Logger.logError('soundcloud-player:load', err);
+              }
             }
 
             soundcloudPlayerIsReady = true;
