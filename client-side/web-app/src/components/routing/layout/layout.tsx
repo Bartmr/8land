@@ -8,12 +8,14 @@ import { Header } from './header/header';
 import { GQLLayoutQuery } from './layout._graphql-generated_';
 import { useLocation } from '@reach/router';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
-import { PROJECT_SLOGAN } from '@app/shared/project-details';
+import { PROJECT_SLOGAN, TWITTER_URL } from '@app/shared/project-details';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { PRIVACY_POLICY_ROUTE } from 'src/components/templates/privacy-policy/privacy-policy-routes';
 import logo from 'src/assets/vendors/this-project/logo.svg';
 import { TERMS_OF_USE_ROUTE } from 'src/components/templates/terms-of-use/terms-of-use-routes';
 import { CONTENT_POLICY_ROUTE } from 'src/components/templates/content-policy/content-policy-routes';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 
 type Props = {
   children: (renderProps: {
@@ -139,7 +141,7 @@ export function Layout(props: Props) {
           <footer className="border-top py-4">
             <div className="container">
               <div className="row g-3 flex-lg-row-reverse align-items-center justify-content-center">
-                <div className="col-12 col-lg-6">
+                <div className="col-12 col-lg-3">
                   <ul className="list-unstyled m-0">
                     <li className="text-lg-end mb-3">
                       <LinkAnchor
@@ -163,6 +165,18 @@ export function Layout(props: Props) {
                         href={CONTENT_POLICY_ROUTE.getHref()}
                       >
                         Content Policy
+                      </LinkAnchor>
+                    </li>
+                  </ul>
+                </div>
+                <div className="col-12 col-lg-3">
+                  <ul className="list-unstyled mt-4 mt-lg-0">
+                    <li className="text-lg-end mb-3">
+                      <LinkAnchor
+                        className="link-body-shade"
+                        href={TWITTER_URL}
+                      >
+                        <FontAwesomeIcon icon={faTwitter} /> Twitter
                       </LinkAnchor>
                     </li>
                   </ul>

@@ -9,6 +9,8 @@ $grid-gutter-width: 0;
 
 $container-padding-x: $spacer;
 
+$enable-negative-margins: true;
+
 $component-active-color: get-contrasting-color-absolute-value(
   $component-active-bg,
   'body'

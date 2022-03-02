@@ -143,14 +143,10 @@ export class TerritoriesController {
 
       for (const territory of territories) {
         if (
-          (data.data.startX >= territory.startX &&
-            data.data.startX < territory.endX) ||
-          (data.data.endX > territory.startX &&
-            data.data.endX <= territory.endX) ||
-          (data.data.startY >= territory.startY &&
-            data.data.startY < territory.endY) ||
-          (data.data.endY > territory.startY &&
-            data.data.endY <= territory.endY)
+          data.data.startX <= territory.endX &&
+          data.data.endX > territory.startX &&
+          data.data.startY <= territory.endY &&
+          data.data.endY > territory.startY
         ) {
           throw new ConflictException({
             error: 'intersects-existing-territory',
