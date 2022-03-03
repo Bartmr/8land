@@ -11,26 +11,25 @@ import { GamepadSingleton } from './gamepad-singleton';
 
 const Vector2 = Phaser.Math.Vector2;
 
+const DIRECTION_TO_VECTOR: {
+  [key in Direction]?: Phaser.Math.Vector2;
+} = {
+  [Direction.UP]: Vector2.UP,
+  [Direction.DOWN]: Vector2.DOWN,
+  [Direction.LEFT]: Vector2.LEFT,
+  [Direction.RIGHT]: Vector2.RIGHT,
+};
+
 @HotReloadClass(module)
 class GridPhysics {
-  private movementDirectionVectors: {
-    [key in Direction]?: Phaser.Math.Vector2;
-  } = {
-    [Direction.UP]: Vector2.UP,
-    [Direction.DOWN]: Vector2.DOWN,
-    [Direction.LEFT]: Vector2.LEFT,
-    [Direction.RIGHT]: Vector2.RIGHT,
-  };
+  private isLocked = false;
 
   private movingDirection: Direction = Direction.NONE;
   private directionBeingPressed = Direction.NONE;
 
-  private readonly speedPixelsPerSecond: number = TILE_SIZE * 4;
   private tileSizePixelsWalked: number = 0;
 
   private hasSteppedOnSafeTile = false;
-
-  private isLocked = false;
 
   constructor(
     private player: Player,
@@ -139,15 +138,13 @@ class GridPhysics {
     this.player.setGridPosition(
       this.player
         .getGridPosition()
-        .add(
-          this.movementDirectionVectors[this.movingDirection] || throwError(),
-        ),
+        .add(DIRECTION_TO_VECTOR[this.movingDirection] || throwError()),
     );
   }
 
   private setPlayerAbsolutePosition(pixelsToMove: number) {
     const directionVec = (
-      this.movementDirectionVectors[this.movingDirection] || throwError()
+      DIRECTION_TO_VECTOR[this.movingDirection] || throwError()
     ).clone();
     const movementDistance = directionVec.multiply(new Vector2(pixelsToMove));
 
@@ -161,7 +158,10 @@ class GridPhysics {
 
   private getPixelsToWalkThisUpdate(delta: number): number {
     const deltaInSeconds = delta / 1000;
-    return this.speedPixelsPerSecond * deltaInSeconds;
+
+    const pixelsPerSecond = TILE_SIZE * 4;
+
+    return pixelsPerSecond * deltaInSeconds;
   }
 
   private stopMoving(): void {
@@ -181,16 +181,16 @@ class GridPhysics {
   }
 
   private willCollideInNextBlock(direction: Direction): boolean {
-    return this.isBlockingTile(this.getNextTilePosition(direction));
+    return this.isCollisionTile(this.getNextTilePosition(direction));
   }
 
   private getNextTilePosition(direction: Direction): Phaser.Math.Vector2 {
     return this.player
       .getGridPosition()
-      .add(this.movementDirectionVectors[direction] || throwError());
+      .add(DIRECTION_TO_VECTOR[direction] || throwError());
   }
 
-  private isBlockingTile(pos: Phaser.Math.Vector2): boolean {
+  private isCollisionTile(pos: Phaser.Math.Vector2): boolean {
     if (this.isOutsideLandBoundaries(pos)) return true;
 
     let landCollides = false;
