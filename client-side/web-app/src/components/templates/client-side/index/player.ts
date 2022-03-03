@@ -20,12 +20,20 @@ export class Player {
     this.sprite.setFrame(4);
   }
 
-  getPosition(): Phaser.Math.Vector2 {
+  getAbsolutePosition(): Phaser.Math.Vector2 {
     return this.sprite.getBottomCenter();
   }
 
-  setPosition(position: Phaser.Math.Vector2): void {
+  setAbsolutePosition(position: Phaser.Math.Vector2): void {
     this.sprite.setPosition(position.x, position.y);
+  }
+
+  getGridPosition(): Phaser.Math.Vector2 {
+    return this.tilePos.clone();
+  }
+
+  setGridPosition(tilePosition: Phaser.Math.Vector2): void {
+    this.tilePos = tilePosition.clone();
   }
 
   stopAnimation(direction: Direction) {
@@ -39,13 +47,5 @@ export class Player {
 
   startAnimation(direction: Direction) {
     this.sprite.anims.play(direction);
-  }
-
-  getTilePos(): Phaser.Math.Vector2 {
-    return this.tilePos.clone();
-  }
-
-  setTilePos(tilePosition: Phaser.Math.Vector2): void {
-    this.tilePos = tilePosition.clone();
   }
 }

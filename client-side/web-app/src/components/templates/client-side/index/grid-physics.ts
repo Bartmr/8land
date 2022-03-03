@@ -7,19 +7,9 @@ import { TILE_SIZE } from './game-constants';
 import { Direction } from './grid.types';
 import { Block, BlockType, DoorBlock } from './land-scene.types';
 import { Player } from './player';
+import { GamepadSingleton } from './gamepad-singleton';
 
 const Vector2 = Phaser.Math.Vector2;
-
-/**
- * TODO
- * if user hasnt walked over a tile that isnt the door it left
- * do not go back into the previous land again
- *
- * have a boolean like walkedOverSafeTile
- *
- * if it didnt, dont go enter the indoor again
- *
- */
 
 @HotReloadClass(module)
 class GridPhysics {
@@ -32,12 +22,11 @@ class GridPhysics {
     [Direction.RIGHT]: Vector2.RIGHT,
   };
 
-  private movementDirection: Direction = Direction.NONE;
+  private movingDirection: Direction = Direction.NONE;
+  private directionBeingPressed = Direction.NONE;
 
   private readonly speedPixelsPerSecond: number = TILE_SIZE * 4;
   private tileSizePixelsWalked: number = 0;
-
-  private lastMovementIntent = Direction.NONE;
 
   private hasSteppedOnSafeTile = false;
 
@@ -72,77 +61,99 @@ class GridPhysics {
     this.isLocked = false;
   }
 
-  movePlayer(direction: Direction): void {
-    if (this.isLocked) {
-      return;
-    }
-
-    this.lastMovementIntent = direction;
-    if (this.isMoving()) return;
-
-    if (this.isBlockingDirection(direction)) {
-      this.player.stopAnimation(direction);
-    } else {
-      this.startMoving(direction);
-    }
-  }
-
   update(delta: number) {
     if (this.isLocked) {
       return;
     }
 
+    //
+    // CONTINUE PREVIOUS ACTIONS
+    //
     if (this.isMoving()) {
-      this.updatePlayerPosition(delta);
+      this.updatePlayer(delta);
     }
-    this.lastMovementIntent = Direction.NONE;
+
+    //
+    // TRIGGER NEW ACTIONS BASED ON BUTTONS PRESSED
+    //
+    const gamePad = GamepadSingleton.getInstance() || throwError();
+
+    const pressingLeft = gamePad.getDirection() === Direction.LEFT;
+    const pressingRight = gamePad.getDirection() === Direction.RIGHT;
+    const pressingUp = gamePad.getDirection() === Direction.UP;
+    const pressingDown = gamePad.getDirection() === Direction.DOWN;
+
+    if (pressingLeft) {
+      this.directionBeingPressed = Direction.LEFT;
+      this.movePlayer(Direction.LEFT);
+    } else if (pressingRight) {
+      this.directionBeingPressed = Direction.RIGHT;
+      this.movePlayer(Direction.RIGHT);
+    } else if (pressingUp) {
+      this.directionBeingPressed = Direction.UP;
+      this.movePlayer(Direction.UP);
+    } else if (pressingDown) {
+      this.directionBeingPressed = Direction.DOWN;
+      this.movePlayer(Direction.DOWN);
+    } else {
+      // user wants to stop by not pressing any key
+      this.directionBeingPressed = Direction.NONE;
+    }
+  }
+
+  private movePlayer(direction: Direction): void {
+    if (this.isMoving()) return;
+
+    if (this.willCollideInNextBlock(direction)) {
+      this.player.stopAnimation(direction);
+    } else {
+      this.player.startAnimation(direction);
+      this.movingDirection = direction;
+      this.changePlayerGridPosition();
+    }
   }
 
   private isMoving(): boolean {
-    return this.movementDirection !== Direction.NONE;
+    return this.movingDirection !== Direction.NONE;
   }
 
-  private startMoving(direction: Direction): void {
-    this.player.startAnimation(direction);
-    this.movementDirection = direction;
-    this.updatePlayerTilePos();
-  }
-
-  private updatePlayerPosition(delta: number) {
+  private updatePlayer(delta: number) {
     const pixelsToWalkThisUpdate = this.getPixelsToWalkThisUpdate(delta);
 
-    if (!this.willCrossTileBorderThisUpdate(pixelsToWalkThisUpdate)) {
-      this.movePlayerSprite(pixelsToWalkThisUpdate);
-    } else {
-      if (this.shouldContinueMoving()) {
-        this.movePlayerSprite(pixelsToWalkThisUpdate);
-        this.updatePlayerTilePos();
+    if (this.willWalkOverANewTile(pixelsToWalkThisUpdate)) {
+      if (this.shouldContinueMovingInSameDirection()) {
+        this.setPlayerAbsolutePosition(pixelsToWalkThisUpdate);
+        this.changePlayerGridPosition();
       } else {
-        this.movePlayerSprite(TILE_SIZE - this.tileSizePixelsWalked);
+        this.setPlayerAbsolutePosition(TILE_SIZE - this.tileSizePixelsWalked);
         this.stopMoving();
       }
 
       this.reactToLandBlockTouch();
+    } else {
+      this.setPlayerAbsolutePosition(pixelsToWalkThisUpdate);
     }
   }
 
-  private updatePlayerTilePos() {
-    this.player.setTilePos(
+  private changePlayerGridPosition() {
+    this.player.setGridPosition(
       this.player
-        .getTilePos()
+        .getGridPosition()
         .add(
-          this.movementDirectionVectors[this.movementDirection] || throwError(),
+          this.movementDirectionVectors[this.movingDirection] || throwError(),
         ),
     );
   }
 
-  private movePlayerSprite(pixelsToMove: number) {
+  private setPlayerAbsolutePosition(pixelsToMove: number) {
     const directionVec = (
-      this.movementDirectionVectors[this.movementDirection] || throwError()
+      this.movementDirectionVectors[this.movingDirection] || throwError()
     ).clone();
     const movementDistance = directionVec.multiply(new Vector2(pixelsToMove));
-    const newPlayerPos = this.player.getPosition().add(movementDistance);
-    this.player.setPosition(newPlayerPos);
+
+    this.player.setAbsolutePosition(
+      this.player.getAbsolutePosition().add(movementDistance),
+    );
 
     this.tileSizePixelsWalked += pixelsToMove;
     this.tileSizePixelsWalked %= TILE_SIZE;
@@ -154,35 +165,33 @@ class GridPhysics {
   }
 
   private stopMoving(): void {
-    this.player.stopAnimation(this.movementDirection);
-    this.movementDirection = Direction.NONE;
+    this.player.stopAnimation(this.movingDirection);
+    this.movingDirection = Direction.NONE;
   }
 
-  private willCrossTileBorderThisUpdate(
-    pixelsToWalkThisUpdate: number,
-  ): boolean {
+  private willWalkOverANewTile(pixelsToWalkThisUpdate: number): boolean {
     return this.tileSizePixelsWalked + pixelsToWalkThisUpdate >= TILE_SIZE;
   }
 
-  private shouldContinueMoving(): boolean {
+  private shouldContinueMovingInSameDirection(): boolean {
     return (
-      this.movementDirection === this.lastMovementIntent &&
-      !this.isBlockingDirection(this.lastMovementIntent)
+      this.movingDirection === this.directionBeingPressed &&
+      !this.willCollideInNextBlock(this.directionBeingPressed)
     );
   }
 
-  private isBlockingDirection(direction: Direction): boolean {
-    return this.isBlockingTile(this.nextTileInDirection(direction));
+  private willCollideInNextBlock(direction: Direction): boolean {
+    return this.isBlockingTile(this.getNextTilePosition(direction));
   }
 
-  private nextTileInDirection(direction: Direction): Phaser.Math.Vector2 {
+  private getNextTilePosition(direction: Direction): Phaser.Math.Vector2 {
     return this.player
-      .getTilePos()
+      .getGridPosition()
       .add(this.movementDirectionVectors[direction] || throwError());
   }
 
   private isBlockingTile(pos: Phaser.Math.Vector2): boolean {
-    if (this.hasNoTileInLand(pos)) return true;
+    if (this.isOutsideLandBoundaries(pos)) return true;
 
     let landCollides = false;
 
@@ -266,7 +275,7 @@ class GridPhysics {
     return landCollides;
   }
 
-  private hasNoTileInLand(pos: Phaser.Math.Vector2): boolean {
+  private isOutsideLandBoundaries(pos: Phaser.Math.Vector2): boolean {
     return !this.context.land.tilemap.layers.some((layer) => {
       return this.context.land.tilemap.hasTileAt(pos.x, pos.y, layer.name);
     });
@@ -276,7 +285,7 @@ class GridPhysics {
     LAND BLOCK METHODS
   */
   private reactToLandBlockTouch() {
-    const pos = this.player.getTilePos();
+    const pos = this.player.getGridPosition();
 
     let blockToReactTo: Block | undefined;
 

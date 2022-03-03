@@ -7,7 +7,6 @@ import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environmen
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 import { HotReloadClass } from 'src/logic/app-internals/utils/hot-reload-class';
 import { TILE_SIZE } from './game-constants';
-import { GridControls } from './grid-controls';
 import { GridPhysics } from './grid-physics';
 import { Direction } from './grid.types';
 import {
@@ -24,7 +23,6 @@ import { TiledJSON } from './tiled.types';
 
 @HotReloadClass(module)
 export class LandScene extends Phaser.Scene {
-  private gridControls?: GridControls;
   private gridPhysics?: GridPhysics;
 
   protected previousLandSceneArguments: LandSceneArguments | null;
@@ -274,13 +272,11 @@ export class LandScene extends Phaser.Scene {
           return;
         }
 
-        (this.gridControls || throwError()).lockControls();
         (this.gridPhysics || throwError()).lock();
 
         await this.handleStepIntoDoor(block);
       },
     });
-    this.gridControls = new GridControls(this.input, this.gridPhysics);
 
     this.createPlayerAnimation(Direction.UP, 9, 8);
     this.createPlayerAnimation(Direction.RIGHT, 1, 0);
@@ -289,7 +285,6 @@ export class LandScene extends Phaser.Scene {
   }
 
   public update(_time: number, delta: number) {
-    (this.gridControls || throwError()).update();
     (this.gridPhysics || throwError()).update(delta);
   }
 
@@ -382,7 +377,6 @@ export class LandScene extends Phaser.Scene {
         );
       }
 
-      (this.gridControls || throwError()).unlockControls();
       (this.gridPhysics || throwError()).unlock();
 
       this.dependencies.changeLandNameDisplay(this.args.land.name);
