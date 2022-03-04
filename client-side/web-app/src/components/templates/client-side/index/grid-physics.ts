@@ -1,13 +1,11 @@
 import { throwError } from '@app/shared/internals/utils/throw-error';
-import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
-import { object } from 'not-me/lib/schemas/object/object-schema';
-import { objectOf } from 'not-me/lib/schemas/object/object-of-schema';
 import { HotReloadClass } from 'src/logic/app-internals/utils/hot-reload-class';
 import { TILE_SIZE } from './game-constants';
 import { Direction } from './grid.types';
 import { Block, BlockType, DoorBlock } from './land-scene.types';
 import { Player } from './player';
 import { GamepadSingleton } from './gamepad-singleton';
+import { JSONPrimitive } from '@app/shared/internals/transports/json-types';
 
 const Vector2 = Phaser.Math.Vector2;
 
@@ -26,6 +24,7 @@ class GridPhysics {
 
   private movingDirection: Direction = Direction.NONE;
   private directionBeingPressed = Direction.NONE;
+  private playerIdPointingTo: Direction = Direction.NONE;
 
   private tileSizePixelsWalked: number = 0;
 
@@ -84,15 +83,19 @@ class GridPhysics {
 
     if (pressingLeft) {
       this.directionBeingPressed = Direction.LEFT;
+      this.playerIdPointingTo = Direction.LEFT;
       this.movePlayer(Direction.LEFT);
     } else if (pressingRight) {
       this.directionBeingPressed = Direction.RIGHT;
+      this.playerIdPointingTo = Direction.RIGHT;
       this.movePlayer(Direction.RIGHT);
     } else if (pressingUp) {
       this.directionBeingPressed = Direction.UP;
+      this.playerIdPointingTo = Direction.UP;
       this.movePlayer(Direction.UP);
     } else if (pressingDown) {
       this.directionBeingPressed = Direction.DOWN;
+      this.playerIdPointingTo = Direction.DOWN;
       this.movePlayer(Direction.DOWN);
     } else {
       // user wants to stop by not pressing any key
@@ -128,7 +131,7 @@ class GridPhysics {
         this.stopMoving();
       }
 
-      this.reactToLandBlockTouch();
+      this.reactToCurrentTile();
     } else {
       this.setPlayerAbsolutePosition(pixelsToWalkThisUpdate);
     }
@@ -181,7 +184,13 @@ class GridPhysics {
   }
 
   private willCollideInNextBlock(direction: Direction): boolean {
-    return this.isCollisionTile(this.getNextTilePosition(direction));
+    const pos = this.getNextTilePosition(direction);
+
+    if (this.isOutsideLandBoundaries(pos)) return true;
+
+    const topTileProps = this.getTopTileProperties(pos);
+
+    return !!topTileProps?.static.collides;
   }
 
   private getNextTilePosition(direction: Direction): Phaser.Math.Vector2 {
@@ -190,10 +199,60 @@ class GridPhysics {
       .add(DIRECTION_TO_VECTOR[direction] || throwError());
   }
 
-  private isCollisionTile(pos: Phaser.Math.Vector2): boolean {
-    if (this.isOutsideLandBoundaries(pos)) return true;
+  private isOutsideLandBoundaries(pos: Phaser.Math.Vector2): boolean {
+    return !this.context.land.tilemap.layers.some((layer) => {
+      return this.context.land.tilemap.hasTileAt(pos.x, pos.y, layer.name);
+    });
+  }
 
-    let landCollides = false;
+  private getTopTileProperties(pos: Phaser.Math.Vector2) {
+    const resolveTileProps = (tile: Phaser.Tilemaps.Tile) => {
+      let foundATopTileWithProps = false;
+      const properties: {
+        static: {
+          collides?: boolean;
+          text?: string;
+        };
+        blockId?: string;
+      } = {
+        static: {},
+      };
+
+      const tileProperties = tile.properties as {
+        [key: string]: JSONPrimitive;
+      };
+
+      if (tileProperties['collides']) {
+        properties.static.collides = true;
+        foundATopTileWithProps = true;
+      }
+
+      if (tileProperties['text']) {
+        const text = tileProperties['text'];
+
+        if (typeof text !== 'string') {
+          throw new Error();
+        }
+
+        properties.static.text = text;
+        foundATopTileWithProps = true;
+      }
+
+      const firstBlockId = Object.entries(tileProperties)
+        .filter((c) => !['collides', 'text'].includes(c[0]))
+        .find((c) => c[1]);
+
+      if (firstBlockId) {
+        properties.blockId = firstBlockId[0];
+        foundATopTileWithProps = true;
+      }
+
+      if (foundATopTileWithProps) {
+        return properties;
+      } else {
+        return undefined;
+      }
+    };
 
     for (const territory of this.context.territories) {
       if (
@@ -217,32 +276,13 @@ class GridPhysics {
           continue;
         }
 
-        const tileProps = object({
-          collides: boolean(),
-        })
-          .required()
-          .validate(tile.properties);
+        const props = resolveTileProps(tile);
 
-        if (tileProps.errors) {
-          throw new Error(JSON.stringify(tileProps.messagesTree));
-        }
-
-        landCollides = !!tileProps.value.collides;
-
-        if (landCollides) {
-          break;
+        if (props) {
+          return props;
         }
       }
-
-      if (landCollides) {
-        break;
-      }
     }
-
-    if (landCollides) {
-      return landCollides;
-    }
-
     for (const layer of this.context.land.tilemap.layers) {
       const tile = this.context.land.tilemap.getTileAt(
         pos.x,
@@ -255,133 +295,37 @@ class GridPhysics {
         throw new Error();
       }
 
-      const tileProps = object({
-        collides: boolean(),
-      })
-        .required()
-        .validate(tile.properties);
+      const props = resolveTileProps(tile);
 
-      if (tileProps.errors) {
-        throw new Error(JSON.stringify(tileProps.messagesTree));
-      }
-
-      landCollides = !!tileProps.value.collides;
-
-      if (landCollides) {
-        break;
+      if (props) {
+        return props;
       }
     }
 
-    return landCollides;
+    return undefined;
   }
 
-  private isOutsideLandBoundaries(pos: Phaser.Math.Vector2): boolean {
-    return !this.context.land.tilemap.layers.some((layer) => {
-      return this.context.land.tilemap.hasTileAt(pos.x, pos.y, layer.name);
-    });
-  }
-
-  /*
-    LAND BLOCK METHODS
-  */
-  private reactToLandBlockTouch() {
+  private reactToCurrentTile() {
     const pos = this.player.getGridPosition();
 
-    let blockToReactTo: Block | undefined;
+    const tileProps = this.getTopTileProperties(pos);
 
-    for (const territory of this.context.territories) {
-      if (
-        !(
-          (pos.x >= territory.startX || pos.x <= territory.endX) &&
-          (pos.y >= territory.startY || pos.y <= territory.endY)
-        )
-      ) {
-        continue;
-      }
-
-      for (const layer of territory.tilemap.layers) {
-        const tile = territory.tilemap.getTileAt(
-          pos.x - territory.startX,
-          pos.y - territory.startY,
-          false,
-          layer.name,
-        ) as Phaser.Tilemaps.Tile | null;
-
-        if (!tile) {
-          continue;
-        }
-
-        const tileProps = objectOf(boolean())
-          .required()
-          .validate(tile.properties);
-
-        if (tileProps.errors) {
-          throw new Error(JSON.stringify(tileProps.messagesTree));
-        }
-
-        const blockId = Object.keys(tileProps.value).filter(
-          (key) => tileProps.value[key],
-        )[0];
-
-        if (blockId) {
-          const block = territory.blocks.find((b) => blockId === b.id);
-
-          if (block) {
-            blockToReactTo = block;
-            break;
-          }
-        }
-      }
-
-      if (blockToReactTo) {
-        break;
-      }
-    }
-
-    if (!blockToReactTo) {
-      for (const layer of this.context.land.tilemap.layers) {
-        const tile = this.context.land.tilemap.getTileAt(
-          pos.x,
-          pos.y,
-          false,
-          layer.name,
-        ) as Phaser.Tilemaps.Tile | null;
-
-        if (!tile) {
-          throw new Error();
-        }
-
-        const tileProps = objectOf(boolean())
-          .required()
-          .validate(tile.properties);
-
-        if (tileProps.errors) {
-          throw new Error(JSON.stringify(tileProps.messagesTree));
-        }
-
-        const blockId = Object.keys(tileProps.value).filter(
-          (key) => tileProps.value[key],
-        )[0];
-
-        if (blockId) {
-          const block = this.context.land.blocks.find((b) => blockId === b.id);
-
-          if (block) {
-            blockToReactTo = block;
-            break;
-          }
-        }
-      }
-    }
-
-    if (blockToReactTo) {
+    if (tileProps) {
       if (!this.hasSteppedOnSafeTile) {
         return;
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      if (blockToReactTo.type === BlockType.Door) {
-        this.context.onStepIntoDoor(blockToReactTo);
+      const blockId = tileProps.blockId;
+
+      if (blockId) {
+        const block = this.context.land.blocks.find((b) => blockId === b.id);
+
+        if (block) {
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          if (block.type === BlockType.Door) {
+            this.context.onStepIntoDoor(block);
+          }
+        }
       }
     } else {
       this.hasSteppedOnSafeTile = true;
