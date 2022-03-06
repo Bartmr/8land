@@ -6,7 +6,6 @@ import { JSONApiBase } from 'src/logic/app-internals/apis/json-api-base';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 import { HotReloadClass } from 'src/logic/app-internals/utils/hot-reload-class';
-import { TILE_SIZE } from './game-constants';
 import { GridPhysics } from './grid-physics';
 import { Direction } from './grid.types';
 import {
@@ -17,9 +16,10 @@ import {
   getTerritoryTilesetKey,
 } from './keys';
 import { Block, DoorBlock, LandSceneArguments } from './land-scene.types';
-import { MusicProvider } from './music-provider.types';
 import { Player } from './player';
 import { TiledJSON } from './tiled.types';
+import { MusicProvider } from '../../../../music-provider.types';
+import { TILE_SIZE } from '../../../../game-constants';
 
 @HotReloadClass(module)
 export class LandScene extends Phaser.Scene {
@@ -328,7 +328,7 @@ export class LandScene extends Phaser.Scene {
       'animatedTiles',
     );
 
-    this.dependencies.musicProvider.playFromSoundcloud(
+    this.dependencies.musicProvider.changeMusic(
       this.args.land.backgroundMusicUrl,
     );
   }

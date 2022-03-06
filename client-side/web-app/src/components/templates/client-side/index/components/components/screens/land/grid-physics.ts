@@ -1,10 +1,10 @@
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { HotReloadClass } from 'src/logic/app-internals/utils/hot-reload-class';
-import { TILE_SIZE } from './game-constants';
+import { TILE_SIZE } from '../../../../game-constants';
 import { Direction } from './grid.types';
 import { Block, BlockType, DoorBlock } from './land-scene.types';
 import { Player } from './player';
-import { GamepadSingleton } from './gamepad-singleton';
+import { GamepadSingleton, GamepadType } from '../../../../gamepad-singleton';
 import { JSONPrimitive } from '@app/shared/internals/transports/json-types';
 
 const Vector2 = Phaser.Math.Vector2;
@@ -20,11 +20,13 @@ const DIRECTION_TO_VECTOR: {
 
 @HotReloadClass(module)
 class GridPhysics {
+  private gamePad: GamepadType;
+
   private isLocked = false;
+  private directionsAreLocked = false;
 
   private movingDirection: Direction = Direction.NONE;
-  private directionBeingPressed = Direction.NONE;
-  private playerIdPointingTo: Direction = Direction.NONE;
+  private facingDirection: Direction = Direction.NONE;
 
   private tileSizePixelsWalked: number = 0;
 
@@ -49,7 +51,9 @@ class GridPhysics {
       }>;
       onStepIntoDoor: (block: DoorBlock) => void;
     },
-  ) {}
+  ) {
+    this.gamePad = GamepadSingleton.getInstance() || throwError();
+  }
 
   lock() {
     this.isLocked = true;
@@ -74,32 +78,25 @@ class GridPhysics {
     //
     // TRIGGER NEW ACTIONS BASED ON BUTTONS PRESSED
     //
-    const gamePad = GamepadSingleton.getInstance() || throwError();
-
-    const pressingLeft = gamePad.getDirection() === Direction.LEFT;
-    const pressingRight = gamePad.getDirection() === Direction.RIGHT;
-    const pressingUp = gamePad.getDirection() === Direction.UP;
-    const pressingDown = gamePad.getDirection() === Direction.DOWN;
+    const pressingLeft = this.gamePad.getDirection() === Direction.LEFT;
+    const pressingRight = this.gamePad.getDirection() === Direction.RIGHT;
+    const pressingUp = this.gamePad.getDirection() === Direction.UP;
+    const pressingDown = this.gamePad.getDirection() === Direction.DOWN;
 
     if (pressingLeft) {
-      this.directionBeingPressed = Direction.LEFT;
-      this.playerIdPointingTo = Direction.LEFT;
+      this.facingDirection = Direction.LEFT;
       this.movePlayer(Direction.LEFT);
     } else if (pressingRight) {
-      this.directionBeingPressed = Direction.RIGHT;
-      this.playerIdPointingTo = Direction.RIGHT;
+      this.facingDirection = Direction.RIGHT;
       this.movePlayer(Direction.RIGHT);
     } else if (pressingUp) {
-      this.directionBeingPressed = Direction.UP;
-      this.playerIdPointingTo = Direction.UP;
+      this.facingDirection = Direction.UP;
       this.movePlayer(Direction.UP);
     } else if (pressingDown) {
-      this.directionBeingPressed = Direction.DOWN;
-      this.playerIdPointingTo = Direction.DOWN;
+      this.facingDirection = Direction.DOWN;
       this.movePlayer(Direction.DOWN);
     } else {
       // user wants to stop by not pressing any key
-      this.directionBeingPressed = Direction.NONE;
     }
   }
 
@@ -178,8 +175,8 @@ class GridPhysics {
 
   private shouldContinueMovingInSameDirection(): boolean {
     return (
-      this.movingDirection === this.directionBeingPressed &&
-      !this.willCollideInNextBlock(this.directionBeingPressed)
+      this.movingDirection === this.gamePad.getDirection() &&
+      !this.willCollideInNextBlock(this.gamePad.getDirection())
     );
   }
 

@@ -3,8 +3,8 @@ import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 import { createTiledJSONSchema } from '@app/shared/land/upload-assets/upload-land-assets.schemas';
 import { InferType } from 'not-me/lib/schemas/schema';
 import { useEffect, useState } from 'react';
+import { TiledJSON } from 'src/components/templates/client-side/index/components/components/screens/land/tiled.types';
 import { TILE_SIZE } from 'src/components/templates/client-side/index/game-constants';
-import { TiledJSON } from 'src/components/templates/client-side/index/tiled.types';
 import { useJSONHttp } from 'src/logic/app-internals/transports/http/json/use-json-http';
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 import {

@@ -75,12 +75,16 @@ export const GATSBY_CONFIG = {
       },
     },
     `gatsby-plugin-netlify`,
-    {
-      resolve: '@sentry/gatsby',
-      options: {
-        dsn: EnvironmentVariables.SENTRY_DSN,
-      },
-    },
+    ...(EnvironmentVariables.SENTRY_DSN
+      ? [
+          {
+            resolve: '@sentry/gatsby',
+            options: {
+              dsn: EnvironmentVariables.SENTRY_DSN,
+            },
+          },
+        ]
+      : []),
     ...(EnvironmentVariables.GOOGLE_ANALYTICS_TRACKING_ID
       ? [
           {

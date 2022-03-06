@@ -5,10 +5,10 @@ import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/ma
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { getLandSceneKey } from './keys';
 import { LandScene } from './land-scene';
-import { MusicProvider } from './music-provider.types';
 import sample from 'lodash/sample';
 import { BlockType, DoorBlock } from './land-scene.types';
 import { throwError } from '@app/shared/internals/utils/throw-error';
+import { MusicProvider } from '../../../../music-provider.types';
 
 export async function runLandGame(
   args: { land: GetLandDTO; session: null | MainApiSessionData },

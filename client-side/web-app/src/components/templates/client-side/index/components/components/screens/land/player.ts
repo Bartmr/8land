@@ -1,6 +1,6 @@
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { HotReloadClass } from 'src/logic/app-internals/utils/hot-reload-class';
-import { TILE_SIZE } from './game-constants';
+import { TILE_SIZE } from '../../../../game-constants';
 import { Direction } from './grid.types';
 
 @HotReloadClass(module)
