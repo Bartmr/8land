@@ -20,6 +20,7 @@ import { Player } from './player';
 import { TiledJSON } from './tiled.types';
 import { TILE_SIZE } from '../../../../game-constants';
 import { MusicService } from '../../music-ticker';
+import { DialogueService } from '../dialogue/dialogue-screen';
 
 @HotReloadClass(module)
 export class LandScene extends Phaser.Scene {
@@ -29,6 +30,7 @@ export class LandScene extends Phaser.Scene {
   protected args: LandSceneArguments;
   protected dependencies: {
     musicService: MusicService;
+    dialogueService: DialogueService;
     api: JSONApiBase;
     changeLandNameDisplay: (landName: string) => void;
   };
@@ -276,6 +278,7 @@ export class LandScene extends Phaser.Scene {
 
         await this.handleStepIntoDoor(block);
       },
+      dialogueService: this.dependencies.dialogueService,
     });
 
     this.createPlayerAnimation(Direction.UP, 9, 8);

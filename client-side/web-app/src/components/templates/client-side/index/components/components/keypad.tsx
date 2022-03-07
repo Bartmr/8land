@@ -15,7 +15,7 @@ export function Keypad() {
       zone: nippleZone,
     });
 
-    const gamepad = GamepadSingleton.getInstance() || throwError();
+    const gamepad = GamepadSingleton.getInstance();
 
     nipple.on('dir:up', () => {
       gamepad.setDirection(Direction.UP);
@@ -59,7 +59,7 @@ export function Keypad() {
     };
     gameButtonB.addEventListener('pointerup', gameButtonBReleasedListener);
 
-    const keyUpListener = (e: KeyboardEvent) => {
+    const keyDownListener = (e: KeyboardEvent) => {
       if (e.key === 'ArrowUp') {
         gamepad.directionWasPressed(Direction.UP);
       } else if (e.key === 'ArrowDown') {
@@ -68,10 +68,14 @@ export function Keypad() {
         gamepad.directionWasPressed(Direction.LEFT);
       } else if (e.key === 'ArrowRight') {
         gamepad.directionWasPressed(Direction.RIGHT);
+      } else if (e.key === 'a') {
+        gamepad.A_keyWasPressed();
+      } else if (e.key === 's') {
+        gamepad.B_keyWasPressed();
       }
     };
 
-    const keyDownListener = (e: KeyboardEvent) => {
+    const keyUpListener = (e: KeyboardEvent) => {
       if (e.key === 'ArrowUp') {
         gamepad.directionWasReleased(Direction.UP);
       } else if (e.key === 'ArrowDown') {
@@ -80,12 +84,16 @@ export function Keypad() {
         gamepad.directionWasReleased(Direction.LEFT);
       } else if (e.key === 'ArrowRight') {
         gamepad.directionWasReleased(Direction.RIGHT);
+      } else if (e.key === 'a') {
+        gamepad.A_keyWasReleased();
+      } else if (e.key === 's') {
+        gamepad.B_keyWasReleased();
       }
     };
 
-    window.addEventListener('keydown', keyUpListener);
+    window.addEventListener('keydown', keyDownListener);
 
-    window.addEventListener('keyup', keyDownListener);
+    window.addEventListener('keyup', keyUpListener);
 
     return () => {
       nipple.destroy();
@@ -144,7 +152,11 @@ export function Keypad() {
         </div>
       </div>
       <div className="d-none d-xl-block mt-3">
-        Instructions: Use the arrow keys to move
+        Instructions: Use the arrow keys to move.
+        <br />
+        &quot;A&quot; for actions (like reading signs).
+        <br />
+        &quot;S&quot; for going back
       </div>
     </>
   );

@@ -5,6 +5,7 @@ import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-
 import { runLandGame } from './land-game';
 import { globalHistory } from '@reach/router';
 import { MusicService } from '../../music-ticker';
+import { DialogueService } from '../dialogue/dialogue-screen';
 
 export class LandScreenService {
   public game: Phaser.Game;
@@ -16,6 +17,7 @@ export class LandScreenService {
 
 export function LandScreen(props: {
   musicService: MusicService;
+  dialogueService: DialogueService;
   land: GetLandDTO;
   session: null | MainApiSessionData;
   changeLandNameDisplay: (landName: string) => void;
@@ -38,6 +40,7 @@ export function LandScreen(props: {
         {
           api,
           musicService: props.musicService,
+          dialogueService: props.dialogueService,
           changeLandNameDisplay: props.changeLandNameDisplay,
         },
       );

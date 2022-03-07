@@ -279,8 +279,33 @@ export function HowToEditTerritoryTemplate() {
                 tileset. To make a tile &quot;solid&quot;, we add a property
                 named{' '}
                 <span style={{ textDecoration: 'underline' }}>collides</span>{' '}
-                and set it to true
+                and set it to true.
               </p>
+              <div className="card my-4">
+                <div className="card-body">
+                  <p>
+                    You can add many types of properties to a tile. Here is the
+                    complete list:
+                  </p>
+
+                  <ul>
+                    <li>
+                      <span className="fst-italic">
+                        collides/<span className="text-success">boolean</span>
+                      </span>
+                      : make the tile solid and block the player from walking
+                      over it
+                    </li>
+                    <li>
+                      <span className="fst-italic">
+                        text/<span className="text-success">string</span>
+                      </span>
+                      : when the player is facing the tile and presses the
+                      action button, the text will appear
+                    </li>
+                  </ul>
+                </div>
+              </div>
               <p>
                 <LinkAnchor
                   openInNewTab

@@ -9,11 +9,13 @@ import sample from 'lodash/sample';
 import { BlockType, DoorBlock } from './land-scene.types';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { MusicService } from '../../music-ticker';
+import { DialogueService } from '../dialogue/dialogue-screen';
 
 export async function runLandGame(
   args: { land: GetLandDTO; session: null | MainApiSessionData },
   dependencies: {
     musicService: MusicService;
+    dialogueService: DialogueService;
     api: JSONApiBase;
     changeLandNameDisplay: (landName: string) => void;
   },

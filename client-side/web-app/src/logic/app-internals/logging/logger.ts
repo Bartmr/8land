@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { EnvironmentVariables } from '../runtime/environment-variables';
-import { RUNNING_IN_SERVER } from '../runtime/running-in';
+import { RUNNING_IN_CLIENT, RUNNING_IN_SERVER } from '../runtime/running-in';
 import * as Sentry from '@sentry/react';
 
 const LOG_ENTRIES_LIMIT = 3;
@@ -10,7 +10,7 @@ export const LOG_SERVICE_COMPANY = 'Functional Software, Inc.';
 
 let sentryInstance: typeof Sentry | undefined;
 
-if (EnvironmentVariables.SENTRY_DSN) {
+if (RUNNING_IN_CLIENT && EnvironmentVariables.SENTRY_DSN) {
   sentryInstance = Sentry;
 }
 

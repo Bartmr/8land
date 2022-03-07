@@ -9,6 +9,8 @@ export class MusicService {
   song?: SoundcloudSong;
   soundcloudPlayer: ReturnType<NonNullable<typeof window['SC']>['Widget']>;
 
+  private initializationPromise: Promise<void>;
+
   private render: () => void;
 
   constructor(args: { render: MusicService['render'] }) {
@@ -21,17 +23,22 @@ export class MusicService {
       soundcloudPlayerIframe as HTMLIFrameElement,
     );
 
-    const onReady = () => {
-      this.soundcloudPlayer.pause();
+    this.initializationPromise = new Promise((resolve) => {
+      const onReady = () => {
+        this.soundcloudPlayer.pause();
 
-      this.soundcloudPlayer.unbind(
+        this.soundcloudPlayer.unbind(
+          (window.SC || throwError()).Widget.Events.READY,
+        );
+
+        resolve();
+      };
+
+      this.soundcloudPlayer.bind(
         (window.SC || throwError()).Widget.Events.READY,
+        onReady,
       );
-    };
-    this.soundcloudPlayer.bind(
-      (window.SC || throwError()).Widget.Events.READY,
-      onReady,
-    );
+    });
 
     // LOOP BACKGROUND MUSIC
     this.soundcloudPlayer.bind(
@@ -51,17 +58,21 @@ export class MusicService {
 
   playMusic(musicUrl: string | null) {
     if (musicUrl && musicUrl !== this.lastMusicUrl) {
-      this.soundcloudPlayer.load(musicUrl, {
-        callback: () => {
-          this.soundcloudPlayer.getCurrentSound((s) => {
-            this.song = s;
-            this.render();
-          });
-          this.soundcloudPlayer.play();
-        },
-      });
+      (async () => {
+        await this.initializationPromise;
 
-      this.lastMusicUrl = musicUrl;
+        this.soundcloudPlayer.load(musicUrl, {
+          callback: () => {
+            this.soundcloudPlayer.getCurrentSound((s) => {
+              this.song = s;
+              this.render();
+            });
+            this.soundcloudPlayer.play();
+          },
+        });
+
+        this.lastMusicUrl = musicUrl;
+      })();
     }
   }
 }
@@ -83,25 +94,27 @@ export function MusicTicker(props: {
 
   return (
     <>
-      {service ? (
-        <div
-          style={{
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}
-        >
-          {service.song ? (
-            <LinkAnchor
-              style={{ textDecoration: 'underline' }}
-              className="link-unstyled"
-              href={service.song.permalink_url}
-            >
-              {service.song.title} - {service.song.user.username}
-            </LinkAnchor>
-          ) : null}
-        </div>
-      ) : null}
+      <>
+        {service ? (
+          <div
+            style={{
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            {service.song ? (
+              <LinkAnchor
+                style={{ textDecoration: 'underline' }}
+                className="link-unstyled"
+                href={service.song.permalink_url}
+              >
+                {service.song.title} - {service.song.user.username}
+              </LinkAnchor>
+            ) : null}
+          </div>
+        ) : null}
+      </>
       <div style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}>
         <iframe
           title="soundcloud-player"

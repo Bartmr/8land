@@ -6,6 +6,7 @@ import { Block, BlockType, DoorBlock } from './land-scene.types';
 import { Player } from './player';
 import { GamepadSingleton, GamepadType } from '../../../../gamepad-singleton';
 import { JSONPrimitive } from '@app/shared/internals/transports/json-types';
+import { DialogueService } from '../dialogue/dialogue-screen';
 
 const Vector2 = Phaser.Math.Vector2;
 
@@ -26,7 +27,7 @@ class GridPhysics {
   private directionsAreLocked = false;
 
   private movingDirection: Direction = Direction.NONE;
-  private facingDirection: Direction = Direction.NONE;
+  private facingDirection: Direction = Direction.DOWN;
 
   private tileSizePixelsWalked: number = 0;
 
@@ -50,9 +51,10 @@ class GridPhysics {
         tilemap: Phaser.Tilemaps.Tilemap;
       }>;
       onStepIntoDoor: (block: DoorBlock) => void;
+      dialogueService: DialogueService;
     },
   ) {
-    this.gamePad = GamepadSingleton.getInstance() || throwError();
+    this.gamePad = GamepadSingleton.getInstance();
   }
 
   lock() {
@@ -64,7 +66,7 @@ class GridPhysics {
   }
 
   update(delta: number) {
-    if (this.isLocked) {
+    if (this.isLocked || this.context.dialogueService.lockCurrentScreen) {
       return;
     }
 
@@ -97,6 +99,10 @@ class GridPhysics {
       this.movePlayer(Direction.DOWN);
     } else {
       // user wants to stop by not pressing any key
+    }
+
+    if (this.gamePad.isAPressed()) {
+      this.searchForActionInFrontOfCharacter();
     }
   }
 
@@ -326,6 +332,16 @@ class GridPhysics {
       }
     } else {
       this.hasSteppedOnSafeTile = true;
+    }
+  }
+
+  private searchForActionInFrontOfCharacter() {
+    const pos = this.getNextTilePosition(this.facingDirection);
+
+    const props = this.getTopTileProperties(pos);
+
+    if (props?.static.text) {
+      this.context.dialogueService.openText(props.static.text);
     }
   }
 }

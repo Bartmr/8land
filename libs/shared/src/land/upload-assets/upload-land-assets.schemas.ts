@@ -4,6 +4,7 @@ import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { number } from 'not-me/lib/schemas/number/number-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
+import { or } from 'not-me/lib/schemas/or/or-schema';
 import { uuid } from '../../internals/validation/schemas/uuid.schema';
 import isHexColor from 'validator/lib/isHexColor';
 
@@ -121,15 +122,38 @@ export const createTiledJSONSchema = ({
           object({
             id: number().integer().required(),
             properties: array(
-              object({
-                animation: equals([]).notNull(),
-                name: string().filled(),
-                type: equals(
-                  ['bool'],
-                  'Only boolean tile properties are allowed',
-                ).required(),
-                value: boolean().required(),
-              }).required(),
+              or([
+                object({
+                  name: equals(['collides']).required(),
+                  type: equals(
+                    ['bool'],
+                    "'collides' props must be of boolean type",
+                  ).required(),
+                  value: boolean().required(),
+                }),
+                object({
+                  name: equals(['text']).required(),
+                  type: equals(
+                    ['string'],
+                    "'text' props must be of string type",
+                  ).required(),
+                  value: string()
+                    .transform((s) => (!s ? '' : s))
+                    .test((s) =>
+                      s.length > 255
+                        ? 'Text cannot be longer than 255 characters'
+                        : null,
+                    ),
+                }),
+                object({
+                  name: uuid('unsupported prop').required(),
+                  type: equals(
+                    ['string'],
+                    'block id props must be of boolean type',
+                  ).required(),
+                  value: boolean().required(),
+                }),
+              ]).required(),
             ).notNull(),
             animation: array(
               object({
