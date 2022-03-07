@@ -7,26 +7,30 @@ import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-ancho
 import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
 import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
 import { LOGIN_ROUTE } from '../../login/login-routes';
-import { LandScreen } from './components/screens/land/land-screen';
 import { Keypad } from './components/keypad';
-import { MusicTicker } from './components/music-ticker';
+import { MusicService, MusicTicker } from './components/music-ticker';
 import * as styles from './game-frame.module.scss';
+import { ScreenSwitcher } from './components/screen-switcher';
 
 export function GameFrame(props: {
   land: GetLandDTO;
   session: null | MainApiSessionData;
 }) {
-  const [musicUrl, replaceMusicUrl] = useState<string | null>(null);
+  const [musicService, replaceMusicService] = useState<
+    MusicService | undefined
+  >();
   const [landName, replaceLandName] = useState<string>('');
 
   return (
     <div className={styles['gameSize'] || missingCssClass()}>
-      <LandScreen
-        session={props.session}
-        land={props.land}
-        onMusicChange={replaceMusicUrl}
-        changeLandNameDisplay={replaceLandName}
-      />
+      {musicService ? (
+        <ScreenSwitcher
+          session={props.session}
+          land={props.land}
+          musicService={musicService}
+          changeLandNameDisplay={replaceLandName}
+        />
+      ) : null}
       <div
         className={`mt-2 p-1 bg-${
           props.session ? 'secondary' : 'warning'
@@ -60,7 +64,7 @@ export function GameFrame(props: {
           <FontAwesomeIcon icon={faMusic} />
         </div>
 
-        <MusicTicker musicUrl={musicUrl} />
+        <MusicTicker onService={(s) => replaceMusicService(s)} />
       </div>
       <Keypad />
     </div>

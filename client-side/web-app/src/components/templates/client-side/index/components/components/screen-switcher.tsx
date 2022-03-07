@@ -1,16 +1,22 @@
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
+import { useState } from 'react';
 import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
-import { LandScreen } from './screens/land/land-screen';
+import { MusicService } from './music-ticker';
+import { LandScreen, LandScreenService } from './screens/land/land-screen';
 
 export function ScreenSwitcher(props: {
-  onMusicChange: (musicUrl: string | null) => void;
+  musicService: MusicService;
   land: GetLandDTO;
   session: null | MainApiSessionData;
   changeLandNameDisplay: (landName: string) => void;
 }) {
+  const [, replaceLandScreenService] = useState<LandScreenService | undefined>(
+    undefined,
+  );
+
   return (
     <>
-      <LandScreen {...props} />
+      <LandScreen {...props} onService={replaceLandScreenService} />
     </>
   );
 }

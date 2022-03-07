@@ -1,83 +1,107 @@
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { useEffect, useState } from 'react';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { v4 } from 'uuid';
 import { SoundcloudSong } from '../../soundcloud-types';
 
-export function MusicTicker(props: { musicUrl: string | null }) {
-  const [lastMusicUrl, replaceLastMusicUrl] = useState<string | undefined>(
-    undefined,
-  );
-  const [song, replaceSong] = useState<SoundcloudSong | undefined>();
-  const [soundcloudPlayer, replaceSoundcloudPlayer] = useState<
-    ReturnType<NonNullable<typeof window['SC']>['Widget']> | undefined
-  >();
+export class MusicService {
+  lastMusicUrl?: string;
+  song?: SoundcloudSong;
+  soundcloudPlayer: ReturnType<NonNullable<typeof window['SC']>['Widget']>;
 
-  useEffect(() => {
+  private render: () => void;
+
+  constructor(args: { render: MusicService['render'] }) {
+    this.render = args.render;
+
     const soundcloudPlayerIframe =
       document.querySelector('#soundcloud-player') || throwError();
 
-    const sP = window.SC
-      ? window.SC.Widget(soundcloudPlayerIframe as HTMLIFrameElement)
-      : undefined;
+    this.soundcloudPlayer = (window.SC ?? throwError()).Widget(
+      soundcloudPlayerIframe as HTMLIFrameElement,
+    );
 
-    if (sP) {
-      const onReady = () => {
-        sP.pause();
+    const onReady = () => {
+      this.soundcloudPlayer.pause();
 
-        replaceSoundcloudPlayer(sP);
+      this.soundcloudPlayer.unbind(
+        (window.SC || throwError()).Widget.Events.READY,
+      );
+    };
+    this.soundcloudPlayer.bind(
+      (window.SC || throwError()).Widget.Events.READY,
+      onReady,
+    );
 
-        sP.unbind((window.SC || throwError()).Widget.Events.READY);
-      };
-      sP.bind((window.SC || throwError()).Widget.Events.READY, onReady);
-
-      sP.bind((window.SC || throwError()).Widget.Events.FINISH, () => {
-        sP.seekTo(0);
-        sP.play();
+    // LOOP BACKGROUND MUSIC
+    this.soundcloudPlayer.bind(
+      (window.SC || throwError()).Widget.Events.FINISH,
+      () => {
+        this.soundcloudPlayer.seekTo(0);
+        this.soundcloudPlayer.play();
 
         const gameElement = document.querySelector(
           '#game-root canvas',
         ) as HTMLCanvasElement;
 
         gameElement.focus();
+      },
+    );
+  }
+
+  playMusic(musicUrl: string | null) {
+    if (musicUrl && musicUrl !== this.lastMusicUrl) {
+      this.soundcloudPlayer.load(musicUrl, {
+        callback: () => {
+          this.soundcloudPlayer.getCurrentSound((s) => {
+            this.song = s;
+            this.render();
+          });
+          this.soundcloudPlayer.play();
+        },
       });
+
+      this.lastMusicUrl = musicUrl;
     }
-  }, []);
+  }
+}
+
+export function MusicTicker(props: {
+  onService: (musicService: MusicService) => void;
+}) {
+  const [, replaceRenderId] = useState<string>(v4());
+  const [service, replaceService] = useState<MusicService | undefined>();
 
   useEffect(() => {
-    if (soundcloudPlayer) {
-      if (props.musicUrl && props.musicUrl !== lastMusicUrl) {
-        soundcloudPlayer.load(props.musicUrl, {
-          callback: () => {
-            soundcloudPlayer.getCurrentSound((s) => replaceSong(s));
-            soundcloudPlayer.play();
-          },
-        });
+    const sv = new MusicService({
+      render: () => replaceRenderId(v4()),
+    });
 
-        replaceLastMusicUrl(props.musicUrl);
-      }
-    }
-  }, [props.musicUrl, soundcloudPlayer]);
+    replaceService(sv);
+    props.onService(sv);
+  }, []);
 
   return (
     <>
-      <div
-        style={{
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-        }}
-      >
-        {song ? (
-          <LinkAnchor
-            style={{ textDecoration: 'underline' }}
-            className="link-unstyled"
-            href={song.permalink_url}
-          >
-            {song.title} - {song.user.username}
-          </LinkAnchor>
-        ) : null}
-      </div>
-
+      {service ? (
+        <div
+          style={{
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          {service.song ? (
+            <LinkAnchor
+              style={{ textDecoration: 'underline' }}
+              className="link-unstyled"
+              href={service.song.permalink_url}
+            >
+              {service.song.title} - {service.song.user.username}
+            </LinkAnchor>
+          ) : null}
+        </div>
+      ) : null}
       <div style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}>
         <iframe
           title="soundcloud-player"

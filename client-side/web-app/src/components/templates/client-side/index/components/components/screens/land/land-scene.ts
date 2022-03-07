@@ -18,8 +18,8 @@ import {
 import { Block, DoorBlock, LandSceneArguments } from './land-scene.types';
 import { Player } from './player';
 import { TiledJSON } from './tiled.types';
-import { MusicProvider } from '../../../../music-provider.types';
 import { TILE_SIZE } from '../../../../game-constants';
+import { MusicService } from '../../music-ticker';
 
 @HotReloadClass(module)
 export class LandScene extends Phaser.Scene {
@@ -28,7 +28,7 @@ export class LandScene extends Phaser.Scene {
   protected previousLandSceneArguments: LandSceneArguments | null;
   protected args: LandSceneArguments;
   protected dependencies: {
-    musicProvider: MusicProvider;
+    musicService: MusicService;
     api: JSONApiBase;
     changeLandNameDisplay: (landName: string) => void;
   };
@@ -328,9 +328,7 @@ export class LandScene extends Phaser.Scene {
       'animatedTiles',
     );
 
-    this.dependencies.musicProvider.changeMusic(
-      this.args.land.backgroundMusicUrl,
-    );
+    this.dependencies.musicService.playMusic(this.args.land.backgroundMusicUrl);
   }
 
   private createPlayerAnimation(

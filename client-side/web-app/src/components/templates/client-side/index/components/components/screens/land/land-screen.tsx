@@ -4,13 +4,25 @@ import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/ma
 import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
 import { runLandGame } from './land-game';
 import { globalHistory } from '@reach/router';
+import { MusicService } from '../../music-ticker';
+
+export class LandScreenService {
+  public game: Phaser.Game;
+
+  constructor(args: { game: LandScreenService['game'] }) {
+    this.game = args.game;
+  }
+}
 
 export function LandScreen(props: {
-  onMusicChange: (musicUrl: string | null) => void;
+  musicService: MusicService;
   land: GetLandDTO;
   session: null | MainApiSessionData;
   changeLandNameDisplay: (landName: string) => void;
+  onService: (landScreenService: LandScreenService) => void;
 }) {
+  const [, replaceService] = useState<LandScreenService | undefined>();
+
   const api = useMainJSONApi();
 
   const [started, replaceStarted] = useState(false);
@@ -25,11 +37,7 @@ export function LandScreen(props: {
         { land: props.land, session: props.session },
         {
           api,
-          musicProvider: {
-            changeMusic: (url: string | null) => {
-              props.onMusicChange(url);
-            },
-          },
+          musicService: props.musicService,
           changeLandNameDisplay: props.changeLandNameDisplay,
         },
       );
@@ -40,6 +48,12 @@ export function LandScreen(props: {
 
         listener();
       });
+
+      const sv = new LandScreenService({
+        game,
+      });
+      replaceService(sv);
+      props.onService(sv);
     })();
   }, []);
 

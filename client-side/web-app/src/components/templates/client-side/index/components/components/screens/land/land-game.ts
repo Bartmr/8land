@@ -8,12 +8,12 @@ import { LandScene } from './land-scene';
 import sample from 'lodash/sample';
 import { BlockType, DoorBlock } from './land-scene.types';
 import { throwError } from '@app/shared/internals/utils/throw-error';
-import { MusicProvider } from '../../../../music-provider.types';
+import { MusicService } from '../../music-ticker';
 
 export async function runLandGame(
   args: { land: GetLandDTO; session: null | MainApiSessionData },
   dependencies: {
-    musicProvider: MusicProvider;
+    musicService: MusicService;
     api: JSONApiBase;
     changeLandNameDisplay: (landName: string) => void;
   },
