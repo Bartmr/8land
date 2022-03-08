@@ -54,6 +54,7 @@ export class ProdStorageService extends StorageService {
         Key: `${parsedKey.path}/${parsedKey.filename}`,
         Body: stream,
         ACL: 'public-read',
+        CacheControl: 'no-cache',
       }),
     );
   }

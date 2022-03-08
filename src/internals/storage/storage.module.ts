@@ -59,6 +59,7 @@ export class StorageModule {
           express.static(path.join(LOCAL_TEMPORARY_FILES_PATH, 'storage'), {
             setHeaders: (res) => {
               res.setHeader('Content-Disposition', 'attachment');
+              res.setHeader('Cache-Control', 'no-cache');
             },
           }),
         )
