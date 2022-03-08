@@ -38,7 +38,10 @@ import { RaribleApi } from 'src/internals/apis/rarible/rarible.api';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
-import { StorageService } from 'src/internals/storage/storage.service';
+import {
+  ContentType,
+  StorageService,
+} from 'src/internals/storage/storage.service';
 import { Connection } from 'typeorm';
 import { TerritoriesRepository } from './typeorm/territories.repository';
 import fileType from 'file-type';
@@ -291,7 +294,11 @@ export class TerritoriesEndUserController {
         if (!territory) {
           throw new ResourceNotFoundException();
         }
-        await this.storageService.saveBuffer(tilesetStorageKey, tileset.buffer);
+        await this.storageService.saveBuffer(
+          tilesetStorageKey,
+          tileset.buffer,
+          { contentType: ContentType.PNG },
+        );
         const toSave: InferType<typeof tiledJSONSchema> = {
           ...tiledJSONValidationResult.value,
           tilesets: [
@@ -304,6 +311,7 @@ export class TerritoriesEndUserController {
         await this.storageService.saveText(
           mapStorageKey,
           JSON.stringify(toSave),
+          { contentType: ContentType.JSON },
         );
         if (!territory.hasAssets) {
           territory.hasAssets = true;

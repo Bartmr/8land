@@ -29,7 +29,10 @@ import { Connection } from 'typeorm';
 import { LandRepository } from './typeorm/land.repository';
 import fileType from 'file-type';
 import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
-import { StorageService } from 'src/internals/storage/storage.service';
+import {
+  ContentType,
+  StorageService,
+} from 'src/internals/storage/storage.service';
 import { InferType } from 'not-me/lib/schemas/schema';
 import { throwError } from 'src/internals/utils/throw-error';
 import { ApiBody, ApiConsumes, ApiProperty } from '@nestjs/swagger';
@@ -190,7 +193,11 @@ export class LandController {
           throw new ResourceNotFoundException();
         }
 
-        await this.storageService.saveBuffer(tilesetStorageKey, tileset.buffer);
+        await this.storageService.saveBuffer(
+          tilesetStorageKey,
+          tileset.buffer,
+          { contentType: ContentType.PNG },
+        );
 
         const toSave: InferType<typeof TiledJSONSchema> = {
           ...tiledJSONValidationResult.value,
@@ -205,6 +212,7 @@ export class LandController {
         await this.storageService.saveText(
           mapStorageKey,
           JSON.stringify(toSave),
+          { contentType: ContentType.JSON },
         );
 
         if (!land.hasAssets) {

@@ -25,7 +25,10 @@ import { Connection } from 'typeorm';
 import { LandRepository } from 'src/land/typeorm/land.repository';
 import sharp from 'sharp';
 import { throwError } from 'src/internals/utils/throw-error';
-import { StorageService } from 'src/internals/storage/storage.service';
+import {
+  ContentType,
+  StorageService,
+} from 'src/internals/storage/storage.service';
 import { TerritoriesRepository } from './typeorm/territories.repository';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { AuditContext } from 'src/internals/auditing/audit-context';
@@ -189,7 +192,9 @@ export class TerritoriesController {
         auditContext,
       );
       const thumbnailStorageKey = `territories/${territory.id}/thumbnail.jpg`;
-      await this.storageService.saveBuffer(thumbnailStorageKey, imgResized);
+      await this.storageService.saveBuffer(thumbnailStorageKey, imgResized, {
+        contentType: ContentType.JPEG,
+      });
 
       const territoryNumber = totalTerritories + 1;
 
