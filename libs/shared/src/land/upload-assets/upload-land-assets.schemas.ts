@@ -6,7 +6,7 @@ import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { or } from 'not-me/lib/schemas/or/or-schema';
 import { uuid } from '../../internals/validation/schemas/uuid.schema';
-import isHexColor from 'validator/lib/isHexColor';
+// import isHexColor from 'validator/lib/isHexColor';
 
 export const UploadLandAssetsParametersSchema = object({
   landId: uuid().required(),
@@ -17,27 +17,27 @@ export const createTiledJSONSchema = ({
   maxHeight: _maxHeight,
   maxWidthMessage,
   maxHeightMessage,
-  allowBackgroundColor,
-}: {
+}: // allowBackgroundColor,
+{
   maxWidth: number | null;
   maxHeight: number | null;
   maxWidthMessage?: string;
   maxHeightMessage?: string;
-  allowBackgroundColor: boolean;
+  // allowBackgroundColor: boolean;
 }) => {
   const maxWidth = _maxWidth ? _maxWidth + 1 : 41;
   const maxHeight = _maxHeight ? _maxHeight + 1 : 41;
 
   return object({
-    backgroundColor: allowBackgroundColor
-      ? string()
-          .notNull()
-          .test((s) =>
-            s ? (isHexColor(s) ? null : 'Not a valid hex color') : null,
-          )
-      : equals([]).test((v) =>
-          v === undefined ? null : 'Background color is not allowed',
-        ),
+    // backgroundColor: allowBackgroundColor
+    //   ? string()
+    //       .notNull()
+    //       .test((s) =>
+    //         s ? (isHexColor(s) ? null : 'Not a valid hex color') : null,
+    //       )
+    //   : equals([]).test((v) =>
+    //       v === undefined ? null : 'Background color is not allowed',
+    //     ),
     compressionlevel: number().required(),
     height: number()
       .integer()
@@ -98,15 +98,15 @@ export const createTiledJSONSchema = ({
     tileheight: equals([16], 'Must be set to 16').required(),
     tilesets: array(
       object({
-        backgroundColor: allowBackgroundColor
-          ? string()
-              .notNull()
-              .test((s) =>
-                s ? (isHexColor(s) ? null : 'Not a valid hex color') : null,
-              )
-          : equals([]).test((v) =>
-              v === undefined ? null : 'Background color is not allowed',
-            ),
+        // backgroundColor: allowBackgroundColor
+        //   ? string()
+        //       .notNull()
+        //       .test((s) =>
+        //         s ? (isHexColor(s) ? null : 'Not a valid hex color') : null,
+        //       )
+        //   : equals([]).test((v) =>
+        //       v === undefined ? null : 'Background color is not allowed',
+        //     ),
         columns: number().integer(),
         firstgid: number().integer().required(),
         image: string().filled(),
@@ -124,7 +124,10 @@ export const createTiledJSONSchema = ({
             properties: array(
               or([
                 object({
-                  name: equals(['collides']).required(),
+                  name: equals(
+                    ['collides'],
+                    'can be set as "collides"',
+                  ).required(),
                   type: equals(
                     ['bool'],
                     "'collides' props must be of boolean type",
@@ -132,7 +135,7 @@ export const createTiledJSONSchema = ({
                   value: boolean().required(),
                 }),
                 object({
-                  name: equals(['text']).required(),
+                  name: equals(['text'], ' can be set as "text"').required(),
                   type: equals(
                     ['string'],
                     "'text' props must be of string type",
@@ -148,7 +151,7 @@ export const createTiledJSONSchema = ({
                 object({
                   name: uuid('unsupported prop').required(),
                   type: equals(
-                    ['string'],
+                    ['bool'],
                     'block id props must be of boolean type',
                   ).required(),
                   value: boolean().required(),

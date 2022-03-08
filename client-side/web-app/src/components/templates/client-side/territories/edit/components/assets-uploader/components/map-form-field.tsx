@@ -58,7 +58,6 @@ export function MapFormField(props: {
               maxHeight,
               maxWidthMessage: `Your territory cannot be more than ${maxWidth} squares wide`,
               maxHeightMessage: `Your territory cannot be more than ${maxHeight} squares tall`,
-              allowBackgroundColor: false,
             });
 
             const validationResult = schema.validate(parsedFile);

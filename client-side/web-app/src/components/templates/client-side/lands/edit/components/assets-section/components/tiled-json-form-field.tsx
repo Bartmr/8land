@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 const schema = createTiledJSONSchema({
   maxWidth: null,
   maxHeight: null,
-  allowBackgroundColor: true,
 });
 
 export type TiledJSONFieldState =
@@ -77,7 +76,9 @@ export function TiledJSONField(props: {
         <div className="invalid-feedback">
           {props.state.error === 'incompatible-file-format'
             ? "Incompatible file format. Make sure you're uploading a JSON Tiled file"
-            : 'File size cannot exceed 512k'}
+            : props.state.error === 'file-size-exceeded'
+            ? 'File size cannot exceed 512k'
+            : null}
         </div>
       ) : null}
       {props.state?.error === 'invalid-json' ? (
@@ -86,9 +87,9 @@ export function TiledJSONField(props: {
             Some invalid values were found in your Tiled JSON.
           </div>
           <div className="card">
-            <div className="card-body text-danger">
+            <pre className="card-body text-danger">
               {JSON.stringify(props.state.messageTree, undefined, 2)}
-            </div>
+            </pre>
           </div>
         </>
       ) : null}
