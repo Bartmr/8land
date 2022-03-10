@@ -89,7 +89,7 @@ export function PrivacyPolicyTemplate() {
           </p>
           <p>2.3. Your email and Ether address.</p>
           <p>
-            2.5 Your interactions with the Site are documented via Google
+            2.4. Your interactions with the Site are documented via Google
             Analytics, Firebase and {LOG_SERVICE_NAME}, and that information is
             processed by Google and {LOG_SERVICE_COMPANY}.
           </p>
