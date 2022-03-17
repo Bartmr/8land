@@ -22,7 +22,7 @@ import path from 'path';
 // Go to https://hardhat.org/config/ to learn more
 
 export default {
-  solidity: '0.8.0',
+  solidity: '0.8.1',
   paths: {
     root: path.resolve(__dirname, 'libs', 'smart-contracts'),
   },
