@@ -11,12 +11,18 @@ export type LandSceneArguments = {
   comingFromDoorBlock: DoorBlock;
 };
 
-export type Block = DoorBlock;
+export type Block = DoorBlock | AppBlock;
 
 export type DoorBlock = {
   type: BlockType.Door;
   id: string;
   toLandId: string;
+};
+
+export type AppBlock = {
+  type: BlockType.App;
+  id: string;
+  url: string;
 };
 
 export { BlockType };

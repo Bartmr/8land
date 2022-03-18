@@ -8,10 +8,12 @@ import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { throwError } from '@app/shared/internals/utils/throw-error';
+import { AppService } from '../app/app-screen';
 
 export function LandScreen(props: {
   musicService: MusicService;
   dialogueService: DialogueService;
+  appService: AppService;
   land: GetLandDTO;
   session: null | MainApiSessionData;
   changeLandNameDisplay: (landName: string) => void;
@@ -37,6 +39,7 @@ export function LandScreen(props: {
           api,
           musicService: props.musicService,
           dialogueService: props.dialogueService,
+          appService: props.appService,
           changeLandNameDisplay: props.changeLandNameDisplay,
           landScreenService: sv,
         },

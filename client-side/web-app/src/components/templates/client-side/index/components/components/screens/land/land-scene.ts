@@ -22,6 +22,7 @@ import { TILE_SIZE } from '../../../../game-constants';
 import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
+import { AppService } from '../app/app-screen';
 
 @HotReloadClass(module)
 export class LandScene extends Phaser.Scene {
@@ -32,6 +33,7 @@ export class LandScene extends Phaser.Scene {
   protected dependencies: {
     musicService: MusicService;
     dialogueService: DialogueService;
+    appService: AppService;
     api: JSONApiBase;
     changeLandNameDisplay: (landName: string) => void;
     landScreenService: LandScreenService;
@@ -131,13 +133,22 @@ export class LandScene extends Phaser.Scene {
         startY: territory.startY,
         endY: territory.endY,
         tilemap: territoryMap,
-        blocks: territory.doorBlocks.map((dB) => {
-          return {
-            type: BlockType.Door,
-            toLandId: dB.toLand.id,
-            id: dB.id,
-          };
-        }),
+        blocks: [
+          ...territory.doorBlocks.map((dB) => {
+            return {
+              type: BlockType.Door as const,
+              toLandId: dB.toLand.id,
+              id: dB.id,
+            };
+          }),
+          ...territory.appBlocks.map((aB) => {
+            return {
+              type: BlockType.App as const,
+              url: aB.url,
+              id: aB.id,
+            };
+          }),
+        ],
       });
 
       const territoryLayer = territoryMap.createLayer(
@@ -269,6 +280,13 @@ export class LandScene extends Phaser.Scene {
               id: dB.id,
             };
           }),
+          ...this.args.land.appBlocks.map((aB) => {
+            return {
+              type: BlockType.App as const,
+              url: aB.url,
+              id: aB.id,
+            };
+          }),
         ],
         tilemap: landMap,
       },
@@ -283,6 +301,7 @@ export class LandScene extends Phaser.Scene {
         await this.handleStepIntoDoor(block);
       },
       dialogueService: this.dependencies.dialogueService,
+      appService: this.dependencies.appService,
     });
 
     this.createPlayerAnimation(Direction.UP, 9, 8);

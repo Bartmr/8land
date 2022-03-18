@@ -11,12 +11,14 @@ import { throwError } from '@app/shared/internals/utils/throw-error';
 import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
+import { AppService } from '../app/app-screen';
 
 export async function runLandGame(
   args: { land: GetLandDTO; session: null | MainApiSessionData },
   dependencies: {
     musicService: MusicService;
     dialogueService: DialogueService;
+    appService: AppService;
     api: JSONApiBase;
     changeLandNameDisplay: (landName: string) => void;
     landScreenService: LandScreenService;

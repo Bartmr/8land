@@ -2,6 +2,7 @@ import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 import { useRef, useState } from 'react';
 import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
 import { MusicService } from './music-ticker';
+import { AppScreen, AppService } from './screens/app/app-screen';
 import {
   DialogueScreen,
   DialogueService,
@@ -12,6 +13,7 @@ import { LandScreenService } from './screens/land/land-screen.service';
 enum CurrentScreen {
   Land = 'land',
   Dialogue = 'dialogue',
+  App = 'app',
 }
 
 export function ScreenSwitcher(props: {
@@ -25,12 +27,13 @@ export function ScreenSwitcher(props: {
   const [dialogueService, replaceDialogueService] = useState<
     DialogueService | undefined
   >();
+  const [appService, replaceAppService] = useState<AppService | undefined>();
 
   const [currentScreen, replaceCurrentScreen] = useState(CurrentScreen.Land);
 
   return (
     <>
-      {dialogueService ? (
+      {dialogueService && appService ? (
         <div
           style={{
             height: currentScreen === CurrentScreen.Land ? undefined : 0,
@@ -42,6 +45,7 @@ export function ScreenSwitcher(props: {
               landScreenServiceRef.current = sv;
             }}
             dialogueService={dialogueService}
+            appService={appService}
           />
         </div>
       ) : null}
@@ -68,6 +72,32 @@ export function ScreenSwitcher(props: {
 
             replaceCurrentScreen(CurrentScreen.Land);
           }}
+          landScreenServiceRef={landScreenServiceRef}
+        />
+      </div>
+      <div
+        style={{
+          display: currentScreen === CurrentScreen.App ? undefined : 'none',
+          paddingBottom: '4px',
+        }}
+      >
+        <AppScreen
+          onService={replaceAppService}
+          onOpen={() => {
+            if (!landScreenServiceRef.current) {
+              throw new Error();
+            }
+
+            replaceCurrentScreen(CurrentScreen.App);
+          }}
+          onClose={() => {
+            if (!landScreenServiceRef.current) {
+              throw new Error();
+            }
+
+            replaceCurrentScreen(CurrentScreen.Land);
+          }}
+          landScreenServiceRef={landScreenServiceRef}
         />
       </div>
     </>

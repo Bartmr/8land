@@ -7,6 +7,7 @@ import { Player } from './player';
 import { GamepadSingleton, GamepadType } from '../../../../gamepad-singleton';
 import { JSONPrimitive } from '@app/shared/internals/transports/json-types';
 import { DialogueService } from '../dialogue/dialogue-screen';
+import { AppService } from '../app/app-screen';
 
 const Vector2 = Phaser.Math.Vector2;
 
@@ -52,6 +53,7 @@ class GridPhysics {
       }>;
       onStepIntoDoor: (block: DoorBlock) => void;
       dialogueService: DialogueService;
+      appService: AppService;
     },
   ) {
     this.gamePad = GamepadSingleton.getInstance();
@@ -66,7 +68,7 @@ class GridPhysics {
   }
 
   update(delta: number) {
-    if (this.isLocked || this.context.dialogueService.lockCurrentScreen) {
+    if (this.isLocked) {
       return;
     }
 
@@ -342,6 +344,19 @@ class GridPhysics {
 
     if (props?.static.text) {
       this.context.dialogueService.openText(props.static.text);
+    } else {
+      const blockId = props?.blockId;
+
+      if (blockId) {
+        const block = this.context.land.blocks.find((b) => blockId === b.id);
+
+        if (block) {
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          if (block.type === BlockType.App) {
+            this.context.appService.openUrl(block.url);
+          }
+        }
+      }
     }
   }
 }

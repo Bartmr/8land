@@ -19,6 +19,7 @@ import { ResourceNotFoundException } from 'src/internals/server/resource-not-fou
 import { getSearchableName } from 'src/internals/utils/get-searchable-name';
 import { LandRepository } from 'src/land/typeorm/land.repository';
 import { Connection } from 'typeorm';
+import { AppBlockRepository } from './typeorm/app-block.repository';
 import { DoorBlockRepository } from './typeorm/door-block.repository';
 
 @Controller('blocks')
@@ -42,9 +43,12 @@ export class BlocksController {
         throw new ResourceNotFoundException({ error: 'land-not-found' });
       }
 
-      const landBlocks = await land.doorBlocks;
+      const [landBlocks, appBlocks] = await Promise.all([
+        land.doorBlocks,
+        land.appBlocks,
+      ]);
 
-      if (landBlocks.length > 10) {
+      if (landBlocks.length + appBlocks.length > 50) {
         throw new BadRequestException({ error: 'block-limit-exceeded' });
       }
 
@@ -74,6 +78,17 @@ export class BlocksController {
         );
 
         return;
+      } else if (body.data.type === BlockType.App) {
+        const appBlockRepository = e.getCustomRepository(AppBlockRepository);
+
+        await appBlockRepository.create(
+          {
+            inLand: land,
+            inTerritory: Promise.resolve(null),
+            url: body.data.url,
+          },
+          auditContext,
+        );
       } else {
         throw new BadRequestException();
       }

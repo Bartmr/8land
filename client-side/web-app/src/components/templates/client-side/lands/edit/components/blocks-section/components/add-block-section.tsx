@@ -38,6 +38,8 @@ export function AddBlockSection(props: {
     >
   >({ status: TransportedDataStatus.Done, data: undefined });
 
+  const type = form.watch('data.type') as BlockType | undefined;
+
   return (
     <>
       <TransportedDataGate dataWrapper={formSubmission}>
@@ -103,39 +105,77 @@ export function AddBlockSection(props: {
                 className="form-select"
               >
                 <option value={BlockType.Door}>Door</option>
+                <option value={BlockType.App}>App</option>
               </select>
             </div>
-            <div className="mb-3">
-              <label htmlFor="destination-name-input" className="form-label">
-                Destination Land Name
-              </label>
-              <input
-                {...form.register('data.destinationLandName')}
-                className={`form-control ${
-                  data === 'destination-land-not-found' ||
-                  formUtils.hasErrors('data.destinationLandName')
-                    ? 'is-invalid'
-                    : ''
-                }`}
-                id="destination-name-input"
-              />
+            {type === BlockType.Door ? (
+              <div className="mb-3">
+                <label htmlFor="destination-name-input" className="form-label">
+                  Destination Land Name
+                </label>
+                <input
+                  {...form.register('data.destinationLandName')}
+                  className={`form-control ${
+                    data === 'destination-land-not-found' ||
+                    formUtils.hasErrors('data.destinationLandName')
+                      ? 'is-invalid'
+                      : ''
+                  }`}
+                  id="destination-name-input"
+                />
 
-              <div className="invalid-feedback">
-                {data === 'destination-land-not-found'
-                  ? "We couldn't find a land with this name. Make sure it's correctly spelled"
-                  : null}
-                {Object.keys(
-                  formUtils.getErrorTypesFromField('data.destinationLandName'),
-                ).map((e) => {
-                  return (
-                    <Fragment key={e}>
-                      {e}
-                      <br />
-                    </Fragment>
-                  );
-                })}
+                <div className="invalid-feedback">
+                  {data === 'destination-land-not-found'
+                    ? "We couldn't find a land with this name. Make sure it's correctly spelled"
+                    : null}
+                  {Object.keys(
+                    formUtils.getErrorTypesFromField(
+                      'data.destinationLandName',
+                    ),
+                  ).map((e) => {
+                    return (
+                      <Fragment key={e}>
+                        {e}
+                        <br />
+                      </Fragment>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            ) : null}
+
+            {/*  */}
+
+            {type === BlockType.App ? (
+              <div className="mb-3">
+                <label htmlFor="app-url-input" className="form-label">
+                  App URL
+                </label>
+                <input
+                  {...form.register('data.url')}
+                  className={`form-control ${
+                    formUtils.hasErrors('data.url') ? 'is-invalid' : ''
+                  }`}
+                  id="app-url-input"
+                />
+
+                <div className="invalid-feedback">
+                  {Object.keys(
+                    formUtils.getErrorTypesFromField('data.url'),
+                  ).map((e) => {
+                    return (
+                      <Fragment key={e}>
+                        {e}
+                        <br />
+                      </Fragment>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
+
+            {/*  */}
+
             {data === 'block-limit-exceeded' ? (
               <div className="text-danger">
                 You cannot add more blocks to this land

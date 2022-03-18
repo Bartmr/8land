@@ -1,24 +1,31 @@
+import { throwError } from '@app/shared/internals/utils/throw-error';
 import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 import { GamepadSingleton } from '../../../../gamepad-singleton';
+import { LandScreenService } from '../land/land-screen.service';
 
 export class DialogueService {
   private render: () => void;
   private onOpen: () => void;
   private onClose: () => void;
+  private landScreenServiceRef: React.MutableRefObject<LandScreenService | null>;
+
+  public lockCurrentScreen = false;
 
   public currentText: null | string = null;
-  public lockCurrentScreen = false;
 
   constructor(args: {
     render: DialogueService['render'];
     onOpen: DialogueService['onOpen'];
     onClose: DialogueService['onClose'];
+    landScreenServiceRef: DialogueService['landScreenServiceRef'];
   }) {
     this.render = args.render;
 
     this.onOpen = args.onOpen;
     this.onClose = args.onClose;
+
+    this.landScreenServiceRef = args.landScreenServiceRef;
   }
 
   openText(text: string) {
@@ -28,6 +35,10 @@ export class DialogueService {
 
     this.currentText = text;
     this.lockCurrentScreen = true;
+
+    (
+      this.landScreenServiceRef.current?.currentScene || throwError()
+    ).sys.pause();
 
     this.onOpen();
     this.render();
@@ -44,6 +55,10 @@ export class DialogueService {
       this.currentText = null;
     }, 500);
 
+    (
+      this.landScreenServiceRef.current?.currentScene || throwError()
+    ).sys.resume();
+
     this.onClose();
     this.render();
   }
@@ -53,6 +68,7 @@ export function DialogueScreen(props: {
   onService: (musicService: DialogueService) => void;
   onOpen: () => void;
   onClose: () => void;
+  landScreenServiceRef: React.MutableRefObject<LandScreenService | null>;
 }) {
   const [, replaceRenderId] = useState<string>(v4());
   const [service, replaceService] = useState<DialogueService | undefined>();
@@ -62,6 +78,7 @@ export function DialogueScreen(props: {
       render: () => replaceRenderId(v4()),
       onOpen: props.onOpen,
       onClose: props.onClose,
+      landScreenServiceRef: props.landScreenServiceRef,
     });
 
     const gamepad = GamepadSingleton.getInstance();
