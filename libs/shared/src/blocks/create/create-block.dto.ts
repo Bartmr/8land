@@ -3,31 +3,30 @@ import { ValidationSchema } from '../../internals/validation/validation-schema.d
 import { BlockType } from './create-block.enums';
 import { CreateBlockRequestSchema } from './create-block.schemas';
 
-class CreateDoorBlockDTO {
+export class CreateDoorBlockDTO {
   type!: BlockType.Door;
   destinationLandName!: string;
 }
 
-@ApiExtraModels(CreateDoorBlockDTO)
+export class AppBlockDTO {
+  type!: BlockType.App;
+  url!: string;
+}
+
+export class OtherBlockDTO {
+  type!: BlockType.Other;
+}
+
+@ApiExtraModels(CreateDoorBlockDTO, AppBlockDTO, OtherBlockDTO)
 @ValidationSchema(CreateBlockRequestSchema)
 export class CreateBlockRequestDTO {
   landId!: string;
   @ApiProperty({
-    oneOf: [{ $ref: getSchemaPath(CreateDoorBlockDTO) }],
+    oneOf: [
+      { $ref: getSchemaPath(CreateDoorBlockDTO) },
+      { $ref: getSchemaPath(AppBlockDTO) },
+      { $ref: getSchemaPath(OtherBlockDTO) },
+    ],
   })
-  data!: CreateDoorBlockDTO;
-}
-
-class DoorBlockLandDTO {
-  id!: string;
-  name!: string;
-  searchableName!: string;
-}
-class DoorBlockDTO {
-  id!: string;
-  toLand!: DoorBlockLandDTO;
-}
-
-export class BlockEntryDTO {
-  door?: DoorBlockDTO;
+  data!: CreateDoorBlockDTO | AppBlockDTO | OtherBlockDTO;
 }

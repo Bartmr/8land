@@ -17,6 +17,11 @@ class GetLandDoorBlockEntryDTO {
   toLand!: GetLandDoorBlockDestinationDTO;
 }
 
+class GetLandAppBlockEntryDTO {
+  id!: string;
+  url!: string;
+}
+
 class GetLandTerritoryDTO {
   id!: string;
   startX!: number;
@@ -24,6 +29,7 @@ class GetLandTerritoryDTO {
   endX!: number;
   endY!: number;
   doorBlocks!: GetLandDoorBlockEntryDTO[];
+  appBlocks!: GetLandAppBlockEntryDTO[];
   assets: undefined | GetLandAssetsDTO;
 }
 
@@ -37,10 +43,10 @@ export class GetLandDTO {
   id!: string;
   name!: string;
   backgroundMusicUrl!: string | null;
-  doorBlocksReferencing!: GetLandDoorReferencingDTO[];
-  doorBlocks!: GetLandDoorBlockEntryDTO[];
   territories!: GetLandTerritoryDTO[];
-
+  doorBlocks!: GetLandDoorBlockEntryDTO[];
+  doorBlocksReferencing!: GetLandDoorReferencingDTO[];
+  appBlocks!: GetLandAppBlockEntryDTO[];
   assets: undefined | GetLandAssetsDTO;
 }
 

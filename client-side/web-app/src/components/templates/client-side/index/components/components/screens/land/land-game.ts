@@ -10,6 +10,7 @@ import { BlockType, DoorBlock } from './land-scene.types';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
+import { LandScreenService } from './land-screen.service';
 
 export async function runLandGame(
   args: { land: GetLandDTO; session: null | MainApiSessionData },
@@ -18,6 +19,7 @@ export async function runLandGame(
     dialogueService: DialogueService;
     api: JSONApiBase;
     changeLandNameDisplay: (landName: string) => void;
+    landScreenService: LandScreenService;
   },
 ) {
   const gameConfig: Phaser.Types.Core.GameConfig = {
@@ -90,5 +92,5 @@ export async function runLandGame(
 
   game.scene.start(sceneKey);
 
-  return game;
+  dependencies.landScreenService.game = game;
 }

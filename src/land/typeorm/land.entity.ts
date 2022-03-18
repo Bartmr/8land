@@ -1,3 +1,4 @@
+import { AppBlock } from 'src/blocks/typeorm/app-block.entity';
 import { DoorBlock } from 'src/blocks/typeorm/door-block.entity';
 import { SimpleEntity } from 'src/internals/databases/simple-entity/simple.entity';
 import { Territory } from 'src/territories/typeorm/territory.entity';
@@ -36,6 +37,9 @@ export class Land extends SimpleEntity {
 
   @OneToMany(() => DoorBlock, (b) => b.toLand, { lazy: true })
   doorBlocksReferencing!: Promise<DoorBlock[]>;
+
+  @OneToMany(() => AppBlock, (b) => b.inLand, { lazy: true })
+  appBlocks!: Promise<AppBlock[]>;
 
   @OneToMany(() => Territory, (e) => e.inLand, { lazy: true })
   territories!: Promise<Territory[]>;

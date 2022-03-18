@@ -21,6 +21,7 @@ import { TiledJSON } from './tiled.types';
 import { TILE_SIZE } from '../../../../game-constants';
 import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
+import { LandScreenService } from './land-screen.service';
 
 @HotReloadClass(module)
 export class LandScene extends Phaser.Scene {
@@ -33,6 +34,7 @@ export class LandScene extends Phaser.Scene {
     dialogueService: DialogueService;
     api: JSONApiBase;
     changeLandNameDisplay: (landName: string) => void;
+    landScreenService: LandScreenService;
   };
 
   // Populated when loading plugin
@@ -58,6 +60,8 @@ export class LandScene extends Phaser.Scene {
     this.previousLandSceneArguments = previousLandSceneArguments;
     this.args = args;
     this.dependencies = deps;
+
+    deps.landScreenService.currentScene = this;
   }
 
   public create() {

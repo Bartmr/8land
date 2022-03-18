@@ -6,9 +6,11 @@ class Gamepad {
 
   private A_isPressed = false;
   private B_isPressed = false;
+  private Escape_isPressed = false;
 
   private A_pressed_callbacks: Set<() => void> = new Set();
   private B_pressed_callbacks: Set<() => void> = new Set();
+  private Escape_pressed_callbacks: Set<() => void> = new Set();
 
   // KEYBOARD METHODS
   directionWasPressed(direction: Direction) {
@@ -74,6 +76,30 @@ class Gamepad {
   }
   removePressing_B_Callback(cb: () => void) {
     this.B_pressed_callbacks.delete(cb);
+  }
+
+  //
+  //
+  //
+
+  Escape_keyWasPressed() {
+    this.Escape_isPressed = true;
+
+    this.Escape_pressed_callbacks.forEach((cb) => {
+      cb();
+    });
+  }
+  Escape_keyWasReleased() {
+    this.Escape_isPressed = false;
+  }
+  isEscapePressed() {
+    return this.Escape_isPressed;
+  }
+  onPressing_Escape(cb: () => void) {
+    this.Escape_pressed_callbacks.add(cb);
+  }
+  removePressing_Escape_Callback(cb: () => void) {
+    this.Escape_pressed_callbacks.delete(cb);
   }
 }
 

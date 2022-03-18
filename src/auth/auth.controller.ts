@@ -117,6 +117,7 @@ export class AuthController {
           role: Role.EndUser,
           walletAddress: null,
           walletNonce: generateRandomUUID(),
+          appId: generateRandomUUID(),
         },
         auditContext,
       );

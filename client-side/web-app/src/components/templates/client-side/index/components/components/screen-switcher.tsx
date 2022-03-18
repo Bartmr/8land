@@ -6,7 +6,8 @@ import {
   DialogueScreen,
   DialogueService,
 } from './screens/dialogue/dialogue-screen';
-import { LandScreen, LandScreenService } from './screens/land/land-screen';
+import { LandScreen } from './screens/land/land-screen';
+import { LandScreenService } from './screens/land/land-screen.service';
 
 enum CurrentScreen {
   Land = 'land',

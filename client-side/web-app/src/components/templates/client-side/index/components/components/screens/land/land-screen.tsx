@@ -6,14 +6,8 @@ import { runLandGame } from './land-game';
 import { globalHistory } from '@reach/router';
 import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
-
-export class LandScreenService {
-  public game: Phaser.Game;
-
-  constructor(args: { game: LandScreenService['game'] }) {
-    this.game = args.game;
-  }
-}
+import { LandScreenService } from './land-screen.service';
+import { throwError } from '@app/shared/internals/utils/throw-error';
 
 export function LandScreen(props: {
   musicService: MusicService;
@@ -34,27 +28,27 @@ export function LandScreen(props: {
       if (started) return;
       replaceStarted(true);
 
+      const sv = new LandScreenService();
+
       // https://soundcloud.com/radion-alexievich-drozdov/spacedandywave?in=eliud-makaveli-zavala/sets/vaporwave
-      const game = await runLandGame(
+      await runLandGame(
         { land: props.land, session: props.session },
         {
           api,
           musicService: props.musicService,
           dialogueService: props.dialogueService,
           changeLandNameDisplay: props.changeLandNameDisplay,
+          landScreenService: sv,
         },
       );
 
       const listener = globalHistory.listen(() => {
         // TODO fix bug where everything freezes when pressing back button
-        game.destroy(true);
+        (sv.game || throwError()).destroy(true);
 
         listener();
       });
 
-      const sv = new LandScreenService({
-        game,
-      });
       replaceService(sv);
       props.onService(sv);
     })();

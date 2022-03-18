@@ -9,23 +9,31 @@ import { BlockType } from './create-block.enums';
 export const CreateBlockRequestSchema: Schema<CreateBlockRequestDTO> = object({
   landId: uuid().required(),
   data: object({
-    type: equals([BlockType.Door]).required(),
+    type: equals([
+      BlockType.Door,
+      BlockType.App,
+      BlockType.Other,
+    ] as const).required(),
   })
     .required()
-    .union<
-      (o: { type: BlockType }) => {
-        type: Schema<BlockType.Door>;
-        destinationLandName: Schema<string>;
-      }
-    >((o) => {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    .union((o) => {
       if (o.type === BlockType.Door) {
         return {
           type: equals([BlockType.Door] as const).required(),
           destinationLandName: string().filled(),
-        } as const;
+        };
+      } else if (o.type === BlockType.App) {
+        return {
+          type: equals([BlockType.App] as const).required(),
+          url: string().filled(),
+        };
       } else {
-        throw new Error();
+        return {
+          type: equals([BlockType.Other] as const).required(),
+        };
       }
-    }),
+    })
+    .test((o) =>
+      o.type === BlockType.Other ? 'Unsupported block type' : null,
+    ),
 }).required();

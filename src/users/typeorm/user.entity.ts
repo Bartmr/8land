@@ -6,14 +6,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
-@Unique(['firebaseUid'])
 export class User extends SimpleEntity {
-  @Column()
+  @Column({ unique: true })
   firebaseUid!: string;
 
   @CreateDateColumn()
@@ -31,17 +29,14 @@ export class User extends SimpleEntity {
   })
   role!: Role;
 
-  /*
-    TODO: create app id for identifying user in apps
-    must be unique and hidden (strip appId in toJSON())
-    should only be visible in the session object
-  */
-
   @Column('text', { nullable: true })
   walletAddress!: string | null;
 
   @Column('text')
   walletNonce!: string;
+
+  @Column({ generated: 'uuid', unique: true })
+  appId!: string;
 
   toJSON() {
     return {

@@ -28,6 +28,7 @@ import { promisify } from 'util';
 import path from 'path';
 import { DevStorageService } from 'src/internals/storage/dev-storage.service';
 import { LOCAL_TEMPORARY_FILES_PATH } from 'src/internals/local-temporary-files/local-temporary-files-path';
+import { AppBlockRepository } from 'src/blocks/typeorm/app-block.repository';
 
 const readFile = promisify(fs.readFile);
 const rm = promisify(fs.rm);
@@ -52,7 +53,11 @@ async function seed() {
     });
 
     await tearDownDatabases([defaultDBConnection]);
-    await rm(LOCAL_TEMPORARY_FILES_PATH, { recursive: true });
+    try {
+      await rm(LOCAL_TEMPORARY_FILES_PATH, { recursive: true });
+    } catch (err) {
+      // NOOP
+    }
 
     const firebaseProjectId = FIREBASE_EMULATOR_PROJECT_ID || throwError();
 
@@ -105,6 +110,7 @@ async function seed() {
         role: Role.EndUser,
         walletAddress: null,
         walletNonce: generateRandomUUID(),
+        appId: generateRandomUUID(),
       },
       auditContext,
     );
@@ -121,6 +127,7 @@ async function seed() {
         role: Role.Admin,
         walletAddress: null,
         walletNonce: generateRandomUUID(),
+        appId: generateRandomUUID(),
       },
       auditContext,
     );
@@ -129,6 +136,8 @@ async function seed() {
       defaultDBConnection.getCustomRepository(LandRepository);
     const doorBlocksRepository =
       defaultDBConnection.getCustomRepository(DoorBlockRepository);
+    const appBlocksRepository =
+      defaultDBConnection.getCustomRepository(AppBlockRepository);
     const storageService = new DevStorageService();
 
     const expectationsBeach = await landsRepository.create(
@@ -138,6 +147,7 @@ async function seed() {
         backgroundMusicUrl: 'https://api.soundcloud.com/tracks/256813580',
         doorBlocks: Promise.resolve([]),
         doorBlocksReferencing: Promise.resolve([]),
+        appBlocks: Promise.resolve([]),
         hasAssets: true,
         territories: Promise.resolve([]),
       },
@@ -151,6 +161,7 @@ async function seed() {
         backgroundMusicUrl: 'https://api.soundcloud.com/tracks/566456658',
         doorBlocks: Promise.resolve([]),
         doorBlocksReferencing: Promise.resolve([]),
+        appBlocks: Promise.resolve([]),
         hasAssets: true,
         territories: Promise.resolve([]),
       },
@@ -166,6 +177,7 @@ async function seed() {
         backgroundMusicUrl: null,
         doorBlocks: Promise.resolve([]),
         doorBlocksReferencing: Promise.resolve([]),
+        appBlocks: Promise.resolve([]),
         hasAssets: true,
         territories: Promise.resolve([]),
       },
@@ -181,6 +193,7 @@ async function seed() {
         backgroundMusicUrl: null,
         doorBlocks: Promise.resolve([]),
         doorBlocksReferencing: Promise.resolve([]),
+        appBlocks: Promise.resolve([]),
         hasAssets: true,
         territories: Promise.resolve([]),
       },
@@ -251,6 +264,15 @@ async function seed() {
       auditContext,
     );
 
+    const townOfHumbleBeginningsApp1 = await appBlocksRepository.create(
+      {
+        inTerritory: Promise.resolve(null),
+        inLand: townOfHumbleBeginningsUnderground1,
+        url: 'http://localhost:8000/apps/test',
+      },
+      auditContext,
+    );
+
     const townOfHumbleBeginningsMap = await readFile(
       path.resolve(
         process.cwd(),
@@ -269,7 +291,8 @@ async function seed() {
       townOfHumbleBeginningsMap
         .replaceAll('<door-1>', expectationsBeachDoor2.id)
         .replaceAll('<door-2>', townOfHumbleBeginningsDoor1.id)
-        .replaceAll('<door-3>', townOfHumbleBeginningsDoor2.id),
+        .replaceAll('<door-3>', townOfHumbleBeginningsDoor2.id)
+        .replaceAll('<app-1>', townOfHumbleBeginningsApp1.id),
     );
     await storageService.saveBuffer(
       `lands/${townOfHumbleBeginnings.id}/tileset.png`,
@@ -346,6 +369,7 @@ async function seed() {
     const territory1 = await territoriesRepository.create(
       {
         doorBlocks: [],
+        appBlocks: [],
         hasAssets: true,
         inLand: Promise.resolve(townOfHumbleBeginnings),
         startX: 3,

@@ -186,6 +186,7 @@ export class TerritoriesController {
           hasAssets: false,
           inLand: Promise.resolve(land),
           doorBlocks: [],
+          appBlocks: [],
           tokenId: null,
           tokenAddress: null,
         },

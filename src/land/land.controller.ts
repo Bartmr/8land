@@ -98,6 +98,7 @@ export class LandController {
           backgroundMusicUrl: null,
           hasAssets: null,
           territories: Promise.resolve([]),
+          appBlocks: Promise.resolve([]),
         },
         auditContext,
       );
@@ -343,11 +344,13 @@ export class LandController {
       throw new ResourceNotFoundException();
     }
 
-    const [doorBlocksReferencing, doorBlocks, territories] = await Promise.all([
-      land.doorBlocksReferencing,
-      land.doorBlocks,
-      land.territories,
-    ]);
+    const [territories, doorBlocksReferencing, doorBlocks, appBlocks] =
+      await Promise.all([
+        land.territories,
+        land.doorBlocksReferencing,
+        land.doorBlocks,
+        land.appBlocks,
+      ]);
 
     return {
       id: land.id,
@@ -378,6 +381,10 @@ export class LandController {
           },
         };
       }),
+      appBlocks: appBlocks.map((b) => ({
+        id: b.id,
+        url: b.url,
+      })),
       territories: territories.map((territory) => {
         return {
           id: territory.id,
@@ -401,6 +408,10 @@ export class LandController {
               },
             };
           }),
+          appBlocks: territory.appBlocks.map((b) => ({
+            id: b.id,
+            url: b.url,
+          })),
         };
       }),
     };
