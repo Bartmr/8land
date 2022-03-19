@@ -17,18 +17,17 @@
     $h-value: hue($value);
     $s-value: saturation($value);
     $l-value: lightness($value);
-    $a-value: opacity($value);
 
     @if ($important) {
       #{$h}: $h-value !important;
       #{$s}: $s-value !important;
       #{$l}: $l-value !important;
-      #{$color}: hsl(var($h), var($s), var($l), $a-value) !important;
+      #{$color}: $value !important;
     } @else {
       #{$h}: $h-value;
       #{$s}: $s-value;
       #{$l}: $l-value;
-      #{$color}: hsl(var($h), var($s), var($l), $a-value);
+      #{$color}: $value;
     }
   }
 }
