@@ -12,19 +12,36 @@ class Gamepad {
   private B_pressed_callbacks: Set<() => void> = new Set();
   private Escape_pressed_callbacks: Set<() => void> = new Set();
 
+  private currentIframe?: HTMLIFrameElement;
+
   // KEYBOARD METHODS
   directionWasPressed(direction: Direction) {
     this.lastPressedDirection = direction;
     this.currentDirection = direction;
+
+    this.currentIframe?.contentWindow?.postMessage(
+      `8land:gamepad:${this.currentDirection}`,
+      '*',
+    );
   }
   directionWasReleased(direction: Direction) {
     if (this.lastPressedDirection === direction) {
       this.currentDirection = Direction.NONE;
     }
+
+    this.currentIframe?.contentWindow?.postMessage(
+      `8land:gamepad:${this.currentDirection}`,
+      '*',
+    );
   }
   // NIPPLE METHODS
   setDirection(direction: Direction) {
     this.currentDirection = direction;
+
+    this.currentIframe?.contentWindow?.postMessage(
+      `8land:gamepad:${this.currentDirection}`,
+      '*',
+    );
   }
   getDirection() {
     return this.currentDirection;
@@ -37,12 +54,22 @@ class Gamepad {
   A_keyWasPressed() {
     this.A_isPressed = true;
 
+    this.currentIframe?.contentWindow?.postMessage(
+      `8land:gamepad:a:pressed`,
+      '*',
+    );
+
     this.A_pressed_callbacks.forEach((cb) => {
       cb();
     });
   }
   A_keyWasReleased() {
     this.A_isPressed = false;
+
+    this.currentIframe?.contentWindow?.postMessage(
+      `8land:gamepad:a:released`,
+      '*',
+    );
   }
   isAPressed() {
     return this.A_isPressed;
@@ -61,12 +88,22 @@ class Gamepad {
   B_keyWasPressed() {
     this.B_isPressed = true;
 
+    this.currentIframe?.contentWindow?.postMessage(
+      `8land:gamepad:b:pressed`,
+      '*',
+    );
+
     this.B_pressed_callbacks.forEach((cb) => {
       cb();
     });
   }
   B_keyWasReleased() {
     this.B_isPressed = false;
+
+    this.currentIframe?.contentWindow?.postMessage(
+      `8land:gamepad:b:released`,
+      '*',
+    );
   }
   isBPressed() {
     return this.B_isPressed;
@@ -100,6 +137,16 @@ class Gamepad {
   }
   removePressing_Escape_Callback(cb: () => void) {
     this.Escape_pressed_callbacks.delete(cb);
+  }
+
+  //
+  //
+  //
+  clearCurrentIframe() {
+    this.currentIframe = undefined;
+  }
+  setCurrentIframe(iframe: HTMLIFrameElement) {
+    this.currentIframe = iframe;
   }
 }
 

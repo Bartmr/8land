@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 import { GamepadSingleton } from '../../../../gamepad-singleton';
 import { LandScreenService } from '../land/land-screen.service';
+import { IframeGate } from './components/iframe-gate';
 
 export class AppService {
   private render: () => void;
@@ -54,6 +55,8 @@ export class AppService {
 
     setTimeout(() => {
       this.currentUrl = null;
+
+      this.render();
     }, 500);
 
     (
@@ -72,7 +75,7 @@ export function AppScreen(props: {
   landScreenServiceRef: React.MutableRefObject<LandScreenService | null>;
 }) {
   const [, replaceRenderId] = useState<string>(v4());
-  const [, replaceService] = useState<AppService | undefined>();
+  const [service, replaceService] = useState<AppService | undefined>();
 
   useEffect(() => {
     const sv = new AppService({
@@ -98,5 +101,32 @@ export function AppScreen(props: {
     };
   }, []);
 
-  return <></>;
+  return (
+    <>
+      {service && service.lockCurrentScreen ? (
+        <style>
+          {`
+    @keyframes escape-pulse {
+      0% {
+        background-color: var(--bs-light);
+      }
+      50% {
+        background-color: var(--bs-warning);
+      }
+      100% {
+        background-color: var(--bs-light);
+      }
+    }
+
+    #game-button-escape {
+      animation: escape-pulse 3s infinite;
+    }
+    `}
+        </style>
+      ) : null}
+      {service && service.currentUrl ? (
+        <IframeGate url={service.currentUrl} appService={service} />
+      ) : null}
+    </>
+  );
 }

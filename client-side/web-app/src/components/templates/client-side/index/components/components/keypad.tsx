@@ -59,6 +59,23 @@ export function Keypad() {
     };
     gameButtonB.addEventListener('pointerup', gameButtonBReleasedListener);
 
+    const gameButtonEscape =
+      document.querySelector('#game-button-escape') || throwError();
+    const gameButtonEscapePressedListener = () => {
+      gamepad.Escape_keyWasPressed();
+    };
+    gameButtonEscape.addEventListener(
+      'pointerdown',
+      gameButtonEscapePressedListener,
+    );
+    const gameButtonEscapeReleasedListener = () => {
+      gamepad.Escape_keyWasReleased();
+    };
+    gameButtonEscape.addEventListener(
+      'pointerup',
+      gameButtonEscapeReleasedListener,
+    );
+
     const keyDownListener = (e: KeyboardEvent) => {
       if (e.key === 'ArrowUp') {
         gamepad.directionWasPressed(Direction.UP);
@@ -72,6 +89,8 @@ export function Keypad() {
         gamepad.A_keyWasPressed();
       } else if (e.key === 's') {
         gamepad.B_keyWasPressed();
+      } else if (e.key === 'k') {
+        gamepad.Escape_keyWasPressed();
       }
     };
 
@@ -88,6 +107,8 @@ export function Keypad() {
         gamepad.A_keyWasReleased();
       } else if (e.key === 's') {
         gamepad.B_keyWasReleased();
+      } else if (e.key === 'k') {
+        gamepad.Escape_keyWasReleased();
       }
     };
 
@@ -112,51 +133,72 @@ export function Keypad() {
         gameButtonBPressedListener,
       );
       gameButtonB.removeEventListener('pointerup', gameButtonBReleasedListener);
+
+      gameButtonEscape.removeEventListener(
+        'pointerdown',
+        gameButtonEscapePressedListener,
+      );
+      gameButtonEscape.removeEventListener(
+        'pointerup',
+        gameButtonEscapeReleasedListener,
+      );
     };
   }, []);
 
   return (
     <>
-      <div className="me-4 mt-3 d-flex d-xl-none align-items-center justify-content-between">
-        {/* A / B Keys */}
-        <div className="d-flex">
-          <button
-            id="game-button-a"
-            className="btn btn-light d-flex align-items-center justify-content-center"
-            style={{ width: '50px', height: '50px' }}
-          >
-            A
-          </button>
-          <button
-            id="game-button-b"
-            className="ms-3 btn btn-light d-flex align-items-center justify-content-center"
-            style={{ width: '50px', height: '50px' }}
-          >
-            B
-          </button>
+      <div className="mt-3 d-block d-xl-none">
+        {/* Secondary buttons*/}
+        <div className="d-flex align-items-center">
+          <span className="me-3">FN</span>
+          <div id="game-button-escape" className="btn-sm btn-light">
+            Escape
+          </div>
         </div>
-        {/* DIRECTION PAD */}
-        <div className="d-flex flex-row-reverse">
-          <div
-            style={{ position: 'absolute', width: '100px', height: '100px' }}
-            id="game-nipple"
-          ></div>
-          <div
-            style={{ width: '100px', height: '100px' }}
-            className="bg-light d-flex align-items-center justify-content-center text-center small"
-          >
-            DRAG HERE
-            <br />
-            TO MOVE
+        <div className="me-4 mt-4 d-flex align-items-center justify-content-between">
+          {/* A / B Keys */}
+          <div className="d-flex">
+            <button
+              id="game-button-a"
+              className="btn btn-light d-flex align-items-center justify-content-center"
+              style={{ width: '50px', height: '50px' }}
+            >
+              A
+            </button>
+            <button
+              id="game-button-b"
+              className="ms-3 btn btn-light d-flex align-items-center justify-content-center"
+              style={{ width: '50px', height: '50px' }}
+            >
+              B
+            </button>
+          </div>
+          {/* DIRECTION PAD */}
+          <div className="d-flex flex-row-reverse">
+            <div
+              style={{ position: 'absolute', width: '100px', height: '100px' }}
+              id="game-nipple"
+            ></div>
+            <div
+              style={{ width: '100px', height: '100px' }}
+              className="bg-light d-flex align-items-center justify-content-center text-center small"
+            >
+              DRAG HERE
+              <br />
+              TO MOVE
+            </div>
           </div>
         </div>
       </div>
+
       <div className="d-none d-xl-block mt-3">
         Instructions: Use the arrow keys to move.
         <br />
         &quot;A&quot; for actions (like reading signs).
         <br />
         &quot;S&quot; for going back
+        <br />
+        &quot;K&quot; for quitting a screen or app
       </div>
     </>
   );

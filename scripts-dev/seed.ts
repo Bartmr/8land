@@ -267,7 +267,7 @@ async function seed() {
     const townOfHumbleBeginningsApp1 = await appBlocksRepository.create(
       {
         inTerritory: Promise.resolve(null),
-        inLand: townOfHumbleBeginningsUnderground1,
+        inLand: townOfHumbleBeginnings,
         url: 'http://localhost:8000/apps/test',
       },
       auditContext,
