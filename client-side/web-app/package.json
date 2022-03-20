@@ -89,8 +89,8 @@
   ],
   "scripts": {
     "postinstall": "node ./polyfill-types-mocha.js",
-    "clean:typings": "rimraf dist _graphql-generated_/**/*.ts **/*._graphql-generated_.ts",
-    "clean": "gatsby clean && rimraf dist .webpack-bundle-analyzer _graphql-generated_ **/*._graphql-generated_.ts",
+    "clean:typings": "rimraf dist && find _graphql-generated_ -name \"*.ts\" -type f -delete && find src -name \"*._graphql-generated_.ts\" -type f -delete",
+    "clean": "gatsby clean && rimraf dist .webpack-bundle-analyzer _graphql-generated_ && find src -name \"*._graphql-generated_.ts\" -type f -delete",
     "build": "gatsby build --prefix-paths",
     "build:ci": "rm -rf dist && mkdir -p dist/libs/shared/src && cp -f -R ../../libs/shared/src dist/libs/shared && CI=true npm run build && npm run move-sourcemaps",
     "develop": "gatsby develop",
