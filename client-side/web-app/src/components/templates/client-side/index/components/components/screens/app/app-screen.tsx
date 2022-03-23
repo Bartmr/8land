@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 import { GamepadSingleton } from '../../../../gamepad-singleton';
 import { LandScreenService } from '../land/land-screen.service';
+import { AppContext } from './app-screen.types';
 import { IframeGate } from './components/iframe-gate';
 
 export class AppService {
@@ -14,7 +15,7 @@ export class AppService {
 
   public lockCurrentScreen = false;
 
-  public currentUrl: null | string = null;
+  public currentContext: AppContext | null = null;
 
   constructor(args: {
     render: AppService['render'];
@@ -30,12 +31,12 @@ export class AppService {
     this.landScreenServiceRef = args.landScreenServiceRef;
   }
 
-  openUrl(url: string) {
-    if (url === this.currentUrl) {
+  openApp(context: AppContext) {
+    if (context.appBlock.id === this.currentContext?.appBlock.id) {
       return;
     }
 
-    this.currentUrl = url;
+    this.currentContext = context;
     this.lockCurrentScreen = true;
 
     (
@@ -54,7 +55,7 @@ export class AppService {
     this.lockCurrentScreen = false;
 
     setTimeout(() => {
-      this.currentUrl = null;
+      this.currentContext = null;
 
       this.render();
     }, 500);
@@ -124,8 +125,8 @@ export function AppScreen(props: {
     `}
         </style>
       ) : null}
-      {service && service.currentUrl ? (
-        <IframeGate url={service.currentUrl} appService={service} />
+      {service && service.currentContext ? (
+        <IframeGate context={service.currentContext} appService={service} />
       ) : null}
     </>
   );

@@ -2,13 +2,17 @@ import { useLayoutEffect, useState } from 'react';
 import { GamepadSingleton } from 'src/components/templates/client-side/index/gamepad-singleton';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { AppService } from '../app-screen';
+import { AppContext } from '../app-screen.types';
 import { IframeWrapper } from './iframe-wrapper';
 
-export function IframeGate(props: { url: string; appService: AppService }) {
+export function IframeGate(props: {
+  context: AppContext;
+  appService: AppService;
+}) {
   const [confirmed, replaceConfirmed] = useState(false);
 
   useLayoutEffect(() => {
-    if (props.url.startsWith(EnvironmentVariables.HOST_URL)) {
+    if (props.context.url.startsWith(EnvironmentVariables.HOST_URL)) {
       replaceConfirmed(true);
 
       return () => {
@@ -38,7 +42,7 @@ export function IframeGate(props: { url: string; appService: AppService }) {
         gamepad.removePressing_B_Callback(onPressing_B);
       };
     }
-  }, [props.url]);
+  }, [props.context.url]);
 
   return (
     <div
@@ -51,7 +55,7 @@ export function IframeGate(props: { url: string; appService: AppService }) {
       }}
     >
       {confirmed ? (
-        <IframeWrapper url={props.url} />
+        <IframeWrapper context={props.context} />
       ) : (
         <div
           className="bg-lightest d-flex flex-column align-items-center justify-content-center text-center p-3"
@@ -63,7 +67,7 @@ export function IframeGate(props: { url: string; appService: AppService }) {
           }}
         >
           <p>You are opening a screen located in:</p>
-          <p className="bg-info">{new URL(props.url).origin}</p>
+          <p className="bg-info">{new URL(props.context.url).origin}</p>
           <p>
             Everything in this screen
             <br />

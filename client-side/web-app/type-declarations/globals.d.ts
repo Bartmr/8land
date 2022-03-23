@@ -5,6 +5,7 @@ import {
   ProviderConnectInfo,
   RequestArguments,
 } from 'hardhat/types';
+import { AppContext } from 'src/components/templates/client-side/index/components/components/screens/app/app-screen.types';
 
 interface EthereumEvent {
   connect: ProviderConnectInfo;
@@ -96,5 +97,7 @@ declare global {
           }): Promise<string>;
           sendAsync: (request: RequestArguments) => Promise<unknown>;
         };
+
+    explore8Land?: AppContext;
   }
 }

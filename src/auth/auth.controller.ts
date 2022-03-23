@@ -108,6 +108,7 @@ export class AuthController {
           userId: user.id,
           role: user.role,
           walletAddress: user.walletAddress,
+          appId: user.appId,
         },
       };
     } else {
@@ -139,6 +140,7 @@ export class AuthController {
         userId: authContext.user.id,
         role: authContext.user.role,
         walletAddress: authContext.user.walletAddress,
+        appId: authContext.user.appId,
       };
     } else {
       throw new NotFoundException();

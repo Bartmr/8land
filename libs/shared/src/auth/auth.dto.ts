@@ -11,6 +11,7 @@ export class AuthSessionDTO {
   userId!: string;
   role!: Role;
   walletAddress!: string | null;
+  appId!: string;
 }
 
 export class LoginResponseDTO {

@@ -301,7 +301,26 @@ export class LandScene extends Phaser.Scene {
         await this.handleStepIntoDoor(block);
       },
       dialogueService: this.dependencies.dialogueService,
-      appService: this.dependencies.appService,
+      onOpenApp: (args) => {
+        this.dependencies.appService.openApp({
+          url: args.url,
+          territory: args.territoryId
+            ? {
+                id: args.territoryId,
+              }
+            : undefined,
+          // WARNING
+          // DO NOT PASS THE WHOLE SESSION OBJECT!!! THAT'S A SECURITY HAZARD
+          // ONLY PASS THE NEEDED ARGUMENTS
+          user: this.args.session
+            ? {
+                appId: this.args.session.appId,
+              }
+            : undefined,
+          land: { id: this.args.land.id, name: this.args.land.name },
+          appBlock: { id: args.appBlockId },
+        });
+      },
     });
 
     this.createPlayerAnimation(Direction.UP, 9, 8);
@@ -423,6 +442,7 @@ export class LandScene extends Phaser.Scene {
             territories: nextLand.territories.filter((t) => !!t.assets),
           },
           comingFromDoorBlock: block,
+          session: this.args.session,
         },
         this.dependencies,
       ),

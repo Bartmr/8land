@@ -7,7 +7,6 @@ import { Player } from './player';
 import { GamepadSingleton, GamepadType } from '../../../../gamepad-singleton';
 import { JSONPrimitive } from '@app/shared/internals/transports/json-types';
 import { DialogueService } from '../dialogue/dialogue-screen';
-import { AppService } from '../app/app-screen';
 
 const Vector2 = Phaser.Math.Vector2;
 
@@ -52,8 +51,12 @@ class GridPhysics {
         tilemap: Phaser.Tilemaps.Tilemap;
       }>;
       onStepIntoDoor: (block: DoorBlock) => void;
+      onOpenApp: (args: {
+        url: string;
+        territoryId: string | undefined;
+        appBlockId: string;
+      }) => void;
       dialogueService: DialogueService;
-      appService: AppService;
     },
   ) {
     this.gamePad = GamepadSingleton.getInstance();
@@ -211,15 +214,20 @@ class GridPhysics {
   }
 
   private getTopTileProperties(pos: Phaser.Math.Vector2) {
-    const resolveTileProps = (tile: Phaser.Tilemaps.Tile) => {
+    const resolveTileProps = (
+      tile: Phaser.Tilemaps.Tile,
+      territoryId: string | undefined,
+    ) => {
       let foundATopTileWithProps = false;
       const properties: {
+        territoryId: undefined | string;
         static: {
           collides?: boolean;
           text?: string;
         };
         blockId?: string;
       } = {
+        territoryId,
         static: {},
       };
 
@@ -281,7 +289,7 @@ class GridPhysics {
           continue;
         }
 
-        const props = resolveTileProps(tile);
+        const props = resolveTileProps(tile, territory.id);
 
         if (props) {
           return props;
@@ -300,7 +308,7 @@ class GridPhysics {
         throw new Error();
       }
 
-      const props = resolveTileProps(tile);
+      const props = resolveTileProps(tile, undefined);
 
       if (props) {
         return props;
@@ -353,7 +361,11 @@ class GridPhysics {
         if (block) {
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           if (block.type === BlockType.App) {
-            this.context.appService.openUrl(block.url);
+            this.context.onOpenApp({
+              url: block.url,
+              territoryId: props.territoryId,
+              appBlockId: block.id,
+            });
           }
         }
       }

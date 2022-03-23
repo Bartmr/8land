@@ -5,6 +5,7 @@ import { string } from 'not-me/lib/schemas/string/string-schema';
 import { uuid } from '../../internals/validation/schemas/uuid.schema';
 import { CreateBlockRequestDTO } from './create-block.dto';
 import { BlockType } from './create-block.enums';
+import isURL from 'validator/lib/isURL';
 
 export const CreateBlockRequestSchema: Schema<CreateBlockRequestDTO> = object({
   landId: uuid().required(),
@@ -25,7 +26,9 @@ export const CreateBlockRequestSchema: Schema<CreateBlockRequestDTO> = object({
       } else if (o.type === BlockType.App) {
         return {
           type: equals([BlockType.App] as const).required(),
-          url: string().filled(),
+          url: string()
+            .filled()
+            .test((s) => (isURL(s) ? 'This is not a valid URL' : null)),
         };
       } else {
         return {
