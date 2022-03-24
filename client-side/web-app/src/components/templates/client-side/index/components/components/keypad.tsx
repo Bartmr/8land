@@ -89,8 +89,6 @@ export function Keypad() {
         gamepad.A_keyWasPressed();
       } else if (e.key === 's') {
         gamepad.B_keyWasPressed();
-      } else if (e.key === 'k') {
-        gamepad.Escape_keyWasPressed();
       }
     };
 
@@ -107,8 +105,6 @@ export function Keypad() {
         gamepad.A_keyWasReleased();
       } else if (e.key === 's') {
         gamepad.B_keyWasReleased();
-      } else if (e.key === 'k') {
-        gamepad.Escape_keyWasReleased();
       }
     };
 
@@ -147,15 +143,19 @@ export function Keypad() {
 
   return (
     <>
-      <div className="mt-3 d-block d-xl-none">
+      <div className="mt-3">
         {/* Secondary buttons*/}
         <div className="d-flex align-items-center">
           <span className="me-3">FN</span>
-          <div id="game-button-escape" className="btn-sm btn-light">
+          <div
+            id="game-button-escape"
+            className="btn-sm btn-light"
+            style={{ cursor: 'pointer' }}
+          >
             Escape
           </div>
         </div>
-        <div className="me-4 mt-4 d-flex align-items-center justify-content-between">
+        <div className="me-4 mt-4 d-flex d-xl-none align-items-center justify-content-between">
           {/* A / B Keys */}
           <div className="d-flex">
             <button
@@ -192,13 +192,11 @@ export function Keypad() {
       </div>
 
       <div className="d-none d-xl-block mt-3">
-        Instructions: Use the arrow keys to move.
+        Use the arrow keys to move.
         <br />
         &quot;A&quot; for actions (like reading signs).
         <br />
         &quot;S&quot; for going back
-        <br />
-        &quot;K&quot; for quitting a screen or app
       </div>
     </>
   );
