@@ -3,5 +3,4 @@ export type AppContext = {
   user: { appId: string } | undefined;
   land: { id: string; name: string };
   territory?: { id: string } | undefined;
-  appBlock: { id: string };
 };

@@ -318,7 +318,6 @@ export class LandScene extends Phaser.Scene {
               }
             : undefined,
           land: { id: this.args.land.id, name: this.args.land.name },
-          appBlock: { id: args.appBlockId },
         });
       },
     });

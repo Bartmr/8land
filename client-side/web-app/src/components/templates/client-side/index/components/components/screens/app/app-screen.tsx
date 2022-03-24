@@ -32,7 +32,7 @@ export class AppService {
   }
 
   openApp(context: AppContext) {
-    if (context.appBlock.id === this.currentContext?.appBlock.id) {
+    if (context.url === this.currentContext?.url) {
       return;
     }
 

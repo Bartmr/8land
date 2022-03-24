@@ -54,7 +54,6 @@ class GridPhysics {
       onOpenApp: (args: {
         url: string;
         territoryId: string | undefined;
-        appBlockId: string;
       }) => void;
       dialogueService: DialogueService;
     },
@@ -364,7 +363,6 @@ class GridPhysics {
             this.context.onOpenApp({
               url: block.url,
               territoryId: props.territoryId,
-              appBlockId: block.id,
             });
           }
         }
