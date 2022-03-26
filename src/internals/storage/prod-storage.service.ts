@@ -59,6 +59,7 @@ export class ProdStorageService extends StorageService {
         ACL: 'public-read',
         CacheControl: 'no-cache',
         ContentType: opts.contentType,
+        ContentDisposition: 'attachment',
       }),
     );
   }
