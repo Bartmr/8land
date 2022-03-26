@@ -64,7 +64,7 @@ export function BlocksSection(props: {
             {props.land.doorBlocksReferencing.map((b) => {
               return (
                 <li key={b.id} className="list-group-item">
-                  Block Code: {b.id}
+                  Block ID: {b.id}
                   <br />
                   From Land: {b.fromLandName}
                 </li>
@@ -84,7 +84,7 @@ export function BlocksSection(props: {
                         className="list-group-item d-flex align-items-center"
                       >
                         <div className="flex-fill">
-                          Block Code: {b.id}
+                          Block ID: {b.id}
                           <br />
                           Goes to: {b.toLand.name}
                         </div>
