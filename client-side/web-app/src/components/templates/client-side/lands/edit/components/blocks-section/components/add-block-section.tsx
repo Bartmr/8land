@@ -100,7 +100,6 @@ export function AddBlockSection(props: {
               </label>
               <select
                 id="block-type-input"
-                disabled
                 {...form.register('data.type')}
                 className="form-select"
               >
