@@ -28,7 +28,7 @@ export const CreateBlockRequestSchema: Schema<CreateBlockRequestDTO> = object({
           type: equals([BlockType.App] as const).required(),
           url: string()
             .filled()
-            .test((s) => (isURL(s) ? 'This is not a valid URL' : null)),
+            .test((s) => (isURL(s) ? null : 'This is not a valid URL')),
         };
       } else {
         return {
