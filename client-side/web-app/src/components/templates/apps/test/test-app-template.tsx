@@ -9,7 +9,9 @@ function Content() {
 
   useEffect(() => {
     window.addEventListener('message', (e) => {
-      replaceEventData(e.data as string);
+      replaceEventData(
+        typeof e.data === 'string' ? e.data : JSON.stringify(e.data),
+      );
     });
   }, []);
 

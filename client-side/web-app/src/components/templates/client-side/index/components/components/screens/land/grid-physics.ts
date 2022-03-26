@@ -7,6 +7,7 @@ import { Player } from './player';
 import { GamepadSingleton, GamepadType } from '../../../../gamepad-singleton';
 import { JSONPrimitive } from '@app/shared/internals/transports/json-types';
 import { DialogueService } from '../dialogue/dialogue-screen';
+import { isUUID } from '@app/shared/internals/utils/uuid/is-uuid';
 
 const Vector2 = Phaser.Math.Vector2;
 
@@ -252,10 +253,13 @@ class GridPhysics {
 
       const firstBlockId = Object.entries(tileProperties)
         .filter((c) => !['collides', 'text'].includes(c[0]))
-        .find((c) => c[1]);
+        .find(
+          (c): c is [string, string] =>
+            typeof c[1] === 'string' && isUUID(c[1]),
+        );
 
       if (firstBlockId) {
-        properties.blockId = firstBlockId[0];
+        properties.blockId = firstBlockId[1];
         foundATopTileWithProps = true;
       }
 

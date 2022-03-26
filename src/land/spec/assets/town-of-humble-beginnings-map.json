@@ -250,9 +250,9 @@
           "id": 15,
           "properties": [
             {
-              "name": "<door-2>",
-              "type": "bool",
-              "value": true
+              "name": "door-2",
+              "type": "string",
+              "value": "<door-2>"
             }
           ]
         },
@@ -260,9 +260,9 @@
           "id": 16,
           "properties": [
             {
-              "name": "<door-2>",
-              "type": "bool",
-              "value": true
+              "name": "door-2",
+              "type": "string",
+              "value": "<door-2>"
             }
           ]
         },
@@ -340,9 +340,9 @@
           "id": 41,
           "properties": [
             {
-              "name": "<door-3>",
-              "type": "bool",
-              "value": true
+              "name": "door-3",
+              "type": "string",
+              "value": "<door-3>"
             },
             {
               "name": "collides",
@@ -365,9 +365,9 @@
           "id": 43,
           "properties": [
             {
-              "name": "<door-1>",
-              "type": "bool",
-              "value": true
+              "name": "door-1",
+              "type": "string",
+              "value": "<door-1>"
             }
           ]
         },
@@ -405,9 +405,9 @@
           "id": 53,
           "properties": [
             {
-              "name": "<app-1>",
-              "type": "bool",
-              "value": true
+              "name": "app-1",
+              "type": "string",
+              "value": "<app-1>"
             },
             {
               "name": "collides",

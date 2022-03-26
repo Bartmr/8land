@@ -171,10 +171,8 @@ export class LandScene extends Phaser.Scene {
     for (const layer of landMap.layers) {
       for (const row of layer.data) {
         for (const tile of row) {
-          const properties = Object.keys(
+          const properties = Object.values(
             tile.properties as { [key: string]: unknown },
-          ).filter(
-            (key) => !!(tile.properties as { [key: string]: unknown })[key],
           );
 
           if (properties.includes(this.args.comingFromDoorBlock.id)) {
@@ -205,10 +203,8 @@ export class LandScene extends Phaser.Scene {
       for (const layer of territoryContext.tilemap.layers) {
         for (const row of layer.data) {
           for (const tile of row) {
-            const properties = Object.keys(
+            const properties = Object.values(
               tile.properties as { [key: string]: unknown },
-            ).filter(
-              (key) => !!(tile.properties as { [key: string]: unknown })[key],
             );
 
             if (properties.includes(this.args.comingFromDoorBlock.id)) {

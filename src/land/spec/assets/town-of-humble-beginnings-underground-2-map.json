@@ -86,9 +86,9 @@
           "id": 3,
           "properties": [
             {
-              "name": "<door-2>",
-              "type": "bool",
-              "value": true
+              "name": "door-2",
+              "type": "string",
+              "value": "<door-2>"
             }
           ]
         },
@@ -96,9 +96,9 @@
           "id": 5,
           "properties": [
             {
-              "name": "<door-1>",
-              "type": "bool",
-              "value": true
+              "name": "door-1",
+              "type": "string",
+              "value": "<door-1>"
             }
           ]
         },
@@ -106,9 +106,9 @@
           "id": 6,
           "properties": [
             {
-              "name": "<door-2>",
-              "type": "bool",
-              "value": true
+              "name": "door-2",
+              "type": "string",
+              "value": "<door-2>"
             }
           ]
         },
@@ -126,9 +126,9 @@
           "id": 8,
           "properties": [
             {
-              "name": "<door-1>",
-              "type": "bool",
-              "value": true
+              "name": "door-1",
+              "type": "string",
+              "value": "<door-1>"
             }
           ]
         },

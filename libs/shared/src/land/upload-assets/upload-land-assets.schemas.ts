@@ -149,12 +149,12 @@ export const createTiledJSONSchema = ({
                     ),
                 }),
                 object({
-                  name: uuid('unsupported prop').required(),
+                  name: string().required(),
                   type: equals(
-                    ['bool'],
-                    'block id props must be of boolean type',
+                    ['string'],
+                    'Block IDs must be of string type',
                   ).required(),
-                  value: boolean().required(),
+                  value: uuid('Invalid block ID').required(),
                 }),
               ]).required(),
             ).notNull(),
