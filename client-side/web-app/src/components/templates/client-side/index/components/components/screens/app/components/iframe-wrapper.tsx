@@ -91,17 +91,21 @@ export function IframeWrapper(props: { context: AppContext }) {
               throw new Error();
             }
 
-            const iframeWindow = iframe.current.contentWindow || throwError();
-            const iframeDoc = iframeWindow.document;
+            try {
+              const iframeWindow = iframe.current.contentWindow || throwError();
+              const iframeDoc = iframeWindow.document;
 
-            const script = iframeDoc.createElement('script');
-            script.append(
-              `window.explore8Land = ${JSON.stringify(props.context)}`,
-            );
-            iframeDoc.documentElement.appendChild(script);
+              const script = iframeDoc.createElement('script');
+              script.append(
+                `window.explore8Land = ${JSON.stringify(props.context)}`,
+              );
+              iframeDoc.documentElement.appendChild(script);
 
-            iframeWindow.addEventListener('keyup', keyUpListener);
-            iframeWindow.addEventListener('keydown', keyDownListener);
+              iframeWindow.addEventListener('keyup', keyUpListener);
+              iframeWindow.addEventListener('keydown', keyDownListener);
+            } catch {
+              window.postMessage('8land:error:cannot-use-iframe-window', '*');
+            }
           }}
           onError={() => {
             replaceLoading(false);
