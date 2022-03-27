@@ -72,6 +72,19 @@ export function BlocksSection(props: {
             })}
           </ul>
           <hr />
+          <h3>App Blocks</h3>
+          <ul className="list-group">
+            {props.land.appBlocks.map((b) => {
+              return (
+                <li key={b.id} className="list-group-item">
+                  Block ID: {b.id}
+                  <br />
+                  URL: {b.url}
+                </li>
+              );
+            })}
+          </ul>
+          <hr />
           <h3>Door Blocks</h3>
           <TransportedDataGate dataWrapper={deletionState}>
             {() => {
