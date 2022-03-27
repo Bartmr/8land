@@ -91,15 +91,14 @@ export function IframeWrapper(props: { context: AppContext }) {
               throw new Error();
             }
 
-            const iframeDoc = iframe.current.contentDocument || throwError();
+            const iframeWindow = iframe.current.contentWindow || throwError();
+            const iframeDoc = iframeWindow.document;
 
             const script = iframeDoc.createElement('script');
             script.append(
               `window.explore8Land = ${JSON.stringify(props.context)}`,
             );
             iframeDoc.documentElement.appendChild(script);
-
-            const iframeWindow = iframe.current.contentWindow || throwError();
 
             iframeWindow.addEventListener('keyup', keyUpListener);
             iframeWindow.addEventListener('keydown', keyDownListener);
