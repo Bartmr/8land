@@ -2,7 +2,7 @@ import { Direction } from './components/components/screens/land/grid.types';
 
 class Gamepad {
   private currentDirection: Direction = Direction.NONE;
-  private lastPressedDirection: Direction = Direction.NONE;
+  private pressedDirections: Direction[] = [];
 
   private A_isPressed = false;
   private B_isPressed = false;
@@ -14,34 +14,42 @@ class Gamepad {
 
   private currentIframe?: HTMLIFrameElement;
 
+  sendToIframe(
+    message:
+      | `8land:gamepad:${Direction}`
+      | `8land:gamepad:${'a' | 'b'}:${'pressed' | 'released'}`,
+  ) {
+    this.currentIframe?.contentWindow?.postMessage(message, '*');
+  }
+
   // KEYBOARD METHODS
   directionWasPressed(direction: Direction) {
-    this.lastPressedDirection = direction;
+    this.pressedDirections.push(direction);
     this.currentDirection = direction;
 
-    this.currentIframe?.contentWindow?.postMessage(
-      `8land:gamepad:${this.currentDirection}`,
-      '*',
-    );
+    this.sendToIframe(`8land:gamepad:${this.currentDirection}`);
   }
   directionWasReleased(direction: Direction) {
-    if (this.lastPressedDirection === direction) {
-      this.currentDirection = Direction.NONE;
-    }
-
-    this.currentIframe?.contentWindow?.postMessage(
-      `8land:gamepad:${this.currentDirection}`,
-      '*',
+    this.pressedDirections = this.pressedDirections.filter(
+      (d) => d !== direction,
     );
+
+    if (this.pressedDirections.length === 0) {
+      this.currentDirection = Direction.NONE;
+      this.sendToIframe(`8land:gamepad:none`);
+    } else {
+      this.currentDirection =
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        this.pressedDirections[this.pressedDirections.length - 1]!;
+
+      this.sendToIframe(`8land:gamepad:${this.currentDirection}`);
+    }
   }
   // NIPPLE METHODS
   setDirection(direction: Direction) {
     this.currentDirection = direction;
 
-    this.currentIframe?.contentWindow?.postMessage(
-      `8land:gamepad:${this.currentDirection}`,
-      '*',
-    );
+    this.sendToIframe(`8land:gamepad:${this.currentDirection}`);
   }
   getDirection() {
     return this.currentDirection;
@@ -54,10 +62,7 @@ class Gamepad {
   A_keyWasPressed() {
     this.A_isPressed = true;
 
-    this.currentIframe?.contentWindow?.postMessage(
-      `8land:gamepad:a:pressed`,
-      '*',
-    );
+    this.sendToIframe(`8land:gamepad:a:pressed`);
 
     this.A_pressed_callbacks.forEach((cb) => {
       cb();
@@ -66,10 +71,7 @@ class Gamepad {
   A_keyWasReleased() {
     this.A_isPressed = false;
 
-    this.currentIframe?.contentWindow?.postMessage(
-      `8land:gamepad:a:released`,
-      '*',
-    );
+    this.sendToIframe(`8land:gamepad:a:released`);
   }
   isAPressed() {
     return this.A_isPressed;
@@ -88,10 +90,7 @@ class Gamepad {
   B_keyWasPressed() {
     this.B_isPressed = true;
 
-    this.currentIframe?.contentWindow?.postMessage(
-      `8land:gamepad:b:pressed`,
-      '*',
-    );
+    this.sendToIframe(`8land:gamepad:b:pressed`);
 
     this.B_pressed_callbacks.forEach((cb) => {
       cb();
@@ -100,10 +99,7 @@ class Gamepad {
   B_keyWasReleased() {
     this.B_isPressed = false;
 
-    this.currentIframe?.contentWindow?.postMessage(
-      `8land:gamepad:b:released`,
-      '*',
-    );
+    this.sendToIframe(`8land:gamepad:b:released`);
   }
   isBPressed() {
     return this.B_isPressed;

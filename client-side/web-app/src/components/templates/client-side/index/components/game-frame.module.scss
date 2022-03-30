@@ -2,8 +2,19 @@
 @import 'breakpoints-mixins';
 
 .gameSize {
+  margin: auto;
+  max-width: 450px;
+
+  @include media-breakpoint-up(sm) {
+    margin: auto;
+    max-width: 450px;
+  }
+  @include media-breakpoint-up(md) {
+    margin: auto;
+    max-width: 50vh;
+  }
   @include media-breakpoint-up(lg) {
     margin: auto;
-    max-width: 65vh;
+    max-width: 60vh;
   }
 }

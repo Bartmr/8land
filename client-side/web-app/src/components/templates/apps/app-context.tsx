@@ -12,9 +12,9 @@ import {
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import { AppContext } from '../client-side/index/components/components/screens/app/app-screen.types';
 
-const AppContextContext = createContext<TransportedData<AppContext> | null>(
-  null,
-);
+const AppContextContext = createContext<TransportedData<
+  AppContext & { explore8Land: NonNullable<Window['explore8Land']> }
+> | null>(null);
 
 export function useAppContext() {
   const context = useContext(AppContextContext);
@@ -23,26 +23,40 @@ export function useAppContext() {
 }
 
 export function AppContextProvider(props: { children: ReactNode }) {
-  const [state, replaceState] = useState<TransportedData<AppContext>>({
+  const [state, replaceState] = useState<
+    TransportedData<
+      AppContext & { explore8Land: NonNullable<Window['explore8Land']> }
+    >
+  >({
     status: TransportedDataStatus.Loading,
   });
 
   useEffect(() => {
-    const interval = window.setInterval(() => {
+    const script = document.createElement('script');
+
+    script.src = '/app-plugin.js';
+
+    document.body.appendChild(script);
+
+    const interval = window.setInterval(async () => {
       if (window.explore8Land) {
         window.clearInterval(interval);
 
+        const context = await window.explore8Land.getContext();
+
         replaceState({
           status: TransportedDataStatus.Done,
-          data: window.explore8Land,
+          data: { ...context, explore8Land: window.explore8Land },
         });
       }
-    }, 300);
+    }, 500);
   }, []);
 
   return (
-    <AppContextContext.Provider value={state}>
-      {props.children}
-    </AppContextContext.Provider>
+    <>
+      <AppContextContext.Provider value={state}>
+        {props.children}
+      </AppContextContext.Provider>
+    </>
   );
 }

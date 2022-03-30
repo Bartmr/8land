@@ -1,53 +1,36 @@
-import { throwError } from '@app/shared/internals/utils/throw-error';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
 import { GamepadSingleton } from 'src/components/templates/client-side/index/gamepad-singleton';
 import { TransportedDataStatus } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
-import { Direction } from '../../land/grid.types';
 import { AppContext } from '../app-screen.types';
 
 export function IframeWrapper(props: { context: AppContext }) {
   const iframe = useRef<null | HTMLIFrameElement>(null);
   const [loading, replaceLoading] = useState(true);
 
-  const keyDownListener = useCallback((e: KeyboardEvent) => {
-    const gamepad = GamepadSingleton.getInstance();
+  const url = new URL(props.context.url);
 
-    if (e.key === 'ArrowUp') {
-      gamepad.directionWasPressed(Direction.UP);
-    } else if (e.key === 'ArrowDown') {
-      gamepad.directionWasPressed(Direction.DOWN);
-    } else if (e.key === 'ArrowLeft') {
-      gamepad.directionWasPressed(Direction.LEFT);
-    } else if (e.key === 'ArrowRight') {
-      gamepad.directionWasPressed(Direction.RIGHT);
-    } else if (e.key === 'a') {
-      gamepad.A_keyWasPressed();
-    } else if (e.key === 's') {
-      gamepad.B_keyWasPressed();
-    }
-  }, []);
+  url.searchParams.set('is8land', 'true');
 
-  const keyUpListener = useCallback((e: KeyboardEvent) => {
-    const gamepad = GamepadSingleton.getInstance();
+  useLayoutEffect(() => {
+    const listener = (e: MessageEvent) => {
+      if (e.data === '8land:context:get') {
+        iframe.current?.contentWindow?.postMessage(
+          {
+            event: '8land:context',
+            data: props.context,
+          },
+          '*',
+        );
+      }
+    };
 
-    if (e.key === 'ArrowUp') {
-      gamepad.directionWasReleased(Direction.UP);
-    } else if (e.key === 'ArrowDown') {
-      gamepad.directionWasReleased(Direction.DOWN);
-    } else if (e.key === 'ArrowLeft') {
-      gamepad.directionWasReleased(Direction.LEFT);
-    } else if (e.key === 'ArrowRight') {
-      gamepad.directionWasReleased(Direction.RIGHT);
-    } else if (e.key === 'a') {
-      gamepad.A_keyWasReleased();
-    } else if (e.key === 's') {
-      gamepad.B_keyWasReleased();
-    }
-  }, []);
+    window.addEventListener('message', listener);
 
-  useEffect(() => {
     return () => {
+      window.removeEventListener('message', listener);
+
       GamepadSingleton.getInstance().clearCurrentIframe();
     };
   }, []);
@@ -59,6 +42,12 @@ export function IframeWrapper(props: { context: AppContext }) {
         width: '100%',
       }}
     >
+      <Helmet>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no"
+        />
+      </Helmet>
       <>
         {loading ? (
           <div className="p-3" style={{ position: 'absolute' }}>
@@ -76,36 +65,16 @@ export function IframeWrapper(props: { context: AppContext }) {
           id="app-screen-iframe"
           width="100%"
           height="100%"
-          src={props.context.url}
+          src={url.toString()}
           ref={(ref) => {
-            iframe.current = ref;
-
             if (ref) {
+              iframe.current = ref;
+
               GamepadSingleton.getInstance().setCurrentIframe(ref);
             }
           }}
           onLoad={() => {
             replaceLoading(false);
-
-            if (!iframe.current) {
-              throw new Error();
-            }
-
-            try {
-              const iframeWindow = iframe.current.contentWindow || throwError();
-              const iframeDoc = iframeWindow.document;
-
-              const script = iframeDoc.createElement('script');
-              script.append(
-                `window.explore8Land = ${JSON.stringify(props.context)}`,
-              );
-              iframeDoc.documentElement.appendChild(script);
-
-              iframeWindow.addEventListener('keyup', keyUpListener);
-              iframeWindow.addEventListener('keydown', keyDownListener);
-            } catch {
-              window.postMessage('8land:error:cannot-use-iframe-window', '*');
-            }
           }}
           onError={() => {
             replaceLoading(false);

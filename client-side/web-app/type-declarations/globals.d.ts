@@ -98,6 +98,23 @@ declare global {
           sendAsync: (request: RequestArguments) => Promise<unknown>;
         };
 
-    explore8Land?: AppContext;
+    explore8Land?: {
+      getContext: () => Promise<AppContext>;
+      listenToGamepad(
+        listener: (
+          event:
+            | 'up'
+            | 'down'
+            | 'left'
+            | 'right'
+            | 'none'
+            | 'a:pressed'
+            | 'a:released'
+            | 'b:pressed'
+            | 'b:released',
+        ) => void,
+      ): void;
+      removeGamepadListener(listener: Function): void;
+    };
   }
 }
