@@ -98,6 +98,7 @@ export function ScreenSwitcher(props: {
             replaceCurrentScreen(CurrentScreen.Land);
           }}
           landScreenServiceRef={landScreenServiceRef}
+          musicService={props.musicService}
         />
       </div>
     </>

@@ -75,6 +75,22 @@ export class MusicService {
       })();
     }
   }
+
+  fadeMusic() {
+    this.soundcloudPlayer.setVolume(40);
+  }
+
+  raiseMusic() {
+    this.soundcloudPlayer.setVolume(100);
+  }
+
+  pause() {
+    this.soundcloudPlayer.pause();
+  }
+
+  play() {
+    this.soundcloudPlayer.play();
+  }
 }
 
 export function MusicTicker(props: {
@@ -125,6 +141,7 @@ export function MusicTicker(props: {
           scrolling="no"
           allow="autoplay"
           src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/189845017"
+          style={{ pointerEvents: 'none' }}
         ></iframe>
       </div>
     </>

@@ -31,11 +31,14 @@
           window.parent.postMessage('8land:context:get', '*');
         });
       },
-      listenToGamepad(listener) {
+      listenToGamepad: (listener) => {
         gamepadCallbacks.add(listener);
       },
-      removeGamepadListener(listener) {
+      removeGamepadListener: (listener) => {
         gamepadCallbacks.delete(listener);
+      },
+      stopMusic: () => {
+        window.parent.postMessage('8land:music:stop', '*');
       },
     };
 

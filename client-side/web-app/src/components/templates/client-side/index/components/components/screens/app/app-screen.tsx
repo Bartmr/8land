@@ -2,6 +2,7 @@ import { throwError } from '@app/shared/internals/utils/throw-error';
 import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 import { GamepadSingleton } from '../../../../gamepad-singleton';
+import { MusicService } from '../../music-ticker';
 import { LandScreenService } from '../land/land-screen.service';
 import { AppContext } from './app-screen.types';
 import { IframeGate } from './components/iframe-gate';
@@ -12,6 +13,7 @@ export class AppService {
   private onOpen: () => void;
   private onClose: () => void;
   private landScreenServiceRef: React.MutableRefObject<LandScreenService | null>;
+  private musicService: MusicService;
 
   public lockCurrentScreen = false;
 
@@ -22,6 +24,7 @@ export class AppService {
     onOpen: AppService['onOpen'];
     onClose: AppService['onClose'];
     landScreenServiceRef: AppService['landScreenServiceRef'];
+    musicService: AppService['musicService'];
   }) {
     this.render = args.render;
 
@@ -29,6 +32,8 @@ export class AppService {
     this.onClose = args.onClose;
 
     this.landScreenServiceRef = args.landScreenServiceRef;
+
+    this.musicService = args.musicService;
   }
 
   openApp(context: AppContext) {
@@ -37,7 +42,10 @@ export class AppService {
     }
 
     this.currentContext = context;
+
     this.lockCurrentScreen = true;
+
+    this.musicService.fadeMusic();
 
     (
       this.landScreenServiceRef.current?.currentScene || throwError()
@@ -53,6 +61,9 @@ export class AppService {
     }
 
     this.lockCurrentScreen = false;
+
+    this.musicService.play();
+    this.musicService.raiseMusic();
 
     setTimeout(() => {
       this.currentContext = null;
@@ -74,6 +85,7 @@ export function AppScreen(props: {
   onOpen: () => void;
   onClose: () => void;
   landScreenServiceRef: React.MutableRefObject<LandScreenService | null>;
+  musicService: MusicService;
 }) {
   const [, replaceRenderId] = useState<string>(v4());
   const [service, replaceService] = useState<AppService | undefined>();
@@ -84,6 +96,7 @@ export function AppScreen(props: {
       onOpen: props.onOpen,
       onClose: props.onClose,
       landScreenServiceRef: props.landScreenServiceRef,
+      musicService: props.musicService,
     });
 
     const gamepad = GamepadSingleton.getInstance();
@@ -126,7 +139,11 @@ export function AppScreen(props: {
         </style>
       ) : null}
       {service && service.currentContext ? (
-        <IframeGate context={service.currentContext} appService={service} />
+        <IframeGate
+          context={service.currentContext}
+          appService={service}
+          musicService={props.musicService}
+        />
       ) : null}
     </>
   );
