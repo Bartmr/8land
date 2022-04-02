@@ -6,12 +6,15 @@ import { DoorBlock } from '../blocks/typeorm/door-block.entity';
 import { Land } from './typeorm/land.entity';
 import { Territory } from 'src/territories/typeorm/territory.entity';
 import { AppBlock } from 'src/blocks/typeorm/app-block.entity';
+import { LandsService } from './lands.service';
+import { LandsInGameController } from './lands-in-game.controller';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Land, Territory, DoorBlock, AppBlock]),
     StorageModule,
   ],
-  controllers: [LandController],
+  providers: [LandsService],
+  controllers: [LandController, LandsInGameController],
 })
 export class LandModule {}

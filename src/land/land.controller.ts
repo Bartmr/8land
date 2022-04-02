@@ -50,6 +50,7 @@ import {
   GetLandParametersDTO,
 } from 'libs/shared/src/land/get/get-land.dto';
 import { PublicRoute } from 'src/auth/public-route.decorator';
+import { LandsService } from './lands.service';
 
 const TiledJSONSchema = createTiledJSONSchema({
   maxWidth: null,
@@ -68,6 +69,7 @@ export class LandController {
   constructor(
     @InjectConnection() private connection: Connection,
     private storageService: StorageService,
+    private landService: LandsService,
   ) {}
 
   @Post()
@@ -302,118 +304,17 @@ export class LandController {
     };
   }
 
-  @Get('/resume')
-  @PublicRoute()
-  async resume(): Promise<GetLandDTO> {
-    const landsRepository = this.connection.getCustomRepository(LandRepository);
-
-    const results = await landsRepository.find({
-      order: {
-        createdAt: 'ASC',
-      },
-      where: {
-        hasAssets: true,
-        // TODO territoryId: IsNull()
-      },
-      skip: 0,
-    });
-
-    const firstLand = results.rows[0];
-
-    if (!firstLand) {
-      throw new Error();
-    }
-
-    return this.getLand({ id: firstLand.id });
-  }
-
-  @Get('/:id')
+  @Get('/getEditable/:id')
   @PublicRoute()
   async getLand(
     @Param() parameters: GetLandParametersDTO,
   ): Promise<GetLandDTO> {
-    const landsRepository = this.connection.getCustomRepository(LandRepository);
-
-    const land = await landsRepository.findOne({
-      where: {
-        id: parameters.id,
-      },
-    });
+    const land = await this.landService.getLand(parameters.id);
 
     if (!land) {
       throw new ResourceNotFoundException();
+    } else {
+      return land;
     }
-
-    const [territories, doorBlocksReferencing, doorBlocks, appBlocks] =
-      await Promise.all([
-        land.territories,
-        land.doorBlocksReferencing,
-        land.doorBlocks,
-        land.appBlocks,
-      ]);
-
-    return {
-      id: land.id,
-      name: land.name,
-      backgroundMusicUrl: land.backgroundMusicUrl,
-      assets: land.hasAssets
-        ? {
-            baseUrl: this.storageService.getHostUrl(),
-            mapKey: `lands/${land.id}/map.json`,
-            tilesetKey: `lands/${land.id}/tileset.png`,
-          }
-        : undefined,
-      doorBlocksReferencing: doorBlocksReferencing.map((b) => {
-        if (!b.inLand) throwError();
-
-        return {
-          id: b.id,
-          fromLandId: b.inLand.id,
-          fromLandName: b.inLand.name,
-        };
-      }),
-      doorBlocks: doorBlocks.map((b) => {
-        return {
-          id: b.id,
-          toLand: {
-            id: b.toLand.id,
-            name: b.toLand.name,
-          },
-        };
-      }),
-      appBlocks: appBlocks.map((b) => ({
-        id: b.id,
-        url: b.url,
-      })),
-      territories: territories.map((territory) => {
-        return {
-          id: territory.id,
-          startX: territory.startX,
-          startY: territory.startY,
-          endX: territory.endX,
-          endY: territory.endY,
-          assets: territory.hasAssets
-            ? {
-                baseUrl: this.storageService.getHostUrl(),
-                mapKey: `territories/${territory.id}/map.json`,
-                tilesetKey: `territories/${territory.id}/tileset.png`,
-              }
-            : undefined,
-          doorBlocks: territory.doorBlocks.map((b) => {
-            return {
-              id: b.id,
-              toLand: {
-                id: b.toLand.id,
-                name: b.toLand.name,
-              },
-            };
-          }),
-          appBlocks: territory.appBlocks.map((b) => ({
-            id: b.id,
-            url: b.url,
-          })),
-        };
-      }),
-    };
   }
 }

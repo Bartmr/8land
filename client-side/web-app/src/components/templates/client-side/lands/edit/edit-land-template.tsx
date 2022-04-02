@@ -36,7 +36,7 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
       { status: 200; body: ToIndexedType<GetLandDTO> },
       undefined
     >({
-      path: `/lands/${props.id}`,
+      path: `/lands/getEditable/${props.id}`,
       query: undefined,
       acceptableStatusCodes: [200],
     });

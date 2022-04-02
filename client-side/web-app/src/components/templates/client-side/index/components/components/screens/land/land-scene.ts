@@ -23,6 +23,7 @@ import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
+import { NavigateToLandQueryDTO } from '@app/shared/land/in-game/navigate/navigate-to-land.schemas';
 
 @HotReloadClass(module)
 export class LandScene extends Phaser.Scene {
@@ -389,16 +390,17 @@ export class LandScene extends Phaser.Scene {
   }
 
   private async handleStepIntoDoor(block: DoorBlock) {
-    const nextLandId = block.toLandId;
-
     this.dependencies.changeLandNameDisplay('-- Loading --');
 
     const res = await this.dependencies.api.get<
       { status: 200; body: ToIndexedType<GetLandDTO> },
-      undefined
+      ToIndexedType<NavigateToLandQueryDTO>
     >({
-      path: `/lands/${nextLandId}`,
-      query: undefined,
+      path: `/lands/navigate`,
+      query: {
+        doorBlockId: block.id,
+        currentLandId: this.args.land.id,
+      },
       acceptableStatusCodes: [200],
     });
 

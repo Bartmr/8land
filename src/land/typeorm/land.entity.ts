@@ -43,6 +43,4 @@ export class Land extends SimpleEntity {
 
   @OneToMany(() => Territory, (e) => e.inLand, { lazy: true })
   territories!: Promise<Territory[]>;
-
-  // TODO: territory relationship nullable column, when land is indoors of territory
 }
