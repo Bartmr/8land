@@ -5,7 +5,6 @@ import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/ma
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { getLandSceneKey } from './keys';
 import { LandScene } from './land-scene';
-import sample from 'lodash/sample';
 import { BlockType, DoorBlock } from './land-scene.types';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { MusicService } from '../../music-ticker';
@@ -56,20 +55,13 @@ export async function runLandGame(
 
   let comingFromDoorBlock: DoorBlock;
 
+  // This is how we position the user when starting from scratch
   if (args.land.doorBlocksReferencing.length > 0) {
-    const el = sample(args.land.doorBlocksReferencing) || throwError();
+    const el = args.land.doorBlocksReferencing[0] || throwError();
 
     comingFromDoorBlock = {
       type: BlockType.Door,
       toLandId: el.fromLandId,
-      id: el.id,
-    };
-  } else if (args.land.doorBlocks.length > 0) {
-    const el = sample(args.land.doorBlocks) || throwError();
-
-    comingFromDoorBlock = {
-      type: BlockType.Door,
-      toLandId: el.toLand.id,
       id: el.id,
     };
   } else {

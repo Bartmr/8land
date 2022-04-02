@@ -50,7 +50,7 @@ export const createTiledJSONSchema = ({
       ),
     infinite: boolean()
       .required()
-      .test((i) => (i ? 'infinite must be false' : null)),
+      .test((i) => (i ? 'Map cannot be infinite' : null)),
     layers: array(
       object({
         data: array(number().required()).required(),
@@ -65,9 +65,9 @@ export const createTiledJSONSchema = ({
           ),
         id: number().integer().required(),
         name: string().filled(),
-        opacity: number().required(),
-        type: equals(['tilelayer']).required(),
-        visible: equals([true], 'Must be set to true'),
+        opacity: equals([1], 'All layers must have full opacity').required(),
+        type: equals(['tilelayer'], 'Only tile layers are allowed').required(),
+        visible: equals([true], 'All layers must be visible'),
         width: number()
           .integer()
           .required()
@@ -82,7 +82,6 @@ export const createTiledJSONSchema = ({
       }).required(),
     )
       .min(0, 'You must have at least one tileset')
-      .max(1, 'You cannot have more than one layer')
       .required(),
     nextlayerid: number().integer().required(),
     nextobjectid: number().integer().required(),
