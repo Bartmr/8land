@@ -3,9 +3,14 @@ import { useState } from 'react';
 
 export function TilesetFormField(props: {
   onChange: (file: File | undefined) => void;
+  serverError: undefined | 'tileset-dimensions-dont-match';
 }) {
   const [error, replaceError] = useState<
-    'incompatible-file-format' | 'file-size-exceeded' | '' | undefined
+    | 'incompatible-file-format'
+    | 'file-size-exceeded'
+    | 'tileset-dimensions-dont-match'
+    | ''
+    | undefined
   >();
 
   return (
@@ -45,6 +50,8 @@ export function TilesetFormField(props: {
           ? "Incompatible file format. Make sure you're uploading a PNG image"
           : error === 'file-size-exceeded'
           ? `File size cannot exceed ${TERRITORY_TILESET_SIZE_LIMIT / 1000}kb`
+          : props.serverError === 'tileset-dimensions-dont-match'
+          ? 'The tileset picture you tried to upload has different dimensions than the ones specified in the Tiled Map tileset.'
           : null}
       </div>
     </div>

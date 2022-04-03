@@ -27,7 +27,6 @@ import { ResourceNotFoundException } from 'src/internals/server/resource-not-fou
 import { getSearchableName } from 'src/internals/utils/get-searchable-name';
 import { Connection } from 'typeorm';
 import { LandRepository } from './typeorm/land.repository';
-import fileType from 'file-type';
 import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
 import {
   ContentType,
@@ -51,6 +50,7 @@ import {
 } from 'libs/shared/src/land/get/get-land.dto';
 import { PublicRoute } from 'src/auth/public-route.decorator';
 import { LandsService } from './lands.service';
+import sharp from 'sharp';
 
 const TiledJSONSchema = createTiledJSONSchema({
   maxWidth: null,
@@ -152,14 +152,20 @@ export class LandController {
       });
     }
 
-    const tilesetFormat =
-      (await fileType.fromBuffer(tileset.buffer)) ||
-      (() => {
-        throw new BadRequestException({ error: 'unrecognized-tileset-format' });
-      })();
+    let tilesetMedatada: sharp.Metadata;
 
-    if (tilesetFormat.ext !== 'png' || tilesetFormat.mime !== 'image/png') {
-      throw new BadRequestException('tileset-not-a-png-file');
+    try {
+      const sharpImg = sharp(tileset.buffer);
+
+      tilesetMedatada = await sharpImg.metadata();
+
+      await sharpImg.stats();
+    } catch (err) {
+      throw new BadRequestException({ error: 'unrecognized-tileset-format' });
+    }
+
+    if (tilesetMedatada.format !== 'png') {
+      throw new BadRequestException({ error: 'unrecognized-tileset-format' });
     }
 
     let mapJSON;
@@ -179,53 +185,63 @@ export class LandController {
         error: 'tiled-json-validation-error',
         messageTree: tiledJSONValidationResult.messagesTree,
       });
-    } else {
-      const tilesetStorageKey = `lands/${params.landId}/tileset.png`;
-      const mapStorageKey = `lands/${params.landId}/map.json`;
+    }
 
-      await this.connection.transaction(async (e) => {
-        const landRepo = e.getCustomRepository(LandRepository);
+    const tilesetSpecifications =
+      tiledJSONValidationResult.value.tilesets[0] || throwError();
 
-        const land = await landRepo.findOne({
-          where: {
-            id: params.landId,
-          },
-        });
-
-        if (!land) {
-          throw new ResourceNotFoundException();
-        }
-
-        await this.storageService.saveBuffer(
-          tilesetStorageKey,
-          tileset.buffer,
-          { contentType: ContentType.PNG },
-        );
-
-        const toSave: InferType<typeof TiledJSONSchema> = {
-          ...tiledJSONValidationResult.value,
-          tilesets: [
-            {
-              ...(tiledJSONValidationResult.value.tilesets[0] || throwError()),
-              image: 'tileset.png',
-            },
-          ],
-        };
-
-        await this.storageService.saveText(
-          mapStorageKey,
-          JSON.stringify(toSave),
-          { contentType: ContentType.JSON },
-        );
-
-        if (!land.hasAssets) {
-          land.hasAssets = true;
-        }
-        land.updatedAt = new Date();
-
-        await landRepo.save(land, auditContext);
+    if (
+      tilesetMedatada.width !== tilesetSpecifications.imagewidth ||
+      tilesetMedatada.height !== tilesetSpecifications.imageheight
+    ) {
+      throw new BadRequestException({
+        error: 'tileset-dimensions-dont-match',
       });
     }
+
+    const tilesetStorageKey = `lands/${params.landId}/tileset.png`;
+    const mapStorageKey = `lands/${params.landId}/map.json`;
+
+    await this.connection.transaction(async (e) => {
+      const landRepo = e.getCustomRepository(LandRepository);
+
+      const land = await landRepo.findOne({
+        where: {
+          id: params.landId,
+        },
+      });
+
+      if (!land) {
+        throw new ResourceNotFoundException();
+      }
+
+      await this.storageService.saveBuffer(tilesetStorageKey, tileset.buffer, {
+        contentType: ContentType.PNG,
+      });
+
+      const toSave: InferType<typeof TiledJSONSchema> = {
+        ...tiledJSONValidationResult.value,
+        tilesets: [
+          {
+            ...(tiledJSONValidationResult.value.tilesets[0] || throwError()),
+            image: 'tileset.png',
+          },
+        ],
+      };
+
+      await this.storageService.saveText(
+        mapStorageKey,
+        JSON.stringify(toSave),
+        { contentType: ContentType.JSON },
+      );
+
+      if (!land.hasAssets) {
+        land.hasAssets = true;
+      }
+      land.updatedAt = new Date();
+
+      await landRepo.save(land, auditContext);
+    });
   }
 
   @Put(':landId')

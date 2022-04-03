@@ -20,7 +20,10 @@ export function AssetsUploader(props: {
   const api = useMainJSONApi();
 
   const [errors, replaceErrors] = useState<
-    'map-missing' | 'tileset-missing' | undefined
+    | 'map-missing'
+    | 'tileset-missing'
+    | 'tileset-dimensions-dont-match'
+    | undefined
   >(undefined);
 
   const [formSubmissionStatus, replaceFormSubmissionStatus] = useState<
@@ -51,7 +54,8 @@ export function AssetsUploader(props: {
     formData.append('tileset', tilesetFile);
 
     const res = await api.put<
-      { status: 204; body: undefined },
+      | { status: 204; body: undefined }
+      | { status: 400; body: undefined | { error: string } },
       undefined,
       FormData
     >({
@@ -68,7 +72,17 @@ export function AssetsUploader(props: {
         status: TransportedDataStatus.NotInitialized,
       });
 
-      props.fetchTerritory();
+      if (res.response.status === 400) {
+        if (res.response.body?.error === 'tileset-dimensions-dont-match') {
+          replaceErrors('tileset-dimensions-dont-match');
+        } else {
+          replaceFormSubmissionStatus({
+            status: res.logAndReturnAsUnexpected().failure,
+          });
+        }
+      } else {
+        props.fetchTerritory();
+      }
     }
   };
 
@@ -98,7 +112,12 @@ export function AssetsUploader(props: {
             <hr />
           </>
         ) : null}
-        <TilesetFormField onChange={replaceTilesetFile} />
+        <TilesetFormField
+          serverError={
+            errors === 'tileset-dimensions-dont-match' ? errors : undefined
+          }
+          onChange={replaceTilesetFile}
+        />
         <div className="mb-3"></div>
         <MapFormField territory={props.territory} onChange={replaceMapFile} />
         <div className="mt-4 d-flex justify-content-start align-items-center">

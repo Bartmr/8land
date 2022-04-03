@@ -19,7 +19,6 @@ import {
 import { CreateTerritoryRequestJSONSchema } from 'libs/shared/src/territories/create/create-territory.schemas';
 import { Role } from 'src/auth/roles/roles';
 import { RolesUpAndIncluding } from 'src/auth/roles/roles.decorator';
-import fileType from 'file-type';
 import { InjectConnection } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { LandRepository } from 'src/land/typeorm/land.repository';
@@ -89,15 +88,16 @@ export class TerritoriesController {
       });
     }
     /* --- */
-    const thumbnailFormat =
-      (await fileType.fromBuffer(thumbnailFile.buffer)) ||
-      (() => {
-        throw new BadRequestException({
-          error: 'unrecognized-thumbnail-format',
-        });
-      })();
-    if (thumbnailFormat.ext !== 'png' || thumbnailFormat.mime !== 'image/png') {
-      throw new BadRequestException('thumbnail-not-a-png-file');
+    let imgMetadata: sharp.Metadata;
+
+    try {
+      imgMetadata = await sharp(thumbnailFile.buffer).metadata();
+    } catch (err) {
+      throw new BadRequestException({ error: 'unrecognized-thumbnail-format' });
+    }
+
+    if (imgMetadata.format !== 'png') {
+      throw new BadRequestException({ error: 'unrecognized-thumbnail-format' });
     }
     /* --- */
     let dataJSON: unknown;
@@ -118,7 +118,6 @@ export class TerritoriesController {
     const data = dataValidationResult.value;
     /* --- */
     const img = sharp(thumbnailFile.buffer);
-    const imgMetadata = await img.metadata();
 
     const imgResized = await img
       .resize({
