@@ -71,6 +71,7 @@ export function TiledJSONField(props: {
         className={`form-control ${props.state?.error ? 'is-invalid' : ''}`}
         type="file"
         id="map-input"
+        accept=".json,application/json"
       />
       {props.state?.error ? (
         <div className="invalid-feedback">

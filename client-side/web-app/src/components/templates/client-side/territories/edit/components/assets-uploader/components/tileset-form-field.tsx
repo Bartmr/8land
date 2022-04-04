@@ -44,6 +44,7 @@ export function TilesetFormField(props: {
         className={`form-control ${error ? 'is-invalid' : ''}`}
         type="file"
         id="tileset-input"
+        accept=".png,image/png"
       />
       <div className="invalid-feedback">
         {error === 'incompatible-file-format'

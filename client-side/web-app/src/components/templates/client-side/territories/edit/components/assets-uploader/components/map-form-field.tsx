@@ -80,6 +80,7 @@ export function MapFormField(props: {
         className={`form-control ${error ? 'is-invalid' : ''}`}
         type="file"
         id="map-input"
+        accept=".json,application/json"
       />
       {error ? (
         <div className="invalid-feedback">
