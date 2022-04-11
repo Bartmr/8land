@@ -77,6 +77,10 @@ export class BlocksController {
           auditContext,
         );
 
+        toLand.updatedAt = new Date();
+
+        await landRepository.save(toLand, auditContext);
+
         return;
       } else if (body.data.type === BlockType.App) {
         const appBlockRepository = e.getCustomRepository(AppBlockRepository);
@@ -92,14 +96,21 @@ export class BlocksController {
       } else {
         throw new BadRequestException();
       }
+
+      land.updatedAt = new Date();
+      await landRepository.save(land, auditContext);
     });
   }
 
   @HttpCode(204)
   @Delete('/doors/:blockId')
   @RolesUpAndIncluding(Role.Admin)
-  deleteBlock(@Param() param: DeleteBlockURLParameters) {
+  deleteBlock(
+    @Param() param: DeleteBlockURLParameters,
+    @WithAuditContext() auditContext: AuditContext,
+  ) {
     return this.connection.transaction(async (e) => {
+      const landRepository = e.getCustomRepository(LandRepository);
       const doorBlocksRepository = e.getCustomRepository(DoorBlockRepository);
 
       const block = await doorBlocksRepository.findOne({
@@ -111,6 +122,11 @@ export class BlocksController {
       }
 
       await doorBlocksRepository.remove(block);
+
+      if (block.inLand) {
+        block.inLand.updatedAt = new Date();
+        await landRepository.save(block.inLand, auditContext);
+      }
     });
   }
 }

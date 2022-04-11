@@ -8,10 +8,17 @@ import { Territory } from 'src/territories/typeorm/territory.entity';
 import { AppBlock } from 'src/blocks/typeorm/app-block.entity';
 import { LandsService } from './lands.service';
 import { LandsInGameController } from './lands-in-game.controller';
+import { NavigationState } from 'src/users/typeorm/navigation-state.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Land, Territory, DoorBlock, AppBlock]),
+    TypeOrmModule.forFeature([
+      Land,
+      Territory,
+      DoorBlock,
+      AppBlock,
+      NavigationState,
+    ]),
     StorageModule,
   ],
   providers: [LandsService],

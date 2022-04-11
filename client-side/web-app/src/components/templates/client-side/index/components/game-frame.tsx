@@ -1,4 +1,3 @@
-import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 import { faMusic } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
@@ -11,9 +10,10 @@ import { Keypad } from './components/keypad';
 import { MusicService, MusicTicker } from './components/music-ticker';
 import * as styles from './game-frame.module.scss';
 import { ScreenSwitcher } from './components/screen-switcher';
+import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
 
 export function GameFrame(props: {
-  land: GetLandDTO;
+  resumedLand: ResumeLandNavigationDTO;
   session: null | MainApiSessionData;
 }) {
   const [musicService, replaceMusicService] = useState<
@@ -26,7 +26,7 @@ export function GameFrame(props: {
       {musicService ? (
         <ScreenSwitcher
           session={props.session}
-          land={props.land}
+          resumedLand={props.resumedLand}
           musicService={musicService}
           changeLandNameDisplay={replaceLandName}
         />

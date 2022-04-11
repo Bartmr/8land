@@ -1,4 +1,4 @@
-import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
+import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
 import { useRef, useState } from 'react';
 import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
 import { MusicService } from './music-ticker';
@@ -18,7 +18,7 @@ enum CurrentScreen {
 
 export function ScreenSwitcher(props: {
   musicService: MusicService;
-  land: GetLandDTO;
+  resumedLand: ResumeLandNavigationDTO;
   session: null | MainApiSessionData;
   changeLandNameDisplay: (landName: string) => void;
 }) {

@@ -6,7 +6,6 @@ import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
-import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
 import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
 import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
@@ -16,6 +15,7 @@ import { GameFrame } from './components/game-frame';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
 import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
+import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
 
 function Content(props: {
   showHeaderAndFooter: () => void;
@@ -31,7 +31,7 @@ function Content(props: {
   const [pressedStart, replacePressedStart] = useState(false);
 
   const [landToResumeFrom, replaceLandToResumeFrom] = useState<
-    TransportedData<GetLandDTO>
+    TransportedData<ResumeLandNavigationDTO>
   >({ status: TransportedDataStatus.NotInitialized });
 
   useEffect(() => {
@@ -39,7 +39,7 @@ function Content(props: {
       replaceLandToResumeFrom({ status: TransportedDataStatus.Loading });
 
       const res = await api.get<
-        { status: 200; body: ToIndexedType<GetLandDTO> },
+        { status: 200; body: ToIndexedType<ResumeLandNavigationDTO> },
         undefined
       >({
         path: '/lands/resume',
@@ -68,7 +68,7 @@ function Content(props: {
         <TransportedDataGate dataWrapper={landToResumeFrom}>
           {({ data: landData }) =>
             pressedStart ? (
-              <GameFrame session={sessionData} land={landData} />
+              <GameFrame session={sessionData} resumedLand={landData} />
             ) : (
               <div className="text-center">
                 <p>

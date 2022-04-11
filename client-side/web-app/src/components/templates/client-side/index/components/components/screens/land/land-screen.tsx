@@ -1,4 +1,3 @@
-import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 import { useEffect, useState } from 'react';
 import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
 import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
@@ -9,12 +8,13 @@ import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { AppService } from '../app/app-screen';
+import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
 
 export function LandScreen(props: {
   musicService: MusicService;
   dialogueService: DialogueService;
   appService: AppService;
-  land: GetLandDTO;
+  resumedLand: ResumeLandNavigationDTO;
   session: null | MainApiSessionData;
   changeLandNameDisplay: (landName: string) => void;
   onService: (landScreenService: LandScreenService) => void;
@@ -34,7 +34,7 @@ export function LandScreen(props: {
 
       // https://soundcloud.com/radion-alexievich-drozdov/spacedandywave?in=eliud-makaveli-zavala/sets/vaporwave
       await runLandGame(
-        { land: props.land, session: props.session },
+        { resumedLand: props.resumedLand, session: props.session },
         {
           api,
           musicService: props.musicService,
