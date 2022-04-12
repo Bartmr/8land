@@ -43,12 +43,9 @@ export class BlocksController {
         throw new ResourceNotFoundException({ error: 'land-not-found' });
       }
 
-      const [landBlocks, appBlocks] = await Promise.all([
-        land.doorBlocks,
-        land.appBlocks,
-      ]);
+      const doorBlocks = await land.doorBlocks;
 
-      if (landBlocks.length + appBlocks.length > 50) {
+      if (doorBlocks.length + land.appBlocks.length > 50) {
         throw new BadRequestException({ error: 'block-limit-exceeded' });
       }
 
@@ -87,7 +84,7 @@ export class BlocksController {
 
         await appBlockRepository.create(
           {
-            inLand: land,
+            inLand: Promise.resolve(land),
             inTerritory: Promise.resolve(null),
             url: body.data.url,
           },

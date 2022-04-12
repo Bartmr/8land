@@ -100,7 +100,7 @@ export class LandController {
           backgroundMusicUrl: null,
           hasAssets: null,
           territories: Promise.resolve([]),
-          appBlocks: Promise.resolve([]),
+          appBlocks: [],
         },
         auditContext,
       );

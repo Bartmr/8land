@@ -38,9 +38,9 @@ export class Land extends SimpleEntity {
   @OneToMany(() => DoorBlock, (b) => b.toLand, { lazy: true })
   doorBlocksReferencing!: Promise<DoorBlock[]>;
 
-  @OneToMany(() => AppBlock, (b) => b.inLand, { lazy: true })
-  appBlocks!: Promise<AppBlock[]>;
-
   @OneToMany(() => Territory, (e) => e.inLand, { lazy: true })
   territories!: Promise<Territory[]>;
+
+  @OneToMany(() => AppBlock, (b) => b.inLand, { eager: true })
+  appBlocks!: AppBlock[];
 }

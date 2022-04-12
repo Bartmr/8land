@@ -5,9 +5,9 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class AppBlock extends SimpleEntity {
-  @ManyToOne(() => Land, { eager: true, nullable: true })
+  @ManyToOne(() => Land, { lazy: true, nullable: true })
   @JoinColumn()
-  inLand!: Land | null;
+  inLand!: Promise<Land | null>;
 
   @ManyToOne(() => Territory, { lazy: true, nullable: true })
   @JoinColumn()
