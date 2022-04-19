@@ -4,13 +4,14 @@ import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/ma
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { getLandSceneKey } from './keys';
 import { LandScene } from './land-scene';
-import { BlockType, DoorBlock } from './land-scene.types';
+import { DoorBlock } from './land-scene.types';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
 import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
+import { DynamicBlockType } from '@app/shared/blocks/create/create-block.enums';
 
 export async function runLandGame(
   args: {
@@ -60,7 +61,7 @@ export async function runLandGame(
 
   if (args.resumedLand.lastDoor) {
     comingFromDoorBlock = {
-      type: BlockType.Door,
+      type: DynamicBlockType.Door,
       id: args.resumedLand.lastDoor.id,
       toLandId: args.resumedLand.lastDoor.toLandId,
     };
@@ -70,7 +71,7 @@ export async function runLandGame(
     const el = args.resumedLand.doorBlocksReferencing[0] || throwError();
 
     comingFromDoorBlock = {
-      type: BlockType.Door,
+      type: DynamicBlockType.Door,
       toLandId: el.fromLandId,
       id: el.id,
     };

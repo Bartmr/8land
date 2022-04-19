@@ -150,6 +150,8 @@ async function seed() {
         appBlocks: [],
         hasAssets: true,
         territories: Promise.resolve([]),
+        world: Promise.resolve(null),
+        isStartingLand: null,
       },
       auditContext,
     );
@@ -164,6 +166,8 @@ async function seed() {
         appBlocks: [],
         hasAssets: true,
         territories: Promise.resolve([]),
+        world: Promise.resolve(null),
+        isStartingLand: null,
       },
       auditContext,
     );
@@ -180,6 +184,8 @@ async function seed() {
         appBlocks: [],
         hasAssets: true,
         territories: Promise.resolve([]),
+        world: Promise.resolve(null),
+        isStartingLand: null,
       },
       auditContext,
     );
@@ -196,6 +202,8 @@ async function seed() {
         appBlocks: [],
         hasAssets: true,
         territories: Promise.resolve([]),
+        world: Promise.resolve(null),
+        isStartingLand: null,
       },
       auditContext,
     );

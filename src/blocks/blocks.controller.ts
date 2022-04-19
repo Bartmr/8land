@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/typeorm';
 import { CreateBlockRequestDTO } from 'libs/shared/src/blocks/create/create-block.dto';
-import { BlockType } from 'libs/shared/src/blocks/create/create-block.enums';
+import { DynamicBlockType } from 'libs/shared/src/blocks/create/create-block.enums';
 import { DeleteBlockURLParameters } from 'libs/shared/src/blocks/delete/delete-block.dto';
 import { Role } from 'src/auth/roles/roles';
 import { RolesUpAndIncluding } from 'src/auth/roles/roles.decorator';
@@ -50,7 +50,7 @@ export class BlocksController {
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      if (body.data.type === BlockType.Door) {
+      if (body.data.type === DynamicBlockType.Door) {
         const doorBlockRepository = e.getCustomRepository(DoorBlockRepository);
 
         const toLand = await landRepository.findOne({
@@ -79,7 +79,7 @@ export class BlocksController {
         await landRepository.save(toLand, auditContext);
 
         return;
-      } else if (body.data.type === BlockType.App) {
+      } else if (body.data.type === DynamicBlockType.App) {
         const appBlockRepository = e.getCustomRepository(AppBlockRepository);
 
         await appBlockRepository.create(

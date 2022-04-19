@@ -1,7 +1,7 @@
 import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { JSONData } from '@app/shared/internals/transports/json-types';
 import { CreateBlockRequestDTO } from '@app/shared/blocks/create/create-block.dto';
-import { BlockType } from '@app/shared/blocks/create/create-block.enums';
+import { DynamicBlockType } from '@app/shared/blocks/create/create-block.enums';
 import { CreateBlockRequestSchema } from '@app/shared/blocks/create/create-block.schemas';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 import { Fragment, useState } from 'react';
@@ -26,7 +26,7 @@ export function AddBlockSection(props: {
     defaultValues: {
       landId: props.land.id,
       data: {
-        type: BlockType.Door,
+        type: DynamicBlockType.Door,
       },
     },
   });
@@ -38,7 +38,7 @@ export function AddBlockSection(props: {
     >
   >({ status: TransportedDataStatus.Done, data: undefined });
 
-  const type = form.watch('data.type') as BlockType | undefined;
+  const type = form.watch('data.type') as DynamicBlockType | undefined;
 
   return (
     <>
@@ -103,11 +103,11 @@ export function AddBlockSection(props: {
                 {...form.register('data.type')}
                 className="form-select"
               >
-                <option value={BlockType.Door}>Door</option>
-                <option value={BlockType.App}>App</option>
+                <option value={DynamicBlockType.Door}>Door</option>
+                <option value={DynamicBlockType.App}>App</option>
               </select>
             </div>
-            {type === BlockType.Door ? (
+            {type === DynamicBlockType.Door ? (
               <div className="mb-3">
                 <label htmlFor="destination-name-input" className="form-label">
                   Destination Land Name
@@ -145,7 +145,7 @@ export function AddBlockSection(props: {
 
             {/*  */}
 
-            {type === BlockType.App ? (
+            {type === DynamicBlockType.App ? (
               <div className="mb-3">
                 <label htmlFor="app-url-input" className="form-label">
                   App URL

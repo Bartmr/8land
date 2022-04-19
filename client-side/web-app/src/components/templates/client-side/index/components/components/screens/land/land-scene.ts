@@ -1,6 +1,6 @@
 import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { throwError } from '@app/shared/internals/utils/throw-error';
-import { BlockType } from '@app/shared/blocks/create/create-block.enums';
+import { DynamicBlockType } from '@app/shared/blocks/create/create-block.enums';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 import { JSONApiBase } from 'src/logic/app-internals/apis/json-api-base';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
@@ -137,14 +137,14 @@ export class LandScene extends Phaser.Scene {
         blocks: [
           ...territory.doorBlocks.map((dB) => {
             return {
-              type: BlockType.Door as const,
+              type: DynamicBlockType.Door as const,
               toLandId: dB.toLand.id,
               id: dB.id,
             };
           }),
           ...territory.appBlocks.map((aB) => {
             return {
-              type: BlockType.App as const,
+              type: DynamicBlockType.App as const,
               url: aB.url,
               id: aB.id,
             };
@@ -265,21 +265,21 @@ export class LandScene extends Phaser.Scene {
         blocks: [
           ...this.args.land.doorBlocks.map((dB) => {
             return {
-              type: BlockType.Door as const,
+              type: DynamicBlockType.Door as const,
               toLandId: dB.toLand.id,
               id: dB.id,
             };
           }),
           ...this.args.land.doorBlocksReferencing.map((dB) => {
             return {
-              type: BlockType.Door as const,
+              type: DynamicBlockType.Door as const,
               toLandId: dB.fromLandId,
               id: dB.id,
             };
           }),
           ...this.args.land.appBlocks.map((aB) => {
             return {
-              type: BlockType.App as const,
+              type: DynamicBlockType.App as const,
               url: aB.url,
               id: aB.id,
             };

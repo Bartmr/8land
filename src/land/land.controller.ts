@@ -101,6 +101,8 @@ export class LandController {
           hasAssets: null,
           territories: Promise.resolve([]),
           appBlocks: [],
+          world: Promise.resolve(null),
+          isStartingLand: null,
         },
         auditContext,
       );

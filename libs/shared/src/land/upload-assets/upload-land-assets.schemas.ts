@@ -6,6 +6,7 @@ import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { or } from 'not-me/lib/schemas/or/or-schema';
 import { uuid } from '../../internals/validation/schemas/uuid.schema';
+import { StaticBlockType } from '../../blocks/create/create-block.enums';
 // import isHexColor from 'validator/lib/isHexColor';
 
 export const UploadLandAssetsParametersSchema = object({
@@ -124,7 +125,7 @@ export const createTiledJSONSchema = ({
               or([
                 object({
                   name: equals(
-                    ['collides'],
+                    [StaticBlockType.Collides],
                     'can be set as "collides"',
                   ).required(),
                   type: equals(
@@ -134,7 +135,10 @@ export const createTiledJSONSchema = ({
                   value: boolean().required(),
                 }),
                 object({
-                  name: equals(['text'], ' can be set as "text"').required(),
+                  name: equals(
+                    [StaticBlockType.Text],
+                    ' can be set as "text"',
+                  ).required(),
                   type: equals(
                     ['string'],
                     "'text' props must be of string type",

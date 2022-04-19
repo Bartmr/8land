@@ -1,20 +1,20 @@
 import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger';
 import { ValidationSchema } from '../../internals/validation/validation-schema.decorator';
-import { BlockType } from './create-block.enums';
+import { DynamicBlockType } from './create-block.enums';
 import { CreateBlockRequestSchema } from './create-block.schemas';
 
 export class CreateDoorBlockDTO {
-  type!: BlockType.Door;
+  type!: DynamicBlockType.Door;
   destinationLandName!: string;
 }
 
 export class AppBlockDTO {
-  type!: BlockType.App;
+  type!: DynamicBlockType.App;
   url!: string;
 }
 
 export class OtherBlockDTO {
-  type!: BlockType.Other;
+  type!: DynamicBlockType.Other;
 }
 
 @ApiExtraModels(CreateDoorBlockDTO, AppBlockDTO, OtherBlockDTO)

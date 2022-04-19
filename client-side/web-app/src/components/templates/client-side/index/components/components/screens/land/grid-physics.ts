@@ -2,12 +2,17 @@ import { throwError } from '@app/shared/internals/utils/throw-error';
 import { HotReloadClass } from 'src/logic/app-internals/utils/hot-reload-class';
 import { TILE_SIZE } from '../../../../game-constants';
 import { Direction } from './grid.types';
-import { Block, BlockType, DoorBlock } from './land-scene.types';
+import { Block, DoorBlock } from './land-scene.types';
 import { Player } from './player';
 import { GamepadSingleton, GamepadType } from '../../../../gamepad-singleton';
 import { JSONPrimitive } from '@app/shared/internals/transports/json-types';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { isUUID } from '@app/shared/internals/utils/uuid/is-uuid';
+import { getEnumValues } from '@app/shared/internals/utils/enums/get-enum-values';
+import {
+  DynamicBlockType,
+  StaticBlockType,
+} from '@app/shared/blocks/create/create-block.enums';
 
 const Vector2 = Phaser.Math.Vector2;
 
@@ -252,7 +257,8 @@ class GridPhysics {
       }
 
       const firstBlockId = Object.entries(tileProperties)
-        .filter((c) => !['collides', 'text'].includes(c[0]))
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+        .filter((c) => !getEnumValues(StaticBlockType).includes(c[0] as any))
         .find(
           (c): c is [string, string] =>
             typeof c[1] === 'string' && isUUID(c[1]),
@@ -338,7 +344,7 @@ class GridPhysics {
 
         if (block) {
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-          if (block.type === BlockType.Door) {
+          if (block.type === DynamicBlockType.Door) {
             this.context.onStepIntoDoor(block);
           }
         }
@@ -363,7 +369,7 @@ class GridPhysics {
 
         if (block) {
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-          if (block.type === BlockType.App) {
+          if (block.type === DynamicBlockType.App) {
             this.context.onOpenApp({
               url: block.url,
               territoryId: props.territoryId,

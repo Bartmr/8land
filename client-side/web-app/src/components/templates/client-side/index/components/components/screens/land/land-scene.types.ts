@@ -1,5 +1,5 @@
+import { DynamicBlockType } from '@app/shared/blocks/create/create-block.enums';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
-import { BlockType } from '@app/shared/blocks/create/create-block.enums';
 import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
 
 export type LandSceneArguments = {
@@ -17,15 +17,13 @@ export type LandSceneArguments = {
 export type Block = DoorBlock | AppBlock;
 
 export type DoorBlock = {
-  type: BlockType.Door;
+  type: DynamicBlockType.Door;
   id: string;
   toLandId: string;
 };
 
 export type AppBlock = {
-  type: BlockType.App;
+  type: DynamicBlockType.App;
   id: string;
   url: string;
 };
-
-export { BlockType };

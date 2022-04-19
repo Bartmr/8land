@@ -1,4 +1,9 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
-  "editor.formatOnSave": false
+  "editor.formatOnSave": false,
+  "terminal.integrated.defaultLocation": "editor",
+  "eslint.workingDirectories": [
+    "/workspaces/8land",
+    "/workspaces/8land/client-side/web-app"
+  ]
 }
