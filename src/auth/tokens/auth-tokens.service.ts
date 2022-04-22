@@ -11,8 +11,8 @@ import { AuthTokensRepository } from './auth-token.repository';
 import { Connection, EntityManager } from 'typeorm';
 import { LoggingService } from 'src/internals/logging/logging.service';
 import { cleanExpiredAuthTokens } from './clean-expired-auth-tokens';
-import { IS_MAIN_SERVER_PROCESS } from 'src/internals/server/server.constants';
 import { throwError } from 'src/internals/utils/throw-error';
+import { ProcessContextManager } from 'src/internals/process/process-context-manager';
 
 @Injectable()
 export class AuthTokensService implements OnModuleInit, OnModuleDestroy {
@@ -30,7 +30,7 @@ export class AuthTokensService implements OnModuleInit, OnModuleDestroy {
   }
 
   onModuleInit() {
-    if (IS_MAIN_SERVER_PROCESS) {
+    if (ProcessContextManager.getContext().isMasterWorker) {
       this.tokensCleanupInterval = setInterval(() => {
         cleanExpiredAuthTokens().catch((err) => {
           this.loggingService.logError(
@@ -43,7 +43,7 @@ export class AuthTokensService implements OnModuleInit, OnModuleDestroy {
   }
 
   onModuleDestroy() {
-    if (IS_MAIN_SERVER_PROCESS) {
+    if (ProcessContextManager.getContext().isMasterWorker) {
       clearInterval(this.tokensCleanupInterval ?? throwError());
     }
   }
