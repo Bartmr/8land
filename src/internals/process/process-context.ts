@@ -12,6 +12,14 @@ export class ProcessContext {
   constructor(params: { type: ProcessType; name: string; workerId: string }) {
     this.id = `${params.type}:${params.name}:${params.workerId}`;
 
-    this.isMasterWorker = true;
+    if (params.type === ProcessType.Testing) {
+      /*
+        Must test jobs/forked logic in their own test cases
+      */
+      this.isMasterWorker = false;
+    } else {
+      // TODO
+      this.isMasterWorker = true;
+    }
   }
 }
