@@ -4,22 +4,22 @@ import * as styles from './header.module.scss';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { PROJECT_NAME } from '@app/shared/project-details';
 import { missingCssClass } from 'src/components/ui-kit/core/utils/missing-css-class';
-// import { faBars, faUser } from '@fortawesome/free-solid-svg-icons';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import {
-//   TransportedDataGate,
-//   TransportedDataGateLayout,
-// } from 'src/components/shared/transported-data-gate/transported-data-gate';
-// import { LANDS_ROUTE } from 'src/components/templates/client-side/lands/lands-routes';
-// import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
-// import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
-// import { Role } from '@app/shared/auth/auth.enums';
-// import { TERRITORIES_ROUTE } from 'src/components/templates/client-side/territories/territories-routes';
-// import { USER_ROUTE } from 'src/components/templates/client-side/user/user-routes';
+import { faBars, faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  TransportedDataGate,
+  TransportedDataGateLayout,
+} from 'src/components/shared/transported-data-gate/transported-data-gate';
+import { LANDS_ROUTE } from 'src/components/templates/client-side/lands/lands-routes';
+import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
+import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
+import { Role } from '@app/shared/auth/auth.enums';
+import { TERRITORIES_ROUTE } from 'src/components/templates/client-side/territories/territories-routes';
+import { USER_ROUTE } from 'src/components/templates/client-side/user/user-routes';
 import { INDEX_ROUTE } from 'src/components/templates/index-template/index-routes';
-// import { LOGIN_ROUTE } from 'src/components/templates/client-side/login/login-routes';
-// import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
-// import { SUPPORT_ROUTE } from 'src/components/templates/support/support-routes';
+import { LOGIN_ROUTE } from 'src/components/templates/client-side/login/login-routes';
+import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
+import { SUPPORT_ROUTE } from 'src/components/templates/support/support-routes';
 
 type Props = {
   menuHtmlId: string;
@@ -33,14 +33,14 @@ type Props = {
 export function Header(props: Props) {
   const [expanded, replaceExpanded] = useState<boolean>(false);
 
-  // const session = useStoreSelector(
-  //   { mainApi: mainApiReducer },
-  //   (s) => s.mainApi.session,
-  // );
+  const session = useStoreSelector(
+    { mainApi: mainApiReducer },
+    (s) => s.mainApi.session,
+  );
 
-  // const expandMenu = () => {
-  //   replaceExpanded(true);
-  // };
+  const expandMenu = () => {
+    replaceExpanded(true);
+  };
 
   const collapseMenu = () => {
     replaceExpanded(false);
@@ -65,7 +65,7 @@ export function Header(props: Props) {
       <header className={`border-bottom ${props.className}`}>
         <Navbar collapseOnSelect expand="lg" expanded={expanded}>
           <div className="container">
-            {/* <Navbar.Toggle
+            <Navbar.Toggle
               onClick={() => {
                 if (expanded) {
                   collapseMenu();
@@ -76,7 +76,7 @@ export function Header(props: Props) {
               aria-controls={props.menuHtmlId}
             >
               <FontAwesomeIcon icon={faBars} />
-            </Navbar.Toggle> */}
+            </Navbar.Toggle>
             <LinkAnchor
               className="navbar-brand me-0 me-lg-3"
               href={INDEX_ROUTE.getHref()}
@@ -95,7 +95,7 @@ export function Header(props: Props) {
                 In the making
               </span>
             </LinkAnchor>
-            {/* <Navbar.Collapse id={props.menuHtmlId}>
+            <Navbar.Collapse id={props.menuHtmlId}>
               <TransportedDataGate
                 layout={TransportedDataGateLayout.Tape}
                 dataWrapper={session}
@@ -175,7 +175,7 @@ export function Header(props: Props) {
                   }}
                 </TransportedDataGate>
               </ul>
-            </Navbar.Collapse> */}
+            </Navbar.Collapse>
           </div>
         </Navbar>
       </header>
