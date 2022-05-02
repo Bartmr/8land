@@ -28,7 +28,7 @@ import {
   ContentType,
   StorageService,
 } from 'src/internals/storage/storage.service';
-import { TerritoriesRepository } from './typeorm/territories.repository';
+import { TerritoriesRepository } from '../typeorm/territories.repository';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { ItselfStorageApi } from 'src/internals/apis/itself/itself-storage.api';
@@ -42,7 +42,7 @@ import {
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
 
 @Controller('territories')
-export class TerritoriesController {
+export class TerritoriesAdminController {
   constructor(
     @InjectConnection() private connection: Connection,
     private storageService: StorageService,

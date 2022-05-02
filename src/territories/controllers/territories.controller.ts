@@ -43,7 +43,7 @@ import {
   StorageService,
 } from 'src/internals/storage/storage.service';
 import { Connection } from 'typeorm';
-import { TerritoriesRepository } from './typeorm/territories.repository';
+import { TerritoriesRepository } from '../typeorm/territories.repository';
 import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
 import { InferType } from 'not-me/lib/schemas/schema';
 import { throwError } from 'src/internals/utils/throw-error';

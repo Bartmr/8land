@@ -26,7 +26,7 @@ import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
 import { getSearchableName } from 'src/internals/utils/get-searchable-name';
 import { Connection } from 'typeorm';
-import { LandRepository } from './typeorm/land.repository';
+import { LandRepository } from '../typeorm/land.repository';
 import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
 import {
   ContentType,
@@ -44,12 +44,7 @@ import {
   IndexLandsDTO,
   IndexLandsQueryDTO,
 } from 'libs/shared/src/land/index/index-lands.dto';
-import {
-  GetLandDTO,
-  GetLandParametersDTO,
-} from 'libs/shared/src/land/get/get-land.dto';
-import { PublicRoute } from 'src/auth/public-route.decorator';
-import { LandsService } from './lands.service';
+import { LandsService } from '../lands.service';
 import sharp from 'sharp';
 
 const TiledJSONSchema = createTiledJSONSchema({
@@ -65,7 +60,7 @@ class LandAssetsRequestDTO {
 }
 
 @Controller('lands')
-export class LandController {
+export class LandsAdminController {
   constructor(
     @InjectConnection() private connection: Connection,
     private storageService: StorageService,
@@ -320,19 +315,5 @@ export class LandController {
         published: !!c.hasAssets,
       })),
     };
-  }
-
-  @Get('/getEditable/:id')
-  @PublicRoute()
-  async getLand(
-    @Param() parameters: GetLandParametersDTO,
-  ): Promise<GetLandDTO> {
-    const land = await this.landService.getLand(parameters.id);
-
-    if (!land) {
-      throw new ResourceNotFoundException();
-    } else {
-      return land;
-    }
   }
 }
