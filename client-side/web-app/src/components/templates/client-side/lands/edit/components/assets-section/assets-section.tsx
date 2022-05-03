@@ -8,15 +8,15 @@ import { TiledJSONFieldState } from './components/tiled-json-form-field';
 import { TilesetImageFieldState } from './components/tileset-image-form-field';
 import { TiledJSONField } from './components/tiled-json-form-field';
 import { TilesetImageFormField } from './components/tileset-image-form-field';
-import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { useLandsAPI } from 'src/logic/lands/lands-api';
 
 export function AssetsSection(props: {
   land: GetLandDTO;
   onSuccessfulSave: () => void;
 }) {
-  const api = useMainJSONApi();
+  const api = useLandsAPI();
 
   const [tiledJSONFieldState, replaceTiledJSONFieldState] =
     useState<TiledJSONFieldState>(undefined);
@@ -35,15 +35,9 @@ export function AssetsSection(props: {
     formData.append('map', args.mapFile);
     formData.append('tileset', args.tilesetFile);
 
-    const res = await api.put<
-      { status: 204; body: undefined },
-      undefined,
-      FormData
-    >({
-      path: `/lands/${props.land.id}/assets`,
-      query: undefined,
-      acceptableStatusCodes: [204],
-      body: formData,
+    const res = await api.uploadAssets({
+      landId: props.land.id,
+      formData,
     });
 
     if (res.failure) {

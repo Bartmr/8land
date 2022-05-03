@@ -16,15 +16,13 @@ import { number } from 'not-me/lib/schemas/number/number-schema';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { or } from 'not-me/lib/schemas/or/or-schema';
 import { SoundcloudSongApiUrlSchema } from '@app/shared/land/edit/edit-land.schema';
-import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
-import { JSONData } from '@app/shared/internals/transports/json-types';
-import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
+import { useLandsAPI } from 'src/logic/lands/lands-api';
 
 export function MainSection(props: {
   land: GetLandDTO;
   onSuccessfulSave: () => void;
 }) {
-  const api = useMainJSONApi();
+  const api = useLandsAPI();
 
   const form = useForm<EditLandBodyDTO>({
     resolver: notMeReactHookFormResolver(
@@ -123,19 +121,9 @@ export function MainSection(props: {
                     status: TransportedDataStatus.Loading,
                   });
 
-                  const res = await api.put<
-                    | { status: 200; body: JSONData }
-                    | { status: 409; body: undefined | { error: string } },
-                    undefined,
-                    ToIndexedType<EditLandBodyDTO>
-                  >({
-                    path: `/lands/${props.land.id}`,
-                    query: undefined,
-                    body: {
-                      name: formData.name,
-                      backgroundMusicUrl: formData.backgroundMusicUrl,
-                    },
-                    acceptableStatusCodes: [200, 409],
+                  const res = await api.updateLand({
+                    landId: props.land.id,
+                    formData,
                   });
 
                   if (res.failure) {

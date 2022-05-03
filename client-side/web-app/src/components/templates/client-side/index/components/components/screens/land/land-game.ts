@@ -1,5 +1,4 @@
 import * as Phaser from 'phaser';
-import { JSONApiBase } from 'src/logic/app-internals/apis/json-api-base';
 import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { getLandSceneKey } from './keys';
@@ -12,6 +11,7 @@ import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
 import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
 import { DynamicBlockType } from '@app/shared/blocks/create/create-block.enums';
+import { LandsAPI } from 'src/logic/lands/lands-api';
 
 export async function runLandGame(
   args: {
@@ -22,7 +22,7 @@ export async function runLandGame(
     musicService: MusicService;
     dialogueService: DialogueService;
     appService: AppService;
-    api: JSONApiBase;
+    landsAPI: LandsAPI;
     changeLandNameDisplay: (landName: string) => void;
     landScreenService: LandScreenService;
   },

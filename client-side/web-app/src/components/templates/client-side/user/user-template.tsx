@@ -1,4 +1,3 @@
-import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { RouteComponentProps } from '@reach/router';
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
@@ -12,19 +11,17 @@ import {
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
 import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use-main-api-session';
-import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
 import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
 import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import { USER_ROUTE } from './user-routes';
-import { GetUserWalletNonce } from '@app/shared/users/me/get-user-wallet-nonce.dto';
-import { ReceiveSignedUserNonceRequestDTO } from '@app/shared/users/me/receive-signed-user-nonce.dto';
 import { Logger } from 'src/logic/app-internals/logging/logger';
 import { useMainApiSessionLogout } from 'src/logic/app-internals/apis/main/session/use-main-api-session-logout';
 import { ChangeEmail } from './components/change-email';
 import { getWalletSignMessage } from '@app/shared/users/me/receive-signed-user-nonce.utils';
+import { useUsersAPI } from 'src/logic/users/users-api';
 
 export function WalletSectionWithNonce(props: {
   session: null | MainApiSessionData;
@@ -32,7 +29,7 @@ export function WalletSectionWithNonce(props: {
   nonce: string;
   walletAddress: null | string;
 }) {
-  const mainApi = useMainJSONApi();
+  const api = useUsersAPI();
 
   const [nonceSignState, replaceNonceSignState] = useState<
     TransportedData<
@@ -118,17 +115,8 @@ export function WalletSectionWithNonce(props: {
         return;
       }
 
-      const res = await mainApi.patch<
-        { status: 204; body: undefined },
-        undefined,
-        ToIndexedType<ReceiveSignedUserNonceRequestDTO>
-      >({
-        path: '/users/me/walletNonce',
-        query: undefined,
-        body: {
-          signedNonce,
-        },
-        acceptableStatusCodes: [204],
+      const res = await api.sendSignedWalletNonce({
+        signedNonce,
       });
 
       if (res.failure) {
@@ -247,7 +235,7 @@ export function WalletSection(props: {
   session: null | MainApiSessionData;
   refreshSession: () => Promise<MainApiSessionData | null | undefined>;
 }) {
-  const mainApi = useMainJSONApi();
+  const api = useUsersAPI();
   const [nonce, replaceNonce] = useState<TransportedData<string>>({
     status: TransportedDataStatus.NotInitialized,
   });
@@ -258,14 +246,7 @@ export function WalletSection(props: {
 
   useEffect(() => {
     (async () => {
-      const res = await mainApi.get<
-        { status: 200; body: ToIndexedType<GetUserWalletNonce> },
-        undefined
-      >({
-        path: '/users/me/walletNonce',
-        query: undefined,
-        acceptableStatusCodes: [200],
-      });
+      const res = await api.getWalletNonce();
 
       if (res.failure) {
         replaceNonce({ status: res.failure });

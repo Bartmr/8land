@@ -5,11 +5,11 @@ import {
   TransportedDataGateLayout,
 } from 'src/components/shared/transported-data-gate/transported-data-gate';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
-import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
 import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+import { useTerritoriesAPI } from 'src/logic/territories/territories-api';
 import { MapFormField } from './components/map-form-field';
 import { TilesetFormField } from './components/tileset-form-field';
 
@@ -17,7 +17,7 @@ export function AssetsUploader(props: {
   territory: GetTerritoryDTO;
   fetchTerritory: () => void;
 }) {
-  const api = useMainJSONApi();
+  const api = useTerritoriesAPI();
 
   const [errors, replaceErrors] = useState<
     | 'map-missing'
@@ -53,16 +53,9 @@ export function AssetsUploader(props: {
     formData.append('map', mapFile);
     formData.append('tileset', tilesetFile);
 
-    const res = await api.put<
-      | { status: 204; body: undefined }
-      | { status: 400; body: undefined | { error: string } },
-      undefined,
-      FormData
-    >({
-      path: `/territories/${props.territory.id}/assets`,
-      query: undefined,
-      acceptableStatusCodes: [204],
-      body: formData,
+    const res = await api.uploadAssets({
+      territoryId: props.territory.id,
+      formData,
     });
 
     if (res.failure) {

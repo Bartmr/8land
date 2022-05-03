@@ -8,7 +8,7 @@ import { EnvironmentVariables } from '../../runtime/environment-variables';
 import { useStoreGetState } from '../../store/use-store-get-state';
 import { mainApiReducer } from './main-api-reducer';
 
-class MainJSONApi extends JSONApiBase {}
+export class MainJSONApi extends JSONApiBase {}
 
 export function useMainJSONApi() {
   /*

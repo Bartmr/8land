@@ -1,16 +1,14 @@
-import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { throwError } from '@app/shared/internals/utils/throw-error';
-import { GetTerritoryIdByRaribleItemIdDTO } from '@app/shared/territories/get-id-by-rarible-item-id/get-territory-id-by-rarible-item-id.dto';
 import { ValidationResult } from 'not-me/lib/schemas/schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { Fragment, useEffect, useState } from 'react';
-import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
+import { useTerritoriesAPI } from 'src/logic/territories/territories-api';
 
 export function TerritoryAuthenticitySection(props: {
   buttonLabel: string;
@@ -25,7 +23,7 @@ export function TerritoryAuthenticitySection(props: {
         },
   ) => void;
 }) {
-  const api = useMainJSONApi();
+  const api = useTerritoriesAPI();
 
   const [url, replaceUrl] = useState('');
 
@@ -108,16 +106,8 @@ export function TerritoryAuthenticitySection(props: {
             throw new Error();
           }
 
-          const res = await api.get<
-            {
-              status: 200;
-              body: ToIndexedType<GetTerritoryIdByRaribleItemIdDTO>;
-            },
-            undefined
-          >({
-            path: `/territories/rarible/${validation.value}`,
-            query: undefined,
-            acceptableStatusCodes: [200],
+          const res = await api.getTerritoryByRaribleItemId({
+            raribleItemId: validation.value,
           });
 
           if (res.failure) {

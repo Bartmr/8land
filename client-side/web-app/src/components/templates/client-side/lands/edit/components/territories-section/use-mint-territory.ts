@@ -1,11 +1,9 @@
-import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
 import Moralis from 'moralis';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
-import { UpdateTerritoryRaribleMetadataRequestDTO } from '@app/shared/territories/update-rarible/update-territory-rarible-metadata.dto';
-import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
+import { useTerritoriesAPI } from 'src/logic/territories/territories-api';
 
 export function useMintTerritory() {
-  const api = useMainJSONApi();
+  const api = useTerritoriesAPI();
 
   const mintTerritory = async ({
     territoryId,
@@ -54,18 +52,12 @@ export function useMintTerritory() {
       tokenUri: '/ipfs/' + (file as unknown as { hash: () => string }).hash(),
     });
 
-    return api.patch<
-      { status: 204; body: undefined },
-      undefined,
-      ToIndexedType<UpdateTerritoryRaribleMetadataRequestDTO>
-    >({
-      path: `/territories/${territoryId}/rarible`,
-      query: undefined,
-      body: {
+    return api.updateTerritoryRaribleMetadata({
+      territoryId,
+      data: {
         tokenId: res.data.result.tokenId,
         tokenAddress: res.data.result.tokenAddress,
       },
-      acceptableStatusCodes: [204],
     });
   };
 

@@ -1,7 +1,4 @@
-import {
-  IndexLandsDTO,
-  IndexLandsQueryDTO,
-} from '@app/shared/land/index/index-lands.dto';
+import { IndexLandsDTO } from '@app/shared/land/index/index-lands.dto';
 import { useEffect, useState } from 'react';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
 import {
@@ -9,18 +6,16 @@ import {
   TransportedDataStatus,
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import { RouteComponentProps } from '@reach/router';
-import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
 import { Logger } from 'src/logic/app-internals/logging/logger';
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 import { Layout } from 'src/components/routing/layout/layout';
 import { LANDS_ROUTE } from './lands-routes';
-import { CreateLandRequestDTO } from '@app/shared/land/create/create-land.dto';
-import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { EDIT_LAND_ROUTE } from './edit/edit-land-routes';
+import { useLandsAPI } from 'src/logic/lands/lands-api';
 
 export function LandsTemplate(_props: RouteComponentProps) {
-  const api = useMainJSONApi();
+  const api = useLandsAPI();
 
   const [newLandName, replaceNewLandName] = useState('');
 
@@ -38,16 +33,7 @@ export function LandsTemplate(_props: RouteComponentProps) {
   const fetchLands = async () => {
     replaceLands({ status: TransportedDataStatus.Loading });
 
-    const res = await api.get<
-      { status: 200; body: ToIndexedType<IndexLandsDTO> },
-      ToIndexedType<IndexLandsQueryDTO>
-    >({
-      path: '/lands',
-      query: {
-        skip: 0,
-      },
-      acceptableStatusCodes: [200],
-    });
+    const res = await api.getLandsIndex();
 
     if (res.failure) {
       replaceLands({
@@ -80,19 +66,7 @@ export function LandsTemplate(_props: RouteComponentProps) {
 
     replaceNewLandSubmission({ status: TransportedDataStatus.Loading });
 
-    const res = await api.post<
-      | { status: 201; body: undefined }
-      | { status: 409; body: { error: 'name-already-taken' } },
-      undefined,
-      ToIndexedType<CreateLandRequestDTO>
-    >({
-      path: '/lands',
-      query: undefined,
-      acceptableStatusCodes: [201, 409],
-      body: {
-        name: newLandName,
-      },
-    });
+    const res = await api.createLand({ name: newLandName });
 
     if (res.failure) {
       replaceNewLandSubmission({

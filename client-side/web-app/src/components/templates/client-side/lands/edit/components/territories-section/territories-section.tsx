@@ -1,7 +1,5 @@
-import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
-import { CreateTerritoryResponseDTO } from '@app/shared/territories/create/create-territory.dto';
 import { CreateTerritoryRequestJSONSchemaObj } from '@app/shared/territories/create/create-territory.schemas';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { Fragment, useState } from 'react';
@@ -10,13 +8,13 @@ import {
   TransportedDataGate,
   TransportedDataGateLayout,
 } from 'src/components/shared/transported-data-gate/transported-data-gate';
-import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
 import { useFormUtils } from 'src/logic/app-internals/forms/form-utils';
 import { notMeReactHookFormResolver } from 'src/logic/app-internals/forms/not-me-react-hook-form-resolver';
 import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+import { useTerritoriesAPI } from 'src/logic/territories/territories-api';
 import { TerritoryPreview } from './territory-preview';
 import { useMintTerritory } from './use-mint-territory';
 
@@ -28,7 +26,7 @@ export function TerritoriesSection(props: {
   land: GetLandDTO;
   onSuccessfulSave: () => void;
 }) {
-  const api = useMainJSONApi();
+  const api = useTerritoriesAPI();
 
   const [formSubmission, replaceFormSubmission] = useState<
     TransportedData<
@@ -98,20 +96,7 @@ export function TerritoriesSection(props: {
 
               body.set('thumbnail', territoryThumbnail || throwError());
 
-              const res = await api.post<
-                | {
-                    status: 201;
-                    body: ToIndexedType<CreateTerritoryResponseDTO>;
-                  }
-                | { status: 409; body: { error: string } },
-                undefined,
-                FormData
-              >({
-                path: '/territories',
-                body,
-                query: undefined,
-                acceptableStatusCodes: [201, 409],
-              });
+              const res = await api.createTerritory(body);
 
               if (res.failure) {
                 replaceFormSubmission({ status: res.failure });

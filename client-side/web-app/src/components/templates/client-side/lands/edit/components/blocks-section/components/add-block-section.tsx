@@ -1,25 +1,22 @@
-import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
-import { JSONData } from '@app/shared/internals/transports/json-types';
-import { CreateBlockRequestDTO } from '@app/shared/blocks/create/create-block.dto';
 import { DynamicBlockType } from '@app/shared/blocks/create/create-block.enums';
 import { CreateBlockRequestSchema } from '@app/shared/blocks/create/create-block.schemas';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
-import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
 import { useFormUtils } from 'src/logic/app-internals/forms/form-utils';
 import { notMeReactHookFormResolver } from 'src/logic/app-internals/forms/not-me-react-hook-form-resolver';
 import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+import { useBlocksAPI } from 'src/logic/blocks/blocks-api';
 
 export function AddBlockSection(props: {
   land: GetLandDTO;
   onBlockCreated: () => void;
 }) {
-  const api = useMainJSONApi();
+  const api = useBlocksAPI();
 
   const form = useForm({
     resolver: notMeReactHookFormResolver(CreateBlockRequestSchema),
@@ -48,17 +45,7 @@ export function AddBlockSection(props: {
             onSubmit={form.handleSubmit(async (formData) => {
               replaceFormSubmission({ status: TransportedDataStatus.Loading });
 
-              const res = await api.post<
-                | { status: 201; body: JSONData }
-                | { status: 404 | 409; body: undefined | { error: string } },
-                undefined,
-                ToIndexedType<CreateBlockRequestDTO>
-              >({
-                path: `/blocks`,
-                query: undefined,
-                acceptableStatusCodes: [201, 404, 409],
-                body: formData,
-              });
+              const res = await api.createBlock(formData);
 
               if (res.failure) {
                 replaceFormSubmission({ status: res.failure });

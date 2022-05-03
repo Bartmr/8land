@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
-import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
 import { runLandGame } from './land-game';
 import { globalHistory } from '@reach/router';
 import { MusicService } from '../../music-ticker';
@@ -9,6 +8,7 @@ import { LandScreenService } from './land-screen.service';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { AppService } from '../app/app-screen';
 import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
+import { useLandsAPI } from 'src/logic/lands/lands-api';
 
 export function LandScreen(props: {
   musicService: MusicService;
@@ -21,7 +21,7 @@ export function LandScreen(props: {
 }) {
   const [, replaceService] = useState<LandScreenService | undefined>();
 
-  const api = useMainJSONApi();
+  const api = useLandsAPI();
 
   const [started, replaceStarted] = useState(false);
 
@@ -36,7 +36,7 @@ export function LandScreen(props: {
       await runLandGame(
         { resumedLand: props.resumedLand, session: props.session },
         {
-          api,
+          landsAPI: api,
           musicService: props.musicService,
           dialogueService: props.dialogueService,
           appService: props.appService,

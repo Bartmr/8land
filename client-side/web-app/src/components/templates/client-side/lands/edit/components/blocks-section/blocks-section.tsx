@@ -3,11 +3,11 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
-import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
 import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+import { useBlocksAPI } from 'src/logic/blocks/blocks-api';
 import { AddBlockSection } from './components/add-block-section';
 
 export function BlocksSection(props: {
@@ -15,7 +15,7 @@ export function BlocksSection(props: {
   onBlockCreated: () => void;
   onBlockDeleted: () => void;
 }) {
-  const api = useMainJSONApi();
+  const api = useBlocksAPI();
 
   const [deletionState, replaceDeletionState] = useState<
     TransportedData<undefined>
@@ -32,11 +32,7 @@ export function BlocksSection(props: {
 
     replaceDeletionState({ status: TransportedDataStatus.Loading });
 
-    const res = await api.delete<{ status: 204; body: undefined }, undefined>({
-      path: `/blocks/doors/${blockId}`,
-      query: undefined,
-      acceptableStatusCodes: [204],
-    });
+    const res = await api.deleteBlock({ blockId });
 
     if (res.failure) {
       replaceDeletionState({ status: res.failure });

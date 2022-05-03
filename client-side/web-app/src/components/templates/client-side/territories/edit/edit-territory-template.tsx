@@ -1,4 +1,3 @@
-import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { uuid } from '@app/shared/internals/validation/schemas/uuid.schema';
 import { GetTerritoryDTO } from '@app/shared/territories/get/get-territory.dto';
 import { RouteComponentProps, useParams } from '@reach/router';
@@ -7,12 +6,12 @@ import { useEffect, useState } from 'react';
 import { Accordion, Toast } from 'react-bootstrap';
 import { Layout } from 'src/components/routing/layout/layout';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
-import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+import { useTerritoriesAPI } from 'src/logic/territories/territories-api';
 import { AssetsUploader } from './components/assets-uploader/assets-uploader';
 import { EDIT_TERRITORY_ROUTE } from './edit-territory-routes';
 
@@ -83,21 +82,14 @@ function EditTerritoryWithTerritory(props: {
 }
 
 function EditTerritoryWithRouteProps(props: { id: string }) {
-  const mainApi = useMainJSONApi();
+  const api = useTerritoriesAPI();
 
   const [territory, replaceTerritory] = useState<
     TransportedData<GetTerritoryDTO>
   >({ status: TransportedDataStatus.NotInitialized });
 
   const fetchTerritory = async () => {
-    const res = await mainApi.get<
-      { status: 200; body: ToIndexedType<GetTerritoryDTO> },
-      undefined
-    >({
-      path: `/territories/${props.id}`,
-      query: undefined,
-      acceptableStatusCodes: [200],
-    });
+    const res = await api.getTerritory({ territoryId: props.id });
 
     if (res.failure) {
       replaceTerritory({ status: res.failure });

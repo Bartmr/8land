@@ -1,8 +1,5 @@
-import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { DynamicBlockType } from '@app/shared/blocks/create/create-block.enums';
-import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
-import { JSONApiBase } from 'src/logic/app-internals/apis/json-api-base';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 import { HotReloadClass } from 'src/logic/app-internals/utils/hot-reload-class';
@@ -23,7 +20,7 @@ import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
-import { NavigateToLandQueryDTO } from '@app/shared/land/in-game/navigate/navigate-to-land.schemas';
+import { LandsAPI } from 'src/logic/lands/lands-api';
 
 @HotReloadClass(module)
 export class LandScene extends Phaser.Scene {
@@ -35,7 +32,7 @@ export class LandScene extends Phaser.Scene {
     musicService: MusicService;
     dialogueService: DialogueService;
     appService: AppService;
-    api: JSONApiBase;
+    landsAPI: LandsAPI;
     changeLandNameDisplay: (landName: string) => void;
     landScreenService: LandScreenService;
   };
@@ -392,16 +389,9 @@ export class LandScene extends Phaser.Scene {
   private async handleStepIntoDoor(block: DoorBlock) {
     this.dependencies.changeLandNameDisplay('-- Loading --');
 
-    const res = await this.dependencies.api.get<
-      { status: 200; body: ToIndexedType<GetLandDTO> },
-      ToIndexedType<NavigateToLandQueryDTO>
-    >({
-      path: `/lands/navigate`,
-      query: {
-        doorBlockId: block.id,
-        currentLandId: this.args.land.id,
-      },
-      acceptableStatusCodes: [200],
+    const res = await this.dependencies.landsAPI.navigate({
+      doorBlockId: block.id,
+      currentLandId: this.args.land.id,
     });
 
     if (res.failure) {

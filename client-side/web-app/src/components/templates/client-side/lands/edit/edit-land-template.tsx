@@ -12,8 +12,7 @@ import { TransportedDataGate } from 'src/components/shared/transported-data-gate
 import { useParams } from '@reach/router';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { uuid } from '@app/shared/internals/validation/schemas/uuid.schema';
-import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
-import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
+import { useLandsAPI } from 'src/logic/lands/lands-api';
 import { Toast } from 'react-bootstrap';
 import { MainSection } from './components/main-section/main-section';
 import { BlocksSection } from './components/blocks-section/blocks-section';
@@ -21,7 +20,7 @@ import { TerritoriesSection } from './components/territories-section/territories
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 
 export function EditLandTemplateWithRouteProps(props: { id: string }) {
-  const api = useMainJSONApi();
+  const api = useLandsAPI();
 
   const [land, replaceLand] = useState<TransportedData<GetLandDTO>>({
     status: TransportedDataStatus.NotInitialized,
@@ -32,14 +31,7 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
   const fetchLand = async () => {
     replaceLand({ status: TransportedDataStatus.Loading });
 
-    const res = await api.get<
-      { status: 200; body: ToIndexedType<GetLandDTO> },
-      undefined
-    >({
-      path: `/lands/getEditable/${props.id}`,
-      query: undefined,
-      acceptableStatusCodes: [200],
-    });
+    const res = await api.getEditableLand({ landId: props.id });
 
     if (res.failure) {
       replaceLand({ status: res.failure });

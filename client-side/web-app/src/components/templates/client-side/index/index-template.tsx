@@ -7,8 +7,6 @@ import {
   TransportedDataStatus,
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
-import { useMainJSONApi } from 'src/logic/app-internals/apis/main/use-main-json-api';
-import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
 import { GameFrame } from './components/game-frame';
@@ -16,12 +14,13 @@ import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-ancho
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
 import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
 import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
+import { useLandsAPI } from 'src/logic/lands/lands-api';
 
 function Content(props: {
   showHeaderAndFooter: () => void;
   hideHeaderAndFooter: () => void;
 }) {
-  const api = useMainJSONApi();
+  const api = useLandsAPI();
 
   const session = useStoreSelector(
     { mainApi: mainApiReducer },
@@ -38,14 +37,7 @@ function Content(props: {
     (async () => {
       replaceLandToResumeFrom({ status: TransportedDataStatus.Loading });
 
-      const res = await api.get<
-        { status: 200; body: ToIndexedType<ResumeLandNavigationDTO> },
-        undefined
-      >({
-        path: '/lands/resume',
-        query: undefined,
-        acceptableStatusCodes: [200],
-      });
+      const res = await api.resume();
 
       if (res.failure) {
         replaceLandToResumeFrom({ status: res.failure });
