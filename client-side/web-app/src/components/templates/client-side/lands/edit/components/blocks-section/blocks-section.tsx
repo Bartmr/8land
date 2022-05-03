@@ -1,3 +1,4 @@
+import { DynamicBlockType } from '@app/shared/blocks/block.enums';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -21,7 +22,10 @@ export function BlocksSection(props: {
     TransportedData<undefined>
   >({ status: TransportedDataStatus.Done, data: undefined });
 
-  const deleteBlock = async (blockId: string) => {
+  const deleteBlock = async (
+    blockType: DynamicBlockType.Door | DynamicBlockType.App,
+    blockId: string,
+  ) => {
     const confirmed = window.confirm(
       'Are you sure you want to delete this block?',
     );
@@ -32,7 +36,7 @@ export function BlocksSection(props: {
 
     replaceDeletionState({ status: TransportedDataStatus.Loading });
 
-    const res = await api.deleteBlock({ blockId });
+    const res = await api.deleteBlock({ blockType, blockId });
 
     if (res.failure) {
       replaceDeletionState({ status: res.failure });
@@ -87,7 +91,7 @@ export function BlocksSection(props: {
                         </div>
                         <button
                           onClick={async () => {
-                            await deleteBlock(b.id);
+                            await deleteBlock(DynamicBlockType.Door, b.id);
                           }}
                           className="btn btn-danger"
                         >
@@ -106,10 +110,23 @@ export function BlocksSection(props: {
           <ul className="list-group">
             {props.land.appBlocks.map((b) => {
               return (
-                <li key={b.id} className="list-group-item">
-                  Block ID: {b.id}
-                  <br />
-                  URL: {b.url}
+                <li
+                  key={b.id}
+                  className="list-group-item d-flex align-items-center"
+                >
+                  <div className="flex-fill">
+                    Block ID: {b.id}
+                    <br />
+                    URL: {b.url}
+                  </div>
+                  <button
+                    onClick={async () => {
+                      await deleteBlock(DynamicBlockType.Door, b.id);
+                    }}
+                    className="btn btn-danger"
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
                 </li>
               );
             })}

@@ -100,7 +100,7 @@ export class BlocksController {
   }
 
   @HttpCode(204)
-  @Delete('/doors/:blockId')
+  @Delete('/:blockType/:blockId')
   @RolesUpAndIncluding(Role.Admin)
   deleteBlock(
     @Param() param: DeleteBlockURLParameters,
@@ -108,9 +108,20 @@ export class BlocksController {
   ) {
     return this.connection.transaction(async (e) => {
       const landRepository = e.getCustomRepository(LandRepository);
-      const doorBlocksRepository = e.getCustomRepository(DoorBlockRepository);
+      const blockRepository = e.getCustomRepository(
+        (() => {
+          if (param.blockType === DynamicBlockType.Door) {
+            return DoorBlockRepository;
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          } else if (param.blockType === DynamicBlockType.App) {
+            return AppBlockRepository;
+          } else {
+            throw new Error();
+          }
+        })(),
+      );
 
-      const block = await doorBlocksRepository.findOne({
+      const block = await blockRepository.findOne({
         where: { id: param.blockId },
       });
 
@@ -118,7 +129,7 @@ export class BlocksController {
         throw new ResourceNotFoundException();
       }
 
-      await doorBlocksRepository.remove(block);
+      await blockRepository.remove(block);
 
       if (block.inLand) {
         block.inLand.updatedAt = new Date();

@@ -5,13 +5,17 @@ import {
 import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { JSONData } from '../app-internals/transports/json-types';
 import { CreateBlockRequestDTO } from '@app/shared/blocks/create/create-block.dto';
+import { DynamicBlockType } from '@app/shared/blocks/block.enums';
 
 export class BlocksAPI {
   constructor(private api: MainJSONApi) {}
 
-  deleteBlock(args: { blockId: string }) {
+  deleteBlock(args: {
+    blockType: DynamicBlockType.Door | DynamicBlockType.App;
+    blockId: string;
+  }) {
     return this.api.delete<{ status: 204; body: undefined }, undefined>({
-      path: `/blocks/doors/${args.blockId}`,
+      path: `/blocks/${args.blockType}/${args.blockId}`,
       query: undefined,
       acceptableStatusCodes: [204],
     });

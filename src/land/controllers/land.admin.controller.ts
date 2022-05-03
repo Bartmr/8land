@@ -96,6 +96,7 @@ export class LandsAdminController {
           hasAssets: null,
           territories: Promise.resolve([]),
           appBlocks: [],
+          trainPlatformBlocks: [],
           world: Promise.resolve(null),
           isStartingLand: null,
         },

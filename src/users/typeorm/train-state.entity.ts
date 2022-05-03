@@ -1,3 +1,4 @@
+import { TrainPlatformBlock } from 'src/blocks/typeorm/train-platform-block.entity';
 import { SimpleEntity } from 'src/internals/databases/simple-entity/simple.entity';
 import { Land } from 'src/land/typeorm/land.entity';
 import { CreateDateColumn, Entity, ManyToOne, UpdateDateColumn } from 'typeorm';
@@ -14,8 +15,8 @@ export class TrainState extends SimpleEntity {
   @ManyToOne(() => User, { lazy: true })
   user!: Promise<User>;
 
-  @ManyToOne(() => Land, { eager: true })
-  boardedOn!: Land;
+  @ManyToOne(() => TrainPlatformBlock, { eager: true })
+  boardedOn!: TrainPlatformBlock;
 
   @ManyToOne(() => Land, { eager: true })
   destinationLand!: Land;
