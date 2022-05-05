@@ -13,13 +13,12 @@ import {
 import { LANDS_ROUTE } from 'src/components/templates/client-side/lands/lands-routes';
 import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
-import { Role } from '@app/shared/auth/auth.enums';
-import { TERRITORIES_ROUTE } from 'src/components/templates/client-side/territories/territories-routes';
 import { USER_ROUTE } from 'src/components/templates/client-side/user/user-routes';
 import { INDEX_ROUTE } from 'src/components/templates/index-template/index-routes';
 import { LOGIN_ROUTE } from 'src/components/templates/client-side/login/login-routes';
 import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
 import { SUPPORT_ROUTE } from 'src/components/templates/support/support-routes';
+import { NFTS_ROUTE } from 'src/components/templates/nfts/nfts-routes';
 
 type Props = {
   menuHtmlId: string;
@@ -96,50 +95,38 @@ export function Header(props: Props) {
               </span>
             </LinkAnchor>
             <Navbar.Collapse id={props.menuHtmlId}>
-              <TransportedDataGate
-                layout={TransportedDataGateLayout.Tape}
-                dataWrapper={session}
-              >
-                {({ data }) => {
-                  return (
-                    <ul className="navbar-nav me-3 my-2 my-lg-0">
-                      {data ? (
-                        data.role === Role.Admin ? (
-                          <li className="nav-item">
-                            <LinkAnchor
-                              activeClassName="active"
-                              className="nav-link"
-                              href={LANDS_ROUTE.geHref()}
-                            >
-                              {LANDS_ROUTE.label}
-                            </LinkAnchor>
-                          </li>
-                        ) : null
-                      ) : null}
-                      {data ? (
-                        <li className="nav-item">
-                          <LinkAnchor
-                            activeClassName="active"
-                            className="nav-link"
-                            href={TERRITORIES_ROUTE.getHref()}
-                          >
-                            {TERRITORIES_ROUTE.title}
-                          </LinkAnchor>
-                        </li>
-                      ) : null}
-                      <li className="nav-item">
-                        <LinkAnchor
-                          activeClassName="active"
-                          className="nav-link"
-                          href={SUPPORT_ROUTE.getHref()}
-                        >
-                          {SUPPORT_ROUTE.title}
-                        </LinkAnchor>
-                      </li>
-                    </ul>
-                  );
-                }}
-              </TransportedDataGate>
+              <ul className="navbar-nav me-3 my-2 my-lg-0">
+                <li className="nav-item">
+                  <LinkAnchor
+                    activeClassName="active"
+                    className="nav-link"
+                    href={LANDS_ROUTE.geHref()}
+                  >
+                    {LANDS_ROUTE.label}
+                  </LinkAnchor>
+                </li>
+                <div className="navbar-nav-divider" />
+                <li className="nav-item">
+                  <LinkAnchor
+                    activeClassName="active"
+                    className="nav-link"
+                    href={NFTS_ROUTE.getHref()}
+                  >
+                    {'Collectibles'}
+                  </LinkAnchor>
+                </li>
+                <div className="navbar-nav-divider" />
+
+                <li className="nav-item">
+                  <LinkAnchor
+                    activeClassName="active"
+                    className="nav-link"
+                    href={SUPPORT_ROUTE.getHref()}
+                  >
+                    {SUPPORT_ROUTE.title}
+                  </LinkAnchor>
+                </li>
+              </ul>
 
               <ul className="navbar-nav ms-auto">
                 <TransportedDataGate

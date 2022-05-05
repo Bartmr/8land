@@ -2,6 +2,7 @@ import { throwError } from '@app/shared/internals/utils/throw-error';
 import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 import { GamepadSingleton } from '../../../../gamepad-singleton';
+import { ESCAPE_BUTTON_SELECTOR } from '../../keypad-utils';
 import { MusicService } from '../../music-ticker';
 import { LandScreenService } from '../land/land-screen.service';
 import { AppContext } from './app-screen.types';
@@ -120,21 +121,21 @@ export function AppScreen(props: {
       {service && service.lockCurrentScreen ? (
         <style>
           {`
-    @keyframes escape-pulse {
-      0% {
-        background-color: var(--bs-light);
-      }
-      50% {
-        background-color: var(--bs-warning);
-      }
-      100% {
-        background-color: var(--bs-light);
-      }
-    }
+@keyframes escape-pulse {
+  0% {
+    background-color: var(--bs-light);
+  }
+  50% {
+    background-color: var(--bs-warning);
+  }
+  100% {
+    background-color: var(--bs-light);
+  }
+}
 
-    #game-button-escape {
-      animation: escape-pulse 3s infinite;
-    }
+${ESCAPE_BUTTON_SELECTOR} {
+  animation: escape-pulse 3s infinite;
+}
     `}
         </style>
       ) : null}

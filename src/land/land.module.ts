@@ -10,6 +10,7 @@ import { LandsService } from './lands.service';
 import { LandsInGameController } from './lands-in-game.controller';
 import { NavigationState } from 'src/users/typeorm/navigation-state.entity';
 import { LandsController } from './controllers/land.controller';
+import { World } from '../worlds/typeorm/worlds.entity';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { LandsController } from './controllers/land.controller';
       DoorBlock,
       AppBlock,
       NavigationState,
+      World,
     ]),
     StorageModule,
   ],

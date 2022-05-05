@@ -9,6 +9,7 @@ export const CONTACT_CTA_PRESENT_CONTINUOUS =
 export const CONTACT_CTA =
   'Twitter <a href="https://twitter.com/explore8land">@explore8land</a>';
 
-export const PROJECT_SLOGAN = 'The pixelart metaverse';
+export const PROJECT_SLOGAN =
+  'A world made of pixelart RPG lands. Build your own.';
 
 export const TWITTER_URL = 'https://twitter.com/explore8land';

@@ -1,4 +1,4 @@
-import { Get, Param } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/typeorm';
 import {
   GetLandDTO,
@@ -9,6 +9,7 @@ import { StorageService } from 'src/internals/storage/storage.service';
 import { Connection } from 'typeorm';
 import { LandsService } from '../lands.service';
 
+@Controller('lands')
 export class LandsController {
   constructor(
     @InjectConnection() private connection: Connection,
