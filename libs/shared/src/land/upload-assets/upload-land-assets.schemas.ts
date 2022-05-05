@@ -18,6 +18,8 @@ export const createTiledJSONSchema = ({
   maxHeight: _maxHeight,
   maxWidthMessage,
   maxHeightMessage,
+  allowTrainPlatformBlock = false,
+  allowStartBlock = false,
 }: // allowBackgroundColor,
 {
   maxWidth: number | null;
@@ -25,6 +27,8 @@ export const createTiledJSONSchema = ({
   maxWidthMessage?: string;
   maxHeightMessage?: string;
   // allowBackgroundColor: boolean;
+  allowTrainPlatformBlock?: boolean;
+  allowStartBlock?: boolean;
 }) => {
   const maxWidth = _maxWidth ? _maxWidth + 1 : 41;
   const maxHeight = _maxHeight ? _maxHeight + 1 : 41;
@@ -151,6 +155,36 @@ export const createTiledJSONSchema = ({
                         : null,
                     ),
                 }),
+                ...(allowStartBlock
+                  ? [
+                      object({
+                        name: equals(
+                          [StaticBlockType.Start],
+                          ' can be set as "start"',
+                        ).required(),
+                        type: equals(
+                          ['string'],
+                          "'start' props must be of boolean type",
+                        ).required(),
+                        value: boolean().required(),
+                      }),
+                    ]
+                  : []),
+                ...(allowTrainPlatformBlock
+                  ? [
+                      object({
+                        name: equals(
+                          [StaticBlockType.TrainPlatform],
+                          ' can be set as "train-platform"',
+                        ).required(),
+                        type: equals(
+                          ['string'],
+                          "'train-platform' props must be of boolean type",
+                        ).required(),
+                        value: boolean().required(),
+                      }),
+                    ]
+                  : []),
                 object({
                   name: string().required(),
                   type: equals(

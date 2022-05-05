@@ -1,6 +1,5 @@
 import { AppBlock } from 'src/blocks/typeorm/app-block.entity';
 import { DoorBlock } from 'src/blocks/typeorm/door-block.entity';
-import { TrainPlatformBlock } from 'src/blocks/typeorm/train-platform-block.entity';
 import { SimpleEntity } from 'src/internals/databases/simple-entity/simple.entity';
 import { Territory } from 'src/territories/typeorm/territory.entity';
 import { World } from 'src/worlds/typeorm/worlds.entity';
@@ -46,9 +45,6 @@ export class Land extends SimpleEntity {
 
   @OneToMany(() => AppBlock, (b) => b.inLand, { eager: true })
   appBlocks!: AppBlock[];
-
-  @OneToMany(() => TrainPlatformBlock, (b) => b.inLand, { eager: true })
-  trainPlatformBlocks!: TrainPlatformBlock[];
 
   @ManyToOne(() => World, (e) => e.lands, { lazy: true })
   world!: Promise<World | null>;

@@ -1,7 +1,6 @@
 export enum DynamicBlockType {
   Door = 'door',
   App = 'app',
-  TrainPlatform = 'train-platform',
   // NO-OP type
   Other = 'other',
 }
@@ -9,4 +8,6 @@ export enum DynamicBlockType {
 export enum StaticBlockType {
   Collides = 'collides',
   Text = 'text',
+  TrainPlatform = 'train-platform',
+  Start = 'start',
 }
