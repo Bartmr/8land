@@ -43,6 +43,8 @@ export function LandsTemplate(_props: RouteComponentProps) {
       if (res.response.body.total > res.response.body.limit) {
         Logger.logError('lands-page-needs-pagination', new Error());
 
+        window.alert('Lands page needs pagination');
+
         replaceLands({
           status: TransportFailure.UnexpectedResponse,
         });

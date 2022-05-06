@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { StorageModule } from 'src/internals/storage/storage.module';
-import { LandsAdminController } from './controllers/land.admin.controller';
 import { DoorBlock } from '../blocks/typeorm/door-block.entity';
 import { Land } from './typeorm/land.entity';
 import { Territory } from 'src/territories/typeorm/territory.entity';
@@ -11,6 +10,7 @@ import { LandsInGameController } from './lands-in-game.controller';
 import { NavigationState } from 'src/users/typeorm/navigation-state.entity';
 import { LandsController } from './controllers/land.controller';
 import { World } from '../worlds/typeorm/worlds.entity';
+import { LandPersistenceService } from './land-persistence.service';
 
 @Module({
   imports: [
@@ -24,7 +24,7 @@ import { World } from '../worlds/typeorm/worlds.entity';
     ]),
     StorageModule,
   ],
-  providers: [LandsService],
-  controllers: [LandsAdminController, LandsController, LandsInGameController],
+  providers: [LandsService, LandPersistenceService],
+  controllers: [LandsController, LandsInGameController],
 })
 export class LandModule {}

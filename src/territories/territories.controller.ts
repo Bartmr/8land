@@ -9,6 +9,9 @@ import {
   Put,
   UploadedFiles,
   UseInterceptors,
+  Body,
+  Patch,
+  Post,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
@@ -43,12 +46,26 @@ import {
   StorageService,
 } from 'src/internals/storage/storage.service';
 import { Connection } from 'typeorm';
-import { TerritoriesRepository } from '../typeorm/territories.repository';
+import { TerritoriesRepository } from './typeorm/territories.repository';
 import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
 import { InferType } from 'not-me/lib/schemas/schema';
 import { throwError } from 'src/internals/utils/throw-error';
 import { or } from 'not-me/lib/schemas/or/or-schema';
 import sharp from 'sharp';
+import {
+  CreateTerritoryRequestDTO,
+  CreateTerritoryResponseDTO,
+} from 'libs/shared/src/territories/create/create-territory.dto';
+import { CreateTerritoryRequestJSONSchema } from 'libs/shared/src/territories/create/create-territory.schemas';
+import { Role } from 'src/auth/roles/roles';
+import { RolesUpAndIncluding } from 'src/auth/roles/roles.decorator';
+import { LandRepository } from 'src/land/typeorm/land.repository';
+import { ItselfStorageApi } from 'src/internals/apis/itself/itself-storage.api';
+import { number } from 'not-me/lib/schemas/number/number-schema';
+import {
+  UpdateTerritoryRaribleMetadataParametersDTO,
+  UpdateTerritoryRaribleMetadataRequestDTO,
+} from 'libs/shared/src/territories/update-rarible/update-territory-rarible-metadata.dto';
 
 @Controller('territories')
 export class TerritoriesEndUserController {
@@ -56,6 +73,7 @@ export class TerritoriesEndUserController {
     @InjectConnection() private connection: Connection,
     private storageService: StorageService,
     private raribleApi: RaribleApi,
+    private itselfStorageApi: ItselfStorageApi,
   ) {}
 
   async isAllowedToEditProject(itemId: string, walletAddress: string) {
@@ -337,6 +355,223 @@ export class TerritoriesEndUserController {
       }
       territory.updatedAt = new Date();
       await territoriesRepo.save(territory, auditContext);
+    });
+  }
+
+  @Post()
+  @RolesUpAndIncluding(Role.Admin)
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'data', maxCount: 1 },
+      { name: 'thumbnail', maxCount: 1 },
+    ]),
+  )
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    type: CreateTerritoryRequestDTO,
+  })
+  async createTerritory(
+    @UploadedFiles()
+    files: {
+      data?: Express.Multer.File[];
+      thumbnail?: Express.Multer.File[];
+    },
+    @WithAuditContext() auditContext: AuditContext,
+  ): Promise<CreateTerritoryResponseDTO> {
+    const dataFile =
+      files.data?.[0] ||
+      (() => {
+        throw new BadRequestException({ error: 'no-data-file' });
+      })();
+    const thumbnailFile =
+      files.thumbnail?.[0] ||
+      (() => {
+        throw new BadRequestException({ error: 'no-thumbnail-file' });
+      })();
+    if (dataFile.size > 64000) {
+      throw new BadRequestException({ error: 'data-exceeds-file-size-limit' });
+    }
+    if (thumbnailFile.size > 1024000) {
+      throw new BadRequestException({
+        error: 'thumbnail-exceeds-file-size-limit',
+      });
+    }
+    /* --- */
+    let imgMetadata: sharp.Metadata;
+
+    try {
+      imgMetadata = await sharp(thumbnailFile.buffer).metadata();
+    } catch (err) {
+      throw new BadRequestException({ error: 'unrecognized-thumbnail-format' });
+    }
+
+    if (imgMetadata.format !== 'png') {
+      throw new BadRequestException({ error: 'unrecognized-thumbnail-format' });
+    }
+    /* --- */
+    let dataJSON: unknown;
+    try {
+      const jsonString = dataFile.buffer.toString();
+      dataJSON = JSON.parse(jsonString) as unknown;
+    } catch (err) {
+      throw new BadRequestException({ error: 'unparsable-data-json' });
+    }
+    const dataValidationResult =
+      CreateTerritoryRequestJSONSchema.validate(dataJSON);
+    if (dataValidationResult.errors) {
+      throw new BadRequestException({
+        error: 'data-validation-error',
+        messageTree: dataValidationResult.messagesTree,
+      });
+    }
+    const data = dataValidationResult.value;
+    /* --- */
+    const img = sharp(thumbnailFile.buffer);
+
+    const imgResized = await img
+      .resize({
+        width: (imgMetadata.width || throwError()) * 2,
+        height: (imgMetadata.height || throwError()) * 2,
+        kernel: 'nearest',
+      })
+      .jpeg()
+      .toBuffer();
+    /* --- */
+    return this.connection.transaction(async (entityManager) => {
+      const landsRepository = entityManager.getCustomRepository(LandRepository);
+      const territoriesRepository = entityManager.getCustomRepository(
+        TerritoriesRepository,
+      );
+      const land = await landsRepository.findOne({
+        where: { id: data.landId },
+      });
+      if (!land) {
+        throw new Error();
+      }
+
+      const territories = await land.territories;
+      const totalTerritories = await territoriesRepository.count({});
+
+      for (const territory of territories) {
+        if (
+          data.data.startX <= territory.endX &&
+          data.data.endX > territory.startX &&
+          data.data.startY <= territory.endY &&
+          data.data.endY > territory.startY
+        ) {
+          throw new ConflictException({
+            error: 'intersects-existing-territory',
+          });
+        }
+      }
+
+      const landMap = await this.itselfStorageApi.get(
+        object({
+          status: equals([200]).required(),
+          body: object({
+            height: number().required(),
+            width: number().required(),
+          }).required(),
+        }).required(),
+        {
+          path: `/lands/${land.id}/map.json`,
+        },
+      );
+      if (
+        data.data.startX > landMap.body.width ||
+        data.data.startY > landMap.body.height ||
+        data.data.endX > landMap.body.width ||
+        data.data.endY > landMap.body.height
+      ) {
+        throw new ConflictException('coordinates-exceeds-bounds');
+      }
+      const territory = await territoriesRepository.create(
+        {
+          startX: data.data.startX,
+          startY: data.data.startY,
+          endX: data.data.endX,
+          endY: data.data.endY,
+          hasAssets: false,
+          inLand: Promise.resolve(land),
+          doorBlocks: [],
+          appBlocks: [],
+          tokenId: null,
+          tokenAddress: null,
+        },
+        auditContext,
+      );
+      const thumbnailStorageKey = `territories/${territory.id}/thumbnail.jpg`;
+      await this.storageService.saveBuffer(thumbnailStorageKey, imgResized, {
+        contentType: ContentType.JPEG,
+      });
+
+      const territoryNumber = totalTerritories + 1;
+
+      const nftMetadata = {
+        name: `8Land Territory #${territoryNumber}`,
+        description: `8Land territory at ${land.name}`,
+        image: `${this.storageService.getHostUrl()}/${thumbnailStorageKey}`,
+        attributes: [
+          {
+            trait_type: 'Territory ID',
+            value: `${territory.id}`,
+          },
+          {
+            trait_type: 'In Land',
+            value: `${land.name}`,
+          },
+          {
+            trait_type: 'Width',
+            value: `${territory.endX - territory.startX}`,
+          },
+          {
+            trait_type: 'Height',
+            value: `${territory.endY - territory.startY}`,
+          },
+          {
+            trait_type: 'Total Area',
+            value: `${
+              (territory.endX - territory.startX) *
+              (territory.endY - territory.startY)
+            }`,
+          },
+        ],
+      };
+
+      return {
+        territoryId: territory.id,
+        nftMetadata: nftMetadata,
+      };
+    });
+  }
+
+  @Patch(':id/rarible')
+  @RolesUpAndIncluding(Role.Admin)
+  @HttpCode(204)
+  async updateRaribleMetadata(
+    @Param() params: UpdateTerritoryRaribleMetadataParametersDTO,
+    @Body() body: UpdateTerritoryRaribleMetadataRequestDTO,
+    @WithAuditContext() auditContext: AuditContext,
+  ) {
+    return this.connection.transaction(async (eM) => {
+      const territoriesRepository = eM.getCustomRepository(
+        TerritoriesRepository,
+      );
+
+      const territory = await territoriesRepository.findOne({
+        where: {
+          id: params.id,
+        },
+      });
+
+      if (!territory) {
+        throw new ResourceNotFoundException();
+      }
+
+      territory.tokenId = body.tokenId;
+      territory.tokenAddress = body.tokenAddress;
+
+      await territoriesRepository.save(territory, auditContext);
     });
   }
 }

@@ -3,29 +3,12 @@ import { StorageService } from 'src/internals/storage/storage.service';
 import { throwError } from 'src/internals/utils/throw-error';
 import { Connection } from 'typeorm';
 import { Land } from './typeorm/land.entity';
-import { LandRepository } from './typeorm/land.repository';
 
 export class LandsService {
   constructor(
     @InjectConnection() private connection: Connection,
     private storageService: StorageService,
   ) {}
-
-  async getLand(landId: string) {
-    const landsRepository = this.connection.getCustomRepository(LandRepository);
-
-    const land = await landsRepository.findOne({
-      where: {
-        id: landId,
-      },
-    });
-
-    if (!land) {
-      return undefined;
-    }
-
-    return this.mapLand(land);
-  }
 
   async mapLand(land: Land) {
     const [territories, doorBlocksReferencing, doorBlocks, appBlocks] =

@@ -5,8 +5,7 @@ import { DoorBlock } from 'src/blocks/typeorm/door-block.entity';
 import { ItselfModule } from 'src/internals/apis/itself/itself.module';
 import { RaribleModule } from 'src/internals/apis/rarible/rarible.module';
 import { StorageModule } from 'src/internals/storage/storage.module';
-import { TerritoriesAdminController } from './controllers/territories.admin.controller';
-import { TerritoriesEndUserController } from './controllers/territories.controller';
+import { TerritoriesEndUserController } from './territories.controller';
 import { Territory } from './typeorm/territory.entity';
 
 @Module({
@@ -16,6 +15,6 @@ import { Territory } from './typeorm/territory.entity';
     ItselfModule,
     RaribleModule,
   ],
-  controllers: [TerritoriesAdminController, TerritoriesEndUserController],
+  controllers: [TerritoriesEndUserController],
 })
 export class TerritoriesModule {}

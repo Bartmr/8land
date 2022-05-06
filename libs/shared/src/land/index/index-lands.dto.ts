@@ -5,6 +5,7 @@ class LandFromIndex {
   id!: string;
   name!: string;
   published!: boolean;
+  isStartingLand!: boolean;
 }
 
 export class IndexLandsDTO {
