@@ -40,7 +40,6 @@ import { UploadLandAssetsParameters } from 'libs/shared/src/land/upload-assets/u
 import { RolesUpAndIncluding } from 'src/auth/roles/roles.decorator';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
-import { getSearchableName } from 'src/internals/utils/get-searchable-name';
 import { ApiBody, ApiConsumes, ApiProperty } from '@nestjs/swagger';
 import {
   EditLandBodyDTO,
@@ -48,6 +47,8 @@ import {
   EditLandParametersDTO,
 } from 'libs/shared/src/land/edit/edit-land.dto';
 import { LandPersistenceService } from '../land-persistence.service';
+import { WorldRepository } from 'src/worlds/worlds.repository';
+import { World } from 'src/worlds/typeorm/worlds.entity';
 
 class LandAssetsRequestDTO {
   @ApiProperty({ type: 'string', format: 'binary' })
@@ -71,12 +72,16 @@ export class LandsController {
     @WithAuthContext() authContext: AuthContext,
   ): Promise<IndexLandsDTO> {
     const landsRepository = this.connection.getCustomRepository(LandRepository);
+    const worldsRepository =
+      this.connection.getCustomRepository(WorldRepository);
 
     let results: {
       limit: number;
       rows: Land[];
       total: number;
     };
+
+    let world: World | undefined = undefined;
 
     if (authContext.user.role === Role.Admin) {
       results = await landsRepository.find({
@@ -86,18 +91,28 @@ export class LandsController {
         skip: query.skip,
       });
     } else {
-      results = await landsRepository.selectManyAndCount(
-        {
-          alias: 'land',
-          skip: query.skip || 0,
-        },
+      const [lands, worldRes] = await Promise.all([
+        landsRepository.selectManyAndCount(
+          {
+            alias: 'land',
+            skip: query.skip || 0,
+          },
 
-        (qb) =>
-          qb
-            .orderBy('land.createdAt')
-            .leftJoinAndSelect('land.world', 'world')
-            .where('world.user = :id', { id: authContext.user.id }),
-      );
+          (qb) =>
+            qb
+              .orderBy('land.createdAt')
+              .leftJoinAndSelect('land.world', 'world')
+              .where('world.user = :id', { id: authContext.user.id }),
+        ),
+        worldsRepository.findOne({ where: { user: authContext.user.id } }),
+      ]);
+
+      results = lands;
+      world = worldRes;
+    }
+
+    if (authContext.user.role !== Role.Admin && !world) {
+      throw new ResourceNotFoundException();
     }
 
     return {
@@ -106,7 +121,10 @@ export class LandsController {
       lands: results.rows.map((c) => ({
         id: c.id,
         name: c.name,
-        published: !!c.hasAssets,
+        published:
+          authContext.user.role === Role.Admin
+            ? !!c.hasAssets
+            : !!(c.hasAssets && world?.hasStartLand),
         isStartingLand: !!c.isStartingLand,
       })),
     };
@@ -228,49 +246,12 @@ export class LandsController {
     @Body() body: EditLandBodyDTO,
     @WithAuditContext() auditContext: AuditContext,
   ): Promise<EditLandDTO> {
-    return this.connection.transaction(async (e) => {
-      const landRepository = e.getCustomRepository(LandRepository);
-
-      const land = await landRepository.findOne({
-        where: {
-          id: param.landId,
-        },
-      });
-
-      if (!land) {
-        throw new ResourceNotFoundException();
-      }
-
-      if (body.name && body.name !== land.name) {
-        const searchableName = getSearchableName(body.name);
-
-        const landWithSameName = await landRepository.findOne({
-          where: {
-            searchableName,
-          },
-        });
-
-        if (landWithSameName) {
-          throw new ConflictException({ error: 'name-already-taken' });
-        }
-
-        land.name = body.name;
-        land.searchableName = searchableName;
-      }
-
-      if (
-        typeof body.backgroundMusicUrl !== 'undefined' &&
-        body.backgroundMusicUrl != land.backgroundMusicUrl
-      ) {
-        land.backgroundMusicUrl = body.backgroundMusicUrl;
-      }
-
-      await landRepository.save(land, auditContext);
-
-      return {
-        id: land.id,
-        name: land.name,
-      };
+    return this.landPersistenceService.editLand({
+      connection: this.connection,
+      auditContext,
+      body,
+      param,
+      limitations: {},
     });
   }
 }

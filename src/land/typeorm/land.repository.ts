@@ -6,4 +6,8 @@ import { Land } from './land.entity';
 export class LandRepository extends SimpleEntityRepository<
   Land,
   'createdAt' | 'updatedAt'
-> {}
+> {
+  remove(entity: Land) {
+    return this.repository.remove(entity);
+  }
+}

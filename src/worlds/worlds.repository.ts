@@ -5,5 +5,5 @@ import { World } from './typeorm/worlds.entity';
 @EntityRepository(World)
 export class WorldRepository extends SimpleEntityRepository<
   World,
-  'createdAt'
+  'createdAt' | 'hasStartLand'
 > {}

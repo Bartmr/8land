@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { CreateLandRequestDTO } from 'libs/shared/src/land/create/create-land.dto';
 import { UploadLandAssetsParameters } from 'libs/shared/src/land/upload-assets/upload-land-assets.dto';
 import { AuthContext } from 'src/auth/auth-context';
@@ -17,6 +21,10 @@ import {
 } from 'src/internals/storage/storage.service';
 import { InferType } from 'not-me/lib/schemas/schema';
 import { throwError } from 'src/internals/utils/throw-error';
+import {
+  EditLandBodyDTO,
+  EditLandParametersDTO,
+} from 'libs/shared/src/land/edit/edit-land.dto';
 
 @Injectable()
 export class LandPersistenceService {
@@ -274,6 +282,101 @@ export class LandPersistenceService {
       land.updatedAt = new Date();
 
       await landRepo.save(land, auditContext);
+    });
+  }
+
+  editLand({
+    connection,
+    auditContext,
+    body,
+    param,
+  }: {
+    connection: Connection;
+    auditContext: AuditContext;
+    body: EditLandBodyDTO;
+    param: EditLandParametersDTO;
+    limitations: {};
+  }) {
+    return connection.transaction(async (e) => {
+      const landRepository = e.getCustomRepository(LandRepository);
+
+      const land = await landRepository.findOne({
+        where: {
+          id: param.landId,
+        },
+      });
+
+      if (!land) {
+        throw new ResourceNotFoundException();
+      }
+
+      if (body.name && body.name !== land.name) {
+        const searchableName = getSearchableName(body.name);
+
+        const landWithSameName = await landRepository.findOne({
+          where: {
+            searchableName,
+          },
+        });
+
+        if (landWithSameName) {
+          throw new ConflictException({ error: 'name-already-taken' });
+        }
+
+        land.name = body.name;
+        land.searchableName = searchableName;
+      }
+
+      if (
+        typeof body.backgroundMusicUrl !== 'undefined' &&
+        body.backgroundMusicUrl != land.backgroundMusicUrl
+      ) {
+        land.backgroundMusicUrl = body.backgroundMusicUrl;
+      }
+
+      await landRepository.save(land, auditContext);
+
+      return {
+        id: land.id,
+        name: land.name,
+      };
+    });
+  }
+
+  deleteLand({
+    connection,
+    landId,
+  }: {
+    connection: Connection;
+    landId: string;
+  }) {
+    return connection.transaction(async (e) => {
+      const landRepository = e.getCustomRepository(LandRepository);
+
+      const land = await landRepository.findOne({
+        where: {
+          id: landId,
+        },
+      });
+
+      if (!land) {
+        throw new ResourceNotFoundException();
+      }
+
+      const doorBlocks = await land.doorBlocks;
+      const doorBlocksReferencing = await land.doorBlocks;
+
+      if (
+        land.appBlocks.length !== 0 ||
+        doorBlocks.length !== 0 ||
+        doorBlocksReferencing.length !== 0
+      ) {
+        return { error: 'must-delete-blocks-first' };
+      }
+
+      await landRepository.remove(land);
+
+      return {};
     });
   }
 }

@@ -1,7 +1,13 @@
 import { SimpleEntity } from 'src/internals/databases/simple-entity/simple.entity';
 import { Land } from 'src/land/typeorm/land.entity';
 import { User } from 'src/users/typeorm/user.entity';
-import { CreateDateColumn, Entity, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 
 @Entity()
 export class World extends SimpleEntity {
@@ -13,4 +19,7 @@ export class World extends SimpleEntity {
 
   @OneToMany(() => Land, (e) => e.world, { lazy: true })
   lands!: Promise<Land[]>;
+
+  @Column('boolean', { nullable: true })
+  hasStartLand!: boolean | null;
 }

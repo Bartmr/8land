@@ -20,7 +20,11 @@ export function LandsTemplate(_props: RouteComponentProps) {
   const [newLandName, replaceNewLandName] = useState('');
 
   const [newLandSubmission, replaceNewLandSubmission] = useState<
-    TransportedData<undefined | 'name-already-taken'>
+    TransportedData<
+      | undefined
+      | { error: 'name-already-taken' }
+      | { error: 'lands-limit-exceeded'; limit: number }
+    >
   >({
     status: TransportedDataStatus.Done,
     data: undefined,
@@ -75,10 +79,10 @@ export function LandsTemplate(_props: RouteComponentProps) {
         status: res.failure,
       });
     } else {
-      if (res.response.body?.error) {
+      if (res.response.error) {
         replaceNewLandSubmission({
           status: TransportedDataStatus.Done,
-          data: res.response.body.error,
+          data: res.response,
         });
       } else {
         replaceNewLandSubmission({
@@ -116,9 +120,14 @@ export function LandsTemplate(_props: RouteComponentProps) {
                       id="add-land-name-input"
                       className={`form-control ${data ? 'is-invalid' : ''}`}
                     />
-                    {data === 'name-already-taken' ? (
+                    {data?.error === 'name-already-taken' ? (
                       <div className="invalid-feedback position-absolute">
                         This name is already taken
+                      </div>
+                    ) : null}
+                    {data?.error === 'lands-limit-exceeded' ? (
+                      <div className="invalid-feedback position-absolute">
+                        You cannot have more than {data.limit} lands
                       </div>
                     ) : null}
                   </div>
@@ -148,6 +157,9 @@ export function LandsTemplate(_props: RouteComponentProps) {
                         <span>{land.name}</span>{' '}
                         {land.published ? (
                           <span className="badge bg-success">Published</span>
+                        ) : null}
+                        {land.isStartingLand ? (
+                          <span className="badge bg-info">Start</span>
                         ) : null}
                       </LinkAnchor>
                     );

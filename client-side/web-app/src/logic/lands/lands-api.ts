@@ -13,6 +13,7 @@ import {
   useMainJSONApi,
 } from '../app-internals/apis/main/use-main-json-api';
 import { JSONData } from '../app-internals/transports/json-types';
+import { TransportFailure } from '../app-internals/transports/transported-data/transport-failures';
 
 export class LandsAPI {
   constructor(private api: MainJSONApi) {}
@@ -66,10 +67,34 @@ export class LandsAPI {
     });
   }
 
-  createLand(args: { name: string }) {
-    return this.api.post<
+  async createLand(args: { name: string }): Promise<
+    | {
+        failure: TransportFailure;
+      }
+    | {
+        failure?: undefined;
+        response:
+          | {
+              error: 'name-already-taken';
+            }
+          | {
+              error: 'lands-limit-exceeded';
+              limit: number;
+            }
+          | {
+              error?: undefined;
+            };
+      }
+  > {
+    const res = await this.api.post<
       | { status: 201; body: undefined }
-      | { status: 409; body: { error: 'name-already-taken' } },
+      | {
+          status: 409;
+          body:
+            | { error?: undefined }
+            | { error: 'lands-limit-exceeded'; limit: number }
+            | { error: 'name-already-taken' };
+        },
       undefined,
       ToIndexedType<CreateLandRequestDTO>
     >({
@@ -80,6 +105,35 @@ export class LandsAPI {
         name: args.name,
       },
     });
+
+    if (res.failure) {
+      return res;
+    } else {
+      if (res.response.status === 409) {
+        const body = res.response.body;
+
+        if (body.error === 'name-already-taken') {
+          return {
+            response: {
+              error: 'name-already-taken',
+            },
+          };
+        } else if (body.error === 'lands-limit-exceeded') {
+          return {
+            response: {
+              error: 'lands-limit-exceeded',
+              limit: body.limit,
+            },
+          };
+        } else {
+          return res.logAndReturnAsUnexpected();
+        }
+      } else {
+        return {
+          response: {},
+        };
+      }
+    }
   }
 
   uploadAssets(args: { landId: string; formData: FormData }) {

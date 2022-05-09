@@ -9,6 +9,7 @@ export class Train1651758178120 implements MigrationInterface {
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
                 "userId" uuid,
+                "hasStartLand" boolean,
                 CONSTRAINT "PK_9a0e469d5311d0d95ce1202c990" PRIMARY KEY ("id")
             )
         `);
