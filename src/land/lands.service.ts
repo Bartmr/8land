@@ -11,13 +11,13 @@ export class LandsService {
   ) {}
 
   async mapLand(land: Land) {
-    const [territories, doorBlocksReferencing, doorBlocks, appBlocks] =
-      await Promise.all([
-        land.territories,
-        land.doorBlocksReferencing,
-        land.doorBlocks,
-        land.appBlocks,
-      ]);
+    const [territories, doorBlocksReferencing, doorBlocks] = await Promise.all([
+      land.territories,
+      land.doorBlocksReferencing,
+      land.doorBlocks,
+    ]);
+
+    const appBlocks = land.appBlocks;
 
     return {
       id: land.id,

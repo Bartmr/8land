@@ -44,7 +44,7 @@ export function IndexTemplate() {
                 <div className="col-12 col-md-4 col-lg-3">
                   <LinkAnchor
                     className="d-block btn btn-default"
-                    href={LANDS_ROUTE.geHref()}
+                    href={LANDS_ROUTE.getHref()}
                   >
                     Start building lands
                   </LinkAnchor>

@@ -87,7 +87,7 @@
       } else if (e.key === 'a') {
         event = 'a:pressed';
       } else if (e.key === 's') {
-        event = 's:pressed';
+        event = 'b:pressed';
       }
 
       gamepadCallbacks.forEach((callback) => {
@@ -119,7 +119,7 @@
       } else if (e.key === 'a') {
         event = 'a:released';
       } else if (e.key === 's') {
-        event = 's:released';
+        event = 'b:released';
       }
 
       gamepadCallbacks.forEach((callback) => {

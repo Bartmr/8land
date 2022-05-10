@@ -5,6 +5,14 @@ const pathSegment = '/lands';
 export const LANDS_ROUTE = {
   pathSegment,
   path: `${CLIENT_SIDE_INDEX_ROUTE.path}${pathSegment}`,
-  geHref: () => LANDS_ROUTE.path,
+  getHref: (params?: { deleted?: boolean }) => {
+    const urlSearchParams = new URLSearchParams();
+
+    if (params?.deleted) {
+      urlSearchParams.set('deleted', 'true');
+    }
+
+    return `${LANDS_ROUTE.path}?${urlSearchParams.toString()}`;
+  },
   label: 'Build lands',
 };

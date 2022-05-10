@@ -167,6 +167,56 @@ export class LandsAPI {
       acceptableStatusCodes: [200, 409],
     });
   }
+
+  async deleteLand(args: { landId: string }): Promise<
+    | {
+        failure: TransportFailure;
+      }
+    | {
+        failure?: undefined;
+        response:
+          | {
+              status: 'must-delete-blocks-first';
+            }
+          | {
+              status: 'ok';
+            };
+      }
+  > {
+    const res = await this.api.delete<
+      | { status: 200; body: undefined }
+      | { status: 409; body: undefined | { error: string } },
+      undefined
+    >({
+      path: `/lands/${args.landId}`,
+      query: undefined,
+      acceptableStatusCodes: [200, 409],
+    });
+
+    if (res.failure) {
+      return res;
+    } else {
+      if (res.response.status === 409) {
+        const body = res.response.body;
+
+        if (body?.error === 'must-delete-blocks-first') {
+          return {
+            response: {
+              status: 'must-delete-blocks-first',
+            },
+          };
+        } else {
+          return res.logAndReturnAsUnexpected();
+        }
+      } else {
+        return {
+          response: {
+            status: 'ok',
+          },
+        };
+      }
+    }
+  }
 }
 
 export function useLandsAPI() {

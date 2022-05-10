@@ -11,6 +11,7 @@ import {
   Put,
   UploadedFiles,
   UseInterceptors,
+  Delete,
 } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/typeorm';
 import {
@@ -49,6 +50,7 @@ import {
 import { LandPersistenceService } from '../land-persistence.service';
 import { WorldRepository } from 'src/worlds/worlds.repository';
 import { World } from 'src/worlds/typeorm/worlds.entity';
+import { DeleteLandParametersDTO } from 'libs/shared/src/land/delete-land/delete-land.dto';
 
 class LandAssetsRequestDTO {
   @ApiProperty({ type: 'string', format: 'binary' })
@@ -253,5 +255,22 @@ export class LandsController {
       param,
       limitations: {},
     });
+  }
+
+  @Delete(':landId')
+  @RolesUpAndIncluding(Role.Admin)
+  async deleteLand(@Param() param: DeleteLandParametersDTO): Promise<void> {
+    const res = await this.landPersistenceService.deleteLand({
+      landId: param.landId,
+      connection: this.connection,
+    });
+
+    if (res.result === 'must-delete-blocks-first') {
+      throw new ConflictException({ error: res.result });
+    } else if (res.result === 'ok') {
+      return;
+    } else {
+      throw new Error();
+    }
   }
 }

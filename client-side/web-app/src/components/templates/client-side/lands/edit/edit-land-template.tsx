@@ -18,6 +18,10 @@ import { MainSection } from './components/main-section/main-section';
 import { BlocksSection } from './components/blocks-section/blocks-section';
 import { TerritoriesSection } from './components/territories-section/territories-section';
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { navigate } from 'gatsby';
+import { LANDS_ROUTE } from '../lands-routes';
 
 export function EditLandTemplateWithRouteProps(props: { id: string }) {
   const api = useLandsAPI();
@@ -26,7 +30,41 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
     status: TransportedDataStatus.NotInitialized,
   });
 
+  const [deleteResult, replaceDeleteResult] = useState<
+    TransportedData<'must-delete-blocks-first'>
+  >({
+    status: TransportedDataStatus.NotInitialized,
+  });
+
   const [successfulSave, replaceSuccessfulSave] = useState(false);
+
+  const deleteLand = async () => {
+    const confirmed = window.confirm(
+      `Are you sure you want do delete this land named ${
+        land.data?.name || ''
+      }?`,
+    );
+
+    if (confirmed) {
+      replaceDeleteResult({ status: TransportedDataStatus.Loading });
+
+      const res = await api.deleteLand({ landId: props.id });
+
+      if (res.failure) {
+        replaceDeleteResult({ status: res.failure });
+      } else {
+        if (res.response.status === 'must-delete-blocks-first') {
+          replaceDeleteResult({
+            status: TransportedDataStatus.Done,
+            data: res.response.status,
+          });
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          navigate(LANDS_ROUTE.getHref({ deleted: true }));
+        }
+      }
+    }
+  };
 
   const fetchLand = async () => {
     replaceLand({ status: TransportedDataStatus.Loading });
@@ -70,6 +108,22 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
         {({ data }) => {
           return (
             <>
+              <div className="mb-4 d-flex justify-content-end">
+                <button
+                  onClick={deleteLand}
+                  disabled={
+                    deleteResult.status === TransportedDataStatus.Loading
+                  }
+                  className="btn btn-danger"
+                >
+                  {deleteResult.status === TransportedDataStatus.Loading ? (
+                    <span className="spinner-border spinner-sm" />
+                  ) : (
+                    <FontAwesomeIcon icon={faTrash} />
+                  )}{' '}
+                  Delete land
+                </button>
+              </div>
               <MainSection onSuccessfulSave={onSuccessfulSave} land={data} />
               <div className="mt-4">
                 <BlocksSection

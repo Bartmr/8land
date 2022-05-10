@@ -1,6 +1,7 @@
 import { CONTACT_CTA_PRESENT } from '@app/shared/project-details';
 import {
   faHandHolding,
+  faLightbulb,
   faPen,
   faProjectDiagram,
 } from '@fortawesome/free-solid-svg-icons';
@@ -10,6 +11,7 @@ import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-ancho
 import { ABOUT_ROUTE } from './about/about-routes';
 import { ACQUIRING_TERRITORIES_ROUTE } from './acquiring-territories/acquiring-territories-routes';
 import { HOW_TO_EDIT_TERRITORY_ROUTE } from './edit-territory/edit-territory-routes';
+import { LAND_IDEAS_ROUTE } from './land-ideas/land-ideas-routes';
 import { SUPPORT_ROUTE } from './support-routes';
 
 export const SupportTemplate = () => {
@@ -33,6 +35,36 @@ export const SupportTemplate = () => {
                   icon: <FontAwesomeIcon icon={faPen} />,
                   title: 'How to edit my territory?',
                   href: HOW_TO_EDIT_TERRITORY_ROUTE.getHref(),
+                },
+              ].map((c) => {
+                return (
+                  <div key={c.title} className="col-6 col-md-4">
+                    <div
+                      className={`h-100 d-block text-center bg-${'lightest'}`}
+                    >
+                      <LinkAnchor
+                        href={c.href}
+                        className="h-100 link-unstyled selectable d-block p-3"
+                      >
+                        <div className="icon-badge mb-2">{c.icon}</div>
+                        {c.title}
+                      </LinkAnchor>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <hr />
+
+          <div>
+            <h3>Lands</h3>
+            <div className="row g-3">
+              {[
+                {
+                  icon: <FontAwesomeIcon icon={faLightbulb} />,
+                  title: LAND_IDEAS_ROUTE.title,
+                  href: LAND_IDEAS_ROUTE.getHref(),
                 },
               ].map((c) => {
                 return (

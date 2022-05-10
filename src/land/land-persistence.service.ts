@@ -364,19 +364,19 @@ export class LandPersistenceService {
       }
 
       const doorBlocks = await land.doorBlocks;
-      const doorBlocksReferencing = await land.doorBlocks;
+      const doorBlocksReferencing = await land.doorBlocksReferencing;
 
       if (
         land.appBlocks.length !== 0 ||
         doorBlocks.length !== 0 ||
         doorBlocksReferencing.length !== 0
       ) {
-        return { error: 'must-delete-blocks-first' };
+        return { result: 'must-delete-blocks-first' } as const;
       }
 
       await landRepository.remove(land);
 
-      return {};
+      return { result: 'ok' };
     });
   }
 }

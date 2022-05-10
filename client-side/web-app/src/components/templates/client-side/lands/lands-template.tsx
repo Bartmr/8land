@@ -13,6 +13,7 @@ import { LANDS_ROUTE } from './lands-routes';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { EDIT_LAND_ROUTE } from './edit/edit-land-routes';
 import { useLandsAPI } from 'src/logic/lands/lands-api';
+import { Toast } from 'react-bootstrap';
 
 export function LandsTemplate(_props: RouteComponentProps) {
   const api = useLandsAPI();
@@ -108,6 +109,17 @@ export function LandsTemplate(_props: RouteComponentProps) {
       {() => (
         <>
           <h1>Lands</h1>
+          <Toast
+            className="bg-success w-100 mb-4"
+            show={
+              new URLSearchParams(window.location.search).get('deleted') ===
+              'true'
+            }
+            delay={10000}
+            autohide
+          >
+            <Toast.Header closeButton={false}>Land was deleted</Toast.Header>
+          </Toast>
           <TransportedDataGate dataWrapper={newLandSubmission}>
             {({ data }) => {
               return (

@@ -100,7 +100,7 @@ export function Header(props: Props) {
                   <LinkAnchor
                     activeClassName="active"
                     className="nav-link"
-                    href={LANDS_ROUTE.geHref()}
+                    href={LANDS_ROUTE.getHref()}
                   >
                     {LANDS_ROUTE.label}
                   </LinkAnchor>
