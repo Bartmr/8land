@@ -62,7 +62,7 @@ export class LandsInGameController {
                 id: navState.lastDoor.id,
                 toLandId: navState.lastDoor.inLand.id,
               },
-              lastDoorWasDeleted: !!navState.lastDoorWasDeleted,
+              lastCheckpointWasDeleted: !!navState.lastCheckpointWasDeleted,
             };
           } else {
             const territory = await navState.lastDoor.inTerritory;
@@ -84,7 +84,7 @@ export class LandsInGameController {
               id: navState.lastDoor.id,
               toLandId: navState.lastDoor.toLand.id,
             },
-            lastDoorWasDeleted: !!navState.lastDoorWasDeleted,
+            lastCheckpointWasDeleted: !!navState.lastCheckpointWasDeleted,
           };
         }
       }
@@ -113,7 +113,7 @@ export class LandsInGameController {
     return {
       ...land,
       lastDoor: null,
-      lastDoorWasDeleted: false,
+      lastCheckpointWasDeleted: false,
     };
   }
 
@@ -149,7 +149,7 @@ export class LandsInGameController {
 
         navState.lastDoor = doorBlock;
         navState.lastSavedAt = new Date();
-        navState.lastDoorWasDeleted = false;
+        navState.lastCheckpointWasDeleted = false;
 
         let lastPlayedBackgroundMusicUrl: string | null;
 

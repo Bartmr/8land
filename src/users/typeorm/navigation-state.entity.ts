@@ -20,9 +20,9 @@ export class NavigationState extends SimpleEntity {
   @Column('bool', { nullable: true })
   isComingBack!: null | boolean;
 
-  @Column('bool', { nullable: true })
-  lastDoorWasDeleted!: boolean | null;
-
   @Column('text', { nullable: true })
   lastPlayedBackgroundMusicUrl!: string | null;
+
+  @Column('bool', { nullable: true })
+  lastCheckpointWasDeleted!: boolean | null;
 }

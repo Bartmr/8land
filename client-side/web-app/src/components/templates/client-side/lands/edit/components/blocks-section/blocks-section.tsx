@@ -27,7 +27,8 @@ export function BlocksSection(props: {
     blockId: string,
   ) => {
     const confirmed = window.confirm(
-      'Are you sure you want to delete this block?',
+      `Are you sure you want to delete this block?
+Players who are currently in this land will be teleported back to the train station!`,
     );
 
     if (!confirmed) {

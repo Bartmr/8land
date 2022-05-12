@@ -79,9 +79,9 @@ export async function runLandGame(
     throw new Error();
   }
 
-  if (args.resumedLand.lastDoorWasDeleted) {
+  if (args.resumedLand.lastCheckpointWasDeleted) {
     window.alert(
-      'The land you were previously in has changed. You were transported to closest known location you were in.',
+      'The land you were previously in was moved or deleted. You were teleported back to the train station.',
     );
   }
 

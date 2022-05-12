@@ -15,8 +15,8 @@ export class TrainState extends SimpleEntity {
   user!: Promise<User>;
 
   @ManyToOne(() => Land, { eager: true })
-  boardedOn!: Land;
+  destinationLand!: Land;
 
   @ManyToOne(() => Land, { eager: true })
-  destinationLand!: Land;
+  boardedOn!: Land;
 }

@@ -6,10 +6,8 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  OneToMany,
   UpdateDateColumn,
 } from 'typeorm';
-import { NavigationState } from './navigation-state.entity';
 
 @Entity()
 export class User extends SimpleEntity {
@@ -39,9 +37,6 @@ export class User extends SimpleEntity {
 
   @Column({ generated: 'uuid', unique: true })
   appId!: string;
-
-  @OneToMany(() => NavigationState, (e) => e.user, { lazy: true })
-  navigationState!: Promise<NavigationState | null>;
 
   toJSON() {
     return {

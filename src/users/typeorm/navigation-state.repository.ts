@@ -8,11 +8,11 @@ import { User } from './user.entity';
 export class NavigationStateRepository extends SimpleEntityRepository<
   NavigationState,
   | 'lastDoor'
-  | 'lastDoorWasDeleted'
   | 'lastSavedAt'
   | 'updatedAt'
   | 'isComingBack'
   | 'lastPlayedBackgroundMusicUrl'
+  | 'lastCheckpointWasDeleted'
 > {
   async getNavigationStateFromUser(
     user: User,

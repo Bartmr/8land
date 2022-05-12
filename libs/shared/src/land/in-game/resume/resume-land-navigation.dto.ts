@@ -7,5 +7,5 @@ class LastDoorDTO {
 
 export class ResumeLandNavigationDTO extends GetLandDTO {
   lastDoor!: null | LastDoorDTO;
-  lastDoorWasDeleted!: boolean;
+  lastCheckpointWasDeleted!: boolean;
 }

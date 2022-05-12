@@ -7,7 +7,7 @@ import { User } from './typeorm/user.entity';
  */
 export abstract class _UsersRepositoryBase extends SimpleEntityRepository<
   User,
-  'createdAt' | 'updatedAt' | 'deletedAt' | 'navigationState'
+  'createdAt' | 'updatedAt' | 'deletedAt'
 > {}
 
 @EntityRepository(User)

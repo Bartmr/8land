@@ -4,6 +4,10 @@ export class Train1651758178120 implements MigrationInterface {
   name = 'Train1651758178120';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE "navigation_state" RENAME COLUMN "lastDoorWasDeleted" TO "lastCheckpointWasDeleted";`,
+    );
+
     await queryRunner.query(`
             CREATE TABLE "world" (
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
@@ -99,5 +103,9 @@ export class Train1651758178120 implements MigrationInterface {
     await queryRunner.query(`
             DROP TABLE "world"
         `);
+
+    await queryRunner.query(
+      `ALTER TABLE "navigation_state" RENAME COLUMN "lastCheckpointWasDeleted" TO "lastDoorWasDeleted";`,
+    );
   }
 }
