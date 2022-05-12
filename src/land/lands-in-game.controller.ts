@@ -16,6 +16,7 @@ import { AuditContext } from 'src/internals/auditing/audit-context';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { LoggingService } from 'src/internals/logging/logging.service';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
+import { NavigationState } from 'src/users/typeorm/navigation-state.entity';
 import { NavigationStateRepository } from 'src/users/typeorm/navigation-state.repository';
 import { Connection } from 'typeorm';
 import { LandsService } from './lands.service';
@@ -35,17 +36,20 @@ export class LandsInGameController {
     @WithAuditContext() auditContext: AuditContext,
     @WithOptionalAuthContext() authContext?: AuthContext,
   ): Promise<ResumeLandNavigationDTO> {
+    const navigationStateRepository = this.connection.getCustomRepository(
+      NavigationStateRepository,
+    );
+
+    let navState: NavigationState | undefined;
+
     if (authContext) {
-      const navigationStateRepository = this.connection.getCustomRepository(
-        NavigationStateRepository,
+      navState = await navigationStateRepository.getNavigationStateFromUser(
+        authContext.user,
+        { auditContext },
       );
+    }
 
-      const navState =
-        await navigationStateRepository.getNavigationStateFromUser(
-          authContext.user,
-          { auditContext },
-        );
-
+    if (navState) {
       if (navState.lastDoor) {
         if (navState.isComingBack) {
           if (navState.lastDoor.inLand) {
@@ -113,7 +117,9 @@ export class LandsInGameController {
     return {
       ...land,
       lastDoor: null,
-      lastCheckpointWasDeleted: false,
+      lastCheckpointWasDeleted: navState
+        ? !!navState.lastCheckpointWasDeleted
+        : false,
     };
   }
 
