@@ -8,8 +8,6 @@ import { User } from './user.entity';
 export class NavigationStateRepository extends SimpleEntityRepository<
   NavigationState,
   | 'lastDoor'
-  | 'lastSavedAt'
-  | 'updatedAt'
   | 'isComingBack'
   | 'lastPlayedBackgroundMusicUrl'
   | 'lastCheckpointWasDeleted'

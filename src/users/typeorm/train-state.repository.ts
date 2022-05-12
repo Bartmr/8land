@@ -7,7 +7,7 @@ import { User } from './user.entity';
 @EntityRepository(TrainState)
 export class TrainStateRepository extends SimpleEntityRepository<
   TrainState,
-  'createdAt' | 'updatedAt' | 'destinationLand' | 'boardedOn'
+  'destinationLand' | 'boardedIn' | 'boardedAt'
 > {
   async getTrainStateFromUser(
     user: User,

@@ -96,17 +96,14 @@ export class LandsInGameController {
 
     const landsRepository = this.connection.getCustomRepository(LandRepository);
 
-    const results = await landsRepository.find({
+    const firstLand = await landsRepository.findOne({
       order: {
         createdAt: 'ASC',
       },
       where: {
         hasAssets: true,
       },
-      skip: 0,
     });
-
-    const firstLand = results.rows[0];
 
     if (!firstLand) {
       throw new Error();
@@ -154,7 +151,6 @@ export class LandsInGameController {
           );
 
         navState.lastDoor = doorBlock;
-        navState.lastSavedAt = new Date();
         navState.lastCheckpointWasDeleted = false;
 
         let lastPlayedBackgroundMusicUrl: string | null;
@@ -211,8 +207,6 @@ export class LandsInGameController {
       } else {
         throw new Error();
       }
-
-      return res;
     } else {
       const inTerritory = await doorBlock.inTerritory;
 
@@ -224,5 +218,11 @@ export class LandsInGameController {
         throw new Error();
       }
     }
+
+    if (!res.assets) {
+      throw new ResourceNotFoundException();
+    }
+
+    return res;
   }
 }

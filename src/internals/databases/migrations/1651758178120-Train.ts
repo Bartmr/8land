@@ -7,6 +7,12 @@ export class Train1651758178120 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "navigation_state" RENAME COLUMN "lastDoorWasDeleted" TO "lastCheckpointWasDeleted";`,
     );
+    await queryRunner.query(
+      `ALTER TABLE "navigation_state" DROP COLUMN "lastSavedAt"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "navigation_state" DROP COLUMN "updatedAt"`,
+    );
 
     await queryRunner.query(`
             CREATE TABLE "world" (
@@ -27,11 +33,10 @@ export class Train1651758178120 implements MigrationInterface {
     await queryRunner.query(`
             CREATE TABLE "train_state" (
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
-                "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
-                "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
                 "userId" uuid,
-                "boardedOnId" uuid,
                 "destinationLandId" uuid,
+                "boardedInId" uuid,
+                "boardedAt" TIMESTAMP,
                 CONSTRAINT "PK_27b832cb7188013cabd4aa9de76" PRIMARY KEY ("id")
             )
         `);
@@ -61,7 +66,7 @@ export class Train1651758178120 implements MigrationInterface {
         `);
     await queryRunner.query(`
             ALTER TABLE "train_state"
-            ADD CONSTRAINT "FK_3c1128584a02c3cd50ced94c40d" FOREIGN KEY ("boardedOnId") REFERENCES "land"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_3c1128584a02c3cd50ced94c40d" FOREIGN KEY ("boardedInId") REFERENCES "land"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
     await queryRunner.query(`
             ALTER TABLE "train_state"
@@ -104,6 +109,12 @@ export class Train1651758178120 implements MigrationInterface {
             DROP TABLE "world"
         `);
 
+    await queryRunner.query(
+      `ALTER TABLE "navigation_state" ADD "updatedAt" TIMESTAMP NOT NULL DEFAULT now()`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "navigation_state" ADD "lastSavedAt" TIMESTAMP`,
+    );
     await queryRunner.query(
       `ALTER TABLE "navigation_state" RENAME COLUMN "lastCheckpointWasDeleted" TO "lastDoorWasDeleted";`,
     );
