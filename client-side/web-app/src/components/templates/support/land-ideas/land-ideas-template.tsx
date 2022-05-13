@@ -23,6 +23,7 @@ export function LandIdeasTemplate() {
                 cryptocurrency tooling and information)
               </li>
               <li>Live forum</li>
+              <li>{'Your own zen space'}</li>
               <li>Virtual pet sitting / tamagotchi</li>
               <li>Virtual items exchange</li>
               <li>
