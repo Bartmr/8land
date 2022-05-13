@@ -1,4 +1,5 @@
 import { InjectConnection } from '@nestjs/typeorm';
+import { GetLandDTO } from 'libs/shared/src/land/get/get-land.dto';
 import { StorageService } from 'src/internals/storage/storage.service';
 import { throwError } from 'src/internals/utils/throw-error';
 import { Connection } from 'typeorm';
@@ -10,7 +11,7 @@ export class LandsService {
     private storageService: StorageService,
   ) {}
 
-  async mapLand(land: Land) {
+  async mapLand(land: Land): Promise<GetLandDTO> {
     const [territories, doorBlocksReferencing, doorBlocks] = await Promise.all([
       land.territories,
       land.doorBlocksReferencing,
@@ -81,6 +82,7 @@ export class LandsService {
           })),
         };
       }),
+      isStartLand: !!land.isStartingLand,
     };
   }
 }

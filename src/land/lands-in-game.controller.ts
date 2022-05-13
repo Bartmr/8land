@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   NotImplementedException,
+  Put,
   Query,
 } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/typeorm';
@@ -9,7 +10,10 @@ import { GetLandDTO } from 'libs/shared/src/land/get/get-land.dto';
 import { NavigateToLandQueryDTO } from 'libs/shared/src/land/in-game/navigate/navigate-to-land.schemas';
 import { ResumeLandNavigationDTO } from 'libs/shared/src/land/in-game/resume/resume-land-navigation.dto';
 import { AuthContext } from 'src/auth/auth-context';
-import { WithOptionalAuthContext } from 'src/auth/auth-context.decorator';
+import {
+  WithAuthContext,
+  WithOptionalAuthContext,
+} from 'src/auth/auth-context.decorator';
 import { PublicRoute } from 'src/auth/public-route.decorator';
 import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
 import { AuditContext } from 'src/internals/auditing/audit-context';
@@ -18,6 +22,7 @@ import { LoggingService } from 'src/internals/logging/logging.service';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
 import { NavigationState } from 'src/users/typeorm/navigation-state.entity';
 import { NavigationStateRepository } from 'src/users/typeorm/navigation-state.repository';
+import { TrainStateRepository } from 'src/users/typeorm/train-state.repository';
 import { Connection } from 'typeorm';
 import { LandsService } from './lands.service';
 import { LandRepository } from './typeorm/land.repository';
@@ -53,6 +58,14 @@ export class LandsInGameController {
       if (navState.lastDoor) {
         if (navState.isComingBack) {
           if (navState.lastDoor.inLand) {
+            if (
+              navState.lastDoor.inLand.world &&
+              !navState.lastDoor.inLand.world.hasStartLand
+            ) {
+              throw new Error(
+                'Lands and worlds cannot loose their start block',
+              );
+            }
             const land = await this.landService.mapLand(
               navState.lastDoor.inLand,
             );
@@ -69,15 +82,16 @@ export class LandsInGameController {
               lastCheckpointWasDeleted: !!navState.lastCheckpointWasDeleted,
             };
           } else {
-            const territory = await navState.lastDoor.inTerritory;
-
-            if (territory) {
-              throw new NotImplementedException();
-            } else {
-              throw new Error();
-            }
+            throw new NotImplementedException();
           }
         } else {
+          if (
+            navState.lastDoor.toLand.world &&
+            !navState.lastDoor.toLand.world.hasStartLand
+          ) {
+            throw new Error('Lands and worlds cannot loose their start block');
+          }
+
           const land = await this.landService.mapLand(navState.lastDoor.toLand);
 
           return {
@@ -96,14 +110,15 @@ export class LandsInGameController {
 
     const landsRepository = this.connection.getCustomRepository(LandRepository);
 
-    const firstLand = await landsRepository.findOne({
-      order: {
-        createdAt: 'ASC',
+    const firstLand = await landsRepository.selectOne(
+      { alias: 'land' },
+      (qB) => {
+        return qB
+          .where('land.hasAssets = :hasAssets', { hasAssets: true })
+          .andWhere('land.world IS NULL')
+          .orderBy('land.createdAt', 'DESC');
       },
-      where: {
-        hasAssets: true,
-      },
-    });
+    );
 
     if (!firstLand) {
       throw new Error();
@@ -224,5 +239,72 @@ export class LandsInGameController {
     }
 
     return res;
+  }
+
+  @Put('/escape')
+  async escape(
+    @WithAuthContext() authContext: AuthContext,
+    @WithAuditContext() auditContext: AuditContext,
+  ) {
+    return this.connection.transaction(async (eM) => {
+      const navigationStatesRepository = eM.getCustomRepository(
+        NavigationStateRepository,
+      );
+      const trainStatesRepository =
+        eM.getCustomRepository(TrainStateRepository);
+      const landsRepository = eM.getCustomRepository(LandRepository);
+      const doorBlocksRepository = eM.getCustomRepository(DoorBlockRepository);
+
+      const navigationState =
+        await navigationStatesRepository.getNavigationStateFromUser(
+          authContext.user,
+          { eM, auditContext },
+        );
+
+      const trainState = await trainStatesRepository.findOne({
+        where: {
+          user: authContext.user,
+        },
+        order: {
+          boardedAt: 'DESC',
+        },
+      });
+
+      if (trainState?.boardedIn) {
+        const doorBlock = await doorBlocksRepository.findOne({
+          where: {
+            toLand: trainState.boardedIn,
+          },
+        });
+
+        if (!doorBlock) {
+          throw new Error();
+        }
+
+        navigationState.lastDoor = doorBlock;
+        trainState.boardedIn = null;
+
+        await navigationStatesRepository.save(navigationState, auditContext);
+        await trainStatesRepository.save(trainState, auditContext);
+      } else {
+        const firstLand = await landsRepository.selectOne(
+          { alias: 'land' },
+          (qB) => {
+            return qB
+              .where('land.hasAssets = :hasAssets', { hasAssets: true })
+              .andWhere('land.world IS NULL')
+              .orderBy('land.createdAt', 'DESC');
+          },
+        );
+
+        if (!firstLand) {
+          throw new Error();
+        }
+
+        navigationState.lastDoor = null;
+
+        await navigationStatesRepository.save(navigationState, auditContext);
+      }
+    });
   }
 }

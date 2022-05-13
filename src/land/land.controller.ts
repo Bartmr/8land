@@ -28,9 +28,9 @@ import { Role } from 'src/auth/roles/roles';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
 import { StorageService } from 'src/internals/storage/storage.service';
 import { Connection } from 'typeorm';
-import { LandsService } from '../lands.service';
-import { Land } from '../typeorm/land.entity';
-import { LandRepository } from '../typeorm/land.repository';
+import { LandsService } from './lands.service';
+import { Land } from './typeorm/land.entity';
+import { LandRepository } from './typeorm/land.repository';
 
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import {
@@ -47,7 +47,7 @@ import {
   EditLandDTO,
   EditLandParametersDTO,
 } from 'libs/shared/src/land/edit/edit-land.dto';
-import { LandPersistenceService } from '../land-persistence.service';
+import { LandPersistenceService } from './land-persistence.service';
 import { WorldRepository } from 'src/worlds/worlds.repository';
 import { World } from 'src/worlds/typeorm/worlds.entity';
 import { DeleteLandParametersDTO } from 'libs/shared/src/land/delete-land/delete-land.dto';
@@ -265,12 +265,10 @@ export class LandsController {
       connection: this.connection,
     });
 
-    if (res.result === 'must-delete-blocks-first') {
-      throw new ConflictException({ error: res.result });
-    } else if (res.result === 'ok') {
+    if (res.status === 'ok') {
       return;
     } else {
-      throw new Error();
+      throw new ConflictException({ error: res.status });
     }
   }
 }

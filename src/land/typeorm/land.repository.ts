@@ -8,8 +8,14 @@ export class LandRepository extends SimpleEntityRepository<
   Land,
   'createdAt' | 'updatedAt'
 > {
-  remove(entity: Land) {
+  remove(
+    entity: Land,
+  ): Promise<{ status: 'cannot-delete-start-land' } | { status: 'ok' }> {
     const run = async (manager: EntityManager) => {
+      if (entity.isStartingLand) {
+        return { status: 'cannot-delete-start-land' } as const;
+      }
+
       const trainStateRepository = manager.getRepository(TrainState);
 
       await trainStateRepository
@@ -26,6 +32,8 @@ export class LandRepository extends SimpleEntityRepository<
         .execute();
 
       await this.repository.remove(entity);
+
+      return { status: 'ok' } as const;
     };
 
     if (this.manager.queryRunner?.isTransactionActive) {

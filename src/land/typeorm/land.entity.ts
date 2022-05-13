@@ -46,8 +46,8 @@ export class Land extends SimpleEntity {
   @OneToMany(() => AppBlock, (b) => b.inLand, { eager: true })
   appBlocks!: AppBlock[];
 
-  @ManyToOne(() => World, (e) => e.lands, { lazy: true })
-  world!: Promise<World | null>;
+  @ManyToOne(() => World, (e) => e.lands, { eager: true })
+  world!: World | null;
 
   /*
     TODO:
@@ -56,6 +56,10 @@ export class Land extends SimpleEntity {
     If the JSON map includes a "start" tile, and it's placed in the map, the land will be set a starting land.
 
     when the land is a starting land, it cannot be deleted, and the map must always have a "start" tile placed in it
+  */
+  /*
+    Once you upload a land block with a start block, you can never delete it
+    or change it without a start block in its map
   */
   @Column('bool', { nullable: true })
   isStartingLand!: null | boolean;

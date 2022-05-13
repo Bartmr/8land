@@ -137,7 +137,7 @@ export class LandPersistenceService {
         land = await landRepo.create(
           {
             ...landBaseProps,
-            world: Promise.resolve(world),
+            world: world,
           },
           auditContext,
         );
@@ -145,7 +145,7 @@ export class LandPersistenceService {
         land = await landRepo.create(
           {
             ...landBaseProps,
-            world: Promise.resolve(null),
+            world: null,
           },
           auditContext,
         );
@@ -177,6 +177,10 @@ export class LandPersistenceService {
 
     limitations: {
       allowTrainBlock: boolean;
+      /*
+        Once you upload a land block with a start block, you can never delete it
+        or change it without a start block in its map
+      */
       allowStartBlock: boolean;
     };
   }) {
@@ -371,12 +375,12 @@ export class LandPersistenceService {
         doorBlocks.length !== 0 ||
         doorBlocksReferencing.length !== 0
       ) {
-        return { result: 'must-delete-blocks-first' } as const;
+        return { status: 'must-delete-blocks-first' } as const;
       }
 
-      await landRepository.remove(land);
+      const res = await landRepository.remove(land);
 
-      return { result: 'ok' };
+      return res;
     });
   }
 }

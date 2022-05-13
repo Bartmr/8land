@@ -48,6 +48,7 @@ export class GetLandDTO {
   doorBlocksReferencing!: GetLandDoorReferencingDTO[];
   appBlocks!: GetLandAppBlockEntryDTO[];
   assets: undefined | GetLandAssetsDTO;
+  isStartLand!: boolean;
 }
 
 @ValidationSchema(GetLandParametersSchema)

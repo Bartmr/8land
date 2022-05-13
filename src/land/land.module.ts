@@ -8,7 +8,7 @@ import { AppBlock } from 'src/blocks/typeorm/app-block.entity';
 import { LandsService } from './lands.service';
 import { LandsInGameController } from './lands-in-game.controller';
 import { NavigationState } from 'src/users/typeorm/navigation-state.entity';
-import { LandsController } from './controllers/land.controller';
+import { LandsController } from './land.controller';
 import { World } from '../worlds/typeorm/worlds.entity';
 import { LandPersistenceService } from './land-persistence.service';
 

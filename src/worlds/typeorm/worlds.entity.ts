@@ -20,6 +20,10 @@ export class World extends SimpleEntity {
   @OneToMany(() => Land, (e) => e.world, { lazy: true })
   lands!: Promise<Land[]>;
 
+  /*
+    Once you upload a land block with a start block, you can never delete it
+    or change it without a start block in its map
+  */
   @Column('boolean', { nullable: true })
   hasStartLand!: boolean | null;
 }

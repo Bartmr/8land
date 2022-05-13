@@ -111,9 +111,7 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
               <div className="mb-4 d-flex justify-content-end">
                 <button
                   onClick={deleteLand}
-                  disabled={
-                    deleteResult.status === TransportedDataStatus.Loading
-                  }
+                  disabled={!land.data || land.data.isStartLand}
                   className="btn btn-danger"
                 >
                   {deleteResult.status === TransportedDataStatus.Loading ? (
@@ -121,7 +119,9 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
                   ) : (
                     <FontAwesomeIcon icon={faTrash} />
                   )}{' '}
-                  Delete land
+                  {land.data?.isStartLand
+                    ? 'Cannot delete lands with start block'
+                    : 'Delete land'}
                 </button>
               </div>
               <MainSection onSuccessfulSave={onSuccessfulSave} land={data} />
