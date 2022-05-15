@@ -11,6 +11,7 @@ import { NavigationState } from 'src/users/typeorm/navigation-state.entity';
 import { LandsController } from './land.controller';
 import { World } from '../worlds/typeorm/worlds.entity';
 import { LandPersistenceService } from './land-persistence.service';
+import { SettingsModule } from 'src/settings/settings.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { LandPersistenceService } from './land-persistence.service';
       World,
     ]),
     StorageModule,
+    SettingsModule
   ],
   providers: [LandsService, LandPersistenceService],
   controllers: [LandsController, LandsInGameController],

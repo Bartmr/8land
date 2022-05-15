@@ -25,6 +25,9 @@ import {
   EditLandBodyDTO,
   EditLandParametersDTO,
 } from 'libs/shared/src/land/edit/edit-land.dto';
+import { Role } from 'src/auth/roles/roles';
+import { LAND_MAP_SIZE_LIMIT, LAND_TILESET_SIZE_LIMIT } from 'libs/shared/src/land/upload-assets/upload-land-assets.constants';
+import { SettingsService } from '../settings/settings.service'
 
 @Injectable()
 export class LandPersistenceService {
@@ -45,7 +48,7 @@ export class LandPersistenceService {
     };
   }): Promise<
     | {
-        error: 'name-already-taken' | 'lands-limit-exceeded';
+        error: 'name-already-taken' | 'lands-limit-exceeded' | 'cannot-create-more-lands-without-start-block';
       }
     | {
         error?: undefined;
@@ -114,12 +117,6 @@ export class LandPersistenceService {
       let land;
 
       if (limitations.useWorld) {
-        /*
-          You cannot create another land till you fill the current one with a start block
-
-          Forces the user to not upload orphan lands with assets that are not navigatable too and are just spending storage
-        */
-
         let world: World;
 
         const previousWorld = await worldRepository.findOne({
@@ -137,6 +134,9 @@ export class LandPersistenceService {
             auditContext,
           );
         } else {
+          if(!previousWorld.hasStartLand) {
+            return { error: 'cannot-create-more-lands-without-start-block'}
+          }
           world = previousWorld;
         }
 
@@ -173,6 +173,8 @@ export class LandPersistenceService {
     params,
     map,
     tileset,
+    authContext,
+    settingsService
   }: {
     connection: Connection;
     storageService: StorageService;
@@ -180,21 +182,52 @@ export class LandPersistenceService {
     params: UploadLandAssetsParameters;
     map: Express.Multer.File;
     tileset: Express.Multer.File;
-
-    limitations: {
-      allowTrainBlock: boolean;
-      /*
-        TODO Once you upload a land block with a start block, you can never delete it
-        or change it without a start block in its map
-      */
-      allowStartBlock: boolean;
-    };
+    authContext: AuthContext;
+    settingsService: SettingsService
   }) {
-    if (map.size > 128000) {
+    const settings = await settingsService.getSettings();
+
+    await connection.transaction(async (e) => {
+    
+      const landRepo = e.getCustomRepository(LandRepository);
+
+      const totalStartLands  = await landRepo.count({ where: { isStartingLand: true }})
+
+      if(totalStartLands > settings.startLandsTotalLimit) {
+        throw new ConflictException({ error: 'start-lands-limit-exceeded' })
+      }
+
+      const land = await landRepo.selectOne(
+        {
+          alias: 'land',
+        },
+        (qb) => {
+          let finalQb = qb.leftJoinAndSelect('land.world', 'world').where('land.id = :id', { id: params.landId });
+
+          if (authContext.user.role === Role.Admin) {
+            finalQb = finalQb.andWhere('land.world IS NULL');
+
+            
+          } else {
+            finalQb = finalQb
+              
+            .andWhere('world.user = :id', { id: authContext.user.id });
+          }
+
+          return finalQb;
+        },
+      );
+    
+
+      if (!land) {
+        throw new ResourceNotFoundException();
+      }
+
+    if (map.size > LAND_MAP_SIZE_LIMIT) {
       throw new BadRequestException({ error: 'map-exceeds-file-size-limit' });
     }
 
-    if (tileset.size > 64000) {
+    if (tileset.size > LAND_TILESET_SIZE_LIMIT) {
       throw new BadRequestException({
         error: 'tileset-exceeds-file-size-limit',
       });
@@ -229,6 +262,9 @@ export class LandPersistenceService {
     const TiledJSONSchema = createTiledJSONSchema({
       maxWidth: null,
       maxHeight: null,
+      allowTrainPlatformBlock: authContext.user.role === Role.Admin,
+      allowStartBlock: !land.world || land.world.hasStartLand ? false : true,
+      hasWorld: !!land.world
     });
 
     const tiledJSONValidationResult = TiledJSONSchema.validate(mapJSON);
@@ -243,6 +279,7 @@ export class LandPersistenceService {
     const tilesetSpecifications =
       tiledJSONValidationResult.value.tilesets[0] || throwError();
 
+
     if (
       tilesetMedatada.width !== tilesetSpecifications.imagewidth ||
       tilesetMedatada.height !== tilesetSpecifications.imageheight
@@ -252,26 +289,14 @@ export class LandPersistenceService {
       });
     }
 
+
+
+
+    //
+
     const tilesetStorageKey = `lands/${params.landId}/tileset.png`;
     const mapStorageKey = `lands/${params.landId}/map.json`;
 
-    /*
-      TODO limit amount of worlds that can have assets
-      use settings to get the maximum value
-    */
-    
-      await connection.transaction(async (e) => {
-      const landRepo = e.getCustomRepository(LandRepository);
-
-      const land = await landRepo.findOne({
-        where: {
-          id: params.landId,
-        },
-      });
-
-      if (!land) {
-        throw new ResourceNotFoundException();
-      }
 
       await storageService.saveBuffer(tilesetStorageKey, tileset.buffer, {
         contentType: ContentType.PNG,
@@ -307,21 +332,37 @@ export class LandPersistenceService {
     auditContext,
     body,
     param,
+    authContext
   }: {
     connection: Connection;
     auditContext: AuditContext;
     body: EditLandBodyDTO;
     param: EditLandParametersDTO;
-    limitations: {};
+    authContext: AuthContext
   }) {
     return connection.transaction(async (e) => {
       const landRepository = e.getCustomRepository(LandRepository);
 
-      const land = await landRepository.findOne({
-        where: {
-          id: param.landId,
+      const land = await landRepository.selectOne(
+        {
+          alias: 'land',
         },
-      });
+        (qb) => {
+          let finalQb = qb.leftJoinAndSelect('land.world', 'world').where('land.id = :id', { id: param.landId });
+
+          if (authContext.user.role === Role.Admin) {
+            finalQb = finalQb.andWhere('land.world IS NULL');
+
+            
+          } else {
+            finalQb = finalQb
+              
+            .andWhere('world.user = :id', { id: authContext.user.id });
+          }
+
+          return finalQb;
+        },
+      );
 
       if (!land) {
         throw new ResourceNotFoundException();
@@ -391,9 +432,13 @@ export class LandPersistenceService {
         return { status: 'must-delete-blocks-first' } as const;
       }
 
-      const res = await landRepository.remove(land);
+      if (land.isStartingLand) {
+        return { status: 'cannot-delete-start-land' } as const;
+      }
 
-      return res;
+      await landRepository.remove(land);
+
+      return { status: 'ok' } as const;
     });
   }
 }

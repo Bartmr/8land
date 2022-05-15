@@ -42,7 +42,7 @@ export class SettingsService {
     });
 
     if (!settings) {
-      await repository.create({ forInstance: this.forInstance }, auditContext);
+      await repository.create({ forInstance: this.forInstance, landLimitPerWorld: 10, startLandsTotalLimit: 10 }, auditContext);
     }
   }
 

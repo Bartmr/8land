@@ -34,6 +34,12 @@ export function LandIdeasTemplate() {
 
               <li>
                 {
+                  "Show your non-profit organization or cause in an interactive manner"
+                }
+              </li>
+
+              <li>
+                {
                   "Diorama - explain a concept in an interactive manner"
                 }
               </li>

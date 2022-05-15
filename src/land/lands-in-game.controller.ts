@@ -22,6 +22,7 @@ import { LoggingService } from 'src/internals/logging/logging.service';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
 import { NavigationState } from 'src/users/typeorm/navigation-state.entity';
 import { NavigationStateRepository } from 'src/users/typeorm/navigation-state.repository';
+import { TrainStateRepository } from 'src/users/typeorm/train-state.repository';
 import { Connection } from 'typeorm';
 import { LandsService } from './lands.service';
 import { LandRepository } from './typeorm/land.repository';
@@ -109,7 +110,27 @@ export class LandsInGameController {
           };
         }
       } else if (navState.traveledByTrainToLand) {
+        const land = await this.landService.mapLand(navState.traveledByTrainToLand)
 
+        return {
+          ...land,
+          lastDoor: null,
+          lastTrainTravel: {
+            comingBackToStation: false
+          },
+          lastCheckpointWasDeleted: !!navState.lastCheckpointWasDeleted,
+        };
+      } else if (navState.boardedOnTrainStation) {
+        const land = await this.landService.mapLand(navState.boardedOnTrainStation)
+
+        return {
+          ...land,
+          lastDoor: null,
+          lastTrainTravel: {
+            comingBackToStation: false
+          },
+          lastCheckpointWasDeleted: !!navState.lastCheckpointWasDeleted,
+        };
       }
     }
 
@@ -171,7 +192,6 @@ export class LandsInGameController {
             { auditContext },
           );
 
-        navState.traveledByTrainToLand = null;
         navState.lastDoor = doorBlock;
         navState.lastCheckpointWasDeleted = false;
 
@@ -238,64 +258,51 @@ export class LandsInGameController {
     @WithAuditContext() auditContext: AuditContext,
   ) {
     return this.connection.transaction(async (eM) => {
-      // const navigationStatesRepository = eM.getCustomRepository(
-      //   NavigationStateRepository,
-      // );
-      // const trainStatesRepository =
-      //   eM.getCustomRepository(TrainStateRepository);
-      // const landsRepository = eM.getCustomRepository(LandRepository);
-      // const doorBlocksRepository = eM.getCustomRepository(DoorBlockRepository);
+      const navigationStatesRepository = eM.getCustomRepository(
+        NavigationStateRepository,
+      );
+      const trainStatesRepository =
+        eM.getCustomRepository(TrainStateRepository);
+      
+      const navigationState =
+        await navigationStatesRepository.getNavigationStateFromUser(
+          authContext.user,
+          { eM, auditContext },
+        );
 
-      // const navigationState =
-      //   await navigationStatesRepository.getNavigationStateFromUser(
-      //     authContext.user,
-      //     { eM, auditContext },
-      //   );
+      const lastDoor = navigationState.lastDoor
 
-      // const trainState = await trainStatesRepository.findOne({
-      //   where: {
-      //     user: authContext.user,
-      //   },
-      //   order: {
-      //     boardedAt: 'DESC',
-      //   },
-      // });
+      navigationState.lastDoor = null;
+      navigationState.traveledByTrainToLand = null;
+      navigationState.isComingBack = null
+      navigationState.lastPlayedBackgroundMusicUrl = null;
 
-      // if (trainState?.boardedIn) {
-      //   const doorBlock = await doorBlocksRepository.findOne({
-      //     where: {
-      //       toLand: trainState.boardedIn,
-      //     },
-      //   });
+      if(navigationState.boardedOnTrainStation){
+        
 
-      //   if (!doorBlock) {
-      //     throw new Error();
-      //   }
+          
 
-      //   navigationState.lastDoor = doorBlock;
-      //   trainState.boardedIn = null;
+          const trainState = await trainStatesRepository.findOne({
+            where: {
+              boardedIn: navigationState.boardedOnTrainStation,
+              user: authContext.user
+            }
+          })
 
-      //   await navigationStatesRepository.save(navigationState, auditContext);
-      //   await trainStatesRepository.save(trainState, auditContext);
-      // } else {
-      //   const firstLand = await landsRepository.selectOne(
-      //     { alias: 'land' },
-      //     (qB) => {
-      //       return qB
-      //         .where('land.hasAssets = :hasAssets', { hasAssets: true })
-      //         .andWhere('land.world IS NULL')
-      //         .orderBy('land.createdAt', 'DESC');
-      //     },
-      //   );
+          if(trainState) {
+            trainState.destinationLand = null;
+            await trainStatesRepository.save(trainState, auditContext);
+          }
+     
+          await navigationStatesRepository.save(navigationState, auditContext)
+      } else if(lastDoor && !lastDoor.inLand) {
+          // MEANS IT'S A BLOCK INSIDE A TERRITORY
+          throw new NotImplementedException()
+      } else {
+        navigationState.boardedOnTrainStation = null;
+      }
 
-      //   if (!firstLand) {
-      //     throw new Error();
-      //   }
-
-      //   navigationState.lastDoor = null;
-
-      //   await navigationStatesRepository.save(navigationState, auditContext);
-      // }
+      
     });
   }
 }

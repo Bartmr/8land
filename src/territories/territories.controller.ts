@@ -19,7 +19,7 @@ import { InjectConnection } from '@nestjs/typeorm';
 import {
   TERRITORY_MAP_SIZE_LIMIT,
   TERRITORY_TILESET_SIZE_LIMIT,
-} from 'libs/shared/src/territories/edit/edit-territory.constants';
+} from 'libs/shared/src/territories/upload-assets/upload-territory-assets.constants';
 import {
   GetTerritoryIdByRaribleItemIdDTO,
   GetTerritoryIdByRaribleItemIdParamsDTO,

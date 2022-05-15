@@ -1,0 +1,2 @@
+export const LAND_TILESET_SIZE_LIMIT = 128000;
+export const LAND_MAP_SIZE_LIMIT = 128000;

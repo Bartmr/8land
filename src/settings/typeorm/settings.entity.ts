@@ -5,4 +5,10 @@ import { Column, Entity } from 'typeorm';
 export class Settings extends SimpleEntity {
   @Column('text')
   forInstance!: string;
+
+  @Column('int')
+  landLimitPerWorld!: number;
+
+  @Column('int')
+  startLandsTotalLimit!: number;
 }

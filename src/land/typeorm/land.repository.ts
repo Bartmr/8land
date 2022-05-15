@@ -11,11 +11,9 @@ export class LandRepository extends SimpleEntityRepository<
 > {
   remove(
     entity: Land,
-  ): Promise<{ status: 'cannot-delete-start-land' } | { status: 'ok' }> {
+  ){
     const run = async (manager: EntityManager) => {
-      if (entity.isStartingLand) {
-        return { status: 'cannot-delete-start-land' } as const;
-      }
+      
 
       const trainStateRepository = manager.getRepository(TrainState);
       const navigationStateRepository = manager.getRepository(NavigationState);
@@ -37,7 +35,8 @@ export class LandRepository extends SimpleEntityRepository<
         .createQueryBuilder()
         .update()
         .set({
-          traveledByTrainToLand: null
+          traveledByTrainToLand: null,
+          lastCheckpointWasDeleted: true
         })
         .where('traveledByTrainToLand = :traveledByTrainToLandId', { traveledByTrainToLandId: entity.id })
         .execute();
@@ -46,14 +45,15 @@ export class LandRepository extends SimpleEntityRepository<
         .createQueryBuilder()
         .update()
         .set({
-          boardedOnTrainStation: null
+          traveledByTrainToLand: null,
+          boardedOnTrainStation: null,
+          lastCheckpointWasDeleted: true
         })
         .where('boardedOnTrainStation = :boardedOnTrainStationId', { boardedOnTrainStationId: entity.id })
         .execute();
 
       await this.repository.remove(entity);
 
-      return { status: 'ok' } as const;
     };
 
     if (this.manager.queryRunner?.isTransactionActive) {

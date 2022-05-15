@@ -25,6 +25,7 @@ export function LandsTemplate(_props: RouteComponentProps) {
       | undefined
       | { error: 'name-already-taken' }
       | { error: 'lands-limit-exceeded'; limit: number }
+      | { error: 'cannot-create-more-lands-without-start-block' }
     >
   >({
     status: TransportedDataStatus.Done,
@@ -123,34 +124,53 @@ export function LandsTemplate(_props: RouteComponentProps) {
           <TransportedDataGate dataWrapper={newLandSubmission}>
             {({ data }) => {
               return (
-                <div className="d-flex mb-5">
-                  <div className="form-group flex-fill">
-                    <input
-                      value={newLandName}
+                <div className="input-group mb-3">
+  <input
+  type="text"
+  
+  value={newLandName}
                       onChange={(e) => replaceNewLandName(e.target.value)}
                       placeholder="New land name"
                       id="add-land-name-input"
                       className={`form-control ${data ? 'is-invalid' : ''}`}
-                    />
-                    {data?.error === 'name-already-taken' ? (
-                      <div className="invalid-feedback position-absolute">
+  
+  />
+  <button 
+   disabled={!newLandName.trim()}
+   onClick={addLand}
+   className="btn btn-success"
+  
+  type="button" id="button-addon2">Add Land</button>
+
+{data?.error === 'name-already-taken' ? (
+                      <div className="invalid-feedback">
                         This name is already taken
                       </div>
                     ) : null}
                     {data?.error === 'lands-limit-exceeded' ? (
-                      <div className="invalid-feedback position-absolute">
+                      <div className="invalid-feedback">
                         You cannot have more than {data.limit} lands
                       </div>
                     ) : null}
-                  </div>
-                  <button
-                    disabled={!newLandName.trim()}
-                    onClick={addLand}
-                    className="btn btn-success"
-                  >
-                    Add Land
-                  </button>
-                </div>
+                    {data?.error === 'cannot-create-more-lands-without-start-block' ? (
+                      <div className="invalid-feedback">
+                        Before you can create any more lands, you need to upload a tileset and a map with a start block
+                        in your first land, for the player to enter and navigate your lands
+                      </div>
+                    ) : null}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
               );
             }}
           </TransportedDataGate>

@@ -51,6 +51,7 @@ import { LandPersistenceService } from './land-persistence.service';
 import { WorldRepository } from 'src/worlds/worlds.repository';
 import { World } from 'src/worlds/typeorm/worlds.entity';
 import { DeleteLandParametersDTO } from 'libs/shared/src/land/delete-land/delete-land.dto';
+import { SettingsService } from 'src/settings/settings.service';
 
 class LandAssetsRequestDTO {
   @ApiProperty({ type: 'string', format: 'binary' })
@@ -68,6 +69,7 @@ export class LandsController {
     private storageService: StorageService,
     private landService: LandsService,
     private landPersistenceService: LandPersistenceService,
+    private settingsService: SettingsService
   ) {}
 
   @Get()
@@ -175,8 +177,9 @@ export class LandsController {
     @WithAuditContext() auditContext: AuditContext,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<CreateLandResponseDTO> {
-    const limit = 10;
-
+    const settings = await this.settingsService.getSettings();
+    const limit = settings.landLimitPerWorld;
+    
     const res = await this.landPersistenceService.createLand({
       connection: this.connection,
       body,
@@ -217,6 +220,7 @@ export class LandsController {
     @UploadedFiles()
     files: { map?: Express.Multer.File[]; tileset?: Express.Multer.File[] },
     @WithAuditContext() auditContext: AuditContext,
+    @WithAuthContext() authContext: AuthContext
   ): Promise<void> {
     const map =
       files.map?.[0] ||
@@ -236,10 +240,7 @@ export class LandsController {
       tileset,
       params,
       auditContext,
-      limitations: {
-        allowStartBlock: false,
-        allowTrainBlock: false,
-      },
+      authContext
     });
   }
 
@@ -249,13 +250,14 @@ export class LandsController {
     @Param() param: EditLandParametersDTO,
     @Body() body: EditLandBodyDTO,
     @WithAuditContext() auditContext: AuditContext,
+    @WithAuthContext() authContext: AuthContext
   ): Promise<EditLandDTO> {
     return this.landPersistenceService.editLand({
       connection: this.connection,
       auditContext,
       body,
       param,
-      limitations: {},
+      authContext
     });
   }
 
