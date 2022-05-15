@@ -31,6 +31,13 @@ export function LandIdeasTemplate() {
                   "Show a miniature version of your company's office to potencial candidates, with cool facts and interactive games"
                 }
               </li>
+
+              <li>
+                {
+                  "Diorama - explain a concept in an interactive manner"
+                }
+              </li>
+
             </ul>
           </>
         );

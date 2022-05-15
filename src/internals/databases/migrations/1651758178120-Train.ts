@@ -13,6 +13,10 @@ export class Train1651758178120 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "navigation_state" DROP COLUMN "updatedAt"`,
     );
+    await queryRunner.query(`ALTER TABLE "navigation_state" ADD "traveledByTrainToLandId" uuid`);
+    await queryRunner.query(`ALTER TABLE "navigation_state" ADD "boardedOnTrainStationId" uuid`);
+    await queryRunner.query(`ALTER TABLE "navigation_state" ADD CONSTRAINT "FK_9dee9df35965624b61838c3c400" FOREIGN KEY ("traveledByTrainToLandId") REFERENCES "land"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
+    await queryRunner.query(`ALTER TABLE "navigation_state" ADD CONSTRAINT "FK_e66855387d146176c776aaeeda2" FOREIGN KEY ("boardedOnTrainStationId") REFERENCES "land"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
 
     await queryRunner.query(`
             CREATE TABLE "world" (
@@ -36,7 +40,6 @@ export class Train1651758178120 implements MigrationInterface {
                 "userId" uuid,
                 "destinationLandId" uuid,
                 "boardedInId" uuid,
-                "boardedAt" TIMESTAMP,
                 CONSTRAINT "PK_27b832cb7188013cabd4aa9de76" PRIMARY KEY ("id")
             )
         `);
@@ -66,7 +69,7 @@ export class Train1651758178120 implements MigrationInterface {
         `);
     await queryRunner.query(`
             ALTER TABLE "train_state"
-            ADD CONSTRAINT "FK_3c1128584a02c3cd50ced94c40d" FOREIGN KEY ("boardedInId") REFERENCES "land"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_371a712c8759a8ebd9276680f71" FOREIGN KEY ("boardedInId") REFERENCES "land"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
     await queryRunner.query(`
             ALTER TABLE "train_state"
@@ -79,7 +82,7 @@ export class Train1651758178120 implements MigrationInterface {
             ALTER TABLE "train_state" DROP CONSTRAINT "FK_b6d065bccaade9f8af80bc7fb56"
         `);
     await queryRunner.query(`
-            ALTER TABLE "train_state" DROP CONSTRAINT "FK_3c1128584a02c3cd50ced94c40d"
+            ALTER TABLE "train_state" DROP CONSTRAINT "FK_371a712c8759a8ebd9276680f71"
         `);
     await queryRunner.query(`
             ALTER TABLE "train_state" DROP CONSTRAINT "FK_5eebbbae9fc14bb9e37ca760a72"
@@ -109,6 +112,10 @@ export class Train1651758178120 implements MigrationInterface {
             DROP TABLE "world"
         `);
 
+    await queryRunner.query(`ALTER TABLE "navigation_state" DROP CONSTRAINT "FK_e66855387d146176c776aaeeda2"`);
+    await queryRunner.query(`ALTER TABLE "navigation_state" DROP CONSTRAINT "FK_9dee9df35965624b61838c3c400"`);
+    await queryRunner.query(`ALTER TABLE "navigation_state" DROP COLUMN "boardedOnTrainStationId"`);
+    await queryRunner.query(`ALTER TABLE "navigation_state" DROP COLUMN "traveledByTrainToLandId"`);
     await queryRunner.query(
       `ALTER TABLE "navigation_state" ADD "updatedAt" TIMESTAMP NOT NULL DEFAULT now()`,
     );

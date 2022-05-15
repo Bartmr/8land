@@ -5,7 +5,12 @@ class LastDoorDTO {
   toLandId!: string;
 }
 
+class LastTrainTravelDTO {
+  comingBackToStation!: boolean
+}
+
 export class ResumeLandNavigationDTO extends GetLandDTO {
   lastDoor!: null | LastDoorDTO;
+  lastTrainTravel!: null | LastTrainTravelDTO
   lastCheckpointWasDeleted!: boolean;
 }

@@ -114,6 +114,12 @@ export class LandPersistenceService {
       let land;
 
       if (limitations.useWorld) {
+        /*
+          You cannot create another land till you fill the current one with a start block
+
+          Forces the user to not upload orphan lands with assets that are not navigatable too and are just spending storage
+        */
+
         let world: World;
 
         const previousWorld = await worldRepository.findOne({
@@ -178,7 +184,7 @@ export class LandPersistenceService {
     limitations: {
       allowTrainBlock: boolean;
       /*
-        Once you upload a land block with a start block, you can never delete it
+        TODO Once you upload a land block with a start block, you can never delete it
         or change it without a start block in its map
       */
       allowStartBlock: boolean;
@@ -249,7 +255,12 @@ export class LandPersistenceService {
     const tilesetStorageKey = `lands/${params.landId}/tileset.png`;
     const mapStorageKey = `lands/${params.landId}/map.json`;
 
-    await connection.transaction(async (e) => {
+    /*
+      TODO limit amount of worlds that can have assets
+      use settings to get the maximum value
+    */
+    
+      await connection.transaction(async (e) => {
       const landRepo = e.getCustomRepository(LandRepository);
 
       const land = await landRepo.findOne({
@@ -288,6 +299,8 @@ export class LandPersistenceService {
       await landRepo.save(land, auditContext);
     });
   }
+
+  // TODO Create endpoint to see how many lands with assets are left to create before reaching limit
 
   editLand({
     connection,

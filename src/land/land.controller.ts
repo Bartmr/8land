@@ -59,6 +59,8 @@ class LandAssetsRequestDTO {
   tileset!: unknown;
 }
 
+// TODO redo all
+
 @Controller('lands')
 export class LandsController {
   constructor(
