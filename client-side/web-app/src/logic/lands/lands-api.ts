@@ -75,7 +75,9 @@ export class LandsAPI {
         failure?: undefined;
         response:
           | {
-              error: 'name-already-taken' | 'cannot-create-more-lands-without-start-block';
+              error:
+                | 'name-already-taken'
+                | 'cannot-create-more-lands-without-start-block';
             }
           | {
               error: 'lands-limit-exceeded';
@@ -93,7 +95,11 @@ export class LandsAPI {
           body:
             | { error?: undefined }
             | { error: 'lands-limit-exceeded'; limit: number }
-            | { error: 'name-already-taken' | 'cannot-create-more-lands-without-start-block' };
+            | {
+                error:
+                  | 'name-already-taken'
+                  | 'cannot-create-more-lands-without-start-block';
+              };
         },
       undefined,
       ToIndexedType<CreateLandRequestDTO>
@@ -112,7 +118,10 @@ export class LandsAPI {
       if (res.response.status === 409) {
         const body = res.response.body;
 
-        if (body.error === 'name-already-taken' || body.error === 'cannot-create-more-lands-without-start-block') {
+        if (
+          body.error === 'name-already-taken' ||
+          body.error === 'cannot-create-more-lands-without-start-block'
+        ) {
           return {
             response: {
               error: body.error,

@@ -9,12 +9,8 @@ export class LandRepository extends SimpleEntityRepository<
   Land,
   'createdAt' | 'updatedAt'
 > {
-  remove(
-    entity: Land,
-  ){
+  remove(entity: Land) {
     const run = async (manager: EntityManager) => {
-      
-
       const trainStateRepository = manager.getRepository(TrainState);
       const navigationStateRepository = manager.getRepository(NavigationState);
 
@@ -36,24 +32,27 @@ export class LandRepository extends SimpleEntityRepository<
         .update()
         .set({
           traveledByTrainToLand: null,
-          lastCheckpointWasDeleted: true
+          lastCheckpointWasDeleted: true,
         })
-        .where('traveledByTrainToLand = :traveledByTrainToLandId', { traveledByTrainToLandId: entity.id })
+        .where('traveledByTrainToLand = :traveledByTrainToLandId', {
+          traveledByTrainToLandId: entity.id,
+        })
         .execute();
-      
+
       await navigationStateRepository
         .createQueryBuilder()
         .update()
         .set({
           traveledByTrainToLand: null,
           boardedOnTrainStation: null,
-          lastCheckpointWasDeleted: true
+          lastCheckpointWasDeleted: true,
         })
-        .where('boardedOnTrainStation = :boardedOnTrainStationId', { boardedOnTrainStationId: entity.id })
+        .where('boardedOnTrainStation = :boardedOnTrainStationId', {
+          boardedOnTrainStationId: entity.id,
+        })
         .execute();
 
       await this.repository.remove(entity);
-
     };
 
     if (this.manager.queryRunner?.isTransactionActive) {

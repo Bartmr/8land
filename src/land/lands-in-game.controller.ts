@@ -110,24 +110,28 @@ export class LandsInGameController {
           };
         }
       } else if (navState.traveledByTrainToLand) {
-        const land = await this.landService.mapLand(navState.traveledByTrainToLand)
+        const land = await this.landService.mapLand(
+          navState.traveledByTrainToLand,
+        );
 
         return {
           ...land,
           lastDoor: null,
           lastTrainTravel: {
-            comingBackToStation: false
+            comingBackToStation: false,
           },
           lastCheckpointWasDeleted: !!navState.lastCheckpointWasDeleted,
         };
       } else if (navState.boardedOnTrainStation) {
-        const land = await this.landService.mapLand(navState.boardedOnTrainStation)
+        const land = await this.landService.mapLand(
+          navState.boardedOnTrainStation,
+        );
 
         return {
           ...land,
           lastDoor: null,
           lastTrainTravel: {
-            comingBackToStation: false
+            comingBackToStation: false,
           },
           lastCheckpointWasDeleted: !!navState.lastCheckpointWasDeleted,
         };
@@ -217,7 +221,7 @@ export class LandsInGameController {
             throw new Error();
           }
         } else {
-          throw new NotImplementedException()
+          throw new NotImplementedException();
         }
 
         navState.lastPlayedBackgroundMusicUrl = lastPlayedBackgroundMusicUrl;
@@ -263,46 +267,40 @@ export class LandsInGameController {
       );
       const trainStatesRepository =
         eM.getCustomRepository(TrainStateRepository);
-      
+
       const navigationState =
         await navigationStatesRepository.getNavigationStateFromUser(
           authContext.user,
           { eM, auditContext },
         );
 
-      const lastDoor = navigationState.lastDoor
+      const lastDoor = navigationState.lastDoor;
 
       navigationState.lastDoor = null;
       navigationState.traveledByTrainToLand = null;
-      navigationState.isComingBack = null
+      navigationState.isComingBack = null;
       navigationState.lastPlayedBackgroundMusicUrl = null;
 
-      if(navigationState.boardedOnTrainStation){
-        
+      if (navigationState.boardedOnTrainStation) {
+        const trainState = await trainStatesRepository.findOne({
+          where: {
+            boardedIn: navigationState.boardedOnTrainStation,
+            user: authContext.user,
+          },
+        });
 
-          
+        if (trainState) {
+          trainState.destinationLand = null;
+          await trainStatesRepository.save(trainState, auditContext);
+        }
 
-          const trainState = await trainStatesRepository.findOne({
-            where: {
-              boardedIn: navigationState.boardedOnTrainStation,
-              user: authContext.user
-            }
-          })
-
-          if(trainState) {
-            trainState.destinationLand = null;
-            await trainStatesRepository.save(trainState, auditContext);
-          }
-     
-          await navigationStatesRepository.save(navigationState, auditContext)
-      } else if(lastDoor && !lastDoor.inLand) {
-          // MEANS IT'S A BLOCK INSIDE A TERRITORY
-          throw new NotImplementedException()
+        await navigationStatesRepository.save(navigationState, auditContext);
+      } else if (lastDoor && !lastDoor.inLand) {
+        // MEANS IT'S A BLOCK INSIDE A TERRITORY
+        throw new NotImplementedException();
       } else {
         navigationState.boardedOnTrainStation = null;
       }
-
-      
     });
   }
 }

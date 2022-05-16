@@ -6,11 +6,11 @@ class LastDoorDTO {
 }
 
 class LastTrainTravelDTO {
-  comingBackToStation!: boolean
+  comingBackToStation!: boolean;
 }
 
 export class ResumeLandNavigationDTO extends GetLandDTO {
   lastDoor!: null | LastDoorDTO;
-  lastTrainTravel!: null | LastTrainTravelDTO
+  lastTrainTravel!: null | LastTrainTravelDTO;
   lastCheckpointWasDeleted!: boolean;
 }

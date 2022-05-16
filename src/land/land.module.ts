@@ -24,7 +24,7 @@ import { SettingsModule } from 'src/settings/settings.module';
       World,
     ]),
     StorageModule,
-    SettingsModule
+    SettingsModule,
   ],
   providers: [LandsService, LandPersistenceService],
   controllers: [LandsController, LandsInGameController],
