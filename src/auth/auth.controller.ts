@@ -33,6 +33,7 @@ import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
 import { Role } from './roles/roles';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { AuditContext } from 'src/internals/auditing/audit-context';
+import { User } from 'src/users/typeorm/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -89,30 +90,13 @@ export class AuthController {
         throw new ConflictException({ error: 'needs-verification' });
       }
 
-      const token = await this.tokensService.createAuthToken(
-        this.connection.manager,
+      return this.createTokenAndReturnResponse({
         user,
-      );
-
-      response.cookie(AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE, token.httpOnlyKey, {
-        expires: token.expires,
-        httpOnly: true,
-        secure: NODE_ENV === NodeEnv.Production,
-        domain: hostname,
-        sameSite: NODE_ENV === NodeEnv.Production ? 'none' : undefined,
+        response,
+        hostname,
       });
-
-      return {
-        authTokenId: token.id,
-        session: {
-          userId: user.id,
-          role: user.role,
-          walletAddress: user.walletAddress,
-          appId: user.appId,
-        },
-      };
     } else {
-      await repository.create(
+      const newUser = await repository.create(
         {
           firebaseUid: decodedToken.uid,
           role: Role.EndUser,
@@ -123,10 +107,22 @@ export class AuthController {
         auditContext,
       );
 
-      throw new ConflictException({
-        error: 'needs-verification',
-        createdNewUser: true,
+      await firebaseAuth.setCustomUserClaims(firebaseUser.uid, {
+        userIdInDatabase: newUser.id,
       });
+
+      if (firebaseUser.emailVerified) {
+        return this.createTokenAndReturnResponse({
+          user: newUser,
+          response,
+          hostname,
+        });
+      } else {
+        throw new ConflictException({
+          error: 'needs-verification',
+          createdNewUser: true,
+        });
+      }
     }
   }
 
@@ -145,5 +141,38 @@ export class AuthController {
     } else {
       throw new NotFoundException();
     }
+  }
+
+  private async createTokenAndReturnResponse({
+    user,
+    response,
+    hostname,
+  }: {
+    user: User;
+    response: AppServerResponse;
+    hostname: string;
+  }) {
+    const token = await this.tokensService.createAuthToken(
+      this.connection.manager,
+      user,
+    );
+
+    response.cookie(AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE, token.httpOnlyKey, {
+      expires: token.expires,
+      httpOnly: true,
+      secure: NODE_ENV === NodeEnv.Production,
+      domain: hostname,
+      sameSite: NODE_ENV === NodeEnv.Production ? 'none' : undefined,
+    });
+
+    return {
+      authTokenId: token.id,
+      session: {
+        userId: user.id,
+        role: user.role,
+        walletAddress: user.walletAddress,
+        appId: user.appId,
+      },
+    };
   }
 }

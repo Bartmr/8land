@@ -69,7 +69,7 @@ export class LandsController {
     private storageService: StorageService,
     private landService: LandsService,
     private landPersistenceService: LandPersistenceService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
   ) {}
 
   @Get()
@@ -179,7 +179,7 @@ export class LandsController {
   ): Promise<CreateLandResponseDTO> {
     const settings = await this.settingsService.getSettings();
     const limit = settings.landLimitPerWorld;
-    
+
     const res = await this.landPersistenceService.createLand({
       connection: this.connection,
       body,
@@ -220,7 +220,7 @@ export class LandsController {
     @UploadedFiles()
     files: { map?: Express.Multer.File[]; tileset?: Express.Multer.File[] },
     @WithAuditContext() auditContext: AuditContext,
-    @WithAuthContext() authContext: AuthContext
+    @WithAuthContext() authContext: AuthContext,
   ): Promise<void> {
     const map =
       files.map?.[0] ||
@@ -240,7 +240,8 @@ export class LandsController {
       tileset,
       params,
       auditContext,
-      authContext
+      authContext,
+      settingsService: this.settingsService,
     });
   }
 
@@ -250,14 +251,14 @@ export class LandsController {
     @Param() param: EditLandParametersDTO,
     @Body() body: EditLandBodyDTO,
     @WithAuditContext() auditContext: AuditContext,
-    @WithAuthContext() authContext: AuthContext
+    @WithAuthContext() authContext: AuthContext,
   ): Promise<EditLandDTO> {
     return this.landPersistenceService.editLand({
       connection: this.connection,
       auditContext,
       body,
       param,
-      authContext
+      authContext,
     });
   }
 
@@ -267,6 +268,7 @@ export class LandsController {
     const res = await this.landPersistenceService.deleteLand({
       landId: param.landId,
       connection: this.connection,
+      storageService: this.storageService,
     });
 
     if (res.status === 'ok') {

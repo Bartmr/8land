@@ -26,8 +26,22 @@ import {
   EditLandParametersDTO,
 } from 'libs/shared/src/land/edit/edit-land.dto';
 import { Role } from 'src/auth/roles/roles';
-import { LAND_MAP_SIZE_LIMIT, LAND_TILESET_SIZE_LIMIT } from 'libs/shared/src/land/upload-assets/upload-land-assets.constants';
-import { SettingsService } from '../settings/settings.service'
+import {
+  LAND_MAP_SIZE_LIMIT,
+  LAND_TILESET_SIZE_LIMIT,
+} from 'libs/shared/src/land/upload-assets/upload-land-assets.constants';
+import { SettingsService } from '../settings/settings.service';
+import { StaticBlockType } from 'libs/shared/src/blocks/block.enums';
+
+function getLandStorageKeys(landId: string) {
+  const tilesetStorageKey = `lands/${landId}/tileset.png`;
+  const mapStorageKey = `lands/${landId}/map.json`;
+
+  return {
+    tilesetStorageKey,
+    mapStorageKey,
+  };
+}
 
 @Injectable()
 export class LandPersistenceService {
@@ -48,7 +62,10 @@ export class LandPersistenceService {
     };
   }): Promise<
     | {
-        error: 'name-already-taken' | 'lands-limit-exceeded' | 'cannot-create-more-lands-without-start-block';
+        error:
+          | 'name-already-taken'
+          | 'lands-limit-exceeded'
+          | 'cannot-create-more-lands-without-start-block';
       }
     | {
         error?: undefined;
@@ -134,8 +151,8 @@ export class LandPersistenceService {
             auditContext,
           );
         } else {
-          if(!previousWorld.hasStartLand) {
-            return { error: 'cannot-create-more-lands-without-start-block'}
+          if (!previousWorld.hasStartLand) {
+            return { error: 'cannot-create-more-lands-without-start-block' };
           }
           world = previousWorld;
         }
@@ -174,7 +191,7 @@ export class LandPersistenceService {
     map,
     tileset,
     authContext,
-    settingsService
+    settingsService,
   }: {
     connection: Connection;
     storageService: StorageService;
@@ -183,18 +200,19 @@ export class LandPersistenceService {
     map: Express.Multer.File;
     tileset: Express.Multer.File;
     authContext: AuthContext;
-    settingsService: SettingsService
+    settingsService: SettingsService;
   }) {
     const settings = await settingsService.getSettings();
 
     await connection.transaction(async (e) => {
-    
       const landRepo = e.getCustomRepository(LandRepository);
 
-      const totalStartLands  = await landRepo.count({ where: { isStartingLand: true }})
+      const totalStartLands = await landRepo.count({
+        where: { isStartingLand: true },
+      });
 
-      if(totalStartLands > settings.startLandsTotalLimit) {
-        throw new ConflictException({ error: 'start-lands-limit-exceeded' })
+      if (totalStartLands > settings.startLandsTotalLimit) {
+        throw new ConflictException({ error: 'start-lands-limit-exceeded' });
       }
 
       const land = await landRepo.selectOne(
@@ -202,101 +220,144 @@ export class LandPersistenceService {
           alias: 'land',
         },
         (qb) => {
-          let finalQb = qb.leftJoinAndSelect('land.world', 'world').where('land.id = :id', { id: params.landId });
+          let finalQb = qb
+            .leftJoinAndSelect('land.world', 'world')
+            .where('land.id = :id', { id: params.landId });
 
           if (authContext.user.role === Role.Admin) {
             finalQb = finalQb.andWhere('land.world IS NULL');
-
-            
           } else {
-            finalQb = finalQb
-              
-            .andWhere('world.user = :id', { id: authContext.user.id });
+            finalQb = finalQb.andWhere('world.user = :id', {
+              id: authContext.user.id,
+            });
           }
 
           return finalQb;
         },
       );
-    
 
       if (!land) {
         throw new ResourceNotFoundException();
       }
 
-    if (map.size > LAND_MAP_SIZE_LIMIT) {
-      throw new BadRequestException({ error: 'map-exceeds-file-size-limit' });
-    }
+      if (map.size > LAND_MAP_SIZE_LIMIT) {
+        throw new BadRequestException({ error: 'map-exceeds-file-size-limit' });
+      }
 
-    if (tileset.size > LAND_TILESET_SIZE_LIMIT) {
-      throw new BadRequestException({
-        error: 'tileset-exceeds-file-size-limit',
+      if (tileset.size > LAND_TILESET_SIZE_LIMIT) {
+        throw new BadRequestException({
+          error: 'tileset-exceeds-file-size-limit',
+        });
+      }
+
+      let tilesetMedatada: sharp.Metadata;
+
+      try {
+        const sharpImg = sharp(tileset.buffer);
+
+        tilesetMedatada = await sharpImg.metadata();
+
+        await sharpImg.stats();
+      } catch (err) {
+        throw new BadRequestException({ error: 'unrecognized-tileset-format' });
+      }
+
+      if (tilesetMedatada.format !== 'png') {
+        throw new BadRequestException({ error: 'unrecognized-tileset-format' });
+      }
+
+      let mapJSON;
+
+      try {
+        const string = map.buffer.toString();
+
+        mapJSON = JSON.parse(string) as unknown;
+      } catch (err) {
+        throw new BadRequestException({ error: 'unparsable-map-json' });
+      }
+
+      const TiledJSONSchema = createTiledJSONSchema({
+        maxWidth: null,
+        maxHeight: null,
       });
-    }
 
-    let tilesetMedatada: sharp.Metadata;
+      const tiledJSONValidationResult = TiledJSONSchema.validate(mapJSON);
 
-    try {
-      const sharpImg = sharp(tileset.buffer);
+      if (tiledJSONValidationResult.errors) {
+        throw new BadRequestException({
+          error: 'tiled-json-validation-error',
+          messageTree: tiledJSONValidationResult.messagesTree,
+        });
+      }
 
-      tilesetMedatada = await sharpImg.metadata();
+      const tilesetSpecifications =
+        tiledJSONValidationResult.value.tilesets[0] || throwError();
 
-      await sharpImg.stats();
-    } catch (err) {
-      throw new BadRequestException({ error: 'unrecognized-tileset-format' });
-    }
+      if (
+        tilesetMedatada.width !== tilesetSpecifications.imagewidth ||
+        tilesetMedatada.height !== tilesetSpecifications.imageheight
+      ) {
+        throw new BadRequestException({
+          error: 'tileset-dimensions-dont-match',
+        });
+      }
 
-    if (tilesetMedatada.format !== 'png') {
-      throw new BadRequestException({ error: 'unrecognized-tileset-format' });
-    }
+      //
+      if (land.world) {
+        const hasTrainBlock = tilesetSpecifications.tiles.some((tile) => {
+          const tileHasTrainBlock = tile.properties?.some((tileProp) => {
+            return tileProp.name === StaticBlockType.TrainPlatform;
+          });
 
-    let mapJSON;
+          return tileHasTrainBlock;
+        });
 
-    try {
-      const string = map.buffer.toString();
+        if (hasTrainBlock) {
+          throw new BadRequestException({
+            error: 'cannot-have-train-block-in-world-lands',
+          });
+        }
 
-      mapJSON = JSON.parse(string) as unknown;
-    } catch (err) {
-      throw new BadRequestException({ error: 'unparsable-map-json' });
-    }
+        const hasStartBlock = tilesetSpecifications.tiles.some((tile) => {
+          const tileHasStartBlock = tile.properties?.some((tileProp) => {
+            return tileProp.name === StaticBlockType.Start;
+          });
 
-    const TiledJSONSchema = createTiledJSONSchema({
-      maxWidth: null,
-      maxHeight: null,
-      allowTrainPlatformBlock: authContext.user.role === Role.Admin,
-      allowStartBlock: !land.world || land.world.hasStartLand ? false : true,
-      hasWorld: !!land.world
-    });
+          return tileHasStartBlock;
+        });
 
-    const tiledJSONValidationResult = TiledJSONSchema.validate(mapJSON);
+        if (land.world.hasStartLand && hasStartBlock && !land.isStartingLand) {
+          throw new BadRequestException({
+            error: 'only-one-land-can-have-a-start-block',
+          });
+        } else if (land.isStartingLand && !hasStartBlock) {
+          throw new BadRequestException({ error: 'cannot-remove-start-block' });
+        } else if (!land.world.hasStartLand && !hasStartBlock) {
+          throw new BadRequestException({
+            error: 'must-have-start-block-in-first-land',
+          });
+        }
+      } else {
+        const hasStartBlock = tilesetSpecifications.tiles.some((tile) => {
+          const tileHasStartBlock = tile.properties?.some((tileProp) => {
+            return tileProp.name === StaticBlockType.Start;
+          });
 
-    if (tiledJSONValidationResult.errors) {
-      throw new BadRequestException({
-        error: 'tiled-json-validation-error',
-        messageTree: tiledJSONValidationResult.messagesTree,
-      });
-    }
+          return tileHasStartBlock;
+        });
 
-    const tilesetSpecifications =
-      tiledJSONValidationResult.value.tilesets[0] || throwError();
+        if (hasStartBlock) {
+          throw new BadRequestException({
+            error: 'cannot-have-start-block-in-admin-lands',
+          });
+        }
+      }
 
+      //
 
-    if (
-      tilesetMedatada.width !== tilesetSpecifications.imagewidth ||
-      tilesetMedatada.height !== tilesetSpecifications.imageheight
-    ) {
-      throw new BadRequestException({
-        error: 'tileset-dimensions-dont-match',
-      });
-    }
-
-
-
-
-    //
-
-    const tilesetStorageKey = `lands/${params.landId}/tileset.png`;
-    const mapStorageKey = `lands/${params.landId}/map.json`;
-
+      const { tilesetStorageKey, mapStorageKey } = getLandStorageKeys(
+        params.landId,
+      );
 
       await storageService.saveBuffer(tilesetStorageKey, tileset.buffer, {
         contentType: ContentType.PNG,
@@ -332,13 +393,13 @@ export class LandPersistenceService {
     auditContext,
     body,
     param,
-    authContext
+    authContext,
   }: {
     connection: Connection;
     auditContext: AuditContext;
     body: EditLandBodyDTO;
     param: EditLandParametersDTO;
-    authContext: AuthContext
+    authContext: AuthContext;
   }) {
     return connection.transaction(async (e) => {
       const landRepository = e.getCustomRepository(LandRepository);
@@ -348,16 +409,16 @@ export class LandPersistenceService {
           alias: 'land',
         },
         (qb) => {
-          let finalQb = qb.leftJoinAndSelect('land.world', 'world').where('land.id = :id', { id: param.landId });
+          let finalQb = qb
+            .leftJoinAndSelect('land.world', 'world')
+            .where('land.id = :id', { id: param.landId });
 
           if (authContext.user.role === Role.Admin) {
             finalQb = finalQb.andWhere('land.world IS NULL');
-
-            
           } else {
-            finalQb = finalQb
-              
-            .andWhere('world.user = :id', { id: authContext.user.id });
+            finalQb = finalQb.andWhere('world.user = :id', {
+              id: authContext.user.id,
+            });
           }
 
           return finalQb;
@@ -404,9 +465,11 @@ export class LandPersistenceService {
   deleteLand({
     connection,
     landId,
+    storageService,
   }: {
     connection: Connection;
     landId: string;
+    storageService: StorageService;
   }) {
     return connection.transaction(async (e) => {
       const landRepository = e.getCustomRepository(LandRepository);
@@ -436,7 +499,12 @@ export class LandPersistenceService {
         return { status: 'cannot-delete-start-land' } as const;
       }
 
+      const { tilesetStorageKey, mapStorageKey } = getLandStorageKeys(land.id);
+
       await landRepository.remove(land);
+
+      await storageService.removeFile(mapStorageKey);
+      await storageService.removeFile(tilesetStorageKey);
 
       return { status: 'ok' } as const;
     });

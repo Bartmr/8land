@@ -18,20 +18,13 @@ export const createTiledJSONSchema = ({
   maxHeight: _maxHeight,
   maxWidthMessage,
   maxHeightMessage,
-  allowTrainPlatformBlock = false,
-  allowStartBlock = false,
-  hasWorld = false
-}:
-  {
-    maxWidth: number | null;
-    maxHeight: number | null;
-    maxWidthMessage?: string;
-    maxHeightMessage?: string;
-    // allowBackgroundColor: boolean;
-    allowTrainPlatformBlock?: boolean;
-    allowStartBlock?: boolean;
-    hasWorld?: boolean
-  }) => {
+}: {
+  maxWidth: number | null;
+  maxHeight: number | null;
+  maxWidthMessage?: string;
+  maxHeightMessage?: string;
+  // allowBackgroundColor: boolean;
+}) => {
   const maxWidth = _maxWidth ? _maxWidth + 1 : 41;
   const maxHeight = _maxHeight ? _maxHeight + 1 : 41;
 
@@ -53,7 +46,7 @@ export const createTiledJSONSchema = ({
         h > 0 && h < maxHeight
           ? null
           : maxHeightMessage ||
-          `Must be greater than 0 and less than ${maxHeight}`,
+            `Must be greater than 0 and less than ${maxHeight}`,
       ),
     infinite: boolean()
       .required()
@@ -68,7 +61,7 @@ export const createTiledJSONSchema = ({
             h > 0 && h < maxHeight
               ? null
               : maxHeightMessage ||
-              `Must be greater than 0 and less than ${maxHeight}`,
+                `Must be greater than 0 and less than ${maxHeight}`,
           ),
         id: number().integer().required(),
         name: string().filled(),
@@ -82,7 +75,7 @@ export const createTiledJSONSchema = ({
             w > 0 && w < maxWidth
               ? null
               : maxWidthMessage ||
-              `Must be greater than 0 and less than ${maxWidth}`,
+                `Must be greater than 0 and less than ${maxWidth}`,
           ),
         x: equals([0], 'Must be set to 0').required(),
         y: equals([0], 'Must be set to 0').required(),
@@ -138,7 +131,7 @@ export const createTiledJSONSchema = ({
                     ['bool'],
                     "'collides' props must be of boolean type",
                   ).required(),
-                  value: boolean().required(),
+                  value: equals([true]).required('value must be true'),
                 }),
                 object({
                   name: equals(
@@ -166,7 +159,7 @@ export const createTiledJSONSchema = ({
                     ['string'],
                     "'start' props must be of boolean type",
                   ).required(),
-                  value: boolean().required(),
+                  value: equals([true]).required('value must be true'),
                 }),
                 object({
                   name: equals(
@@ -177,7 +170,7 @@ export const createTiledJSONSchema = ({
                     ['string'],
                     "'train-platform' props must be of boolean type",
                   ).required(),
-                  value: boolean().required(),
+                  value: equals([true]).required('value must be true'),
                 }),
                 object({
                   name: string().required(),
@@ -188,9 +181,7 @@ export const createTiledJSONSchema = ({
                   value: uuid('Invalid block ID').required(),
                 }),
               ]).required(),
-            ).notNull()
-            // validate world and admin limitations using test()
-            ,
+            ).notNull(),
             animation: array(
               object({
                 duration: number().integer().required(),
@@ -214,7 +205,7 @@ export const createTiledJSONSchema = ({
         w > 0 && w < maxWidth
           ? null
           : maxWidthMessage ||
-          `Must be greater than 0 and less than ${maxWidth}`,
+            `Must be greater than 0 and less than ${maxWidth}`,
       ),
   })
     .required()

@@ -11,6 +11,8 @@ export class NavigationStateRepository extends SimpleEntityRepository<
   | 'isComingBack'
   | 'lastPlayedBackgroundMusicUrl'
   | 'lastCheckpointWasDeleted'
+  | 'traveledByTrainToLand'
+  | 'boardedOnTrainStation'
 > {
   async getNavigationStateFromUser(
     user: User,
