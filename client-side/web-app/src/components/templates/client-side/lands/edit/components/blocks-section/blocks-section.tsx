@@ -60,7 +60,7 @@ Players who are currently in this land will be teleported back to the train stat
             onBlockCreated={props.onBlockCreated}
           />
           <hr />
-          <h3>Door Blocks pointing back to this land</h3>
+          <h3>Door Blocks pointing to this land</h3>
           <ul className="list-group">
             {props.land.doorBlocksReferencing.map((b) => {
               return (

@@ -31,7 +31,7 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
   });
 
   const [deleteResult, replaceDeleteResult] = useState<
-    TransportedData<'must-delete-blocks-first'>
+    TransportedData<undefined>
   >({
     status: TransportedDataStatus.NotInitialized,
   });
@@ -54,9 +54,13 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
         replaceDeleteResult({ status: res.failure });
       } else {
         if (res.response.status === 'must-delete-blocks-first') {
+          window.alert(
+            'You must delete all blocks in this land and all other blocks pointing to it before can delete this land.',
+          );
+
           replaceDeleteResult({
             status: TransportedDataStatus.Done,
-            data: res.response.status,
+            data: undefined,
           });
         } else {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
