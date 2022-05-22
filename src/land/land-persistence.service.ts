@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateLandRequestDTO } from 'libs/shared/src/land/create/create-land.dto';
 import { UploadLandAssetsParameters } from 'libs/shared/src/land/upload-assets/upload-land-assets.dto';
 import { AuthContext } from 'src/auth/auth-context';
@@ -14,7 +10,6 @@ import { Connection } from 'typeorm';
 import { LandRepository } from './typeorm/land.repository';
 import sharp from 'sharp';
 import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
-import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
 import {
   ContentType,
   StorageService,
@@ -204,7 +199,7 @@ export class LandPersistenceService {
   }) {
     const settings = await settingsService.getSettings();
 
-    await connection.transaction(async (e) => {
+    return connection.transaction(async (e) => {
       const landRepo = e.getCustomRepository(LandRepository);
 
       const totalStartLands = await landRepo.count({
@@ -212,7 +207,7 @@ export class LandPersistenceService {
       });
 
       if (totalStartLands > settings.startLandsTotalLimit) {
-        throw new ConflictException({ error: 'start-lands-limit-exceeded' });
+        return { status: 'start-lands-limit-exceeded' } as const;
       }
 
       const land = await landRepo.selectOne(
@@ -237,17 +232,17 @@ export class LandPersistenceService {
       );
 
       if (!land) {
-        throw new ResourceNotFoundException();
+        return { status: 'not-found' } as const;
       }
 
       if (map.size > LAND_MAP_SIZE_LIMIT) {
-        throw new BadRequestException({ error: 'map-exceeds-file-size-limit' });
+        return { status: 'map-exceeds-file-size-limit' } as const;
       }
 
       if (tileset.size > LAND_TILESET_SIZE_LIMIT) {
-        throw new BadRequestException({
-          error: 'tileset-exceeds-file-size-limit',
-        });
+        return {
+          status: 'tileset-exceeds-file-size-limit',
+        } as const;
       }
 
       let tilesetMedatada: sharp.Metadata;
@@ -259,11 +254,11 @@ export class LandPersistenceService {
 
         await sharpImg.stats();
       } catch (err) {
-        throw new BadRequestException({ error: 'unrecognized-tileset-format' });
+        return { status: 'unrecognized-tileset-format' } as const;
       }
 
       if (tilesetMedatada.format !== 'png') {
-        throw new BadRequestException({ error: 'unrecognized-tileset-format' });
+        return { status: 'unrecognized-tileset-format' } as const;
       }
 
       let mapJSON;
@@ -273,7 +268,7 @@ export class LandPersistenceService {
 
         mapJSON = JSON.parse(string) as unknown;
       } catch (err) {
-        throw new BadRequestException({ error: 'unparsable-map-json' });
+        return { status: 'unparsable-map-json' } as const;
       }
 
       const TiledJSONSchema = createTiledJSONSchema({
@@ -284,10 +279,10 @@ export class LandPersistenceService {
       const tiledJSONValidationResult = TiledJSONSchema.validate(mapJSON);
 
       if (tiledJSONValidationResult.errors) {
-        throw new BadRequestException({
-          error: 'tiled-json-validation-error',
+        return {
+          status: 'tiled-json-validation-error',
           messageTree: tiledJSONValidationResult.messagesTree,
-        });
+        } as const;
       }
 
       const tilesetSpecifications =
@@ -297,9 +292,9 @@ export class LandPersistenceService {
         tilesetMedatada.width !== tilesetSpecifications.imagewidth ||
         tilesetMedatada.height !== tilesetSpecifications.imageheight
       ) {
-        throw new BadRequestException({
-          error: 'tileset-dimensions-dont-match',
-        });
+        return {
+          status: 'tileset-dimensions-dont-match',
+        } as const;
       }
 
       //
@@ -313,9 +308,9 @@ export class LandPersistenceService {
         });
 
         if (hasTrainBlock) {
-          throw new BadRequestException({
-            error: 'cannot-have-train-block-in-world-lands',
-          });
+          return {
+            status: 'cannot-have-train-block-in-world-lands',
+          } as const;
         }
 
         const hasStartBlock = tilesetSpecifications.tiles.some((tile) => {
@@ -327,15 +322,15 @@ export class LandPersistenceService {
         });
 
         if (land.world.hasStartLand && hasStartBlock && !land.isStartingLand) {
-          throw new BadRequestException({
-            error: 'only-one-land-can-have-a-start-block',
-          });
+          return {
+            status: 'only-one-land-can-have-a-start-block',
+          } as const;
         } else if (land.isStartingLand && !hasStartBlock) {
-          throw new BadRequestException({ error: 'cannot-remove-start-block' });
+          return { status: 'cannot-remove-start-block' } as const;
         } else if (!land.world.hasStartLand && !hasStartBlock) {
-          throw new BadRequestException({
-            error: 'must-have-start-block-in-first-land',
-          });
+          return {
+            status: 'must-have-start-block-in-first-land',
+          } as const;
         }
       } else {
         const hasStartBlock = tilesetSpecifications.tiles.some((tile) => {
@@ -347,9 +342,9 @@ export class LandPersistenceService {
         });
 
         if (hasStartBlock) {
-          throw new BadRequestException({
-            error: 'cannot-have-start-block-in-admin-lands',
-          });
+          return {
+            status: 'cannot-have-start-block-in-admin-lands',
+          } as const;
         }
       }
 
@@ -383,6 +378,8 @@ export class LandPersistenceService {
       land.updatedAt = new Date();
 
       await landRepo.save(land, auditContext);
+
+      return { status: 'ok' } as const;
     });
   }
 
@@ -426,7 +423,7 @@ export class LandPersistenceService {
       );
 
       if (!land) {
-        throw new ResourceNotFoundException();
+        return { status: 'not-found' } as const;
       }
 
       if (body.name && body.name !== land.name) {
@@ -439,7 +436,7 @@ export class LandPersistenceService {
         });
 
         if (landWithSameName) {
-          throw new ConflictException({ error: 'name-already-taken' });
+          return { status: 'name-already-taken' } as const;
         }
 
         land.name = body.name;
@@ -456,9 +453,12 @@ export class LandPersistenceService {
       await landRepository.save(land, auditContext);
 
       return {
-        id: land.id,
-        name: land.name,
-      };
+        status: 'ok',
+        data: {
+          id: land.id,
+          name: land.name,
+        },
+      } as const;
     });
   }
 
@@ -481,7 +481,7 @@ export class LandPersistenceService {
       });
 
       if (!land) {
-        throw new ResourceNotFoundException();
+        return { status: 'not-found' } as const;
       }
 
       const doorBlocks = await land.doorBlocks;

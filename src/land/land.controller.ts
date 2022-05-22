@@ -233,7 +233,7 @@ export class LandsController {
         throw new BadRequestException({ error: 'no-tileset-file' });
       })();
 
-    await this.landPersistenceService.uploadLandAssets({
+    const res = await this.landPersistenceService.uploadLandAssets({
       connection: this.connection,
       storageService: this.storageService,
       map,
@@ -243,23 +243,48 @@ export class LandsController {
       authContext,
       settingsService: this.settingsService,
     });
+
+    if (res.status === 'ok') {
+      return;
+    } else if (res.status === 'not-found') {
+      throw new ResourceNotFoundException({ error: res.status });
+    } else if (
+      res.status === 'map-exceeds-file-size-limit' ||
+      res.status === 'tileset-exceeds-file-size-limit' ||
+      res.status === 'unrecognized-tileset-format' ||
+      res.status === 'tileset-dimensions-dont-match' ||
+      res.status === 'unparsable-map-json' ||
+      res.status === 'tiled-json-validation-error'
+    ) {
+      throw new BadRequestException({ error: res.status });
+    } else {
+      throw new ConflictException({ error: res.status });
+    }
   }
 
   @Put(':landId')
   @RolesUpAndIncluding(Role.Admin)
-  editLand(
+  async editLand(
     @Param() param: EditLandParametersDTO,
     @Body() body: EditLandBodyDTO,
     @WithAuditContext() auditContext: AuditContext,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<EditLandDTO> {
-    return this.landPersistenceService.editLand({
+    const res = await this.landPersistenceService.editLand({
       connection: this.connection,
       auditContext,
       body,
       param,
       authContext,
     });
+
+    if (res.status === 'ok') {
+      return res.data;
+    } else if (res.status === 'not-found') {
+      throw new ResourceNotFoundException();
+    } else {
+      throw new ConflictException({ error: res.status });
+    }
   }
 
   @Delete(':landId')
@@ -273,6 +298,8 @@ export class LandsController {
 
     if (res.status === 'ok') {
       return;
+    } else if (res.status === 'not-found') {
+      throw new ResourceNotFoundException();
     } else {
       throw new ConflictException({ error: res.status });
     }
