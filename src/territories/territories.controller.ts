@@ -66,6 +66,7 @@ import {
   UpdateTerritoryRaribleMetadataParametersDTO,
   UpdateTerritoryRaribleMetadataRequestDTO,
 } from 'libs/shared/src/territories/update-rarible/update-territory-rarible-metadata.dto';
+import { StaticBlockType } from 'libs/shared/src/blocks/block.enums';
 
 @Controller('territories')
 export class TerritoriesEndUserController {
@@ -309,8 +310,31 @@ export class TerritoriesEndUserController {
         messageTree: tiledJSONValidationResult.messagesTree,
       });
     }
+
     const tilesetSpecifications =
       tiledJSONValidationResult.value.tilesets[0] || throwError();
+
+    const hasTrainBlock = tilesetSpecifications.tiles.some((tile) => {
+      const tileHasTrainBlock = tile.properties?.some((tileProp) => {
+        return tileProp.name === StaticBlockType.TrainPlatform;
+      });
+
+      return tileHasTrainBlock;
+    });
+
+    const hasStartBlock = tilesetSpecifications.tiles.some((tile) => {
+      const tileHasStartBlock = tile.properties?.some((tileProp) => {
+        return tileProp.name === StaticBlockType.Start;
+      });
+
+      return tileHasStartBlock;
+    });
+
+    if (hasTrainBlock || hasStartBlock) {
+      throw new BadRequestException({
+        error: 'train-and-start-block-not-allowed',
+      });
+    }
 
     if (
       tilesetMedatada.width !== tilesetSpecifications.imagewidth ||
