@@ -201,6 +201,7 @@ export class LandPersistenceService {
 
     return connection.transaction(async (e) => {
       const landRepo = e.getCustomRepository(LandRepository);
+      const worldRepo = e.getCustomRepository(WorldRepository);
 
       const totalStartLands = await landRepo.count({
         where: { isStartingLand: true },
@@ -332,6 +333,11 @@ export class LandPersistenceService {
             status: 'must-have-start-block-in-first-land',
           } as const;
         }
+
+        if (hasStartBlock) {
+          land.isStartingLand = true;
+          land.world.hasStartLand = true;
+        }
       } else {
         const hasStartBlock = tilesetSpecifications.tiles.some((tile) => {
           const tileHasStartBlock = tile.properties?.some((tileProp) => {
@@ -378,6 +384,9 @@ export class LandPersistenceService {
       land.updatedAt = new Date();
 
       await landRepo.save(land, auditContext);
+      if (land.world) {
+        await worldRepo.save(land.world, auditContext);
+      }
 
       return { status: 'ok' } as const;
     });
@@ -462,7 +471,7 @@ export class LandPersistenceService {
     });
   }
 
-  deleteLand({
+  async deleteLand({
     connection,
     landId,
     storageService,
@@ -471,7 +480,7 @@ export class LandPersistenceService {
     landId: string;
     storageService: StorageService;
   }) {
-    return connection.transaction(async (e) => {
+    const res = await connection.transaction(async (e) => {
       const landRepository = e.getCustomRepository(LandRepository);
 
       const land = await landRepository.findOne({
@@ -499,14 +508,20 @@ export class LandPersistenceService {
         return { status: 'cannot-delete-start-land' } as const;
       }
 
-      const { tilesetStorageKey, mapStorageKey } = getLandStorageKeys(land.id);
-
       await landRepository.remove(land);
+
+      return { status: 'ok' } as const;
+    });
+
+    if (res.status === 'ok') {
+      const { tilesetStorageKey, mapStorageKey } = getLandStorageKeys(landId);
 
       await storageService.removeFile(mapStorageKey);
       await storageService.removeFile(tilesetStorageKey);
 
-      return { status: 'ok' } as const;
-    });
+      return res;
+    } else {
+      return res;
+    }
   }
 }
