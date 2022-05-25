@@ -136,14 +136,14 @@ export class LandScene extends Phaser.Scene {
             return {
               type: DynamicBlockType.Door as const,
               toLandId: dB.toLand.id,
-              id: dB.id,
+              id: `door:${dB.id}`,
             };
           }),
           ...territory.appBlocks.map((aB) => {
             return {
               type: DynamicBlockType.App as const,
               url: aB.url,
-              id: aB.id,
+              id: `app:${aB.id}`,
             };
           }),
         ],
@@ -264,21 +264,21 @@ export class LandScene extends Phaser.Scene {
             return {
               type: DynamicBlockType.Door as const,
               toLandId: dB.toLand.id,
-              id: dB.id,
+              id: `door:${dB.id}`,
             };
           }),
           ...this.args.land.doorBlocksReferencing.map((dB) => {
             return {
               type: DynamicBlockType.Door as const,
               toLandId: dB.fromLandId,
-              id: dB.id,
+              id: `door:${dB.id}`,
             };
           }),
           ...this.args.land.appBlocks.map((aB) => {
             return {
               type: DynamicBlockType.App as const,
               url: aB.url,
-              id: aB.id,
+              id: `app:${aB.id}`,
             };
           }),
         ],

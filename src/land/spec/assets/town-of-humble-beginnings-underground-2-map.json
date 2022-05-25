@@ -71,7 +71,7 @@
             {
               "name": "town",
               "type": "string",
-              "value": "f7fd8436-b554-486b-b12b-cd64eac385f1"
+              "value": "door:f7fd8436-b554-486b-b12b-cd64eac385f1"
             }
           ]
         },
@@ -81,7 +81,7 @@
             {
               "name": "entrance",
               "type": "string",
-              "value": "f4b0eb2e-4c34-4d56-a9de-ffbd9132ef47"
+              "value": "door:f4b0eb2e-4c34-4d56-a9de-ffbd9132ef47"
             }
           ]
         },
@@ -91,7 +91,7 @@
             {
               "name": "town",
               "type": "string",
-              "value": "f7fd8436-b554-486b-b12b-cd64eac385f1"
+              "value": "door:f7fd8436-b554-486b-b12b-cd64eac385f1"
             }
           ]
         },
@@ -105,7 +105,7 @@
             {
               "name": "entrance",
               "type": "string",
-              "value": "f4b0eb2e-4c34-4d56-a9de-ffbd9132ef47"
+              "value": "door:f4b0eb2e-4c34-4d56-a9de-ffbd9132ef47"
             }
           ]
         },

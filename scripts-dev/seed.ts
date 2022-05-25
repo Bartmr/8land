@@ -280,12 +280,12 @@ async function seed() {
             if (prop.name === 'start') {
               return {
                 ...prop,
-                value: expectationsBeachDoor1.id,
+                value: `door:${expectationsBeachDoor1.id}`,
               };
             } else if (prop.name === 'town') {
               return {
                 ...prop,
-                value: expectationsBeachDoor2.id,
+                value: `door:${expectationsBeachDoor2.id}`,
               };
             } else {
               return prop;
@@ -378,27 +378,27 @@ async function seed() {
             if (prop.name === 'underground-entrance') {
               return {
                 ...prop,
-                value: townOfHumbleBeginningsDoor1.id,
+                value: `door:${townOfHumbleBeginningsDoor1.id}`,
               };
             } else if (prop.name === 'temple') {
               return {
                 ...prop,
-                value: townOfHumbleBeginningsDoor3.id,
+                value: `door:${townOfHumbleBeginningsDoor3.id}`,
               };
             } else if (prop.name === 'form') {
               return {
                 ...prop,
-                value: townOfHumbleBeginningsApp1.id,
+                value: `app:${townOfHumbleBeginningsApp1.id}`,
               };
             } else if (prop.name === 'underground') {
               return {
                 ...prop,
-                value: townOfHumbleBeginningsDoor2.id,
+                value: `door:${townOfHumbleBeginningsDoor2.id}`,
               };
             } else if (prop.name === 'beach') {
               return {
                 ...prop,
-                value: expectationsBeachDoor2.id,
+                value: `door:${expectationsBeachDoor2.id}`,
               };
             } else {
               return prop;
@@ -468,12 +468,12 @@ async function seed() {
             if (prop.name === 'underground') {
               return {
                 ...prop,
-                value: townOfHumbleBeginningsUnderground1Door1.id,
+                value: `door:${townOfHumbleBeginningsUnderground1Door1.id}`,
               };
             } else if (prop.name === 'town') {
               return {
                 ...prop,
-                value: townOfHumbleBeginningsDoor1.id,
+                value: `door:${townOfHumbleBeginningsDoor1.id}`,
               };
             } else {
               return prop;
@@ -533,12 +533,12 @@ async function seed() {
             if (prop.name === 'town') {
               return {
                 ...prop,
-                value: townOfHumbleBeginningsDoor2.id,
+                value: `door:${townOfHumbleBeginningsDoor2.id}`,
               };
             } else if (prop.name === 'entrance') {
               return {
                 ...prop,
-                value: townOfHumbleBeginningsUnderground1Door1.id,
+                value: `door:${townOfHumbleBeginningsUnderground1Door1.id}`,
               };
             } else {
               return prop;
@@ -598,7 +598,7 @@ async function seed() {
             if (prop.name === 'town') {
               return {
                 ...prop,
-                value: townOfHumbleBeginningsDoor3.id,
+                value: `door:${townOfHumbleBeginningsDoor3.id}`,
               };
             } else {
               return prop;

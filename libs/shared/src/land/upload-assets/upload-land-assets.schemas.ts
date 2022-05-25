@@ -178,7 +178,7 @@ export const createTiledJSONSchema = ({
                     ['string'],
                     'Block IDs must be of string type',
                   ).required(),
-                  value: uuid('Invalid block ID').required(),
+                  value: string('Invalid block ID').required(),
                 }),
               ]).required(),
             ).notNull(),

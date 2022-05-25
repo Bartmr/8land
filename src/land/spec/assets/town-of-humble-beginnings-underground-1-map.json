@@ -104,7 +104,7 @@
             {
               "name": "underground",
               "type": "string",
-              "value": "f4b0eb2e-4c34-4d56-a9de-ffbd9132ef47"
+              "value": "door:f4b0eb2e-4c34-4d56-a9de-ffbd9132ef47"
             }
           ]
         },
@@ -126,7 +126,7 @@
             {
               "name": "underground",
               "type": "string",
-              "value": "f4b0eb2e-4c34-4d56-a9de-ffbd9132ef47"
+              "value": "door:f4b0eb2e-4c34-4d56-a9de-ffbd9132ef47"
             }
           ]
         },
@@ -180,7 +180,7 @@
             {
               "name": "town",
               "type": "string",
-              "value": "526c3c53-087c-4023-8dd0-d817eb6ea5f6"
+              "value": "door:526c3c53-087c-4023-8dd0-d817eb6ea5f6"
             }
           ]
         },
@@ -190,7 +190,7 @@
             {
               "name": "town",
               "type": "string",
-              "value": "526c3c53-087c-4023-8dd0-d817eb6ea5f6"
+              "value": "door:526c3c53-087c-4023-8dd0-d817eb6ea5f6"
             }
           ]
         },

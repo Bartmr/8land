@@ -183,7 +183,7 @@
             {
               "name": "town",
               "type": "string",
-              "value": "f1dd5876-e65a-42ee-a0b7-52befa3aead6"
+              "value": "door:f1dd5876-e65a-42ee-a0b7-52befa3aead6"
             }
           ]
         },
@@ -193,7 +193,7 @@
             {
               "name": "town",
               "type": "string",
-              "value": "f1dd5876-e65a-42ee-a0b7-52befa3aead6"
+              "value": "door:f1dd5876-e65a-42ee-a0b7-52befa3aead6"
             }
           ]
         },

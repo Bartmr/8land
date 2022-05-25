@@ -65,7 +65,7 @@ Players who are currently in this land will be teleported back to the train stat
             {props.land.doorBlocksReferencing.map((b) => {
               return (
                 <li key={b.id} className="list-group-item">
-                  Block ID: {b.id}
+                  Block ID: door:{b.id}
                   <br />
                   From Land: {b.fromLandName}
                 </li>
@@ -86,7 +86,7 @@ Players who are currently in this land will be teleported back to the train stat
                         className="list-group-item d-flex align-items-center"
                       >
                         <div className="flex-fill">
-                          Block ID: {b.id}
+                          Block ID: door:{b.id}
                           <br />
                           Goes to: {b.toLand.name}
                         </div>
@@ -116,7 +116,7 @@ Players who are currently in this land will be teleported back to the train stat
                   className="list-group-item d-flex align-items-center"
                 >
                   <div className="flex-fill">
-                    Block ID: {b.id}
+                    Block ID: app:{b.id}
                     <br />
                     URL: {b.url}
                   </div>

@@ -62,7 +62,7 @@
             {
               "name": "start",
               "type": "string",
-              "value": "15346034-6040-4175-bd4a-3ddace2b2989"
+              "value": "door:15346034-6040-4175-bd4a-3ddace2b2989"
             }
           ]
         },
@@ -72,7 +72,7 @@
             {
               "name": "town",
               "type": "string",
-              "value": "b12a19dd-850e-4bc2-b01c-b407ccbba028"
+              "value": "door:b12a19dd-850e-4bc2-b01c-b407ccbba028"
             }
           ]
         },

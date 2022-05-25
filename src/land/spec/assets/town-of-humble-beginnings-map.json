@@ -182,7 +182,7 @@
             {
               "name": "underground-entrance",
               "type": "string",
-              "value": "526c3c53-087c-4023-8dd0-d817eb6ea5f6"
+              "value": "door:526c3c53-087c-4023-8dd0-d817eb6ea5f6"
             }
           ]
         },
@@ -192,7 +192,7 @@
             {
               "name": "underground-entrance",
               "type": "string",
-              "value": "526c3c53-087c-4023-8dd0-d817eb6ea5f6"
+              "value": "door:526c3c53-087c-4023-8dd0-d817eb6ea5f6"
             }
           ]
         },
@@ -269,7 +269,7 @@
             {
               "name": "temple",
               "type": "string",
-              "value": "f1dd5876-e65a-42ee-a0b7-52befa3aead6"
+              "value": "door:f1dd5876-e65a-42ee-a0b7-52befa3aead6"
             }
           ]
         },
@@ -284,7 +284,7 @@
             {
               "name": "form",
               "type": "string",
-              "value": "8602d26d-eb55-40e2-adbe-b65eca83fd71"
+              "value": "app:8602d26d-eb55-40e2-adbe-b65eca83fd71"
             }
           ]
         },
@@ -294,7 +294,7 @@
             {
               "name": "underground",
               "type": "string",
-              "value": "f7fd8436-b554-486b-b12b-cd64eac385f1"
+              "value": "door:f7fd8436-b554-486b-b12b-cd64eac385f1"
             }
           ]
         },
@@ -308,7 +308,7 @@
             {
               "name": "beach",
               "type": "string",
-              "value": "b12a19dd-850e-4bc2-b01c-b407ccbba028"
+              "value": "door:b12a19dd-850e-4bc2-b01c-b407ccbba028"
             }
           ]
         },
