@@ -5,11 +5,11 @@
   "layers": [
     {
       "data": [
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 12, 13, 14, 15, 16, 17, 18, 19, 1, 1,
-        22, 23, 24, 25, 26, 27, 28, 29, 1, 1, 32, 33, 34, 35, 36, 37, 38, 39, 1,
-        1, 42, 43, 44, 45, 46, 47, 48, 49, 1, 1, 52, 53, 54, 55, 56, 57, 58, 59,
-        1, 1, 62, 63, 64, 65, 66, 67, 68, 69, 1, 1, 72, 73, 74, 75, 76, 77, 78,
-        79, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+        21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+        39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56,
+        57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74,
+        75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90
       ],
       "height": 9,
       "id": 1,
@@ -32,11 +32,11 @@
     {
       "columns": 10,
       "firstgid": 1,
-      "image": "tileset.png",
+      "image": "town-of-humble-beginnings-temple-tileset.png",
       "imageheight": 144,
       "imagewidth": 160,
       "margin": 0,
-      "name": "town-of-humble-beginnings-underground-1-tileset",
+      "name": "tileset",
       "spacing": 0,
       "tilecount": 90,
       "tileheight": 16,
@@ -44,6 +44,38 @@
       "tiles": [
         {
           "id": 0,
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+        },
+        {
+          "id": 1,
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+        },
+        {
+          "id": 2,
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+        },
+        {
+          "id": 3,
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+        },
+        {
+          "id": 4,
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+        },
+        {
+          "id": 5,
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+        },
+        {
+          "id": 6,
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+        },
+        {
+          "id": 7,
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+        },
+        {
+          "id": 8,
           "properties": [{ "name": "collides", "type": "bool", "value": true }]
         },
         {
@@ -95,40 +127,12 @@
           "properties": [{ "name": "collides", "type": "bool", "value": true }]
         },
         {
-          "id": 25,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
-        },
-        {
-          "id": 26,
-          "properties": [
-            {
-              "name": "underground",
-              "type": "string",
-              "value": "f4b0eb2e-4c34-4d56-a9de-ffbd9132ef47"
-            }
-          ]
-        },
-        {
           "id": 29,
           "properties": [{ "name": "collides", "type": "bool", "value": true }]
         },
         {
           "id": 30,
           "properties": [{ "name": "collides", "type": "bool", "value": true }]
-        },
-        {
-          "id": 35,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
-        },
-        {
-          "id": 36,
-          "properties": [
-            {
-              "name": "underground",
-              "type": "string",
-              "value": "f4b0eb2e-4c34-4d56-a9de-ffbd9132ef47"
-            }
-          ]
         },
         {
           "id": 39,
@@ -139,24 +143,23 @@
           "properties": [{ "name": "collides", "type": "bool", "value": true }]
         },
         {
-          "id": 45,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
-        },
-        {
-          "id": 46,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
-        },
-        {
-          "id": 47,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
-        },
-        {
           "id": 49,
           "properties": [{ "name": "collides", "type": "bool", "value": true }]
         },
         {
           "id": 50,
           "properties": [{ "name": "collides", "type": "bool", "value": true }]
+        },
+        {
+          "id": 54,
+          "properties": [
+            { "name": "collides", "type": "bool", "value": true },
+            {
+              "name": "text",
+              "type": "string",
+              "value": "Ignoring your ... was always an option... (the stone plate is too weared out)"
+            }
+          ]
         },
         {
           "id": 59,
@@ -180,7 +183,7 @@
             {
               "name": "town",
               "type": "string",
-              "value": "526c3c53-087c-4023-8dd0-d817eb6ea5f6"
+              "value": "f1dd5876-e65a-42ee-a0b7-52befa3aead6"
             }
           ]
         },
@@ -190,7 +193,7 @@
             {
               "name": "town",
               "type": "string",
-              "value": "526c3c53-087c-4023-8dd0-d817eb6ea5f6"
+              "value": "f1dd5876-e65a-42ee-a0b7-52befa3aead6"
             }
           ]
         },

@@ -29,6 +29,7 @@ import path from 'path';
 import { DevStorageService } from 'src/internals/storage/dev-storage.service';
 import { LOCAL_TEMPORARY_FILES_PATH } from 'src/internals/local-temporary-files/local-temporary-files-path';
 import { AppBlockRepository } from 'src/blocks/typeorm/app-block.repository';
+import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
 
 const readFile = promisify(fs.readFile);
 const rm = promisify(fs.rm);
@@ -208,6 +209,22 @@ async function seed() {
       auditContext,
     );
 
+    const townOfHumbleBeginningsTemple = await landsRepository.create(
+      {
+        name: 'Town of Humble Beginnings - Temple',
+        searchableName: getSearchableName('Town of Humble Beginnings - Temple'),
+        backgroundMusicUrl: null,
+        doorBlocks: Promise.resolve([]),
+        doorBlocksReferencing: Promise.resolve([]),
+        appBlocks: [],
+        hasAssets: true,
+        territories: Promise.resolve([]),
+        world: null,
+        isStartingLand: null,
+      },
+      auditContext,
+    );
+
     /* ----- */
 
     const expectationsBeachDoor1 = await doorBlocksRepository.create(
@@ -228,7 +245,7 @@ async function seed() {
       auditContext,
     );
 
-    const expectationsBeachMap = await readFile(
+    const expectationsBeachMapString = await readFile(
       path.resolve(
         process.cwd(),
         'src/land/spec/assets/expectations-beach-map.json',
@@ -241,11 +258,45 @@ async function seed() {
         'src/land/spec/assets/expectations-beach-tileset.png',
       ),
     );
+
+    const expectationsBeachMapRes = createTiledJSONSchema({
+      maxWidth: null,
+      maxHeight: null,
+    }).validate(JSON.parse(expectationsBeachMapString) as unknown);
+
+    if (expectationsBeachMapRes.errors) {
+      throw new Error(JSON.stringify(expectationsBeachMapRes.messagesTree));
+    }
+
+    const expectationsBeachMap = expectationsBeachMapRes.value;
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    expectationsBeachMap.tilesets[0]!.tiles =
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      expectationsBeachMap.tilesets[0]!.tiles.map((tile) => {
+        return {
+          ...tile,
+          properties: tile.properties?.map((prop) => {
+            if (prop.name === 'start') {
+              return {
+                ...prop,
+                value: expectationsBeachDoor1.id,
+              };
+            } else if (prop.name === 'town') {
+              return {
+                ...prop,
+                value: expectationsBeachDoor2.id,
+              };
+            } else {
+              return prop;
+            }
+          }),
+        };
+      });
+
     await storageService.saveText(
       `lands/${expectationsBeach.id}/map.json`,
-      expectationsBeachMap
-        .replaceAll('<door-1>', expectationsBeachDoor1.id)
-        .replaceAll('<door-2>', expectationsBeachDoor2.id),
+      JSON.stringify(expectationsBeachMap),
     );
     await storageService.saveBuffer(
       `lands/${expectationsBeach.id}/tileset.png`,
@@ -272,6 +323,15 @@ async function seed() {
       auditContext,
     );
 
+    const townOfHumbleBeginningsDoor3 = await doorBlocksRepository.create(
+      {
+        inTerritory: Promise.resolve(null),
+        inLand: townOfHumbleBeginnings,
+        toLand: townOfHumbleBeginningsTemple,
+      },
+      auditContext,
+    );
+
     const townOfHumbleBeginningsApp1 = await appBlocksRepository.create(
       {
         inTerritory: Promise.resolve(null),
@@ -281,7 +341,7 @@ async function seed() {
       auditContext,
     );
 
-    const townOfHumbleBeginningsMap = await readFile(
+    const townOfHumbleBeginningsMapString = await readFile(
       path.resolve(
         process.cwd(),
         'src/land/spec/assets/town-of-humble-beginnings-map.json',
@@ -294,13 +354,62 @@ async function seed() {
         'src/land/spec/assets/town-of-humble-beginnings-tileset.png',
       ),
     );
+
+    const townOfHumbleBeginningsMapRes = createTiledJSONSchema({
+      maxWidth: null,
+      maxHeight: null,
+    }).validate(JSON.parse(townOfHumbleBeginningsMapString) as unknown);
+
+    if (townOfHumbleBeginningsMapRes.errors) {
+      throw new Error(
+        JSON.stringify(townOfHumbleBeginningsMapRes.messagesTree),
+      );
+    }
+
+    const townOfHumbleBeginningsMap = townOfHumbleBeginningsMapRes.value;
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    townOfHumbleBeginningsMap.tilesets[0]!.tiles =
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      townOfHumbleBeginningsMap.tilesets[0]!.tiles.map((tile) => {
+        return {
+          ...tile,
+          properties: tile.properties?.map((prop) => {
+            if (prop.name === 'underground-entrance') {
+              return {
+                ...prop,
+                value: townOfHumbleBeginningsDoor1.id,
+              };
+            } else if (prop.name === 'temple') {
+              return {
+                ...prop,
+                value: townOfHumbleBeginningsDoor3.id,
+              };
+            } else if (prop.name === 'form') {
+              return {
+                ...prop,
+                value: townOfHumbleBeginningsApp1.id,
+              };
+            } else if (prop.name === 'underground') {
+              return {
+                ...prop,
+                value: townOfHumbleBeginningsDoor2.id,
+              };
+            } else if (prop.name === 'beach') {
+              return {
+                ...prop,
+                value: expectationsBeachDoor2.id,
+              };
+            } else {
+              return prop;
+            }
+          }),
+        };
+      });
+
     await storageService.saveText(
       `lands/${townOfHumbleBeginnings.id}/map.json`,
-      townOfHumbleBeginningsMap
-        .replaceAll('<door-1>', expectationsBeachDoor2.id)
-        .replaceAll('<door-2>', townOfHumbleBeginningsDoor1.id)
-        .replaceAll('<door-3>', townOfHumbleBeginningsDoor2.id)
-        .replaceAll('<app-1>', townOfHumbleBeginningsApp1.id),
+      JSON.stringify(townOfHumbleBeginningsMap),
     );
     await storageService.saveBuffer(
       `lands/${townOfHumbleBeginnings.id}/tileset.png`,
@@ -319,7 +428,7 @@ async function seed() {
         auditContext,
       );
 
-    const townOfHumbleBeginningsUnderground1Map = await readFile(
+    const townOfHumbleBeginningsUnderground1MapString = await readFile(
       path.resolve(
         process.cwd(),
         'src/land/spec/assets/town-of-humble-beginnings-underground-1-map.json',
@@ -332,11 +441,50 @@ async function seed() {
         'src/land/spec/assets/town-of-humble-beginnings-underground-1-tileset.png',
       ),
     );
+
+    const townOfHumbleBeginningsUnderground1MapRes = createTiledJSONSchema({
+      maxWidth: null,
+      maxHeight: null,
+    }).validate(
+      JSON.parse(townOfHumbleBeginningsUnderground1MapString) as unknown,
+    );
+
+    if (townOfHumbleBeginningsUnderground1MapRes.errors) {
+      throw new Error(
+        JSON.stringify(townOfHumbleBeginningsUnderground1MapRes.messagesTree),
+      );
+    }
+
+    const townOfHumbleBeginningsUnderground1Res =
+      townOfHumbleBeginningsUnderground1MapRes.value;
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    townOfHumbleBeginningsUnderground1Res.tilesets[0]!.tiles =
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      townOfHumbleBeginningsUnderground1Res.tilesets[0]!.tiles.map((tile) => {
+        return {
+          ...tile,
+          properties: tile.properties?.map((prop) => {
+            if (prop.name === 'underground') {
+              return {
+                ...prop,
+                value: townOfHumbleBeginningsUnderground1Door1.id,
+              };
+            } else if (prop.name === 'town') {
+              return {
+                ...prop,
+                value: townOfHumbleBeginningsDoor1.id,
+              };
+            } else {
+              return prop;
+            }
+          }),
+        };
+      });
+
     await storageService.saveText(
       `lands/${townOfHumbleBeginningsUnderground1.id}/map.json`,
-      townOfHumbleBeginningsUnderground1Map
-        .replaceAll('<door-1>', townOfHumbleBeginningsDoor1.id)
-        .replaceAll('<door-2>', townOfHumbleBeginningsUnderground1Door1.id),
+      JSON.stringify(townOfHumbleBeginningsUnderground1Res),
     );
     await storageService.saveBuffer(
       `lands/${townOfHumbleBeginningsUnderground1.id}/tileset.png`,
@@ -345,7 +493,7 @@ async function seed() {
 
     /* ----- */
 
-    const townOfHumbleBeginningsUnderground2Map = await readFile(
+    const townOfHumbleBeginningsUnderground2MapString = await readFile(
       path.resolve(
         process.cwd(),
         'src/land/spec/assets/town-of-humble-beginnings-underground-2-map.json',
@@ -358,11 +506,50 @@ async function seed() {
         'src/land/spec/assets/town-of-humble-beginnings-underground-2-tileset.png',
       ),
     );
+
+    const townOfHumbleBeginningsUnderground2MapRes = createTiledJSONSchema({
+      maxWidth: null,
+      maxHeight: null,
+    }).validate(
+      JSON.parse(townOfHumbleBeginningsUnderground2MapString) as unknown,
+    );
+
+    if (townOfHumbleBeginningsUnderground2MapRes.errors) {
+      throw new Error(
+        JSON.stringify(townOfHumbleBeginningsUnderground2MapRes.messagesTree),
+      );
+    }
+
+    const townOfHumbleBeginningsUnderground2Map =
+      townOfHumbleBeginningsUnderground2MapRes.value;
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    townOfHumbleBeginningsUnderground2Map.tilesets[0]!.tiles =
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      townOfHumbleBeginningsUnderground2Map.tilesets[0]!.tiles.map((tile) => {
+        return {
+          ...tile,
+          properties: tile.properties?.map((prop) => {
+            if (prop.name === 'town') {
+              return {
+                ...prop,
+                value: townOfHumbleBeginningsDoor2.id,
+              };
+            } else if (prop.name === 'entrance') {
+              return {
+                ...prop,
+                value: townOfHumbleBeginningsUnderground1Door1.id,
+              };
+            } else {
+              return prop;
+            }
+          }),
+        };
+      });
+
     await storageService.saveText(
       `lands/${townOfHumbleBeginningsUnderground2.id}/map.json`,
-      townOfHumbleBeginningsUnderground2Map
-        .replaceAll('<door-1>', townOfHumbleBeginningsUnderground1Door1.id)
-        .replaceAll('<door-2>', townOfHumbleBeginningsDoor2.id),
+      JSON.stringify(townOfHumbleBeginningsUnderground2Map),
     );
     await storageService.saveBuffer(
       `lands/${townOfHumbleBeginningsUnderground2.id}/tileset.png`,
@@ -370,6 +557,66 @@ async function seed() {
     );
 
     /* --- */
+
+    /* ----- */
+
+    const townOfHumbleBeginningsTempleMapString = await readFile(
+      path.resolve(
+        process.cwd(),
+        'src/land/spec/assets/town-of-humble-beginnings-temple-map.json',
+      ),
+      { encoding: 'utf-8' },
+    );
+    const townOfHumbleBeginningsTempleTileset = await readFile(
+      path.resolve(
+        process.cwd(),
+        'src/land/spec/assets/town-of-humble-beginnings-temple-tileset.png',
+      ),
+    );
+
+    const townOfHumbleBeginningsTempleMapRes = createTiledJSONSchema({
+      maxWidth: null,
+      maxHeight: null,
+    }).validate(JSON.parse(townOfHumbleBeginningsTempleMapString) as unknown);
+
+    if (townOfHumbleBeginningsTempleMapRes.errors) {
+      throw new Error(
+        JSON.stringify(townOfHumbleBeginningsTempleMapRes.messagesTree),
+      );
+    }
+
+    const townOfHumbleBeginningsTempleMap = townOfHumbleBeginningsMapRes.value;
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    townOfHumbleBeginningsTempleMap.tilesets[0]!.tiles =
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      townOfHumbleBeginningsTempleMap.tilesets[0]!.tiles.map((tile) => {
+        return {
+          ...tile,
+          properties: tile.properties?.map((prop) => {
+            if (prop.name === 'town') {
+              return {
+                ...prop,
+                value: townOfHumbleBeginningsDoor3.id,
+              };
+            } else {
+              return prop;
+            }
+          }),
+        };
+      });
+
+    await storageService.saveText(
+      `lands/${townOfHumbleBeginningsTemple.id}/map.json`,
+      JSON.stringify(townOfHumbleBeginningsTempleMap),
+    );
+    await storageService.saveBuffer(
+      `lands/${townOfHumbleBeginningsTemple.id}/tileset.png`,
+      townOfHumbleBeginningsTempleTileset,
+    );
+
+    /* ----- */
+
     const territoriesRepository = defaultDBConnection.getCustomRepository(
       TerritoriesRepository,
     );

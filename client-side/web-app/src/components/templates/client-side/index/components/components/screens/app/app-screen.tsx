@@ -1,5 +1,7 @@
 import { throwError } from '@app/shared/internals/utils/throw-error';
+import { navigate } from 'gatsby';
 import { useEffect, useState } from 'react';
+import { USER_ROUTE } from 'src/components/templates/client-side/user/user-routes';
 import { v4 } from 'uuid';
 import { GamepadSingleton } from '../../../../gamepad-singleton';
 import { ESCAPE_BUTTON_SELECTOR } from '../../keypad-utils';
@@ -16,7 +18,7 @@ export class AppService {
   private landScreenServiceRef: React.MutableRefObject<LandScreenService | null>;
   private musicService: MusicService;
 
-  public lockCurrentScreen = false;
+  public active = false;
 
   public currentContext: AppContext | null = null;
 
@@ -44,7 +46,7 @@ export class AppService {
 
     this.currentContext = context;
 
-    this.lockCurrentScreen = true;
+    this.active = true;
 
     this.musicService.fadeMusic();
 
@@ -57,11 +59,11 @@ export class AppService {
   }
 
   close() {
-    if (!this.lockCurrentScreen) {
+    if (!this.active) {
       return;
     }
 
-    this.lockCurrentScreen = false;
+    this.active = false;
 
     this.musicService.play();
     this.musicService.raiseMusic();
@@ -102,8 +104,12 @@ export function AppScreen(props: {
 
     const gamepad = GamepadSingleton.getInstance();
 
-    const onPressing_Escape = () => {
-      sv.close();
+    const onPressing_Escape = async () => {
+      if (sv.active) {
+        sv.close();
+      } else {
+        await navigate(USER_ROUTE.getHref({ section: 'escape' }));
+      }
     };
 
     gamepad.onPressing_Escape(onPressing_Escape);
@@ -118,7 +124,7 @@ export function AppScreen(props: {
 
   return (
     <>
-      {service && service.lockCurrentScreen ? (
+      {service && service.active ? (
         <style>
           {`
 @keyframes escape-pulse {

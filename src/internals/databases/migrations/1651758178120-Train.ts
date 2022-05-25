@@ -43,13 +43,6 @@ export class Train1651758178120 implements MigrationInterface {
             )
         `);
     await queryRunner.query(`
-            CREATE TABLE "train_platform_block" (
-                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
-                "inLandId" uuid,
-                CONSTRAINT "PK_f2b08d1ef77868c12f80461629b" PRIMARY KEY ("id")
-            )
-        `);
-    await queryRunner.query(`
             CREATE TABLE "train_state" (
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "userId" uuid,
@@ -73,10 +66,6 @@ export class Train1651758178120 implements MigrationInterface {
     await queryRunner.query(`
             ALTER TABLE "land"
             ADD CONSTRAINT "FK_17c933a8881643469968048493a" FOREIGN KEY ("worldId") REFERENCES "world"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
-        `);
-    await queryRunner.query(`
-            ALTER TABLE "train_platform_block"
-            ADD CONSTRAINT "FK_17a010256c9d84ce99a3c2a05f9" FOREIGN KEY ("inLandId") REFERENCES "land"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
     await queryRunner.query(`
             ALTER TABLE "train_state"
@@ -103,9 +92,6 @@ export class Train1651758178120 implements MigrationInterface {
             ALTER TABLE "train_state" DROP CONSTRAINT "FK_5eebbbae9fc14bb9e37ca760a72"
         `);
     await queryRunner.query(`
-            ALTER TABLE "train_platform_block" DROP CONSTRAINT "FK_17a010256c9d84ce99a3c2a05f9"
-        `);
-    await queryRunner.query(`
             ALTER TABLE "land" DROP CONSTRAINT "FK_17c933a8881643469968048493a"
         `);
     await queryRunner.query(`
@@ -119,9 +105,6 @@ export class Train1651758178120 implements MigrationInterface {
         `);
     await queryRunner.query(`
             DROP TABLE "train_state"
-        `);
-    await queryRunner.query(`
-            DROP TABLE "train_platform_block"
         `);
     await queryRunner.query(`
             DROP TABLE "world"

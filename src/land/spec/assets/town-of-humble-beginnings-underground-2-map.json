@@ -51,44 +51,27 @@
       "spacing": 0,
       "tilecount": 15,
       "tileheight": 16,
+      "tilewidth": 16,
       "tiles": [
         {
           "id": 0,
-          "properties": [
-            {
-              "name": "collides",
-              "type": "bool",
-              "value": true
-            }
-          ]
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
         },
         {
           "id": 1,
-          "properties": [
-            {
-              "name": "collides",
-              "type": "bool",
-              "value": true
-            }
-          ]
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
         },
         {
           "id": 2,
-          "properties": [
-            {
-              "name": "collides",
-              "type": "bool",
-              "value": true
-            }
-          ]
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
         },
         {
           "id": 3,
           "properties": [
             {
-              "name": "door-2",
+              "name": "town",
               "type": "string",
-              "value": "<door-2>"
+              "value": "f7fd8436-b554-486b-b12b-cd64eac385f1"
             }
           ]
         },
@@ -96,9 +79,9 @@
           "id": 5,
           "properties": [
             {
-              "name": "door-1",
+              "name": "entrance",
               "type": "string",
-              "value": "<door-1>"
+              "value": "f4b0eb2e-4c34-4d56-a9de-ffbd9132ef47"
             }
           ]
         },
@@ -106,94 +89,51 @@
           "id": 6,
           "properties": [
             {
-              "name": "door-2",
+              "name": "town",
               "type": "string",
-              "value": "<door-2>"
+              "value": "f7fd8436-b554-486b-b12b-cd64eac385f1"
             }
           ]
         },
         {
           "id": 7,
-          "properties": [
-            {
-              "name": "collides",
-              "type": "bool",
-              "value": true
-            }
-          ]
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
         },
         {
           "id": 8,
           "properties": [
             {
-              "name": "door-1",
+              "name": "entrance",
               "type": "string",
-              "value": "<door-1>"
+              "value": "f4b0eb2e-4c34-4d56-a9de-ffbd9132ef47"
             }
           ]
         },
         {
           "id": 9,
-          "properties": [
-            {
-              "name": "collides",
-              "type": "bool",
-              "value": true
-            }
-          ]
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
         },
         {
           "id": 10,
-          "properties": [
-            {
-              "name": "collides",
-              "type": "bool",
-              "value": true
-            }
-          ]
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
         },
         {
           "id": 11,
-          "properties": [
-            {
-              "name": "collides",
-              "type": "bool",
-              "value": true
-            }
-          ]
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
         },
         {
           "id": 12,
-          "properties": [
-            {
-              "name": "collides",
-              "type": "bool",
-              "value": true
-            }
-          ]
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
         },
         {
           "id": 13,
-          "properties": [
-            {
-              "name": "collides",
-              "type": "bool",
-              "value": true
-            }
-          ]
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
         },
         {
           "id": 14,
-          "properties": [
-            {
-              "name": "collides",
-              "type": "bool",
-              "value": true
-            }
-          ]
+          "properties": [{ "name": "collides", "type": "bool", "value": true }]
         }
-      ],
-      "tilewidth": 16
+      ]
     }
   ],
   "tilewidth": 16,

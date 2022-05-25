@@ -146,7 +146,7 @@ export class LandsInGameController {
         return qB
           .where('land.hasAssets = :hasAssets', { hasAssets: true })
           .andWhere('land.world IS NULL')
-          .orderBy('land.createdAt', 'DESC');
+          .orderBy('land.createdAt', 'ASC');
       },
     );
 

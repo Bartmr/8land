@@ -330,7 +330,9 @@ export function UserTemplate(_props: RouteComponentProps) {
               </div>
               <div className="my-3 card">
                 <div className="card-body">
-                  <h2 className="card-title h3">Escape</h2>
+                  <h2 id="escape" className="card-title h3">
+                    Escape
+                  </h2>
                   <p>
                     If you are having trouble leaving a land, you can teleport
                     yourself back to a safe place, like the trains station, by

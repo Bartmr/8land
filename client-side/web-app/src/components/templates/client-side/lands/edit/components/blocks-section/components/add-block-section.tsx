@@ -164,7 +164,9 @@ export function AddBlockSection(props: {
 
             {data === 'block-limit-exceeded' ? (
               <div className="text-danger">
-                You cannot add more blocks to this land
+                {
+                  'You cannot add more blocks to this land. Please delete some blocks before adding a new one.'
+                }
               </div>
             ) : null}
             <button
