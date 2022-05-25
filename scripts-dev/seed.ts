@@ -585,7 +585,8 @@ async function seed() {
       );
     }
 
-    const townOfHumbleBeginningsTempleMap = townOfHumbleBeginningsMapRes.value;
+    const townOfHumbleBeginningsTempleMap =
+      townOfHumbleBeginningsTempleMapRes.value;
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     townOfHumbleBeginningsTempleMap.tilesets[0]!.tiles =
