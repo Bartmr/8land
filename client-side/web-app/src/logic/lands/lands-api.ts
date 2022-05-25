@@ -282,6 +282,17 @@ export class LandsAPI {
       }
     }
   }
+
+  escape() {
+    return this.api.put<{ status: 200; body: undefined }, undefined, undefined>(
+      {
+        path: '/lands/escape',
+        query: undefined,
+        acceptableStatusCodes: [200],
+        body: undefined,
+      },
+    );
+  }
 }
 
 export function useLandsAPI() {

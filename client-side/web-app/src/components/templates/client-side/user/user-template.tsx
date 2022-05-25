@@ -22,6 +22,9 @@ import { useMainApiSessionLogout } from 'src/logic/app-internals/apis/main/sessi
 import { ChangeEmail } from './components/change-email';
 import { getWalletSignMessage } from '@app/shared/users/me/receive-signed-user-nonce.utils';
 import { useUsersAPI } from 'src/logic/users/users-api';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPersonThroughWindow } from '@fortawesome/free-solid-svg-icons';
+import { useLandsAPI } from 'src/logic/lands/lands-api';
 
 export function WalletSectionWithNonce(props: {
   session: null | MainApiSessionData;
@@ -277,12 +280,31 @@ export function WalletSection(props: {
 }
 
 export function UserTemplate(_props: RouteComponentProps) {
+  const [escapeStatus, replaceEscapeStatus] = useState<
+    TransportedData<undefined>
+  >({ status: TransportedDataStatus.NotInitialized });
+
   const mainApiSession = useMainApiSession();
   const session = useStoreSelector(
     { mainApi: mainApiReducer },
     (s) => s.mainApi.session,
   );
   const logout = useMainApiSessionLogout();
+
+  const landsApi = useLandsAPI();
+
+  const handleEscape = async () => {
+    const res = await landsApi.escape();
+
+    if (res.failure) {
+      replaceEscapeStatus({ status: res.failure });
+    } else {
+      replaceEscapeStatus({
+        status: TransportedDataStatus.Done,
+        data: undefined,
+      });
+    }
+  };
 
   return (
     <Layout title={USER_ROUTE.label}>
@@ -304,6 +326,39 @@ export function UserTemplate(_props: RouteComponentProps) {
                   >
                     Log out
                   </button>
+                </div>
+              </div>
+              <div className="my-3 card">
+                <div className="card-body">
+                  <h2 className="card-title h3">Escape</h2>
+                  <p>
+                    If you are having trouble leaving a land, you can teleport
+                    yourself back to a safe place, like the trains station, by
+                    clicking the button below
+                  </p>
+                  <div className="d-flex align-items-center">
+                    <button
+                      onClick={handleEscape}
+                      disabled={
+                        escapeStatus.status === TransportedDataStatus.Loading
+                      }
+                      className="btn btn-danger"
+                    >
+                      <FontAwesomeIcon icon={faPersonThroughWindow} /> Escape
+                    </button>
+                    <div className="ms-3">
+                      <TransportedDataGate
+                        layout={TransportedDataGateLayout.Tape}
+                        dataWrapper={escapeStatus}
+                      >
+                        {() => (
+                          <span className="text-success">
+                            Escape was successful
+                          </span>
+                        )}
+                      </TransportedDataGate>
+                    </div>
+                  </div>
                 </div>
               </div>
               <WalletSection
