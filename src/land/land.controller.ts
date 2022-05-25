@@ -118,7 +118,11 @@ export class LandsController {
     }
 
     if (authContext.user.role !== Role.Admin && !world) {
-      throw new ResourceNotFoundException();
+      return {
+        total: 0,
+        limit: results.limit,
+        lands: [],
+      };
     }
 
     return {
@@ -156,7 +160,7 @@ export class LandsController {
         if (authContext.user.role !== Role.Admin) {
           resQb = resQb
             .leftJoinAndSelect('land.world', 'world')
-            .andWhere('world.user = :id', { id: authContext.user.id });
+            .andWhere('world.user = :userId', { userId: authContext.user.id });
         }
 
         return resQb;
@@ -171,7 +175,6 @@ export class LandsController {
   }
 
   @Post()
-  @RolesUpAndIncluding(Role.Admin)
   async createLand(
     @Body() body: CreateLandRequestDTO,
     @WithAuditContext() auditContext: AuditContext,
@@ -202,7 +205,6 @@ export class LandsController {
     }
   }
 
-  @RolesUpAndIncluding(Role.Admin)
   @HttpCode(204)
   @Put(':landId/assets')
   @UseInterceptors(
@@ -263,7 +265,6 @@ export class LandsController {
   }
 
   @Put(':landId')
-  @RolesUpAndIncluding(Role.Admin)
   async editLand(
     @Param() param: EditLandParametersDTO,
     @Body() body: EditLandBodyDTO,
@@ -289,11 +290,15 @@ export class LandsController {
 
   @Delete(':landId')
   @RolesUpAndIncluding(Role.Admin)
-  async deleteLand(@Param() param: DeleteLandParametersDTO): Promise<void> {
+  async deleteLand(
+    @Param() param: DeleteLandParametersDTO,
+    @WithAuthContext() authContext: AuthContext,
+  ): Promise<void> {
     const res = await this.landPersistenceService.deleteLand({
       landId: param.landId,
       connection: this.connection,
       storageService: this.storageService,
+      authContext,
     });
 
     if (res.status === 'ok') {

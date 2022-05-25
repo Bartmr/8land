@@ -12,6 +12,7 @@ import {
   MainJSONApi,
   useMainJSONApi,
 } from '../app-internals/apis/main/use-main-json-api';
+import { Logger } from '../app-internals/logging/logger';
 import { JSONData } from '../app-internals/transports/json-types';
 import { TransportFailure } from '../app-internals/transports/transported-data/transport-failures';
 
@@ -145,13 +146,68 @@ export class LandsAPI {
     }
   }
 
-  uploadAssets(args: { landId: string; formData: FormData }) {
-    return this.api.put<{ status: 204; body: undefined }, undefined, FormData>({
+  async uploadAssets(args: { landId: string; formData: FormData }) {
+    const res = await this.api.put<
+      | { status: 204; body: undefined }
+      | {
+          status: 409;
+          body:
+            | undefined
+            | {
+                error?:
+                  | 'start-lands-limit-exceeded'
+                  | 'cannot-have-train-block-in-world-lands'
+                  | 'only-one-land-can-have-a-start-block'
+                  | 'cannot-remove-start-block'
+                  | 'must-have-start-block-in-first-land'
+                  | 'cannot-have-start-block-in-admin-lands';
+              };
+        },
+      undefined,
+      FormData
+    >({
       path: `/lands/${args.landId}/assets`,
       query: undefined,
-      acceptableStatusCodes: [204],
+      acceptableStatusCodes: [204, 409],
       body: args.formData,
     });
+
+    if (res.failure) {
+      return res;
+    } else {
+      if (res.response.status === 409) {
+        const body = res.response.body;
+
+        if (body?.error === 'start-lands-limit-exceeded') {
+          Logger.logError(body.error, new Error());
+        }
+
+        if (
+          body?.error === 'start-lands-limit-exceeded' ||
+          body?.error === 'cannot-have-train-block-in-world-lands' ||
+          body?.error === 'only-one-land-can-have-a-start-block' ||
+          body?.error === 'cannot-remove-start-block' ||
+          body?.error === 'must-have-start-block-in-first-land' ||
+          body?.error === 'cannot-have-start-block-in-admin-lands'
+        ) {
+          return {
+            failure: undefined,
+            response: {
+              error: body.error,
+            } as const,
+          };
+        } else {
+          return res.logAndReturnAsUnexpected();
+        }
+      } else {
+        return {
+          failure: undefined,
+          response: {
+            error: undefined,
+          },
+        };
+      }
+    }
   }
 
   updateLand(args: {

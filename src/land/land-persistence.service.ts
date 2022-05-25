@@ -96,7 +96,7 @@ export class LandPersistenceService {
           if (limitations.useWorld) {
             finalQb = finalQb
               .leftJoinAndSelect('land.world', 'world')
-              .where('world.user = :id', { id: authContext.user.id });
+              .where('world.user = :userId', { userId: authContext.user.id });
           } else {
             finalQb = finalQb.where('land.world IS NULL');
           }
@@ -223,8 +223,8 @@ export class LandPersistenceService {
           if (authContext.user.role === Role.Admin) {
             finalQb = finalQb.andWhere('land.world IS NULL');
           } else {
-            finalQb = finalQb.andWhere('world.user = :id', {
-              id: authContext.user.id,
+            finalQb = finalQb.andWhere('world.user = :userId', {
+              userId: authContext.user.id,
             });
           }
 
@@ -422,8 +422,8 @@ export class LandPersistenceService {
           if (authContext.user.role === Role.Admin) {
             finalQb = finalQb.andWhere('land.world IS NULL');
           } else {
-            finalQb = finalQb.andWhere('world.user = :id', {
-              id: authContext.user.id,
+            finalQb = finalQb.andWhere('world.user = :userId', {
+              userId: authContext.user.id,
             });
           }
 
@@ -475,19 +475,36 @@ export class LandPersistenceService {
     connection,
     landId,
     storageService,
+    authContext,
   }: {
     connection: Connection;
     landId: string;
     storageService: StorageService;
+    authContext: AuthContext;
   }) {
     const res = await connection.transaction(async (e) => {
       const landRepository = e.getCustomRepository(LandRepository);
 
-      const land = await landRepository.findOne({
-        where: {
-          id: landId,
+      const land = await landRepository.selectOne(
+        {
+          alias: 'land',
         },
-      });
+        (qb) => {
+          let finalQb = qb
+            .leftJoinAndSelect('land.world', 'world')
+            .where('land.id = :id', { id: landId });
+
+          if (authContext.user.role === Role.Admin) {
+            finalQb = finalQb.andWhere('land.world IS NULL');
+          } else {
+            finalQb = finalQb.andWhere('world.user = :userId', {
+              userId: authContext.user.id,
+            });
+          }
+
+          return finalQb;
+        },
+      );
 
       if (!land) {
         return { status: 'not-found' } as const;
