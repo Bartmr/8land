@@ -46,7 +46,6 @@ export class Train1651758178120 implements MigrationInterface {
             CREATE TABLE "train_state" (
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "userId" uuid,
-                "destinationLandId" uuid,
                 "boardedInId" uuid,
                 CONSTRAINT "PK_27b832cb7188013cabd4aa9de76" PRIMARY KEY ("id")
             )
@@ -75,16 +74,9 @@ export class Train1651758178120 implements MigrationInterface {
             ALTER TABLE "train_state"
             ADD CONSTRAINT "FK_371a712c8759a8ebd9276680f71" FOREIGN KEY ("boardedInId") REFERENCES "land"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
-    await queryRunner.query(`
-            ALTER TABLE "train_state"
-            ADD CONSTRAINT "FK_b6d065bccaade9f8af80bc7fb56" FOREIGN KEY ("destinationLandId") REFERENCES "land"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
-        `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
-            ALTER TABLE "train_state" DROP CONSTRAINT "FK_b6d065bccaade9f8af80bc7fb56"
-        `);
     await queryRunner.query(`
             ALTER TABLE "train_state" DROP CONSTRAINT "FK_371a712c8759a8ebd9276680f71"
         `);

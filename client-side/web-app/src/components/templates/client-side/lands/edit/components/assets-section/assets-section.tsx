@@ -11,6 +11,7 @@ import { TilesetImageFormField } from './components/tileset-image-form-field';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { useLandsAPI } from 'src/logic/lands/lands-api';
+import { START_LANDS_LIMIT_EXCEEDED_MESSAGE } from './assets-section.constants';
 
 export function AssetsSection(props: {
   land: GetLandDTO;
@@ -117,7 +118,7 @@ export function AssetsSection(props: {
                   <span className="text-danger">
                     {(() => {
                       if (data?.error === 'start-lands-limit-exceeded') {
-                        return '8Land hit its upload limit right now. Wait for the developers to release more bandwidth so you can start your new land.';
+                        return START_LANDS_LIMIT_EXCEEDED_MESSAGE;
                       } else if (
                         data?.error === 'must-have-start-block-in-first-land'
                       ) {

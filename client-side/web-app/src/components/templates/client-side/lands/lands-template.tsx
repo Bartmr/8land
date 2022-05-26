@@ -14,6 +14,8 @@ import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-ancho
 import { EDIT_LAND_ROUTE } from './edit/edit-land-routes';
 import { useLandsAPI } from 'src/logic/lands/lands-api';
 import { Toast } from 'react-bootstrap';
+import { GetLandsToClaimDTO } from '@app/shared/land/lands-to-claim/lands-to-claim.dto';
+import { START_LANDS_LIMIT_EXCEEDED_MESSAGE } from './edit/components/assets-section/assets-section.constants';
 
 export function LandsTemplate(_props: RouteComponentProps) {
   const api = useLandsAPI();
@@ -30,6 +32,12 @@ export function LandsTemplate(_props: RouteComponentProps) {
   >({
     status: TransportedDataStatus.Done,
     data: undefined,
+  });
+
+  const [landsToClaim, replaceLandsToClaim] = useState<
+    TransportedData<GetLandsToClaimDTO>
+  >({
+    status: TransportedDataStatus.NotInitialized,
   });
 
   const [lands, replaceLands] = useState<TransportedData<IndexLandsDTO>>({
@@ -60,6 +68,23 @@ export function LandsTemplate(_props: RouteComponentProps) {
           data: res.response.body,
         });
       }
+    }
+  };
+
+  const fetchLandsToClaim = async () => {
+    replaceLandsToClaim({ status: TransportedDataStatus.Loading });
+
+    const res = await api.getLandsToClaim();
+
+    if (res.failure) {
+      replaceLands({
+        status: res.failure,
+      });
+    } else {
+      replaceLandsToClaim({
+        status: TransportedDataStatus.Done,
+        data: res.response.body,
+      });
     }
   };
 
@@ -101,7 +126,7 @@ export function LandsTemplate(_props: RouteComponentProps) {
 
   useEffect(() => {
     (async () => {
-      await fetchLands();
+      await Promise.all([fetchLands(), fetchLandsToClaim()]);
     })();
   }, []);
 
@@ -121,6 +146,22 @@ export function LandsTemplate(_props: RouteComponentProps) {
           >
             <Toast.Header closeButton={false}>Land was deleted</Toast.Header>
           </Toast>
+          <div className="my-3">
+            <TransportedDataGate dataWrapper={landsToClaim}>
+              {({ data }) => {
+                return data.free === 0 ? (
+                  <div className="bg-warning p-3">
+                    {START_LANDS_LIMIT_EXCEEDED_MESSAGE}
+                  </div>
+                ) : (
+                  <div className="bg-info p-3">
+                    There are {data.free} lands in all of 8Land, ready to be
+                    claimed
+                  </div>
+                );
+              }}
+            </TransportedDataGate>
+          </div>
           <TransportedDataGate dataWrapper={newLandSubmission}>
             {({ data }) => {
               return (

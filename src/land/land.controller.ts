@@ -52,6 +52,8 @@ import { WorldRepository } from 'src/worlds/worlds.repository';
 import { World } from 'src/worlds/typeorm/worlds.entity';
 import { DeleteLandParametersDTO } from 'libs/shared/src/land/delete-land/delete-land.dto';
 import { SettingsService } from 'src/settings/settings.service';
+import { PublicRoute } from 'src/auth/public-route.decorator';
+import { GetLandsToClaimDTO } from 'libs/shared/src/land/lands-to-claim/lands-to-claim.dto';
 
 class LandAssetsRequestDTO {
   @ApiProperty({ type: 'string', format: 'binary' })
@@ -137,6 +139,25 @@ export class LandsController {
             : !!(c.hasAssets && world?.hasStartLand),
         isStartingLand: !!c.isStartingLand,
       })),
+    };
+  }
+
+  @Get('/getLandsToClaim')
+  @PublicRoute()
+  async getLandsToClaim(): Promise<GetLandsToClaimDTO> {
+    const landsRepository = this.connection.getCustomRepository(LandRepository);
+
+    const [landsWithStartCount, settings] = await Promise.all([
+      landsRepository.count({
+        where: {
+          isStartingLand: true,
+        },
+      }),
+      this.settingsService.getSettings(),
+    ]);
+
+    return {
+      free: settings.startLandsTotalLimit - landsWithStartCount,
     };
   }
 

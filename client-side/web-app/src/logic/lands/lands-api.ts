@@ -8,6 +8,7 @@ import {
   IndexLandsDTO,
   IndexLandsQueryDTO,
 } from '@app/shared/land/index/index-lands.dto';
+import { GetLandsToClaimDTO } from '@app/shared/land/lands-to-claim/lands-to-claim.dto';
 import {
   MainJSONApi,
   useMainJSONApi,
@@ -292,6 +293,17 @@ export class LandsAPI {
         body: undefined,
       },
     );
+  }
+
+  getLandsToClaim() {
+    return this.api.get<
+      { status: 200; body: ToIndexedType<GetLandsToClaimDTO> },
+      undefined
+    >({
+      path: '/lands/getLandsToClaim',
+      query: undefined,
+      acceptableStatusCodes: [200],
+    });
   }
 }
 

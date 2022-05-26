@@ -290,7 +290,6 @@ export class LandsInGameController {
         });
 
         if (trainState) {
-          trainState.destinationLand = null;
           await trainStatesRepository.save(trainState, auditContext);
         }
 

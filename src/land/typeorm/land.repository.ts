@@ -19,7 +19,6 @@ export class LandRepository extends SimpleEntityRepository<
         .update()
         .set({
           boardedIn: null,
-          destinationLand: null,
         })
         .where('boardedIn = :boardedInId', { boardedInId: entity.id })
         .orWhere('destinationLand = :destinationLandId', {

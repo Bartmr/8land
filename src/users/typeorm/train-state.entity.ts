@@ -9,8 +9,5 @@ export class TrainState extends SimpleEntity {
   user!: Promise<User>;
 
   @ManyToOne(() => Land, { eager: true })
-  destinationLand!: Land | null;
-
-  @ManyToOne(() => Land, { eager: true })
   boardedIn!: Land | null;
 }
