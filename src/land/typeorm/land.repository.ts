@@ -1,6 +1,5 @@
 import { SimpleEntityRepository } from 'src/internals/databases/simple-entity/simple-entity.repository';
 import { NavigationState } from 'src/users/typeorm/navigation-state.entity';
-import { TrainState } from 'src/users/typeorm/train-state.entity';
 import { EntityManager, EntityRepository } from 'typeorm';
 import { Land } from './land.entity';
 
@@ -11,20 +10,7 @@ export class LandRepository extends SimpleEntityRepository<
 > {
   remove(entity: Land) {
     const run = async (manager: EntityManager) => {
-      const trainStateRepository = manager.getRepository(TrainState);
       const navigationStateRepository = manager.getRepository(NavigationState);
-
-      await trainStateRepository
-        .createQueryBuilder()
-        .update()
-        .set({
-          boardedIn: null,
-        })
-        .where('boardedIn = :boardedInId', { boardedInId: entity.id })
-        .orWhere('destinationLand = :destinationLandId', {
-          destinationLandId: entity.id,
-        })
-        .execute();
 
       await navigationStateRepository
         .createQueryBuilder()

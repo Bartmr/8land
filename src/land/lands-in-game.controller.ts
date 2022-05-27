@@ -22,7 +22,6 @@ import { LoggingService } from 'src/internals/logging/logging.service';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
 import { NavigationState } from 'src/users/typeorm/navigation-state.entity';
 import { NavigationStateRepository } from 'src/users/typeorm/navigation-state.repository';
-import { TrainStateRepository } from 'src/users/typeorm/train-state.repository';
 import { Connection } from 'typeorm';
 import { LandsService } from './lands.service';
 import { LandRepository } from './typeorm/land.repository';
@@ -265,8 +264,6 @@ export class LandsInGameController {
       const navigationStatesRepository = eM.getCustomRepository(
         NavigationStateRepository,
       );
-      const trainStatesRepository =
-        eM.getCustomRepository(TrainStateRepository);
 
       const navigationState =
         await navigationStatesRepository.getNavigationStateFromUser(
@@ -282,17 +279,6 @@ export class LandsInGameController {
       navigationState.lastPlayedBackgroundMusicUrl = null;
 
       if (navigationState.boardedOnTrainStation) {
-        const trainState = await trainStatesRepository.findOne({
-          where: {
-            boardedIn: navigationState.boardedOnTrainStation,
-            user: authContext.user,
-          },
-        });
-
-        if (trainState) {
-          await trainStatesRepository.save(trainState, auditContext);
-        }
-
         await navigationStatesRepository.save(navigationState, auditContext);
       } else if (lastDoor && !lastDoor.inLand) {
         // MEANS IT'S A BLOCK INSIDE A TERRITORY

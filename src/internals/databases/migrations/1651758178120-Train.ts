@@ -42,14 +42,7 @@ export class Train1651758178120 implements MigrationInterface {
                 CONSTRAINT "PK_9a0e469d5311d0d95ce1202c990" PRIMARY KEY ("id")
             )
         `);
-    await queryRunner.query(`
-            CREATE TABLE "train_state" (
-                "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
-                "userId" uuid,
-                "boardedInId" uuid,
-                CONSTRAINT "PK_27b832cb7188013cabd4aa9de76" PRIMARY KEY ("id")
-            )
-        `);
+
     await queryRunner.query(`
             ALTER TABLE "land"
             ADD "isStartingLand" boolean
@@ -66,23 +59,9 @@ export class Train1651758178120 implements MigrationInterface {
             ALTER TABLE "land"
             ADD CONSTRAINT "FK_17c933a8881643469968048493a" FOREIGN KEY ("worldId") REFERENCES "world"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
-    await queryRunner.query(`
-            ALTER TABLE "train_state"
-            ADD CONSTRAINT "FK_5eebbbae9fc14bb9e37ca760a72" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
-        `);
-    await queryRunner.query(`
-            ALTER TABLE "train_state"
-            ADD CONSTRAINT "FK_371a712c8759a8ebd9276680f71" FOREIGN KEY ("boardedInId") REFERENCES "land"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
-        `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
-            ALTER TABLE "train_state" DROP CONSTRAINT "FK_371a712c8759a8ebd9276680f71"
-        `);
-    await queryRunner.query(`
-            ALTER TABLE "train_state" DROP CONSTRAINT "FK_5eebbbae9fc14bb9e37ca760a72"
-        `);
     await queryRunner.query(`
             ALTER TABLE "land" DROP CONSTRAINT "FK_17c933a8881643469968048493a"
         `);
@@ -94,9 +73,6 @@ export class Train1651758178120 implements MigrationInterface {
         `);
     await queryRunner.query(`
             ALTER TABLE "land" DROP COLUMN "isStartingLand"
-        `);
-    await queryRunner.query(`
-            DROP TABLE "train_state"
         `);
     await queryRunner.query(`
             DROP TABLE "world"

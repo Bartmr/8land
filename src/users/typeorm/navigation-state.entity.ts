@@ -16,10 +16,10 @@ export class NavigationState extends SimpleEntity {
   isComingBack!: null | boolean;
 
   @ManyToOne(() => Land, { eager: true, nullable: true })
-  traveledByTrainToLand!: Land | null;
+  boardedOnTrainStation!: Land | null;
 
   @ManyToOne(() => Land, { eager: true, nullable: true })
-  boardedOnTrainStation!: Land | null;
+  traveledByTrainToLand!: Land | null;
 
   @Column('text', { nullable: true })
   lastPlayedBackgroundMusicUrl!: string | null;
