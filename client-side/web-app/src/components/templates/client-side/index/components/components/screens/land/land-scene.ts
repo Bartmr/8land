@@ -136,14 +136,14 @@ export class LandScene extends Phaser.Scene {
             return {
               type: DynamicBlockType.Door as const,
               toLandId: dB.toLand.id,
-              id: `door:${dB.id}`,
+              id: dB.id,
             };
           }),
           ...territory.appBlocks.map((aB) => {
             return {
               type: DynamicBlockType.App as const,
               url: aB.url,
-              id: `app:${aB.id}`,
+              id: aB.id,
             };
           }),
         ],
@@ -235,7 +235,7 @@ export class LandScene extends Phaser.Scene {
 
     if (!position) {
       window.alert(
-        'This territory does not have any exits. You should use the escape button to go back to the outdoors',
+        'This land does not have any exits. You should use the escape button to go back to the outdoors',
       );
 
       position = {
@@ -264,21 +264,21 @@ export class LandScene extends Phaser.Scene {
             return {
               type: DynamicBlockType.Door as const,
               toLandId: dB.toLand.id,
-              id: `door:${dB.id}`,
+              id: dB.id,
             };
           }),
           ...this.args.land.doorBlocksReferencing.map((dB) => {
             return {
               type: DynamicBlockType.Door as const,
               toLandId: dB.fromLandId,
-              id: `door:${dB.id}`,
+              id: dB.id,
             };
           }),
           ...this.args.land.appBlocks.map((aB) => {
             return {
               type: DynamicBlockType.App as const,
               url: aB.url,
-              id: `app:${aB.id}`,
+              id: aB.id,
             };
           }),
         ],

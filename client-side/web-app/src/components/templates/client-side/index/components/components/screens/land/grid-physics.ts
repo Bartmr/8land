@@ -7,7 +7,6 @@ import { Player } from './player';
 import { GamepadSingleton, GamepadType } from '../../../../gamepad-singleton';
 import { JSONPrimitive } from '@app/shared/internals/transports/json-types';
 import { DialogueService } from '../dialogue/dialogue-screen';
-import { isUUID } from '@app/shared/internals/utils/uuid/is-uuid';
 import { getEnumValues } from '@app/shared/internals/utils/enums/get-enum-values';
 import {
   DynamicBlockType,
@@ -221,18 +220,21 @@ class GridPhysics {
   private getTopTileProperties(pos: Phaser.Math.Vector2) {
     const resolveTileProps = (
       tile: Phaser.Tilemaps.Tile,
-      territoryId: string | undefined,
+      inTerritoryId: string | undefined,
     ) => {
       let foundATopTileWithProps = false;
       const properties: {
-        territoryId: undefined | string;
+        inTerritoryId: undefined | string;
         static: {
           collides?: boolean;
           text?: string;
         };
-        blockId?: string;
+        dynamicBlock?: {
+          type: string | undefined;
+          id: string | undefined;
+        };
       } = {
-        territoryId,
+        inTerritoryId,
         static: {},
       };
 
@@ -256,16 +258,19 @@ class GridPhysics {
         foundATopTileWithProps = true;
       }
 
-      const firstBlockId = Object.entries(tileProperties)
+      const firstBlockEntry = Object.entries(tileProperties)
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
         .filter((c) => !getEnumValues(StaticBlockType).includes(c[0] as any))
-        .find(
-          (c): c is [string, string] =>
-            typeof c[1] === 'string' && isUUID(c[1]),
-        );
+        .find((c): c is [string, string] => typeof c[1] === 'string');
 
-      if (firstBlockId) {
-        properties.blockId = firstBlockId[1];
+      if (firstBlockEntry) {
+        const firstBlockIdSplitted = firstBlockEntry[1].split(':');
+
+        properties.dynamicBlock = {
+          type: firstBlockIdSplitted[0],
+          id: firstBlockIdSplitted[1],
+        };
+
         foundATopTileWithProps = true;
       }
 
@@ -337,10 +342,12 @@ class GridPhysics {
         return;
       }
 
-      const blockId = tileProps.blockId;
+      const dynamicBlock = tileProps.dynamicBlock;
 
-      if (blockId) {
-        const block = this.context.land.blocks.find((b) => blockId === b.id);
+      if (dynamicBlock) {
+        const block = this.context.land.blocks.find(
+          (b) => b.type === dynamicBlock.type && b.id === dynamicBlock.id,
+        );
 
         if (block) {
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -362,17 +369,19 @@ class GridPhysics {
     if (props?.static.text) {
       this.context.dialogueService.openText(props.static.text);
     } else {
-      const blockId = props?.blockId;
+      const dynamicBlock = props?.dynamicBlock;
 
-      if (blockId) {
-        const block = this.context.land.blocks.find((b) => blockId === b.id);
+      if (dynamicBlock) {
+        const block = this.context.land.blocks.find(
+          (b) => b.type === dynamicBlock.type && b.id === dynamicBlock.id,
+        );
 
         if (block) {
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           if (block.type === DynamicBlockType.App) {
             this.context.onOpenApp({
               url: block.url,
-              territoryId: props.territoryId,
+              territoryId: props.inTerritoryId,
             });
           }
         }

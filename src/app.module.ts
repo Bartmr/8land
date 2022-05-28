@@ -9,6 +9,7 @@ import { LandModule } from './land/land.module';
 import { BlocksModule } from './blocks/blocks.module';
 import { TerritoriesModule } from './territories/territories.module';
 import { UsersModule } from './users/users.module';
+import { TrainModule } from './train/train.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UsersModule } from './users/users.module';
     BlocksModule,
     TerritoriesModule,
     UsersModule,
+    TrainModule,
   ],
   providers: [...CROSS_CUTTING_PROVIDERS],
 })
