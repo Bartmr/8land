@@ -2,7 +2,10 @@ import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { CreateLandRequestDTO } from '@app/shared/land/create/create-land.dto';
 import { EditLandBodyDTO } from '@app/shared/land/edit/edit-land.dto';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
-import { NavigateToLandQueryDTO } from '@app/shared/land/in-game/navigate/navigate-to-land.schemas';
+import {
+  NavigateToLandQueryDTO,
+  NavigateToLandDTO,
+} from '@app/shared/land/in-game/navigate/navigate-to-land.dto';
 import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
 import {
   IndexLandsDTO,
@@ -22,7 +25,7 @@ export class LandsAPI {
 
   navigate(args: { doorBlockId: string; currentLandId: string }) {
     return this.api.get<
-      { status: 200; body: ToIndexedType<GetLandDTO> },
+      { status: 200; body: ToIndexedType<NavigateToLandDTO> },
       ToIndexedType<NavigateToLandQueryDTO>
     >({
       path: `/lands/navigate`,

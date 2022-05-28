@@ -1,7 +1,11 @@
-import { object } from 'not-me/lib/schemas/object/object-schema';
-import { uuid } from '../../../internals/validation/schemas/uuid.schema';
+import { ValidationSchema } from '../../../internals/validation/validation-schema.decorator';
+import { GetLandDTO } from '../../get/get-land.dto';
+import { NavigateToLandQuerySchema } from './navigate-to-land.schemas';
 
-export const NavigateToLandQuerySchema = object({
-  doorBlockId: uuid().required(),
-  currentLandId: uuid().required(),
-}).required();
+@ValidationSchema(NavigateToLandQuerySchema)
+export class NavigateToLandQueryDTO {
+  doorBlockId!: string;
+  currentLandId!: string;
+}
+
+export class NavigateToLandDTO extends GetLandDTO {}

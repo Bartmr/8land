@@ -7,7 +7,10 @@ import {
 } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/typeorm';
 import { GetLandDTO } from 'libs/shared/src/land/get/get-land.dto';
-import { NavigateToLandQueryDTO } from 'libs/shared/src/land/in-game/navigate/navigate-to-land.schemas';
+import {
+  NavigateToLandDTO,
+  NavigateToLandQueryDTO,
+} from 'libs/shared/src/land/in-game/navigate/navigate-to-land.dto';
 import { ResumeLandNavigationDTO } from 'libs/shared/src/land/in-game/resume/resume-land-navigation.dto';
 import { AuthContext } from 'src/auth/auth-context';
 import {
@@ -171,7 +174,7 @@ export class LandsInGameController {
     @Query() query: NavigateToLandQueryDTO,
     @WithAuditContext() auditContext: AuditContext,
     @WithOptionalAuthContext() authContext?: AuthContext,
-  ): Promise<GetLandDTO> {
+  ): Promise<NavigateToLandDTO> {
     const doorBlocksRepository =
       this.connection.getCustomRepository(DoorBlockRepository);
 
