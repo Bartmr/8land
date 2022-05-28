@@ -6,7 +6,12 @@ import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { or } from 'not-me/lib/schemas/or/or-schema';
 import { uuid } from '../../internals/validation/schemas/uuid.schema';
-import { StaticBlockType } from '../../blocks/create/create-block.enums';
+import {
+  StaticBlockType,
+  DynamicBlockType,
+} from '../../blocks/create/create-block.enums';
+import { getEnumValues } from '../../internals/utils/enums/get-enum-values';
+import { isUUID } from '../../internals/utils/uuid/is-uuid';
 // import isHexColor from 'validator/lib/isHexColor';
 
 export const UploadLandAssetsParametersSchema = object({
@@ -178,7 +183,31 @@ export const createTiledJSONSchema = ({
                     ['string'],
                     'Block IDs must be of string type',
                   ).required(),
-                  value: string('Invalid block ID').required(),
+                  value: string()
+                    .required()
+                    .test((s) => {
+                      const splitted = s.split(':');
+
+                      if (splitted.length !== 2) {
+                        return 'Invalid block ID format';
+                      }
+
+                      if (
+                        !(
+                          getEnumValues(DynamicBlockType) as Array<
+                            string | undefined
+                          >
+                        ).includes(splitted[0])
+                      ) {
+                        return 'Invalid block ID. First segment before ":" must be a valid lowercase block type';
+                      }
+
+                      if (!(splitted[1] && isUUID(splitted[1]))) {
+                        return 'Invalid block ID. Second segment after ":" is invalid. Check if you copied the whole block ID into the tile property';
+                      }
+
+                      return null;
+                    }),
                 }),
               ]).required(),
             ).notNull(),
