@@ -133,7 +133,7 @@ export class LandsInGameController {
           ...land,
           lastDoor: null,
           lastTrainTravel: {
-            comingBackToStation: false,
+            comingBackToStation: true,
           },
           lastCheckpointWasDeleted: !!navState.lastCheckpointWasDeleted,
         };
