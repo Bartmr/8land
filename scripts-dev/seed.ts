@@ -153,6 +153,7 @@ async function seed() {
         territories: Promise.resolve([]),
         world: null,
         isStartingLand: null,
+        isTrainStation: null,
       },
       auditContext,
     );
@@ -169,6 +170,7 @@ async function seed() {
         territories: Promise.resolve([]),
         world: null,
         isStartingLand: null,
+        isTrainStation: null,
       },
       auditContext,
     );
@@ -187,6 +189,7 @@ async function seed() {
         territories: Promise.resolve([]),
         world: null,
         isStartingLand: null,
+        isTrainStation: null,
       },
       auditContext,
     );
@@ -205,6 +208,7 @@ async function seed() {
         territories: Promise.resolve([]),
         world: null,
         isStartingLand: null,
+        isTrainStation: null,
       },
       auditContext,
     );
@@ -221,6 +225,7 @@ async function seed() {
         territories: Promise.resolve([]),
         world: null,
         isStartingLand: null,
+        isTrainStation: null,
       },
       auditContext,
     );

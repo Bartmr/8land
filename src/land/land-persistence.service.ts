@@ -124,6 +124,7 @@ export class LandPersistenceService {
         territories: Promise.resolve([]),
         appBlocks: [],
         isStartingLand: null,
+        isTrainStation: null,
       };
 
       let land;
@@ -299,15 +300,15 @@ export class LandPersistenceService {
       }
 
       //
-      if (land.world) {
-        const hasTrainBlock = tilesetSpecifications.tiles.some((tile) => {
-          const tileHasTrainBlock = tile.properties?.some((tileProp) => {
-            return tileProp.name === StaticBlockType.TrainPlatform;
-          });
-
-          return tileHasTrainBlock;
+      const hasTrainBlock = tilesetSpecifications.tiles.some((tile) => {
+        const tileHasTrainBlock = tile.properties?.some((tileProp) => {
+          return tileProp.name === StaticBlockType.TrainPlatform;
         });
 
+        return tileHasTrainBlock;
+      });
+
+      if (land.world) {
         if (hasTrainBlock) {
           return {
             status: 'cannot-have-train-block-in-world-lands',
@@ -352,6 +353,8 @@ export class LandPersistenceService {
             status: 'cannot-have-start-block-in-admin-lands',
           } as const;
         }
+
+        land.isTrainStation = hasTrainBlock;
       }
 
       //

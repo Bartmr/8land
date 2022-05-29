@@ -60,7 +60,7 @@ export class LandsInGameController {
 
     if (navState) {
       if (navState.lastDoor) {
-        if (navState.isComingBack) {
+        if (navState.cameBack) {
           if (navState.lastDoor.inLand) {
             if (
               navState.lastDoor.inLand.world &&
@@ -206,7 +206,7 @@ export class LandsInGameController {
         if (doorBlock.inLand) {
           // player came back
           if (query.currentLandId == doorBlock.toLand.id) {
-            navState.isComingBack = true;
+            navState.cameBack = true;
 
             lastPlayedBackgroundMusicUrl =
               doorBlock.inLand.backgroundMusicUrl ||
@@ -214,7 +214,7 @@ export class LandsInGameController {
           }
           // player entered
           else if (query.currentLandId == doorBlock.inLand.id) {
-            navState.isComingBack = false;
+            navState.cameBack = false;
 
             lastPlayedBackgroundMusicUrl =
               doorBlock.toLand.backgroundMusicUrl ||
@@ -275,20 +275,26 @@ export class LandsInGameController {
         );
 
       const lastDoor = navigationState.lastDoor;
+      const traveledByTrainToLand = navigationState.traveledByTrainToLand;
 
       navigationState.lastDoor = null;
       navigationState.traveledByTrainToLand = null;
-      navigationState.isComingBack = null;
+      navigationState.cameBack = null;
       navigationState.lastPlayedBackgroundMusicUrl = null;
 
-      if (navigationState.boardedOnTrainStation) {
-        await navigationStatesRepository.save(navigationState, auditContext);
-      } else if (lastDoor && !lastDoor.inLand) {
-        // MEANS IT'S A BLOCK INSIDE A TERRITORY
-        throw new NotImplementedException();
-      } else {
+      if (
+        navigationState.boardedOnTrainStation &&
+        !lastDoor &&
+        !traveledByTrainToLand
+      ) {
         navigationState.boardedOnTrainStation = null;
       }
+
+      if (lastDoor && !lastDoor.inLand) {
+        // MEANS IT'S A BLOCK INSIDE A TERRITORY
+        throw new NotImplementedException();
+      }
+      await navigationStatesRepository.save(navigationState, auditContext);
     });
   }
 }

@@ -17,7 +17,7 @@ export class DoorBlockRepository extends SimpleEntityRepository<DoorBlock> {
         },
         {
           lastDoor: null,
-          isComingBack: null,
+          cameBack: null,
           lastPlayedBackgroundMusicUrl: null,
           lastCheckpointWasDeleted: true,
         },

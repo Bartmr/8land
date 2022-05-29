@@ -13,7 +13,7 @@ export class NavigationState extends SimpleEntity {
   lastDoor!: DoorBlock | null;
 
   @Column('bool', { nullable: true })
-  isComingBack!: null | boolean;
+  cameBack!: null | boolean;
 
   @ManyToOne(() => Land, { eager: true, nullable: true })
   boardedOnTrainStation!: Land | null;

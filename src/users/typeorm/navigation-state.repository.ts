@@ -8,7 +8,7 @@ import { User } from './user.entity';
 export class NavigationStateRepository extends SimpleEntityRepository<
   NavigationState,
   | 'lastDoor'
-  | 'isComingBack'
+  | 'cameBack'
   | 'lastPlayedBackgroundMusicUrl'
   | 'lastCheckpointWasDeleted'
   | 'traveledByTrainToLand'

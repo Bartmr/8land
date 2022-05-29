@@ -12,8 +12,13 @@ export class Train1651758178120 implements MigrationInterface {
     );
 
     await queryRunner.query(
+      `ALTER TABLE "navigation_state" RENAME COLUMN "isComingBack" TO "cameBack";`,
+    );
+
+    await queryRunner.query(
       `ALTER TABLE "navigation_state" RENAME COLUMN "lastDoorWasDeleted" TO "lastCheckpointWasDeleted";`,
     );
+
     await queryRunner.query(
       `ALTER TABLE "navigation_state" DROP COLUMN "lastSavedAt"`,
     );
@@ -47,6 +52,10 @@ export class Train1651758178120 implements MigrationInterface {
             ALTER TABLE "land"
             ADD "isStartingLand" boolean
         `);
+    await queryRunner.query(`
+        ALTER TABLE "land"
+        ADD "isTrainStation" boolean
+    `);
     await queryRunner.query(`
             ALTER TABLE "land"
             ADD "worldId" uuid
@@ -98,6 +107,9 @@ export class Train1651758178120 implements MigrationInterface {
     );
     await queryRunner.query(
       `ALTER TABLE "navigation_state" RENAME COLUMN "lastCheckpointWasDeleted" TO "lastDoorWasDeleted";`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "navigation_state" RENAME COLUMN "cameBack" TO "isComingBack";`,
     );
 
     await queryRunner.query(
