@@ -152,12 +152,12 @@ export function HowToEditTerritoryTemplate() {
             </li>
             <li>
               <p>
-                In order to keep the game fast in any platform, we&apos;ve
-                limited the tilesets file size to{' '}
-                {TERRITORY_TILESET_SIZE_LIMIT / 1000} KB.
+                In order to keep the game fast in any platform, we don&apos;t
+                allow tilesets bigger than {TERRITORY_TILESET_SIZE_LIMIT / 1000}{' '}
+                KB.
                 <br />
                 We might allow more in the future, but for now you can cut most
-                of the file size by converting the tileset colors to
+                of the file size by using a lower color precision or using the
                 &quot;Indexed Mode&quot;. Here&apos;s how you can do that with
                 GIMP:
               </p>

@@ -1,3 +1,4 @@
+import { LAND_TILESET_SIZE_LIMIT } from '@app/shared/land/upload-assets/upload-land-assets.constants';
 import { useEffect, useState } from 'react';
 
 export type TilesetImageFieldState =
@@ -49,13 +50,19 @@ export function TilesetImageFormField(props: {
           id="tileset-input"
           accept=".png,image/png"
         />
-        {props.state?.error ? (
-          <div className="invalid-feedback">
-            {props.state.error === 'incompatible-file-format'
-              ? "Incompatible file format. Make sure you're uploading a PNG image"
-              : 'File size cannot exceed 64k'}
-          </div>
-        ) : null}
+        <div className="invalid-feedback">
+          {props.state?.error === 'file-size-exceeded' ? (
+            <span>
+              File size cannot exceed {LAND_TILESET_SIZE_LIMIT / 1000} KB. You
+              can reduce the file size by converting the tileset to a lower
+              color bit-depth or to an indexed color palette.
+            </span>
+          ) : null}
+
+          {props.state?.error === 'incompatible-file-format'
+            ? "Incompatible file format. Make sure you're uploading a PNG image"
+            : null}
+        </div>
       </div>
     </>
   );

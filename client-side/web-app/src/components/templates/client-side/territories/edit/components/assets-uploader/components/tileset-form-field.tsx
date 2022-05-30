@@ -47,13 +47,17 @@ export function TilesetFormField(props: {
         accept=".png,image/png"
       />
       <div className="invalid-feedback">
-        {error === 'incompatible-file-format'
-          ? "Incompatible file format. Make sure you're uploading a PNG image"
-          : error === 'file-size-exceeded'
-          ? `File size cannot exceed ${TERRITORY_TILESET_SIZE_LIMIT / 1000}kb`
-          : props.serverError === 'tileset-dimensions-dont-match'
-          ? 'The tileset picture you tried to upload has different dimensions than the ones specified in the Tiled Map tileset.'
-          : null}
+        {error === 'incompatible-file-format' ? (
+          "Incompatible file format. Make sure you're uploading a PNG image"
+        ) : error === 'file-size-exceeded' ? (
+          <span>
+            File size cannot exceed {TERRITORY_TILESET_SIZE_LIMIT / 1000} KB.{' '}
+            You can reduce the file size by converting the tileset to a lower
+            color bit-depth or to an indexed color palette.
+          </span>
+        ) : props.serverError === 'tileset-dimensions-dont-match' ? (
+          'The tileset picture you tried to upload has different dimensions than the ones specified in the Tiled Map tileset.'
+        ) : null}
       </div>
     </div>
   );
