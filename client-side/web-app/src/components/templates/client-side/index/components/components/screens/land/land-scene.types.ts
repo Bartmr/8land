@@ -1,4 +1,7 @@
-import { DynamicBlockType } from '@app/shared/blocks/create/create-block.enums';
+import {
+  DynamicBlockType,
+  StaticBlockType,
+} from '@app/shared/blocks/create/create-block.enums';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
 
@@ -9,7 +12,10 @@ export type LandSceneArguments = {
   land: GetLandDTO;
 
   // To position player after he entered a door
-  comingFromDoorBlock: DoorBlock;
+  comingFrom:
+    | DoorBlock
+    | { type: StaticBlockType.Start }
+    | { type: StaticBlockType.TrainPlatform };
 
   session: null | MainApiSessionData;
 };

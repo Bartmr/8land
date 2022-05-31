@@ -3,14 +3,17 @@ import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/ma
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { getLandSceneKey } from './keys';
 import { LandScene } from './land-scene';
-import { DoorBlock } from './land-scene.types';
+import { LandSceneArguments } from './land-scene.types';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
 import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
-import { DynamicBlockType } from '@app/shared/blocks/create/create-block.enums';
+import {
+  DynamicBlockType,
+  StaticBlockType,
+} from '@app/shared/blocks/create/create-block.enums';
 import { LandsAPI } from 'src/logic/lands/lands-api';
 
 export async function runLandGame(
@@ -57,20 +60,30 @@ export async function runLandGame(
 
   const sceneKey = getLandSceneKey(args.resumedLand);
 
-  let comingFromDoorBlock: DoorBlock;
+  let comingFrom: LandSceneArguments['comingFrom'];
 
   if (args.resumedLand.lastDoor) {
-    comingFromDoorBlock = {
+    comingFrom = {
       type: DynamicBlockType.Door,
       id: args.resumedLand.lastDoor.id,
       toLandId: args.resumedLand.lastDoor.toLandId,
     };
+  } else if (args.resumedLand.lastTrainTravel) {
+    if (args.resumedLand.lastTrainTravel.comingBackToStation) {
+      comingFrom = {
+        type: StaticBlockType.TrainPlatform,
+      };
+    } else {
+      comingFrom = {
+        type: StaticBlockType.Start,
+      };
+    }
   }
   // This is how we position the user when starting from scratch
   else if (args.resumedLand.doorBlocksReferencing.length > 0) {
     const el = args.resumedLand.doorBlocksReferencing[0] || throwError();
 
-    comingFromDoorBlock = {
+    comingFrom = {
       type: DynamicBlockType.Door,
       toLandId: el.fromLandId,
       id: el.id,
@@ -95,7 +108,7 @@ export async function runLandGame(
           ...args.resumedLand,
           territories: args.resumedLand.territories.filter((t) => !!t.assets),
         },
-        comingFromDoorBlock,
+        comingFrom: comingFrom,
         session: args.session,
       },
       dependencies,

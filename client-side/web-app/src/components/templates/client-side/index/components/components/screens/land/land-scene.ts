@@ -1,5 +1,8 @@
 import { throwError } from '@app/shared/internals/utils/throw-error';
-import { DynamicBlockType } from '@app/shared/blocks/create/create-block.enums';
+import {
+  DynamicBlockType,
+  StaticBlockType,
+} from '@app/shared/blocks/create/create-block.enums';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 import { HotReloadClass } from 'src/logic/app-internals/utils/hot-reload-class';
@@ -169,20 +172,53 @@ export class LandScene extends Phaser.Scene {
     for (const layer of landMap.layers) {
       for (const row of layer.data) {
         for (const tile of row) {
-          const properties = Object.values(
-            tile.properties as { [key: string]: unknown },
-          );
+          if (this.args.comingFrom.type === DynamicBlockType.Door) {
+            const properties = Object.values(
+              tile.properties as { [key: string]: unknown },
+            );
 
-          if (properties.includes(this.args.comingFromDoorBlock.id)) {
-            position = {
-              x: tile.x,
-              y: tile.y,
-            };
-            break;
-          }
+            if (properties.includes(this.args.comingFrom.id)) {
+              position = {
+                x: tile.x,
+                y: tile.y,
+              };
+              break;
+            }
+          } else if (this.args.comingFrom.type === StaticBlockType.Start) {
+            const properties = Object.entries(
+              tile.properties as { [key: string]: unknown },
+            );
 
-          if (position) {
-            break;
+            if (
+              properties.find(
+                (p) => p[0] === StaticBlockType.Start && p[1] === true,
+              )
+            ) {
+              position = {
+                x: tile.x,
+                y: tile.y,
+              };
+              break;
+            }
+          } else if (
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            this.args.comingFrom.type === StaticBlockType.TrainPlatform
+          ) {
+            const properties = Object.entries(
+              tile.properties as { [key: string]: unknown },
+            );
+
+            if (
+              properties.find(
+                (p) => p[0] === StaticBlockType.TrainPlatform && p[1] === true,
+              )
+            ) {
+              position = {
+                x: tile.x,
+                y: tile.y,
+              };
+              break;
+            }
           }
         }
 
@@ -201,20 +237,54 @@ export class LandScene extends Phaser.Scene {
       for (const layer of territoryContext.tilemap.layers) {
         for (const row of layer.data) {
           for (const tile of row) {
-            const properties = Object.values(
-              tile.properties as { [key: string]: unknown },
-            );
+            if (this.args.comingFrom.type === DynamicBlockType.Door) {
+              const properties = Object.values(
+                tile.properties as { [key: string]: unknown },
+              );
 
-            if (properties.includes(this.args.comingFromDoorBlock.id)) {
-              position = {
-                x: tile.x + territoryContext.startX,
-                y: tile.y + territoryContext.startY,
-              };
-              break;
-            }
+              if (properties.includes(this.args.comingFrom.id)) {
+                position = {
+                  x: tile.x,
+                  y: tile.y,
+                };
+                break;
+              }
+            } else if (this.args.comingFrom.type === StaticBlockType.Start) {
+              const properties = Object.entries(
+                tile.properties as { [key: string]: unknown },
+              );
 
-            if (position) {
-              break;
+              if (
+                properties.find(
+                  (p) => p[0] === StaticBlockType.Start && p[1] === true,
+                )
+              ) {
+                position = {
+                  x: tile.x,
+                  y: tile.y,
+                };
+                break;
+              }
+            } else if (
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+              this.args.comingFrom.type === StaticBlockType.TrainPlatform
+            ) {
+              const properties = Object.entries(
+                tile.properties as { [key: string]: unknown },
+              );
+
+              if (
+                properties.find(
+                  (p) =>
+                    p[0] === StaticBlockType.TrainPlatform && p[1] === true,
+                )
+              ) {
+                position = {
+                  x: tile.x,
+                  y: tile.y,
+                };
+                break;
+              }
             }
           }
 
@@ -235,7 +305,7 @@ export class LandScene extends Phaser.Scene {
 
     if (!position) {
       window.alert(
-        'This land does not have any exits. You should use the escape button to go back to the outdoors',
+        'This land does not have any exits. You should use the escape button in the user settings to go back to the outdoors',
       );
 
       position = {
@@ -428,7 +498,7 @@ export class LandScene extends Phaser.Scene {
             ...nextLand,
             territories: nextLand.territories.filter((t) => !!t.assets),
           },
-          comingFromDoorBlock: block,
+          comingFrom: block,
           session: this.args.session,
         },
         this.dependencies,
