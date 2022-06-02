@@ -29,7 +29,6 @@ import { ResourceNotFoundException } from 'src/internals/server/resource-not-fou
 import { StorageService } from 'src/internals/storage/storage.service';
 import { Connection } from 'typeorm';
 import { LandsService } from './lands.service';
-import { Land } from './typeorm/land.entity';
 import { LandRepository } from './typeorm/land.repository';
 
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
@@ -49,7 +48,6 @@ import {
 } from 'libs/shared/src/land/edit/edit-land.dto';
 import { LandPersistenceService } from './land-persistence.service';
 import { WorldRepository } from 'src/worlds/worlds.repository';
-import { World } from 'src/worlds/typeorm/worlds.entity';
 import { DeleteLandParametersDTO } from 'libs/shared/src/land/delete-land/delete-land.dto';
 import { SettingsService } from 'src/settings/settings.service';
 import { PublicRoute } from 'src/auth/public-route.decorator';
@@ -83,41 +81,28 @@ export class LandsController {
     const worldsRepository =
       this.connection.getCustomRepository(WorldRepository);
 
-    let results: {
-      limit: number;
-      rows: Land[];
-      total: number;
-    };
-
-    let world: World | undefined = undefined;
-
-    if (authContext.user.role === Role.Admin) {
-      results = await landsRepository.find({
-        order: {
-          createdAt: 'DESC',
+    const [results, world] = await Promise.all([
+      landsRepository.selectManyAndCount(
+        {
+          alias: 'land',
+          skip: query.skip || 0,
         },
-        skip: query.skip,
-      });
-    } else {
-      const [lands, worldRes] = await Promise.all([
-        landsRepository.selectManyAndCount(
-          {
-            alias: 'land',
-            skip: query.skip || 0,
-          },
 
-          (qb) =>
-            qb
+        (qb) => {
+          if (authContext.user.role === Role.Admin) {
+            return qb
+              .orderBy('land.createdAt', 'DESC')
+              .where('land.world IS NULL');
+          } else {
+            return qb
               .orderBy('land.createdAt')
               .leftJoinAndSelect('land.world', 'world')
-              .where('world.user = :id', { id: authContext.user.id }),
-        ),
-        worldsRepository.findOne({ where: { user: authContext.user.id } }),
-      ]);
-
-      results = lands;
-      world = worldRes;
-    }
+              .where('world.user = :id', { id: authContext.user.id });
+          }
+        },
+      ),
+      worldsRepository.findOne({ where: { user: authContext.user.id } }),
+    ]);
 
     if (authContext.user.role !== Role.Admin && !world) {
       return {

@@ -31,7 +31,10 @@ export function AddBlockSection(props: {
 
   const [formSubmission, replaceFormSubmission] = useState<
     TransportedData<
-      undefined | 'block-limit-exceeded' | 'destination-land-not-found'
+      | undefined
+      | 'block-limit-exceeded'
+      | 'destination-land-not-found'
+      | 'land-is-outside-world'
     >
   >({ status: TransportedDataStatus.Done, data: undefined });
 
@@ -50,7 +53,14 @@ export function AddBlockSection(props: {
               if (res.failure) {
                 replaceFormSubmission({ status: res.failure });
               } else {
-                if (res.response.status === 404) {
+                if (res.response.status === 403) {
+                  if (res.response.body?.error === 'land-is-outside-world') {
+                    replaceFormSubmission({
+                      status: TransportedDataStatus.Done,
+                      data: 'land-is-outside-world',
+                    });
+                  }
+                } else if (res.response.status === 404) {
                   if (
                     res.response.body?.error === 'destination-land-not-found'
                   ) {
@@ -58,16 +68,16 @@ export function AddBlockSection(props: {
                       status: TransportedDataStatus.Done,
                       data: 'destination-land-not-found',
                     });
-                  } else if (
-                    res.response.body?.error === 'block-limit-exceeded'
-                  ) {
-                    replaceFormSubmission({
-                      status: TransportedDataStatus.Done,
-                      data: 'block-limit-exceeded',
-                    });
                   } else {
                     replaceFormSubmission({
                       status: res.logAndReturnAsUnexpected().failure,
+                    });
+                  }
+                } else if (res.response.status === 409) {
+                  if (res.response.body?.error === 'block-limit-exceeded') {
+                    replaceFormSubmission({
+                      status: TransportedDataStatus.Done,
+                      data: 'block-limit-exceeded',
                     });
                   }
                 } else {
@@ -113,6 +123,9 @@ export function AddBlockSection(props: {
                 <div className="invalid-feedback">
                   {data === 'destination-land-not-found'
                     ? "We couldn't find a land with this name. Make sure it's correctly spelled"
+                    : null}
+                  {data === 'land-is-outside-world'
+                    ? 'You can only create doors for lands that belong to you'
                     : null}
                   {Object.keys(
                     formUtils.getErrorTypesFromField(

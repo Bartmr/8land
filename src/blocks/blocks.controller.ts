@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   HttpCode,
   Param,
   Post,
@@ -11,6 +12,8 @@ import { InjectConnection } from '@nestjs/typeorm';
 import { CreateBlockRequestDTO } from 'libs/shared/src/blocks/create/create-block.dto';
 import { DynamicBlockType } from 'libs/shared/src/blocks/create/create-block.enums';
 import { DeleteBlockURLParameters } from 'libs/shared/src/blocks/delete/delete-block.dto';
+import { AuthContext } from 'src/auth/auth-context';
+import { WithAuthContext } from 'src/auth/auth-context.decorator';
 import { Role } from 'src/auth/roles/roles';
 import { RolesUpAndIncluding } from 'src/auth/roles/roles.decorator';
 import { AuditContext } from 'src/internals/auditing/audit-context';
@@ -31,13 +34,32 @@ export class BlocksController {
   createBlock(
     @Body() body: CreateBlockRequestDTO,
     @WithAuditContext() auditContext: AuditContext,
+    @WithAuthContext() authContext: AuthContext,
   ) {
     return this.connection.transaction(async (e) => {
       const landRepository = e.getCustomRepository(LandRepository);
 
-      const land = await landRepository.findOne({
-        where: { id: body.landId },
-      });
+      const land = await landRepository.selectOne(
+        {
+          alias: 'land',
+        },
+
+        (qb) => {
+          let resQb = qb;
+
+          resQb = resQb.where('land.id = :id', { id: body.landId });
+
+          if (authContext.user.role !== Role.Admin) {
+            resQb = resQb
+              .leftJoinAndSelect('land.world', 'world')
+              .andWhere('world.user = :userId', {
+                userId: authContext.user.id,
+              });
+          }
+
+          return resQb;
+        },
+      );
 
       if (!land) {
         throw new ResourceNotFoundException({ error: 'land-not-found' });
@@ -63,6 +85,14 @@ export class BlocksController {
           throw new ResourceNotFoundException({
             error: 'destination-land-not-found',
           });
+        }
+
+        if (land.world) {
+          if (!toLand.world || toLand.world.id !== land.world.id) {
+            throw new ForbiddenException({
+              error: 'land-is-outside-world',
+            });
+          }
         }
 
         await doorBlockRepository.create(

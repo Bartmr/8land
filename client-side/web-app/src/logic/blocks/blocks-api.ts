@@ -24,7 +24,14 @@ export class BlocksAPI {
   createBlock(args: CreateBlockRequestDTO) {
     return this.api.post<
       | { status: 201; body: JSONData }
-      | { status: 404 | 409; body: undefined | { error: string } },
+      | {
+          status: 404;
+          body:
+            | undefined
+            | { error?: 'destination-land-not-found' | 'land-not-found' };
+        }
+      | { status: 409; body: undefined | { error?: 'block-limit-exceeded' } }
+      | { status: 403; body: undefined | { error?: 'land-is-outside-world' } },
       undefined,
       ToIndexedType<CreateBlockRequestDTO>
     >({
