@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   Get,
   NotImplementedException,
@@ -23,13 +24,9 @@ import { AuditContext } from 'src/internals/auditing/audit-context';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { LoggingService } from 'src/internals/logging/logging.service';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
-import { NavigationState } from 'src/users/typeorm/navigation-state.entity';
 import { NavigationStateRepository } from 'src/users/typeorm/navigation-state.repository';
 import { Connection } from 'typeorm';
 import { LandsService } from './lands.service';
-import { LandRepository } from './typeorm/land.repository';
-
-// TODO redo all
 
 @Controller('lands')
 export class LandsInGameController {
@@ -45,127 +42,12 @@ export class LandsInGameController {
     @WithAuditContext() auditContext: AuditContext,
     @WithOptionalAuthContext() authContext?: AuthContext,
   ): Promise<ResumeLandNavigationDTO> {
-    const navigationStateRepository = this.connection.getCustomRepository(
-      NavigationStateRepository,
-    );
-
-    let navState: NavigationState | undefined;
-
-    if (authContext) {
-      navState = await navigationStateRepository.getNavigationStateFromUser(
-        authContext.user,
-        { auditContext },
-      );
-    }
-
-    if (navState) {
-      if (navState.lastDoor) {
-        if (navState.cameBack) {
-          if (navState.lastDoor.inLand) {
-            if (
-              navState.lastDoor.inLand.world &&
-              !navState.lastDoor.inLand.world.hasStartLand
-            ) {
-              throw new Error(
-                'Lands and worlds cannot loose their start block',
-              );
-            }
-            const land = await this.landService.mapLand(
-              navState.lastDoor.inLand,
-            );
-
-            return {
-              ...land,
-              backgroundMusicUrl:
-                land.backgroundMusicUrl ||
-                navState.lastPlayedBackgroundMusicUrl,
-              lastDoor: {
-                id: navState.lastDoor.id,
-                toLandId: navState.lastDoor.inLand.id,
-              },
-              lastTrainTravel: null,
-              lastCheckpointWasDeleted: !!navState.lastCheckpointWasDeleted,
-            };
-          } else {
-            throw new NotImplementedException();
-          }
-        } else {
-          if (
-            navState.lastDoor.toLand.world &&
-            !navState.lastDoor.toLand.world.hasStartLand
-          ) {
-            throw new Error('Lands and worlds cannot loose their start block');
-          }
-
-          const land = await this.landService.mapLand(navState.lastDoor.toLand);
-
-          return {
-            ...land,
-            backgroundMusicUrl:
-              land.backgroundMusicUrl || navState.lastPlayedBackgroundMusicUrl,
-            lastDoor: {
-              id: navState.lastDoor.id,
-              toLandId: navState.lastDoor.toLand.id,
-            },
-            lastTrainTravel: null,
-            lastCheckpointWasDeleted: !!navState.lastCheckpointWasDeleted,
-          };
-        }
-      } else if (navState.traveledByTrainToLand) {
-        const land = await this.landService.mapLand(
-          navState.traveledByTrainToLand,
-        );
-
-        return {
-          ...land,
-          lastDoor: null,
-          lastTrainTravel: {
-            comingBackToStation: false,
-          },
-          lastCheckpointWasDeleted: !!navState.lastCheckpointWasDeleted,
-        };
-      } else if (navState.boardedOnTrainStation) {
-        const land = await this.landService.mapLand(
-          navState.boardedOnTrainStation,
-        );
-
-        return {
-          ...land,
-          lastDoor: null,
-          lastTrainTravel: {
-            comingBackToStation: true,
-          },
-          lastCheckpointWasDeleted: !!navState.lastCheckpointWasDeleted,
-        };
-      }
-    }
-
-    const landsRepository = this.connection.getCustomRepository(LandRepository);
-
-    const firstLand = await landsRepository.selectOne(
-      { alias: 'land' },
-      (qB) => {
-        return qB
-          .where('land.hasAssets = :hasAssets', { hasAssets: true })
-          .andWhere('land.world IS NULL')
-          .orderBy('land.createdAt', 'ASC');
-      },
-    );
-
-    if (!firstLand) {
-      throw new Error();
-    }
-
-    const land = await this.landService.mapLand(firstLand);
-
-    return {
-      ...land,
-      lastDoor: null,
-      lastCheckpointWasDeleted: navState
-        ? !!navState.lastCheckpointWasDeleted
-        : false,
-      lastTrainTravel: null,
-    };
+    return this.landService.resume({
+      eM: this.connection.manager,
+      loggingService: this.loggingService,
+      auditContext,
+      authContext,
+    });
   }
 
   @Get('/navigate')
@@ -199,7 +81,6 @@ export class LandsInGameController {
           );
 
         navState.lastDoor = doorBlock;
-        navState.lastCheckpointWasDeleted = false;
 
         let lastPlayedBackgroundMusicUrl: string | null;
 
@@ -207,6 +88,11 @@ export class LandsInGameController {
           // player came back
           if (query.currentLandId == doorBlock.toLand.id) {
             navState.cameBack = true;
+
+            if (!doorBlock.inLand.world) {
+              navState.traveledByTrainToLand = null;
+              navState.boardedOnTrainStation = null;
+            }
 
             lastPlayedBackgroundMusicUrl =
               doorBlock.inLand.backgroundMusicUrl ||
@@ -216,11 +102,16 @@ export class LandsInGameController {
           else if (query.currentLandId == doorBlock.inLand.id) {
             navState.cameBack = false;
 
+            if (!doorBlock.toLand.world) {
+              navState.traveledByTrainToLand = null;
+              navState.boardedOnTrainStation = null;
+            }
+
             lastPlayedBackgroundMusicUrl =
               doorBlock.toLand.backgroundMusicUrl ||
               navState.lastPlayedBackgroundMusicUrl;
           } else {
-            throw new Error();
+            throw new BadRequestException();
           }
         } else {
           throw new NotImplementedException();
@@ -271,7 +162,7 @@ export class LandsInGameController {
       const navigationState =
         await navigationStatesRepository.getNavigationStateFromUser(
           authContext.user,
-          { eM, auditContext },
+          { auditContext },
         );
 
       const lastDoor = navigationState.lastDoor;

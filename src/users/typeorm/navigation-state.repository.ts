@@ -1,6 +1,6 @@
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { SimpleEntityRepository } from 'src/internals/databases/simple-entity/simple-entity.repository';
-import { EntityManager, EntityRepository } from 'typeorm';
+import { EntityRepository } from 'typeorm';
 import { NavigationState } from './navigation-state.entity';
 import { User } from './user.entity';
 
@@ -17,25 +17,19 @@ export class NavigationStateRepository extends SimpleEntityRepository<
   async getNavigationStateFromUser(
     user: User,
     {
-      eM,
       auditContext,
     }: {
       auditContext: AuditContext;
-      eM?: EntityManager;
     },
   ) {
-    const repository = eM
-      ? eM.getCustomRepository(NavigationStateRepository)
-      : this;
-
-    const state = await repository.findOne({
+    const state = await this.findOne({
       where: {
         user,
       },
     });
 
     if (!state) {
-      const res = await repository.create(
+      const res = await this.create(
         {
           user: Promise.resolve(user),
         },
