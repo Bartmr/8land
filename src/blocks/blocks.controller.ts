@@ -55,6 +55,8 @@ export class BlocksController {
               .andWhere('world.user = :userId', {
                 userId: authContext.user.id,
               });
+          } else {
+            resQb = resQb.andWhere('land.world IS NULL');
           }
 
           return resQb;

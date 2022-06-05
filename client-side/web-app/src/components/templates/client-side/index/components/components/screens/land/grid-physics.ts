@@ -28,9 +28,6 @@ const DIRECTION_TO_VECTOR: {
 class GridPhysics {
   private gamePad: GamepadType;
 
-  private isLocked = false;
-  private directionsAreLocked = false;
-
   private movingDirection: Direction = Direction.NONE;
   private facingDirection: Direction = Direction.DOWN;
 
@@ -55,7 +52,12 @@ class GridPhysics {
         endY: number;
         tilemap: Phaser.Tilemaps.Tilemap;
       }>;
-      onStepIntoDoor: (block: DoorBlock) => void;
+      onStepIntoDoor: (
+        block:
+          | DoorBlock
+          | { type: StaticBlockType.Start }
+          | { type: StaticBlockType.TrainPlatform },
+      ) => void;
       onOpenApp: (args: {
         url: string;
         territoryId: string | undefined;
@@ -66,19 +68,7 @@ class GridPhysics {
     this.gamePad = GamepadSingleton.getInstance();
   }
 
-  lock() {
-    this.isLocked = true;
-  }
-
-  unlock() {
-    this.isLocked = false;
-  }
-
   update(delta: number) {
-    if (this.isLocked) {
-      return;
-    }
-
     //
     // CONTINUE PREVIOUS ACTIONS
     //
@@ -228,6 +218,8 @@ class GridPhysics {
         static: {
           collides?: boolean;
           text?: string;
+          train?: boolean;
+          start?: boolean;
         };
         dynamicBlock?: {
           type: string | undefined;
@@ -255,6 +247,16 @@ class GridPhysics {
         }
 
         properties.static.text = text;
+        foundATopTileWithProps = true;
+      }
+
+      if (tileProperties[StaticBlockType.Start]) {
+        properties.static.start = true;
+        foundATopTileWithProps = true;
+      }
+
+      if (tileProperties[StaticBlockType.Start]) {
+        properties.static.train = true;
         foundATopTileWithProps = true;
       }
 
@@ -355,6 +357,10 @@ class GridPhysics {
             this.context.onStepIntoDoor(block);
           }
         }
+      } else if (tileProps.static.start) {
+        this.context.onStepIntoDoor({ type: StaticBlockType.Start });
+      } else if (tileProps.static.train) {
+        this.context.onStepIntoDoor({ type: StaticBlockType.TrainPlatform });
       }
     } else {
       this.hasSteppedOnSafeTile = true;

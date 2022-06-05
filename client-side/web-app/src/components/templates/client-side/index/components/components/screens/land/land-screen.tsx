@@ -9,6 +9,7 @@ import { throwError } from '@app/shared/internals/utils/throw-error';
 import { AppService } from '../app/app-screen';
 import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
 import { useLandsAPI } from 'src/logic/lands/lands-api';
+import { useTrainAPI } from 'src/logic/train/train.api';
 
 export function LandScreen(props: {
   musicService: MusicService;
@@ -21,7 +22,8 @@ export function LandScreen(props: {
 }) {
   const [, replaceService] = useState<LandScreenService | undefined>();
 
-  const api = useLandsAPI();
+  const landsApi = useLandsAPI();
+  const trainApi = useTrainAPI();
 
   const [started, replaceStarted] = useState(false);
 
@@ -36,12 +38,13 @@ export function LandScreen(props: {
       await runLandGame(
         { resumedLand: props.resumedLand, session: props.session },
         {
-          landsAPI: api,
+          landsAPI: landsApi,
           musicService: props.musicService,
           dialogueService: props.dialogueService,
           appService: props.appService,
           changeLandNameDisplay: props.changeLandNameDisplay,
           landScreenService: sv,
+          trainAPI: trainApi,
         },
       );
 

@@ -23,6 +23,10 @@ class LocalStorage {
     window.localStorage.setItem(key, JSON.stringify(value));
   }
 
+  removeItem(key: string): void {
+    window.localStorage.removeItem(key);
+  }
+
   wipeAll(): void {
     window.localStorage.clear();
   }

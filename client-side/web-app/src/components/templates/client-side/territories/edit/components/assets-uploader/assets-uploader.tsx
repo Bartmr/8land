@@ -23,6 +23,7 @@ export function AssetsUploader(props: {
     | 'map-missing'
     | 'tileset-missing'
     | 'tileset-dimensions-dont-match'
+    | 'train-and-start-block-not-allowed'
     | undefined
   >(undefined);
 
@@ -68,6 +69,10 @@ export function AssetsUploader(props: {
       if (res.response.status === 400) {
         if (res.response.body?.error === 'tileset-dimensions-dont-match') {
           replaceErrors('tileset-dimensions-dont-match');
+        } else if (
+          res.response.body?.error === 'train-and-start-block-not-allowed'
+        ) {
+          replaceErrors('train-and-start-block-not-allowed');
         } else {
           replaceFormSubmissionStatus({
             status: res.logAndReturnAsUnexpected().failure,
@@ -138,6 +143,11 @@ export function AssetsUploader(props: {
           {errors === 'map-missing' ? (
             <span className="text-danger">
               You need to select a Tiled JSON file to use as map
+            </span>
+          ) : null}
+          {errors === 'train-and-start-block-not-allowed' ? (
+            <span className="text-danger">
+              {'Territory maps cannot have "start" or "train" blocks'}
             </span>
           ) : null}
         </div>

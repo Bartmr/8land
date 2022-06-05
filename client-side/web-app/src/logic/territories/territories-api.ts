@@ -75,7 +75,16 @@ export class TerritoriesAPI {
   uploadAssets(args: { territoryId: string; formData: FormData }) {
     return this.api.put<
       | { status: 204; body: undefined }
-      | { status: 400; body: undefined | { error: string } },
+      | {
+          status: 400;
+          body:
+            | undefined
+            | {
+                error?:
+                  | 'train-and-start-block-not-allowed'
+                  | 'tileset-dimensions-dont-match';
+              };
+        },
       undefined,
       FormData
     >({

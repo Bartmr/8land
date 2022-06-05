@@ -15,6 +15,7 @@ import {
   StaticBlockType,
 } from '@app/shared/blocks/create/create-block.enums';
 import { LandsAPI } from 'src/logic/lands/lands-api';
+import { TrainAPI } from 'src/logic/train/train.api';
 
 export async function runLandGame(
   args: {
@@ -26,6 +27,7 @@ export async function runLandGame(
     dialogueService: DialogueService;
     appService: AppService;
     landsAPI: LandsAPI;
+    trainAPI: TrainAPI;
     changeLandNameDisplay: (landName: string) => void;
     landScreenService: LandScreenService;
   },

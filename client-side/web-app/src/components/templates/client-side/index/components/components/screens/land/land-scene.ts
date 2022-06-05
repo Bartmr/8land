@@ -24,6 +24,8 @@ import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
 import { LandsAPI } from 'src/logic/lands/lands-api';
+import { NavigateToLandDTO } from '@app/shared/land/in-game/navigate/navigate-to-land.dto';
+import { TrainAPI } from 'src/logic/train/train.api';
 
 @HotReloadClass(module)
 export class LandScene extends Phaser.Scene {
@@ -36,6 +38,7 @@ export class LandScene extends Phaser.Scene {
     dialogueService: DialogueService;
     appService: AppService;
     landsAPI: LandsAPI;
+    trainAPI: TrainAPI;
     changeLandNameDisplay: (landName: string) => void;
     landScreenService: LandScreenService;
   };
@@ -48,6 +51,8 @@ export class LandScene extends Phaser.Scene {
     resume(layerIndex: number, mapIndex: number): void;
     pause(layerIndex: number, mapIndex: number): void;
   };
+
+  private isLocked = false;
 
   constructor(
     previousLandSceneArguments: LandScene['previousLandSceneArguments'],
@@ -355,14 +360,25 @@ export class LandScene extends Phaser.Scene {
         tilemap: landMap,
       },
       territories: territoryContexts,
-      onStepIntoDoor: async (block: DoorBlock) => {
-        if (this.args.land.id === block.toLandId) {
+      onStepIntoDoor: async (block) => {
+        if (
+          block.type === DynamicBlockType.Door &&
+          this.args.land.id === block.toLandId
+        ) {
           return;
         }
 
-        (this.gridPhysics || throwError()).lock();
+        this.isLocked = true;
 
-        await this.handleStepIntoDoor(block);
+        this.dependencies.changeLandNameDisplay('-- Loading --');
+
+        const res = await this.handleStepIntoDoor(block);
+
+        if (res === 'failed') {
+          this.dependencies.changeLandNameDisplay(this.args.land.name);
+
+          this.isLocked = false;
+        }
       },
       dialogueService: this.dependencies.dialogueService,
       onOpenApp: (args) => {
@@ -390,10 +406,6 @@ export class LandScene extends Phaser.Scene {
     this.createPlayerAnimation(Direction.RIGHT, 1, 0);
     this.createPlayerAnimation(Direction.DOWN, 6, 5);
     this.createPlayerAnimation(Direction.LEFT, 3, 2);
-  }
-
-  public update(_time: number, delta: number) {
-    (this.gridPhysics || throwError()).update(delta);
   }
 
   public preload() {
@@ -456,35 +468,115 @@ export class LandScene extends Phaser.Scene {
     });
   }
 
-  private async handleStepIntoDoor(block: DoorBlock) {
-    this.dependencies.changeLandNameDisplay('-- Loading --');
-
-    const res = await this.dependencies.landsAPI.navigate({
-      doorBlockId: block.id,
-      currentLandId: this.args.land.id,
-    });
-
-    if (res.failure) {
-      if (res.failure === TransportFailure.ConnectionFailure) {
-        window.alert(
-          "Couldn't connect to the Internet. Check your connection and enter the door again.",
-        );
-      } else if (res.failure === TransportFailure.NotFound) {
-        window.alert("This path's destination no longer exists.");
-      } else {
-        window.alert(
-          "There was an error loading what's further down this path. Try to enter it again later.",
-        );
-      }
-
-      (this.gridPhysics || throwError()).unlock();
-
-      this.dependencies.changeLandNameDisplay(this.args.land.name);
-
+  public update(_time: number, delta: number) {
+    if (this.isLocked) {
       return;
     }
 
-    const nextLand = res.response.body;
+    (this.gridPhysics || throwError()).update(delta);
+  }
+
+  private async handleStepIntoDoor(
+    block:
+      | DoorBlock
+      | { type: StaticBlockType.Start }
+      | { type: StaticBlockType.TrainPlatform },
+  ): Promise<'ok' | 'failed'> {
+    let nextLand: NavigateToLandDTO;
+
+    if (block.type === DynamicBlockType.Door) {
+      const res = await this.dependencies.landsAPI.navigate({
+        doorBlockId: block.id,
+        currentLandId: this.args.land.id,
+      });
+
+      if (res.failure) {
+        if (res.failure === TransportFailure.ConnectionFailure) {
+          window.alert(
+            "Couldn't connect to the Internet. Check your connection and enter the door again.",
+          );
+        } else if (res.failure === TransportFailure.NotFound) {
+          window.alert("This path's destination no longer exists.");
+        } else {
+          window.alert(
+            "There was an error loading what's further down this path. Try to enter it again later.",
+          );
+        }
+
+        return 'failed';
+      }
+
+      nextLand = res.response.body;
+    } else if (block.type === StaticBlockType.Start) {
+      const res = await this.dependencies.trainAPI.returnToTrainStation();
+
+      if (res.failure) {
+        if (res.failure === TransportFailure.ConnectionFailure) {
+          window.alert(
+            "Couldn't connect to the Internet. Check your connection and enter the door again.",
+          );
+        } else {
+          window.alert(
+            "There was an error loading what's further down this path. Try to enter it again later.",
+          );
+        }
+
+        return 'failed';
+      }
+
+      nextLand = res.response.body;
+    } else if (
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      block.type === StaticBlockType.TrainPlatform
+    ) {
+      const trainDestination = this.dependencies.trainAPI.getTrainDestination({
+        currentStationLandId: this.args.land.id,
+      });
+
+      if (!trainDestination) {
+        window.alert(
+          'You need to pick where you want to go first. Use the ticket machines available at this train station.',
+        );
+
+        return 'failed';
+      }
+
+      const res = await this.dependencies.trainAPI.board({
+        worldId: trainDestination,
+        boardingFromLand: this.args.land.id,
+      });
+
+      if (res.failure) {
+        if (res.failure === TransportFailure.ConnectionFailure) {
+          window.alert(
+            "Couldn't connect to the Internet. Check your connection and enter the door again.",
+          );
+        }
+        if (res.failure === TransportFailure.NotFound) {
+          this.dependencies.trainAPI.clearTrainDestination({
+            currentStationLandId: this.args.land.id,
+          });
+
+          window.alert(
+            'This destination no longer exists. Please pick another destination in the ticket machines available at this train station.',
+          );
+        } else {
+          window.alert(
+            "There was an error loading what's further down this path. Try to enter it again later.",
+          );
+        }
+
+        return 'failed';
+      }
+
+      this.dependencies.trainAPI.clearTrainDestination({
+        currentStationLandId: this.args.land.id,
+      });
+
+      nextLand = res.response.body;
+    } else {
+      throw new Error();
+    }
 
     const sceneKey = getLandSceneKey(nextLand);
 
@@ -508,6 +600,8 @@ export class LandScene extends Phaser.Scene {
     this.scene.stop(this.scene.key);
 
     this.scene.start(sceneKey);
+
+    return 'ok';
   }
 }
 
