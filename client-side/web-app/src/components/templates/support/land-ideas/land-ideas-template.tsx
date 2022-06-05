@@ -38,7 +38,16 @@ export function LandIdeasTemplate() {
                 }
               </li>
 
-              <li>{'Diorama - explain a concept in an interactive manner'}</li>
+              <li>{'Diorama - teach something interactively'}</li>
+
+              <li>{'An escape room'}</li>
+
+              <li>
+                {
+                  'Show a miniature version of your office to candidates, with trivea and quirky facts about the company'
+                }
+              </li>
+              <li>{"Create arcades for the games you've developed"}</li>
             </ul>
           </>
         );
