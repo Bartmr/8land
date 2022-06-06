@@ -1,10 +1,10 @@
 import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { uuid } from '@app/shared/internals/validation/schemas/uuid.schema';
-import { BoardTrainDTO } from '@app/shared/train/board-train.dto';
+import { BoardTrainDTO } from '@app/shared/train/board/board-train.dto';
 import {
   ReturnToTrainStationDTO,
   ReturnToTrainStationQueryDTO,
-} from '@app/shared/train/return-to-train-station.dto';
+} from '@app/shared/train/return/return-to-train-station.dto';
 import {
   mainApiReducer,
   MainApiStoreState,

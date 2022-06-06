@@ -497,9 +497,7 @@ export class LandPersistenceService {
             .leftJoinAndSelect('land.world', 'world')
             .where('land.id = :id', { id: landId });
 
-          if (authContext.user.role === Role.Admin) {
-            finalQb = finalQb.andWhere('land.world IS NULL');
-          } else {
+          if (authContext.user.role !== Role.Admin) {
             finalQb = finalQb.andWhere('world.user = :userId', {
               userId: authContext.user.id,
             });

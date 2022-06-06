@@ -8,13 +8,18 @@ import {
   Query,
 } from '@nestjs/common';
 import {
+  GetTrainDestinationsDTO,
+  GetTrainDestinationQueryDTO,
+} from 'libs/shared/src/train/apps/tickets/get-destinations/get-train-destinations.dto';
+import {
   BoardTrainDTO,
   BoardTrainParametersDTO,
-} from 'libs/shared/src/train/board-train.dto';
+} from 'libs/shared/src/train/board/board-train.dto';
 import {
   ReturnToTrainStationDTO,
   ReturnToTrainStationQueryDTO,
-} from 'libs/shared/src/train/return-to-train-station.dto';
+} from 'libs/shared/src/train/return/return-to-train-station.dto';
+import { getTypesafeObjectFieldPath } from 'not-me/lib/utils/get-typesafe-object-field-path';
 import { AuthContext } from 'src/auth/auth-context';
 import { WithOptionalAuthContext } from 'src/auth/auth-context.decorator';
 import { PublicRoute } from 'src/auth/public-route.decorator';
@@ -22,6 +27,8 @@ import { AuditContext } from 'src/internals/auditing/audit-context';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { LoggingService } from 'src/internals/logging/logging.service';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
+import { getSearchableName } from 'src/internals/utils/get-searchable-name';
+import { throwError } from 'src/internals/utils/throw-error';
 import { LandsService } from 'src/land/lands.service';
 import { Land } from 'src/land/typeorm/land.entity';
 import { LandRepository } from 'src/land/typeorm/land.repository';
@@ -166,5 +173,59 @@ export class TrainController {
 
       return this.landsService.mapLand(trainStation);
     }
+  }
+
+  @Get('/apps/tickets/getDestinations')
+  @PublicRoute()
+  async getTrainDestinations(
+    @Query() query: GetTrainDestinationQueryDTO,
+  ): Promise<GetTrainDestinationsDTO> {
+    const landsRepo = this.connection.getCustomRepository(LandRepository);
+
+    const res = await landsRepo.selectManyAndCount(
+      {
+        alias: 'land',
+        skip: query.skip,
+      },
+      (qB) => {
+        let qBFinal = qB
+          .orderBy(
+            getTypesafeObjectFieldPath<Land>().and('createdAt').end(),
+            'DESC',
+          )
+          .where(
+            `lands.${getTypesafeObjectFieldPath<Land>()
+              .and('isStartingLand')
+              .end()} = true`,
+          )
+          .andWhere(
+            `lands.${getTypesafeObjectFieldPath<Land>()
+              .and('world')
+              .end()} IS NOT NULL`,
+          );
+
+        if (query.name) {
+          qBFinal = qBFinal.andWhere(
+            `land.${getTypesafeObjectFieldPath<Land>()
+              .and('searchableName')
+              .end()} = :searchableName`,
+            { searchableName: getSearchableName(query.name) },
+          );
+        }
+
+        return qBFinal;
+      },
+    );
+
+    return {
+      limit: res.limit,
+      total: res.total,
+      rows: res.rows.map((r) => {
+        return {
+          name: r.name,
+          worldId: r.world?.id ?? throwError(),
+        };
+      }),
+    };
   }
 }
