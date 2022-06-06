@@ -118,63 +118,146 @@
       "spacing": 0,
       "tilecount": 200,
       "tileheight": 16,
-      "tilewidth": 16,
       "tiles": [
         {
           "id": 0,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 1,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 2,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 3,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 4,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 5,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 6,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 7,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 8,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 10,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 11,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 12,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 13,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 14,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 15,
@@ -198,16 +281,32 @@
         },
         {
           "id": 17,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 18,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 19,
           "properties": [
-            { "name": "collides", "type": "bool", "value": true },
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            },
             {
               "name": "text",
               "type": "string",
@@ -217,51 +316,123 @@
         },
         {
           "id": 20,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 21,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 22,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 23,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 28,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 29,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 31,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 32,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 33,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 34,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 35,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 36,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 37,
@@ -275,12 +446,22 @@
         },
         {
           "id": 38,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 39,
           "properties": [
-            { "name": "collides", "type": "bool", "value": true },
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            },
             {
               "name": "form",
               "type": "string",
@@ -300,7 +481,13 @@
         },
         {
           "id": 42,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 43,
@@ -314,501 +501,1188 @@
         },
         {
           "id": 50,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 51,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 52,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 53,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 60,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 61,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 62,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 63,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 64,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 65,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 66,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 67,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 68,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 69,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
-          "id": 70,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }],
           "animation": [
-            { "duration": 200, "tileid": 70 },
-            { "duration": 200, "tileid": 71 },
-            { "duration": 200, "tileid": 72 },
-            { "duration": 200, "tileid": 73 },
-            { "duration": 200, "tileid": 74 },
-            { "duration": 200, "tileid": 75 },
-            { "duration": 200, "tileid": 76 },
-            { "duration": 200, "tileid": 77 },
-            { "duration": 200, "tileid": 78 },
-            { "duration": 200, "tileid": 79 }
+            {
+              "duration": 200,
+              "tileid": 70
+            },
+            {
+              "duration": 200,
+              "tileid": 71
+            },
+            {
+              "duration": 200,
+              "tileid": 72
+            },
+            {
+              "duration": 200,
+              "tileid": 73
+            },
+            {
+              "duration": 200,
+              "tileid": 74
+            },
+            {
+              "duration": 200,
+              "tileid": 75
+            },
+            {
+              "duration": 200,
+              "tileid": 76
+            },
+            {
+              "duration": 200,
+              "tileid": 77
+            },
+            {
+              "duration": 200,
+              "tileid": 78
+            },
+            {
+              "duration": 200,
+              "tileid": 79
+            }
+          ],
+          "id": 70,
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
           ]
         },
         {
           "id": 71,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 72,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 73,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 74,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 75,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 76,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 77,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 78,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 79,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 81,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 82,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 83,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 84,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 85,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 86,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 87,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 91,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 92,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 93,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 94,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 95,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 96,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 97,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 101,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 102,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 103,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 104,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 105,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 106,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 107,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 110,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 111,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 112,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 113,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 114,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 115,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 116,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 117,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 120,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 121,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 122,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 123,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 124,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 125,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 126,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 127,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 130,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 131,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 132,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 133,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 134,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 135,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 136,
           "properties": [
-            { "name": "collides", "type": "bool", "value": true },
             {
-              "name": "text",
+              "name": "train-station-entrance",
               "type": "string",
-              "value": "Looks like they're building something hi-tech inside..."
+              "value": "train station entrance"
             }
           ]
         },
         {
           "id": 137,
           "properties": [
-            { "name": "collides", "type": "bool", "value": true },
             {
-              "name": "text",
+              "name": "train-station-entrance",
               "type": "string",
-              "value": "Looks like they're building something hi-tech inside..."
+              "value": "train station entrance"
             }
           ]
         },
         {
           "id": 142,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 143,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 144,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 145,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 146,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 147,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 148,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 152,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 153,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 154,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 155,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 156,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 157,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 158,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 162,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 163,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 164,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 165,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 166,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 167,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 168,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 172,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 173,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 174,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 175,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 176,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 177,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 178,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 179,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 182,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 183,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 184,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 185,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 186,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 187,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 188,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 189,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 192,
           "properties": [
-            { "name": "collides", "type": "bool", "value": true },
             {
-              "name": "text",
+              "name": "train-station-entrance",
               "type": "string",
-              "value": "Looks like they're building something hi-tech inside..."
+              "value": "train station entrance"
             }
           ]
         },
         {
           "id": 193,
           "properties": [
-            { "name": "collides", "type": "bool", "value": true },
             {
-              "name": "text",
+              "name": "train-station-entrance",
               "type": "string",
-              "value": "Looks like they're building something hi-tech inside..."
+              "value": "train station entrance"
             }
           ]
         },
         {
           "id": 194,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 195,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 196,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 197,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 198,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         },
         {
           "id": 199,
-          "properties": [{ "name": "collides", "type": "bool", "value": true }]
+          "properties": [
+            {
+              "name": "collides",
+              "type": "bool",
+              "value": true
+            }
+          ]
         }
-      ]
+      ],
+      "tilewidth": 16
     }
   ],
   "tilewidth": 16,

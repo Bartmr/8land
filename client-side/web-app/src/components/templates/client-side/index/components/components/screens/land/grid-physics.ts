@@ -255,7 +255,7 @@ class GridPhysics {
         foundATopTileWithProps = true;
       }
 
-      if (tileProperties[StaticBlockType.Start]) {
+      if (tileProperties[StaticBlockType.TrainPlatform]) {
         properties.static.train = true;
         foundATopTileWithProps = true;
       }
@@ -321,7 +321,7 @@ class GridPhysics {
       ) as Phaser.Tilemaps.Tile | null;
 
       if (!tile) {
-        throw new Error();
+        continue;
       }
 
       const props = resolveTileProps(tile, undefined);

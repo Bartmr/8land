@@ -6,12 +6,7 @@ import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { or } from 'not-me/lib/schemas/or/or-schema';
 import { uuid } from '../../internals/validation/schemas/uuid.schema';
-import {
-  StaticBlockType,
-  DynamicBlockType,
-} from '../../blocks/create/create-block.enums';
-import { getEnumValues } from '../../internals/utils/enums/get-enum-values';
-import { isUUID } from '../../internals/utils/uuid/is-uuid';
+import { StaticBlockType } from '../../blocks/create/create-block.enums';
 // import isHexColor from 'validator/lib/isHexColor';
 
 export const UploadLandAssetsParametersSchema = object({
@@ -59,34 +54,18 @@ export const createTiledJSONSchema = ({
     layers: array(
       object({
         data: array(number().required()).required(),
-        height: number()
-          .integer()
-          .required()
-          .test((h) =>
-            h > 0 && h < maxHeight
-              ? null
-              : maxHeightMessage ||
-                `Must be greater than 0 and less than ${maxHeight}`,
-          ),
+        height: number().integer().required(),
         id: number().integer().required(),
         name: string().filled(),
         opacity: equals([1], 'All layers must have full opacity').required(),
         type: equals(['tilelayer'], 'Only tile layers are allowed').required(),
         visible: equals([true], 'All layers must be visible'),
-        width: number()
-          .integer()
-          .required()
-          .test((w) =>
-            w > 0 && w < maxWidth
-              ? null
-              : maxWidthMessage ||
-                `Must be greater than 0 and less than ${maxWidth}`,
-          ),
+        width: number().integer().required(),
         x: equals([0], 'Must be set to 0').required(),
         y: equals([0], 'Must be set to 0').required(),
       }).required(),
     )
-      .min(0, 'You must have at least one tileset')
+      .min(1, 'You must have at least one layer')
       .required(),
     nextlayerid: number().integer().required(),
     nextobjectid: number().integer().required(),
@@ -161,7 +140,7 @@ export const createTiledJSONSchema = ({
                     ' can be set as "start"',
                   ).required(),
                   type: equals(
-                    ['string'],
+                    ['bool'],
                     "'start' props must be of boolean type",
                   ).required(),
                   value: equals([true]).required('value must be true'),
@@ -172,7 +151,7 @@ export const createTiledJSONSchema = ({
                     ' can be set as "train-platform"',
                   ).required(),
                   type: equals(
-                    ['string'],
+                    ['bool'],
                     "'train-platform' props must be of boolean type",
                   ).required(),
                   value: equals([true]).required('value must be true'),
@@ -183,31 +162,30 @@ export const createTiledJSONSchema = ({
                     ['string'],
                     'Block IDs must be of string type',
                   ).required(),
-                  value: string()
-                    .required()
-                    .test((s) => {
-                      const splitted = s.split(':');
+                  value: string().required(),
+                  // .test((s) => {
+                  //   const splitted = s.split(':');
 
-                      if (splitted.length !== 2) {
-                        return 'Invalid block ID format';
-                      }
+                  //   if (splitted.length !== 2) {
+                  //     return 'Invalid block ID format';
+                  //   }
 
-                      if (
-                        !(
-                          getEnumValues(DynamicBlockType) as Array<
-                            string | undefined
-                          >
-                        ).includes(splitted[0])
-                      ) {
-                        return 'Invalid block ID. First segment before ":" must be a valid lowercase block type';
-                      }
+                  //   if (
+                  //     !(
+                  //       getEnumValues(DynamicBlockType) as Array<
+                  //         string | undefined
+                  //       >
+                  //     ).includes(splitted[0])
+                  //   ) {
+                  //     return 'Invalid block ID. First segment before ":" must be a valid lowercase block type';
+                  //   }
 
-                      if (!(splitted[1] && isUUID(splitted[1]))) {
-                        return 'Invalid block ID. Second segment after ":" is invalid. Check if you copied the whole block ID into the tile property';
-                      }
+                  //   if (!(splitted[1] && isUUID(splitted[1]))) {
+                  //     return 'Invalid block ID. Second segment after ":" is invalid. Check if you copied the whole block ID into the tile property';
+                  //   }
 
-                      return null;
-                    }),
+                  //   return null;
+                  // }),
                 }),
               ]).required(),
             ).notNull(),
@@ -221,7 +199,7 @@ export const createTiledJSONSchema = ({
         ).required(),
       }).required(),
     )
-      .min(0, 'You must have at least one tileset')
+      .min(1, 'You must have at least one tileset')
       .max(1, 'You cannot have more than one tileset')
       .required(),
     tilewidth: equals([16], 'Must be set to 16').required(),
@@ -240,12 +218,12 @@ export const createTiledJSONSchema = ({
     .required()
     .test((o) => {
       for (const layer of o.layers) {
-        if (layer.height > o.height) {
-          return 'Layer height should not exceed map height';
+        if (layer.height === o.height) {
+          return `Layer "${layer.name}" height must be equal to the map height`;
         }
 
         if (layer.width > o.width) {
-          return 'Layer width should not exceed map width';
+          return `Layer "${layer.name}" width must be equal to the map width`;
         }
       }
 

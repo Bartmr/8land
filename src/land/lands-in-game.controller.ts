@@ -68,6 +68,27 @@ export class LandsInGameController {
       throw new ResourceNotFoundException();
     }
 
+    let res: GetLandDTO;
+
+    if (doorBlock.inLand) {
+      // player came back
+      if (query.currentLandId == doorBlock.toLand.id) {
+        res = await this.landService.mapLand(doorBlock.inLand);
+      }
+      // player entered
+      else if (query.currentLandId == doorBlock.inLand.id) {
+        res = await this.landService.mapLand(doorBlock.toLand);
+      } else {
+        throw new Error();
+      }
+    } else {
+      throw new NotImplementedException();
+    }
+
+    if (!res.assets) {
+      throw new ResourceNotFoundException();
+    }
+
     if (authContext) {
       (async () => {
         const navigationStateRepository = this.connection.getCustomRepository(
@@ -123,27 +144,6 @@ export class LandsInGameController {
       })().catch((err: unknown) =>
         this.loggingService.logError('navigate:save-state', err),
       );
-    }
-
-    let res: GetLandDTO;
-
-    if (doorBlock.inLand) {
-      // player came back
-      if (query.currentLandId == doorBlock.toLand.id) {
-        res = await this.landService.mapLand(doorBlock.inLand);
-      }
-      // player entered
-      else if (query.currentLandId == doorBlock.inLand.id) {
-        res = await this.landService.mapLand(doorBlock.toLand);
-      } else {
-        throw new Error();
-      }
-    } else {
-      throw new NotImplementedException();
-    }
-
-    if (!res.assets) {
-      throw new ResourceNotFoundException();
     }
 
     return res;

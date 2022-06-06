@@ -26,6 +26,14 @@ function Content() {
         }}
       </TransportedDataGate>
       <div className="mt-3">Last Event: {eventData}</div>
+      <button
+        className="mt-3"
+        onClick={() => {
+          appContext.data?.explore8Land.stopMusic();
+        }}
+      >
+        Stop music
+      </button>
     </>
   );
 }

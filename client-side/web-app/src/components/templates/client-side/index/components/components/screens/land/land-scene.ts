@@ -97,8 +97,19 @@ export class LandScene extends Phaser.Scene {
       getLandSceneTilesetKey(this.args.land),
     );
 
-    const landLayer = landMap.createLayer(0, landFirstTileset.name, 0, 0);
-    landLayer.setDepth(0);
+    let nextDepth = 0;
+
+    landTiledJSON.layers.forEach(() => {
+      const landLayer = landMap.createLayer(
+        nextDepth,
+        landFirstTileset.name,
+        0,
+        0,
+      );
+      landLayer.setDepth(nextDepth);
+
+      nextDepth += 1;
+    });
 
     this.animatedTiles.init(landMap);
     //
@@ -164,7 +175,9 @@ export class LandScene extends Phaser.Scene {
         territory.startY * TILE_SIZE,
       );
 
-      territoryLayer.setDepth(1 + i);
+      territoryLayer.setDepth(nextDepth);
+
+      nextDepth += 1;
 
       this.animatedTiles.init(territoryMap);
     }
@@ -182,7 +195,7 @@ export class LandScene extends Phaser.Scene {
               tile.properties as { [key: string]: unknown },
             );
 
-            if (properties.includes(this.args.comingFrom.id)) {
+            if (properties.includes(`door:${this.args.comingFrom.id}`)) {
               position = {
                 x: tile.x,
                 y: tile.y,
@@ -247,7 +260,7 @@ export class LandScene extends Phaser.Scene {
                 tile.properties as { [key: string]: unknown },
               );
 
-              if (properties.includes(this.args.comingFrom.id)) {
+              if (properties.includes(`door:${this.args.comingFrom.id}`)) {
                 position = {
                   x: tile.x,
                   y: tile.y,
@@ -309,7 +322,7 @@ export class LandScene extends Phaser.Scene {
     }
 
     if (!position) {
-      window.alert(
+      this.dependencies.dialogueService.openText(
         'This land does not have any exits. You should use the escape button in the user settings to go back to the outdoors',
       );
 
@@ -320,11 +333,16 @@ export class LandScene extends Phaser.Scene {
     }
 
     const playerSprite = this.add.sprite(0, 0, 'player');
-    playerSprite.setDepth(2);
+    playerSprite.setDepth(nextDepth);
 
     this.cameras.main.startFollow(playerSprite);
     this.cameras.main.roundPixels = true;
-    this.cameras.main.setBounds(0, 0, landLayer.width, landLayer.height);
+    this.cameras.main.setBounds(
+      0,
+      0,
+      landTiledJSON.width * TILE_SIZE,
+      landTiledJSON.height * TILE_SIZE,
+    );
 
     const player = new Player(
       playerSprite,
@@ -437,10 +455,6 @@ export class LandScene extends Phaser.Scene {
       frameHeight: 16,
     });
 
-    /*
-      From https://github.com/nkholski/phaser-animated-tiles/blob/master/dist/AnimatedTiles.js
-      commit a10cc9f on May 26, 2018
-    */
     this.load.scenePlugin(
       'AnimatedTiles',
       `${EnvironmentVariables.HOST_URL}/AnimatedTiles.js`,
@@ -492,13 +506,15 @@ export class LandScene extends Phaser.Scene {
 
       if (res.failure) {
         if (res.failure === TransportFailure.ConnectionFailure) {
-          window.alert(
+          this.dependencies.dialogueService.openText(
             "Couldn't connect to the Internet. Check your connection and enter the door again.",
           );
         } else if (res.failure === TransportFailure.NotFound) {
-          window.alert("This path's destination no longer exists.");
+          this.dependencies.dialogueService.openText(
+            "This path's destination no longer exists.",
+          );
         } else {
-          window.alert(
+          this.dependencies.dialogueService.openText(
             "There was an error loading what's further down this path. Try to enter it again later.",
           );
         }
@@ -512,11 +528,11 @@ export class LandScene extends Phaser.Scene {
 
       if (res.failure) {
         if (res.failure === TransportFailure.ConnectionFailure) {
-          window.alert(
+          this.dependencies.dialogueService.openText(
             "Couldn't connect to the Internet. Check your connection and enter the door again.",
           );
         } else {
-          window.alert(
+          this.dependencies.dialogueService.openText(
             "There was an error loading what's further down this path. Try to enter it again later.",
           );
         }
@@ -525,6 +541,7 @@ export class LandScene extends Phaser.Scene {
       }
 
       nextLand = res.response.body;
+      this.dependencies.musicService.pause();
     } else if (
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       block.type === StaticBlockType.TrainPlatform
@@ -534,7 +551,7 @@ export class LandScene extends Phaser.Scene {
       });
 
       if (!trainDestination) {
-        window.alert(
+        this.dependencies.dialogueService.openText(
           'You need to pick where you want to go first. Use the ticket machines available at this train station.',
         );
 
@@ -548,7 +565,7 @@ export class LandScene extends Phaser.Scene {
 
       if (res.failure) {
         if (res.failure === TransportFailure.ConnectionFailure) {
-          window.alert(
+          this.dependencies.dialogueService.openText(
             "Couldn't connect to the Internet. Check your connection and enter the door again.",
           );
         }
@@ -557,11 +574,11 @@ export class LandScene extends Phaser.Scene {
             currentStationLandId: this.args.land.id,
           });
 
-          window.alert(
+          this.dependencies.dialogueService.openText(
             'This destination no longer exists. Please pick another destination in the ticket machines available at this train station.',
           );
         } else {
-          window.alert(
+          this.dependencies.dialogueService.openText(
             "There was an error loading what's further down this path. Try to enter it again later.",
           );
         }
@@ -574,6 +591,7 @@ export class LandScene extends Phaser.Scene {
       });
 
       nextLand = res.response.body;
+      this.dependencies.musicService.pause();
     } else {
       throw new Error();
     }

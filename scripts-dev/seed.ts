@@ -30,6 +30,7 @@ import { DevStorageService } from 'src/internals/storage/dev-storage.service';
 import { LOCAL_TEMPORARY_FILES_PATH } from 'src/internals/local-temporary-files/local-temporary-files-path';
 import { AppBlockRepository } from 'src/blocks/typeorm/app-block.repository';
 import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
+import { seedTrainStation } from './seed/seed-train-station';
 
 const readFile = promisify(fs.readFile);
 const rm = promisify(fs.rm);
@@ -373,6 +374,13 @@ async function seed() {
 
     const townOfHumbleBeginningsMap = townOfHumbleBeginningsMapRes.value;
 
+    const { trainStationEntrance } = await seedTrainStation({
+      landOutside: townOfHumbleBeginnings,
+      auditContext,
+      storageService,
+      eM: defaultDBConnection.createEntityManager(),
+    });
+
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     townOfHumbleBeginningsMap.tilesets[0]!.tiles =
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -404,6 +412,11 @@ async function seed() {
               return {
                 ...prop,
                 value: `door:${expectationsBeachDoor2.id}`,
+              };
+            } else if (prop.name === 'train-station-entrance') {
+              return {
+                ...prop,
+                value: `door:${trainStationEntrance.id}`,
               };
             } else {
               return prop;
