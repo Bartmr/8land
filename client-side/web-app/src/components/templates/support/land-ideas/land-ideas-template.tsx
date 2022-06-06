@@ -40,7 +40,7 @@ export function LandIdeasTemplate() {
 
               <li>{'Diorama - teach something interactively'}</li>
 
-              <li>{'An escape room'}</li>
+              {/* TODO <li>{'An escape room'}</li> */}
 
               <li>
                 {
