@@ -218,11 +218,11 @@ export const createTiledJSONSchema = ({
     .required()
     .test((o) => {
       for (const layer of o.layers) {
-        if (layer.height === o.height) {
+        if (layer.height !== o.height) {
           return `Layer "${layer.name}" height must be equal to the map height`;
         }
 
-        if (layer.width > o.width) {
+        if (layer.width !== o.width) {
           return `Layer "${layer.name}" width must be equal to the map width`;
         }
       }
