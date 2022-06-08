@@ -7,7 +7,6 @@ import { string } from 'not-me/lib/schemas/string/string-schema';
 import { or } from 'not-me/lib/schemas/or/or-schema';
 import { uuid } from '../../internals/validation/schemas/uuid.schema';
 import { StaticBlockType } from '../../blocks/create/create-block.enums';
-// import isHexColor from 'validator/lib/isHexColor';
 
 export const UploadLandAssetsParametersSchema = object({
   landId: uuid().required(),
@@ -23,22 +22,12 @@ export const createTiledJSONSchema = ({
   maxHeight: number | null;
   maxWidthMessage?: string;
   maxHeightMessage?: string;
-  // allowBackgroundColor: boolean;
 }) => {
   const maxWidth = _maxWidth ? _maxWidth + 1 : 41;
   const maxHeight = _maxHeight ? _maxHeight + 1 : 41;
 
   return object({
-    // backgroundColor: allowBackgroundColor
-    //   ? string()
-    //       .notNull()
-    //       .test((s) =>
-    //         s ? (isHexColor(s) ? null : 'Not a valid hex color') : null,
-    //       )
-    //   : equals([]).test((v) =>
-    //       v === undefined ? null : 'Background color is not allowed',
-    //     ),
-    compressionlevel: number().required(),
+    compressionlevel: number().integer().required(),
     height: number()
       .integer()
       .required()
@@ -81,15 +70,6 @@ export const createTiledJSONSchema = ({
     tileheight: equals([16], 'Must be set to 16').required(),
     tilesets: array(
       object({
-        // backgroundColor: allowBackgroundColor
-        //   ? string()
-        //       .notNull()
-        //       .test((s) =>
-        //         s ? (isHexColor(s) ? null : 'Not a valid hex color') : null,
-        //       )
-        //   : equals([]).test((v) =>
-        //       v === undefined ? null : 'Background color is not allowed',
-        //     ),
         columns: number().integer(),
         firstgid: number().integer().required(),
         image: string().filled(),
@@ -163,29 +143,6 @@ export const createTiledJSONSchema = ({
                     'Block IDs must be of string type',
                   ).required(),
                   value: string().required(),
-                  // .test((s) => {
-                  //   const splitted = s.split(':');
-
-                  //   if (splitted.length !== 2) {
-                  //     return 'Invalid block ID format';
-                  //   }
-
-                  //   if (
-                  //     !(
-                  //       getEnumValues(DynamicBlockType) as Array<
-                  //         string | undefined
-                  //       >
-                  //     ).includes(splitted[0])
-                  //   ) {
-                  //     return 'Invalid block ID. First segment before ":" must be a valid lowercase block type';
-                  //   }
-
-                  //   if (!(splitted[1] && isUUID(splitted[1]))) {
-                  //     return 'Invalid block ID. Second segment after ":" is invalid. Check if you copied the whole block ID into the tile property';
-                  //   }
-
-                  //   return null;
-                  // }),
                 }),
               ]).required(),
             ).notNull(),
