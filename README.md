@@ -25,13 +25,16 @@ The core version of `estirador` can be enhanced with some pre-made layers that c
 - Setup the project's secrets
   - Create an API secrets file called `.env.secret.development` in the root of the project and fill it with the necessary secrets
   - Create a Web App secrets file called `.env.secret.development` in `client-side/web-app` and fill it with the necessary secrets
-- From now on you can just run `npm run start:dev:infrastructure` in order to start all the services and infrastructure
 - Set up an Alchemy account at <https://www.alchemy.com/>
 - Create a Metamask Wallet
 - Build the smart-contracts by running `NODE_ENV=development npm run build:smart-contracts`
 - Deploy smart-contracts into a testnet
   - run `NODE_ENV=development npm run ts-node ./dist/scripts/deploy.ts`
   - take note of the contracts addresses and place them in `.env.secrets.development` to be used environment variables
+- Start Firebase
+  - `npm run start:dev:firebase`
+- Start your project's infrastructure (example: databases, Redis, etc.)
+  - `./start-dev-infrastructure.sh`
 - Seed the development database with sample data by running `NODE_ENV=development npm run seed`
 - Start the server with `npm run start:dev`, or `npm run start:debug` if you want to debug the API in the Chrome Developer Tools
 - To run the web app:
