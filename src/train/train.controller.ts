@@ -190,16 +190,16 @@ export class TrainController {
       (qB) => {
         let qBFinal = qB
           .orderBy(
-            getTypesafeObjectFieldPath<Land>().and('createdAt').end(),
+            `land.${getTypesafeObjectFieldPath<Land>().and('createdAt').end()}`,
             'DESC',
           )
           .where(
-            `lands.${getTypesafeObjectFieldPath<Land>()
+            `land.${getTypesafeObjectFieldPath<Land>()
               .and('isStartingLand')
               .end()} = true`,
           )
           .andWhere(
-            `lands.${getTypesafeObjectFieldPath<Land>()
+            `land.${getTypesafeObjectFieldPath<Land>()
               .and('world')
               .end()} IS NOT NULL`,
           );

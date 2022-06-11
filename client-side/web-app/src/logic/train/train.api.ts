@@ -1,5 +1,9 @@
 import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
 import { uuid } from '@app/shared/internals/validation/schemas/uuid.schema';
+import {
+  GetTrainDestinationQueryDTO,
+  GetTrainDestinationsDTO,
+} from '@app/shared/train/apps/tickets/get-destinations/get-train-destinations.dto';
 import { BoardTrainDTO } from '@app/shared/train/board/board-train.dto';
 import {
   ReturnToTrainStationDTO,
@@ -79,6 +83,20 @@ export class TrainAPI {
     >({
       path: `/train/return`,
       query,
+      acceptableStatusCodes: [200],
+    });
+  }
+
+  searchDestinations(args: { skip: number; searchQuery: string }) {
+    return this.api.get<
+      { status: 200; body: ToIndexedType<GetTrainDestinationsDTO> },
+      ToIndexedType<GetTrainDestinationQueryDTO>
+    >({
+      path: `/train/apps/tickets/getDestinations`,
+      query: {
+        skip: args.skip,
+        name: args.searchQuery,
+      },
       acceptableStatusCodes: [200],
     });
   }
