@@ -3,6 +3,7 @@ import { TERRITORY_MAP_SIZE_LIMIT } from '@app/shared/territories/upload-assets/
 import { GetTerritoryDTO } from '@app/shared/territories/get/get-territory.dto';
 import { AnyErrorMessagesTree } from 'not-me/lib/error-messages/error-messages-tree';
 import { useState } from 'react';
+import { trackCustomEvent } from 'gatsby-plugin-google-analytics';
 
 export function MapFormField(props: {
   territory: GetTerritoryDTO;
@@ -63,6 +64,15 @@ export function MapFormField(props: {
             const validationResult = schema.validate(parsedFile);
 
             if (validationResult.errors) {
+              trackCustomEvent({
+                category: 'territory:map-form-field',
+                action: 'invalid-json',
+                label: JSON.stringify(validationResult.messagesTree).substring(
+                  0,
+                  500,
+                ),
+              });
+
               replaceError({
                 error: 'invalid-json',
                 messageTree: validationResult.messagesTree,

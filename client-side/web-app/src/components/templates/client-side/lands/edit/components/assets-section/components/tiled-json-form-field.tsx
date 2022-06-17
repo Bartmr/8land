@@ -1,6 +1,7 @@
 import { createTiledJSONSchema } from '@app/shared/land/upload-assets/upload-land-assets.schemas';
 import { AnyErrorMessagesTree } from 'not-me/lib/error-messages/error-messages-tree';
 import { useEffect, useState } from 'react';
+import { trackCustomEvent } from 'gatsby-plugin-google-analytics';
 
 const schema = createTiledJSONSchema({
   maxWidth: null,
@@ -44,6 +45,15 @@ export function TiledJSONField(props: {
         const validationResult = schema.validate(parsedFile);
 
         if (validationResult.errors) {
+          trackCustomEvent({
+            category: 'land:tiled-json-form-field',
+            action: 'invalid-json',
+            label: JSON.stringify(validationResult.messagesTree).substring(
+              0,
+              500,
+            ),
+          });
+
           props.onChange({
             error: 'invalid-json',
             messageTree: validationResult.messagesTree,
