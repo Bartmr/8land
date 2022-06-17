@@ -8,6 +8,22 @@ import { or } from 'not-me/lib/schemas/or/or-schema';
 import { uuid } from '../../internals/validation/schemas/uuid.schema';
 import { StaticBlockType } from '../../blocks/create/create-block.enums';
 
+const positiveInteger = () => {
+  return number()
+    .integer()
+    .test((n) => {
+      if (n == null) {
+        return null;
+      }
+
+      if (n >= 0) {
+        return null;
+      } else {
+        return 'Must be a positive number';
+      }
+    });
+};
+
 export const UploadLandAssetsParametersSchema = object({
   landId: uuid().required(),
 }).required();
@@ -42,22 +58,22 @@ export const createTiledJSONSchema = ({
       .test((i) => (i ? 'Map cannot be infinite' : null)),
     layers: array(
       object({
-        data: array(number().required()).required(),
-        height: number().integer().required(),
-        id: number().integer().required(),
+        data: array(positiveInteger().required()).required(),
+        height: positiveInteger().required(),
+        id: positiveInteger().required(),
         name: string().filled(),
         opacity: equals([1], 'All layers must have full opacity').required(),
         type: equals(['tilelayer'], 'Only tile layers are allowed').required(),
         visible: equals([true], 'All layers must be visible'),
-        width: number().integer().required(),
+        width: positiveInteger().required(),
         x: equals([0], 'Must be set to 0').required(),
         y: equals([0], 'Must be set to 0').required(),
       }).required(),
     )
       .min(1, 'You must have at least one layer')
       .required(),
-    nextlayerid: number().integer().required(),
-    nextobjectid: number().integer().required(),
+    nextlayerid: positiveInteger().required(),
+    nextobjectid: positiveInteger().required(),
     orientation: equals(
       ['orthogonal'],
       "must be set to 'orthogonal'",
@@ -70,20 +86,20 @@ export const createTiledJSONSchema = ({
     tileheight: equals([16], 'Must be set to 16').required(),
     tilesets: array(
       object({
-        columns: number().integer(),
-        firstgid: number().integer().required(),
+        columns: positiveInteger().required(),
+        firstgid: positiveInteger().required(),
         image: string().filled(),
-        imageheight: number().integer().required(),
-        imagewidth: number().integer().required(),
-        margin: number().integer().required(),
+        imageheight: positiveInteger().required(),
+        imagewidth: positiveInteger().required(),
+        margin: positiveInteger().required(),
         name: string().filled(),
-        spacing: number().integer().required(),
-        tilecount: number().integer().required(),
+        spacing: positiveInteger().required(),
+        tilecount: positiveInteger().required(),
         tileheight: equals([16], 'Must be set to 16').required(),
         tilewidth: equals([16], 'Must be set to 16').required(),
         tiles: array(
           object({
-            id: number().integer().required(),
+            id: positiveInteger().required(),
             properties: array(
               or([
                 object({
@@ -148,8 +164,8 @@ export const createTiledJSONSchema = ({
             ).notNull(),
             animation: array(
               object({
-                duration: number().integer().required(),
-                tileid: number().integer().required(),
+                duration: positiveInteger().required(),
+                tileid: positiveInteger().required(),
               }).required(),
             ).notNull(),
           }).required(),
