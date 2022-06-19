@@ -3,11 +3,26 @@ import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 
 const schema = object({
-  WALLET_PUBLIC_KEY: string().filled(),
-  WALLET_PRIVATE_KEY: string().filled(),
-  MORALIS_SERVER_URL: string().filled(),
-  MORALIS_APP_ID: string().filled(),
-  MORALIS_SPEEDY_NODE: string().filled(),
+  WALLET_PUBLIC_KEY: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
+  WALLET_PRIVATE_KEY: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
+  MORALIS_SERVER_URL: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
+  MORALIS_APP_ID: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
+  MORALIS_SPEEDY_NODE: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
 }).required();
 
 const environmentVariablesValidationResult = schema.validate({

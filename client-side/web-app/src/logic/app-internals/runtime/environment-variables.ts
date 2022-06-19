@@ -42,40 +42,64 @@ const schema = object({
     }
   }),
   LOG_DEBUG: boolean(),
-  MAIN_API_URL: string().filled(),
+  MAIN_API_URL: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
   FIREBASE_AUTH_EMULATOR_URL:
     [NodeEnv.Development, NodeEnv.Test].includes(
       process.env.NODE_ENV as NodeEnv,
     ) || isIntegrityCheck
-      ? string().filled()
+      ? string()
+          .required()
+          .transform((s) => s.trim())
+          .test((s) => (s.length > 0 ? null : 'Must be filled'))
       : string(),
   FIREBASE_CONFIG: object({
-    apiKey: string().filled(),
-    authDomain: string().filled(),
-    projectId: string().filled(),
-    storageBucket: string().filled(),
-    messagingSenderId: string().filled(),
-    appId: string().filled(),
+    apiKey: string().required(),
+    authDomain: string().required(),
+    projectId: string().required(),
+    storageBucket: string().required(),
+    messagingSenderId: string().required(),
+    appId: string().required(),
   }).required(),
-  TERRITORIES_STORE_URL: string().filled(),
+  TERRITORIES_STORE_URL: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
 
-  MORALIS_SERVER_URL: string().filled(),
-  MORALIS_APP_ID: string().filled(),
+  MORALIS_SERVER_URL: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
+  MORALIS_APP_ID: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
 
   WEB3_NET: equals(['rinkeby', 'eth']).required(),
 
-  RARIBLE_URL: string().filled(),
+  RARIBLE_URL: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
 
   SENTRY_DSN:
     process.env.NODE_ENV === NodeEnv.Production &&
     process.env.IS_INTEGRITY_CHECK !== 'true'
-      ? string().filled()
+      ? string()
+          .required()
+          .transform((s) => s.trim())
+          .test((s) => (s.length > 0 ? null : 'Must be filled'))
       : equals([]),
 
   GOOGLE_ANALYTICS_TRACKING_ID:
     process.env.NODE_ENV === NodeEnv.Production &&
     process.env.IS_INTEGRITY_CHECK !== 'true'
-      ? string().filled()
+      ? string()
+          .required()
+          .transform((s) => s.trim())
+          .test((s) => (s.length > 0 ? null : 'Must be filled'))
       : equals([]),
 }).required();
 

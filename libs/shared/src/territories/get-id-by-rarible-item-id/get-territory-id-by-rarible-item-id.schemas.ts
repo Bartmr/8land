@@ -5,5 +5,8 @@ import { GetTerritoryIdByRaribleItemIdParamsDTO } from './get-territory-id-by-ra
 
 export const GetTerritoryIdByRaribleItemIdParametersSchema: Schema<GetTerritoryIdByRaribleItemIdParamsDTO> =
   object({
-    itemId: string().filled(),
+    itemId: string()
+      .required()
+      .transform((s) => s.trim())
+      .test((s) => (s.length > 0 ? null : 'Must be filled')),
   }).required();

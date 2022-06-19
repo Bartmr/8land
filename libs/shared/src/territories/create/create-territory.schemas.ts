@@ -1,25 +1,13 @@
-import { number } from 'not-me/lib/schemas/number/number-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
+import { positiveInteger } from '../../internals/validation/schemas/positive-integer';
 import { uuid } from '../../internals/validation/schemas/uuid.schema';
 
 export const CreateTerritoryRequestJSONSchemaObj = {
   data: object({
-    startX: number()
-      .required()
-      .integer()
-      .test((n) => (n >= 0 ? null : 'Must be a positive number')),
-    startY: number()
-      .required()
-      .integer()
-      .test((n) => (n >= 0 ? null : 'Must be a positive number')),
-    endX: number()
-      .required()
-      .integer()
-      .test((n) => (n >= 0 ? null : 'Must be a positive number')),
-    endY: number()
-      .required()
-      .integer()
-      .test((n) => (n >= 0 ? null : 'Must be a positive number')),
+    startX: positiveInteger().required(),
+    startY: positiveInteger().required(),
+    endX: positiveInteger().required(),
+    endY: positiveInteger().required(),
   })
     .required()
     .test((v) =>

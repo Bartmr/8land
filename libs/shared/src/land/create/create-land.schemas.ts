@@ -5,7 +5,7 @@ import { CreateLandRequestDTO } from './create-land.dto';
 
 export const CreateLandRequestSchemaObj = {
   name: string()
-    .filled()
+    .required()
     .transform((s) => s.trim())
     .test((n) =>
       n.length < 1 ? 'Land name must have at least 1 character' : null,

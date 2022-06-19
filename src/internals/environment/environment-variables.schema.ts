@@ -7,7 +7,12 @@ import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 
 const stringFailIfEmptyInProd =
-  NODE_ENV === NodeEnv.Production ? string().filled() : string();
+  NODE_ENV === NodeEnv.Production
+    ? string()
+        .required()
+        .transform((s) => s.trim())
+        .test((s) => (s.length > 0 ? null : 'Must be filled'))
+    : string();
 
 export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   HOT_RELOAD_DATABASE_MIGRATIONS_ROLLBACK_STEPS: (() => {
@@ -35,16 +40,34 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   }),
 
   WEB_APP_ORIGIN: string()
-    .filled()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled'))
     .transform((s) => s.split(',')),
 
-  DATABASE_HOST: string().filled(),
+  DATABASE_HOST: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
   DATABASE_PORT: number().required(),
-  DATABASE_NAME: string().filled(),
-  DATABASE_USER: string().filled(),
-  DATABASE_PASSWORD: string().filled(),
+  DATABASE_NAME: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
+  DATABASE_USER: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
+  DATABASE_PASSWORD: string()
+    .required()
+    .transform((s) => s.trim())
+    .test((s) => (s.length > 0 ? null : 'Must be filled')),
   DATABASE_CA_CERTIFICATE:
-    NODE_ENV === NodeEnv.Production ? string().filled() : string(),
+    NODE_ENV === NodeEnv.Production
+      ? string()
+          .required()
+          .test((s) => (s.length > 0 ? null : 'Must be filled'))
+      : string(),
 
   AUTH_TOKEN_TTL: number()
     .notNull()
@@ -59,12 +82,18 @@ export const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = object({
   FIREBASE_AUTH_EMULATOR_HOST: [NodeEnv.Development, NodeEnv.Test].includes(
     NODE_ENV as NodeEnv,
   )
-    ? string().filled()
+    ? string()
+        .required()
+        .transform((s) => s.trim())
+        .test((s) => (s.length > 0 ? null : 'Must be filled'))
     : string(),
   FIREBASE_PROJECT_ID: [NodeEnv.Development, NodeEnv.Test].includes(
     NODE_ENV as NodeEnv,
   )
-    ? string().filled()
+    ? string()
+        .required()
+        .transform((s) => s.trim())
+        .test((s) => (s.length > 0 ? null : 'Must be filled'))
     : string(),
 
   GOOGLE_APPLICATION_CREDENTIALS: [NodeEnv.Development, NodeEnv.Test].includes(

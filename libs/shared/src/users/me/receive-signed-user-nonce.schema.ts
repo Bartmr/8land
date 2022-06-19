@@ -5,5 +5,7 @@ import { ReceiveSignedUserNonceRequestDTO } from './receive-signed-user-nonce.dt
 
 export const ReceiveSignedUserNonceRequestSchema: Schema<ReceiveSignedUserNonceRequestDTO> =
   object({
-    signedNonce: string().filled(),
+    signedNonce: string()
+      .required()
+      .test((s) => (s.trim().length > 0 ? null : 'Must be filled')),
   }).required();

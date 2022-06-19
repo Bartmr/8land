@@ -7,22 +7,7 @@ import { string } from 'not-me/lib/schemas/string/string-schema';
 import { or } from 'not-me/lib/schemas/or/or-schema';
 import { uuid } from '../../internals/validation/schemas/uuid.schema';
 import { StaticBlockType } from '../../blocks/create/create-block.enums';
-
-const positiveInteger = () => {
-  return number()
-    .integer()
-    .test((n) => {
-      if (n == null) {
-        return null;
-      }
-
-      if (n >= 0) {
-        return null;
-      } else {
-        return 'Must be a positive number';
-      }
-    });
-};
+import { positiveInteger } from '../../internals/validation/schemas/positive-integer';
 
 export const UploadLandAssetsParametersSchema = object({
   landId: uuid().required(),
@@ -43,10 +28,12 @@ export const createTiledJSONSchema = ({
   const maxHeight = _maxHeight ? _maxHeight + 1 : 41;
 
   return object({
-    compressionlevel: number().integer().required(),
-    height: number()
-      .integer()
+    compressionlevel: number()
       .required()
+      .test((n) => (Number.isInteger(n) ? null : 'Must be an integer')),
+    height: number()
+      .required()
+      .test((n) => (Number.isInteger(n) ? null : 'Must be an integer'))
       .test((h) =>
         h > 0 && h < maxHeight
           ? null
@@ -61,7 +48,9 @@ export const createTiledJSONSchema = ({
         data: array(positiveInteger().required()).required(),
         height: positiveInteger().required(),
         id: positiveInteger().required(),
-        name: string().filled(),
+        name: string()
+          .required()
+          .test((s) => (s.trim().length > 0 ? null : 'Layer must have a name')),
         opacity: equals([1], 'All layers must have full opacity').required(),
         type: equals(['tilelayer'], 'Only tile layers are allowed').required(),
         visible: equals([true], 'All layers must be visible'),
@@ -88,11 +77,18 @@ export const createTiledJSONSchema = ({
       object({
         columns: positiveInteger().required(),
         firstgid: positiveInteger().required(),
-        image: string().filled(),
+        image: string()
+          .required()
+          .transform((s) => s.trim())
+          .test((s) => (s.length > 0 ? null : 'Tileset must have an image')),
         imageheight: positiveInteger().required(),
         imagewidth: positiveInteger().required(),
         margin: positiveInteger().required(),
-        name: string().filled(),
+        name: string()
+          .required()
+          .test((s) =>
+            s.trim().length > 0 ? null : 'Tileset must have a name',
+          ),
         spacing: positiveInteger().required(),
         tilecount: positiveInteger().required(),
         tileheight: equals([16], 'Must be set to 16').required(),
@@ -177,9 +173,13 @@ export const createTiledJSONSchema = ({
       .required(),
     tilewidth: equals([16], 'Must be set to 16').required(),
     type: equals(['map'], "Must be set to 'map'").required(),
-    version: string().filled(),
+    version: string()
+      .required()
+      .test((s) =>
+        s.trim().length > 0 ? null : 'A version must be specified',
+      ),
     width: number()
-      .integer()
+      .test((n) => (Number.isInteger(n) ? null : 'Must be an integer'))
       .required()
       .test((w) =>
         w > 0 && w < maxWidth

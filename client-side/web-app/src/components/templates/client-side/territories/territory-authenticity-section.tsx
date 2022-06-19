@@ -40,7 +40,8 @@ export function TerritoryAuthenticitySection(props: {
 
     if (url) {
       const res = string()
-        .filled()
+        .required()
+        .test((s) => (s.trim().length > 0 ? null : 'Must be filled'))
         .test((s) => {
           return s.startsWith(prefix) ? null : 'Input is not a Rarible link';
         })

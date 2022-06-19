@@ -21,13 +21,18 @@ export const CreateBlockRequestSchema: Schema<CreateBlockRequestDTO> = object({
       if (o.type === DynamicBlockType.Door) {
         return {
           type: equals([DynamicBlockType.Door] as const).required(),
-          destinationLandName: string().filled(),
+          destinationLandName: string()
+            .required()
+            .transform((s) => s.trim())
+            .test((s) => (s.length > 0 ? null : 'Must be filled')),
         };
       } else if (o.type === DynamicBlockType.App) {
         return {
           type: equals([DynamicBlockType.App] as const).required(),
           url: string()
-            .filled()
+            .required()
+            .transform((s) => s.trim())
+            .test((s) => (s.length > 0 ? null : 'Must be filled'))
             .test((s) => (isURL(s) ? null : 'This is not a valid URL')),
         };
       } else {
