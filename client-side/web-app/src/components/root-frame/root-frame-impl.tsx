@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StateProvider } from './components/state-provider';
 import { Helmet } from 'react-helmet';
 import { dom } from '@fortawesome/fontawesome-svg-core';
+import { USER_ROUTE } from '../templates/client-side/user/user-routes';
 
 const FatalErrorFrame = () => {
   return (
@@ -21,6 +22,23 @@ const FatalErrorFrame = () => {
             An internal error occured.
             <br />
             Please refresh the page and try again.
+          </p>
+          <p>
+            {
+              "If you're stuck in a land and can't get out, try to use the Escape button "
+            }
+            <a
+              href={USER_ROUTE.getHref({ section: 'escape' })}
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.assign(
+                  USER_ROUTE.getHref({ section: 'escape' }),
+                );
+              }}
+            >
+              here
+            </a>
+            {'. It will teleport you back to a safe location.'}
           </p>
         </div>
       </div>
