@@ -9,6 +9,8 @@ import {
   ReturnToTrainStationDTO,
   ReturnToTrainStationQueryDTO,
 } from '@app/shared/train/return/return-to-train-station.dto';
+import { object } from 'not-me/lib/schemas/object/object-schema';
+import { string } from 'not-me/lib/schemas/string/string-schema';
 import {
   mainApiReducer,
   MainApiStoreState,
@@ -29,18 +31,25 @@ export class TrainAPI {
 
   getTrainDestination(args: { currentStationLandId: string }) {
     return this.localStorage.getItem(
-      uuid(),
+      object({
+        name: string().required(),
+        worldId: uuid().required(),
+      }),
       `train-destination:${args.currentStationLandId}`,
     );
   }
 
   setTrainDestination(args: {
+    destinationWorldName: string;
     destinationWorldId: string;
     currentStationLandId: string;
   }) {
     return this.localStorage.setItem(
       `train-destination:${args.currentStationLandId}`,
-      args.destinationWorldId,
+      {
+        name: args.destinationWorldName,
+        worldId: args.destinationWorldId,
+      },
     );
   }
 

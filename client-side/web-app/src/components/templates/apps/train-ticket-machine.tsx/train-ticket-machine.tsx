@@ -24,9 +24,13 @@ function Content(props: { appContext: AppContext }) {
     TransportedData<GetTrainDestinationsDTO['rows']>
   >({ status: TransportedDataStatus.NotInitialized });
 
-  const [selectedWorldId, replaceSelectedWorldId] = useState<
-    string | undefined
-  >();
+  const [selectedWorld, replaceSelectedWorld] = useState<
+    { name: string; worldId: string } | undefined
+  >(
+    trainsApi.getTrainDestination({
+      currentStationLandId: props.appContext.land.id,
+    }) ?? undefined,
+  );
 
   const fetchDestinations = async (args?: { reset?: boolean }) => {
     if (args?.reset || !destinations.data) {
@@ -59,29 +63,39 @@ function Content(props: { appContext: AppContext }) {
   };
 
   useEffect(() => {
-    replaceSelectedWorldId(
-      trainsApi.getTrainDestination({
-        currentStationLandId: props.appContext.land.id,
-      }) ?? undefined,
-    );
+    if (destinations.status === TransportedDataStatus.NotInitialized) {
+      (async () => {
+        await fetchDestinations({ reset: true });
+      })();
 
-    (async () => {
-      await fetchDestinations({ reset: true });
-    })();
+      return;
+    } else {
+      const timeout = window.setTimeout(() => {
+        (async () => {
+          await fetchDestinations({ reset: true });
+        })();
+      }, 300);
+
+      return () => {
+        window.clearTimeout(timeout);
+      };
+    }
   }, [searchQuery]);
 
   return (
-    <div className="py-4 container">
+    <div className="py-2 container">
       <h1 className="h3 text-center">Welcome. Please pick a destination:</h1>
       <input
         value={searchQuery}
         onChange={(e) => replaceSearchQuery(e.target.value)}
-        className="form-control"
+        className="form-control form-control-sm"
         placeholder="Search for land by name"
       />
-      {selectedWorldId ? (
-        <p className="text-success">
-          Destination is picked. Go throught the station gates to board
+      {selectedWorld ? (
+        <p className="bg-success mt-1">
+          Destination: {selectedWorld.name}
+          <br />
+          Go throught the station gates to board
         </p>
       ) : null}
       <TransportedDataGate className="mt-3" dataWrapper={destinations}>
@@ -90,17 +104,7 @@ function Content(props: { appContext: AppContext }) {
             <InfiniteScroll
               dataLength={data.length}
               next={() => fetchDestinations()}
-              hasMore={Boolean(
-                !(
-                  [
-                    TransportedDataStatus.Loading,
-                    TransportedDataStatus.Refreshing,
-                  ] as string[]
-                ).includes(destinations.status) ||
-                  lastTotal == null ||
-                  destinations.data == null ||
-                  destinations.data.length < lastTotal,
-              )}
+              hasMore={lastTotal != null && data.length < lastTotal}
               loader={
                 (
                   [
@@ -112,7 +116,7 @@ function Content(props: { appContext: AppContext }) {
                 ) : null
               }
               endMessage={
-                <span className="d-block muted text-center">
+                <span className="d-block text-muted text-center">
                   There are no more destinations
                 </span>
               }
@@ -125,17 +129,29 @@ function Content(props: { appContext: AppContext }) {
                     return (
                       <li
                         key={destination.worldId}
-                        className="p-3 d-flex justify-content-between align-items-center"
+                        className="py-2 d-flex justify-content-between align-items-center"
                       >
                         <span>{destination.name}</span>
                         <button
-                          className={`btn btn-${
-                            selectedWorldId === destination.worldId
+                          onClick={() => {
+                            replaceSelectedWorld({
+                              name: destination.name,
+                              worldId: destination.worldId,
+                            });
+
+                            trainsApi.setTrainDestination({
+                              destinationWorldName: destination.name,
+                              destinationWorldId: destination.worldId,
+                              currentStationLandId: props.appContext.land.id,
+                            });
+                          }}
+                          className={`btn btn-sm btn-${
+                            selectedWorld?.worldId === destination.worldId
                               ? 'success'
                               : 'info'
                           }`}
                         >
-                          {selectedWorldId === destination.worldId ? (
+                          {selectedWorld?.worldId === destination.worldId ? (
                             <>
                               <FontAwesomeIcon icon={faCheck} /> Picked
                             </>

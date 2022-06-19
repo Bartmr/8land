@@ -559,7 +559,7 @@ export class LandScene extends Phaser.Scene {
       }
 
       const res = await this.dependencies.trainAPI.board({
-        worldId: trainDestination,
+        worldId: trainDestination.worldId,
         boardingFromLand: this.args.land.id,
       });
 

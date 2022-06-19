@@ -121,7 +121,7 @@ $dark-contrasting-colors: (
   'default': $dark,
   'primary': $primary,
   'secondary': change-color($secondary, $lightness: 40%),
-  'success': $success,
+  'success': change-color($success, $lightness: 40%),
   'info': $info,
   'warning': $warning,
   'danger': $danger,
