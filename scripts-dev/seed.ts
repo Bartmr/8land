@@ -31,6 +31,7 @@ import { LOCAL_TEMPORARY_FILES_PATH } from 'src/internals/local-temporary-files/
 import { AppBlockRepository } from 'src/blocks/typeorm/app-block.repository';
 import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
 import { seedTrainStation } from './seed/seed-train-station';
+import { seedUserLand } from './seed/seed-user-land';
 
 const readFile = promisify(fs.readFile);
 const rm = promisify(fs.rm);
@@ -108,7 +109,7 @@ async function seed() {
     authContext: null,
   });
 
-  await usersRepository.create(
+  const endUser = await usersRepository.create(
     {
       firebaseUid: (
         await firebaseAuth.createUser({
@@ -725,6 +726,15 @@ async function seed() {
 
   await territoriesRepository.save(territory1, auditContext);
   /* --- */
+
+  await seedUserLand({
+    auditContext,
+    storageService,
+    eM: defaultDBConnection.createEntityManager(),
+    appBlocksRepository,
+    user: endUser,
+  });
+
   await Promise.all([defaultDBConnection.close()]);
 }
 

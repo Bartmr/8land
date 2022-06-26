@@ -79,10 +79,12 @@ export abstract class SimpleEntityRepository<
   Entity extends SimpleEntity,
   FieldsOmittedBeforePersistence extends keyof Entity = never,
 > extends AbstractRepository<Entity> {
-  _EntityCreationAttributes!: Omit<
-    Entity,
-    keyof SimpleEntity | FieldsOmittedBeforePersistence | 'toJSON'
-  >;
+  _EntityCreationAttributes!:
+    | Entity
+    | Omit<
+        Entity,
+        keyof SimpleEntity | FieldsOmittedBeforePersistence | 'toJSON'
+      >;
 
   findOne(
     query: FindOneOptions<Entity>,

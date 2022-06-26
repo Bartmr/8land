@@ -1,7 +1,5 @@
 import { throwError } from '@app/shared/internals/utils/throw-error';
-import { navigate } from 'gatsby';
 import { useEffect, useState } from 'react';
-import { USER_ROUTE } from 'src/components/templates/client-side/user/user-routes';
 import { v4 } from 'uuid';
 import { GamepadSingleton } from '../../../../gamepad-singleton';
 import { ESCAPE_BUTTON_SELECTOR } from '../../keypad-utils';
@@ -104,21 +102,22 @@ export function AppScreen(props: {
 
     const gamepad = GamepadSingleton.getInstance();
 
-    const onPressing_Escape = async () => {
+    const onPressing_Escape = () => {
       if (sv.active) {
         sv.close();
-      } else {
-        await navigate(USER_ROUTE.getHref({ section: 'escape' }));
+        return 'stop-propagation' as const;
       }
+
+      return 'continue-propagation' as const;
     };
 
-    gamepad.onPressing_Escape(onPressing_Escape);
+    gamepad.onPressing_Escape(onPressing_Escape, 'appScreen');
 
     replaceService(sv);
     props.onService(sv);
 
     return () => {
-      gamepad.removePressing_Escape_Callback(onPressing_Escape);
+      gamepad.removePressing_Escape_Callback('appScreen');
     };
   }, []);
 

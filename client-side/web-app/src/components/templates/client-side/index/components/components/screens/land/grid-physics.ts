@@ -340,10 +340,6 @@ class GridPhysics {
     const tileProps = this.getTopTileProperties(pos);
 
     if (tileProps) {
-      if (!this.hasSteppedOnSafeTile) {
-        return;
-      }
-
       const dynamicBlock = tileProps.dynamicBlock;
 
       if (dynamicBlock) {
@@ -354,13 +350,27 @@ class GridPhysics {
         if (block) {
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           if (block.type === DynamicBlockType.Door) {
-            this.context.onStepIntoDoor(block);
+            if (this.hasSteppedOnSafeTile) {
+              this.context.onStepIntoDoor(block);
+            }
+
+            this.hasSteppedOnSafeTile = false;
           }
         }
       } else if (tileProps.static.start) {
-        this.context.onStepIntoDoor({ type: StaticBlockType.Start });
+        if (this.hasSteppedOnSafeTile) {
+          this.context.onStepIntoDoor({ type: StaticBlockType.Start });
+        }
+
+        this.hasSteppedOnSafeTile = false;
       } else if (tileProps.static.train) {
-        this.context.onStepIntoDoor({ type: StaticBlockType.TrainPlatform });
+        if (this.hasSteppedOnSafeTile) {
+          this.context.onStepIntoDoor({ type: StaticBlockType.TrainPlatform });
+        }
+
+        this.hasSteppedOnSafeTile = false;
+      } else {
+        this.hasSteppedOnSafeTile = true;
       }
     } else {
       this.hasSteppedOnSafeTile = true;

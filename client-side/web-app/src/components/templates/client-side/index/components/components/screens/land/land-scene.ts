@@ -498,6 +498,8 @@ export class LandScene extends Phaser.Scene {
   ): Promise<'ok' | 'failed'> {
     let nextLand: NavigateToLandDTO;
 
+    let navType: 'door' | 'boarded-train' | 'back-to-start';
+
     if (block.type === DynamicBlockType.Door) {
       const res = await this.dependencies.landsAPI.navigate({
         doorBlockId: block.id,
@@ -522,6 +524,7 @@ export class LandScene extends Phaser.Scene {
         return 'failed';
       }
 
+      navType = 'door';
       nextLand = res.response.body;
     } else if (block.type === StaticBlockType.Start) {
       const res = await this.dependencies.trainAPI.returnToTrainStation();
@@ -540,6 +543,7 @@ export class LandScene extends Phaser.Scene {
         return 'failed';
       }
 
+      navType = 'back-to-start';
       nextLand = res.response.body;
       this.dependencies.musicService.pause();
     } else if (
@@ -590,6 +594,7 @@ export class LandScene extends Phaser.Scene {
         currentStationLandId: this.args.land.id,
       });
 
+      navType = 'boarded-train';
       nextLand = res.response.body;
       this.dependencies.musicService.pause();
     } else {
@@ -608,7 +613,23 @@ export class LandScene extends Phaser.Scene {
             ...nextLand,
             territories: nextLand.territories.filter((t) => !!t.assets),
           },
-          comingFrom: block,
+          comingFrom: (() => {
+            if (navType === 'door') {
+              return block;
+            } else if (navType === 'boarded-train') {
+              return {
+                type: StaticBlockType.Start,
+              };
+            }
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            else if (navType === 'back-to-start') {
+              return {
+                type: StaticBlockType.TrainPlatform,
+              };
+            } else {
+              throw new Error();
+            }
+          })(),
           session: this.args.session,
         },
         this.dependencies,

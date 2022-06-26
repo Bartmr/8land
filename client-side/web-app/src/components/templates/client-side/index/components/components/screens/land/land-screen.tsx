@@ -10,6 +10,9 @@ import { AppService } from '../app/app-screen';
 import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
 import { useLandsAPI } from 'src/logic/lands/lands-api';
 import { useTrainAPI } from 'src/logic/train/train.api';
+import { navigate } from 'gatsby';
+import { USER_ROUTE } from 'src/components/templates/client-side/user/user-routes';
+import { GamepadSingleton } from '../../../../gamepad-singleton';
 
 export function LandScreen(props: {
   musicService: MusicService;
@@ -58,6 +61,22 @@ export function LandScreen(props: {
       replaceService(sv);
       props.onService(sv);
     })();
+
+    const gamepad = GamepadSingleton.getInstance();
+
+    const onPressing_Escape = () => {
+      (async () => {
+        await navigate(USER_ROUTE.getHref({ section: 'escape' }));
+      })();
+
+      return 'stop-propagation' as const;
+    };
+
+    gamepad.onPressing_Escape(onPressing_Escape, 'landScreen');
+
+    return () => {
+      gamepad.removePressing_Escape_Callback('landScreen');
+    };
   }, []);
 
   return (

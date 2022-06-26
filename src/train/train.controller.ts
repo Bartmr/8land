@@ -65,7 +65,12 @@ export class TrainController {
           qb
             .orderBy('land.createdAt')
             .leftJoinAndSelect('land.world', 'world')
-            .where('world.user = :id', { id: param.worldId }),
+            .andWhere(
+              `land.${getTypesafeObjectFieldPath<Land>()
+                .and('isStartingLand')
+                .end()} = true`,
+            )
+            .where('world.id = :id', { id: param.worldId }),
       );
 
       if (!land) {

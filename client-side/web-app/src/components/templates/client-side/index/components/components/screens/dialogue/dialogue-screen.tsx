@@ -98,9 +98,25 @@ export function DialogueScreen(props: {
     replaceService(sv);
     props.onService(sv);
 
+    const onPressing_Escape = () => {
+      if (sv.lockCurrentScreen) {
+        sv.close();
+
+        return 'stop-propagation' as const;
+      }
+
+      return 'continue-propagation' as const;
+    };
+
+    gamepad.onPressing_Escape(onPressing_Escape, 'dialogueScreen');
+
+    replaceService(sv);
+    props.onService(sv);
+
     return () => {
       gamepad.removePressing_A_Callback(onPressing_A);
       gamepad.removePressing_B_Callback(onPressing_B);
+      gamepad.removePressing_Escape_Callback('dialogueScreen');
     };
   }, []);
 
