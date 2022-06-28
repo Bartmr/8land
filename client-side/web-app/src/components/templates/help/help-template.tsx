@@ -12,14 +12,14 @@ import { ABOUT_ROUTE } from './about/about-routes';
 import { ACQUIRING_TERRITORIES_ROUTE } from './acquiring-territories/acquiring-territories-routes';
 import { HOW_TO_EDIT_TERRITORY_ROUTE } from './edit-territory/edit-territory-routes';
 import { LAND_IDEAS_ROUTE } from './land-ideas/land-ideas-routes';
-import { SUPPORT_ROUTE } from './support-routes';
+import { HELP_ROUTE } from './help-routes';
 
-export const SupportTemplate = () => {
+export const HelpTemplate = () => {
   return (
-    <Layout title={SUPPORT_ROUTE.title}>
+    <Layout title={HELP_ROUTE.title}>
       {() => (
         <div>
-          <h2>Support</h2>
+          <h2>Help</h2>
           <hr />
 
           <div>

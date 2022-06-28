@@ -17,7 +17,7 @@ import { USER_ROUTE } from 'src/components/templates/client-side/user/user-route
 import { INDEX_ROUTE } from 'src/components/templates/index-template/index-routes';
 import { LOGIN_ROUTE } from 'src/components/templates/client-side/login/login-routes';
 import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
-import { SUPPORT_ROUTE } from 'src/components/templates/support/support-routes';
+import { HELP_ROUTE } from 'src/components/templates/help/help-routes';
 import { NFTS_ROUTE } from 'src/components/templates/nfts/nfts-routes';
 
 type Props = {
@@ -121,9 +121,9 @@ export function Header(props: Props) {
                   <LinkAnchor
                     activeClassName="active"
                     className="nav-link"
-                    href={SUPPORT_ROUTE.getHref()}
+                    href={HELP_ROUTE.getHref()}
                   >
-                    {SUPPORT_ROUTE.title}
+                    {HELP_ROUTE.title}
                   </LinkAnchor>
                 </li>
               </ul>

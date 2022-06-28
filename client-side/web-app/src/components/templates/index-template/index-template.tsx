@@ -5,7 +5,7 @@ import { Layout } from 'src/components/routing/layout/layout';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { CLIENT_SIDE_INDEX_ROUTE } from '../client-side/index/index-routes';
 import { LANDS_ROUTE } from '../client-side/lands/lands-routes';
-import { LAND_IDEAS_ROUTE } from '../support/land-ideas/land-ideas-routes';
+import { LAND_IDEAS_ROUTE } from '../help/land-ideas/land-ideas-routes';
 import { INDEX_ROUTE } from './index-routes';
 
 export function IndexTemplate() {
