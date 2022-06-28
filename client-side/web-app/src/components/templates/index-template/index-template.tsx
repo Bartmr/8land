@@ -5,6 +5,7 @@ import { Layout } from 'src/components/routing/layout/layout';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { CLIENT_SIDE_INDEX_ROUTE } from '../client-side/index/index-routes';
 import { LANDS_ROUTE } from '../client-side/lands/lands-routes';
+import { LAND_IDEAS_ROUTE } from '../support/land-ideas/land-ideas-routes';
 import { INDEX_ROUTE } from './index-routes';
 
 export function IndexTemplate() {
@@ -64,20 +65,16 @@ export function IndexTemplate() {
           <hr />
           <div className="bg-secondary py-5">
             <div className="container">
-              <p className="display-3 text-body">
-                An artwork to explore and relax
-                <br />
-                <span className="display-4 text-body">
-                  8Land is an ever evolving game that tries to retain the
-                  simplicity of old-school RPGs.
-                </span>
-              </p>
+              <p className="display-3 text-body">What is 8Land?</p>
               <p className="mt-4">
-                {
-                  "It's open enough for people to build their own pixelised world, \
-but simple enough for anyone to just explore aimlessly, like we \
-did with old RPG games."
-                }
+                {'Imagine the discoverability of an RPG like '}
+                <span className="fst-italic">Pokemon Silver</span>
+                {', and the ability from '}
+                <span className="fst-italic">Minecraft</span>
+                {' for anyone to build...'}
+
+                <br />
+                {"That's it."}
               </p>
             </div>
           </div>
@@ -86,19 +83,23 @@ did with old RPG games."
             className="with-light-contrasting-colors py-5"
           >
             <div className="container">
-              <p className="display-4 text-secondary">
-                3D realstate in the metaverse is hard or takes too long to
-                build?
-                <br />
-                <span className="display-3 text-body">
-                  Well, build your 2D lands in a single afternoon
-                </span>
+              <p className="display-3 text-body">
+                Build your 2D lands in a single afternoon
               </p>
               <p className="mt-4">
                 Sketching in 2D is faster than conceptualizing in 3D.
                 <br />
                 Just by drawing pixelart and laying it out on a map, you can
                 start your own tiny world in no time.
+              </p>
+              <p>
+                <LinkAnchor
+                  className="text-body"
+                  href={LAND_IDEAS_ROUTE.getHref()}
+                >
+                  Click here to see some ideas of what you can build in this
+                  world
+                </LinkAnchor>
               </p>
             </div>
           </div>
