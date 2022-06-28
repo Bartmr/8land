@@ -22,6 +22,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { navigate } from 'gatsby';
 import { LANDS_ROUTE } from '../lands-routes';
+import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
+import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
+import { throwError } from '@app/shared/internals/utils/throw-error';
+import { Role } from '@app/shared/auth/auth.enums';
 
 export function EditLandTemplateWithRouteProps(props: { id: string }) {
   const api = useLandsAPI();
@@ -37,6 +41,11 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
   });
 
   const [successfulSave, replaceSuccessfulSave] = useState(false);
+
+  const session = useStoreSelector(
+    { mainApi: mainApiReducer },
+    (s) => s.mainApi.session.data || throwError(),
+  );
 
   const deleteLand = async () => {
     const confirmed = window.confirm(
@@ -142,12 +151,14 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
                   land={data}
                 />
               </div>
-              <div className="mt-4">
-                <TerritoriesSection
-                  land={data}
-                  onSuccessfulSave={onSuccessfulSave}
-                />
-              </div>
+              {session.role === Role.Admin ? (
+                <div className="mt-4">
+                  <TerritoriesSection
+                    land={data}
+                    onSuccessfulSave={onSuccessfulSave}
+                  />
+                </div>
+              ) : null}
             </>
           );
         }}
