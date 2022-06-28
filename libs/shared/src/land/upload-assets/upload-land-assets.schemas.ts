@@ -28,9 +28,10 @@ export const createTiledJSONSchema = ({
   const maxHeight = _maxHeight ? _maxHeight + 1 : 41;
 
   return object({
-    compressionlevel: number()
-      .required()
-      .test((n) => (Number.isInteger(n) ? null : 'Must be an integer')),
+    compressionlevel: equals(
+      [-1],
+      'Must set to -1, which is the default value in Tiled',
+    ).required(),
     height: number()
       .required()
       .test((n) => (Number.isInteger(n) ? null : 'Must be an integer'))
