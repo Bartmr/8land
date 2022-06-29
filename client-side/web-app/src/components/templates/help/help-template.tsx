@@ -1,16 +1,12 @@
 import { CONTACT_CTA_PRESENT } from '@app/shared/project-details';
 import {
-  faHandHolding,
   faLightbulb,
-  faPen,
   faProjectDiagram,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layout } from 'src/components/routing/layout/layout';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { ABOUT_ROUTE } from './about/about-routes';
-import { ACQUIRING_TERRITORIES_ROUTE } from './acquiring-territories/acquiring-territories-routes';
-import { HOW_TO_EDIT_TERRITORY_ROUTE } from './edit-territory/edit-territory-routes';
 import { LAND_IDEAS_ROUTE } from './land-ideas/land-ideas-routes';
 import { HELP_ROUTE } from './help-routes';
 
@@ -22,7 +18,7 @@ export const HelpTemplate = () => {
           <h2>Help</h2>
           <hr />
 
-          <div>
+          {/* <div>
             <h3>Collectibles and NFT Territories</h3>
             <div className="row g-3">
               {[
@@ -55,7 +51,7 @@ export const HelpTemplate = () => {
               })}
             </div>
           </div>
-          <hr />
+          <hr /> */}
 
           <div>
             <h3>Lands</h3>

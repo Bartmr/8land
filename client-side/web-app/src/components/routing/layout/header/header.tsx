@@ -18,7 +18,6 @@ import { INDEX_ROUTE } from 'src/components/templates/index-template/index-route
 import { LOGIN_ROUTE } from 'src/components/templates/client-side/login/login-routes';
 import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
 import { HELP_ROUTE } from 'src/components/templates/help/help-routes';
-import { NFTS_ROUTE } from 'src/components/templates/nfts/nfts-routes';
 
 type Props = {
   menuHtmlId: string;
@@ -106,7 +105,7 @@ export function Header(props: Props) {
                   </LinkAnchor>
                 </li>
                 <div className="navbar-nav-divider" />
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <LinkAnchor
                     activeClassName="active"
                     className="nav-link"
@@ -114,7 +113,7 @@ export function Header(props: Props) {
                   >
                     {'Collectibles'}
                   </LinkAnchor>
-                </li>
+                </li> */}
                 <div className="navbar-nav-divider" />
 
                 <li className="nav-item">

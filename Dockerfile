@@ -6,6 +6,7 @@ USER node
 
 COPY ./package-lock.json \
   ./package.json \
+  ./polyfill-types-mocha.js \
   /usr/src/app/
 WORKDIR /usr/src/app
 RUN npm ci
@@ -25,7 +26,6 @@ COPY ./.nvmrc \
   ./tsconfig.base.json \
   ./tsconfig.declaration-files.json \
   ./tsconfig.build.json \
-  ./polyfill-types-mocha.js \
   ./firebase-env-to-file.js \
   ./hardhat.config.ts \
   /usr/src/app/
