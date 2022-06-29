@@ -104,8 +104,8 @@ export function Header(props: Props) {
                     {LANDS_ROUTE.label}
                   </LinkAnchor>
                 </li>
-                <div className="navbar-nav-divider" />
-                {/* <li className="nav-item">
+                {/* <div className="navbar-nav-divider" />
+                <li className="nav-item">
                   <LinkAnchor
                     activeClassName="active"
                     className="nav-link"
