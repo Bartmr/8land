@@ -155,8 +155,10 @@ export function LandsTemplate(_props: RouteComponentProps) {
                   </div>
                 ) : (
                   <div className="bg-info p-3">
-                    There are {data.free} lands in all of 8Land, ready to be
-                    claimed
+                    8Land has {data.free} lands available for building.
+                    <br />
+                    We will keep raising the amount of available lands as we
+                    grow.
                   </div>
                 );
               }}
