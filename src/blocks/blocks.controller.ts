@@ -118,7 +118,7 @@ export class BlocksController {
       } else if (body.data.type === DynamicBlockType.App) {
         const appBlockRepository = e.getCustomRepository(AppBlockRepository);
 
-        await appBlockRepository.create(
+        const appBlock = await appBlockRepository.create(
           {
             inLand: Promise.resolve(land),
             inTerritory: Promise.resolve(null),
@@ -126,6 +126,8 @@ export class BlocksController {
           },
           auditContext,
         );
+
+        land.appBlocks.push(appBlock);
       } else {
         throw new BadRequestException();
       }
