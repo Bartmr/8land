@@ -78,7 +78,9 @@ export const GATSBY_CONFIG = {
       resolve: `gatsby-plugin-netlify`,
       options: {
         headers: {
-          'Content-Security-Policy': 'frame-src https://explore8land.com/',
+          '/*': [
+            'Content-Security-Policy: frame-src https://explore8land.com/',
+          ],
         },
       },
     },
