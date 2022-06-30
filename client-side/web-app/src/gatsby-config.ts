@@ -74,7 +74,14 @@ export const GATSBY_CONFIG = {
         ),
       },
     },
-    `gatsby-plugin-netlify`,
+    {
+      resolve: `gatsby-plugin-netlify`,
+      options: {
+        headers: {
+          'Content-Security-Policy': 'frame-src https://explore8land.com/',
+        },
+      },
+    },
     ...(EnvironmentVariables.SENTRY_DSN
       ? [
           {

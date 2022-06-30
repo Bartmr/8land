@@ -129,6 +129,10 @@ function Content() {
             account. <br /> After you verified your account, reload this page
             and login again.
           </p>
+          <p>
+            {"Don't forget to check your "}
+            <span style={{ textDecoration: 'underline' }}>spam folder.</span>
+          </p>
           <TransportedDataGate dataWrapper={resendconfirmationEmailState}>
             {({ data }) =>
               data ? (
