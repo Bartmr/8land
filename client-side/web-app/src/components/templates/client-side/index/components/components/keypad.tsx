@@ -146,7 +146,6 @@ export function Keypad() {
       <div className="mt-3">
         {/* Secondary buttons*/}
         <div className="d-flex align-items-center">
-          <span className="me-3">FN</span>
           <div
             id="game-button-escape"
             className="btn-sm btn-light"

@@ -127,19 +127,18 @@ export function AppScreen(props: {
         <style>
           {`
 @keyframes escape-pulse {
-  0% {
-    background-color: var(--bs-light);
-  }
-  50% {
-    background-color: var(--bs-warning);
+  10% {
+    background-color: #ffff55;
+    transform: scale3d(1.05, 1.05, 1.05);
   }
   100% {
     background-color: var(--bs-light);
+    transform: scale3d(1, 1, 1);
   }
 }
 
 ${ESCAPE_BUTTON_SELECTOR} {
-  animation: escape-pulse 3s infinite;
+  animation: escape-pulse 1.5s infinite;
 }
     `}
         </style>
