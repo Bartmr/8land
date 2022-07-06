@@ -16,8 +16,10 @@ $component-active-color: get-contrasting-color-absolute-value(
   'body'
 );
 
-$card-bg: transparent;
-$card-bg-inverted: transparent;
+$card-bg: $body-bg;
+$card-bg-inverted: $body-bg-inverted;
+$card-cap-bg: set-contrasting-color-alpha('body', 0.05);
+$card-border-color: $border-color;
 
 $hr-height: 3px;
 
