@@ -13,7 +13,6 @@ import {
   UseInterceptors,
   Delete,
 } from '@nestjs/common';
-import { InjectConnection } from '@nestjs/typeorm';
 import {
   GetLandDTO,
   GetLandParametersDTO,
@@ -52,6 +51,7 @@ import { DeleteLandParametersDTO } from 'libs/shared/src/land/delete-land/delete
 import { SettingsService } from 'src/settings/settings.service';
 import { PublicRoute } from 'src/auth/public-route.decorator';
 import { GetLandsToClaimDTO } from 'libs/shared/src/land/lands-to-claim/lands-to-claim.dto';
+import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
 
 class LandAssetsRequestDTO {
   @ApiProperty({ type: 'string', format: 'binary' })
@@ -65,7 +65,7 @@ class LandAssetsRequestDTO {
 @Controller('lands')
 export class LandsController {
   constructor(
-    @InjectConnection() private connection: Connection,
+    @InjectTypeormConnection() private connection: Connection,
     private storageService: StorageService,
     private landService: LandsService,
     private landPersistenceService: LandPersistenceService,

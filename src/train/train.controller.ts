@@ -25,6 +25,7 @@ import { WithOptionalAuthContext } from 'src/auth/auth-context.decorator';
 import { PublicRoute } from 'src/auth/public-route.decorator';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
+import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
 import { LoggingService } from 'src/internals/logging/logging.service';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
 import { getSearchableName } from 'src/internals/utils/get-searchable-name';
@@ -38,7 +39,7 @@ import { Connection } from 'typeorm';
 @Controller('/train')
 export class TrainController {
   constructor(
-    private connection: Connection,
+    @InjectTypeormConnection() private connection: Connection,
     private landsService: LandsService,
     private loggingService: LoggingService,
   ) {}

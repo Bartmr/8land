@@ -1,8 +1,8 @@
 import { NotImplementedException } from '@nestjs/common';
-import { InjectConnection } from '@nestjs/typeorm';
 import { GetLandDTO } from 'libs/shared/src/land/get/get-land.dto';
 import { AuthContext } from 'src/auth/auth-context';
 import { AuditContext } from 'src/internals/auditing/audit-context';
+import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
 import { LoggingService } from 'src/internals/logging/logging.service';
 import { StorageService } from 'src/internals/storage/storage.service';
 import { throwError } from 'src/internals/utils/throw-error';
@@ -14,7 +14,7 @@ import { LandRepository } from './typeorm/land.repository';
 
 export class LandsService {
   constructor(
-    @InjectConnection() private connection: Connection,
+    @InjectTypeormConnection() private connection: Connection,
     private storageService: StorageService,
   ) {}
 

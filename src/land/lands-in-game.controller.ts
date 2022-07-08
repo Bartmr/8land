@@ -6,7 +6,6 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { InjectConnection } from '@nestjs/typeorm';
 import { GetLandDTO } from 'libs/shared/src/land/get/get-land.dto';
 import {
   NavigateToLandDTO,
@@ -22,6 +21,7 @@ import { PublicRoute } from 'src/auth/public-route.decorator';
 import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
+import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
 import { LoggingService } from 'src/internals/logging/logging.service';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
 import { NavigationStateRepository } from 'src/users/typeorm/navigation-state.repository';
@@ -31,7 +31,7 @@ import { LandsService } from './lands.service';
 @Controller('lands')
 export class LandsInGameController {
   constructor(
-    @InjectConnection() private connection: Connection,
+    @InjectTypeormConnection() private connection: Connection,
     private landService: LandsService,
     private loggingService: LoggingService,
   ) {}

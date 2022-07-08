@@ -22,7 +22,6 @@ import { WithOptionalAuthContext } from './auth-context.decorator';
 import { PublicRoute } from './public-route.decorator';
 import { FirebaseService } from 'src/internals/apis/firebase/firebase.service';
 import { UnwrapPromise } from 'libs/shared/src/internals/utils/types/promise-types';
-import { InjectConnection } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { UsersRepository } from 'src/users/users.repository';
 import { AuthTokensService } from './tokens/auth-tokens.service';
@@ -34,12 +33,13 @@ import { Role } from './roles/roles';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { User } from 'src/users/typeorm/user.entity';
+import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private firebaseService: FirebaseService,
-    @InjectConnection() private connection: Connection,
+    @InjectTypeormConnection() private connection: Connection,
     private tokensService: AuthTokensService,
   ) {}
 

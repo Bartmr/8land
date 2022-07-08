@@ -15,7 +15,6 @@ import {
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
-import { InjectConnection } from '@nestjs/typeorm';
 import {
   TERRITORY_MAP_SIZE_LIMIT,
   TERRITORY_TILESET_SIZE_LIMIT,
@@ -67,11 +66,12 @@ import {
   UpdateTerritoryRaribleMetadataRequestDTO,
 } from 'libs/shared/src/territories/update-rarible/update-territory-rarible-metadata.dto';
 import { StaticBlockType } from 'libs/shared/src/blocks/block.enums';
+import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
 
 @Controller('territories')
 export class TerritoriesEndUserController {
   constructor(
-    @InjectConnection() private connection: Connection,
+    @InjectTypeormConnection() private connection: Connection,
     private storageService: StorageService,
     private raribleApi: RaribleApi,
     private itselfStorageApi: ItselfStorageApi,

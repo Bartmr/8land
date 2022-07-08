@@ -8,7 +8,6 @@ import {
   Param,
   Post,
 } from '@nestjs/common';
-import { InjectConnection } from '@nestjs/typeorm';
 import { CreateBlockRequestDTO } from 'libs/shared/src/blocks/create/create-block.dto';
 import { DynamicBlockType } from 'libs/shared/src/blocks/create/create-block.enums';
 import { DeleteBlockURLParameters } from 'libs/shared/src/blocks/delete/delete-block.dto';
@@ -18,6 +17,7 @@ import { Role } from 'src/auth/roles/roles';
 import { RolesUpAndIncluding } from 'src/auth/roles/roles.decorator';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
+import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
 import { getSearchableName } from 'src/internals/utils/get-searchable-name';
 import { LandRepository } from 'src/land/typeorm/land.repository';
@@ -27,7 +27,7 @@ import { DoorBlockRepository } from './typeorm/door-block.repository';
 
 @Controller('blocks')
 export class BlocksController {
-  constructor(@InjectConnection() private connection: Connection) {}
+  constructor(@InjectTypeormConnection() private connection: Connection) {}
 
   @Post()
   @RolesUpAndIncluding(Role.Admin)

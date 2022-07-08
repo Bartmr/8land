@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { StorageModule } from 'src/internals/storage/storage.module';
 import { DoorBlock } from '../blocks/typeorm/door-block.entity';
 import { Land } from './typeorm/land.entity';
@@ -12,17 +11,13 @@ import { LandsController } from './land.controller';
 import { World } from '../worlds/typeorm/worlds.entity';
 import { LandPersistenceService } from './land-persistence.service';
 import { SettingsModule } from 'src/settings/settings.module';
+import { TypeormFeatureModule } from 'src/internals/databases/typeorm.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      Land,
-      Territory,
-      DoorBlock,
-      AppBlock,
-      NavigationState,
-      World,
-    ]),
+    TypeormFeatureModule.forFeature({
+      entities: [Land, Territory, DoorBlock, AppBlock, NavigationState, World],
+    }),
     StorageModule,
     SettingsModule,
   ],

@@ -1,5 +1,4 @@
 import { Body, Controller, Get, HttpCode, Patch } from '@nestjs/common';
-import { InjectConnection } from '@nestjs/typeorm';
 import { AuthContext } from 'src/auth/auth-context';
 import { WithAuthContext } from 'src/auth/auth-context.decorator';
 import { AuditContext } from 'src/internals/auditing/audit-context';
@@ -11,10 +10,11 @@ import { ReceiveSignedUserNonceRequestDTO } from 'libs/shared/src/users/me/recei
 import * as ethUtil from 'ethereumjs-util';
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
 import { getWalletSignMessage } from 'libs/shared/src/users/me/receive-signed-user-nonce.utils';
+import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
 
 @Controller('users')
 export class UsersController {
-  constructor(@InjectConnection() private connection: Connection) {}
+  constructor(@InjectTypeormConnection() private connection: Connection) {}
 
   @Get('/me/walletNonce')
   getWalletNonce(
