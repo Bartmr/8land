@@ -40,7 +40,7 @@ export function notMeReactHookFormResolver<S extends Schema<FormValueBase>>(
                 return acc;
               },
               { type: 'validate', types: {} },
-            );
+            ) as unknown as FieldErrors<any>[string];
         }
       }
 

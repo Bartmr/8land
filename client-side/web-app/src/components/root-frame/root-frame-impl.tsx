@@ -46,7 +46,7 @@ const FatalErrorFrame = () => {
   );
 };
 
-type ErrorBoundaryProps = {};
+type ErrorBoundaryProps = { children: ReactNode };
 type ErrorBoundaryState = { fatalErrorOccurred: boolean };
 class ErrorBoundary extends React.Component<
   ErrorBoundaryProps,

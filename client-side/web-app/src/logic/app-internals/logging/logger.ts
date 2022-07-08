@@ -65,7 +65,7 @@ class LoggerImpl {
 
       if (sentryInstance) {
         Sentry.captureMessage(key, {
-          level: Sentry.Severity.Warning,
+          level: 'warning',
           extra: {
             message,
             data: extraData,
