@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layout } from 'src/components/routing/layout/layout';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
 import { ABOUT_ROUTE } from './about/about-routes';
-import { LAND_IDEAS_ROUTE } from './land-ideas/land-ideas-routes';
+import { LAND_IDEAS_ROUTE } from './lands/land-ideas/land-ideas-routes';
 import { HELP_ROUTE } from './help-routes';
 
 export const HelpTemplate = () => {

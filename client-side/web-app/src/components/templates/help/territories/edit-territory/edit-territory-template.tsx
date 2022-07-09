@@ -1,8 +1,8 @@
 import { TERRITORY_TILESET_SIZE_LIMIT } from '@app/shared/territories/upload-assets/upload-territory-assets.constants';
 import { Layout } from 'src/components/routing/layout/layout';
 import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
-import { TERRITORIES_ROUTE } from '../../client-side/territories/territories-routes';
-import { ACQUIRING_TERRITORIES_ROUTE } from '../acquiring-territories/acquiring-territories-routes';
+import { TERRITORIES_ROUTE } from '../../../client-side/territories/territories-routes';
+import { ACQUIRING_TERRITORIES_ROUTE } from '../../acquiring-territories/acquiring-territories-routes';
 import { HOW_TO_EDIT_TERRITORY_ROUTE } from './edit-territory-routes';
 
 import gimpImg1 from './tileset/image-1.jpg';
