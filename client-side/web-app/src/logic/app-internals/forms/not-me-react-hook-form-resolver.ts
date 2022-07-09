@@ -15,7 +15,7 @@ export function notMeReactHookFormResolver<S extends Schema<FormValueBase>>(
     const validationResult = schema.validate(data);
 
     const parseMessagesTreeObject = (obj: ErrorMessagesTreeObject) => {
-      const errors: FieldErrors<any> = {};
+      const errors: FieldErrors<{ [key: string]: unknown }> = {};
 
       for (const key of Object.keys(obj)) {
         const notMeFieldErrors = obj[key];
@@ -40,7 +40,7 @@ export function notMeReactHookFormResolver<S extends Schema<FormValueBase>>(
                 return acc;
               },
               { type: 'validate', types: {} },
-            ) as unknown as FieldErrors<any>[string];
+            );
         }
       }
 
