@@ -1,6 +1,7 @@
 import { CONTACT_CTA_PRESENT } from '@app/shared/project-details';
 import {
   faLightbulb,
+  faPenRuler,
   faProjectDiagram,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +10,7 @@ import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-ancho
 import { ABOUT_ROUTE } from './about/about-routes';
 import { LAND_IDEAS_ROUTE } from './lands/land-ideas/land-ideas-routes';
 import { HELP_ROUTE } from './help-routes';
+import { BUILDING_A_LAND_ROUTE } from './lands/building-a-land/building-a-land.routes';
 
 export const HelpTemplate = () => {
   return (
@@ -61,6 +63,11 @@ export const HelpTemplate = () => {
                   icon: <FontAwesomeIcon icon={faLightbulb} />,
                   title: LAND_IDEAS_ROUTE.title,
                   href: LAND_IDEAS_ROUTE.getHref(),
+                },
+                {
+                  icon: <FontAwesomeIcon icon={faPenRuler} />,
+                  title: BUILDING_A_LAND_ROUTE.title,
+                  href: BUILDING_A_LAND_ROUTE.getHref(),
                 },
               ].map((c) => {
                 return (

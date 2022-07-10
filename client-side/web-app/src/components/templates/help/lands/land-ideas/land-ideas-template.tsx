@@ -7,7 +7,7 @@ export function LandIdeasTemplate() {
       {() => {
         return (
           <>
-            <h2>Land Ideas</h2>
+            <h1>Land Ideas</h1>
             <ul>
               <li>Present your physical / online store and its products</li>
               <li>Showcase your art as an interactive gallery</li>
