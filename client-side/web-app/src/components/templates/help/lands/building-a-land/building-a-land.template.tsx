@@ -68,9 +68,81 @@ In the example below, a player can walk 10 steps horizontally and 9 steps vertic
               <li>
                 <p>{"Now it's time to add some interactivity to our land"}</p>
                 <p>
-                  Lands have <span className="fw-bold">blocks</span> that fire
-                  actions when a user steps on them or interacts with them.
+                  Lands have <span>blocks</span> that fire actions when a user
+                  steps on them or interacts with them.
                 </p>
+                <p>There are two types of blocks:</p>
+
+                <div>
+                  <div>
+                    <h2>Dynamic blocks</h2>
+                    <p>
+                      {
+                        'They are created in the "Edit Land" page, which in turn gives you an ID to set in Tiled.'
+                      }
+                    </p>
+                    <ul>
+                      <li>
+                        <span className="text-secondary">Door blocks</span>:
+                        when the user steps on a door block, he walks into the
+                        land that was assigned to said block.
+                        <br />
+                        A door block should be used as an entrance and also as
+                        an exit, by reusing the door block id in the other land.
+                        <br />{' '}
+                        {
+                          'You can see which doors are available as exits in the "Edit Land" page, under "Door Blocks pointing to this land"'
+                        }
+                      </li>
+                      <li>
+                        <span className="text-secondary">App blocks</span>:
+                        These blocks open a given URL with an 8Land app, when
+                        the user is facing torwards the block and interacts with
+                        it
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div>
+                  <h2>Static blocks</h2>
+                  <p>
+                    {
+                      "These are blocks don't need to be created first, and that can be directly set in Tiled"
+                    }
+                  </p>
+                  <ul>
+                    <li>
+                      <span className="text-primary">{'collides'}</span>: a
+                      boolean property that makes the block solid and stops the
+                      user from getting past it.
+                    </li>
+                    <li>
+                      <span className="text-primary">{'text'}</span>: a string
+                      property that opens a text dialog when the user is facing
+                      torwards the block and interacts with it.
+                      <br />
+                      Text is limited to 255 characters
+                    </li>
+                    <li>
+                      <span className="text-primary">{'start'}</span>: this is
+                      the block where the user will be dropped to when he
+                      travels to your lands. It is also the block that allows
+                      him to leave your lands, back to the train station.
+                      <br />
+                      This block should only be set in the first land that you
+                      created. After the user lands on your{' '}
+                      <span className="text-primary">start</span> block, he will
+                      then travel to your other lands by using the{' '}
+                      <span className="text-secondary">Door blocks.</span>
+                      <br />
+                      After you you upload a map with a{' '}
+                      <span className="text-primary">start</span>
+                      {
+                        ' block into the first land you created, you will see "start" tag on the side of it\'s name.'
+                      }
+                    </li>
+                  </ul>
+                </div>
               </li>
             </ol>
           </>

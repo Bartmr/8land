@@ -221,12 +221,14 @@ export function LandsTemplate(_props: RouteComponentProps) {
                         className="list-group-item d-flex justify-content-between"
                       >
                         <span>{land.name}</span>{' '}
-                        {land.published ? (
-                          <span className="badge bg-success">Published</span>
-                        ) : null}
-                        {land.isStartingLand ? (
-                          <span className="badge bg-info">Start</span>
-                        ) : null}
+                        <div>
+                          {land.published ? (
+                            <span className="badge bg-success">Published</span>
+                          ) : null}
+                          {land.isStartingLand ? (
+                            <span className="badge bg-info">Start</span>
+                          ) : null}
+                        </div>
                       </LinkAnchor>
                     );
                   })}

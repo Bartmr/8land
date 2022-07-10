@@ -143,7 +143,7 @@ $dark-contrasting-colors: (
 
 $light-contrasting-colors: (
   'default': $light,
-  'primary': change-color($primary, $lightness: 70%),
+  'primary': change-color($primary, $lightness: 75%),
   'secondary': change-color($secondary, $lightness: 70%),
   'success': change-color($success, $lightness: 70%),
   'info': change-color($info, $lightness: 70%),

@@ -108,7 +108,7 @@ export const createTiledJSONSchema = ({
                     ['bool'],
                     "'collides' props must be of boolean type",
                   ).required(),
-                  value: equals([true]).required('value must be true'),
+                  value: boolean().required(),
                 }),
                 object({
                   name: equals(
