@@ -31,7 +31,7 @@ export function BuildingALandTemplate() {
                       Tiled
                     </LinkAnchor>
                     {
-                      ", a map editor that we're going to use to add behaviour to our land"
+                      ", a map editor, that we're going to use to add interactivity to our land"
                     }
                   </li>
                 </ul>
@@ -63,6 +63,13 @@ In the example below, a player can walk 10 steps horizontally and 9 steps vertic
                     className="border"
                     height={'72px'}
                   />
+                </p>
+              </li>
+              <li>
+                <p>{"Now it's time to add some interactivity to our land"}</p>
+                <p>
+                  Lands have <span className="fw-bold">blocks</span> that fire
+                  actions when a user steps on them or interacts with them.
                 </p>
               </li>
             </ol>
