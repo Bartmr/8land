@@ -6,7 +6,7 @@ import { DEFAULT_DB_TYPEORM_CONN_OPTS } from './internals/databases/default-db-t
 import { AuthModule } from './auth/auth.module';
 import { LandModule } from './land/land.module';
 import { BlocksModule } from './blocks/blocks.module';
-import { TerritoriesModule } from './territories/territories.module';
+// import { TerritoriesModule } from './territories/territories.module';
 import { UsersModule } from './users/users.module';
 import { TrainModule } from './train/train.module';
 import { TypeormConnectionsModule } from './internals/databases/typeorm.module';
@@ -18,7 +18,7 @@ import { TypeormConnectionsModule } from './internals/databases/typeorm.module';
     AuthModule,
     LandModule,
     BlocksModule,
-    TerritoriesModule,
+    // TerritoriesModule,
     UsersModule,
     TrainModule,
   ],

@@ -16,6 +16,8 @@ import { useLandsAPI } from 'src/logic/lands/lands-api';
 import { Toast } from 'react-bootstrap';
 import { GetLandsToClaimDTO } from '@app/shared/land/lands-to-claim/lands-to-claim.dto';
 import { START_LANDS_LIMIT_EXCEEDED_MESSAGE } from './edit/components/assets-section/assets-section.constants';
+import { BUILDING_A_LAND_ROUTE } from '../../help/lands/building-a-land/building-a-land.routes';
+import { LAND_IDEAS_ROUTE } from '../../help/lands/land-ideas/land-ideas-routes';
 
 export function LandsTemplate(_props: RouteComponentProps) {
   const api = useLandsAPI();
@@ -146,8 +148,24 @@ export function LandsTemplate(_props: RouteComponentProps) {
           >
             <Toast.Header closeButton={false}>Land was deleted</Toast.Header>
           </Toast>
-          <div className="my-3">
-            <TransportedDataGate dataWrapper={landsToClaim}>
+          <div className="my-3 row g-3">
+            <div className="col-12 col-md-6">
+              <p>
+                <LinkAnchor href={BUILDING_A_LAND_ROUTE.getHref()}>
+                  How to build a land?
+                </LinkAnchor>
+              </p>
+
+              <p>
+                <LinkAnchor href={LAND_IDEAS_ROUTE.getHref()}>
+                  I need ideas for a land
+                </LinkAnchor>
+              </p>
+            </div>
+            <TransportedDataGate
+              className="col-12 col-md-6"
+              dataWrapper={landsToClaim}
+            >
               {({ data }) => {
                 return data.free === 0 ? (
                   <div className="bg-warning p-3">
@@ -201,7 +219,7 @@ export function LandsTemplate(_props: RouteComponentProps) {
                     <div className="invalid-feedback">
                       Before you can create any more lands, you need to upload a
                       tileset and a map with a start block in your first land,
-                      for the player to enter and navigate your lands
+                      so the player can enter and navigate your many lands
                     </div>
                   ) : null}
                 </div>

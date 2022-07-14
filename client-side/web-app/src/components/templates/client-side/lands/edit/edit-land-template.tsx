@@ -16,16 +16,16 @@ import { useLandsAPI } from 'src/logic/lands/lands-api';
 import { Toast } from 'react-bootstrap';
 import { MainSection } from './components/main-section/main-section';
 import { BlocksSection } from './components/blocks-section/blocks-section';
-import { TerritoriesSection } from './components/territories-section/territories-section';
+// import { TerritoriesSection } from './components/territories-section/territories-section';
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { navigate } from 'gatsby';
 import { LANDS_ROUTE } from '../lands-routes';
-import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
-import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
-import { throwError } from '@app/shared/internals/utils/throw-error';
-import { Role } from '@app/shared/auth/auth.enums';
+// import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
+// import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
+// import { throwError } from '@app/shared/internals/utils/throw-error';
+// import { Role } from '@app/shared/auth/auth.enums';
 
 export function EditLandTemplateWithRouteProps(props: { id: string }) {
   const api = useLandsAPI();
@@ -42,10 +42,10 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
 
   const [successfulSave, replaceSuccessfulSave] = useState(false);
 
-  const session = useStoreSelector(
-    { mainApi: mainApiReducer },
-    (s) => s.mainApi.session.data || throwError(),
-  );
+  // const session = useStoreSelector(
+  //   { mainApi: mainApiReducer },
+  //   (s) => s.mainApi.session.data || throwError(),
+  // );
 
   const deleteLand = async () => {
     const confirmed = window.confirm(
@@ -121,21 +121,24 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
         {({ data }) => {
           return (
             <>
-              <div className="mb-4 d-flex justify-content-end">
-                <button
-                  onClick={deleteLand}
-                  disabled={!land.data || land.data.isStartLand}
-                  className="btn btn-danger"
-                >
-                  {deleteResult.status === TransportedDataStatus.Loading ? (
-                    <span className="spinner-border spinner-sm" />
-                  ) : (
-                    <FontAwesomeIcon icon={faTrash} />
-                  )}{' '}
-                  {land.data?.isStartLand
-                    ? 'Cannot delete lands with start block'
-                    : 'Delete land'}
-                </button>
+              <div className="mb-4 d-flex justify-content-between align-items-center flex-wrap">
+                <h1 className="mb-0">Edit Land</h1>
+                <div>
+                  <button
+                    onClick={deleteLand}
+                    disabled={!land.data || land.data.isStartLand}
+                    className="btn btn-danger"
+                  >
+                    {deleteResult.status === TransportedDataStatus.Loading ? (
+                      <span className="spinner-border spinner-sm" />
+                    ) : (
+                      <FontAwesomeIcon icon={faTrash} />
+                    )}{' '}
+                    {land.data?.isStartLand
+                      ? 'Cannot delete lands with start block'
+                      : 'Delete land'}
+                  </button>
+                </div>
               </div>
               <MainSection onSuccessfulSave={onSuccessfulSave} land={data} />
               <div className="mt-4">
@@ -151,14 +154,16 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
                   land={data}
                 />
               </div>
-              {session.role === Role.Admin ? (
-                <div className="mt-4">
-                  <TerritoriesSection
-                    land={data}
-                    onSuccessfulSave={onSuccessfulSave}
-                  />
-                </div>
-              ) : null}
+              {/*
+              //  {session.role === Role.Admin ? (
+              //   <div className="mt-4">
+              //     <TerritoriesSection
+              //       land={data}
+              //       onSuccessfulSave={onSuccessfulSave}
+              //     />
+              //   </div>
+              // ) : null}
+              */}
             </>
           );
         }}

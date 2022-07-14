@@ -12,6 +12,8 @@ type Props = {
   style?: React.CSSProperties;
   openExternalLinkInSameTab?: boolean;
   openInNewTab?: boolean;
+  asRegularAnchorTag?: boolean;
+  replace?: boolean;
 };
 
 export function LinkAnchor(props: Props) {
@@ -34,12 +36,21 @@ export function LinkAnchor(props: Props) {
       : {}),
   };
 
-  if (props.href.includes('://') || props.openInNewTab) {
+  if (
+    props.href.includes('://') ||
+    props.openInNewTab ||
+    props.asRegularAnchorTag
+  ) {
     return (
       <OutboundLink
         rel="noopener noreferrer"
         href={props.href}
-        target={props.openExternalLinkInSameTab ? undefined : '_blank'}
+        target={
+          (props.href.includes('://') && !props.openExternalLinkInSameTab) ||
+          props.openInNewTab
+            ? '_blank'
+            : undefined
+        }
         {...commonProps}
       >
         {props.children}
@@ -63,6 +74,7 @@ export function LinkAnchor(props: Props) {
   } else {
     return (
       <Link
+        replace={props.replace}
         partiallyActive
         activeClassName={props.activeClassName}
         to={props.href}

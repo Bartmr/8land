@@ -55,7 +55,8 @@ export function TilesetImageFormField(props: {
             <span>
               File size cannot exceed {LAND_TILESET_SIZE_LIMIT / 1000} KB. You
               can reduce the file size by converting the tileset to a lower
-              color bit-depth or to an indexed color palette.
+              color bit-depth or to an indexed color palette, or by using a
+              smaller tileset and reusing more of its tiles in the map.
             </span>
           ) : null}
 

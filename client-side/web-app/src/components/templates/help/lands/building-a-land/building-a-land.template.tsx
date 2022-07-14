@@ -3,6 +3,9 @@ import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-ancho
 import { BUILDING_A_LAND_ROUTE } from './building-a-land.routes';
 import landWithGrid from './images/land-with-grid.png';
 import colorShades from './images/4-color-shades.png';
+import editTileset from './images/edit-tileset.png';
+import staticBlocks from './images/static-blocks.png';
+import dynamicBlocks from './images/dynamic-blocks.png';
 
 export function BuildingALandTemplate() {
   return (
@@ -24,7 +27,8 @@ export function BuildingALandTemplate() {
                 <ul>
                   <li>
                     An image editor like Photoshop or GIMP, to draw our pixelart
-                    land
+                    land, also known as a{' '}
+                    <span className="text-highlight">tileset</span>
                   </li>
                   <li>
                     <LinkAnchor href="https://www.mapeditor.org/">
@@ -39,9 +43,9 @@ export function BuildingALandTemplate() {
               <li>
                 <p>
                   {
-                    "To draw our land, we're going to create a new PNG image. Decide how big your land will be by how many steps a user can walk in it, horizontally and vertically. \
-Now multiply the horizontal steps and vertical steps by 16, which is how many pixels each step has. \
-In the example below, a player can walk 10 steps horizontally and 9 steps vertically, meaning the picture dimensions are 160 by 144 pixels."
+                    "To draw our land tileset, we're going to create a new PNG image. Land tilesets are made of 16 by 16 pixel tiles. \
+Decide how many tiles your land will have horizontally and vertically, and multiply those dimensions by 16. \
+In the example below, the tileset has 10 tiles horizontally and 9 tiles vertically, meaning the picture dimensions are 160 by 144 pixels."
                   }
                 </p>
                 <p>
@@ -87,8 +91,11 @@ In the example below, a player can walk 10 steps horizontally and 9 steps vertic
                         when the user steps on a door block, he walks into the
                         land that was assigned to said block.
                         <br />
-                        A door block should be used as an entrance and also as
-                        an exit, by reusing the door block id in the other land.
+                        <span style={{ textDecoration: 'underline' }}>
+                          The same door block should be used as an entrance and
+                          as an exit, by reusing the door block id in the other
+                          land.
+                        </span>
                         <br />{' '}
                         {
                           'You can see which doors are available as exits in the "Edit Land" page, under "Door Blocks pointing to this land"'
@@ -112,22 +119,24 @@ In the example below, a player can walk 10 steps horizontally and 9 steps vertic
                   </p>
                   <ul>
                     <li>
-                      <span className="text-primary">{'collides'}</span>: a
-                      boolean property that makes the block solid and stops the
-                      user from getting past it.
+                      <span className="text-primary">{'collides'}</span> -
+                      boolean property in Tiled: a boolean property that makes
+                      the block solid and stops the user from getting past it.
                     </li>
                     <li>
-                      <span className="text-primary">{'text'}</span>: a string
-                      property that opens a text dialog when the user is facing
-                      torwards the block and interacts with it.
+                      <span className="text-primary">{'text'}</span> - string
+                      property in Tiled: a string property that opens a text
+                      dialog when the user is facing torwards the block and
+                      interacts with it.
                       <br />
                       Text is limited to 255 characters
                     </li>
                     <li>
-                      <span className="text-primary">{'start'}</span>: this is
-                      the block where the user will be dropped to when he
-                      travels to your lands. It is also the block that allows
-                      him to leave your lands, back to the train station.
+                      <span className="text-primary">{'start'}</span> - boolean
+                      property in Tiled : this is the block where the user will
+                      be dropped to when he travels to your lands. It is also
+                      the block that allows him to leave your lands, back to the
+                      train station.
                       <br />
                       This block should only be set in the first land that you
                       created. After the user lands on your{' '}
@@ -143,6 +152,93 @@ In the example below, a player can walk 10 steps horizontally and 9 steps vertic
                     </li>
                   </ul>
                 </div>
+              </li>
+
+              <li>
+                <p>{"It's time to add our blocks to our land"}</p>
+                <p>{'Lets open Tiled and click on "New Map"'}</p>
+                <p>
+                  We can leave all the prefilled options. We just need to change
+                  the map dimensions to match the size of our land, and set the
+                  tile size to 16 by 16 pixels.
+                </p>
+                <p>Save your new map as a JSON file.</p>
+              </li>
+
+              <li>
+                <p>{'Click on "New Tileset" and import your tileset.'}</p>
+              </li>
+              <li>
+                <p>
+                  {
+                    'Click on "Edit Tileset", on the bottom of the left sidebar. We will now assign Tiled properties to our tiles. These properties will represent Static or Dynamic blocks.'
+                  }
+                </p>
+                <div className="alert alert-info">
+                  {
+                    'You can have multiple properties per tile. A tile can be solid and open an app when interacted with, by assigning both a "collides" property and an app block id property.'
+                  }
+                </div>
+                <p>
+                  <img
+                    src={editTileset}
+                    alt="Edit Tileset"
+                    className="border"
+                    height={'300px'}
+                  />
+                </p>
+              </li>
+              <li>
+                <p>
+                  {
+                    "You can assign a Static Block to a tile by creating a property with the name of the static block you want, setting it's respective type as described above, and then setting a value."
+                  }
+                </p>
+
+                <div className="alert alert-warning" role="alert">
+                  If this map and its tileset are supposed to be used in your
+                  first land, you must set a{' '}
+                  <span className="text-primary">{'start'}</span> block /
+                  property, to point where the players will enter and leave your
+                  land.
+                </div>
+
+                <p>
+                  <LinkAnchor asRegularAnchorTag href={staticBlocks}>
+                    <img
+                      src={staticBlocks}
+                      alt="Static Blocks"
+                      className="border"
+                      height={'400px'}
+                    />
+                  </LinkAnchor>
+                </p>
+              </li>
+
+              <li>
+                <p>
+                  {
+                    "You can assign a Dynamic Block to a tile by creating a property with any name, setting it's respective type as a string, and then setting it's value to the block id of the dynamic block that you want to assign."
+                  }
+                  <br />
+                  {
+                    'You will find the block id where you created it: in the "Edit Land" page, under the "Blocks" section.'
+                  }
+                </p>
+                <p>
+                  <LinkAnchor asRegularAnchorTag href={dynamicBlocks}>
+                    <img
+                      src={dynamicBlocks}
+                      alt="Dynamic Blocks"
+                      className="border"
+                      height={'400px'}
+                    />
+                  </LinkAnchor>
+                </p>
+              </li>
+
+              <li>
+                {'Upload your tileset and map files in the "Edit Land" page'}
               </li>
             </ol>
           </>
