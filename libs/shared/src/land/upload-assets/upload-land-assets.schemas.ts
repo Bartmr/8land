@@ -84,13 +84,13 @@ export const createTiledJSONSchema = ({
           .test((s) => (s.length > 0 ? null : 'Tileset must have an image')),
         imageheight: positiveInteger().required(),
         imagewidth: positiveInteger().required(),
-        margin: positiveInteger().required(),
+        margin: equals([0], 'Must be set to 0').required(),
         name: string()
           .required()
           .test((s) =>
             s.trim().length > 0 ? null : 'Tileset must have a name',
           ),
-        spacing: positiveInteger().required(),
+        spacing: equals([0], 'Must be set to 0').required(),
         tilecount: positiveInteger().required(),
         tileheight: equals([16], 'Must be set to 16').required(),
         tilewidth: equals([16], 'Must be set to 16').required(),
