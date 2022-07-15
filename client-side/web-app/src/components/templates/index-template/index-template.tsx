@@ -69,10 +69,8 @@ export function IndexTemplate() {
               <p className="mt-4">
                 {'Imagine the discoverability of an RPG like '}
                 <span className="fst-italic">Pokemon Silver</span>
-                {', and the ability from '}
-                <span className="fst-italic">Minecraft</span>
-                {' for anyone to build...'}
-
+                {', and the ability for anyone to build lands like in '}
+                <span className="fst-italic">Minecraft</span>...
                 <br />
                 {"That's it."}
               </p>
