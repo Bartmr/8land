@@ -55,8 +55,7 @@ export function IndexTemplate() {
                     className="d-block btn btn-primary"
                     href={CLIENT_SIDE_INDEX_ROUTE.getHref()}
                   >
-                    Explore it{' '}
-                    <span className="small">(No login required)</span>
+                    Play now <span className="small">(No login required)</span>
                   </LinkAnchor>
                 </div>
               </div>

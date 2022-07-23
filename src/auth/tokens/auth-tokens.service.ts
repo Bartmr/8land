@@ -88,4 +88,8 @@ export class AuthTokensService implements OnModuleInit, OnModuleDestroy {
   findToken(tokenString: string) {
     return this.tokensRepository.findTokenById(tokenString);
   }
+
+  deleteAllTokensFromUser(user: User) {
+    return this.tokensRepository.deleteAllTokensFromUser(user);
+  }
 }

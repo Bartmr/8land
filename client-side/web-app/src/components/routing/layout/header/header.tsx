@@ -18,6 +18,7 @@ import { INDEX_ROUTE } from 'src/components/templates/index-template/index-route
 import { LOGIN_ROUTE } from 'src/components/templates/client-side/login/login-routes';
 import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
 import { HELP_ROUTE } from 'src/components/templates/help/help-routes';
+import { CLIENT_SIDE_INDEX_ROUTE } from 'src/components/templates/client-side/index/index-routes';
 
 type Props = {
   menuHtmlId: string;
@@ -76,7 +77,7 @@ export function Header(props: Props) {
               <FontAwesomeIcon icon={faBars} />
             </Navbar.Toggle>
             <LinkAnchor
-              className="navbar-brand me-0 me-lg-3"
+              className="navbar-brand me-n3 me-lg-2"
               href={INDEX_ROUTE.getHref()}
             >
               <span className="h3">{PROJECT_NAME}</span>
@@ -94,7 +95,16 @@ export function Header(props: Props) {
               </span>
             </LinkAnchor>
             <Navbar.Collapse id={props.menuHtmlId}>
-              <ul className="navbar-nav me-3 my-2 my-lg-0">
+              <ul className="navbar-nav">
+                <li className="nav-item">
+                  <LinkAnchor
+                    activeClassName="active"
+                    className="nav-link"
+                    href={CLIENT_SIDE_INDEX_ROUTE.getHref()}
+                  >
+                    {CLIENT_SIDE_INDEX_ROUTE.label}
+                  </LinkAnchor>
+                </li>
                 <li className="nav-item">
                   <LinkAnchor
                     activeClassName="active"
@@ -127,13 +137,14 @@ export function Header(props: Props) {
                 </li>
               </ul>
 
-              <ul className="navbar-nav ms-auto">
-                <TransportedDataGate
-                  layout={TransportedDataGateLayout.Tape}
-                  dataWrapper={session}
-                >
-                  {({ data }) => {
-                    return (
+              <TransportedDataGate
+                layout={TransportedDataGateLayout.Tape}
+                dataWrapper={session}
+                className="ms-auto"
+              >
+                {({ data }) => {
+                  return (
+                    <ul className="navbar-nav ms-auto">
                       <>
                         {data ? (
                           <li className="nav-item d-flex justify-content-end">
@@ -157,10 +168,10 @@ export function Header(props: Props) {
                           </li>
                         )}
                       </>
-                    );
-                  }}
-                </TransportedDataGate>
-              </ul>
+                    </ul>
+                  );
+                }}
+              </TransportedDataGate>
             </Navbar.Collapse>
           </div>
         </Navbar>

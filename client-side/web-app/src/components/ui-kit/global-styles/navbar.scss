@@ -16,6 +16,16 @@
   }
 }
 
+.navbar {
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+
+  .nav-link {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+}
+
 .navbar-nav {
   .active {
     background-color: set-contrasting-color-alpha('body', 0.2);

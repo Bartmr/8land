@@ -25,6 +25,7 @@ import { useUsersAPI } from 'src/logic/users/users-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPersonThroughWindow } from '@fortawesome/free-solid-svg-icons';
 import { useLandsAPI } from 'src/logic/lands/lands-api';
+import { useAuthAPI } from 'src/logic/auth/auth.api';
 
 export function WalletSectionWithNonce(props: {
   session: null | MainApiSessionData;
@@ -293,6 +294,8 @@ export function UserTemplate(_props: RouteComponentProps) {
 
   const landsApi = useLandsAPI();
 
+  const authApi = useAuthAPI();
+
   const handleEscape = async () => {
     const res = await landsApi.escape();
 
@@ -319,13 +322,23 @@ export function UserTemplate(_props: RouteComponentProps) {
           {({ data: sessionData }) => (
             <>
               <div className="card mb-3">
-                <div className="card-body d-flex justify-content-end">
-                  <button
-                    onClick={() => logout.logout()}
-                    className="btn btn-default"
-                  >
-                    Log out
-                  </button>
+                <div className="card-body row g-2 justify-content-end">
+                  <div className="col-auto">
+                    <button
+                      onClick={() => logout.logout()}
+                      className="btn btn-default"
+                    >
+                      Log out
+                    </button>
+                  </div>
+                  <div className="col-auto">
+                    <button
+                      onClick={() => authApi.logoutFromAllDevices()}
+                      className="btn btn-default"
+                    >
+                      Log out from all devices
+                    </button>
+                  </div>
                 </div>
               </div>
               <div className="my-3 card">

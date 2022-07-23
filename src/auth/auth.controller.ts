@@ -8,17 +8,22 @@ import {
   Body,
   ConflictException,
   Controller,
+  Delete,
   Get,
   HttpCode,
   NotFoundException,
   Post,
   Request,
   Response,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AppServerRequest } from 'src/internals/server/types/app-server-request-types';
 import { AppServerResponse } from 'src/internals/server/types/app-server-response-types';
 import { AuthContext } from './auth-context';
-import { WithOptionalAuthContext } from './auth-context.decorator';
+import {
+  WithAuthContext,
+  WithOptionalAuthContext,
+} from './auth-context.decorator';
 import { PublicRoute } from './public-route.decorator';
 import { FirebaseService } from 'src/internals/apis/firebase/firebase.service';
 import { UnwrapPromise } from 'libs/shared/src/internals/utils/types/promise-types';
@@ -174,5 +179,14 @@ export class AuthController {
         appId: user.appId,
       },
     };
+  }
+
+  @Delete()
+  async logoutFromAllDevices(
+    @WithAuthContext() authContext: AuthContext,
+  ): Promise<void> {
+    await this.tokensService.deleteAllTokensFromUser(authContext.user);
+
+    throw new UnauthorizedException();
   }
 }

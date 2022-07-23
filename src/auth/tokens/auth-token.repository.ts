@@ -56,4 +56,10 @@ export class AuthTokensRepository extends AbstractRepository<AuthToken> {
       },
     });
   }
+
+  public deleteAllTokensFromUser(user: User) {
+    return this.repository.delete({
+      user,
+    });
+  }
 }
