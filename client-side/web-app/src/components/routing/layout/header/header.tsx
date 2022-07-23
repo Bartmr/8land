@@ -144,10 +144,10 @@ export function Header(props: Props) {
               >
                 {({ data }) => {
                   return (
-                    <ul className="navbar-nav ms-auto">
+                    <ul className="navbar-nav">
                       <>
                         {data ? (
-                          <li className="nav-item">
+                          <li className="nav-item d-flex justify-content-center my-2 my-lg-0">
                             <LinkAnchor
                               href={USER_ROUTE.getHref()}
                               className="btn btn-default"
