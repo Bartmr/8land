@@ -147,7 +147,7 @@ export function Header(props: Props) {
                     <ul className="navbar-nav ms-auto">
                       <>
                         {data ? (
-                          <li className="nav-item d-flex justify-content-end">
+                          <li className="nav-item">
                             <LinkAnchor
                               href={USER_ROUTE.getHref()}
                               className="btn btn-default"
