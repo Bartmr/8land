@@ -1,4 +1,4 @@
-import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { getAuth, connectAuthEmulator, User } from 'firebase/auth';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { FirebaseApp } from '../app-internals/apis/firebase/firebase-app';
 
@@ -11,3 +11,17 @@ if (EnvironmentVariables.FIREBASE_AUTH_EMULATOR_URL) {
 }
 
 export const FirebaseAuth = auth;
+
+let firebaseUser: User | null = null;
+
+const firstFirebaseUserLoadPromise = new Promise((resolve) => {
+  FirebaseAuth.onAuthStateChanged((user) => {
+    firebaseUser = user;
+    resolve(undefined);
+  });
+});
+
+export const getFirebaseUser = async () => {
+  await firstFirebaseUserLoadPromise;
+  return firebaseUser;
+};

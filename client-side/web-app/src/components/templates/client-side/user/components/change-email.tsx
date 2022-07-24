@@ -8,7 +8,7 @@ import {
   TransportedDataStatus,
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
 import * as auth from 'firebase/auth';
-import { FirebaseAuth } from 'src/logic/auth/firebase-auth';
+import { FirebaseAuth, getFirebaseUser } from 'src/logic/auth/firebase-auth';
 import { useMainApiSessionLogout } from 'src/logic/app-internals/apis/main/session/use-main-api-session-logout';
 import isEmail from 'validator/lib/isEmail';
 
@@ -24,7 +24,7 @@ export function ChangeEmail() {
   const sendVerificationEmail = async () => {
     replaceFormStatus({ status: TransportedDataStatus.Loading });
 
-    const firebaseUser = FirebaseAuth.currentUser;
+    const firebaseUser = await getFirebaseUser();
 
     if (!firebaseUser) {
       await logout.logout();
