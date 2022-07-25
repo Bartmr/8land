@@ -14,10 +14,16 @@ export const FirebaseAuth = auth;
 
 let firebaseUser: User | null = null;
 
+let firebaseUserPromiseIsResolved = false;
+
 const firstFirebaseUserLoadPromise = new Promise((resolve) => {
   FirebaseAuth.onAuthStateChanged((user) => {
     firebaseUser = user;
-    resolve(undefined);
+
+    if (!firebaseUserPromiseIsResolved) {
+      firebaseUserPromiseIsResolved = true;
+      resolve(undefined);
+    }
   });
 });
 
