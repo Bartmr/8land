@@ -38,8 +38,8 @@ export function LinkAnchor(props: Props) {
 
   if (
     props.href.includes('://') ||
-    props.openInNewTab ||
-    props.asRegularAnchorTag
+    props.asRegularAnchorTag ||
+    props.openInNewTab
   ) {
     return (
       <OutboundLink
