@@ -38,11 +38,11 @@ const authTokenKeySchema = uuid().required();
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private readonly reflector: Reflector,
+    private reflector: Reflector,
     private tokensService: AuthTokensService,
   ) {}
 
-  async canActivate(context: ExecutionContext) {
+  async canActivate(context: ExecutionContext): Promise<true> {
     if (context.getType() !== 'http') {
       throw new Error('Unknown execution context');
     }
