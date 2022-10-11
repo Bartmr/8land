@@ -1,3 +1,13 @@
+## Coming back since last time
+
+- write a tutorial on how to create apps
+- add an app that allows user to favourite their favourite lands
+- create an app debugger that allows users to run and debug their apps in a closed environment, with editable configs
+- save already allowed app domains into localstorage, so user does not get a confirmation dialog every time
+- instead of throwing an exception, server side map json validation errors should be set as errors in the section react state, just like they were client side validation errors
+- during land assets upload, warn the user when he has block ids in the map json pointing to non-existing blocks
+- error handling when loading and preloading land assets during the game
+
 ## Quick stuff
 
 ## Updating the project's boilerplate
