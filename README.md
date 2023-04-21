@@ -1,31 +1,14 @@
-## Coming back since last time
+## Code quality
 
-- write a tutorial on how to create apps
-- add an app that allows user to favourite their favourite lands
-- create an app debugger that allows users to run and debug their apps in a closed environment, with editable configs
-- save already allowed app domains into localstorage, so user does not get a confirmation dialog every time
-- instead of throwing an exception, server side map json validation errors should be set as errors in the section react state, just like they were client side validation errors
-- during land assets upload, warn the user when he has block ids in the map json pointing to non-existing blocks
-- error handling when loading and preloading land assets during the game
+**Let me remind you that this codebase is old**.
 
-## Quick stuff
+It favours owning and customizing abstractions even for the build pipeline, so I could share Typescript code and guarantee type-safety between backend and frontend back then. It's also very bloated and made during my free hours, with the objective of just having an MVP.
 
-## Updating the project's boilerplate
-
-To update the project's boilerplate, just run `update-project-boilerplate.sh` and input the _Git_ repository URL of the boilerplate your project is based on. In this case `https://github.com/Bartmr/estirador.git`
-
-## Adding layers
-
-The core version of `estirador` can be enhanced with some pre-made layers that change its functionality and architecture (example: have `estirador` use `NextJS` instead of `Gatsby` ). These layers are placed on top of the default distribution's updates. To add a layer, you only have to run the update script like its described above, and instead of fetching updates from the `main` branch, you pick one of the layer branches listed here:
-
-- `layer-auth` - Adds authentication and authorization to your project
-- `layer-nextjs` - Replaces `Gatsby` with `NextJS`
-
-> These layers receive updates once in a while, so don't forget to update them in the same way you added them
+**This is no longer the methodology I follow** , since it takes a lot of time, and brings a lot of non-product related code into your workload. With the advance of Large Language Models, I also try to stick with the defaults of frameworks and use 3rd party providers the most, since it makes it easier to use these models to generate new code.
 
 ## Development
 
-### Start development environment
+### Setup
 
 - `npm run install:all`
 - Setup and start the Firebase Emulator Suite
@@ -35,21 +18,38 @@ The core version of `estirador` can be enhanced with some pre-made layers that c
 - Setup the project's secrets
   - Create an API secrets file called `.env.secret.development` in the root of the project and fill it with the necessary secrets
   - Create a Web App secrets file called `.env.secret.development` in `client-side/web-app` and fill it with the necessary secrets
+- Start Firebase
+  - `npm run start:dev:firebase`
+- Start your project's infrastructure (example: databases, Redis, etc.)
+  - `./start-dev-infrastructure.sh`
+- Seed the development database with sample data by running `NODE_ENV=development npm run seed`
+
+#### ~~Crypto setup (no longer used)~~
+
 - Set up an Alchemy account at <https://www.alchemy.com/>
 - Create a Metamask Wallet
 - Build the smart-contracts by running `NODE_ENV=development npm run build:smart-contracts`
 - Deploy smart-contracts into a testnet
   - run `NODE_ENV=development npm run ts-node ./dist/scripts/deploy.ts`
   - take note of the contracts addresses and place them in `.env.secrets.development` to be used environment variables
+
+### Start
+
 - Start Firebase
   - `npm run start:dev:firebase`
 - Start your project's infrastructure (example: databases, Redis, etc.)
   - `./start-dev-infrastructure.sh`
-- Seed the development database with sample data by running `NODE_ENV=development npm run seed`
 - Start the server with `npm run start:dev`, or `npm run start:debug` if you want to debug the API in the Chrome Developer Tools
 - To run the web app:
   - `cd client-side/web-app`
   - `npm run develop`
+
+### Logins
+
+- `end-user@8land.com`
+  - `password123`
+- `admin@8land.com`
+  - `password123`
 
 ### Useful Commands
 
