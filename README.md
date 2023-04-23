@@ -1,3 +1,9 @@
+# 8Land
+
+8Land is an open pixel-art RPG game where players design their own lands and launch their own public games. The objective is to have the gameplay of [Decentraland](https://decentraland.org/) and the feel and nostalgia of Pokemon Gold and Silver
+
+![alt text](screenshot.png 'Screenshot')
+
 ## Copyright Notice
 
 This Github repository does not include any license and is therefore subject to default copyright laws. The code contained within this repository is copyrighted and the user is not allowed to distribute, modify, or share the code without the permission of the copyright holder.
@@ -16,14 +22,21 @@ It favours owning and customizing abstractions even for the build pipeline, so I
 
 ### Setup
 
+> This repository provides a `devcontainer` in case you want to run the project in a container isolated from your host setup
+
 - `npm run install:all`
 - Setup and start the Firebase Emulator Suite
+  - Create a new project in the [Firebase Console](console.firebase.google.com/)
   - Install the Firebase CLI: `npm install -g firebase-tools`
   - Login with your Google Account: `firebase login`
   - Setup the emulators: `firebase init emulators`
+    - You will only need the `Authentication Emulator`
+    - Leave everything else in its default values
 - Setup the project's secrets
-  - Create an API secrets file called `.env.secret.development` in the root of the project and fill it with the necessary secrets
-  - Create a Web App secrets file called `.env.secret.development` in `client-side/web-app` and fill it with the necessary secrets
+  - Create an API secrets file called `.env.secrets.development` in the root of the project and fill it with the necessary secrets
+    - required environment variables are listed in `src/internals/environment/environment-variables.schema.ts`
+  - Create a Web App secrets file called `.env.secrets.development` in `client-side/web-app` and fill it with the necessary secrets
+    - required environment variables are listed in `client-side/web-app/src/logic/app-internals/runtime/environment-variables.ts`
 - Start Firebase
   - `npm run start:dev:firebase`
 - Start your project's infrastructure (example: databases, Redis, etc.)
@@ -49,6 +62,7 @@ It favours owning and customizing abstractions even for the build pipeline, so I
 - To run the web app:
   - `cd client-side/web-app`
   - `npm run develop`
+- Open `http://localhost:8000` and start developing
 
 ### Logins
 
