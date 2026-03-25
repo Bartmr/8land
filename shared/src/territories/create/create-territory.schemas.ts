@@ -1,6 +1,6 @@
 import { object } from 'not-me/lib/schemas/object/object-schema';
-import { positiveInteger } from '../../internals/validation/schemas/positive-integer';
-import { uuid } from '../../internals/validation/schemas/uuid.schema';
+import { positiveInteger } from '../../validation/schemas/positive-integer';
+import { uuid } from '../../validation/schemas/uuid.schema';
 
 export const CreateTerritoryRequestJSONSchemaObj = {
   data: object({

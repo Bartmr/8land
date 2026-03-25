@@ -1,5 +1,5 @@
 import { string } from 'not-me/lib/schemas/string/string-schema';
-import { isUUID } from '../../utils/uuid/is-uuid';
+import { isUUID } from '../../uuid/is-uuid';
 
 export function uuid(message?: string) {
   return string().test((v) =>

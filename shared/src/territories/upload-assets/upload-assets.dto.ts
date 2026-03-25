@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ValidationSchema } from '../../internals/validation/validation-schema.decorator';
+import { ValidationSchema } from '../../validation/validation-schema.decorator';
 import { UploadTerritoryAssetsParametersSchema } from './upload-assets.schemas';
 
 @ValidationSchema(UploadTerritoryAssetsParametersSchema)

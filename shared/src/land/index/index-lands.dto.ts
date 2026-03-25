@@ -1,4 +1,4 @@
-import { ValidationSchema } from '../../internals/validation/validation-schema.decorator';
+import { ValidationSchema } from '../../validation/validation-schema.decorator';
 import { IndexLandsQuerySchema } from './index-lands.schemas';
 
 class LandFromIndex {

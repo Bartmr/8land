@@ -1,5 +1,5 @@
 import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger';
-import { ValidationSchema } from '../../internals/validation/validation-schema.decorator';
+import { ValidationSchema } from '../../validation/validation-schema.decorator';
 import { DynamicBlockType } from './create-block.enums';
 import { CreateBlockRequestSchema } from './create-block.schemas';
 

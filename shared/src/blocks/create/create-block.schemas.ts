@@ -2,7 +2,7 @@ import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { Schema } from 'not-me/lib/schemas/schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
-import { uuid } from '../../internals/validation/schemas/uuid.schema';
+import { uuid } from '../../validation/schemas/uuid.schema';
 import { CreateBlockRequestDTO } from './create-block.dto';
 import { DynamicBlockType } from './create-block.enums';
 import isURL from 'validator/lib/isURL';

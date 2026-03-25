@@ -1,4 +1,4 @@
-import { ValidationSchema } from '../../../internals/validation/validation-schema.decorator';
+import { ValidationSchema } from '../../../validation/validation-schema.decorator';
 import { GetLandDTO } from '../../get/get-land.dto';
 import { NavigateToLandQuerySchema } from './navigate-to-land.schemas';
 

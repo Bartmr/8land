@@ -5,9 +5,9 @@ import { number } from 'not-me/lib/schemas/number/number-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { or } from 'not-me/lib/schemas/or/or-schema';
-import { uuid } from '../../internals/validation/schemas/uuid.schema';
+import { uuid } from '../../validation/schemas/uuid.schema';
 import { StaticBlockType } from '../../blocks/create/create-block.enums';
-import { positiveInteger } from '../../internals/validation/schemas/positive-integer';
+import { positiveInteger } from '../../validation/schemas/positive-integer';
 
 export const UploadLandAssetsParametersSchema = object({
   landId: uuid().required(),

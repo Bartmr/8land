@@ -1,4 +1,4 @@
-import { ValidationSchema } from '../../internals/validation/validation-schema.decorator';
+import { ValidationSchema } from '../../validation/validation-schema.decorator';
 import { GetLandParametersSchema } from './get-land-schemas';
 
 class GetLandDoorReferencingDTO {

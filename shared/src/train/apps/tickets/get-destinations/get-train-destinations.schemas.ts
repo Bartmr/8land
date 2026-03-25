@@ -1,7 +1,7 @@
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { Schema } from 'not-me/lib/schemas/schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
-import { positiveInteger } from '../../../../internals/validation/schemas/positive-integer';
+import { positiveInteger } from '../../../../validation/schemas/positive-integer';
 import { GetTrainDestinationQueryDTO } from './get-train-destinations.dto';
 
 export const GetTrainDestinationQuerySchema: Schema<GetTrainDestinationQueryDTO> =

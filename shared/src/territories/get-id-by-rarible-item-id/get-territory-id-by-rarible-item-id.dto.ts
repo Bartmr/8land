@@ -1,4 +1,4 @@
-import { ValidationSchema } from '../../internals/validation/validation-schema.decorator';
+import { ValidationSchema } from '../../validation/validation-schema.decorator';
 import { GetTerritoryIdByRaribleItemIdParametersSchema } from './get-territory-id-by-rarible-item-id.schemas';
 
 @ValidationSchema(GetTerritoryIdByRaribleItemIdParametersSchema)
