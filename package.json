@@ -10,39 +10,9 @@
   "scripts": {
     "seed": "npm run ts-node ./development/seed.ts",
     "tear-down-databases": "npm run ts-node ./development/tear-down-databases.ts",
-    "start:dev": "NODE_ENV=development nest build --watch --webpack --webpackPath webpack-hmr.config.js --path tsconfig.build.json",
-    "start:dev:no-typecheck": "NODE_ENV=development nest build --watch --webpack --webpackPath webpack-hmr-no-type-checks.config.js --path tsconfig.build.json",
-    "start:dev:tsc": "NODE_ENV=development nest start --path tsconfig.build.json --watch",
-    "start:debug": "NODE_ENV=development nest build --watch --webpack --webpackPath webpack-hmr-debug.config.js --path tsconfig.build.json",
-    "start:debug:no-typecheck": "NODE_ENV=development nest build --watch --webpack --webpackPath webpack-hmr-debug-no-type-checks.config.js --path tsconfig.build.json",
-    "start:debug:tsc": "NODE_ENV=development nest start --path tsconfig.build.json --watch --debug",
-    "start:dev:chrome": "NODE_ENV=development nest build --watch --webpack --webpackPath webpack-hmr-chrome.config.js --path tsconfig.build.json",
-    "start:dev:no-typecheck:chrome": "NODE_ENV=development nest build --watch --webpack --webpackPath webpack-hmr-no-type-checks-chrome.config.js --path tsconfig.build.json",
-    "start:dev:tsc:chrome": "NODE_ENV=development nest start --path tsconfig.tsc-chrome.json --watch",
-    "start:debug:chrome": "NODE_ENV=development nest build --watch --webpack --webpackPath webpack-hmr-debug-chrome.config.js --path tsconfig.build.json",
-    "start:debug:no-typecheck:chrome": "NODE_ENV=development nest build --watch --webpack --webpackPath webpack-hmr-debug-no-type-checks-chrome.config.js --path tsconfig.build.json",
-    "start:debug:tsc:chrome": "NODE_ENV=development nest start --path tsconfig.tsc-chrome.json --watch --debug",
+    "start:dev": "NODE_ENV=development nest start --path tsconfig.build.json --watch",
+    "start:dev:debug": "NODE_ENV=development nest start --path tsconfig.build.json --watch --debug",
     "start:prod": "typeorm migration:run && node dist/src/main.js",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:cov:changed": "npm run test:cov -- --onlyChanged",
-    "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand --testTimeout=86400000",
-    "test:debug:watch": "npm run test:debug -- --watch",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "test:e2e:cov": "npm run test:e2e -- --coverage",
-    "test:e2e:cov:changed": "npm run test:e2e:cov -- --onlyChanged",
-    "test:e2e:watch": "jest --config ./test/jest-e2e.json --watch",
-    "test:e2e:debug": "node --inspect-brk node_modules/.bin/jest --runInBand --testTimeout=86400000 --config ./test/jest-e2e.json",
-    "test:e2e:debug:watch": "npm run test:e2e:debug -- --watch",
-    "test:migrations": "jest --config ./test/jest-migrations.json --runInBand",
-    "test:migrations:cov": "npm run test:migrations -- --coverage",
-    "test:migrations:cov:changed": "npm run test:migrations:cov -- --onlyChanged",
-    "test:migrations:watch": "jest --config ./test/jest-migrations.json --runInBand --watch",
-    "test:migrations:debug": "node --inspect-brk node_modules/.bin/jest --runInBand --testTimeout=86400000 --config ./test/jest-migrations.json",
-    "test:migrations:debug:watch": "npm run test:migrations:debug -- --watch",
-    "test:all:cov": "jest --config ./test/jest-all.js --coverage",
-    "test:all:cov:changed": "npm run test:all:cov -- --onlyChanged",
     "clean:api": "rimraf dist node_modules/.cache/webpack",
     "build:api": "npm run clean:api && nest build --path tsconfig.build.json",
     "typecheck": "tsc --noEmit",
@@ -98,7 +68,6 @@
     "@nestjs/testing": "^8.4.1",
     "@types/cookie-parser": "^1.4.3",
     "@types/express": "^4.17.13",
-    "@types/jest": "^28.1.4",
     "@types/multer": "^1.4.7",
     "@types/node": "^16.11.21",
     "@types/pg": "^8.6.5",
@@ -114,51 +83,16 @@
     "eslint-import-resolver-typescript": "^3.2.4",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
-    "jest": "^28.1.2",
     "npm-check-updates": "^15.2.1",
     "prettier": "^2.7.1",
     "run-script-webpack-plugin": "^0.1.1",
     "source-map-loader": "^4.0.0",
     "supertest": "^6.2.4",
-    "ts-jest": "^28.0.5",
     "ts-loader": "^9.3.1",
     "ts-node": "^10.8.2",
     "tsconfig-paths": "^4.0.0",
     "typechain": "^8.1.0",
     "typescript": "^4.7.4",
     "webpack-node-externals": "^3.0.0"
-  },
-  "jest": {
-    "setupFiles": [
-      "<rootDir>/src/internals/environment/load-environment-variables.ts",
-      "<rootDir>/test-environment-impl/base/set-test-process-context.ts"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": ".",
-    "testMatch": [
-      "**/*.spec.ts"
-    ],
-    "transform": {
-      "^.+\\.ts$": "ts-jest"
-    },
-    "globals": {
-      "ts-jest": {
-        "isolatedModules": true,
-        "tsconfig": "tsconfig.test.json"
-      }
-    },
-    "testEnvironment": "node",
-    "roots": [
-      "<rootDir>/src/",
-      "<rootDir>/libs/"
-    ],
-    "moduleDirectories": [
-      "node_modules",
-      "<rootDir>"
-    ]
   }
 }
