@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
-import { CROSS_CUTTING_PROVIDERS } from './cross-cutting-providers';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+
 import { LoggingModule } from './logging/logging.module';
 import { LoggingServiceSingleton } from './logging/logging.service.singleton';
 import { DEFAULT_DB_TYPEORM_CONN_OPTS } from './databases/default-db-typeorm-conn-opts';
@@ -10,6 +11,8 @@ import { BlocksModule } from './blocks/blocks.module';
 import { UsersModule } from './users/users.module';
 import { TrainModule } from './train/train.module';
 import { TypeormConnectionsModule } from './databases/typeorm.module';
+import { AppValidationPipe } from './validation/validation.pipe';
+import { AllExceptionsFilter } from './error-handling/all-exceptions.filter';
 
 @Module({
   imports: [
@@ -22,6 +25,15 @@ import { TypeormConnectionsModule } from './databases/typeorm.module';
     UsersModule,
     TrainModule,
   ],
-  providers: [...CROSS_CUTTING_PROVIDERS],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: AppValidationPipe,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+  ],
 })
 export class AppModule {}
