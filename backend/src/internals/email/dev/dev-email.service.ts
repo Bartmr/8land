@@ -1,7 +1,7 @@
 import util from 'util';
 import fs from 'fs';
 import path from 'path';
-import { LOCAL_TEMPORARY_FILES_PATH } from 'src/internals/local-temporary-files/local-temporary-files-path';
+import { LOCAL_TEMPORARY_FILES_PATH } from 'src/internals/temporary-files/temporary-files';
 import { Email, EmailService } from '../email.service';
 import { LoggingService } from 'src/internals/logging/logging.service';
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';

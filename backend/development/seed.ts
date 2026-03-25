@@ -26,7 +26,7 @@ import fs from 'fs';
 import { promisify } from 'util';
 import path from 'path';
 import { DevStorageService } from 'src/internals/storage/dev-storage.service';
-import { LOCAL_TEMPORARY_FILES_PATH } from 'src/internals/local-temporary-files/local-temporary-files-path';
+import { LOCAL_TEMPORARY_FILES_PATH } from 'src/internals/temporary-files/temporary-files';
 import { AppBlockRepository } from 'src/blocks/typeorm/app-block.repository';
 import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
 import { seedTrainStation } from './seed/seed-train-station';

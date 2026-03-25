@@ -5,7 +5,7 @@ import { DevEmailService } from './dev/dev-email.service';
 import { EmailService } from './email.service';
 import express from 'express';
 import path from 'path';
-import { LOCAL_TEMPORARY_FILES_PATH } from '../local-temporary-files/local-temporary-files-path';
+import { LOCAL_TEMPORARY_FILES_PATH } from '../temporary-files/temporary-files';
 import fs from 'fs';
 import { promisify } from 'util';
 import { ProdEmailService } from './dev/prod-email.service';

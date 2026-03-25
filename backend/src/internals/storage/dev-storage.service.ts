@@ -3,7 +3,7 @@ import path from 'path';
 import { Readable } from 'stream';
 import { promisify } from 'util';
 import { EnvironmentVariablesService } from '../environment/environment-variables.service';
-import { LOCAL_TEMPORARY_FILES_PATH } from '../local-temporary-files/local-temporary-files-path';
+import { LOCAL_TEMPORARY_FILES_PATH } from '../temporary-files/temporary-files';
 import { StorageService } from './storage.service';
 
 const writeFile = promisify(fs.writeFile);
