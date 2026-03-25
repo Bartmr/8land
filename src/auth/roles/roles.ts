@@ -1,4 +1,4 @@
-import { Role } from 'libs/shared/src/auth/auth.enums';
+import { Role } from '@shared/src/auth/auth.enums';
 
 export const ROLES_LEVELS: { [K in Role]: number } = {
   [Role.EndUser]: 1,

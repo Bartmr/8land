@@ -8,7 +8,7 @@ import { Reflector } from '@nestjs/core';
 import {
   SupportedValidationSchema,
   VALIDATION_SCHEMA_KEY,
-} from 'libs/shared/src/internals/validation/validation-schema.decorator';
+} from '@shared/src/internals/validation/validation-schema.decorator';
 import { throwError } from '../utils/throw-error';
 
 @Injectable()

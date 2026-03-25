@@ -1,5 +1,5 @@
 import { NotImplementedException } from '@nestjs/common';
-import { GetLandDTO } from 'libs/shared/src/land/get/get-land.dto';
+import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
 import { AuthContext } from 'src/auth/auth-context';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';

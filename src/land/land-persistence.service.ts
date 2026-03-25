@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateLandRequestDTO } from 'libs/shared/src/land/create/create-land.dto';
-import { UploadLandAssetsParameters } from 'libs/shared/src/land/upload-assets/upload-land-assets.dto';
+import { CreateLandRequestDTO } from '@shared/src/land/create/create-land.dto';
+import { UploadLandAssetsParameters } from '@shared/src/land/upload-assets/upload-land-assets.dto';
 import { AuthContext } from 'src/auth/auth-context';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { getSearchableName } from 'src/internals/utils/get-searchable-name';
@@ -9,7 +9,7 @@ import { WorldRepository } from 'src/worlds/worlds.repository';
 import { Connection } from 'typeorm';
 import { LandRepository } from './typeorm/land.repository';
 import sharp from 'sharp';
-import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
+import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
 import {
   ContentType,
   StorageService,
@@ -19,14 +19,14 @@ import { throwError } from 'src/internals/utils/throw-error';
 import {
   EditLandBodyDTO,
   EditLandParametersDTO,
-} from 'libs/shared/src/land/edit/edit-land.dto';
+} from '@shared/src/land/edit/edit-land.dto';
 import { Role } from 'src/auth/roles/roles';
 import {
   LAND_MAP_SIZE_LIMIT,
   LAND_TILESET_SIZE_LIMIT,
-} from 'libs/shared/src/land/upload-assets/upload-land-assets.constants';
+} from '@shared/src/land/upload-assets/upload-land-assets.constants';
 import { SettingsService } from '../settings/settings.service';
-import { StaticBlockType } from 'libs/shared/src/blocks/block.enums';
+import { StaticBlockType } from '@shared/src/blocks/block.enums';
 
 function getLandStorageKeys(landId: string) {
   const tilesetStorageKey = `lands/${landId}/tileset.png`;

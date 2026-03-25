@@ -1,16 +1,7 @@
 {
-  "include": [
-    "src",
-    "libs",
-    "production",
-    "development",
-    "../shared",
-  ],
+  "include": ["src"],
   "compilerOptions": {
     "baseUrl": "./",
-    "paths": {
-      "@shared": ["../shared"]
-    },
     "skipLibCheck": true,
     "lib": ["es2021"],
     "module": "commonjs",

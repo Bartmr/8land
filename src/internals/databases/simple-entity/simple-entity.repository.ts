@@ -1,7 +1,7 @@
 import {
   Class,
   ConcreteClass,
-} from 'libs/shared/src/internals/utils/types/classes-types';
+} from '@shared/src/internals/utils/types/classes-types';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import {
   AbstractRepository,
@@ -13,7 +13,7 @@ import {
 import { SimpleEntity } from './simple.entity';
 import { throwError } from 'src/internals/utils/throw-error';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { UnwrapPromise } from 'libs/shared/src/internals/utils/types/promise-types';
+import { UnwrapPromise } from '@shared/src/internals/utils/types/promise-types';
 
 type AnyEntity = {
   id: number | string;

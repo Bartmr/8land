@@ -18,19 +18,19 @@ import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import {
   TERRITORY_MAP_SIZE_LIMIT,
   TERRITORY_TILESET_SIZE_LIMIT,
-} from 'libs/shared/src/territories/upload-assets/upload-territory-assets.constants';
+} from '@shared/src/territories/upload-assets/upload-territory-assets.constants';
 import {
   GetTerritoryIdByRaribleItemIdDTO,
   GetTerritoryIdByRaribleItemIdParamsDTO,
-} from 'libs/shared/src/territories/get-id-by-rarible-item-id/get-territory-id-by-rarible-item-id.dto';
+} from '@shared/src/territories/get-id-by-rarible-item-id/get-territory-id-by-rarible-item-id.dto';
 import {
   GetTerritoryDTO,
   GetTerritoryParametersDTO,
-} from 'libs/shared/src/territories/get/get-territory.dto';
+} from '@shared/src/territories/get/get-territory.dto';
 import {
   UploadTerritoryAssetsParametersDTO,
   UploadTerritoryAssetsRequestDTO,
-} from 'libs/shared/src/territories/upload-assets/upload-assets.dto';
+} from '@shared/src/territories/upload-assets/upload-assets.dto';
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
@@ -46,7 +46,7 @@ import {
 } from 'src/internals/storage/storage.service';
 import { Connection } from 'typeorm';
 import { TerritoriesRepository } from './typeorm/territories.repository';
-import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
+import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
 import { InferType } from 'not-me/lib/schemas/schema';
 import { throwError } from 'src/internals/utils/throw-error';
 import { or } from 'not-me/lib/schemas/or/or-schema';
@@ -54,8 +54,8 @@ import sharp from 'sharp';
 import {
   CreateTerritoryRequestDTO,
   CreateTerritoryResponseDTO,
-} from 'libs/shared/src/territories/create/create-territory.dto';
-import { CreateTerritoryRequestJSONSchema } from 'libs/shared/src/territories/create/create-territory.schemas';
+} from '@shared/src/territories/create/create-territory.dto';
+import { CreateTerritoryRequestJSONSchema } from '@shared/src/territories/create/create-territory.schemas';
 import { Role } from 'src/auth/roles/roles';
 import { RolesUpAndIncluding } from 'src/auth/roles/roles.decorator';
 import { LandRepository } from 'src/land/typeorm/land.repository';
@@ -64,8 +64,8 @@ import { number } from 'not-me/lib/schemas/number/number-schema';
 import {
   UpdateTerritoryRaribleMetadataParametersDTO,
   UpdateTerritoryRaribleMetadataRequestDTO,
-} from 'libs/shared/src/territories/update-rarible/update-territory-rarible-metadata.dto';
-import { StaticBlockType } from 'libs/shared/src/blocks/block.enums';
+} from '@shared/src/territories/update-rarible/update-territory-rarible-metadata.dto';
+import { StaticBlockType } from '@shared/src/blocks/block.enums';
 import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
 
 @Controller('territories')

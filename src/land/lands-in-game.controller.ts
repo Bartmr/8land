@@ -6,12 +6,12 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { GetLandDTO } from 'libs/shared/src/land/get/get-land.dto';
+import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
 import {
   NavigateToLandDTO,
   NavigateToLandQueryDTO,
-} from 'libs/shared/src/land/in-game/navigate/navigate-to-land.dto';
-import { ResumeLandNavigationDTO } from 'libs/shared/src/land/in-game/resume/resume-land-navigation.dto';
+} from '@shared/src/land/in-game/navigate/navigate-to-land.dto';
+import { ResumeLandNavigationDTO } from '@shared/src/land/in-game/resume/resume-land-navigation.dto';
 import { AuthContext } from 'src/auth/auth-context';
 import {
   WithAuthContext,

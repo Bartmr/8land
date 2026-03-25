@@ -2,8 +2,8 @@ import { InferType, Schema } from 'not-me/lib/schemas/schema';
 import {
   JSONPrimitive,
   SerializableJSONData,
-} from 'libs/shared/src/internals/transports/json-types';
-import { toQueryString } from 'libs/shared/src/internals/urls/to-query-string';
+} from '@shared/src/internals/transports/json-types';
+import { toQueryString } from '@shared/src/internals/urls/to-query-string';
 import axios from 'axios';
 import { LoggingService } from '../logging/logging.service';
 

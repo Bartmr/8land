@@ -4,11 +4,11 @@
   "projects": {
     "shared": {
       "type": "library",
-      "root": "libs/shared",
+      "root": "../shared",
       "entryFile": "index",
-      "sourceRoot": "libs/shared/src",
+      "sourceRoot": "../shared/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/shared/tsconfig.json"
+        "tsConfigPath": "../shared/tsconfig.json"
       }
     }
   },

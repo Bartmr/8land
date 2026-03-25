@@ -1,1 +1,1 @@
-export * from 'libs/shared/src/internals/utils/throw-error';
+export * from '@shared/src/internals/utils/throw-error';

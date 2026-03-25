@@ -16,11 +16,11 @@ import {
 import {
   GetLandDTO,
   GetLandParametersDTO,
-} from 'libs/shared/src/land/get/get-land.dto';
+} from '@shared/src/land/get/get-land.dto';
 import {
   IndexLandsDTO,
   IndexLandsQueryDTO,
-} from 'libs/shared/src/land/index/index-lands.dto';
+} from '@shared/src/land/index/index-lands.dto';
 import { AuthContext } from 'src/auth/auth-context';
 import { WithAuthContext } from 'src/auth/auth-context.decorator';
 import { Role } from 'src/auth/roles/roles';
@@ -34,8 +34,8 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import {
   CreateLandRequestDTO,
   CreateLandResponseDTO,
-} from 'libs/shared/src/land/create/create-land.dto';
-import { UploadLandAssetsParameters } from 'libs/shared/src/land/upload-assets/upload-land-assets.dto';
+} from '@shared/src/land/create/create-land.dto';
+import { UploadLandAssetsParameters } from '@shared/src/land/upload-assets/upload-land-assets.dto';
 import { RolesUpAndIncluding } from 'src/auth/roles/roles.decorator';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
@@ -44,13 +44,13 @@ import {
   EditLandBodyDTO,
   EditLandDTO,
   EditLandParametersDTO,
-} from 'libs/shared/src/land/edit/edit-land.dto';
+} from '@shared/src/land/edit/edit-land.dto';
 import { LandPersistenceService } from './land-persistence.service';
 import { WorldRepository } from 'src/worlds/worlds.repository';
-import { DeleteLandParametersDTO } from 'libs/shared/src/land/delete-land/delete-land.dto';
+import { DeleteLandParametersDTO } from '@shared/src/land/delete-land/delete-land.dto';
 import { SettingsService } from 'src/settings/settings.service';
 import { PublicRoute } from 'src/auth/public-route.decorator';
-import { GetLandsToClaimDTO } from 'libs/shared/src/land/lands-to-claim/lands-to-claim.dto';
+import { GetLandsToClaimDTO } from '@shared/src/land/lands-to-claim/lands-to-claim.dto';
 import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
 
 class LandAssetsRequestDTO {

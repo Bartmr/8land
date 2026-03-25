@@ -10,15 +10,15 @@ import {
 import {
   GetTrainDestinationsDTO,
   GetTrainDestinationQueryDTO,
-} from 'libs/shared/src/train/apps/tickets/get-destinations/get-train-destinations.dto';
+} from '@shared/src/train/apps/tickets/get-destinations/get-train-destinations.dto';
 import {
   BoardTrainDTO,
   BoardTrainParametersDTO,
-} from 'libs/shared/src/train/board/board-train.dto';
+} from '@shared/src/train/board/board-train.dto';
 import {
   ReturnToTrainStationDTO,
   ReturnToTrainStationQueryDTO,
-} from 'libs/shared/src/train/return/return-to-train-station.dto';
+} from '@shared/src/train/return/return-to-train-station.dto';
 import { getTypesafeObjectFieldPath } from 'not-me/lib/utils/get-typesafe-object-field-path';
 import { AuthContext } from 'src/auth/auth-context';
 import { WithOptionalAuthContext } from 'src/auth/auth-context.decorator';

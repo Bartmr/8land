@@ -9,8 +9,8 @@ import path from 'path';
 import fs from 'fs';
 import { AppBlockRepository } from 'src/blocks/typeorm/app-block.repository';
 import { promisify } from 'util';
-import { createTiledJSONSchema } from 'libs/shared/src/land/upload-assets/upload-land-assets.schemas';
-import { StaticBlockType } from 'libs/shared/src/blocks/block.enums';
+import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
+import { StaticBlockType } from '@shared/src/blocks/block.enums';
 import { DevStorageService } from 'src/internals/storage/dev-storage.service';
 
 const readFile = promisify(fs.readFile);

@@ -1,1 +1,1 @@
-export * from 'libs/shared/src/internals/utils/uuid/generate-random-uuid';
+export * from '@shared/src/internals/utils/uuid/generate-random-uuid';

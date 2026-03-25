@@ -1,1 +1,1 @@
-export * from 'libs/shared/src/internals/utils/uuid/is-uuid';
+export * from '@shared/src/internals/utils/uuid/is-uuid';

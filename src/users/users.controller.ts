@@ -5,11 +5,11 @@ import { AuditContext } from 'src/internals/auditing/audit-context';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { Connection } from 'typeorm';
 import { UsersRepository } from './users.repository';
-import { GetUserWalletNonce } from 'libs/shared/src/users/me/get-user-wallet-nonce.dto';
-import { ReceiveSignedUserNonceRequestDTO } from 'libs/shared/src/users/me/receive-signed-user-nonce.dto';
+import { GetUserWalletNonce } from '@shared/src/users/me/get-user-wallet-nonce.dto';
+import { ReceiveSignedUserNonceRequestDTO } from '@shared/src/users/me/receive-signed-user-nonce.dto';
 import * as ethUtil from 'ethereumjs-util';
 import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
-import { getWalletSignMessage } from 'libs/shared/src/users/me/receive-signed-user-nonce.utils';
+import { getWalletSignMessage } from '@shared/src/users/me/receive-signed-user-nonce.utils';
 import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
 
 @Controller('users')

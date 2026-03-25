@@ -1,1 +1,1 @@
-export * from 'libs/shared/src/internals/utils/uuid/generate-unique-uuid';
+export * from '@shared/src/internals/utils/uuid/generate-unique-uuid';

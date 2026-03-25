@@ -3,8 +3,8 @@ import {
   Injectable,
   OnApplicationShutdown,
 } from '@nestjs/common';
-import { getEnumValues } from 'libs/shared/src/internals/utils/enums/get-enum-values';
-import { ConcreteClass } from 'libs/shared/src/internals/utils/types/classes-types';
+import { getEnumValues } from '@shared/src/internals/utils/enums/get-enum-values';
+import { ConcreteClass } from '@shared/src/internals/utils/types/classes-types';
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { Connection, ConnectionManager, ConnectionOptions } from 'typeorm';
 import { throwError } from '../utils/throw-error';

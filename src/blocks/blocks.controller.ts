@@ -8,9 +8,9 @@ import {
   Param,
   Post,
 } from '@nestjs/common';
-import { CreateBlockRequestDTO } from 'libs/shared/src/blocks/create/create-block.dto';
-import { DynamicBlockType } from 'libs/shared/src/blocks/create/create-block.enums';
-import { DeleteBlockURLParameters } from 'libs/shared/src/blocks/delete/delete-block.dto';
+import { CreateBlockRequestDTO } from '@shared/src/blocks/create/create-block.dto';
+import { DynamicBlockType } from '@shared/src/blocks/create/create-block.enums';
+import { DeleteBlockURLParameters } from '@shared/src/blocks/delete/delete-block.dto';
 import { AuthContext } from 'src/auth/auth-context';
 import { WithAuthContext } from 'src/auth/auth-context.decorator';
 import { Role } from 'src/auth/roles/roles';

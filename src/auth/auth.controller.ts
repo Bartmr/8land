@@ -2,7 +2,7 @@ import {
   AuthSessionDTO,
   LoginRequestDTO,
   LoginResponseDTO,
-} from 'libs/shared/src/auth/auth.dto';
+} from '@shared/src/auth/auth.dto';
 import {
   BadRequestException,
   Body,
@@ -26,7 +26,7 @@ import {
 } from './auth-context.decorator';
 import { PublicRoute } from './public-route.decorator';
 import { FirebaseService } from 'src/internals/apis/firebase/firebase.service';
-import { UnwrapPromise } from 'libs/shared/src/internals/utils/types/promise-types';
+import { UnwrapPromise } from '@shared/src/internals/utils/types/promise-types';
 import { Connection } from 'typeorm';
 import { UsersRepository } from 'src/users/users.repository';
 import { AuthTokensService } from './tokens/auth-tokens.service';
