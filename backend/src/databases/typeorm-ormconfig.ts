@@ -1,4 +1,12 @@
+import { EnvironmentVariablesService } from 'src/environment/environment-variables.service';
 import { ConnectionOptions } from 'typeorm';
+import { ALL_SUBSCRIBERS } from './all-subscribers';
+import { FirstMigration1642874083482 } from '../../migrations/1642874083482-FirstMigration';
+import { NFTMetadata1645870824982 } from '../../migrations/1645870824982-NFTMetadata';
+import { UserAppId1647382874239 } from '../../migrations/1647382874239-UserAppId';
+import { NavigationState1649620686884 } from '../../migrations/1649620686884-NavigationState';
+import { Train1651758178120 } from '../../migrations/1651758178120-Train';
+
 
 export const TYPEORM_ORMCONFIG: ConnectionOptions[] = {
   type: 'postgres' as const,
@@ -8,7 +16,7 @@ export const TYPEORM_ORMCONFIG: ConnectionOptions[] = {
   password: EnvironmentVariablesService.variables.DATABASE_PASSWORD,
   database: EnvironmentVariablesService.variables.DATABASE_NAME,
   entities: ['src/**/typeorm/*.entity.ts'],
-  subscribers: ALL_SUBSCRIBERS,
+  subscribers: [],
   synchronize: false,
   logging: EnvironmentVariablesService.variables.LOG_DATABASES,
   /*
@@ -19,7 +27,13 @@ export const TYPEORM_ORMCONFIG: ConnectionOptions[] = {
     into the API runtime when not needed (specially important in production).
   */
   migrationsRun: false,
-  migrations: ALL_MIGRATIONS,
+  migrations: [
+    FirstMigration1642874083482,
+    NFTMetadata1645870824982,
+    UserAppId1647382874239,
+    NavigationState1649620686884,
+    Train1651758178120,
+  ],
   cli: {
     migrationsDir: 'migrations',
   },
