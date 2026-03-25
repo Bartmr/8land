@@ -4,12 +4,12 @@ if (process.env.NODE_ENV === 'production') {
   require('./dist/src/internals/environment/load-environment-variables');
 
   const {
-    TYPEORM_ORMCONFIG_WITH_MIGRATIONS,
-  } = require(`./dist/src/internals/databases/typeorm-ormconfig-with-migrations`);
+    TYPEORM_ORMCONFIG,
+  } = require(`./dist/src/internals/databases/typeorm-ormconfig`);
 
   module.exports = [
     {
-      ...TYPEORM_ORMCONFIG_WITH_MIGRATIONS[0],
+      ...TYPEORM_ORMCONFIG,
       entities: ['dist/src/**/typeorm/*.entity.js'],
     },
   ];
@@ -17,13 +17,12 @@ if (process.env.NODE_ENV === 'production') {
   require('./src/internals/environment/load-environment-variables');
 
   const {
-    TYPEORM_ORMCONFIG_WITH_MIGRATIONS,
-  } = require(`./src/internals/databases/typeorm-ormconfig-with-migrations`);
+    TYPEORM_ORMCONFIG,
+  } = require(`./src/internals/databases/typeorm-ormconfig`);
 
   module.exports = [
     {
-      ...TYPEORM_ORMCONFIG_WITH_MIGRATIONS[0],
-      entities: ['src/**/typeorm/*.entity.ts'],
+      ...TYPEORM_ORMCONFIG,
     },
   ];
 } else {

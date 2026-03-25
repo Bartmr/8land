@@ -1,7 +1,7 @@
 {
   "include": [
     "src",
-    "libs",
+     "migrations",
     "production",
     "development",
     "../shared",

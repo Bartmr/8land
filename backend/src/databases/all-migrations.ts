@@ -1,8 +1,8 @@
-import { FirstMigration1642874083482 } from './migrations/1642874083482-FirstMigration';
-import { NFTMetadata1645870824982 } from './migrations/1645870824982-NFTMetadata';
-import { UserAppId1647382874239 } from './migrations/1647382874239-UserAppId';
-import { NavigationState1649620686884 } from './migrations/1649620686884-NavigationState';
-import { Train1651758178120 } from './migrations/1651758178120-Train';
+import { FirstMigration1642874083482 } from '../../migrations/1642874083482-FirstMigration';
+import { NFTMetadata1645870824982 } from '../../migrations/1645870824982-NFTMetadata';
+import { UserAppId1647382874239 } from '../../migrations/1647382874239-UserAppId';
+import { NavigationState1649620686884 } from '../../migrations/1649620686884-NavigationState';
+import { Train1651758178120 } from '../../migrations/1651758178120-Train';
 
 export const ALL_MIGRATIONS = [
   FirstMigration1642874083482,
