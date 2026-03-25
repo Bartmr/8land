@@ -25,7 +25,7 @@ import {
   WithOptionalAuthContext,
 } from './auth-context.decorator';
 import { PublicRoute } from './public-route.decorator';
-import { FirebaseService } from 'src/internals/apis/firebase/firebase.service';
+import { FirebaseService } from 'src/internals/firebase/firebase.service';
 import { UnwrapPromise } from '@shared/src/internals/utils/types/promise-types';
 import { Connection } from 'typeorm';
 import { UsersRepository } from 'src/users/users.repository';

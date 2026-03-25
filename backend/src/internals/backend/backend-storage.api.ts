@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { LoggingService } from 'src/internals/logging/logging.service';
-import { JSONApiBase } from '../json-api-base';
+import { JSONApiBase } from '../apis/json-api-base';
 
 @Injectable()
-export class ItselfStorageApi extends JSONApiBase {
+export class BackendStorageApi extends JSONApiBase {
   protected apiUrl: string;
   protected getDefaultHeaders: () => { [key: string]: string | undefined };
   protected loggingService: LoggingService;

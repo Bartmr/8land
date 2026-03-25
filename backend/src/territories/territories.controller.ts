@@ -36,7 +36,7 @@ import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { AuthContext } from 'src/auth/auth-context';
 import { WithAuthContext } from 'src/auth/auth-context.decorator';
-import { RaribleApi } from 'src/internals/apis/rarible/rarible.api';
+import { RaribleApi } from 'src/internals/rarible/rarible.api';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
@@ -59,7 +59,7 @@ import { CreateTerritoryRequestJSONSchema } from '@shared/src/territories/create
 import { Role } from 'src/auth/roles/roles';
 import { RolesUpAndIncluding } from 'src/auth/roles/roles.decorator';
 import { LandRepository } from 'src/land/typeorm/land.repository';
-import { ItselfStorageApi } from 'src/internals/apis/itself/itself-storage.api';
+import { BackendStorageApi } from 'src/internals/backend/backend-storage.api';
 import { number } from 'not-me/lib/schemas/number/number-schema';
 import {
   UpdateTerritoryRaribleMetadataParametersDTO,
@@ -74,7 +74,7 @@ export class TerritoriesEndUserController {
     @InjectTypeormConnection() private connection: Connection,
     private storageService: StorageService,
     private raribleApi: RaribleApi,
-    private itselfStorageApi: ItselfStorageApi,
+    private itselfStorageApi: BackendStorageApi,
   ) {}
 
   async isAllowedToEditProject(itemId: string, walletAddress: string) {

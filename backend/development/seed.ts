@@ -16,7 +16,7 @@ import { JSONApiBase } from 'src/internals/apis/json-api-base';
 import { LoggingServiceSingleton } from 'src/internals/logging/logging.service.singleton';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
-import { FIREBASE_EMULATOR_PROJECT_ID } from 'src/internals/apis/firebase/firebase.constants';
+import { FIREBASE_EMULATOR_PROJECT_ID } from 'src/internals/firebase/firebase.constants';
 import { throwError } from 'src/internals/throw-error';
 import { LandRepository } from 'src/land/typeorm/land.repository';
 import { TerritoriesRepository } from 'src/territories/typeorm/territories.repository';

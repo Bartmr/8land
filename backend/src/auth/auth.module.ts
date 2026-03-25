@@ -4,7 +4,7 @@ import { AUTH_MODULE_ENTITIES } from './auth-module-entities';
 import { AuthController } from './auth.controller';
 import { AuthGuard } from './auth.guard';
 import { AuthTokensService } from './tokens/auth-tokens.service';
-import { FirebaseModule } from 'src/internals/apis/firebase/firebase.module';
+import { FirebaseModule } from 'src/internals/firebase/firebase.module';
 import { TypeormFeatureModule } from 'src/internals/databases/typeorm.module';
 
 @Module({

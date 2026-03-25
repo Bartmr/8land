@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
 import { LoggingService } from 'src/internals/logging/logging.service';
-import { JSONApiBase } from '../json-api-base';
+import { JSONApiBase } from '../apis/json-api-base';
 
 @Injectable()
 export class RaribleApi extends JSONApiBase {
