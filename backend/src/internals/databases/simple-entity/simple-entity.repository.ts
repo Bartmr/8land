@@ -11,7 +11,7 @@ import {
   SelectQueryBuilder,
 } from 'typeorm';
 import { SimpleEntity } from './simple.entity';
-import { throwError } from 'src/internals/utils/throw-error';
+import { throwError } from 'src/internals/throw-error';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { UnwrapPromise } from '@shared/src/internals/utils/types/promise-types';
 

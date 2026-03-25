@@ -10,7 +10,7 @@ import { AuthTokensRepository } from './auth-token.repository';
 import { Connection, EntityManager } from 'typeorm';
 import { LoggingService } from 'src/internals/logging/logging.service';
 import { cleanExpiredAuthTokens } from './clean-expired-auth-tokens';
-import { throwError } from 'src/internals/utils/throw-error';
+import { throwError } from 'src/internals/throw-error';
 import { ProcessContextManager } from 'src/internals/process/process-context-manager';
 import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
 

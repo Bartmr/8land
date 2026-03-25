@@ -1,5 +1,5 @@
 import { ProcessContextManager } from 'src/internals/process/process-context-manager';
-import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
+import { generateRandomUUID } from 'src/internals/uuids/generate-random-uuid';
 import { AuditContext } from '../audit-context';
 
 export function createTestAuditContext() {

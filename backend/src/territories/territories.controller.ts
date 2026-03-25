@@ -48,7 +48,7 @@ import { Connection } from 'typeorm';
 import { TerritoriesRepository } from './typeorm/territories.repository';
 import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
 import { InferType } from 'not-me/lib/schemas/schema';
-import { throwError } from 'src/internals/utils/throw-error';
+import { throwError } from 'src/internals/throw-error';
 import { or } from 'not-me/lib/schemas/or/or-schema';
 import sharp from 'sharp';
 import {

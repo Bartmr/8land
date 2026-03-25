@@ -7,8 +7,8 @@ import {
 import { NODE_ENV } from 'src/internals/environment/node-env.constants';
 import { NodeEnv } from 'src/internals/environment/node-env.types';
 import { ProcessContextManager } from 'src/internals/process/process-context-manager';
-import { generateUniqueUUID } from 'src/internals/utils/generate-unique-uuid';
-import { throwError } from 'src/internals/utils/throw-error';
+import { generateUniqueUUID } from 'src/internals/uuids/generate-unique-uuid';
+import { throwError } from 'src/internals/throw-error';
 import { Connection, EntityManager, EntityRepository } from 'typeorm';
 import { Settings } from './typeorm/settings.entity';
 

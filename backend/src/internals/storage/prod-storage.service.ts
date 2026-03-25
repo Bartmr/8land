@@ -5,7 +5,7 @@ import {
 } from '@aws-sdk/client-s3';
 import { Readable } from 'typeorm/platform/PlatformTools';
 import { EnvironmentVariablesService } from '../environment/environment-variables.service';
-import { throwError } from '../utils/throw-error';
+import { throwError } from '../throw-error';
 import { ContentType, StorageService } from './storage.service';
 
 export class ProdStorageService extends StorageService {

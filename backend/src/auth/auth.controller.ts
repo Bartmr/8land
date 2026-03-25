@@ -33,7 +33,7 @@ import { AuthTokensService } from './tokens/auth-tokens.service';
 import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
 import { NODE_ENV } from 'src/internals/environment/node-env.constants';
 import { NodeEnv } from 'src/internals/environment/node-env.types';
-import { generateRandomUUID } from 'src/internals/utils/generate-random-uuid';
+import { generateRandomUUID } from 'src/internals/uuids/generate-random-uuid';
 import { Role } from './roles/roles';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { AuditContext } from 'src/internals/auditing/audit-context';

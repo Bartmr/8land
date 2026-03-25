@@ -7,7 +7,7 @@ import type { LoggingService } from '../logging/logging.service';
 import { LoggingServiceSingleton } from '../logging/logging.service.singleton';
 import { ProcessType } from '../process/process-context';
 import { ProcessContextManager } from '../process/process-context-manager';
-import { generateRandomUUID } from '../utils/generate-random-uuid';
+import { generateRandomUUID } from '../uuids/generate-random-uuid';
 
 if (NODE_ENV === NodeEnv.Test) {
   throw new Error(

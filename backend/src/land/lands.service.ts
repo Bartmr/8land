@@ -5,7 +5,7 @@ import { AuditContext } from 'src/internals/auditing/audit-context';
 import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
 import { LoggingService } from 'src/internals/logging/logging.service';
 import { StorageService } from 'src/internals/storage/storage.service';
-import { throwError } from 'src/internals/utils/throw-error';
+import { throwError } from 'src/internals/throw-error';
 import { NavigationState } from 'src/users/typeorm/navigation-state.entity';
 import { NavigationStateRepository } from 'src/users/typeorm/navigation-state.repository';
 import { Connection, EntityManager } from 'typeorm';

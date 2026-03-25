@@ -3,7 +3,7 @@ import { CreateLandRequestDTO } from '@shared/src/land/create/create-land.dto';
 import { UploadLandAssetsParameters } from '@shared/src/land/upload-assets/upload-land-assets.dto';
 import { AuthContext } from 'src/auth/auth-context';
 import { AuditContext } from 'src/internals/auditing/audit-context';
-import { getSearchableName } from 'src/internals/utils/get-searchable-name';
+import { getSearchableName } from 'src/internals/strings/get-searchable-name';
 import { World } from 'src/worlds/typeorm/worlds.entity';
 import { WorldRepository } from 'src/worlds/worlds.repository';
 import { Connection } from 'typeorm';
@@ -15,7 +15,7 @@ import {
   StorageService,
 } from 'src/internals/storage/storage.service';
 import { InferType } from 'not-me/lib/schemas/schema';
-import { throwError } from 'src/internals/utils/throw-error';
+import { throwError } from 'src/internals/throw-error';
 import {
   EditLandBodyDTO,
   EditLandParametersDTO,

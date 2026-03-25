@@ -7,7 +7,7 @@ import { getEnumValues } from '@shared/src/internals/utils/enums/get-enum-values
 import { ConcreteClass } from '@shared/src/internals/utils/types/classes-types';
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { Connection, ConnectionManager, ConnectionOptions } from 'typeorm';
-import { throwError } from '../utils/throw-error';
+import { throwError } from '../throw-error';
 import { getTypeormConnectionProviderToken } from './inject-typeorm-connection.decorator';
 import { TypeormConnectionName } from './typeorm-connection-names';
 

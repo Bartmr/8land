@@ -9,7 +9,7 @@ import {
   SupportedValidationSchema,
   VALIDATION_SCHEMA_KEY,
 } from '@shared/src/internals/validation/validation-schema.decorator';
-import { throwError } from '../utils/throw-error';
+import { throwError } from '../throw-error';
 
 @Injectable()
 export class AppValidationPipe implements PipeTransform<unknown> {

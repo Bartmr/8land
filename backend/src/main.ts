@@ -6,7 +6,7 @@ import { NODE_ENV } from './internals/environment/node-env.constants';
 import { NodeEnv } from './internals/environment/node-env.types';
 import { ProcessType } from './internals/process/process-context';
 import { ProcessContextManager } from './internals/process/process-context-manager';
-import { generateRandomUUID } from './internals/utils/generate-random-uuid';
+import { generateRandomUUID } from './internals/uuids/generate-random-uuid';
 import { createApp } from './create-app';
 import { EnvironmentVariablesService } from './internals/environment/environment-variables.service';
 
