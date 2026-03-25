@@ -6,7 +6,7 @@ import {
   ContentType,
   StorageService,
 } from 'src/internals/storage/storage.service';
-import { getSearchableName } from 'src/internals/utils/get-searchable-name';
+import { getSearchableName } from 'src/internals/strings/get-searchable-name';
 import { Land } from 'src/land/typeorm/land.entity';
 import { LandRepository } from 'src/land/typeorm/land.repository';
 import { EntityManager } from 'typeorm';

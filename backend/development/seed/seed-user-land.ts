@@ -1,6 +1,6 @@
 import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
 import { AuditContext } from 'src/internals/auditing/audit-context';
-import { getSearchableName } from 'src/internals/utils/get-searchable-name';
+import { getSearchableName } from 'src/internals/strings/get-searchable-name';
 import { LandRepository } from 'src/land/typeorm/land.repository';
 import { User } from 'src/users/typeorm/user.entity';
 import { WorldRepository } from 'src/worlds/worlds.repository';

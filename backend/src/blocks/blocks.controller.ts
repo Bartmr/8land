@@ -19,7 +19,7 @@ import { AuditContext } from 'src/internals/auditing/audit-context';
 import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
 import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
 import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
-import { getSearchableName } from 'src/internals/utils/get-searchable-name';
+import { getSearchableName } from 'src/internals/strings/get-searchable-name';
 import { LandRepository } from 'src/land/typeorm/land.repository';
 import { Connection } from 'typeorm';
 import { AppBlockRepository } from './typeorm/app-block.repository';

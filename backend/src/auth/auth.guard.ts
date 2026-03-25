@@ -22,7 +22,7 @@ import {
 } from './roles/roles.decorator';
 import { AuthTokensService } from './tokens/auth-tokens.service';
 import { string } from 'not-me/lib/schemas/string/string-schema';
-import { isUUID } from 'src/internals/utils/is-uuid';
+import { isUUID } from 'src/internals/uuids/is-uuid';
 import { AuditContext } from 'src/internals/auditing/audit-context';
 import { generateUniqueUUID } from 'src/internals/uuids/generate-unique-uuid';
 
