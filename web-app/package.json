@@ -89,7 +89,6 @@
     "gatsby"
   ],
   "scripts": {
-    "postinstall": "node ./polyfill-types-mocha.js",
     "clean:typings": "rimraf dist && find _graphql-generated_ -name \"*.ts\" -type f -delete && find src -name \"*._graphql-generated_.ts\" -type f -delete",
     "clean": "gatsby clean && rimraf dist .webpack-bundle-analyzer _graphql-generated_ && find src -name \"*._graphql-generated_.ts\" -type f -delete",
     "build": "gatsby build --prefix-paths",
