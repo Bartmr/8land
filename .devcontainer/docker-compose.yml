@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  devcontainer:
+    build: 
+      context: devcontainer
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspace
+      - claude:/root/.claude
+    environment:
+      # signal that it is running within a restricted, containerized environment
+      # rather than directly on your host machine.
+      # allows to run `--dangerously-skip-permissions` in rootless docker containers
+      - IS_SANDBOX=1
+      - CLAUDE_CONFIG_DIR=/root/.claude
+    command: sleep infinity
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+
+  firebase-emulator:
+    build:
+      context: firebase-emulator
+      dockerfile: Dockerfile
+    ports:
+      - 4000:4000
+      - 9099:9099
+
+volumes:
+  claude:
+    name: claude

@@ -1,3 +1,0 @@
-FROM postgres
-
-USER postgres
