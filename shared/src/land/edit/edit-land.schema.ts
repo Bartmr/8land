@@ -1,38 +1,28 @@
-import { object } from 'not-me/lib/schemas/object/object-schema';
-import { Schema } from 'not-me/lib/schemas/schema';
-import { string } from 'not-me/lib/schemas/string/string-schema';
+import { z } from 'zod';
 import { uuid } from '../../validation/schemas/uuid.schema';
 import { CreateLandRequestSchemaObj } from '../create/create-land.schemas';
 import { EditLandBodyDTO, EditLandParametersDTO } from './edit-land.dto';
-import { number } from 'not-me/lib/schemas/number/number-schema';
 
-export const SoundcloudSongApiUrlSchema = string().test((s) => {
-  if (s) {
-    const splittedApiUrl = s.split('/');
-    const isIdANumber = number().required().validate(splittedApiUrl.pop());
-    const hostPart = splittedApiUrl.join('/');
-
-    if (
-      !isIdANumber.errors &&
-      hostPart === 'https://api.soundcloud.com/tracks'
-    ) {
-      return null;
-    } else {
-      return 'Invalid Soundcloud API song url';
-    }
-  } else {
-    return null;
+export const SoundcloudSongApiUrlSchema = z.string().optional().refine((s) => {
+  if (!s) {
+    return true;
   }
+
+  const parts = s.split('/');
+  const isIdANumber = z.coerce.number().safeParse(parts.pop());
+  const hostPart = parts.join('/');
+
+  return isIdANumber.success && hostPart === 'https://api.soundcloud.com/tracks';
+}, 'Invalid Soundcloud API song url');
+
+export const EditLandParametersSchema: z.ZodType<EditLandParametersDTO> = z.object({
+  landId: uuid(),
 });
 
-export const EditLandParametersSchema: Schema<EditLandParametersDTO> = object({
-  landId: uuid().required(),
-}).required();
-
-export const EditLandBodySchema: Schema<EditLandBodyDTO> = object({
+export const EditLandBodySchema: z.ZodType<EditLandBodyDTO> = z.object({
   ...CreateLandRequestSchemaObj,
   backgroundMusicUrl: SoundcloudSongApiUrlSchema,
-}).required();
+});
 
 // .notNull()
 //     .transform((s) => {

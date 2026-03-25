@@ -1,11 +1,9 @@
-import { object } from 'not-me/lib/schemas/object/object-schema';
-import { Schema } from 'not-me/lib/schemas/schema';
-import { string } from 'not-me/lib/schemas/string/string-schema';
+import { z } from 'zod';
 import { positiveInteger } from '../../../../validation/schemas/positive-integer';
 import { GetTrainDestinationQueryDTO } from './get-train-destinations.dto';
 
-export const GetTrainDestinationQuerySchema: Schema<GetTrainDestinationQueryDTO> =
-  object({
-    skip: positiveInteger().required(),
-    name: string().transform((s) => (s ? s : undefined)),
-  }).required();
+export const GetTrainDestinationQuerySchema: z.ZodType<GetTrainDestinationQueryDTO> =
+  z.object({
+    skip: positiveInteger(),
+    name: z.string().optional().transform((s) => s || undefined),
+  });

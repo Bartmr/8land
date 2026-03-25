@@ -1,20 +1,14 @@
-import { object } from 'not-me/lib/schemas/object/object-schema';
-import { Schema } from 'not-me/lib/schemas/schema';
-import { string } from 'not-me/lib/schemas/string/string-schema';
+import { z } from 'zod';
 import { CreateLandRequestDTO } from './create-land.dto';
 
 export const CreateLandRequestSchemaObj = {
-  name: string()
-    .required()
+  name: z
+    .string()
     .transform((s) => s.trim())
-    .test((n) =>
-      n.length < 1 ? 'Land name must have at least 1 character' : null,
-    )
-    .test((n) =>
-      n.length > 64 ? 'Land name cannot be more than 64 characters' : null,
-    ),
+    .refine((n) => n.length >= 1, 'Land name must have at least 1 character')
+    .refine((n) => n.length <= 64, 'Land name cannot be more than 64 characters'),
 };
 
-export const CreateLandRequestSchema: Schema<CreateLandRequestDTO> = object(
+export const CreateLandRequestSchema: z.ZodType<CreateLandRequestDTO> = z.object(
   CreateLandRequestSchemaObj,
-).required();
+);

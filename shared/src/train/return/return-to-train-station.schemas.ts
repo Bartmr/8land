@@ -1,9 +1,7 @@
-import { object } from 'not-me/lib/schemas/object/object-schema';
-import { Schema } from 'not-me/lib/schemas/schema';
-import { string } from 'not-me/lib/schemas/string/string-schema';
+import { z } from 'zod';
 import { ReturnToTrainStationQueryDTO } from './return-to-train-station.dto';
 
-export const ReturnToTrainStationQuerySchema: Schema<ReturnToTrainStationQueryDTO> =
-  object({
-    boardedOnTrainStation: string().required(),
-  }).required();
+export const ReturnToTrainStationQuerySchema: z.ZodType<ReturnToTrainStationQueryDTO> =
+  z.object({
+    boardedOnTrainStation: z.string(),
+  });

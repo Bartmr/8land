@@ -1,11 +1,9 @@
-import { object } from 'not-me/lib/schemas/object/object-schema';
-import { Schema } from 'not-me/lib/schemas/schema';
-import { string } from 'not-me/lib/schemas/string/string-schema';
+import { z } from 'zod';
 import { ReceiveSignedUserNonceRequestDTO } from './receive-signed-user-nonce.dto';
 
-export const ReceiveSignedUserNonceRequestSchema: Schema<ReceiveSignedUserNonceRequestDTO> =
-  object({
-    signedNonce: string()
-      .required()
-      .test((s) => (s.trim().length > 0 ? null : 'Must be filled')),
-  }).required();
+export const ReceiveSignedUserNonceRequestSchema: z.ZodType<ReceiveSignedUserNonceRequestDTO> =
+  z.object({
+    signedNonce: z
+      .string()
+      .refine((s) => s.trim().length > 0, 'Must be filled'),
+  });

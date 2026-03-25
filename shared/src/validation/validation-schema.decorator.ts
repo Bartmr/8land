@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { SetMetadata } from '@nestjs/common';
-import { Schema } from 'not-me/lib/schemas/schema';
+import { z } from 'zod';
 
 export const VALIDATION_SCHEMA_KEY = 'not-me-validation-schema';
 
 /*
-  
+
 */
-export type SupportedValidationSchema = Schema<object>;
+export type SupportedValidationSchema = z.ZodType<object>;
 
 /**
  * Schema must be an array or an object marked with .required().

@@ -1,17 +1,11 @@
-import { array } from 'not-me/lib/schemas/array/array-schema';
-import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
-import { equals } from 'not-me/lib/schemas/equals/equals-schema';
-import { number } from 'not-me/lib/schemas/number/number-schema';
-import { object } from 'not-me/lib/schemas/object/object-schema';
-import { string } from 'not-me/lib/schemas/string/string-schema';
-import { or } from 'not-me/lib/schemas/or/or-schema';
+import { z } from 'zod';
 import { uuid } from '../../validation/schemas/uuid.schema';
 import { StaticBlockType } from '../../blocks/create/create-block.enums';
 import { positiveInteger } from '../../validation/schemas/positive-integer';
 
-export const UploadLandAssetsParametersSchema = object({
-  landId: uuid().required(),
-}).required();
+export const UploadLandAssetsParametersSchema = z.object({
+  landId: uuid(),
+});
 
 export const createTiledJSONSchema = ({
   maxWidth: _maxWidth,
@@ -27,177 +21,165 @@ export const createTiledJSONSchema = ({
   const maxWidth = _maxWidth ? _maxWidth + 1 : 41;
   const maxHeight = _maxHeight ? _maxHeight + 1 : 41;
 
-  return object({
-    compressionlevel: equals(
-      [-1],
-      'Must set to -1, which is the default value in Tiled',
-    ).required(),
-    height: number()
-      .required()
-      .test((n) => (Number.isInteger(n) ? null : 'Must be an integer'))
-      .test((h) =>
-        h > 0 && h < maxHeight
-          ? null
-          : maxHeightMessage ||
-            `Must be greater than 0 and less than ${maxHeight}`,
+  return z
+    .object({
+      compressionlevel: z.literal(
+        -1,
+        'Must set to -1, which is the default value in Tiled',
       ),
-    infinite: boolean()
-      .required()
-      .test((i) => (i ? 'Map cannot be infinite' : null)),
-    layers: array(
-      object({
-        data: array(positiveInteger().required()).required(),
-        height: positiveInteger().required(),
-        id: positiveInteger().required(),
-        name: string()
-          .required()
-          .test((s) => (s.trim().length > 0 ? null : 'Layer must have a name')),
-        opacity: equals([1], 'All layers must have full opacity').required(),
-        type: equals(['tilelayer'], 'Only tile layers are allowed').required(),
-        visible: equals([true], 'All layers must be visible'),
-        width: positiveInteger().required(),
-        x: equals([0], 'Must be set to 0').required(),
-        y: equals([0], 'Must be set to 0').required(),
-      }).required(),
-    )
-      .min(1, 'You must have at least one layer')
-      .required(),
-    nextlayerid: positiveInteger().required(),
-    nextobjectid: positiveInteger().required(),
-    orientation: equals(
-      ['orthogonal'],
-      "must be set to 'orthogonal'",
-    ).required(),
-    renderorder: equals(
-      ['right-down'],
-      "must be set to 'right-down'",
-    ).required(),
-    tiledversion: string().required(),
-    tileheight: equals([16], 'Must be set to 16').required(),
-    tilesets: array(
-      object({
-        columns: positiveInteger().required(),
-        firstgid: positiveInteger().required(),
-        image: string()
-          .required()
-          .transform((s) => s.trim())
-          .test((s) => (s.length > 0 ? null : 'Tileset must have an image')),
-        imageheight: positiveInteger().required(),
-        imagewidth: positiveInteger().required(),
-        margin: equals([0], 'Must be set to 0').required(),
-        name: string()
-          .required()
-          .test((s) =>
-            s.trim().length > 0 ? null : 'Tileset must have a name',
-          ),
-        spacing: equals([0], 'Must be set to 0').required(),
-        tilecount: positiveInteger().required(),
-        tileheight: equals([16], 'Must be set to 16').required(),
-        tilewidth: equals([16], 'Must be set to 16').required(),
-        tiles: array(
-          object({
-            id: positiveInteger().required(),
-            properties: array(
-              or([
-                object({
-                  name: equals(
-                    [StaticBlockType.Collides],
-                    'can be set as "collides"',
-                  ).required(),
-                  type: equals(
-                    ['bool'],
-                    "'collides' props must be of boolean type",
-                  ).required(),
-                  value: boolean().required(),
-                }),
-                object({
-                  name: equals(
-                    [StaticBlockType.Text],
-                    ' can be set as "text"',
-                  ).required(),
-                  type: equals(
-                    ['string'],
-                    "'text' props must be of string type",
-                  ).required(),
-                  value: string()
-                    .transform((s) => (!s ? '' : s))
-                    .test((s) =>
-                      s.length > 255
-                        ? 'Text cannot be longer than 255 characters'
-                        : null,
-                    ),
-                }),
-                object({
-                  name: equals(
-                    [StaticBlockType.Start],
-                    ' can be set as "start"',
-                  ).required(),
-                  type: equals(
-                    ['bool'],
-                    "'start' props must be of boolean type",
-                  ).required(),
-                  value: equals([true]).required('value must be true'),
-                }),
-                object({
-                  name: equals(
-                    [StaticBlockType.TrainPlatform],
-                    ' can be set as "train-platform"',
-                  ).required(),
-                  type: equals(
-                    ['bool'],
-                    "'train-platform' props must be of boolean type",
-                  ).required(),
-                  value: equals([true]).required('value must be true'),
-                }),
-                object({
-                  name: string().required(),
-                  type: equals(
-                    ['string'],
-                    'Block IDs must be of string type',
-                  ).required(),
-                  value: string().required(),
-                }),
-              ]).required(),
-            ).notNull(),
-            animation: array(
-              object({
-                duration: positiveInteger().required(),
-                tileid: positiveInteger().required(),
-              }).required(),
-            ).notNull(),
-          }).required(),
-        ).required(),
-      }).required(),
-    )
-      .min(1, 'You must have at least one tileset')
-      .max(1, 'You cannot have more than one tileset')
-      .required(),
-    tilewidth: equals([16], 'Must be set to 16').required(),
-    type: equals(['map'], "Must be set to 'map'").required(),
-    version: string()
-      .required()
-      .test((s) =>
-        s.trim().length > 0 ? null : 'A version must be specified',
-      ),
-    width: number()
-      .test((n) => (Number.isInteger(n) ? null : 'Must be an integer'))
-      .required()
-      .test((w) =>
-        w > 0 && w < maxWidth
-          ? null
-          : maxWidthMessage ||
-            `Must be greater than 0 and less than ${maxWidth}`,
-      ),
-  })
-    .required()
-    .test((o) => {
+      height: z
+        .number()
+        .int('Must be an integer')
+        .refine(
+          (h) => h > 0 && h < maxHeight,
+          maxHeightMessage || `Must be greater than 0 and less than ${maxHeight}`,
+        ),
+      infinite: z
+        .boolean()
+        .refine((i) => !i, 'Map cannot be infinite'),
+      layers: z
+        .array(
+          z.object({
+            data: z.array(positiveInteger()),
+            height: positiveInteger(),
+            id: positiveInteger(),
+            name: z
+              .string()
+              .refine((s) => s.trim().length > 0, 'Layer must have a name'),
+            opacity: z.literal(1, 'All layers must have full opacity'),
+            type: z.literal('tilelayer', 'Only tile layers are allowed'),
+            visible: z.literal(true, 'All layers must be visible').optional(),
+            width: positiveInteger(),
+            x: z.literal(0, 'Must be set to 0'),
+            y: z.literal(0, 'Must be set to 0'),
+          }),
+        )
+        .min(1, 'You must have at least one layer'),
+      nextlayerid: positiveInteger(),
+      nextobjectid: positiveInteger(),
+      orientation: z.literal('orthogonal', "must be set to 'orthogonal'"),
+      renderorder: z.literal('right-down', "must be set to 'right-down'"),
+      tiledversion: z.string(),
+      tileheight: z.literal(16, 'Must be set to 16'),
+      tilesets: z
+        .array(
+          z.object({
+            columns: positiveInteger(),
+            firstgid: positiveInteger(),
+            image: z
+              .string()
+              .transform((s) => s.trim())
+              .refine((s) => s.length > 0, 'Tileset must have an image'),
+            imageheight: positiveInteger(),
+            imagewidth: positiveInteger(),
+            margin: z.literal(0, 'Must be set to 0'),
+            name: z
+              .string()
+              .refine((s) => s.trim().length > 0, 'Tileset must have a name'),
+            spacing: z.literal(0, 'Must be set to 0'),
+            tilecount: positiveInteger(),
+            tileheight: z.literal(16, 'Must be set to 16'),
+            tilewidth: z.literal(16, 'Must be set to 16'),
+            tiles: z.array(
+              z.object({
+                id: positiveInteger(),
+                properties: z
+                  .array(
+                    z.union([
+                      z.object({
+                        name: z.literal(
+                          StaticBlockType.Collides,
+                          'can be set as "collides"',
+                        ),
+                        type: z.literal(
+                          'bool',
+                          "'collides' props must be of boolean type",
+                        ),
+                        value: z.boolean(),
+                      }),
+                      z.object({
+                        name: z.literal(
+                          StaticBlockType.Text,
+                          'can be set as "text"',
+                        ),
+                        type: z.literal(
+                          'string',
+                          "'text' props must be of string type",
+                        ),
+                        value: z
+                          .string()
+                          .nullish()
+                          .transform((s) => s ?? '')
+                          .refine(
+                            (s) => s.length <= 255,
+                            'Text cannot be longer than 255 characters',
+                          ),
+                      }),
+                      z.object({
+                        name: z.literal(
+                          StaticBlockType.Start,
+                          'can be set as "start"',
+                        ),
+                        type: z.literal(
+                          'bool',
+                          "'start' props must be of boolean type",
+                        ),
+                        value: z.literal(true, 'value must be true'),
+                      }),
+                      z.object({
+                        name: z.literal(
+                          StaticBlockType.TrainPlatform,
+                          'can be set as "train-platform"',
+                        ),
+                        type: z.literal(
+                          'bool',
+                          "'train-platform' props must be of boolean type",
+                        ),
+                        value: z.literal(true, 'value must be true'),
+                      }),
+                      z.object({
+                        name: z.string(),
+                        type: z.literal('string', 'Block IDs must be of string type'),
+                        value: z.string(),
+                      }),
+                    ]),
+                  )
+                  .optional(),
+                animation: z
+                  .array(
+                    z.object({
+                      duration: positiveInteger(),
+                      tileid: positiveInteger(),
+                    }),
+                  )
+                  .optional(),
+              }),
+            ),
+          }),
+        )
+        .min(1, 'You must have at least one tileset')
+        .max(1, 'You cannot have more than one tileset'),
+      tilewidth: z.literal(16, 'Must be set to 16'),
+      type: z.literal('map', "Must be set to 'map'"),
+      version: z
+        .string()
+        .refine((s) => s.trim().length > 0, 'A version must be specified'),
+      width: z
+        .number()
+        .int('Must be an integer')
+        .refine(
+          (w) => w > 0 && w < maxWidth,
+          maxWidthMessage || `Must be greater than 0 and less than ${maxWidth}`,
+        ),
+    })
+    .refine((o) => {
       for (const layer of o.layers) {
         if (layer.height !== o.height) {
-          return `Layer "${layer.name}" height must be equal to the map height`;
+          return false;
         }
 
         if (layer.width !== o.width) {
-          return `Layer "${layer.name}" width must be equal to the map width`;
+          return false;
         }
       }
 
@@ -206,13 +188,37 @@ export const createTiledJSONSchema = ({
           if (tile.animation) {
             for (const animation of tile.animation) {
               if (animation.tileid > tileset.tilecount) {
-                return `${animation.tileid} is bigger than the total tiles in the tileset`;
+                return false;
               }
             }
           }
         }
       }
 
-      return null;
+      return true;
+    }, (o) => {
+      for (const layer of o.layers) {
+        if (layer.height !== o.height) {
+          return { message: `Layer "${layer.name}" height must be equal to the map height` };
+        }
+
+        if (layer.width !== o.width) {
+          return { message: `Layer "${layer.name}" width must be equal to the map width` };
+        }
+      }
+
+      for (const tileset of o.tilesets) {
+        for (const tile of tileset.tiles) {
+          if (tile.animation) {
+            for (const animation of tile.animation) {
+              if (animation.tileid > tileset.tilecount) {
+                return { message: `${animation.tileid} is bigger than the total tiles in the tileset` };
+              }
+            }
+          }
+        }
+      }
+
+      return { message: 'Invalid map' };
     });
 };

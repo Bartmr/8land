@@ -1,6 +1,6 @@
-import { object } from 'not-me/lib/schemas/object/object-schema';
+import { z } from 'zod';
 import { uuid } from '../../validation/schemas/uuid.schema';
 
-export const GetLandParametersSchema = object({
-  id: uuid().required(),
-}).required();
+export const GetLandParametersSchema = z.object({
+  id: uuid(),
+});

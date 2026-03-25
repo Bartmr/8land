@@ -1,26 +1,5 @@
-import { number } from 'not-me/lib/schemas/number/number-schema';
+import { z } from 'zod';
+
 export const positiveInteger = () => {
-  return number()
-    .test((n) => {
-      if (n == null) {
-        return null;
-      }
-
-      if (Number.isInteger(n)) {
-        return null;
-      } else {
-        return 'Must be an integer';
-      }
-    })
-    .test((n) => {
-      if (n == null) {
-        return null;
-      }
-
-      if (n >= 0) {
-        return null;
-      } else {
-        return 'Must be a positive number';
-      }
-    });
+  return z.number().int('Must be an integer').min(0, 'Must be a positive number');
 };

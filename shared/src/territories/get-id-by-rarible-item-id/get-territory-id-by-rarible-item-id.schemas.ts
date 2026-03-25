@@ -1,12 +1,10 @@
-import { object } from 'not-me/lib/schemas/object/object-schema';
-import { Schema } from 'not-me/lib/schemas/schema';
-import { string } from 'not-me/lib/schemas/string/string-schema';
+import { z } from 'zod';
 import { GetTerritoryIdByRaribleItemIdParamsDTO } from './get-territory-id-by-rarible-item-id.dto';
 
-export const GetTerritoryIdByRaribleItemIdParametersSchema: Schema<GetTerritoryIdByRaribleItemIdParamsDTO> =
-  object({
-    itemId: string()
-      .required()
+export const GetTerritoryIdByRaribleItemIdParametersSchema: z.ZodType<GetTerritoryIdByRaribleItemIdParamsDTO> =
+  z.object({
+    itemId: z
+      .string()
       .transform((s) => s.trim())
-      .test((s) => (s.length > 0 ? null : 'Must be filled')),
-  }).required();
+      .refine((s) => s.length > 0, 'Must be filled'),
+  });

@@ -1,9 +1,8 @@
-import { object } from 'not-me/lib/schemas/object/object-schema';
-import { Schema } from 'not-me/lib/schemas/schema';
+import { z } from 'zod';
 import { uuid } from '../../validation/schemas/uuid.schema';
 import { DeleteLandParametersDTO } from './delete-land.dto';
 
-export const DeleteLandParametersSchema: Schema<DeleteLandParametersDTO> =
-  object({
-    landId: uuid().required(),
-  }).required();
+export const DeleteLandParametersSchema: z.ZodType<DeleteLandParametersDTO> =
+  z.object({
+    landId: uuid(),
+  });

@@ -1,8 +1,6 @@
-import { string } from 'not-me/lib/schemas/string/string-schema';
+import { z } from 'zod';
 import { isUUID } from '../../uuid/is-uuid';
 
 export function uuid(message?: string) {
-  return string().test((v) =>
-    v == undefined || isUUID(v) ? null : message || 'Must be an UUID',
-  );
+  return z.string().refine((v) => isUUID(v), message || 'Must be an UUID');
 }

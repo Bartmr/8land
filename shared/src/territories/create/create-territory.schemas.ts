@@ -1,28 +1,26 @@
-import { object } from 'not-me/lib/schemas/object/object-schema';
+import { z } from 'zod';
 import { positiveInteger } from '../../validation/schemas/positive-integer';
 import { uuid } from '../../validation/schemas/uuid.schema';
 
 export const CreateTerritoryRequestJSONSchemaObj = {
-  data: object({
-    startX: positiveInteger().required(),
-    startY: positiveInteger().required(),
-    endX: positiveInteger().required(),
-    endY: positiveInteger().required(),
-  })
-    .required()
-    .test((v) =>
-      v.endX > v.startX
-        ? null
-        : 'End X coordinate must be bigger than Start X coordinate',
+  data: z
+    .object({
+      startX: positiveInteger(),
+      startY: positiveInteger(),
+      endX: positiveInteger(),
+      endY: positiveInteger(),
+    })
+    .refine(
+      (v) => v.endX > v.startX,
+      'End X coordinate must be bigger than Start X coordinate',
     )
-    .test((v) =>
-      v.endY > v.startY
-        ? null
-        : 'End Y coordinate must be bigger than Start Y coordinate',
+    .refine(
+      (v) => v.endY > v.startY,
+      'End Y coordinate must be bigger than Start Y coordinate',
     ),
 };
 
-export const CreateTerritoryRequestJSONSchema = object({
+export const CreateTerritoryRequestJSONSchema = z.object({
   ...CreateTerritoryRequestJSONSchemaObj,
-  landId: uuid().required(),
-}).required();
+  landId: uuid(),
+});

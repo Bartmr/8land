@@ -1,9 +1,8 @@
-import { object } from 'not-me/lib/schemas/object/object-schema';
-import { Schema } from 'not-me/lib/schemas/schema';
+import { z } from 'zod';
 import { uuid } from '../../validation/schemas/uuid.schema';
 import { BoardTrainParametersDTO } from './board-train.dto';
 
-export const BoardTrainParametersSchema: Schema<BoardTrainParametersDTO> =
-  object({
-    worldId: uuid().required(),
-  }).required();
+export const BoardTrainParametersSchema: z.ZodType<BoardTrainParametersDTO> =
+  z.object({
+    worldId: uuid(),
+  });
