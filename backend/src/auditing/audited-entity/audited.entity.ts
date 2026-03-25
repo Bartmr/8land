@@ -1,4 +1,4 @@
-import { SimpleEntity } from 'src/internals/databases/simple-entity/simple.entity';
+import { SimpleEntity } from 'src/databases/simple-entity/simple.entity';
 import { Column, DeleteDateColumn } from 'typeorm';
 
 /*

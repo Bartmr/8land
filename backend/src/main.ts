@@ -1,14 +1,14 @@
 import 'source-map-support/register';
-import 'src/internals/environment/load-environment-variables';
+import 'src/environment/load-environment-variables';
 
-import { LoggingServiceSingleton } from './internals/logging/logging.service.singleton';
-import { NODE_ENV } from './internals/environment/node-env.constants';
-import { NodeEnv } from './internals/environment/node-env.types';
-import { ProcessType } from './internals/process/process-context';
-import { ProcessContextManager } from './internals/process/process-context-manager';
-import { generateRandomUUID } from './internals/uuids/generate-random-uuid';
+import { LoggingServiceSingleton } from './logging/logging.service.singleton';
+import { NODE_ENV } from './environment/node-env.constants';
+import { NodeEnv } from './environment/node-env.types';
+import { ProcessType } from './process/process-context';
+import { ProcessContextManager } from './process/process-context-manager';
+import { generateRandomUUID } from './uuids/generate-random-uuid';
 import { createApp } from './create-app';
-import { EnvironmentVariablesService } from './internals/environment/environment-variables.service';
+import { EnvironmentVariablesService } from './environment/environment-variables.service';
 
 type ModuleHotData = {
   closingPromise?: Promise<unknown>;
@@ -31,7 +31,7 @@ async function bootstrap() {
 
   if (NODE_ENV === NodeEnv.Development) {
     const { hotReloadDatabases } = await import(
-      './internals/databases/hot-reload-databases'
+      './databases/hot-reload-databases'
     );
     await hotReloadDatabases();
   }

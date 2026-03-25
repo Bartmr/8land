@@ -1,14 +1,14 @@
-import { AuditContext } from 'src/internals/auditing/audit-context';
-import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
+import { AuditContext } from 'src/auditing/audit-context';
+import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
 import {
   IncrementalUpdateChanges,
   SimpleEntityRepository,
-} from 'src/internals/databases/simple-entity/simple-entity.repository';
-import { NODE_ENV } from 'src/internals/environment/node-env.constants';
-import { NodeEnv } from 'src/internals/environment/node-env.types';
-import { ProcessContextManager } from 'src/internals/process/process-context-manager';
-import { generateUniqueUUID } from 'src/internals/uuids/generate-unique-uuid';
-import { throwError } from 'src/internals/throw-error';
+} from 'src/databases/simple-entity/simple-entity.repository';
+import { NODE_ENV } from 'src/environment/node-env.constants';
+import { NodeEnv } from 'src/environment/node-env.types';
+import { ProcessContextManager } from 'src/process/process-context-manager';
+import { generateUniqueUUID } from 'src/uuids/generate-unique-uuid';
+import { throwError } from 'src/throw-error';
 import { Connection, EntityManager, EntityRepository } from 'typeorm';
 import { Settings } from './typeorm/settings.entity';
 

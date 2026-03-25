@@ -1,5 +1,5 @@
 import { Module, OnModuleInit } from '@nestjs/common';
-import { TypeormFeatureModule } from 'src/internals/databases/typeorm.module';
+import { TypeormFeatureModule } from 'src/databases/typeorm.module';
 import { SettingsService } from './settings.service';
 import { Settings } from './typeorm/settings.entity';
 

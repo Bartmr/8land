@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { LoggingService } from 'src/internals/logging/logging.service';
-import { StorageModule } from 'src/internals/storage/storage.module';
-import { StorageService } from 'src/internals/storage/storage.service';
+import { LoggingService } from 'src/logging/logging.service';
+import { StorageModule } from 'src/storage/storage.module';
+import { StorageService } from 'src/storage/storage.service';
 import { BackendStorageApi } from './backend-storage.api';
 
 @Module({

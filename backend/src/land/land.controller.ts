@@ -24,8 +24,8 @@ import {
 import { AuthContext } from 'src/auth/auth-context';
 import { WithAuthContext } from 'src/auth/auth-context.decorator';
 import { Role } from 'src/auth/roles/roles';
-import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
-import { StorageService } from 'src/internals/storage/storage.service';
+import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
+import { StorageService } from 'src/storage/storage.service';
 import { Connection } from 'typeorm';
 import { LandsService } from './lands.service';
 import { LandRepository } from './typeorm/land.repository';
@@ -37,8 +37,8 @@ import {
 } from '@shared/src/land/create/create-land.dto';
 import { UploadLandAssetsParameters } from '@shared/src/land/upload-assets/upload-land-assets.dto';
 import { RolesUpAndIncluding } from 'src/auth/roles/roles.decorator';
-import { AuditContext } from 'src/internals/auditing/audit-context';
-import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
+import { AuditContext } from 'src/auditing/audit-context';
+import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { ApiBody, ApiConsumes, ApiProperty } from '@nestjs/swagger';
 import {
   EditLandBodyDTO,
@@ -51,7 +51,7 @@ import { DeleteLandParametersDTO } from '@shared/src/land/delete-land/delete-lan
 import { SettingsService } from 'src/settings/settings.service';
 import { PublicRoute } from 'src/auth/public-route.decorator';
 import { GetLandsToClaimDTO } from '@shared/src/land/lands-to-claim/lands-to-claim.dto';
-import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
+import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
 
 class LandAssetsRequestDTO {
   @ApiProperty({ type: 'string', format: 'binary' })

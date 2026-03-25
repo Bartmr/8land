@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import * as firebaseAdmin from 'firebase-admin';
 import { applicationDefault } from 'firebase-admin/app';
-import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
-import { generateRandomUUID } from 'src/internals/uuids/generate-random-uuid';
-import { throwError } from 'src/internals/throw-error';
+import { EnvironmentVariablesService } from 'src/environment/environment-variables.service';
+import { generateRandomUUID } from 'src/uuids/generate-random-uuid';
+import { throwError } from 'src/throw-error';
 import { FIREBASE_EMULATOR_PROJECT_ID } from './firebase.constants';
 import { FirebaseService } from './firebase.service';
 

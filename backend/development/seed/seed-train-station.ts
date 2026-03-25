@@ -1,12 +1,12 @@
 import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
 import { AppBlockRepository } from 'src/blocks/typeorm/app-block.repository';
 import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
-import { AuditContext } from 'src/internals/auditing/audit-context';
+import { AuditContext } from 'src/auditing/audit-context';
 import {
   ContentType,
   StorageService,
-} from 'src/internals/storage/storage.service';
-import { getSearchableName } from 'src/internals/strings/get-searchable-name';
+} from 'src/storage/storage.service';
+import { getSearchableName } from 'src/strings/get-searchable-name';
 import { Land } from 'src/land/typeorm/land.entity';
 import { LandRepository } from 'src/land/typeorm/land.repository';
 import { EntityManager } from 'typeorm';

@@ -1,6 +1,6 @@
 import { AppBlock } from 'src/blocks/typeorm/app-block.entity';
 import { DoorBlock } from 'src/blocks/typeorm/door-block.entity';
-import { SimpleEntity } from 'src/internals/databases/simple-entity/simple.entity';
+import { SimpleEntity } from 'src/databases/simple-entity/simple.entity';
 import { Territory } from 'src/territories/typeorm/territory.entity';
 import { World } from 'src/worlds/typeorm/worlds.entity';
 import {

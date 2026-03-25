@@ -1,4 +1,4 @@
-import 'src/internals/environment/load-environment-variables';
+import 'src/environment/load-environment-variables';
 
 import { tearDownDatabases } from 'test-environment-impl/base/tear-down-databases';
 

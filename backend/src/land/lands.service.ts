@@ -1,11 +1,11 @@
 import { NotImplementedException } from '@nestjs/common';
 import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
 import { AuthContext } from 'src/auth/auth-context';
-import { AuditContext } from 'src/internals/auditing/audit-context';
-import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
-import { LoggingService } from 'src/internals/logging/logging.service';
-import { StorageService } from 'src/internals/storage/storage.service';
-import { throwError } from 'src/internals/throw-error';
+import { AuditContext } from 'src/auditing/audit-context';
+import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
+import { LoggingService } from 'src/logging/logging.service';
+import { StorageService } from 'src/storage/storage.service';
+import { throwError } from 'src/throw-error';
 import { NavigationState } from 'src/users/typeorm/navigation-state.entity';
 import { NavigationStateRepository } from 'src/users/typeorm/navigation-state.repository';
 import { Connection, EntityManager } from 'typeorm';

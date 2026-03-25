@@ -1,5 +1,5 @@
-import { AuditContext } from 'src/internals/auditing/audit-context';
-import { SimpleEntityRepository } from 'src/internals/databases/simple-entity/simple-entity.repository';
+import { AuditContext } from 'src/auditing/audit-context';
+import { SimpleEntityRepository } from 'src/databases/simple-entity/simple-entity.repository';
 import { EntityRepository } from 'typeorm';
 import { NavigationState } from './navigation-state.entity';
 import { User } from './user.entity';

@@ -1,8 +1,8 @@
-import { AuditContext } from 'src/internals/auditing/audit-context';
+import { AuditContext } from 'src/auditing/audit-context';
 import {
   IncrementalUpdateChanges,
   SimpleEntityRepository,
-} from 'src/internals/databases/simple-entity/simple-entity.repository';
+} from 'src/databases/simple-entity/simple-entity.repository';
 import { DeepPartial, EntityManager } from 'typeorm';
 import { AuditedEntity } from './audited.entity';
 import { ConcreteClass } from '@shared/src/internals/utils/types/classes-types';

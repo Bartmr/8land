@@ -3,7 +3,7 @@ import { DoorBlock } from './typeorm/door-block.entity';
 import { Land } from 'src/land/typeorm/land.entity';
 import { BlocksController } from './blocks.controller';
 import { AppBlock } from './typeorm/app-block.entity';
-import { TypeormFeatureModule } from 'src/internals/databases/typeorm.module';
+import { TypeormFeatureModule } from 'src/databases/typeorm.module';
 
 @Module({
   imports: [

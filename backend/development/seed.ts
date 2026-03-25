@@ -1,32 +1,32 @@
-import 'src/internals/environment/load-environment-variables';
+import 'src/environment/load-environment-variables';
 
 import { tearDownDatabases } from 'test-environment-impl/base/tear-down-databases';
 import { createConnection } from 'typeorm';
-import { NODE_ENV } from 'src/internals/environment/node-env.constants';
-import { NodeEnv } from 'src/internals/environment/node-env.types';
-import { ProcessContextManager } from 'src/internals/process/process-context-manager';
-import { ProcessType } from 'src/internals/process/process-context';
-import { generateRandomUUID } from 'src/internals/uuids/generate-random-uuid';
-import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
+import { NODE_ENV } from 'src/environment/node-env.constants';
+import { NodeEnv } from 'src/environment/node-env.types';
+import { ProcessContextManager } from 'src/process/process-context-manager';
+import { ProcessType } from 'src/process/process-context';
+import { generateRandomUUID } from 'src/uuids/generate-random-uuid';
+import { EnvironmentVariablesService } from 'src/environment/environment-variables.service';
 import * as firebaseAdmin from 'firebase-admin';
 import { UsersRepository } from 'src/users/users.repository';
-import { AuditContext } from 'src/internals/auditing/audit-context';
+import { AuditContext } from 'src/auditing/audit-context';
 import { Role } from 'src/auth/roles/roles';
-import { JSONApiBase } from 'src/internals/apis/json-api-base';
-import { LoggingServiceSingleton } from 'src/internals/logging/logging.service.singleton';
+import { JSONApiBase } from 'src/apis/json-api-base';
+import { LoggingServiceSingleton } from 'src/logging/logging.service.singleton';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
-import { FIREBASE_EMULATOR_PROJECT_ID } from 'src/internals/firebase/firebase.constants';
-import { throwError } from 'src/internals/throw-error';
+import { FIREBASE_EMULATOR_PROJECT_ID } from 'src/firebase/firebase.constants';
+import { throwError } from 'src/throw-error';
 import { LandRepository } from 'src/land/typeorm/land.repository';
 import { TerritoriesRepository } from 'src/territories/typeorm/territories.repository';
-import { getSearchableName } from 'src/internals/strings/get-searchable-name';
+import { getSearchableName } from 'src/strings/get-searchable-name';
 import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
 import fs from 'fs';
 import { promisify } from 'util';
 import path from 'path';
-import { DevStorageService } from 'src/internals/storage/dev-storage.service';
-import { LOCAL_TEMPORARY_FILES_PATH } from 'src/internals/temporary-files/temporary-files';
+import { DevStorageService } from 'src/storage/dev-storage.service';
+import { LOCAL_TEMPORARY_FILES_PATH } from 'src/temporary-files/temporary-files';
 import { AppBlockRepository } from 'src/blocks/typeorm/app-block.repository';
 import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
 import { seedTrainStation } from './seed/seed-train-station';
@@ -54,7 +54,7 @@ async function seed() {
   });
 
   const { DEFAULT_DB_TYPEORM_CONN_OPTS_WITH_MIGRATIONS } = await import(
-    'src/internals/databases/typeorm-ormconfig-with-migrations'
+    'src/databases/typeorm-ormconfig-with-migrations'
   );
 
   const defaultDBConnection = await createConnection({

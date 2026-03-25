@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { LoggingService } from 'src/internals/logging/logging.service';
-import { AppServerHttpAdapter } from 'src/internals/server/types/app-server-http-adapter-types';
+import { LoggingService } from 'src/logging/logging.service';
+import { AppServerHttpAdapter } from 'src/server/types/app-server-http-adapter-types';
 import { EmailService } from '../email.service';
 
 @Injectable()

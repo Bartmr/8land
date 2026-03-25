@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AppServerRequest } from 'src/internals/server/types/app-server-request-types';
+import { AppServerRequest } from 'src/server/types/app-server-request-types';
 import { AuthContext } from './auth-context';
 import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
 import {
@@ -22,9 +22,9 @@ import {
 } from './roles/roles.decorator';
 import { AuthTokensService } from './tokens/auth-tokens.service';
 import { string } from 'not-me/lib/schemas/string/string-schema';
-import { isUUID } from 'src/internals/uuids/is-uuid';
-import { AuditContext } from 'src/internals/auditing/audit-context';
-import { generateUniqueUUID } from 'src/internals/uuids/generate-unique-uuid';
+import { isUUID } from 'src/uuids/is-uuid';
+import { AuditContext } from 'src/auditing/audit-context';
+import { generateUniqueUUID } from 'src/uuids/generate-unique-uuid';
 
 const authTokenIdSchema = string()
   .test((s) =>

@@ -36,19 +36,19 @@ import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { AuthContext } from 'src/auth/auth-context';
 import { WithAuthContext } from 'src/auth/auth-context.decorator';
-import { RaribleApi } from 'src/internals/rarible/rarible.api';
-import { AuditContext } from 'src/internals/auditing/audit-context';
-import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
-import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
+import { RaribleApi } from 'src/rarible/rarible.api';
+import { AuditContext } from 'src/auditing/audit-context';
+import { WithAuditContext } from 'src/auditing/audit.decorator';
+import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import {
   ContentType,
   StorageService,
-} from 'src/internals/storage/storage.service';
+} from 'src/storage/storage.service';
 import { Connection } from 'typeorm';
 import { TerritoriesRepository } from './typeorm/territories.repository';
 import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
 import { InferType } from 'not-me/lib/schemas/schema';
-import { throwError } from 'src/internals/throw-error';
+import { throwError } from 'src/throw-error';
 import { or } from 'not-me/lib/schemas/or/or-schema';
 import sharp from 'sharp';
 import {
@@ -59,14 +59,14 @@ import { CreateTerritoryRequestJSONSchema } from '@shared/src/territories/create
 import { Role } from 'src/auth/roles/roles';
 import { RolesUpAndIncluding } from 'src/auth/roles/roles.decorator';
 import { LandRepository } from 'src/land/typeorm/land.repository';
-import { BackendStorageApi } from 'src/internals/backend/backend-storage.api';
+import { BackendStorageApi } from 'src/backend/backend-storage.api';
 import { number } from 'not-me/lib/schemas/number/number-schema';
 import {
   UpdateTerritoryRaribleMetadataParametersDTO,
   UpdateTerritoryRaribleMetadataRequestDTO,
 } from '@shared/src/territories/update-rarible/update-territory-rarible-metadata.dto';
 import { StaticBlockType } from '@shared/src/blocks/block.enums';
-import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
+import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
 
 @Controller('territories')
 export class TerritoriesEndUserController {

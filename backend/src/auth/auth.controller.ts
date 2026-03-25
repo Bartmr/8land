@@ -17,28 +17,28 @@ import {
   Response,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AppServerRequest } from 'src/internals/server/types/app-server-request-types';
-import { AppServerResponse } from 'src/internals/server/types/app-server-response-types';
+import { AppServerRequest } from 'src/server/types/app-server-request-types';
+import { AppServerResponse } from 'src/server/types/app-server-response-types';
 import { AuthContext } from './auth-context';
 import {
   WithAuthContext,
   WithOptionalAuthContext,
 } from './auth-context.decorator';
 import { PublicRoute } from './public-route.decorator';
-import { FirebaseService } from 'src/internals/firebase/firebase.service';
+import { FirebaseService } from 'src/firebase/firebase.service';
 import { UnwrapPromise } from '@shared/src/internals/utils/types/promise-types';
 import { Connection } from 'typeorm';
 import { UsersRepository } from 'src/users/users.repository';
 import { AuthTokensService } from './tokens/auth-tokens.service';
 import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
-import { NODE_ENV } from 'src/internals/environment/node-env.constants';
-import { NodeEnv } from 'src/internals/environment/node-env.types';
-import { generateRandomUUID } from 'src/internals/uuids/generate-random-uuid';
+import { NODE_ENV } from 'src/environment/node-env.constants';
+import { NodeEnv } from 'src/environment/node-env.types';
+import { generateRandomUUID } from 'src/uuids/generate-random-uuid';
 import { Role } from './roles/roles';
-import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
-import { AuditContext } from 'src/internals/auditing/audit-context';
+import { WithAuditContext } from 'src/auditing/audit.decorator';
+import { AuditContext } from 'src/auditing/audit-context';
 import { User } from 'src/users/typeorm/user.entity';
-import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
+import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
 
 @Controller('auth')
 export class AuthController {

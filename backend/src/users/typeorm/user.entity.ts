@@ -1,6 +1,6 @@
 import { getEnumValues } from '@shared/src/internals/utils/enums/get-enum-values';
 import { Role } from 'src/auth/roles/roles';
-import { SimpleEntity } from 'src/internals/databases/simple-entity/simple.entity';
+import { SimpleEntity } from 'src/databases/simple-entity/simple.entity';
 import {
   Column,
   CreateDateColumn,

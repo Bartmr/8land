@@ -1,10 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { LoggingService } from './internals/logging/logging.service';
+import { LoggingService } from './logging/logging.service';
 import { LoggerService } from '@nestjs/common';
-import { NODE_ENV } from './internals/environment/node-env.constants';
-import { NodeEnv } from './internals/environment/node-env.types';
-import { EnvironmentVariablesService } from './internals/environment/environment-variables.service';
+import { NODE_ENV } from './environment/node-env.constants';
+import { NodeEnv } from './environment/node-env.types';
+import { EnvironmentVariablesService } from './environment/environment-variables.service';
 import { PROJECT_NAME } from '@shared/src/project-details';
 import cookieParser from 'cookie-parser';
 

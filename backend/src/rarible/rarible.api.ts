@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
-import { LoggingService } from 'src/internals/logging/logging.service';
+import { EnvironmentVariablesService } from 'src/environment/environment-variables.service';
+import { LoggingService } from 'src/logging/logging.service';
 import { JSONApiBase } from '../apis/json-api-base';
 
 @Injectable()

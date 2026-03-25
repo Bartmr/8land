@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateLandRequestDTO } from '@shared/src/land/create/create-land.dto';
 import { UploadLandAssetsParameters } from '@shared/src/land/upload-assets/upload-land-assets.dto';
 import { AuthContext } from 'src/auth/auth-context';
-import { AuditContext } from 'src/internals/auditing/audit-context';
-import { getSearchableName } from 'src/internals/strings/get-searchable-name';
+import { AuditContext } from 'src/auditing/audit-context';
+import { getSearchableName } from 'src/strings/get-searchable-name';
 import { World } from 'src/worlds/typeorm/worlds.entity';
 import { WorldRepository } from 'src/worlds/worlds.repository';
 import { Connection } from 'typeorm';
@@ -13,9 +13,9 @@ import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-lan
 import {
   ContentType,
   StorageService,
-} from 'src/internals/storage/storage.service';
+} from 'src/storage/storage.service';
 import { InferType } from 'not-me/lib/schemas/schema';
-import { throwError } from 'src/internals/throw-error';
+import { throwError } from 'src/throw-error';
 import {
   EditLandBodyDTO,
   EditLandParametersDTO,

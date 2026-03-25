@@ -2,7 +2,7 @@ import {
   Class,
   ConcreteClass,
 } from '@shared/src/internals/utils/types/classes-types';
-import { AuditContext } from 'src/internals/auditing/audit-context';
+import { AuditContext } from 'src/auditing/audit-context';
 import {
   AbstractRepository,
   DeepPartial,
@@ -11,7 +11,7 @@ import {
   SelectQueryBuilder,
 } from 'typeorm';
 import { SimpleEntity } from './simple.entity';
-import { throwError } from 'src/internals/throw-error';
+import { throwError } from 'src/throw-error';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { UnwrapPromise } from '@shared/src/internals/utils/types/promise-types';
 

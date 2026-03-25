@@ -1,7 +1,7 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { AppServerRequest } from 'src/internals/server/types/app-server-request-types';
-import { throwError } from 'src/internals/throw-error';
-import { EnforceParameterDecoratorTypesafety } from 'src/internals/types/typesafe-parameter-decorators';
+import { AppServerRequest } from 'src/server/types/app-server-request-types';
+import { throwError } from 'src/throw-error';
+import { EnforceParameterDecoratorTypesafety } from 'src/types/typesafe-parameter-decorators';
 import { AuthContext } from './auth-context';
 
 export const WithAuthContext = createParamDecorator(

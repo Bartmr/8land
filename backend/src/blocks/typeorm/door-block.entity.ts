@@ -1,4 +1,4 @@
-import { SimpleEntity } from 'src/internals/databases/simple-entity/simple.entity';
+import { SimpleEntity } from 'src/databases/simple-entity/simple.entity';
 import { Land } from 'src/land/typeorm/land.entity';
 import { Territory } from 'src/territories/typeorm/territory.entity';
 import { Entity, JoinColumn, ManyToOne } from 'typeorm';

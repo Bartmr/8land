@@ -1,13 +1,13 @@
 import util from 'util';
 import fs from 'fs';
 import path from 'path';
-import { LOCAL_TEMPORARY_FILES_PATH } from 'src/internals/temporary-files/temporary-files';
+import { LOCAL_TEMPORARY_FILES_PATH } from 'src/temporary-files/temporary-files';
 import { Email, EmailService } from '../email.service';
-import { LoggingService } from 'src/internals/logging/logging.service';
-import { generateRandomUUID } from 'src/internals/uuids/generate-random-uuid';
-import { throwError } from 'src/internals/throw-error';
+import { LoggingService } from 'src/logging/logging.service';
+import { generateRandomUUID } from 'src/uuids/generate-random-uuid';
+import { throwError } from 'src/throw-error';
 import { HttpAdapterHost } from '@nestjs/core';
-import { AppServerHttpAdapter } from 'src/internals/server/types/app-server-http-adapter-types';
+import { AppServerHttpAdapter } from 'src/server/types/app-server-http-adapter-types';
 import { Injectable } from '@nestjs/common';
 
 const writeFile = util.promisify(fs.writeFile);

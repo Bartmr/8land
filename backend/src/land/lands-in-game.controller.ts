@@ -19,11 +19,11 @@ import {
 } from 'src/auth/auth-context.decorator';
 import { PublicRoute } from 'src/auth/public-route.decorator';
 import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
-import { AuditContext } from 'src/internals/auditing/audit-context';
-import { WithAuditContext } from 'src/internals/auditing/audit.decorator';
-import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
-import { LoggingService } from 'src/internals/logging/logging.service';
-import { ResourceNotFoundException } from 'src/internals/server/resource-not-found.exception';
+import { AuditContext } from 'src/auditing/audit-context';
+import { WithAuditContext } from 'src/auditing/audit.decorator';
+import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
+import { LoggingService } from 'src/logging/logging.service';
+import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import { NavigationStateRepository } from 'src/users/typeorm/navigation-state.repository';
 import { Connection } from 'typeorm';
 import { LandsService } from './lands.service';

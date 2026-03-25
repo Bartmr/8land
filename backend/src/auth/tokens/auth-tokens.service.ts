@@ -4,15 +4,15 @@ import {
   OnModuleInit,
   UnauthorizedException,
 } from '@nestjs/common';
-import { EnvironmentVariablesService } from 'src/internals/environment/environment-variables.service';
+import { EnvironmentVariablesService } from 'src/environment/environment-variables.service';
 import { User } from 'src/users/typeorm/user.entity';
 import { AuthTokensRepository } from './auth-token.repository';
 import { Connection, EntityManager } from 'typeorm';
-import { LoggingService } from 'src/internals/logging/logging.service';
+import { LoggingService } from 'src/logging/logging.service';
 import { cleanExpiredAuthTokens } from './clean-expired-auth-tokens';
-import { throwError } from 'src/internals/throw-error';
-import { ProcessContextManager } from 'src/internals/process/process-context-manager';
-import { InjectTypeormConnection } from 'src/internals/databases/inject-typeorm-connection.decorator';
+import { throwError } from 'src/throw-error';
+import { ProcessContextManager } from 'src/process/process-context-manager';
+import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
 
 @Injectable()
 export class AuthTokensService implements OnModuleInit, OnModuleDestroy {
