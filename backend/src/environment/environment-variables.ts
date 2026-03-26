@@ -20,7 +20,7 @@ const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = z.object({
 
   GOOGLE_APPLICATION_CREDENTIALS: z.string().optional(),
 
-  API_PORT: z.coerce.number().optional(),
+  API_PORT: z.coerce.number(),
 
   AWS_ENDPOINT: z.string().optional(),
   AWS_REGION: z.string().optional(),

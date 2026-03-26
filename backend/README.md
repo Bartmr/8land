@@ -21,7 +21,9 @@ It favours owning and customizing abstractions even for the build pipeline, so I
 
 ## Setup
 
-```bash
+```
+API_PORT=3000
+
 LOG_DATABASES=true
 
 LOG_DEBUG=true

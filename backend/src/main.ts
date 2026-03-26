@@ -1,9 +1,12 @@
 import 'source-map-support/register';
 
 import dotenv from "dotenv";
-
 dotenv.config();
 
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import cookieParser from 'cookie-parser';
+import { EnvironmentVariables } from './environment/environment-variables';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,7 +14,7 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.enableCors({
-    origin: WEB_APP_ORIGIN,
+    origin: EnvironmentVariables.WEB_APP_ORIGIN,
     credentials: true,
   });
 
@@ -24,7 +27,7 @@ async function bootstrap() {
   process.on('SIGINT', shutdown);
   process.on('SIGUSR2', shutdown);
 
-  await app.listen(EnvironmentVariablesService.variables.API_PORT);
+  await app.listen(EnvironmentVariables.API_PORT);
 }
 
 bootstrap().catch((err) => {
