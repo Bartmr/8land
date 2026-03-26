@@ -35,6 +35,30 @@ export class User {
   @Column({ generated: 'uuid', unique: true })
   appId!: string;
 
+  constructor(props: {
+    firebaseUid: string;
+    isAdmin: boolean;
+    walletAddress: string | null;
+    walletNonce: string;
+    appId: string;
+  })
+  constructor()
+  constructor(props?: {
+    firebaseUid: string;
+    isAdmin: boolean;
+    walletAddress: string | null;
+    walletNonce: string;
+    appId: string;
+  }) {
+    if (props) {
+      this.firebaseUid = props.firebaseUid;
+      this.isAdmin = props.isAdmin;
+      this.walletAddress = props.walletAddress;
+      this.walletNonce = props.walletNonce;
+      this.appId = props.appId;
+    }
+  }
+
   toJSON() {
     return {
       ...this,

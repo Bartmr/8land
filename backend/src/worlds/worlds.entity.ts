@@ -28,4 +28,19 @@ export class World {
   */
   @Column('boolean', { nullable: true })
   hasStartLand!: boolean | null;
+
+  constructor(props: {
+    user: Promise<User>;
+    lands: Promise<Land[]>;
+  })
+  constructor()
+  constructor(props?: {
+    user: Promise<User>;
+    lands: Promise<Land[]>;
+  }) {
+    if (props) {
+      this.user = props.user;
+      this.lands = props.lands;
+    }
+  }
 }

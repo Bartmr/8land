@@ -126,10 +126,10 @@ export class LandPersistenceService {
         });
 
         if (!previousWorld) {
-          const newWorld = new World();
-          newWorld.user = Promise.resolve(authContext.user);
-          newWorld.lands = Promise.resolve([]);
-          world = await worldRepository.create(newWorld);
+          world = await worldRepository.create(new World({
+            user: Promise.resolve(authContext.user),
+            lands: Promise.resolve([]),
+          }));
         } else {
           if (!previousWorld.hasStartLand) {
             return { error: 'cannot-create-more-lands-without-start-block' };
@@ -137,33 +137,33 @@ export class LandPersistenceService {
           world = previousWorld;
         }
 
-        const newLand = new Land();
-        newLand.name = body.name;
-        newLand.searchableName = getSearchableName(body.name);
-        newLand.doorBlocks = Promise.resolve([]);
-        newLand.doorBlocksReferencing = Promise.resolve([]);
-        newLand.backgroundMusicUrl = null;
-        newLand.hasAssets = null;
-        newLand.territories = Promise.resolve([]);
-        newLand.appBlocks = [];
-        newLand.isStartingLand = null;
-        newLand.isTrainStation = null;
-        newLand.world = world;
-        land = await landRepo.create(newLand);
+        land = await landRepo.create(new Land({
+          name: body.name,
+          searchableName: getSearchableName(body.name),
+          doorBlocks: Promise.resolve([]),
+          doorBlocksReferencing: Promise.resolve([]),
+          backgroundMusicUrl: null,
+          hasAssets: null,
+          territories: Promise.resolve([]),
+          appBlocks: [],
+          isStartingLand: null,
+          isTrainStation: null,
+          world,
+        }));
       } else {
-        const newLand = new Land();
-        newLand.name = body.name;
-        newLand.searchableName = getSearchableName(body.name);
-        newLand.doorBlocks = Promise.resolve([]);
-        newLand.doorBlocksReferencing = Promise.resolve([]);
-        newLand.backgroundMusicUrl = null;
-        newLand.hasAssets = null;
-        newLand.territories = Promise.resolve([]);
-        newLand.appBlocks = [];
-        newLand.isStartingLand = null;
-        newLand.isTrainStation = null;
-        newLand.world = null;
-        land = await landRepo.create(newLand);
+        land = await landRepo.create(new Land({
+          name: body.name,
+          searchableName: getSearchableName(body.name),
+          doorBlocks: Promise.resolve([]),
+          doorBlocksReferencing: Promise.resolve([]),
+          backgroundMusicUrl: null,
+          hasAssets: null,
+          territories: Promise.resolve([]),
+          appBlocks: [],
+          isStartingLand: null,
+          isTrainStation: null,
+          world: null,
+        }));
       }
 
       return {

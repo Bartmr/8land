@@ -102,13 +102,13 @@ export class AuthController {
         hostname,
       });
     } else {
-      const userEntity = new User();
-      userEntity.firebaseUid = decodedToken.uid;
-      userEntity.isAdmin = false;
-      userEntity.walletAddress = null;
-      userEntity.walletNonce = generateRandomUUID();
-      userEntity.appId = generateRandomUUID();
-      const newUser = await repository.create(userEntity);
+      const newUser = await repository.create(new User({
+        firebaseUid: decodedToken.uid,
+        isAdmin: false,
+        walletAddress: null,
+        walletNonce: generateRandomUUID(),
+        appId: generateRandomUUID(),
+      }));
 
       await firebaseAuth.setCustomUserClaims(firebaseUser.uid, {
         userIdInDatabase: newUser.id,

@@ -106,11 +106,11 @@ export class BlocksController {
           });
         }
 
-        const doorBlock = new DoorBlock();
-        doorBlock.inLand = land;
-        doorBlock.inTerritory = Promise.resolve(null);
-        doorBlock.toLand = toLand;
-        await doorBlockRepository.create(doorBlock);
+        await doorBlockRepository.create(new DoorBlock({
+          inLand: land,
+          inTerritory: Promise.resolve(null),
+          toLand,
+        }));
 
         toLand.updatedAt = new Date();
 
@@ -120,11 +120,11 @@ export class BlocksController {
       } else if (body.data.type === DynamicBlockType.App) {
         const appBlockRepository = e.getCustomRepository(AppBlockRepository);
 
-        const appBlock = new AppBlock();
-        appBlock.inLand = Promise.resolve(land);
-        appBlock.inTerritory = Promise.resolve(null);
-        appBlock.url = body.data.url;
-        land.appBlocks.push(await appBlockRepository.create(appBlock));
+        land.appBlocks.push(await appBlockRepository.create(new AppBlock({
+          inLand: Promise.resolve(land),
+          inTerritory: Promise.resolve(null),
+          url: body.data.url,
+        })));
       } else {
         throw new BadRequestException();
       }

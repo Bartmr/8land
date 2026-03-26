@@ -514,18 +514,18 @@ export class TerritoriesEndUserController {
       ) {
         throw new ConflictException('coordinates-exceeds-bounds');
       }
-      const territoryEntity = new Territory();
-      territoryEntity.startX = data.data.startX;
-      territoryEntity.startY = data.data.startY;
-      territoryEntity.endX = data.data.endX;
-      territoryEntity.endY = data.data.endY;
-      territoryEntity.hasAssets = false;
-      territoryEntity.inLand = Promise.resolve(land);
-      territoryEntity.doorBlocks = [];
-      territoryEntity.appBlocks = [];
-      territoryEntity.tokenId = null;
-      territoryEntity.tokenAddress = null;
-      const territory = await territoriesRepository.create(territoryEntity);
+      const territory = await territoriesRepository.create(new Territory({
+        startX: data.data.startX,
+        startY: data.data.startY,
+        endX: data.data.endX,
+        endY: data.data.endY,
+        hasAssets: false,
+        inLand: Promise.resolve(land),
+        doorBlocks: [],
+        appBlocks: [],
+        tokenId: null,
+        tokenAddress: null,
+      }));
       const thumbnailStorageKey = `territories/${territory.id}/thumbnail.jpg`;
       await this.storageService.saveBuffer(thumbnailStorageKey, imgResized, {
         contentType: ContentType.JPEG,

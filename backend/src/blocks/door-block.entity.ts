@@ -17,4 +17,22 @@ export class DoorBlock {
   @ManyToOne(() => Land, { eager: true })
   @JoinColumn()
   toLand!: Land;
+
+  constructor(props: {
+    inLand: Land | null;
+    inTerritory: Promise<Territory | null>;
+    toLand: Land;
+  })
+  constructor()
+  constructor(props?: {
+    inLand: Land | null;
+    inTerritory: Promise<Territory | null>;
+    toLand: Land;
+  }) {
+    if (props) {
+      this.inLand = props.inLand;
+      this.inTerritory = props.inTerritory;
+      this.toLand = props.toLand;
+    }
+  }
 }

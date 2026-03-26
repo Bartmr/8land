@@ -14,4 +14,22 @@ export class AuthToken {
 
   @Column()
   expires!: Date;
+
+  constructor(props: {
+    httpOnlyKey: string;
+    user: User;
+    expires: Date;
+  })
+  constructor()
+  constructor(props?: {
+    httpOnlyKey: string;
+    user: User;
+    expires: Date;
+  }) {
+    if (props) {
+      this.httpOnlyKey = props.httpOnlyKey;
+      this.user = props.user;
+      this.expires = props.expires;
+    }
+  }
 }

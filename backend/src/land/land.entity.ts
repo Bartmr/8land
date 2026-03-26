@@ -56,4 +56,46 @@ export class Land {
 
   @Column('bool', { nullable: true })
   isTrainStation!: null | boolean;
+
+  constructor(props: {
+    name: string;
+    searchableName: string;
+    backgroundMusicUrl: string | null;
+    hasAssets: boolean | null;
+    doorBlocks: Promise<DoorBlock[]>;
+    doorBlocksReferencing: Promise<DoorBlock[]>;
+    territories: Promise<Territory[]>;
+    appBlocks: AppBlock[];
+    world: World | null;
+    isStartingLand: boolean | null;
+    isTrainStation: boolean | null;
+  })
+  constructor()
+  constructor(props?: {
+    name: string;
+    searchableName: string;
+    backgroundMusicUrl: string | null;
+    hasAssets: boolean | null;
+    doorBlocks: Promise<DoorBlock[]>;
+    doorBlocksReferencing: Promise<DoorBlock[]>;
+    territories: Promise<Territory[]>;
+    appBlocks: AppBlock[];
+    world: World | null;
+    isStartingLand: boolean | null;
+    isTrainStation: boolean | null;
+  }) {
+    if (props) {
+      this.name = props.name;
+      this.searchableName = props.searchableName;
+      this.backgroundMusicUrl = props.backgroundMusicUrl;
+      this.hasAssets = props.hasAssets;
+      this.doorBlocks = props.doorBlocks;
+      this.doorBlocksReferencing = props.doorBlocksReferencing;
+      this.territories = props.territories;
+      this.appBlocks = props.appBlocks;
+      this.world = props.world;
+      this.isStartingLand = props.isStartingLand;
+      this.isTrainStation = props.isTrainStation;
+    }
+  }
 }

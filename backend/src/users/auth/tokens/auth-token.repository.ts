@@ -25,18 +25,14 @@ export class AuthTokensRepository extends AbstractRepository<AuthToken> {
   public async createToken(user: User, ttl: number): Promise<AuthToken> {
     const ttlInMilliseconds = ttl * 1000;
 
-    const token = new AuthToken();
-
-    token.httpOnlyKey = v4();
-
-    token.user = user;
-
     const expiration = new Date();
     expiration.setTime(expiration.getTime() + ttlInMilliseconds);
 
-    token.expires = expiration;
-
-    return this.repository.save(token);
+    return this.repository.save(new AuthToken({
+      httpOnlyKey: v4(),
+      user,
+      expires: expiration,
+    }));
   }
 
   public findTokenById(id: string) {

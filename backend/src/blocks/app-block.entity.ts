@@ -16,4 +16,22 @@ export class AppBlock {
 
   @Column('text')
   url!: string;
+
+  constructor(props: {
+    inLand: Promise<Land | null>;
+    inTerritory: Promise<Territory | null>;
+    url: string;
+  })
+  constructor()
+  constructor(props?: {
+    inLand: Promise<Land | null>;
+    inTerritory: Promise<Territory | null>;
+    url: string;
+  }) {
+    if (props) {
+      this.inLand = props.inLand;
+      this.inTerritory = props.inTerritory;
+      this.url = props.url;
+    }
+  }
 }

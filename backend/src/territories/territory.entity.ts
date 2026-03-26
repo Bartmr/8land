@@ -52,4 +52,43 @@ export class Territory {
 
   @Column('text', { nullable: true })
   tokenId!: string | null;
+
+  constructor(props: {
+    startX: number;
+    startY: number;
+    endX: number;
+    endY: number;
+    hasAssets: boolean | null;
+    inLand: Promise<Land>;
+    doorBlocks: DoorBlock[];
+    appBlocks: AppBlock[];
+    tokenId: string | null;
+    tokenAddress: string | null;
+  })
+  constructor()
+  constructor(props?: {
+    startX: number;
+    startY: number;
+    endX: number;
+    endY: number;
+    hasAssets: boolean | null;
+    inLand: Promise<Land>;
+    doorBlocks: DoorBlock[];
+    appBlocks: AppBlock[];
+    tokenId: string | null;
+    tokenAddress: string | null;
+  }) {
+    if (props) {
+      this.startX = props.startX;
+      this.startY = props.startY;
+      this.endX = props.endX;
+      this.endY = props.endY;
+      this.hasAssets = props.hasAssets;
+      this.inLand = props.inLand;
+      this.doorBlocks = props.doorBlocks;
+      this.appBlocks = props.appBlocks;
+      this.tokenId = props.tokenId;
+      this.tokenAddress = props.tokenAddress;
+    }
+  }
 }
