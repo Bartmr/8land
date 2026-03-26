@@ -1,4 +1,3 @@
-import { uuid } from '@shared/src/internals/validation/schemas/uuid.schema';
 import {
   CanActivate,
   ExecutionContext,
@@ -6,7 +5,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AppServerRequest } from 'src/server/types/app-server-request-types';
 import { AuthContext } from './auth-context';
 import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
 import {
@@ -14,19 +12,17 @@ import {
   PUBLIC_ROUTE_METADATA_KEY,
 } from './public-route.decorator';
 import { AuthTokensService } from './tokens/auth-tokens.service';
-import { string } from 'not-me/lib/schemas/string/string-schema';
-import { isUUID } from 'src/uuids/is-uuid';
-import { AuditContext } from 'src/auditing/audit-context';
-import { generateUniqueUUID } from 'src/uuids/generate-unique-uuid';
+import { z } from 'zod';
+import { AppRequest } from 'src/requests/request-types';
 
-const authTokenIdSchema = string()
-  .test((s) =>
-    s == undefined || s.startsWith('Bearer ') ? null : 'must-be-bearer-scheme',
-  )
+const authTokenIdSchema = z
+  .string()
+  .optional()
+  .refine((s) => s === undefined || s.startsWith('Bearer '), 'must-be-bearer-scheme')
   .transform((s) => (s ? s.replace('Bearer ', '') : s))
-  .test((s) => (s == undefined || isUUID(s) ? null : 'must-be-uuid'));
+  .pipe(z.uuid().optional());
 
-const authTokenKeySchema = uuid().required();
+const authTokenKeySchema = z.uuid();
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -40,46 +36,39 @@ export class AuthGuard implements CanActivate {
       throw new Error('Unknown execution context');
     }
 
-    const request: AppServerRequest = context
+    const request = context
       .switchToHttp()
-      .getRequest<AppServerRequest>();
-
-    request.auditContext = new AuditContext({
-      operationId: generateUniqueUUID(),
-      requestPath: request.path,
-      requestMethod: request.method,
-      authContext: null,
-    });
+      .getRequest<AppRequest>();
 
     const isPublic = this.reflector.get<PublicRouteMetadata | undefined>(
       PUBLIC_ROUTE_METADATA_KEY,
       context.getHandler(),
     );
 
-    const authTokenIdValidationResult = authTokenIdSchema.validate(
+    const authTokenIdResult = authTokenIdSchema.safeParse(
       request.header('authorization'),
     );
 
-    if (authTokenIdValidationResult.errors) {
+    if (!authTokenIdResult.success) {
       throw new UnauthorizedException();
     }
 
-    const authTokenId = authTokenIdValidationResult.value;
+    const authTokenId = authTokenIdResult.data;
 
     if (authTokenId) {
       const authTokenKeyFromCookie = (
         request.cookies as { [key: string]: unknown }
       )[AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE];
 
-      const authTokenKeyValidation = authTokenKeySchema.validate(
+      const authTokenKeyResult = authTokenKeySchema.safeParse(
         authTokenKeyFromCookie,
       );
 
-      if (authTokenKeyValidation.errors) {
+      if (!authTokenKeyResult.success) {
         throw new UnauthorizedException();
       }
 
-      const authTokenKey = authTokenKeyValidation.value;
+      const authTokenKey = authTokenKeyResult.data;
 
       const user = await this.tokensService.validateAuthToken(
         authTokenId,
@@ -88,7 +77,6 @@ export class AuthGuard implements CanActivate {
 
       const authContext = new AuthContext({ user });
       request.authContext = authContext;
-      request.auditContext.authContext = authContext;
     }
 
     if (isPublic) {

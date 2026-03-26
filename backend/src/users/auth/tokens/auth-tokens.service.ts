@@ -1,56 +1,48 @@
 import {
   Injectable,
+  Logger,
   OnModuleDestroy,
   OnModuleInit,
   UnauthorizedException,
 } from '@nestjs/common';
-import { EnvironmentVariablesService } from 'src/environment/environment-variables.service';
 import { User } from 'src/users/user.entity';
 import { AuthTokensRepository } from './auth-token.repository';
 import { DataSource, EntityManager } from 'typeorm';
-import { LoggingService } from 'src/logging/logging.service';
 import { cleanExpiredAuthTokens } from './clean-expired-auth-tokens';
 import { throwError } from 'src/throw-error';
-import { ProcessContextManager } from 'src/process/process-context-manager';
 
 @Injectable()
 export class AuthTokensService implements OnModuleInit, OnModuleDestroy {
-  private loggingService: LoggingService;
+  private logger: Logger = new Logger(AuthTokensRepository.name)
   private tokensRepository: AuthTokensRepository;
   private tokensCleanupInterval?: NodeJS.Timer;
 
   constructor(
-    loggingService: LoggingService,
     dataSource: DataSource,
   ) {
-    this.loggingService = loggingService;
     this.tokensRepository =
       dataSource.getCustomRepository(AuthTokensRepository);
   }
 
   onModuleInit() {
-    if (ProcessContextManager.getContext().isMasterWorker) {
-      this.tokensCleanupInterval = setInterval(() => {
-        cleanExpiredAuthTokens().catch((err) => {
-          this.loggingService.logError(
-            'auth-tokens-service:token-cleanup-error',
-            err,
-          );
-        });
-      }, 1000 * 60 * 60);
-    }
+    this.tokensCleanupInterval = setInterval(() => {
+      cleanExpiredAuthTokens().catch((err) => {
+        this.logger.error(
+          'auth-tokens-service:token-cleanup-error',
+          err,
+        );
+      });
+    }, 1000 * 60 * 60);
   }
 
   onModuleDestroy() {
-    if (ProcessContextManager.getContext().isMasterWorker) {
-      clearInterval(this.tokensCleanupInterval ?? throwError());
-    }
+    clearInterval(this.tokensCleanupInterval ?? throwError());
   }
 
   async createAuthToken(manager: EntityManager, user: User) {
     const tokensRepository = manager.getCustomRepository(AuthTokensRepository);
 
-    const ttl = EnvironmentVariablesService.variables.AUTH_TOKEN_TTL;
+    const ttl = 60 * 60 * 24 * 30;
 
     const token = await tokensRepository.createToken(user, ttl);
 

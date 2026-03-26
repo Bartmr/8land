@@ -1,17 +1,16 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { AUTH_MODULE_ENTITIES } from './auth-module-entities';
 import { AuthController } from './auth.controller';
 import { AuthGuard } from './auth.guard';
 import { AuthTokensService } from './tokens/auth-tokens.service';
 import { FirebaseModule } from 'src/firebase/firebase.module';
-import { TypeormFeatureModule } from 'src/databases/typeorm.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from '../user.entity';
+import { AuthToken } from './tokens/auth-token.entity';
 
 @Module({
   imports: [
-    TypeormFeatureModule.forFeature({
-      entities: AUTH_MODULE_ENTITIES,
-    }),
+    TypeOrmModule.forFeature([AuthToken, User]),
     FirebaseModule,
   ],
   providers: [
