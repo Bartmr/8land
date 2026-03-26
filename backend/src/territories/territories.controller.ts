@@ -8,11 +8,13 @@ import {
   Param,
   Put,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
   Body,
   Patch,
   Post,
 } from '@nestjs/common';
+import { AuthGuard } from 'src/users/auth/auth.guard';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import {
@@ -65,6 +67,7 @@ import {
 } from '@shared/src/territories/update-rarible/update-territory-rarible-metadata.dto';
 import { StaticBlockType } from '@shared/src/blocks/block.enums';
 
+@UseGuards(AuthGuard)
 @Controller('territories')
 export class TerritoriesEndUserController {
   constructor(

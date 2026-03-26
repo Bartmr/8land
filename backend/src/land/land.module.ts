@@ -12,6 +12,7 @@ import { World } from '../worlds/worlds.entity';
 import { LandPersistenceService } from './land-persistence.service';
 import { SettingsModule } from 'src/settings/settings.module';
 import { TypeormFeatureModule } from 'src/databases/typeorm.module';
+import { AuthModule } from 'src/users/auth/auth.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { TypeormFeatureModule } from 'src/databases/typeorm.module';
     }),
     StorageModule,
     SettingsModule,
+    AuthModule,
   ],
   exports: [LandsService],
   providers: [LandsService, LandPersistenceService],

@@ -11,9 +11,11 @@ import {
   Post,
   Put,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
   Delete,
 } from '@nestjs/common';
+import { AuthGuard } from 'src/users/auth/auth.guard';
 import {
   GetLandDTO,
   GetLandParametersDTO,
@@ -60,6 +62,7 @@ class LandAssetsRequestDTO {
 
 // TODO redo all
 
+@UseGuards(AuthGuard)
 @Controller('lands')
 export class LandsController {
   constructor(

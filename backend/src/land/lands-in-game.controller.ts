@@ -5,7 +5,9 @@ import {
   NotImplementedException,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from 'src/users/auth/auth.guard';
 import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
 import {
   NavigateToLandDTO,
@@ -27,6 +29,7 @@ import { NavigationStateRepository } from 'src/users/navigation-state.repository
 import { DataSource } from 'typeorm';
 import { LandsService } from './lands.service';
 
+@UseGuards(AuthGuard)
 @Controller('lands')
 export class LandsInGameController {
   constructor(

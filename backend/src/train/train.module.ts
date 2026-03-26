@@ -5,6 +5,7 @@ import { Land } from 'src/land/land.entity';
 import { NavigationState } from 'src/users/navigation-state.entity';
 import { User } from 'src/users/user.entity';
 import { TrainController } from './train.controller';
+import { AuthModule } from 'src/users/auth/auth.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { TrainController } from './train.controller';
       entities: [Land, NavigationState, User],
     }),
     LandModule,
+    AuthModule,
   ],
   controllers: [TrainController],
 })

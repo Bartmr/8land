@@ -7,7 +7,9 @@ import {
   HttpCode,
   Param,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from 'src/users/auth/auth.guard';
 import { CreateBlockRequestDTO } from '@shared/src/blocks/create/create-block.dto';
 import { DynamicBlockType } from '@shared/src/blocks/create/create-block.enums';
 import { DeleteBlockURLParameters } from '@shared/src/blocks/delete/delete-block.dto';
@@ -22,6 +24,7 @@ import { DataSource } from 'typeorm';
 import { AppBlockRepository } from './app-block.repository';
 import { DoorBlockRepository } from './door-block.repository';
 
+@UseGuards(AuthGuard)
 @Controller('blocks')
 export class BlocksController {
   constructor(private dataSource: DataSource) {}

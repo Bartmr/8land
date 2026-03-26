@@ -16,7 +16,9 @@ import {
   Request,
   Response,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from './auth.guard';
 import { AppServerRequest } from 'src/server/types/app-server-request-types';
 import { AppServerResponse } from 'src/server/types/app-server-response-types';
 import { AuthContext } from './auth-context';
@@ -38,6 +40,7 @@ import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { AuditContext } from 'src/auditing/audit-context';
 import { User } from 'src/users/user.entity';
 
+@UseGuards(AuthGuard)
 @Controller('auth')
 export class AuthController {
   constructor(

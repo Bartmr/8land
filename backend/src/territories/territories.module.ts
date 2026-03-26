@@ -7,6 +7,7 @@ import { TypeormFeatureModule } from 'src/databases/typeorm.module';
 import { StorageModule } from 'src/storage/storage.module';
 import { TerritoriesEndUserController } from './territories.controller';
 import { Territory } from './territory.entity';
+import { AuthModule } from 'src/users/auth/auth.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { Territory } from './territory.entity';
     StorageModule,
     BackendModule,
     RaribleModule,
+    AuthModule,
   ],
   controllers: [TerritoriesEndUserController],
 })

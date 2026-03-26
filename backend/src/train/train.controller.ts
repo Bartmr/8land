@@ -6,7 +6,9 @@ import {
   NotImplementedException,
   Param,
   Query,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from 'src/users/auth/auth.guard';
 import {
   GetTrainDestinationsDTO,
   GetTrainDestinationQueryDTO,
@@ -35,6 +37,7 @@ import { LandRepository } from 'src/land/land.repository';
 import { NavigationStateRepository } from 'src/users/navigation-state.repository';
 import { DataSource } from 'typeorm';
 
+@UseGuards(AuthGuard)
 @Controller('/train')
 export class TrainController {
   constructor(
