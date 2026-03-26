@@ -7,8 +7,6 @@ const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = z.object({
 
   LOG_DEBUG: z.coerce.boolean().optional(),
 
-  SHOW_ALL_LOGS_IN_TESTS: z.coerce.boolean(),
-
   WEB_APP_ORIGIN: z.string(),
 
   DATABASE_HOST: z.string(),
@@ -29,6 +27,8 @@ const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = z.object({
   AWS_ACCESS_KEY_ID: z.string().optional(),
   AWS_SECRET_ACCESS_KEY: z.string().optional(),
   S3_BUCKET_NAME: z.string().optional(),
+
+  USE_DEV_EMAIL: z.coerce.boolean().optional()
 });
 
 export const EnvironmentVariables = ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA.parse({

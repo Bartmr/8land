@@ -4,13 +4,17 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-import { createApp } from './create-app';
-import { EnvironmentVariablesService } from './environment/environment-variables.service';
 
 async function bootstrap() {
-  
+  const app = await NestFactory.create(AppModule);
 
-  const app = await createApp();
+  app.use(cookieParser());
+
+  app.enableCors({
+    origin: WEB_APP_ORIGIN,
+    credentials: true,
+  });
+
 
   const shutdown = async () => {
     app.close();

@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
 import * as firebaseAdmin from 'firebase-admin';
 import { applicationDefault } from 'firebase-admin/app';
-import { EnvironmentVariablesService } from 'src/environment/environment-variables.service';
-import { generateRandomUUID } from 'src/uuids/generate-random-uuid';
 import { throwError } from 'src/throw-error';
-import { FIREBASE_EMULATOR_PROJECT_ID } from './firebase.constants';
 import { FirebaseService } from './firebase.service';
+import { EnvironmentVariables } from 'src/environment/environment-variables';
+import { v4 } from 'uuid';
 
 type FirebaseApp = ReturnType<typeof firebaseAdmin['initializeApp']>;
 
@@ -16,12 +15,12 @@ type FirebaseApp = ReturnType<typeof firebaseAdmin['initializeApp']>;
       useFactory: () => {
         let app: FirebaseApp;
 
-        if (EnvironmentVariablesService.variables.FIREBASE_AUTH_EMULATOR_HOST) {
+        if (EnvironmentVariables.FIREBASE_AUTH_EMULATOR_HOST) {
           app = firebaseAdmin.initializeApp(
             {
-              projectId: FIREBASE_EMULATOR_PROJECT_ID || throwError(),
+              projectId: EnvironmentVariables.FIREBASE_PROJECT_ID || throwError(),
             },
-            generateRandomUUID(),
+            v4()
           );
         } else {
           app = firebaseAdmin.initializeApp({

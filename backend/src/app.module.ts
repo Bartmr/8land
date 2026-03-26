@@ -1,39 +1,23 @@
 import { Module } from '@nestjs/common';
-import { APP_FILTER, APP_PIPE } from '@nestjs/core';
-
-import { LoggingModule } from './logging/logging.module';
-import { LoggingServiceSingleton } from './logging/logging.service.singleton';
-import { DEFAULT_DB_TYPEORM_CONN_OPTS } from './databases/default-db-typeorm-conn-opts';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './users/auth/auth.module';
 import { LandModule } from './land/land.module';
 import { BlocksModule } from './blocks/blocks.module';
 // import { TerritoriesModule } from './territories/territories.module';
 import { UsersModule } from './users/users.module';
 import { TrainModule } from './train/train.module';
-import { TypeormConnectionsModule } from './databases/typeorm.module';
-import { AppValidationPipe } from './validation/validation.pipe';
-import { AllExceptionsFilter } from './error-handling/all-exceptions.filter';
+
+import { TYPEORM_ORMCONFIG } from './databases/ormconfig';
 
 @Module({
   imports: [
-    LoggingModule.forRoot(() => LoggingServiceSingleton.getInstance()),
-    TypeormConnectionsModule.forRoot([DEFAULT_DB_TYPEORM_CONN_OPTS]),
+    TypeOrmModule.forRoot(TYPEORM_ORMCONFIG),
     AuthModule,
     LandModule,
     BlocksModule,
     // TerritoriesModule,
     UsersModule,
     TrainModule,
-  ],
-  providers: [
-    {
-      provide: APP_PIPE,
-      useClass: AppValidationPipe,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: AllExceptionsFilter,
-    },
   ],
 })
 export class AppModule {}

@@ -1,6 +1,4 @@
-import { EnvironmentVariablesService } from 'src/environment/environment-variables.service';
 import { ConnectionOptions } from 'typeorm';
-import { ALL_SUBSCRIBERS } from './all-subscribers';
 import { FirstMigration1642874083482 } from '../../migrations/1642874083482-FirstMigration';
 import { NFTMetadata1645870824982 } from '../../migrations/1645870824982-NFTMetadata';
 import { UserAppId1647382874239 } from '../../migrations/1647382874239-UserAppId';
@@ -8,14 +6,14 @@ import { NavigationState1649620686884 } from '../../migrations/1649620686884-Nav
 import { Train1651758178120 } from '../../migrations/1651758178120-Train';
 
 
-export const TYPEORM_ORMCONFIG: ConnectionOptions[] = {
+export const TYPEORM_ORMCONFIG: ConnectionOptions = {
   type: 'postgres' as const,
   host: EnvironmentVariablesService.variables.DATABASE_HOST,
   port: EnvironmentVariablesService.variables.DATABASE_PORT,
   username: EnvironmentVariablesService.variables.DATABASE_USER,
   password: EnvironmentVariablesService.variables.DATABASE_PASSWORD,
   database: EnvironmentVariablesService.variables.DATABASE_NAME,
-  entities: ['src/**/typeorm/*.entity.ts'],
+  entities: [],
   subscribers: [],
   synchronize: false,
   logging: EnvironmentVariablesService.variables.LOG_DATABASES,
@@ -38,9 +36,4 @@ export const TYPEORM_ORMCONFIG: ConnectionOptions[] = {
     migrationsDir: 'migrations',
   },
   installExtensions: false,
-  ssl: EnvironmentVariablesService.variables.DATABASE_CA_CERTIFICATE
-    ? {
-        ca: EnvironmentVariablesService.variables.DATABASE_CA_CERTIFICATE,
-      }
-    : undefined,
 };
