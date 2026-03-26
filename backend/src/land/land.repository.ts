@@ -42,7 +42,7 @@ export class LandRepository extends AbstractRepository<Land> {
   }
 
   async selectManyAndCount(
-    options: { alias: string; withDeleted?: boolean; skip: number },
+    options: { alias: string; skip: number },
     builderFn: (
       queryBuilder: SelectQueryBuilder<Land>,
     ) => SelectQueryBuilder<Land>,
@@ -50,10 +50,6 @@ export class LandRepository extends AbstractRepository<Land> {
     const limit = 50;
 
     let queryBuilder = this.repository.createQueryBuilder(options.alias);
-
-    if (options.withDeleted) {
-      queryBuilder = queryBuilder.withDeleted();
-    }
 
     queryBuilder = builderFn(queryBuilder);
 
@@ -73,16 +69,12 @@ export class LandRepository extends AbstractRepository<Land> {
   }
 
   async selectAndCount(
-    options: { alias: string; withDeleted?: boolean },
+    options: { alias: string },
     builderFn: (
       queryBuilder: SelectQueryBuilder<Land>,
     ) => SelectQueryBuilder<Land>,
   ) {
     let queryBuilder = this.repository.createQueryBuilder(options.alias);
-
-    if (options.withDeleted) {
-      queryBuilder = queryBuilder.withDeleted();
-    }
 
     queryBuilder = builderFn(queryBuilder);
 
@@ -90,16 +82,12 @@ export class LandRepository extends AbstractRepository<Land> {
   }
 
   async selectOne(
-    options: { alias: string; withDeleted?: boolean },
+    options: { alias: string },
     builderFn: (
       queryBuilder: SelectQueryBuilder<Land>,
     ) => SelectQueryBuilder<Land>,
   ) {
     let queryBuilder = this.repository.createQueryBuilder(options.alias);
-
-    if (options.withDeleted) {
-      queryBuilder = queryBuilder.withDeleted();
-    }
 
     queryBuilder = builderFn(queryBuilder);
 
