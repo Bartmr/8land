@@ -56,8 +56,7 @@ import {
   CreateTerritoryResponseDTO,
 } from '@shared/src/territories/create/create-territory.dto';
 import { CreateTerritoryRequestJSONSchema } from '@shared/src/territories/create/create-territory.schemas';
-import { Role } from 'src/users/authentication/roles/roles';
-import { RolesUpAndIncluding } from 'src/users/authentication/roles/roles.decorator';
+import { AdminOnly } from 'src/users/auth/admin-only.decorator';
 import { LandRepository } from 'src/land/land.repository';
 import { BackendStorageApi } from 'src/backend/backend-storage.api';
 import { number } from 'not-me/lib/schemas/number/number-schema';
@@ -382,7 +381,7 @@ export class TerritoriesEndUserController {
   }
 
   @Post()
-  @RolesUpAndIncluding(Role.Admin)
+  @AdminOnly()
   @UseInterceptors(
     FileFieldsInterceptor([
       { name: 'data', maxCount: 1 },
@@ -569,7 +568,7 @@ export class TerritoriesEndUserController {
   }
 
   @Patch(':id/rarible')
-  @RolesUpAndIncluding(Role.Admin)
+  @AdminOnly()
   @HttpCode(204)
   async updateRaribleMetadata(
     @Param() params: UpdateTerritoryRaribleMetadataParametersDTO,

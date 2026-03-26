@@ -20,7 +20,6 @@ import {
   EditLandBodyDTO,
   EditLandParametersDTO,
 } from '@shared/src/land/edit/edit-land.dto';
-import { Role } from 'src/users/authentication/roles/roles';
 import {
   LAND_MAP_SIZE_LIMIT,
   LAND_TILESET_SIZE_LIMIT,
@@ -221,7 +220,7 @@ export class LandPersistenceService {
             .leftJoinAndSelect('land.world', 'world')
             .where('land.id = :id', { id: params.landId });
 
-          if (authContext.user.role === Role.Admin) {
+          if (authContext.user.isAdmin) {
             finalQb = finalQb.andWhere('land.world IS NULL');
           } else {
             finalQb = finalQb.andWhere('world.user = :userId', {
@@ -422,7 +421,7 @@ export class LandPersistenceService {
             .leftJoinAndSelect('land.world', 'world')
             .where('land.id = :id', { id: param.landId });
 
-          if (authContext.user.role === Role.Admin) {
+          if (authContext.user.isAdmin) {
             finalQb = finalQb.andWhere('land.world IS NULL');
           } else {
             finalQb = finalQb.andWhere('world.user = :userId', {
@@ -497,7 +496,7 @@ export class LandPersistenceService {
             .leftJoinAndSelect('land.world', 'world')
             .where('land.id = :id', { id: landId });
 
-          if (authContext.user.role !== Role.Admin) {
+          if (!authContext.user.isAdmin) {
             finalQb = finalQb.andWhere('world.user = :userId', {
               userId: authContext.user.id,
             });

@@ -13,8 +13,7 @@ import { DynamicBlockType } from '@shared/src/blocks/create/create-block.enums';
 import { DeleteBlockURLParameters } from '@shared/src/blocks/delete/delete-block.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
-import { Role } from 'src/users/authentication/roles/roles';
-import { RolesUpAndIncluding } from 'src/users/authentication/roles/roles.decorator';
+import { AdminOnly } from 'src/users/auth/admin-only.decorator';
 import { AuditContext } from 'src/auditing/audit-context';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
@@ -29,7 +28,7 @@ export class BlocksController {
   constructor(private dataSource: DataSource) {}
 
   @Post()
-  @RolesUpAndIncluding(Role.Admin)
+  @AdminOnly()
   createBlock(
     @Body() body: CreateBlockRequestDTO,
     @WithAuditContext() auditContext: AuditContext,
@@ -48,7 +47,7 @@ export class BlocksController {
 
           resQb = resQb.where('land.id = :id', { id: body.landId });
 
-          if (authContext.user.role !== Role.Admin) {
+          if (!authContext.user.isAdmin) {
             resQb = resQb
               .leftJoinAndSelect('land.world', 'world')
               .andWhere('world.user = :userId', {
@@ -138,7 +137,7 @@ export class BlocksController {
 
   @HttpCode(204)
   @Delete('/:blockType/:blockId')
-  @RolesUpAndIncluding(Role.Admin)
+  @AdminOnly()
   deleteBlock(
     @Param() param: DeleteBlockURLParameters,
     @WithAuditContext() auditContext: AuditContext,

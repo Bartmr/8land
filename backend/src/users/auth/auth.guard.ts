@@ -14,12 +14,7 @@ import {
   PublicRouteMetadata,
   PUBLIC_ROUTE_METADATA_KEY,
 } from './public-route.decorator';
-import { ROLES_LEVELS } from './roles/roles';
-import {
-  ROUTE_ROLES_METADATA_KEY,
-  RouteRolesMetadata,
-  RolePermissionType,
-} from './roles/roles.decorator';
+import { ADMIN_ONLY_METADATA_KEY } from './admin-only.decorator';
 import { AuthTokensService } from './tokens/auth-tokens.service';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { isUUID } from 'src/uuids/is-uuid';
@@ -102,39 +97,13 @@ export class AuthGuard implements CanActivate {
       return true;
     } else {
       if (request.authContext) {
-        const rolesMetadata = this.reflector.get<RouteRolesMetadata>(
-          ROUTE_ROLES_METADATA_KEY,
+        const isAdminOnly = this.reflector.get<true | undefined>(
+          ADMIN_ONLY_METADATA_KEY,
           context.getHandler(),
         );
 
-        if (rolesMetadata) {
-          const currentUserRole = request.authContext.user.role;
-
-          let isAllowed: boolean;
-
-          switch (rolesMetadata.permissionType) {
-            case RolePermissionType.UpAndIncluding:
-              isAllowed =
-                ROLES_LEVELS[currentUserRole] >=
-                ROLES_LEVELS[rolesMetadata.role];
-              break;
-            case RolePermissionType.DownAndIncluding:
-              isAllowed =
-                ROLES_LEVELS[currentUserRole] <=
-                ROLES_LEVELS[rolesMetadata.role];
-              break;
-            case RolePermissionType.EqualTo:
-              isAllowed = rolesMetadata.allowedRoles.includes(currentUserRole);
-              break;
-            default:
-              throw new Error();
-          }
-
-          if (isAllowed) {
-            return true;
-          } else {
-            throw new ForbiddenException();
-          }
+        if (isAdminOnly && !request.authContext.user.isAdmin) {
+          throw new ForbiddenException();
         }
 
         return true;

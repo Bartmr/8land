@@ -34,7 +34,6 @@ import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
 import { NODE_ENV } from 'src/environment/node-env.constants';
 import { NodeEnv } from 'src/environment/node-env.types';
 import { generateRandomUUID } from 'src/uuids/generate-random-uuid';
-import { Role } from './roles/roles';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { AuditContext } from 'src/auditing/audit-context';
 import { User } from 'src/users/user.entity';
@@ -103,7 +102,7 @@ export class AuthController {
       const newUser = await repository.create(
         {
           firebaseUid: decodedToken.uid,
-          role: Role.EndUser,
+          isAdmin: false,
           walletAddress: null,
           walletNonce: generateRandomUUID(),
           appId: generateRandomUUID(),
@@ -138,7 +137,7 @@ export class AuthController {
     if (authContext) {
       return {
         userId: authContext.user.id,
-        role: authContext.user.role,
+        isAdmin: authContext.user.isAdmin,
         walletAddress: authContext.user.walletAddress,
         appId: authContext.user.appId,
       };
@@ -173,7 +172,7 @@ export class AuthController {
       authTokenId: token.id,
       session: {
         userId: user.id,
-        role: user.role,
+        isAdmin: user.isAdmin,
         walletAddress: user.walletAddress,
         appId: user.appId,
       },

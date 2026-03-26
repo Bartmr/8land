@@ -1,5 +1,3 @@
-import { getEnumValues } from '@shared/src/internals/utils/enums/get-enum-values';
-import { Role } from 'src/users/authentication/roles/roles';
 import {
   Column,
   CreateDateColumn,
@@ -25,11 +23,8 @@ export class User {
   @DeleteDateColumn()
   deletedAt!: Date | null;
 
-  @Column({
-    type: 'enum',
-    enum: getEnumValues(Role),
-  })
-  role!: Role;
+  @Column({ default: false })
+  isAdmin!: boolean;
 
   @Column('text', { nullable: true })
   walletAddress!: string | null;

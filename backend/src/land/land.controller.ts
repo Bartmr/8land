@@ -23,7 +23,6 @@ import {
 } from '@shared/src/land/index/index-lands.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
-import { Role } from 'src/users/authentication/roles/roles';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import { StorageService } from 'src/storage/storage.service';
 import { DataSource } from 'typeorm';
@@ -36,7 +35,7 @@ import {
   CreateLandResponseDTO,
 } from '@shared/src/land/create/create-land.dto';
 import { UploadLandAssetsParameters } from '@shared/src/land/upload-assets/upload-land-assets.dto';
-import { RolesUpAndIncluding } from 'src/users/authentication/roles/roles.decorator';
+import { AdminOnly } from 'src/users/auth/admin-only.decorator';
 import { AuditContext } from 'src/auditing/audit-context';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { ApiBody, ApiConsumes, ApiProperty } from '@nestjs/swagger';
@@ -88,7 +87,7 @@ export class LandsController {
         },
 
         (qb) => {
-          if (authContext.user.role === Role.Admin) {
+          if (authContext.user.isAdmin) {
             return qb
               .orderBy('land.createdAt', 'DESC')
               .where('land.world IS NULL');
@@ -103,7 +102,7 @@ export class LandsController {
       worldsRepository.findOne({ where: { user: authContext.user.id } }),
     ]);
 
-    if (authContext.user.role !== Role.Admin && !world) {
+    if (!authContext.user.isAdmin && !world) {
       return {
         total: 0,
         limit: results.limit,
@@ -118,7 +117,7 @@ export class LandsController {
         id: c.id,
         name: c.name,
         published:
-          authContext.user.role === Role.Admin
+          authContext.user.isAdmin
             ? !!c.hasAssets
             : !!(c.hasAssets && world?.hasStartLand),
         isStartingLand: !!c.isStartingLand,
@@ -162,7 +161,7 @@ export class LandsController {
 
         resQb = resQb.where('land.id = :id', { id: parameters.id });
 
-        if (authContext.user.role !== Role.Admin) {
+        if (!authContext.user.isAdmin) {
           resQb = resQb
             .leftJoinAndSelect('land.world', 'world')
             .andWhere('world.user = :userId', { userId: authContext.user.id });
@@ -194,8 +193,8 @@ export class LandsController {
       authContext,
       auditContext,
       limitations: {
-        limitQuantity: authContext.user.role != Role.Admin ? limit : undefined,
-        useWorld: authContext.user.role != Role.Admin,
+        limitQuantity: !authContext.user.isAdmin ? limit : undefined,
+        useWorld: !authContext.user.isAdmin,
       },
     });
 
@@ -294,7 +293,7 @@ export class LandsController {
   }
 
   @Delete(':landId')
-  @RolesUpAndIncluding(Role.Admin)
+  @AdminOnly()
   async deleteLand(
     @Param() param: DeleteLandParametersDTO,
     @WithAuthContext() authContext: AuthContext,
