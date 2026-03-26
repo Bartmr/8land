@@ -47,6 +47,7 @@ import {
   StorageService,
 } from 'src/storage/storage.service';
 import { DataSource } from 'typeorm';
+import { Territory } from './territory.entity';
 import { TerritoriesRepository } from './territories.repository';
 import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
 import { InferType } from 'not-me/lib/schemas/schema';
@@ -378,7 +379,7 @@ export class TerritoriesEndUserController {
         territory.hasAssets = true;
       }
       territory.updatedAt = new Date();
-      await territoriesRepo.save(territory, auditContext);
+      await territoriesRepo.save(territory);
     });
   }
 
@@ -513,21 +514,18 @@ export class TerritoriesEndUserController {
       ) {
         throw new ConflictException('coordinates-exceeds-bounds');
       }
-      const territory = await territoriesRepository.create(
-        {
-          startX: data.data.startX,
-          startY: data.data.startY,
-          endX: data.data.endX,
-          endY: data.data.endY,
-          hasAssets: false,
-          inLand: Promise.resolve(land),
-          doorBlocks: [],
-          appBlocks: [],
-          tokenId: null,
-          tokenAddress: null,
-        },
-        auditContext,
-      );
+      const territoryEntity = new Territory();
+      territoryEntity.startX = data.data.startX;
+      territoryEntity.startY = data.data.startY;
+      territoryEntity.endX = data.data.endX;
+      territoryEntity.endY = data.data.endY;
+      territoryEntity.hasAssets = false;
+      territoryEntity.inLand = Promise.resolve(land);
+      territoryEntity.doorBlocks = [];
+      territoryEntity.appBlocks = [];
+      territoryEntity.tokenId = null;
+      territoryEntity.tokenAddress = null;
+      const territory = await territoriesRepository.create(territoryEntity);
       const thumbnailStorageKey = `territories/${territory.id}/thumbnail.jpg`;
       await this.storageService.saveBuffer(thumbnailStorageKey, imgResized, {
         contentType: ContentType.JPEG,
@@ -603,7 +601,7 @@ export class TerritoriesEndUserController {
       territory.tokenId = body.tokenId;
       territory.tokenAddress = body.tokenAddress;
 
-      await territoriesRepository.save(territory, auditContext);
+      await territoriesRepository.save(territory);
     });
   }
 }

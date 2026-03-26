@@ -5,6 +5,7 @@ import { AuthContext } from 'src/users/auth/auth-context';
 import { AuditContext } from 'src/auditing/audit-context';
 import { getSearchableName } from 'src/strings/get-searchable-name';
 import { World } from 'src/worlds/worlds.entity';
+import { Land } from './land.entity';
 import { WorldRepository } from 'src/worlds/worlds.repository';
 import { DataSource } from 'typeorm';
 import { LandRepository } from './land.repository';
@@ -113,19 +114,6 @@ export class LandPersistenceService {
         };
       }
 
-      const landBaseProps = {
-        name: body.name,
-        searchableName: getSearchableName(body.name),
-        doorBlocks: Promise.resolve([]),
-        doorBlocksReferencing: Promise.resolve([]),
-        backgroundMusicUrl: null,
-        hasAssets: null,
-        territories: Promise.resolve([]),
-        appBlocks: [],
-        isStartingLand: null,
-        isTrainStation: null,
-      };
-
       let land;
 
       if (limitations.useWorld) {
@@ -138,13 +126,10 @@ export class LandPersistenceService {
         });
 
         if (!previousWorld) {
-          world = await worldRepository.create(
-            {
-              user: Promise.resolve(authContext.user),
-              lands: Promise.resolve([]),
-            },
-            auditContext,
-          );
+          const newWorld = new World();
+          newWorld.user = Promise.resolve(authContext.user);
+          newWorld.lands = Promise.resolve([]);
+          world = await worldRepository.create(newWorld);
         } else {
           if (!previousWorld.hasStartLand) {
             return { error: 'cannot-create-more-lands-without-start-block' };
@@ -152,21 +137,33 @@ export class LandPersistenceService {
           world = previousWorld;
         }
 
-        land = await landRepo.create(
-          {
-            ...landBaseProps,
-            world: world,
-          },
-          auditContext,
-        );
+        const newLand = new Land();
+        newLand.name = body.name;
+        newLand.searchableName = getSearchableName(body.name);
+        newLand.doorBlocks = Promise.resolve([]);
+        newLand.doorBlocksReferencing = Promise.resolve([]);
+        newLand.backgroundMusicUrl = null;
+        newLand.hasAssets = null;
+        newLand.territories = Promise.resolve([]);
+        newLand.appBlocks = [];
+        newLand.isStartingLand = null;
+        newLand.isTrainStation = null;
+        newLand.world = world;
+        land = await landRepo.create(newLand);
       } else {
-        land = await landRepo.create(
-          {
-            ...landBaseProps,
-            world: null,
-          },
-          auditContext,
-        );
+        const newLand = new Land();
+        newLand.name = body.name;
+        newLand.searchableName = getSearchableName(body.name);
+        newLand.doorBlocks = Promise.resolve([]);
+        newLand.doorBlocksReferencing = Promise.resolve([]);
+        newLand.backgroundMusicUrl = null;
+        newLand.hasAssets = null;
+        newLand.territories = Promise.resolve([]);
+        newLand.appBlocks = [];
+        newLand.isStartingLand = null;
+        newLand.isTrainStation = null;
+        newLand.world = null;
+        land = await landRepo.create(newLand);
       }
 
       return {
@@ -385,9 +382,9 @@ export class LandPersistenceService {
       }
       land.updatedAt = new Date();
 
-      await landRepo.save(land, auditContext);
+      await landRepo.save(land);
       if (land.world) {
-        await worldRepo.save(land.world, auditContext);
+        await worldRepo.save(land.world);
       }
 
       return { status: 'ok' } as const;
@@ -461,7 +458,7 @@ export class LandPersistenceService {
         land.backgroundMusicUrl = body.backgroundMusicUrl;
       }
 
-      await landRepository.save(land, auditContext);
+      await landRepository.save(land);
 
       return {
         status: 'ok',

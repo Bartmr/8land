@@ -21,7 +21,9 @@ import { ResourceNotFoundException } from 'src/server/resource-not-found.excepti
 import { getSearchableName } from 'src/strings/get-searchable-name';
 import { LandRepository } from 'src/land/land.repository';
 import { DataSource } from 'typeorm';
+import { AppBlock } from './app-block.entity';
 import { AppBlockRepository } from './app-block.repository';
+import { DoorBlock } from './door-block.entity';
 import { DoorBlockRepository } from './door-block.repository';
 
 @UseGuards(AuthGuard)
@@ -104,39 +106,31 @@ export class BlocksController {
           });
         }
 
-        await doorBlockRepository.create(
-          {
-            inLand: land,
-            inTerritory: Promise.resolve(null),
-            toLand,
-          },
-          auditContext,
-        );
+        const doorBlock = new DoorBlock();
+        doorBlock.inLand = land;
+        doorBlock.inTerritory = Promise.resolve(null);
+        doorBlock.toLand = toLand;
+        await doorBlockRepository.create(doorBlock);
 
         toLand.updatedAt = new Date();
 
-        await landRepository.save(toLand, auditContext);
+        await landRepository.save(toLand);
 
         return;
       } else if (body.data.type === DynamicBlockType.App) {
         const appBlockRepository = e.getCustomRepository(AppBlockRepository);
 
-        const appBlock = await appBlockRepository.create(
-          {
-            inLand: Promise.resolve(land),
-            inTerritory: Promise.resolve(null),
-            url: body.data.url,
-          },
-          auditContext,
-        );
-
-        land.appBlocks.push(appBlock);
+        const appBlock = new AppBlock();
+        appBlock.inLand = Promise.resolve(land);
+        appBlock.inTerritory = Promise.resolve(null);
+        appBlock.url = body.data.url;
+        land.appBlocks.push(await appBlockRepository.create(appBlock));
       } else {
         throw new BadRequestException();
       }
 
       land.updatedAt = new Date();
-      await landRepository.save(land, auditContext);
+      await landRepository.save(land);
     });
   }
 
@@ -178,7 +172,7 @@ export class BlocksController {
 
       if (block.inLand) {
         block.inLand.updatedAt = new Date();
-        await landRepository.save(block.inLand, auditContext);
+        await landRepository.save(block.inLand);
       }
     });
   }

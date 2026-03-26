@@ -121,7 +121,7 @@ export class LandsService {
       (async () => {
         navState.lastCheckpointWasDeleted = false;
 
-        await navigationStateRepository.save(navState, auditContext);
+        await navigationStateRepository.save(navState);
       })().catch((err: unknown) =>
         loggingService.logError('navigate:resume', err),
       );

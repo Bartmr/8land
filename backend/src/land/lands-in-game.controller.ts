@@ -141,7 +141,7 @@ export class LandsInGameController {
 
         navState.lastPlayedBackgroundMusicUrl = lastPlayedBackgroundMusicUrl;
 
-        await navigationStateRepository.save(navState, auditContext);
+        await navigationStateRepository.save(navState);
       })().catch((err: unknown) =>
         this.loggingService.logError('navigate:save-state', err),
       );
@@ -185,7 +185,7 @@ export class LandsInGameController {
         // MEANS IT'S A BLOCK INSIDE A TERRITORY
         throw new NotImplementedException();
       }
-      await navigationStatesRepository.save(navigationState, auditContext);
+      await navigationStatesRepository.save(navigationState);
     });
   }
 }

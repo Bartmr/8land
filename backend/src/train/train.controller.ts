@@ -118,7 +118,7 @@ export class TrainController {
         navState.traveledByTrainToLand = land;
         navState.boardedOnTrainStation = trainStation;
 
-        await navStatesRepository.save(navState, auditContext);
+        await navStatesRepository.save(navState);
 
         return this.landsService.mapLand(land);
       }
@@ -149,7 +149,7 @@ export class TrainController {
           navState.traveledByTrainToLand = null;
           navState.boardedOnTrainStation = null;
 
-          await navStateRepo.save(navState, auditContext);
+          await navStateRepo.save(navState);
 
           return this.landsService.mapLand(boardedOnTrainStation);
         } else {

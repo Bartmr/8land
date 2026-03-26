@@ -54,6 +54,6 @@ export class UsersController {
     const usersRepository =
       this.dataSource.getCustomRepository(UsersRepository);
 
-    await usersRepository.save(authContext.user, auditContext);
+    await usersRepository.save(authContext.user);
   }
 }
