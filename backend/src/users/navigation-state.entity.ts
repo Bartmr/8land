@@ -1,11 +1,12 @@
 import { DoorBlock } from 'src/blocks/door-block.entity';
-import { SimpleEntity } from 'src/databases/simple-entity/simple.entity';
 import { Land } from 'src/land/land.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity()
-export class NavigationState extends SimpleEntity {
+export class NavigationState {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
   @ManyToOne(() => User, { lazy: true })
   user!: Promise<User>;
 

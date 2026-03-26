@@ -1,6 +1,5 @@
 import { AppBlock } from 'src/blocks/app-block.entity';
 import { DoorBlock } from 'src/blocks/door-block.entity';
-import { SimpleEntity } from 'src/databases/simple-entity/simple.entity';
 import { Territory } from 'src/territories/territory.entity';
 import { World } from 'src/worlds/worlds.entity';
 import {
@@ -9,13 +8,16 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
 @Unique(['searchableName'])
-export class Land extends SimpleEntity {
+export class Land {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
   @CreateDateColumn()
   createdAt!: Date;
 

@@ -1,10 +1,11 @@
-import { SimpleEntity } from 'src/databases/simple-entity/simple.entity';
 import { Land } from 'src/land/land.entity';
 import { Territory } from 'src/territories/territory.entity';
-import { Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class DoorBlock extends SimpleEntity {
+export class DoorBlock {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
   @ManyToOne(() => Land, { eager: true, nullable: true })
   @JoinColumn()
   inLand!: Land | null;

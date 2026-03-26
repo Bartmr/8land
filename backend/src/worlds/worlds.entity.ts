@@ -1,4 +1,3 @@
-import { SimpleEntity } from 'src/databases/simple-entity/simple.entity';
 import { Land } from 'src/land/land.entity';
 import { User } from 'src/users/user.entity';
 import {
@@ -7,10 +6,13 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
-export class World extends SimpleEntity {
+export class World {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
   @CreateDateColumn()
   createdAt!: Date;
 

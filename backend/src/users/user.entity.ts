@@ -1,16 +1,18 @@
 import { getEnumValues } from '@shared/src/internals/utils/enums/get-enum-values';
 import { Role } from 'src/users/authentication/roles/roles';
-import { SimpleEntity } from 'src/databases/simple-entity/simple.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
-export class User extends SimpleEntity {
+export class User {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
   @Column({ unique: true })
   firebaseUid!: string;
 

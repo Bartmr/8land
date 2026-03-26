@@ -1,6 +1,5 @@
 import { AppBlock } from 'src/blocks/app-block.entity';
 import { DoorBlock } from 'src/blocks/door-block.entity';
-import { SimpleEntity } from 'src/databases/simple-entity/simple.entity';
 import { Land } from 'src/land/land.entity';
 import {
   Column,
@@ -9,11 +8,14 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
-export class Territory extends SimpleEntity {
+export class Territory {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
   @CreateDateColumn()
   createdAt!: Date;
 

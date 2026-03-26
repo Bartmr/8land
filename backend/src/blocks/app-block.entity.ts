@@ -1,10 +1,11 @@
-import { SimpleEntity } from 'src/databases/simple-entity/simple.entity';
 import { Land } from 'src/land/land.entity';
 import { Territory } from 'src/territories/territory.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class AppBlock extends SimpleEntity {
+export class AppBlock {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
   @ManyToOne(() => Land, { lazy: true, nullable: true })
   @JoinColumn()
   inLand!: Promise<Land | null>;

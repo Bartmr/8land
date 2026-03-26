@@ -26,11 +26,6 @@ export const TYPEORM_ORMCONFIG: ConnectionOptions = {
   */
   migrationsRun: false,
   migrations: [
-    FirstMigration1642874083482,
-    NFTMetadata1645870824982,
-    UserAppId1647382874239,
-    NavigationState1649620686884,
-    Train1651758178120,
   ],
   cli: {
     migrationsDir: 'migrations',
