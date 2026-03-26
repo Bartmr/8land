@@ -1,4 +1,6 @@
-import 'src/environment/load-environment-variables';
+import dotenv from "dotenv"
+
+dotenv.config()
 
 import { tearDownDatabases } from 'test-environment-impl/base/tear-down-databases';
 import { createConnection } from 'typeorm';
@@ -11,7 +13,7 @@ import { EnvironmentVariablesService } from 'src/environment/environment-variabl
 import * as firebaseAdmin from 'firebase-admin';
 import { UsersRepository } from 'src/users/users.repository';
 import { AuditContext } from 'src/auditing/audit-context';
-import { Role } from 'src/auth/roles/roles';
+import { Role } from 'src/users/authentication/roles/roles';
 import { JSONApiBase } from 'src/apis/json-api-base';
 import { LoggingServiceSingleton } from 'src/logging/logging.service.singleton';
 import { object } from 'not-me/lib/schemas/object/object-schema';

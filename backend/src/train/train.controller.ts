@@ -20,9 +20,9 @@ import {
   ReturnToTrainStationQueryDTO,
 } from '@shared/src/train/return/return-to-train-station.dto';
 import { getTypesafeObjectFieldPath } from 'not-me/lib/utils/get-typesafe-object-field-path';
-import { AuthContext } from 'src/auth/auth-context';
-import { WithOptionalAuthContext } from 'src/auth/auth-context.decorator';
-import { PublicRoute } from 'src/auth/public-route.decorator';
+import { AuthContext } from 'src/users/auth/auth-context';
+import { WithOptionalAuthContext } from 'src/users/auth/auth-context.decorator';
+import { PublicRoute } from 'src/users/auth/public-route.decorator';
 import { AuditContext } from 'src/auditing/audit-context';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';

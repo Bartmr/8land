@@ -12,12 +12,12 @@ import {
   NavigateToLandQueryDTO,
 } from '@shared/src/land/in-game/navigate/navigate-to-land.dto';
 import { ResumeLandNavigationDTO } from '@shared/src/land/in-game/resume/resume-land-navigation.dto';
-import { AuthContext } from 'src/auth/auth-context';
+import { AuthContext } from 'src/users/auth/auth-context';
 import {
   WithAuthContext,
   WithOptionalAuthContext,
-} from 'src/auth/auth-context.decorator';
-import { PublicRoute } from 'src/auth/public-route.decorator';
+} from 'src/users/auth/auth-context.decorator';
+import { PublicRoute } from 'src/users/auth/public-route.decorator';
 import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
 import { AuditContext } from 'src/auditing/audit-context';
 import { WithAuditContext } from 'src/auditing/audit.decorator';

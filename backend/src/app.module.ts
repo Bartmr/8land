@@ -4,7 +4,7 @@ import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { LoggingModule } from './logging/logging.module';
 import { LoggingServiceSingleton } from './logging/logging.service.singleton';
 import { DEFAULT_DB_TYPEORM_CONN_OPTS } from './databases/default-db-typeorm-conn-opts';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './users/auth/auth.module';
 import { LandModule } from './land/land.module';
 import { BlocksModule } from './blocks/blocks.module';
 // import { TerritoriesModule } from './territories/territories.module';

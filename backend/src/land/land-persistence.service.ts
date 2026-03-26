@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLandRequestDTO } from '@shared/src/land/create/create-land.dto';
 import { UploadLandAssetsParameters } from '@shared/src/land/upload-assets/upload-land-assets.dto';
-import { AuthContext } from 'src/auth/auth-context';
+import { AuthContext } from 'src/users/auth/auth-context';
 import { AuditContext } from 'src/auditing/audit-context';
 import { getSearchableName } from 'src/strings/get-searchable-name';
 import { World } from 'src/worlds/typeorm/worlds.entity';
@@ -20,7 +20,7 @@ import {
   EditLandBodyDTO,
   EditLandParametersDTO,
 } from '@shared/src/land/edit/edit-land.dto';
-import { Role } from 'src/auth/roles/roles';
+import { Role } from 'src/users/authentication/roles/roles';
 import {
   LAND_MAP_SIZE_LIMIT,
   LAND_TILESET_SIZE_LIMIT,

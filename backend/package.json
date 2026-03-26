@@ -48,7 +48,8 @@
     "swagger-ui-express": "^4.4.0",
     "typeorm": "~0.2.45",
     "uuid": "^8.3.2",
-    "validator": "^13.7.0"
+    "validator": "^13.7.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.18.6",

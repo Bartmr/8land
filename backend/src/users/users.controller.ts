@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, Patch } from '@nestjs/common';
-import { AuthContext } from 'src/auth/auth-context';
-import { WithAuthContext } from 'src/auth/auth-context.decorator';
+import { AuthContext } from 'src/users/auth/auth-context';
+import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
 import { AuditContext } from 'src/auditing/audit-context';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { Connection } from 'typeorm';

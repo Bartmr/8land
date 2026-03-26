@@ -34,8 +34,8 @@ import {
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
-import { AuthContext } from 'src/auth/auth-context';
-import { WithAuthContext } from 'src/auth/auth-context.decorator';
+import { AuthContext } from 'src/users/auth/auth-context';
+import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
 import { RaribleApi } from 'src/rarible/rarible.api';
 import { AuditContext } from 'src/auditing/audit-context';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
@@ -56,8 +56,8 @@ import {
   CreateTerritoryResponseDTO,
 } from '@shared/src/territories/create/create-territory.dto';
 import { CreateTerritoryRequestJSONSchema } from '@shared/src/territories/create/create-territory.schemas';
-import { Role } from 'src/auth/roles/roles';
-import { RolesUpAndIncluding } from 'src/auth/roles/roles.decorator';
+import { Role } from 'src/users/authentication/roles/roles';
+import { RolesUpAndIncluding } from 'src/users/authentication/roles/roles.decorator';
 import { LandRepository } from 'src/land/typeorm/land.repository';
 import { BackendStorageApi } from 'src/backend/backend-storage.api';
 import { number } from 'not-me/lib/schemas/number/number-schema';

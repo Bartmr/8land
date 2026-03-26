@@ -1,5 +1,8 @@
 import 'source-map-support/register';
-import 'src/environment/load-environment-variables';
+
+import dotenv from "dotenv";
+
+dotenv.config();
 
 import { createApp } from './create-app';
 import { EnvironmentVariablesService } from './environment/environment-variables.service';
