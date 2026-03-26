@@ -13,7 +13,6 @@ import { DynamicBlockType } from '@shared/src/blocks/create/create-block.enums';
 import { DeleteBlockURLParameters } from '@shared/src/blocks/delete/delete-block.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
-import { AdminOnly } from 'src/users/auth/admin-only.decorator';
 import { AuditContext } from 'src/auditing/audit-context';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
@@ -28,12 +27,15 @@ export class BlocksController {
   constructor(private dataSource: DataSource) {}
 
   @Post()
-  @AdminOnly()
   createBlock(
     @Body() body: CreateBlockRequestDTO,
     @WithAuditContext() auditContext: AuditContext,
     @WithAuthContext() authContext: AuthContext,
   ) {
+    if (!authContext.user.isAdmin) {
+      throw new ForbiddenException();
+    }
+
     return this.dataSource.transaction(async (e) => {
       const landRepository = e.getCustomRepository(LandRepository);
 
@@ -137,11 +139,15 @@ export class BlocksController {
 
   @HttpCode(204)
   @Delete('/:blockType/:blockId')
-  @AdminOnly()
   deleteBlock(
     @Param() param: DeleteBlockURLParameters,
     @WithAuditContext() auditContext: AuditContext,
+    @WithAuthContext() authContext: AuthContext,
   ) {
+    if (!authContext.user.isAdmin) {
+      throw new ForbiddenException();
+    }
+
     return this.dataSource.transaction(async (e) => {
       const landRepository = e.getCustomRepository(LandRepository);
       const blockRepository = e.getCustomRepository(

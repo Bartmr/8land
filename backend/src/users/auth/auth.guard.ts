@@ -2,7 +2,6 @@ import { uuid } from '@shared/src/internals/validation/schemas/uuid.schema';
 import {
   CanActivate,
   ExecutionContext,
-  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -14,7 +13,6 @@ import {
   PublicRouteMetadata,
   PUBLIC_ROUTE_METADATA_KEY,
 } from './public-route.decorator';
-import { ADMIN_ONLY_METADATA_KEY } from './admin-only.decorator';
 import { AuthTokensService } from './tokens/auth-tokens.service';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { isUUID } from 'src/uuids/is-uuid';
@@ -97,15 +95,6 @@ export class AuthGuard implements CanActivate {
       return true;
     } else {
       if (request.authContext) {
-        const isAdminOnly = this.reflector.get<true | undefined>(
-          ADMIN_ONLY_METADATA_KEY,
-          context.getHandler(),
-        );
-
-        if (isAdminOnly && !request.authContext.user.isAdmin) {
-          throw new ForbiddenException();
-        }
-
         return true;
       } else {
         throw new UnauthorizedException();

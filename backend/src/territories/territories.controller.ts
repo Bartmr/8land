@@ -56,7 +56,6 @@ import {
   CreateTerritoryResponseDTO,
 } from '@shared/src/territories/create/create-territory.dto';
 import { CreateTerritoryRequestJSONSchema } from '@shared/src/territories/create/create-territory.schemas';
-import { AdminOnly } from 'src/users/auth/admin-only.decorator';
 import { LandRepository } from 'src/land/land.repository';
 import { BackendStorageApi } from 'src/backend/backend-storage.api';
 import { number } from 'not-me/lib/schemas/number/number-schema';
@@ -381,7 +380,6 @@ export class TerritoriesEndUserController {
   }
 
   @Post()
-  @AdminOnly()
   @UseInterceptors(
     FileFieldsInterceptor([
       { name: 'data', maxCount: 1 },
@@ -399,7 +397,12 @@ export class TerritoriesEndUserController {
       thumbnail?: Express.Multer.File[];
     },
     @WithAuditContext() auditContext: AuditContext,
+    @WithAuthContext() authContext: AuthContext,
   ): Promise<CreateTerritoryResponseDTO> {
+    if (!authContext.user.isAdmin) {
+      throw new ForbiddenException();
+    }
+
     const dataFile =
       files.data?.[0] ||
       (() => {
@@ -568,13 +571,17 @@ export class TerritoriesEndUserController {
   }
 
   @Patch(':id/rarible')
-  @AdminOnly()
   @HttpCode(204)
   async updateRaribleMetadata(
     @Param() params: UpdateTerritoryRaribleMetadataParametersDTO,
     @Body() body: UpdateTerritoryRaribleMetadataRequestDTO,
     @WithAuditContext() auditContext: AuditContext,
+    @WithAuthContext() authContext: AuthContext,
   ) {
+    if (!authContext.user.isAdmin) {
+      throw new ForbiddenException();
+    }
+
     return this.dataSource.transaction(async (eM) => {
       const territoriesRepository = eM.getCustomRepository(
         TerritoriesRepository,

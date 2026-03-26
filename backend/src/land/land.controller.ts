@@ -6,6 +6,7 @@ import {
   BadRequestException,
   Body,
   ConflictException,
+  ForbiddenException,
   HttpCode,
   Post,
   Put,
@@ -35,7 +36,6 @@ import {
   CreateLandResponseDTO,
 } from '@shared/src/land/create/create-land.dto';
 import { UploadLandAssetsParameters } from '@shared/src/land/upload-assets/upload-land-assets.dto';
-import { AdminOnly } from 'src/users/auth/admin-only.decorator';
 import { AuditContext } from 'src/auditing/audit-context';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { ApiBody, ApiConsumes, ApiProperty } from '@nestjs/swagger';
@@ -293,11 +293,14 @@ export class LandsController {
   }
 
   @Delete(':landId')
-  @AdminOnly()
   async deleteLand(
     @Param() param: DeleteLandParametersDTO,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<void> {
+    if (!authContext.user.isAdmin) {
+      throw new ForbiddenException();
+    }
+
     const res = await this.landPersistenceService.deleteLand({
       landId: param.landId,
       connection: this.dataSource,
