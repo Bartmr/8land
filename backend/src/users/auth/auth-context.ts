@@ -1,4 +1,4 @@
-import { User } from 'src/users/typeorm/user.entity';
+import { User } from 'src/users/user.entity';
 
 export class AuthContext {
   user: User;

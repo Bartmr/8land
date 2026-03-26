@@ -1,6 +1,6 @@
 import { SimpleEntityRepository } from 'src/databases/simple-entity/simple-entity.repository';
 import { EntityRepository } from 'typeorm';
-import { User } from './typeorm/user.entity';
+import { User } from './user.entity';
 
 /**
  * BASE CLASS CREATED FOR TESTING!

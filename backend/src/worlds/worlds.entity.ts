@@ -1,6 +1,6 @@
 import { SimpleEntity } from 'src/databases/simple-entity/simple.entity';
-import { Land } from 'src/land/typeorm/land.entity';
-import { User } from 'src/users/typeorm/user.entity';
+import { Land } from 'src/land/land.entity';
+import { User } from 'src/users/user.entity';
 import {
   Column,
   CreateDateColumn,

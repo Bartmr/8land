@@ -1,6 +1,6 @@
 import { SimpleEntity } from 'src/databases/simple-entity/simple.entity';
-import { Land } from 'src/land/typeorm/land.entity';
-import { Territory } from 'src/territories/typeorm/territory.entity';
+import { Land } from 'src/land/land.entity';
+import { Territory } from 'src/territories/territory.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity()

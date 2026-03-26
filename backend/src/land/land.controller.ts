@@ -28,7 +28,7 @@ import { ResourceNotFoundException } from 'src/server/resource-not-found.excepti
 import { StorageService } from 'src/storage/storage.service';
 import { Connection } from 'typeorm';
 import { LandsService } from './lands.service';
-import { LandRepository } from './typeorm/land.repository';
+import { LandRepository } from './land.repository';
 
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import {

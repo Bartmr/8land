@@ -45,7 +45,7 @@ import {
   StorageService,
 } from 'src/storage/storage.service';
 import { Connection } from 'typeorm';
-import { TerritoriesRepository } from './typeorm/territories.repository';
+import { TerritoriesRepository } from './territories.repository';
 import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
 import { InferType } from 'not-me/lib/schemas/schema';
 import { throwError } from 'src/throw-error';
@@ -58,7 +58,7 @@ import {
 import { CreateTerritoryRequestJSONSchema } from '@shared/src/territories/create/create-territory.schemas';
 import { Role } from 'src/users/authentication/roles/roles';
 import { RolesUpAndIncluding } from 'src/users/authentication/roles/roles.decorator';
-import { LandRepository } from 'src/land/typeorm/land.repository';
+import { LandRepository } from 'src/land/land.repository';
 import { BackendStorageApi } from 'src/backend/backend-storage.api';
 import { number } from 'not-me/lib/schemas/number/number-schema';
 import {

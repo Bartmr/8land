@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { EnvironmentVariablesService } from 'src/environment/environment-variables.service';
-import { User } from 'src/users/typeorm/user.entity';
+import { User } from 'src/users/user.entity';
 import { AuthTokensRepository } from './auth-token.repository';
 import { Connection, EntityManager } from 'typeorm';
 import { LoggingService } from 'src/logging/logging.service';

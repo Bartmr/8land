@@ -6,11 +6,11 @@ import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection
 import { LoggingService } from 'src/logging/logging.service';
 import { StorageService } from 'src/storage/storage.service';
 import { throwError } from 'src/throw-error';
-import { NavigationState } from 'src/users/typeorm/navigation-state.entity';
-import { NavigationStateRepository } from 'src/users/typeorm/navigation-state.repository';
+import { NavigationState } from 'src/users/navigation-state.entity';
+import { NavigationStateRepository } from 'src/users/navigation-state.repository';
 import { Connection, EntityManager } from 'typeorm';
-import { Land } from './typeorm/land.entity';
-import { LandRepository } from './typeorm/land.repository';
+import { Land } from './land.entity';
+import { LandRepository } from './land.repository';
 
 export class LandsService {
   constructor(

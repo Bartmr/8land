@@ -37,7 +37,7 @@ import { generateRandomUUID } from 'src/uuids/generate-random-uuid';
 import { Role } from './roles/roles';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { AuditContext } from 'src/auditing/audit-context';
-import { User } from 'src/users/typeorm/user.entity';
+import { User } from 'src/users/user.entity';
 import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
 
 @Controller('auth')

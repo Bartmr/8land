@@ -20,10 +20,10 @@ import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import { getSearchableName } from 'src/strings/get-searchable-name';
-import { LandRepository } from 'src/land/typeorm/land.repository';
+import { LandRepository } from 'src/land/land.repository';
 import { Connection } from 'typeorm';
-import { AppBlockRepository } from './typeorm/app-block.repository';
-import { DoorBlockRepository } from './typeorm/door-block.repository';
+import { AppBlockRepository } from './app-block.repository';
+import { DoorBlockRepository } from './door-block.repository';
 
 @Controller('blocks')
 export class BlocksController {

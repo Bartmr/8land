@@ -1,11 +1,11 @@
-import { User } from 'src/users/typeorm/user.entity';
+import { User } from 'src/users/user.entity';
 import {
   AbstractRepository,
   EntityRepository,
   LessThan,
   MoreThan,
 } from 'typeorm';
-import { AuthToken } from './typeorm/auth-token.entity';
+import { AuthToken } from './auth-token.entity';
 import { generateRandomUUID } from 'src/uuids/generate-random-uuid';
 
 @EntityRepository(AuthToken)

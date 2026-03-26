@@ -1,5 +1,5 @@
 import { SimpleEntityRepository } from 'src/databases/simple-entity/simple-entity.repository';
-import { NavigationState } from 'src/users/typeorm/navigation-state.entity';
+import { NavigationState } from 'src/users/navigation-state.entity';
 import { EntityManager, EntityRepository } from 'typeorm';
 import { DoorBlock } from './door-block.entity';
 

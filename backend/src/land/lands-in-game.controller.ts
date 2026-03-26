@@ -18,13 +18,13 @@ import {
   WithOptionalAuthContext,
 } from 'src/users/auth/auth-context.decorator';
 import { PublicRoute } from 'src/users/auth/public-route.decorator';
-import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
+import { DoorBlockRepository } from 'src/blocks/door-block.repository';
 import { AuditContext } from 'src/auditing/audit-context';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
 import { LoggingService } from 'src/logging/logging.service';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
-import { NavigationStateRepository } from 'src/users/typeorm/navigation-state.repository';
+import { NavigationStateRepository } from 'src/users/navigation-state.repository';
 import { Connection } from 'typeorm';
 import { LandsService } from './lands.service';
 

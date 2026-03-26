@@ -31,9 +31,9 @@ import { ResourceNotFoundException } from 'src/server/resource-not-found.excepti
 import { getSearchableName } from 'src/strings/get-searchable-name';
 import { throwError } from 'src/throw-error';
 import { LandsService } from 'src/land/lands.service';
-import { Land } from 'src/land/typeorm/land.entity';
-import { LandRepository } from 'src/land/typeorm/land.repository';
-import { NavigationStateRepository } from 'src/users/typeorm/navigation-state.repository';
+import { Land } from 'src/land/land.entity';
+import { LandRepository } from 'src/land/land.repository';
+import { NavigationStateRepository } from 'src/users/navigation-state.repository';
 import { Connection } from 'typeorm';
 
 @Controller('/train')

@@ -4,10 +4,10 @@ import { UploadLandAssetsParameters } from '@shared/src/land/upload-assets/uploa
 import { AuthContext } from 'src/users/auth/auth-context';
 import { AuditContext } from 'src/auditing/audit-context';
 import { getSearchableName } from 'src/strings/get-searchable-name';
-import { World } from 'src/worlds/typeorm/worlds.entity';
+import { World } from 'src/worlds/worlds.entity';
 import { WorldRepository } from 'src/worlds/worlds.repository';
 import { Connection } from 'typeorm';
-import { LandRepository } from './typeorm/land.repository';
+import { LandRepository } from './land.repository';
 import sharp from 'sharp';
 import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
 import {

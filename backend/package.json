@@ -19,10 +19,10 @@
     "format": "prettier --write .",
     "lint": "eslint --ext .ts,.tsx --max-warnings 0 .",
     "lint:fix": "eslint --ext .ts,.tsx --max-warnings 0 --fix .",
-    "reset-repository": "git clean -Xdf",
     "nest": "nest",
     "typeorm": "npm run ts-node ./node_modules/.bin/typeorm",
-    "ts-node": "ts-node --project tsconfig.build.json --transpile-only -r tsconfig-paths/register"
+    "ts-node": "ts-node --project tsconfig.build.json --transpile-only -r tsconfig-paths/register",
+    "reset-repository": "git clean -Xdf"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.121.0",

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeormFeatureModule } from 'src/databases/typeorm.module';
 import { LandModule } from 'src/land/land.module';
-import { Land } from 'src/land/typeorm/land.entity';
-import { NavigationState } from 'src/users/typeorm/navigation-state.entity';
-import { User } from 'src/users/typeorm/user.entity';
+import { Land } from 'src/land/land.entity';
+import { NavigationState } from 'src/users/navigation-state.entity';
+import { User } from 'src/users/user.entity';
 import { TrainController } from './train.controller';
 
 @Module({
