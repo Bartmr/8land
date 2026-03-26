@@ -11,18 +11,5 @@
         "tsConfigPath": "../shared/tsconfig.json"
       }
     }
-  },
-  "compilerOptions": {
-    "webpack": false,
-    "plugins": [
-      {
-        "name": "@nestjs/swagger",
-        "options": {
-          "introspectComments": false,
-          "classValidatorShim": false,
-          "dtoFileNameSuffix": [".dto.ts"]
-        }
-      }
-    ]
   }
 }

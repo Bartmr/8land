@@ -8,11 +8,6 @@ import { EnvironmentVariablesService } from './environment/environment-variables
 import { PROJECT_NAME } from '@shared/src/project-details';
 import cookieParser from 'cookie-parser';
 
-if (NODE_ENV === NodeEnv.Test) {
-  throw new Error(`createApp() is not meant to create an app for testing purposes.
-Use createTestApp() instead, inside ./spec/`);
-}
-
 const WEB_APP_ORIGIN = EnvironmentVariablesService.variables.WEB_APP_ORIGIN;
 
 export async function createApp() {
@@ -23,7 +18,6 @@ export async function createApp() {
   app.enableCors({
     origin: WEB_APP_ORIGIN,
     credentials: true,
-    exposedHeaders: ['X-Resource-Not-Found'],
   });
 
   const loggingService = app.get(LoggingService);
@@ -50,29 +44,6 @@ export async function createApp() {
   };
 
   app.useLogger(logger);
-
-  if (EnvironmentVariablesService.variables.ENABLE_SWAGGER) {
-    const { SwaggerModule, DocumentBuilder } = await import('@nestjs/swagger');
-
-    const options = new DocumentBuilder()
-      .setTitle(PROJECT_NAME + ' API')
-      .setVersion('1.0')
-      .addBearerAuth(
-        {
-          type: 'http',
-          scheme: 'bearer',
-        },
-        'Auth Token Id',
-      )
-      .addSecurityRequirements('Auth Token Id')
-      .build();
-
-    const document = SwaggerModule.createDocument(app, options);
-
-    SwaggerModule.setup('api-docs', app, document, {
-      swaggerOptions: { persistAuthorization: true },
-    });
-  }
 
   return app;
 }

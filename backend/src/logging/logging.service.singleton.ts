@@ -5,12 +5,6 @@ import { NODE_ENV } from '../environment/node-env.constants';
 import { NodeEnv } from '../environment/node-env.types';
 import { LoggingService } from './logging.service';
 
-if (NODE_ENV === NodeEnv.Test) {
-  throw new Error(
-    'Do not import this logging implementation in testing environments. Use a mock instead',
-  );
-}
-
 function nestedValuesToString(value: unknown) {
   return inspect(value, undefined, 10);
 }
