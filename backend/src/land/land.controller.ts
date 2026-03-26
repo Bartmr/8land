@@ -26,7 +26,7 @@ import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
 import { Role } from 'src/users/authentication/roles/roles';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import { StorageService } from 'src/storage/storage.service';
-import { Connection } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { LandsService } from './lands.service';
 import { LandRepository } from './land.repository';
 
@@ -51,7 +51,7 @@ import { DeleteLandParametersDTO } from '@shared/src/land/delete-land/delete-lan
 import { SettingsService } from 'src/settings/settings.service';
 import { PublicRoute } from 'src/users/auth/public-route.decorator';
 import { GetLandsToClaimDTO } from '@shared/src/land/lands-to-claim/lands-to-claim.dto';
-import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
+import { InjectDataSource } from '@nestjs/typeorm';
 
 class LandAssetsRequestDTO {
   @ApiProperty({ type: 'string', format: 'binary' })
@@ -65,7 +65,7 @@ class LandAssetsRequestDTO {
 @Controller('lands')
 export class LandsController {
   constructor(
-    @InjectTypeormConnection() private connection: Connection,
+    @InjectDataSource() private dataSource: DataSource,
     private storageService: StorageService,
     private landService: LandsService,
     private landPersistenceService: LandPersistenceService,
@@ -77,9 +77,9 @@ export class LandsController {
     @Query() query: IndexLandsQueryDTO,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<IndexLandsDTO> {
-    const landsRepository = this.connection.getCustomRepository(LandRepository);
+    const landsRepository = this.dataSource.getCustomRepository(LandRepository);
     const worldsRepository =
-      this.connection.getCustomRepository(WorldRepository);
+      this.dataSource.getCustomRepository(WorldRepository);
 
     const [results, world] = await Promise.all([
       landsRepository.selectManyAndCount(
@@ -130,7 +130,7 @@ export class LandsController {
   @Get('/getLandsToClaim')
   @PublicRoute()
   async getLandsToClaim(): Promise<GetLandsToClaimDTO> {
-    const landsRepository = this.connection.getCustomRepository(LandRepository);
+    const landsRepository = this.dataSource.getCustomRepository(LandRepository);
 
     const [landsWithStartCount, settings] = await Promise.all([
       landsRepository.count({
@@ -151,7 +151,7 @@ export class LandsController {
     @Param() parameters: GetLandParametersDTO,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<GetLandDTO> {
-    const landsRepository = this.connection.getCustomRepository(LandRepository);
+    const landsRepository = this.dataSource.getCustomRepository(LandRepository);
 
     const land = await landsRepository.selectOne(
       {
@@ -190,7 +190,7 @@ export class LandsController {
     const limit = settings.landLimitPerWorld;
 
     const res = await this.landPersistenceService.createLand({
-      connection: this.connection,
+      connection: this.dataSource,
       body,
       authContext,
       auditContext,
@@ -242,7 +242,7 @@ export class LandsController {
       })();
 
     const res = await this.landPersistenceService.uploadLandAssets({
-      connection: this.connection,
+      connection: this.dataSource,
       storageService: this.storageService,
       map,
       tileset,
@@ -278,7 +278,7 @@ export class LandsController {
     @WithAuthContext() authContext: AuthContext,
   ): Promise<EditLandDTO> {
     const res = await this.landPersistenceService.editLand({
-      connection: this.connection,
+      connection: this.dataSource,
       auditContext,
       body,
       param,
@@ -302,7 +302,7 @@ export class LandsController {
   ): Promise<void> {
     const res = await this.landPersistenceService.deleteLand({
       landId: param.landId,
-      connection: this.connection,
+      connection: this.dataSource,
       storageService: this.storageService,
       authContext,
     });

@@ -9,7 +9,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@shared": ["../shared"]
+      "@shared/*": ["../shared/*"]
     },
     "skipLibCheck": true,
     "lib": ["es2021"],

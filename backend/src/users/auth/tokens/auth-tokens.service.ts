@@ -7,12 +7,12 @@ import {
 import { EnvironmentVariablesService } from 'src/environment/environment-variables.service';
 import { User } from 'src/users/user.entity';
 import { AuthTokensRepository } from './auth-token.repository';
-import { Connection, EntityManager } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { LoggingService } from 'src/logging/logging.service';
 import { cleanExpiredAuthTokens } from './clean-expired-auth-tokens';
 import { throwError } from 'src/throw-error';
 import { ProcessContextManager } from 'src/process/process-context-manager';
-import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
+import { InjectDataSource } from '@nestjs/typeorm';
 
 @Injectable()
 export class AuthTokensService implements OnModuleInit, OnModuleDestroy {
@@ -22,11 +22,11 @@ export class AuthTokensService implements OnModuleInit, OnModuleDestroy {
 
   constructor(
     loggingService: LoggingService,
-    @InjectTypeormConnection() connection: Connection,
+    @InjectDataSource() dataSource: DataSource,
   ) {
     this.loggingService = loggingService;
     this.tokensRepository =
-      connection.getCustomRepository(AuthTokensRepository);
+      dataSource.getCustomRepository(AuthTokensRepository);
   }
 
   onModuleInit() {

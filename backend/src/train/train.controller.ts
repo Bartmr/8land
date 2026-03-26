@@ -25,7 +25,7 @@ import { WithOptionalAuthContext } from 'src/users/auth/auth-context.decorator';
 import { PublicRoute } from 'src/users/auth/public-route.decorator';
 import { AuditContext } from 'src/auditing/audit-context';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
-import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
+import { InjectDataSource } from '@nestjs/typeorm';
 import { LoggingService } from 'src/logging/logging.service';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import { getSearchableName } from 'src/strings/get-searchable-name';
@@ -34,12 +34,12 @@ import { LandsService } from 'src/land/lands.service';
 import { Land } from 'src/land/land.entity';
 import { LandRepository } from 'src/land/land.repository';
 import { NavigationStateRepository } from 'src/users/navigation-state.repository';
-import { Connection } from 'typeorm';
+import { DataSource } from 'typeorm';
 
 @Controller('/train')
 export class TrainController {
   constructor(
-    @InjectTypeormConnection() private connection: Connection,
+    @InjectDataSource() private dataSource: DataSource,
     private landsService: LandsService,
     private loggingService: LoggingService,
   ) {}
@@ -51,7 +51,7 @@ export class TrainController {
     @WithAuditContext() auditContext: AuditContext,
     @WithOptionalAuthContext() authContext?: AuthContext,
   ): Promise<BoardTrainDTO> {
-    return this.connection.transaction(async (eM) => {
+    return this.dataSource.transaction(async (eM) => {
       const landsRepository = eM.getCustomRepository(LandRepository);
       const navStatesRepository = eM.getCustomRepository(
         NavigationStateRepository,
@@ -131,7 +131,7 @@ export class TrainController {
     @WithOptionalAuthContext() authContext?: AuthContext,
   ): Promise<ReturnToTrainStationDTO> {
     if (authContext) {
-      return this.connection.transaction(async (eM) => {
+      return this.dataSource.transaction(async (eM) => {
         const navStateRepo = eM.getCustomRepository(NavigationStateRepository);
 
         const navState = await navStateRepo.getNavigationStateFromUser(
@@ -165,7 +165,7 @@ export class TrainController {
       }
 
       const landsRepository =
-        this.connection.getCustomRepository(LandRepository);
+        this.dataSource.getCustomRepository(LandRepository);
 
       const trainStation = await landsRepository.findOne({
         where: { id: query.boardedOnTrainStation },
@@ -184,7 +184,7 @@ export class TrainController {
   async getTrainDestinations(
     @Query() query: GetTrainDestinationQueryDTO,
   ): Promise<GetTrainDestinationsDTO> {
-    const landsRepo = this.connection.getCustomRepository(LandRepository);
+    const landsRepo = this.dataSource.getCustomRepository(LandRepository);
 
     const res = await landsRepo.selectManyAndCount(
       {

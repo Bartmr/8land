@@ -17,17 +17,17 @@ import { Role } from 'src/users/authentication/roles/roles';
 import { RolesUpAndIncluding } from 'src/users/authentication/roles/roles.decorator';
 import { AuditContext } from 'src/auditing/audit-context';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
-import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
+import { InjectDataSource } from '@nestjs/typeorm';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import { getSearchableName } from 'src/strings/get-searchable-name';
 import { LandRepository } from 'src/land/land.repository';
-import { Connection } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { AppBlockRepository } from './app-block.repository';
 import { DoorBlockRepository } from './door-block.repository';
 
 @Controller('blocks')
 export class BlocksController {
-  constructor(@InjectTypeormConnection() private connection: Connection) {}
+  constructor(@InjectDataSource() private dataSource: DataSource) {}
 
   @Post()
   @RolesUpAndIncluding(Role.Admin)
@@ -36,7 +36,7 @@ export class BlocksController {
     @WithAuditContext() auditContext: AuditContext,
     @WithAuthContext() authContext: AuthContext,
   ) {
-    return this.connection.transaction(async (e) => {
+    return this.dataSource.transaction(async (e) => {
       const landRepository = e.getCustomRepository(LandRepository);
 
       const land = await landRepository.selectOne(
@@ -144,7 +144,7 @@ export class BlocksController {
     @Param() param: DeleteBlockURLParameters,
     @WithAuditContext() auditContext: AuditContext,
   ) {
-    return this.connection.transaction(async (e) => {
+    return this.dataSource.transaction(async (e) => {
       const landRepository = e.getCustomRepository(LandRepository);
       const blockRepository = e.getCustomRepository(
         (() => {

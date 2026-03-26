@@ -6,7 +6,7 @@ import { AuditContext } from 'src/auditing/audit-context';
 import { getSearchableName } from 'src/strings/get-searchable-name';
 import { World } from 'src/worlds/worlds.entity';
 import { WorldRepository } from 'src/worlds/worlds.repository';
-import { Connection } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { LandRepository } from './land.repository';
 import sharp from 'sharp';
 import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
@@ -47,7 +47,7 @@ export class LandPersistenceService {
     authContext,
     limitations,
   }: {
-    connection: Connection;
+    connection: DataSource;
     auditContext: AuditContext;
     authContext: AuthContext;
     body: CreateLandRequestDTO;
@@ -189,7 +189,7 @@ export class LandPersistenceService {
     authContext,
     settingsService,
   }: {
-    connection: Connection;
+    connection: DataSource;
     storageService: StorageService;
     auditContext: AuditContext;
     params: UploadLandAssetsParameters;
@@ -404,7 +404,7 @@ export class LandPersistenceService {
     param,
     authContext,
   }: {
-    connection: Connection;
+    connection: DataSource;
     auditContext: AuditContext;
     body: EditLandBodyDTO;
     param: EditLandParametersDTO;
@@ -480,7 +480,7 @@ export class LandPersistenceService {
     storageService,
     authContext,
   }: {
-    connection: Connection;
+    connection: DataSource;
     landId: string;
     storageService: StorageService;
     authContext: AuthContext;

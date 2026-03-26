@@ -44,7 +44,7 @@ import {
   ContentType,
   StorageService,
 } from 'src/storage/storage.service';
-import { Connection } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { TerritoriesRepository } from './territories.repository';
 import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
 import { InferType } from 'not-me/lib/schemas/schema';
@@ -66,12 +66,12 @@ import {
   UpdateTerritoryRaribleMetadataRequestDTO,
 } from '@shared/src/territories/update-rarible/update-territory-rarible-metadata.dto';
 import { StaticBlockType } from '@shared/src/blocks/block.enums';
-import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
+import { InjectDataSource } from '@nestjs/typeorm';
 
 @Controller('territories')
 export class TerritoriesEndUserController {
   constructor(
-    @InjectTypeormConnection() private connection: Connection,
+    @InjectDataSource() private dataSource: DataSource,
     private storageService: StorageService,
     private raribleApi: RaribleApi,
     private itselfStorageApi: BackendStorageApi,
@@ -127,7 +127,7 @@ export class TerritoriesEndUserController {
       throw new BadRequestException();
     }
 
-    const territoriesRepository = this.connection.getCustomRepository(
+    const territoriesRepository = this.dataSource.getCustomRepository(
       TerritoriesRepository,
     );
 
@@ -163,7 +163,7 @@ export class TerritoriesEndUserController {
       throw new ConflictException();
     }
 
-    const territoriesRepository = this.connection.getCustomRepository(
+    const territoriesRepository = this.dataSource.getCustomRepository(
       TerritoriesRepository,
     );
     const territory = await territoriesRepository.findOne({
@@ -228,7 +228,7 @@ export class TerritoriesEndUserController {
     @WithAuthContext() authContext: AuthContext,
   ): Promise<void> {
     const territoriesRepository_NO_TRANSACTION =
-      this.connection.getCustomRepository(TerritoriesRepository);
+      this.dataSource.getCustomRepository(TerritoriesRepository);
     const walletAddress = authContext.user.walletAddress;
     if (!walletAddress) {
       throw new ForbiddenException();
@@ -347,7 +347,7 @@ export class TerritoriesEndUserController {
 
     const tilesetStorageKey = `territories/${territory_UNSAFE.id}/tileset.png`;
     const mapStorageKey = `territories/${territory_UNSAFE.id}/map.json`;
-    await this.connection.transaction(async (e) => {
+    await this.dataSource.transaction(async (e) => {
       const territoriesRepo = e.getCustomRepository(TerritoriesRepository);
       const territory = await territoriesRepo.findOne({
         where: {
@@ -461,7 +461,7 @@ export class TerritoriesEndUserController {
       .jpeg()
       .toBuffer();
     /* --- */
-    return this.connection.transaction(async (entityManager) => {
+    return this.dataSource.transaction(async (entityManager) => {
       const landsRepository = entityManager.getCustomRepository(LandRepository);
       const territoriesRepository = entityManager.getCustomRepository(
         TerritoriesRepository,
@@ -577,7 +577,7 @@ export class TerritoriesEndUserController {
     @Body() body: UpdateTerritoryRaribleMetadataRequestDTO,
     @WithAuditContext() auditContext: AuditContext,
   ) {
-    return this.connection.transaction(async (eM) => {
+    return this.dataSource.transaction(async (eM) => {
       const territoriesRepository = eM.getCustomRepository(
         TerritoriesRepository,
       );

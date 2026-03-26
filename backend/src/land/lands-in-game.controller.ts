@@ -21,17 +21,17 @@ import { PublicRoute } from 'src/users/auth/public-route.decorator';
 import { DoorBlockRepository } from 'src/blocks/door-block.repository';
 import { AuditContext } from 'src/auditing/audit-context';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
-import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
+import { InjectDataSource } from '@nestjs/typeorm';
 import { LoggingService } from 'src/logging/logging.service';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import { NavigationStateRepository } from 'src/users/navigation-state.repository';
-import { Connection } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { LandsService } from './lands.service';
 
 @Controller('lands')
 export class LandsInGameController {
   constructor(
-    @InjectTypeormConnection() private connection: Connection,
+    @InjectDataSource() private dataSource: DataSource,
     private landService: LandsService,
     private loggingService: LoggingService,
   ) {}
@@ -43,7 +43,7 @@ export class LandsInGameController {
     @WithOptionalAuthContext() authContext?: AuthContext,
   ): Promise<ResumeLandNavigationDTO> {
     return this.landService.resume({
-      eM: this.connection.manager,
+      eM: this.dataSource.manager,
       loggingService: this.loggingService,
       auditContext,
       authContext,
@@ -58,7 +58,7 @@ export class LandsInGameController {
     @WithOptionalAuthContext() authContext?: AuthContext,
   ): Promise<NavigateToLandDTO> {
     const doorBlocksRepository =
-      this.connection.getCustomRepository(DoorBlockRepository);
+      this.dataSource.getCustomRepository(DoorBlockRepository);
 
     const doorBlock = await doorBlocksRepository.findOne({
       where: { id: query.doorBlockId },
@@ -91,7 +91,7 @@ export class LandsInGameController {
 
     if (authContext) {
       (async () => {
-        const navigationStateRepository = this.connection.getCustomRepository(
+        const navigationStateRepository = this.dataSource.getCustomRepository(
           NavigationStateRepository,
         );
 
@@ -153,7 +153,7 @@ export class LandsInGameController {
     @WithAuthContext() authContext: AuthContext,
     @WithAuditContext() auditContext: AuditContext,
   ) {
-    return this.connection.transaction(async (eM) => {
+    return this.dataSource.transaction(async (eM) => {
       const navigationStatesRepository = eM.getCustomRepository(
         NavigationStateRepository,
       );

@@ -27,7 +27,7 @@ import {
 import { PublicRoute } from './public-route.decorator';
 import { FirebaseService } from 'src/firebase/firebase.service';
 import { UnwrapPromise } from '@shared/src/internals/utils/types/promise-types';
-import { Connection } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { UsersRepository } from 'src/users/users.repository';
 import { AuthTokensService } from './tokens/auth-tokens.service';
 import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
@@ -38,13 +38,13 @@ import { Role } from './roles/roles';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { AuditContext } from 'src/auditing/audit-context';
 import { User } from 'src/users/user.entity';
-import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
+import { InjectDataSource } from '@nestjs/typeorm';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private firebaseService: FirebaseService,
-    @InjectTypeormConnection() private connection: Connection,
+    @InjectDataSource() private dataSource: DataSource,
     private tokensService: AuthTokensService,
   ) {}
 
@@ -82,7 +82,7 @@ export class AuthController {
 
     const firebaseUser = await firebaseAuth.getUser(decodedToken.uid);
 
-    const repository = this.connection.getCustomRepository(UsersRepository);
+    const repository = this.dataSource.getCustomRepository(UsersRepository);
 
     const user = await repository.findOne({
       where: {
@@ -158,7 +158,7 @@ export class AuthController {
     hostname: string;
   }) {
     const token = await this.tokensService.createAuthToken(
-      this.connection.manager,
+      this.dataSource.manager,
       user,
     );
 

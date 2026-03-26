@@ -2,19 +2,19 @@ import { NotImplementedException } from '@nestjs/common';
 import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { AuditContext } from 'src/auditing/audit-context';
-import { InjectTypeormConnection } from 'src/databases/inject-typeorm-connection.decorator';
+import { InjectDataSource } from '@nestjs/typeorm';
 import { LoggingService } from 'src/logging/logging.service';
 import { StorageService } from 'src/storage/storage.service';
 import { throwError } from 'src/throw-error';
 import { NavigationState } from 'src/users/navigation-state.entity';
 import { NavigationStateRepository } from 'src/users/navigation-state.repository';
-import { Connection, EntityManager } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { Land } from './land.entity';
 import { LandRepository } from './land.repository';
 
 export class LandsService {
   constructor(
-    @InjectTypeormConnection() private connection: Connection,
+    @InjectDataSource() private dataSource: DataSource,
     private storageService: StorageService,
   ) {}
 
