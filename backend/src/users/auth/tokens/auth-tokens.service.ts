@@ -12,7 +12,6 @@ import { LoggingService } from 'src/logging/logging.service';
 import { cleanExpiredAuthTokens } from './clean-expired-auth-tokens';
 import { throwError } from 'src/throw-error';
 import { ProcessContextManager } from 'src/process/process-context-manager';
-import { InjectDataSource } from '@nestjs/typeorm';
 
 @Injectable()
 export class AuthTokensService implements OnModuleInit, OnModuleDestroy {
@@ -22,7 +21,7 @@ export class AuthTokensService implements OnModuleInit, OnModuleDestroy {
 
   constructor(
     loggingService: LoggingService,
-    @InjectDataSource() dataSource: DataSource,
+    dataSource: DataSource,
   ) {
     this.loggingService = loggingService;
     this.tokensRepository =

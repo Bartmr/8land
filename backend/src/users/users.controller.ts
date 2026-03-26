@@ -10,11 +10,10 @@ import { ReceiveSignedUserNonceRequestDTO } from '@shared/src/users/me/receive-s
 import * as ethUtil from 'ethereumjs-util';
 import { generateRandomUUID } from 'src/uuids/generate-random-uuid';
 import { getWalletSignMessage } from '@shared/src/users/me/receive-signed-user-nonce.utils';
-import { InjectDataSource } from '@nestjs/typeorm';
 
 @Controller('users')
 export class UsersController {
-  constructor(@InjectDataSource() private dataSource: DataSource) {}
+  constructor(private dataSource: DataSource) {}
 
   @Get('/me/walletNonce')
   getWalletNonce(

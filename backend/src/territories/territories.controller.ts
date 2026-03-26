@@ -66,12 +66,11 @@ import {
   UpdateTerritoryRaribleMetadataRequestDTO,
 } from '@shared/src/territories/update-rarible/update-territory-rarible-metadata.dto';
 import { StaticBlockType } from '@shared/src/blocks/block.enums';
-import { InjectDataSource } from '@nestjs/typeorm';
 
 @Controller('territories')
 export class TerritoriesEndUserController {
   constructor(
-    @InjectDataSource() private dataSource: DataSource,
+    private dataSource: DataSource,
     private storageService: StorageService,
     private raribleApi: RaribleApi,
     private itselfStorageApi: BackendStorageApi,

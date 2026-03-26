@@ -2,7 +2,6 @@ import { NotImplementedException } from '@nestjs/common';
 import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { AuditContext } from 'src/auditing/audit-context';
-import { InjectDataSource } from '@nestjs/typeorm';
 import { LoggingService } from 'src/logging/logging.service';
 import { StorageService } from 'src/storage/storage.service';
 import { throwError } from 'src/throw-error';
@@ -14,7 +13,7 @@ import { LandRepository } from './land.repository';
 
 export class LandsService {
   constructor(
-    @InjectDataSource() private dataSource: DataSource,
+    private dataSource: DataSource,
     private storageService: StorageService,
   ) {}
 

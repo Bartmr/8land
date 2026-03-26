@@ -38,13 +38,12 @@ import { Role } from './roles/roles';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { AuditContext } from 'src/auditing/audit-context';
 import { User } from 'src/users/user.entity';
-import { InjectDataSource } from '@nestjs/typeorm';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private firebaseService: FirebaseService,
-    @InjectDataSource() private dataSource: DataSource,
+    private dataSource: DataSource,
     private tokensService: AuthTokensService,
   ) {}
 

@@ -21,7 +21,6 @@ import { PublicRoute } from 'src/users/auth/public-route.decorator';
 import { DoorBlockRepository } from 'src/blocks/door-block.repository';
 import { AuditContext } from 'src/auditing/audit-context';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
-import { InjectDataSource } from '@nestjs/typeorm';
 import { LoggingService } from 'src/logging/logging.service';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import { NavigationStateRepository } from 'src/users/navigation-state.repository';
@@ -31,7 +30,7 @@ import { LandsService } from './lands.service';
 @Controller('lands')
 export class LandsInGameController {
   constructor(
-    @InjectDataSource() private dataSource: DataSource,
+    private dataSource: DataSource,
     private landService: LandsService,
     private loggingService: LoggingService,
   ) {}

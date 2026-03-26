@@ -51,7 +51,6 @@ import { DeleteLandParametersDTO } from '@shared/src/land/delete-land/delete-lan
 import { SettingsService } from 'src/settings/settings.service';
 import { PublicRoute } from 'src/users/auth/public-route.decorator';
 import { GetLandsToClaimDTO } from '@shared/src/land/lands-to-claim/lands-to-claim.dto';
-import { InjectDataSource } from '@nestjs/typeorm';
 
 class LandAssetsRequestDTO {
   @ApiProperty({ type: 'string', format: 'binary' })
@@ -65,7 +64,7 @@ class LandAssetsRequestDTO {
 @Controller('lands')
 export class LandsController {
   constructor(
-    @InjectDataSource() private dataSource: DataSource,
+    private dataSource: DataSource,
     private storageService: StorageService,
     private landService: LandsService,
     private landPersistenceService: LandPersistenceService,

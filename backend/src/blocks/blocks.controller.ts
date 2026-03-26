@@ -17,7 +17,6 @@ import { Role } from 'src/users/authentication/roles/roles';
 import { RolesUpAndIncluding } from 'src/users/authentication/roles/roles.decorator';
 import { AuditContext } from 'src/auditing/audit-context';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
-import { InjectDataSource } from '@nestjs/typeorm';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import { getSearchableName } from 'src/strings/get-searchable-name';
 import { LandRepository } from 'src/land/land.repository';
@@ -27,7 +26,7 @@ import { DoorBlockRepository } from './door-block.repository';
 
 @Controller('blocks')
 export class BlocksController {
-  constructor(@InjectDataSource() private dataSource: DataSource) {}
+  constructor(private dataSource: DataSource) {}
 
   @Post()
   @RolesUpAndIncluding(Role.Admin)

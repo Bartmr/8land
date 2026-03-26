@@ -25,7 +25,6 @@ import { WithOptionalAuthContext } from 'src/users/auth/auth-context.decorator';
 import { PublicRoute } from 'src/users/auth/public-route.decorator';
 import { AuditContext } from 'src/auditing/audit-context';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
-import { InjectDataSource } from '@nestjs/typeorm';
 import { LoggingService } from 'src/logging/logging.service';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import { getSearchableName } from 'src/strings/get-searchable-name';
@@ -39,7 +38,7 @@ import { DataSource } from 'typeorm';
 @Controller('/train')
 export class TrainController {
   constructor(
-    @InjectDataSource() private dataSource: DataSource,
+    private dataSource: DataSource,
     private landsService: LandsService,
     private loggingService: LoggingService,
   ) {}
