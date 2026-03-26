@@ -1,42 +1,19 @@
-import { AuditContext } from 'src/auditing/audit-context';
-import { SimpleEntityRepository } from 'src/databases/simple-entity/simple-entity.repository';
-import { EntityRepository } from 'typeorm';
+import { AbstractRepository, EntityRepository } from 'typeorm';
 import { NavigationState } from './navigation-state.entity';
 import { User } from './user.entity';
 
 @EntityRepository(NavigationState)
-export class NavigationStateRepository extends SimpleEntityRepository<
-  NavigationState,
-  | 'lastDoor'
-  | 'cameBack'
-  | 'lastPlayedBackgroundMusicUrl'
-  | 'lastCheckpointWasDeleted'
-  | 'traveledByTrainToLand'
-  | 'boardedOnTrainStation'
-> {
-  async getNavigationStateFromUser(
-    user: User,
-    {
-      auditContext,
-    }: {
-      auditContext: AuditContext;
-    },
-  ) {
-    const state = await this.findOne({
+export class NavigationStateRepository extends AbstractRepository<NavigationState> {
+  async getNavigationStateFromUser(user: User) {
+    const state = await this.repository.findOne({
       where: {
         user,
       },
     });
 
     if (!state) {
-      const res = await this.create(
-        {
-          user: Promise.resolve(user),
-        },
-        auditContext,
-      );
-
-      return res;
+      const entity = this.repository.create({ user: Promise.resolve(user) });
+      return this.repository.save(entity);
     } else {
       return state;
     }

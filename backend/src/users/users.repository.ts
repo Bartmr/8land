@@ -1,14 +1,5 @@
-import { SimpleEntityRepository } from 'src/databases/simple-entity/simple-entity.repository';
-import { EntityRepository } from 'typeorm';
+import { AbstractRepository, EntityRepository } from 'typeorm';
 import { User } from './user.entity';
 
-/**
- * BASE CLASS CREATED FOR TESTING!
- */
-export abstract class _UsersRepositoryBase extends SimpleEntityRepository<
-  User,
-  'createdAt' | 'updatedAt' | 'deletedAt'
-> {}
-
 @EntityRepository(User)
-export class UsersRepository extends _UsersRepositoryBase {}
+export class UsersRepository extends AbstractRepository<User> {}

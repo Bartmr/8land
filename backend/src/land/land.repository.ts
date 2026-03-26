@@ -1,13 +1,9 @@
-import { SimpleEntityRepository } from 'src/databases/simple-entity/simple-entity.repository';
 import { NavigationState } from 'src/users/navigation-state.entity';
-import { EntityManager, EntityRepository } from 'typeorm';
+import { AbstractRepository, EntityManager, EntityRepository } from 'typeorm';
 import { Land } from './land.entity';
 
 @EntityRepository(Land)
-export class LandRepository extends SimpleEntityRepository<
-  Land,
-  'createdAt' | 'updatedAt'
-> {
+export class LandRepository extends AbstractRepository<Land> {
   remove(entity: Land) {
     const run = async (manager: EntityManager) => {
       const navigationStateRepository = manager.getRepository(NavigationState);

@@ -1,10 +1,9 @@
-import { SimpleEntityRepository } from 'src/databases/simple-entity/simple-entity.repository';
 import { NavigationState } from 'src/users/navigation-state.entity';
-import { EntityManager, EntityRepository } from 'typeorm';
+import { AbstractRepository, EntityManager, EntityRepository } from 'typeorm';
 import { DoorBlock } from './door-block.entity';
 
 @EntityRepository(DoorBlock)
-export class DoorBlockRepository extends SimpleEntityRepository<DoorBlock> {
+export class DoorBlockRepository extends AbstractRepository<DoorBlock> {
   remove(entity: DoorBlock) {
     const run = async (manager: EntityManager) => {
       const doorsRepository = manager.getRepository(DoorBlock);

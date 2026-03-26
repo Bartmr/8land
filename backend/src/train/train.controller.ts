@@ -83,7 +83,6 @@ export class TrainController {
       } else {
         const navState = await navStatesRepository.getNavigationStateFromUser(
           authContext.user,
-          { auditContext },
         );
 
         if (!navState.lastDoor) {
@@ -137,7 +136,6 @@ export class TrainController {
 
         const navState = await navStateRepo.getNavigationStateFromUser(
           authContext.user,
-          { auditContext },
         );
 
         const boardedOnTrainStation = navState.boardedOnTrainStation;

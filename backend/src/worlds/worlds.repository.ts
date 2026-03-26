@@ -1,9 +1,5 @@
-import { SimpleEntityRepository } from 'src/databases/simple-entity/simple-entity.repository';
-import { EntityRepository } from 'typeorm';
+import { AbstractRepository, EntityRepository } from 'typeorm';
 import { World } from './worlds.entity';
 
 @EntityRepository(World)
-export class WorldRepository extends SimpleEntityRepository<
-  World,
-  'createdAt' | 'hasStartLand'
-> {}
+export class WorldRepository extends AbstractRepository<World> {}

@@ -98,7 +98,6 @@ export class LandsInGameController {
         const navState =
           await navigationStateRepository.getNavigationStateFromUser(
             authContext.user,
-            { auditContext },
           );
 
         navState.lastDoor = doorBlock;
@@ -162,7 +161,6 @@ export class LandsInGameController {
       const navigationState =
         await navigationStatesRepository.getNavigationStateFromUser(
           authContext.user,
-          { auditContext },
         );
 
       const lastDoor = navigationState.lastDoor;

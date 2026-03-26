@@ -113,7 +113,6 @@ export class LandsService {
     if (authContext) {
       navState = await navigationStateRepository.getNavigationStateFromUser(
         authContext.user,
-        { auditContext },
       );
     }
 
