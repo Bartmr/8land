@@ -24,21 +24,13 @@ export class NavigationStateRepository extends AbstractRepository<NavigationStat
     }
   }
 
-  async save(entity: NavigationState): Promise<void> {
-    return this.saveMany([entity]);
+  async save(entity: NavigationState) {
+    return this.repository.save(entity);
   }
 
-  async saveMany(entities: NavigationState[]): Promise<void> {
-    const EntityClass = this.repository.target as Class;
-
-    for (const entity of entities) {
-      if (!(entity instanceof EntityClass)) {
-        throw new Error();
-      }
-    }
-
+  async saveMany(entities: NavigationState[]) {
     await this.repository.save(
-      entities as unknown as DeepPartial<NavigationState>[],
+      entities
     );
   }
 }
