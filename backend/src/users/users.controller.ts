@@ -17,43 +17,5 @@ import { getWalletSignMessage } from '@shared/src/users/me/receive-signed-user-n
 export class UsersController {
   constructor(private dataSource: DataSource) {}
 
-  @Get('/me/walletNonce')
-  getWalletNonce(
-    @WithAuthContext() authContext: AuthContext,
-  ): GetUserWalletNonce {
-    return {
-      walletNonce: authContext.user.walletNonce,
-    };
-  }
-
-  @Patch('/me/walletNonce')
-  @HttpCode(204)
-  async receiveSignedWalletNonce(
-    @WithAuditContext() auditContext: AuditContext,
-    @WithAuthContext() authContext: AuthContext,
-    @Body() body: ReceiveSignedUserNonceRequestDTO,
-  ): Promise<void> {
-    let nonce = authContext.user.walletNonce;
-
-    const message = getWalletSignMessage(nonce);
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-    nonce = '\x19Ethereum Signed Message:\n' + message.length + message;
-
-    const nonceBuffer = ethUtil.keccak(Buffer.from(nonce, 'utf-8'));
-    const { v, r, s } = ethUtil.fromRpcSig(body.signedNonce);
-
-    const pubKey = ethUtil.ecrecover(ethUtil.toBuffer(nonceBuffer), v, r, s);
-
-    const addrBuf = ethUtil.pubToAddress(pubKey);
-
-    const addr = ethUtil.bufferToHex(addrBuf);
-
-    authContext.user.walletAddress = addr;
-    authContext.user.walletNonce = generateRandomUUID();
-
-    const usersRepository =
-      this.dataSource.getCustomRepository(UsersRepository);
-
-    await usersRepository.save(authContext.user);
-  }
+  
 }

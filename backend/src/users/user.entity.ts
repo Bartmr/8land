@@ -26,12 +26,6 @@ export class User {
   @Column({ default: false })
   isAdmin!: boolean;
 
-  @Column('text', { nullable: true })
-  walletAddress!: string | null;
-
-  @Column('text')
-  walletNonce!: string;
-
   @Column({ generated: 'uuid', unique: true })
   appId!: string;
 
@@ -46,15 +40,11 @@ export class User {
   constructor(props?: {
     firebaseUid: string;
     isAdmin: boolean;
-    walletAddress: string | null;
-    walletNonce: string;
     appId: string;
   }) {
     if (props) {
       this.firebaseUid = props.firebaseUid;
       this.isAdmin = props.isAdmin;
-      this.walletAddress = props.walletAddress;
-      this.walletNonce = props.walletNonce;
       this.appId = props.appId;
     }
   }
@@ -63,8 +53,6 @@ export class User {
     return {
       ...this,
       firebaseUid: undefined,
-      walletNonce: undefined,
-      walletAddress: undefined,
     };
   }
 }
