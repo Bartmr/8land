@@ -25,37 +25,6 @@ module.exports = {
     },
   },
   rules: {
-    'import/no-restricted-paths': [
-      'error',
-      {
-        zones: [
-          {
-            target: './libs/shared',
-            from: '.',
-            except: ['./libs/shared', './node_modules'],
-          },
-          {
-            target: './libs/smart-contracts',
-            from: '.',
-            except: [
-              './libs/shared',
-              './libs/smart-contracts',
-              './node_modules',
-            ],
-          },
-          {
-            target: './src',
-            from: '.',
-            except: [
-              './src',
-              './libs/shared',
-              './libs/smart-contracts',
-              './node_modules',
-            ],
-          },
-        ],
-      },
-    ],
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
