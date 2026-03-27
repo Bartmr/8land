@@ -19,16 +19,16 @@ import { object } from 'not-me/lib/schemas/object/object-schema';
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { FIREBASE_EMULATOR_PROJECT_ID } from 'src/firebase/firebase.constants';
 import { throwError } from 'src/throw-error';
-import { LandRepository } from 'src/land/typeorm/land.repository';
-import { TerritoriesRepository } from 'src/territories/typeorm/territories.repository';
+import { LandRepository } from 'src/land/land.repository';
+import { TerritoriesRepository } from 'src/territories/territories.repository';
 import { getSearchableName } from 'src/strings/get-searchable-name';
-import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
+import { DoorBlockRepository } from 'src/blocks/door-block.repository';
 import fs from 'fs';
 import { promisify } from 'util';
 import path from 'path';
 import { DevStorageService } from 'src/storage/dev-storage.service';
 import { LOCAL_TEMPORARY_FILES_PATH } from 'src/temporary-files/temporary-files';
-import { AppBlockRepository } from 'src/blocks/typeorm/app-block.repository';
+import { AppBlockRepository } from 'src/blocks/app-block.repository';
 import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
 import { seedTrainStation } from './seed/seed-train-station';
 import { seedUserLand } from './seed/seed-user-land';
@@ -60,7 +60,7 @@ async function seed() {
 
   const defaultDBConnection = await createConnection({
     ...DEFAULT_DB_TYPEORM_CONN_OPTS_WITH_MIGRATIONS,
-    entities: ['src/**/typeorm/*.entity.ts'],
+    entities: ['src/**/*.entity.ts'],
   });
 
   await tearDownDatabases([defaultDBConnection]);

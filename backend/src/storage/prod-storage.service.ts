@@ -3,10 +3,10 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
-import { Readable } from 'typeorm/platform/PlatformTools';
 import { EnvironmentVariablesService } from '../environment/environment-variables.service';
 import { throwError } from '../throw-error';
 import { ContentType, StorageService } from './storage.service';
+import { Readable } from 'stream';
 
 export class ProdStorageService extends StorageService {
   constructor(private s3Client: S3Client) {

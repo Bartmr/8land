@@ -1,12 +1,12 @@
-import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
+import { DoorBlockRepository } from 'src/blocks/door-block.repository';
 import { getSearchableName } from 'src/strings/get-searchable-name';
-import { LandRepository } from 'src/land/typeorm/land.repository';
-import { User } from 'src/users/typeorm/user.entity';
+import { LandRepository } from 'src/land/land.repository';
+import { User } from 'src/users/user.entity';
 import { WorldRepository } from 'src/worlds/worlds.repository';
 import { EntityManager } from 'typeorm';
 import path from 'path';
 import fs from 'fs';
-import { AppBlockRepository } from 'src/blocks/typeorm/app-block.repository';
+import { AppBlockRepository } from 'src/blocks/app-block.repository';
 import { promisify } from 'util';
 import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
 import { StaticBlockType } from '@shared/src/blocks/block.enums';

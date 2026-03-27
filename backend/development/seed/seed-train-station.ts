@@ -1,13 +1,13 @@
 import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
-import { AppBlockRepository } from 'src/blocks/typeorm/app-block.repository';
-import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
+import { AppBlockRepository } from 'src/blocks/app-block.repository';
+import { DoorBlockRepository } from 'src/blocks/door-block.repository';
 import {
   ContentType,
   StorageService,
 } from 'src/storage/storage.service';
 import { getSearchableName } from 'src/strings/get-searchable-name';
-import { Land } from 'src/land/typeorm/land.entity';
-import { LandRepository } from 'src/land/typeorm/land.repository';
+import { Land } from 'src/land/land.entity';
+import { LandRepository } from 'src/land/land.repository';
 import { EntityManager } from 'typeorm';
 import { promisify } from 'util';
 import fs from 'fs';

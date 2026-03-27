@@ -10,7 +10,6 @@ if (process.env.NODE_ENV === 'production') {
   module.exports = [
     {
       ...TYPEORM_ORMCONFIG,
-      entities: ['dist/src/**/typeorm/*.entity.js'],
     },
   ];
 } else if (process.env.NODE_ENV === 'development') {
