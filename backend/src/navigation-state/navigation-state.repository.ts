@@ -5,7 +5,7 @@ import {
   EntityRepository,
 } from 'typeorm';
 import { NavigationState } from './navigation-state.entity';
-import { User } from './user.entity';
+import { User } from '../users/user.entity';
 
 @EntityRepository(NavigationState)
 export class NavigationStateRepository extends AbstractRepository<NavigationState> {

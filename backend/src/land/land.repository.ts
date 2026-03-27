@@ -1,5 +1,5 @@
 import { Class } from '@shared/src/types/classes-types';
-import { NavigationState } from 'src/users/navigation-state.entity';
+import { NavigationState } from 'src/navigation-state/navigation-state.entity';
 import {
   AbstractRepository,
   DeepPartial,
