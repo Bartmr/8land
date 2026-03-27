@@ -78,92 +78,11 @@ export class TerritoriesEndUserController {
     private itselfStorageApi: BackendStorageApi,
   ) {}
 
-  async isAllowedToEditProject(itemId: string, walletAddress: string) {
-    const res = await this.raribleApi.get(
-      or([
-        object({
-          status: equals([200] as const).required(),
-          body: object({
-            owner: string().required(),
-            tokenId: string().required(),
-          }).required(),
-        }),
-        object({
-          status: equals([404] as const).required(),
-          body: object({}).required(),
-        }),
-      ]).required(),
-      {
-        path: `/ownerships/ETHEREUM:${itemId}:${walletAddress}`,
-      },
-    );
-
-    if (res.status === 404) {
-      return false;
-    }
-
-    return res.body.owner.replace('ETHEREUM:', '') === walletAddress;
-  }
-
-  @Get('/rarible/:itemId')
-  async getTerritoryIdByRaribleItemId(
-    @Param() param: GetTerritoryIdByRaribleItemIdParamsDTO,
-    @WithAuthContext() authContext: AuthContext,
-  ): Promise<GetTerritoryIdByRaribleItemIdDTO> {
-    const walletAddress = authContext.user.walletAddress;
-    if (!walletAddress) {
-      throw new ConflictException();
-    }
-
-    const splitItemId = param.itemId.split(':');
-
-    const contractAddress = splitItemId[0];
-    const tokenId = splitItemId[1];
-
-    if (!contractAddress) {
-      throw new BadRequestException();
-    }
-
-    if (!tokenId) {
-      throw new BadRequestException();
-    }
-
-    const territoriesRepository = this.dataSource.getCustomRepository(
-      TerritoriesRepository,
-    );
-
-    const territory = await territoriesRepository.findOne({
-      where: {
-        tokenAddress: contractAddress,
-        tokenId: tokenId,
-      },
-    });
-
-    if (!territory) {
-      throw new ResourceNotFoundException();
-    }
-
-    const allowedToEditProject = await this.isAllowedToEditProject(
-      param.itemId,
-      walletAddress,
-    );
-
-    return {
-      id: territory.id,
-      owned: allowedToEditProject,
-    };
-  }
-
   @Get(':id')
   async getTerritory(
     @Param() params: GetTerritoryParametersDTO,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<GetTerritoryDTO> {
-    const walletAddress = authContext.user.walletAddress;
-    if (!walletAddress) {
-      throw new ConflictException();
-    }
-
     const territoriesRepository = this.dataSource.getCustomRepository(
       TerritoriesRepository,
     );
@@ -172,17 +91,8 @@ export class TerritoriesEndUserController {
         id: params.id,
       },
     });
-    if (!territory || !territory.tokenAddress || !territory.tokenId) {
+    if (!territory) {
       throw new ResourceNotFoundException();
-    }
-
-    const authorized = await this.isAllowedToEditProject(
-      `${territory.tokenAddress}:${territory.tokenId}`,
-      walletAddress,
-    );
-
-    if (!authorized) {
-      throw new ForbiddenException();
     }
 
     const land = await territory.inLand;
@@ -228,12 +138,12 @@ export class TerritoriesEndUserController {
     @WithAuditContext() auditContext: AuditContext,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<void> {
-    const territoriesRepository_NO_TRANSACTION =
-      this.dataSource.getCustomRepository(TerritoriesRepository);
-    const walletAddress = authContext.user.walletAddress;
-    if (!walletAddress) {
+    if (!authContext.user.isAdmin) {
       throw new ForbiddenException();
     }
+
+    const territoriesRepository_NO_TRANSACTION =
+      this.dataSource.getCustomRepository(TerritoriesRepository);
     const territory_UNSAFE = await territoriesRepository_NO_TRANSACTION.findOne(
       {
         where: {
@@ -241,22 +151,13 @@ export class TerritoriesEndUserController {
         },
       },
     );
+    
     if (
-      !territory_UNSAFE ||
-      !territory_UNSAFE.tokenAddress ||
-      !territory_UNSAFE.tokenId
+      !territory_UNSAFE
     ) {
       throw new ResourceNotFoundException();
     }
 
-    const authorized = await this.isAllowedToEditProject(
-      `${territory_UNSAFE.tokenAddress}:${territory_UNSAFE.tokenId}`,
-      walletAddress,
-    );
-
-    if (!authorized) {
-      throw new ForbiddenException();
-    }
 
     const map =
       files.map?.[0] ||
@@ -568,40 +469,6 @@ export class TerritoriesEndUserController {
         territoryId: territory.id,
         nftMetadata: nftMetadata,
       };
-    });
-  }
-
-  @Patch(':id/rarible')
-  @HttpCode(204)
-  async updateRaribleMetadata(
-    @Param() params: UpdateTerritoryRaribleMetadataParametersDTO,
-    @Body() body: UpdateTerritoryRaribleMetadataRequestDTO,
-    @WithAuditContext() auditContext: AuditContext,
-    @WithAuthContext() authContext: AuthContext,
-  ) {
-    if (!authContext.user.isAdmin) {
-      throw new ForbiddenException();
-    }
-
-    return this.dataSource.transaction(async (eM) => {
-      const territoriesRepository = eM.getCustomRepository(
-        TerritoriesRepository,
-      );
-
-      const territory = await territoriesRepository.findOne({
-        where: {
-          id: params.id,
-        },
-      });
-
-      if (!territory) {
-        throw new ResourceNotFoundException();
-      }
-
-      territory.tokenId = body.tokenId;
-      territory.tokenAddress = body.tokenAddress;
-
-      await territoriesRepository.save(territory);
     });
   }
 }

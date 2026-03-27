@@ -27,16 +27,8 @@ export class TerritoriesRepository extends AbstractRepository<Territory> {
   }
 
   async saveMany(entities: Territory[]): Promise<void> {
-    const EntityClass = this.repository.target as Class;
-
-    for (const entity of entities) {
-      if (!(entity instanceof EntityClass)) {
-        throw new Error();
-      }
-    }
-
     await this.repository.save(
-      entities as unknown as DeepPartial<Territory>[],
+      entities
     );
   }
 }

@@ -47,11 +47,7 @@ export class Territory {
   @OneToMany(() => AppBlock, (e) => e.inTerritory, { eager: true })
   appBlocks!: AppBlock[];
 
-  @Column('text', { nullable: true })
-  tokenAddress!: string | null;
-
-  @Column('text', { nullable: true })
-  tokenId!: string | null;
+ 
 
   constructor(props: {
     startX: number;
@@ -62,8 +58,6 @@ export class Territory {
     inLand: Promise<Land>;
     doorBlocks: DoorBlock[];
     appBlocks: AppBlock[];
-    tokenId: string | null;
-    tokenAddress: string | null;
   })
   constructor()
   constructor(props?: {
@@ -75,8 +69,7 @@ export class Territory {
     inLand: Promise<Land>;
     doorBlocks: DoorBlock[];
     appBlocks: AppBlock[];
-    tokenId: string | null;
-    tokenAddress: string | null;
+    
   }) {
     if (props) {
       this.startX = props.startX;
@@ -87,8 +80,6 @@ export class Territory {
       this.inLand = props.inLand;
       this.doorBlocks = props.doorBlocks;
       this.appBlocks = props.appBlocks;
-      this.tokenId = props.tokenId;
-      this.tokenAddress = props.tokenAddress;
     }
   }
 }

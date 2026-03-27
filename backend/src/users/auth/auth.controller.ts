@@ -14,7 +14,6 @@ import {
   NotFoundException,
   Post,
   Request,
-  Response,
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
@@ -39,6 +38,7 @@ import { generateRandomUUID } from 'src/uuids/generate-random-uuid';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { AuditContext } from 'src/auditing/audit-context';
 import { User } from 'src/users/user.entity';
+import { Response } from 'express';
 
 @UseGuards(AuthGuard)
 @Controller('auth')
@@ -152,7 +152,7 @@ export class AuthController {
     hostname,
   }: {
     user: User;
-    response: AppServerResponse;
+    response: Response;
     hostname: string;
   }) {
     const token = await this.tokensService.createAuthToken(
