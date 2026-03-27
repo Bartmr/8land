@@ -1,8 +1,6 @@
-import { Class } from '@shared/src/types/classes-types';
 import { NavigationState } from 'src/navigation/state/navigation-state.entity';
 import {
   AbstractRepository,
-  DeepPartial,
   EntityManager,
   EntityRepository,
   FindManyOptions,
@@ -30,15 +28,8 @@ export class LandRepository extends AbstractRepository<Land> {
   }
 
   async saveMany(entities: Land[]): Promise<void> {
-    const EntityClass = this.repository.target as Class;
 
-    for (const entity of entities) {
-      if (!(entity instanceof EntityClass)) {
-        throw new Error();
-      }
-    }
-
-    await this.repository.save(entities as unknown as DeepPartial<Land>[]);
+    await this.repository.save(entities);
   }
 
   async selectManyAndCount(

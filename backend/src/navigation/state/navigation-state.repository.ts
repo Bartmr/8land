@@ -1,7 +1,5 @@
-import { Class } from '@shared/src/types/classes-types';
 import {
   AbstractRepository,
-  DeepPartial,
   EntityRepository,
 } from 'typeorm';
 import { NavigationState } from './navigation-state.entity';
