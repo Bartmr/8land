@@ -28,7 +28,12 @@ const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = z.object({
   AWS_SECRET_ACCESS_KEY: z.string().optional(),
   S3_BUCKET_NAME: z.string().optional(),
 
-  USE_DEV_EMAIL: z.coerce.boolean().optional()
+  USE_DEV_EMAIL: z.coerce.boolean().optional(),
+
+  START_LANDS_TOTAL_LIMIT: z.coerce.number().int(),
+
+
+  LAND_LIMIT_PER_WORLD: z.coerce.number().int(),
 });
 
 export const EnvironmentVariables = ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA.parse({

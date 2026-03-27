@@ -14,6 +14,7 @@ import {
   UseGuards,
   UseInterceptors,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/users/auth/auth.guard';
 import {
@@ -26,7 +27,6 @@ import {
 } from '@shared/src/land/index/index-lands.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
-import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import { StorageService } from 'src/storage/storage.service';
 import { DataSource } from 'typeorm';
 import { LandsService } from './lands.service';
@@ -47,9 +47,9 @@ import {
 import { LandPersistenceService } from './land-persistence.service';
 import { WorldRepository } from 'src/worlds/worlds.repository';
 import { DeleteLandParametersDTO } from '@shared/src/land/delete-land/delete-land.dto';
-import { SettingsService } from 'src/settings/settings.service';
 import { PublicRoute } from 'src/users/auth/public-route.decorator';
 import { GetLandsToClaimDTO } from '@shared/src/land/lands-to-claim/lands-to-claim.dto';
+import { EnvironmentVariables } from 'src/environment/environment-variables';
 
 class LandAssetsRequestDTO {
   @ApiProperty({ type: 'string', format: 'binary' })
@@ -68,7 +68,6 @@ export class LandsController {
     private storageService: StorageService,
     private landService: LandsService,
     private landPersistenceService: LandPersistenceService,
-    private settingsService: SettingsService,
   ) {}
 
   @Get()
@@ -100,7 +99,7 @@ export class LandsController {
           }
         },
       ),
-      worldsRepository.findOne({ where: { user: authContext.user.id } }),
+      worldsRepository.findOne({ where: { user: { id: authContext.user.id }} }),
     ]);
 
     if (!authContext.user.isAdmin && !world) {
@@ -131,17 +130,14 @@ export class LandsController {
   async getLandsToClaim(): Promise<GetLandsToClaimDTO> {
     const landsRepository = this.dataSource.getCustomRepository(LandRepository);
 
-    const [landsWithStartCount, settings] = await Promise.all([
-      landsRepository.count({
+    const landsWithStartCount = await landsRepository.count({
         where: {
           isStartingLand: true,
         },
-      }),
-      this.settingsService.getSettings(),
-    ]);
+      })
 
     return {
-      free: settings.startLandsTotalLimit - landsWithStartCount,
+      free: EnvironmentVariables.START_LANDS_TOTAL_LIMIT - landsWithStartCount,
     };
   }
 
@@ -173,7 +169,7 @@ export class LandsController {
     );
 
     if (!land) {
-      throw new ResourceNotFoundException();
+      throw new NotFoundException();
     } else {
       return this.landService.mapLand(land);
     }
@@ -184,8 +180,7 @@ export class LandsController {
     @Body() body: CreateLandRequestDTO,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<CreateLandResponseDTO> {
-    const settings = await this.settingsService.getSettings();
-    const limit = settings.landLimitPerWorld;
+    const limit = EnvironmentVariables.LAND_LIMIT_PER_WORLD;
 
     const res = await this.landPersistenceService.createLand({
       connection: this.dataSource,
@@ -244,13 +239,12 @@ export class LandsController {
       tileset,
       params,
       authContext,
-      settingsService: this.settingsService,
     });
 
     if (res.status === 'ok') {
       return;
     } else if (res.status === 'not-found') {
-      throw new ResourceNotFoundException({ error: res.status });
+      throw new NotFoundException({ error: res.status });
     } else if (
       res.status === 'map-exceeds-file-size-limit' ||
       res.status === 'tileset-exceeds-file-size-limit' ||
@@ -281,7 +275,7 @@ export class LandsController {
     if (res.status === 'ok') {
       return res.data;
     } else if (res.status === 'not-found') {
-      throw new ResourceNotFoundException();
+      throw new NotFoundException({ error: res.status });
     } else {
       throw new ConflictException({ error: res.status });
     }
@@ -306,7 +300,7 @@ export class LandsController {
     if (res.status === 'ok') {
       return;
     } else if (res.status === 'not-found') {
-      throw new ResourceNotFoundException();
+      throw new NotFoundException({ error: res.status });
     } else {
       throw new ConflictException({ error: res.status });
     }

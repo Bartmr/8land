@@ -11,14 +11,12 @@ import { LandsController } from './land.controller';
 import { World } from '../worlds/worlds.entity';
 import { LandPersistenceService } from './land-persistence.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SettingsModule } from 'src/settings/settings.module';
 import { AuthModule } from 'src/users/auth/auth.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Land, Territory, DoorBlock, AppBlock, NavigationState, World]),
     StorageModule,
-    SettingsModule,
     AuthModule,
   ],
   exports: [LandsService],

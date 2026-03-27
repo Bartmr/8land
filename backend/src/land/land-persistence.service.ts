@@ -14,7 +14,6 @@ import {
   ContentType,
   StorageService,
 } from 'src/storage/storage.service';
-import { InferType } from 'not-me/lib/schemas/schema';
 import { throwError } from 'src/throw-error';
 import {
   EditLandBodyDTO,
@@ -24,8 +23,9 @@ import {
   LAND_MAP_SIZE_LIMIT,
   LAND_TILESET_SIZE_LIMIT,
 } from '@shared/src/land/upload-assets/upload-land-assets.constants';
-import { SettingsService } from '../settings/settings.service';
 import { StaticBlockType } from '@shared/src/blocks/block.enums';
+import { EnvironmentVariables } from 'src/environment/environment-variables';
+import { z } from "zod"
 
 function getLandStorageKeys(landId: string) {
   const tilesetStorageKey = `lands/${landId}/tileset.png`;
@@ -179,7 +179,6 @@ export class LandPersistenceService {
     map,
     tileset,
     authContext,
-    settingsService,
   }: {
     connection: DataSource;
     storageService: StorageService;
@@ -187,9 +186,7 @@ export class LandPersistenceService {
     map: Express.Multer.File;
     tileset: Express.Multer.File;
     authContext: AuthContext;
-    settingsService: SettingsService;
   }) {
-    const settings = await settingsService.getSettings();
 
     return connection.transaction(async (e) => {
       const landRepo = e.getCustomRepository(LandRepository);
@@ -199,7 +196,7 @@ export class LandPersistenceService {
         where: { isStartingLand: true },
       });
 
-      if (totalStartLands > settings.startLandsTotalLimit) {
+      if (totalStartLands > EnvironmentVariables.START_LANDS_TOTAL_LIMIT) {
         return { status: 'start-lands-limit-exceeded' } as const;
       }
 
@@ -269,17 +266,17 @@ export class LandPersistenceService {
         maxHeight: null,
       });
 
-      const tiledJSONValidationResult = TiledJSONSchema.validate(mapJSON);
+      const tiledJSONValidationResult = TiledJSONSchema.safeParse(mapJSON);
 
-      if (tiledJSONValidationResult.errors) {
+      if (!tiledJSONValidationResult.success) {
         return {
           status: 'tiled-json-validation-error',
-          messageTree: tiledJSONValidationResult.messagesTree,
+          messageTree: tiledJSONValidationResult.error,
         } as const;
       }
 
       const tilesetSpecifications =
-        tiledJSONValidationResult.value.tilesets[0] || throwError();
+        tiledJSONValidationResult.data.tilesets[0] || throwError();
 
       if (
         tilesetMedatada.width !== tilesetSpecifications.imagewidth ||
@@ -358,11 +355,11 @@ export class LandPersistenceService {
         contentType: ContentType.PNG,
       });
 
-      const toSave: InferType<typeof TiledJSONSchema> = {
-        ...tiledJSONValidationResult.value,
+      const toSave: z.infer<typeof TiledJSONSchema> = {
+        ...tiledJSONValidationResult.data,
         tilesets: [
           {
-            ...(tiledJSONValidationResult.value.tilesets[0] || throwError()),
+            ...(tiledJSONValidationResult.data.tilesets[0] || throwError()),
             image: 'tileset.png',
           },
         ],
