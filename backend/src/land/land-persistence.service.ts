@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CreateLandRequestDTO } from '@shared/src/land/create/create-land.dto';
 import { UploadLandAssetsParameters } from '@shared/src/land/upload-assets/upload-land-assets.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
-import { AuditContext } from 'src/auditing/audit-context';
 import { getSearchableName } from 'src/strings/get-searchable-name';
 import { World } from 'src/worlds/worlds.entity';
 import { Land } from './land.entity';
@@ -43,12 +42,10 @@ export class LandPersistenceService {
   async createLand({
     connection,
     body,
-    auditContext,
     authContext,
     limitations,
   }: {
     connection: DataSource;
-    auditContext: AuditContext;
     authContext: AuthContext;
     body: CreateLandRequestDTO;
     limitations: {
@@ -178,7 +175,6 @@ export class LandPersistenceService {
   async uploadLandAssets({
     connection,
     storageService,
-    auditContext,
     params,
     map,
     tileset,
@@ -187,7 +183,6 @@ export class LandPersistenceService {
   }: {
     connection: DataSource;
     storageService: StorageService;
-    auditContext: AuditContext;
     params: UploadLandAssetsParameters;
     map: Express.Multer.File;
     tileset: Express.Multer.File;
@@ -395,13 +390,11 @@ export class LandPersistenceService {
 
   editLand({
     connection,
-    auditContext,
     body,
     param,
     authContext,
   }: {
     connection: DataSource;
-    auditContext: AuditContext;
     body: EditLandBodyDTO;
     param: EditLandParametersDTO;
     authContext: AuthContext;

@@ -35,8 +35,6 @@ import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
 import { NODE_ENV } from 'src/environment/node-env.constants';
 import { NodeEnv } from 'src/environment/node-env.types';
 import { generateRandomUUID } from 'src/uuids/generate-random-uuid';
-import { WithAuditContext } from 'src/auditing/audit.decorator';
-import { AuditContext } from 'src/auditing/audit-context';
 import { User } from 'src/users/user.entity';
 import { Response } from 'express';
 
@@ -56,7 +54,6 @@ export class AuthController {
     @Body() body: LoginRequestDTO,
     @Request() request: AppServerRequest,
     @Response({ passthrough: true }) response: AppServerResponse,
-    @WithAuditContext() auditContext: AuditContext,
     @WithOptionalAuthContext() authContext?: AuthContext,
   ): Promise<LoginResponseDTO> {
     const hostname = request.hostname;

@@ -39,8 +39,6 @@ import { string } from 'not-me/lib/schemas/string/string-schema';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
 import { RaribleApi } from 'src/rarible/rarible.api';
-import { AuditContext } from 'src/auditing/audit-context';
-import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import {
   ContentType,
@@ -135,7 +133,6 @@ export class TerritoriesEndUserController {
     @Param() params: UploadTerritoryAssetsParametersDTO,
     @UploadedFiles()
     files: { map?: Express.Multer.File[]; tileset?: Express.Multer.File[] },
-    @WithAuditContext() auditContext: AuditContext,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<void> {
     if (!authContext.user.isAdmin) {
@@ -301,7 +298,6 @@ export class TerritoriesEndUserController {
       data?: Express.Multer.File[];
       thumbnail?: Express.Multer.File[];
     },
-    @WithAuditContext() auditContext: AuditContext,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<CreateTerritoryResponseDTO> {
     if (!authContext.user.isAdmin) {

@@ -25,8 +25,6 @@ import { getTypesafeObjectFieldPath } from 'not-me/lib/utils/get-typesafe-object
 import { AuthContext } from 'src/users/auth/auth-context';
 import { WithOptionalAuthContext } from 'src/users/auth/auth-context.decorator';
 import { PublicRoute } from 'src/users/auth/public-route.decorator';
-import { AuditContext } from 'src/auditing/audit-context';
-import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { LoggingService } from 'src/logging/logging.service';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import { getSearchableName } from 'src/strings/get-searchable-name';
@@ -50,7 +48,6 @@ export class TrainController {
   @PublicRoute()
   async board(
     @Param() param: BoardTrainParametersDTO,
-    @WithAuditContext() auditContext: AuditContext,
     @WithOptionalAuthContext() authContext?: AuthContext,
   ): Promise<BoardTrainDTO> {
     return this.dataSource.transaction(async (eM) => {
@@ -129,7 +126,6 @@ export class TrainController {
   @PublicRoute()
   async returnToTrainStation(
     @Query() query: ReturnToTrainStationQueryDTO,
-    @WithAuditContext() auditContext: AuditContext,
     @WithOptionalAuthContext() authContext?: AuthContext,
   ): Promise<ReturnToTrainStationDTO> {
     if (authContext) {
@@ -156,7 +152,6 @@ export class TrainController {
           return this.landsService.resume({
             eM,
             loggingService: this.loggingService,
-            auditContext,
             authContext,
           });
         }

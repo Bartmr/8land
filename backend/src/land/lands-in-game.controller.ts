@@ -21,8 +21,6 @@ import {
 } from 'src/users/auth/auth-context.decorator';
 import { PublicRoute } from 'src/users/auth/public-route.decorator';
 import { DoorBlockRepository } from 'src/blocks/door-block.repository';
-import { AuditContext } from 'src/auditing/audit-context';
-import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { LoggingService } from 'src/logging/logging.service';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import { NavigationStateRepository } from 'src/navigation/state/navigation-state.repository';
@@ -41,13 +39,11 @@ export class LandsInGameController {
   @Get('/resume')
   @PublicRoute()
   async resumeLandNavigation(
-    @WithAuditContext() auditContext: AuditContext,
     @WithOptionalAuthContext() authContext?: AuthContext,
   ): Promise<ResumeLandNavigationDTO> {
     return this.landService.resume({
       eM: this.dataSource.manager,
       loggingService: this.loggingService,
-      auditContext,
       authContext,
     });
   }
@@ -56,7 +52,6 @@ export class LandsInGameController {
   @PublicRoute()
   async navigate(
     @Query() query: NavigateToLandQueryDTO,
-    @WithAuditContext() auditContext: AuditContext,
     @WithOptionalAuthContext() authContext?: AuthContext,
   ): Promise<NavigateToLandDTO> {
     const doorBlocksRepository =
@@ -153,7 +148,6 @@ export class LandsInGameController {
   @Put('/escape')
   async escape(
     @WithAuthContext() authContext: AuthContext,
-    @WithAuditContext() auditContext: AuditContext,
   ) {
     return this.dataSource.transaction(async (eM) => {
       const navigationStatesRepository = eM.getCustomRepository(

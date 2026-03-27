@@ -15,8 +15,6 @@ import { DynamicBlockType } from '@shared/src/blocks/create/create-block.enums';
 import { DeleteBlockURLParameters } from '@shared/src/blocks/delete/delete-block.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
-import { AuditContext } from 'src/auditing/audit-context';
-import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import { getSearchableName } from 'src/strings/get-searchable-name';
 import { LandRepository } from 'src/land/land.repository';
@@ -34,7 +32,6 @@ export class BlocksController {
   @Post()
   createBlock(
     @Body() body: CreateBlockRequestDTO,
-    @WithAuditContext() auditContext: AuditContext,
     @WithAuthContext() authContext: AuthContext,
   ) {
     if (!authContext.user.isAdmin) {
@@ -138,7 +135,6 @@ export class BlocksController {
   @Delete('/:blockType/:blockId')
   deleteBlock(
     @Param() param: DeleteBlockURLParameters,
-    @WithAuditContext() auditContext: AuditContext,
     @WithAuthContext() authContext: AuthContext,
   ) {
     if (!authContext.user.isAdmin) {

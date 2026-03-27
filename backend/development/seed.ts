@@ -12,7 +12,6 @@ import { generateRandomUUID } from 'src/uuids/generate-random-uuid';
 import { EnvironmentVariablesService } from 'src/environment/environment-variables.service';
 import * as firebaseAdmin from 'firebase-admin';
 import { UsersRepository } from 'src/users/users.repository';
-import { AuditContext } from 'src/auditing/audit-context';
 import { Role } from 'src/users/authentication/roles/roles';
 import { JSONApiBase } from 'src/apis/json-api-base';
 import { LoggingServiceSingleton } from 'src/logging/logging.service.singleton';
@@ -103,13 +102,6 @@ async function seed() {
   const usersRepository =
     defaultDBConnection.getCustomRepository(UsersRepository);
 
-  const auditContext = new AuditContext({
-    operationId: generateRandomUUID(),
-    requestMethod: null,
-    requestPath: null,
-    authContext: null,
-  });
-
   const endUser = await usersRepository.create(
     {
       firebaseUid: (
@@ -124,7 +116,6 @@ async function seed() {
       walletNonce: generateRandomUUID(),
       appId: generateRandomUUID(),
     },
-    auditContext,
   );
 
   await usersRepository.create(
@@ -141,7 +132,6 @@ async function seed() {
       walletNonce: generateRandomUUID(),
       appId: generateRandomUUID(),
     },
-    auditContext,
   );
 
   const landsRepository =
@@ -166,7 +156,6 @@ async function seed() {
       isStartingLand: null,
       isTrainStation: null,
     },
-    auditContext,
   );
 
   const townOfHumbleBeginnings = await landsRepository.create(
@@ -183,7 +172,6 @@ async function seed() {
       isStartingLand: null,
       isTrainStation: null,
     },
-    auditContext,
   );
 
   const townOfHumbleBeginningsUnderground1 = await landsRepository.create(
@@ -202,7 +190,6 @@ async function seed() {
       isStartingLand: null,
       isTrainStation: null,
     },
-    auditContext,
   );
 
   const townOfHumbleBeginningsUnderground2 = await landsRepository.create(
@@ -221,7 +208,6 @@ async function seed() {
       isStartingLand: null,
       isTrainStation: null,
     },
-    auditContext,
   );
 
   const townOfHumbleBeginningsTemple = await landsRepository.create(
@@ -238,7 +224,6 @@ async function seed() {
       isStartingLand: null,
       isTrainStation: null,
     },
-    auditContext,
   );
 
   /* ----- */
@@ -249,7 +234,6 @@ async function seed() {
       inLand: expectationsBeach,
       toLand: expectationsBeach,
     },
-    auditContext,
   );
 
   const expectationsBeachDoor2 = await doorBlocksRepository.create(
@@ -258,7 +242,6 @@ async function seed() {
       inLand: expectationsBeach,
       toLand: townOfHumbleBeginnings,
     },
-    auditContext,
   );
 
   const expectationsBeachMapString = await readFile(
@@ -327,7 +310,6 @@ async function seed() {
       inLand: townOfHumbleBeginnings,
       toLand: townOfHumbleBeginningsUnderground1,
     },
-    auditContext,
   );
 
   const townOfHumbleBeginningsDoor2 = await doorBlocksRepository.create(
@@ -336,7 +318,6 @@ async function seed() {
       inLand: townOfHumbleBeginnings,
       toLand: townOfHumbleBeginningsUnderground2,
     },
-    auditContext,
   );
 
   const townOfHumbleBeginningsDoor3 = await doorBlocksRepository.create(
@@ -345,7 +326,6 @@ async function seed() {
       inLand: townOfHumbleBeginnings,
       toLand: townOfHumbleBeginningsTemple,
     },
-    auditContext,
   );
 
   const townOfHumbleBeginningsApp1 = await appBlocksRepository.create(
@@ -354,7 +334,6 @@ async function seed() {
       inLand: Promise.resolve(townOfHumbleBeginnings),
       url: 'http://localhost:8000/apps/test',
     },
-    auditContext,
   );
 
   const townOfHumbleBeginningsMapString = await readFile(
@@ -384,7 +363,6 @@ async function seed() {
 
   const { trainStationEntrance } = await seedTrainStation({
     landOutside: townOfHumbleBeginnings,
-    auditContext,
     storageService,
     eM: defaultDBConnection.createEntityManager(),
   });
@@ -451,7 +429,6 @@ async function seed() {
         inLand: townOfHumbleBeginningsUnderground1,
         toLand: townOfHumbleBeginningsUnderground2,
       },
-      auditContext,
     );
 
   const townOfHumbleBeginningsUnderground1MapString = await readFile(
@@ -661,7 +638,6 @@ async function seed() {
       tokenId: null,
       tokenAddress: null,
     },
-    auditContext,
   );
 
   const territory1Map = await readFile(
@@ -725,11 +701,10 @@ async function seed() {
     }),
   );
 
-  await territoriesRepository.save(territory1, auditContext);
+  await territoriesRepository.save(territory1);
   /* --- */
 
   await seedUserLand({
-    auditContext,
     storageService,
     eM: defaultDBConnection.createEntityManager(),
     appBlocksRepository,

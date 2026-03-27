@@ -1,7 +1,6 @@
 import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
 import { AppBlockRepository } from 'src/blocks/typeorm/app-block.repository';
 import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
-import { AuditContext } from 'src/auditing/audit-context';
 import {
   ContentType,
   StorageService,
@@ -19,12 +18,10 @@ const readFile = promisify(fs.readFile);
 export async function seedTrainStation({
   eM,
   landOutside,
-  auditContext,
   storageService,
 }: {
   eM: EntityManager;
   landOutside: Land;
-  auditContext: AuditContext;
   storageService: StorageService;
 }) {
   const landsRepo = eM.getCustomRepository(LandRepository);
@@ -47,7 +44,6 @@ export async function seedTrainStation({
       isStartingLand: null,
       isTrainStation: true,
     },
-    auditContext,
   );
 
   const entrance = await doorBlocksRepo.create(
@@ -56,7 +52,6 @@ export async function seedTrainStation({
       toLand: trainStation,
       inTerritory: Promise.resolve(null),
     },
-    auditContext,
   );
 
   const ticketMachine = await appBlocksRepo.create(
@@ -65,7 +60,6 @@ export async function seedTrainStation({
       inTerritory: Promise.resolve(null),
       url: 'http://localhost:8000/apps/train-ticket-machine',
     },
-    auditContext,
   );
 
   const mapString = await readFile(

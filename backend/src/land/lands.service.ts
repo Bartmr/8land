@@ -1,7 +1,6 @@
 import { NotImplementedException } from '@nestjs/common';
 import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
-import { AuditContext } from 'src/auditing/audit-context';
 import { LoggingService } from 'src/logging/logging.service';
 import { StorageService } from 'src/storage/storage.service';
 import { throwError } from 'src/throw-error';
@@ -95,13 +94,11 @@ export class LandsService {
   async resume({
     eM,
     loggingService,
-    auditContext,
     authContext,
   }: {
     eM: EntityManager;
     loggingService: LoggingService;
     authContext: AuthContext | undefined;
-    auditContext: AuditContext;
   }) {
     const navigationStateRepository = eM.getCustomRepository(
       NavigationStateRepository,

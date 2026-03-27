@@ -38,8 +38,6 @@ import {
   CreateLandResponseDTO,
 } from '@shared/src/land/create/create-land.dto';
 import { UploadLandAssetsParameters } from '@shared/src/land/upload-assets/upload-land-assets.dto';
-import { AuditContext } from 'src/auditing/audit-context';
-import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { ApiBody, ApiConsumes, ApiProperty } from '@nestjs/swagger';
 import {
   EditLandBodyDTO,
@@ -184,7 +182,6 @@ export class LandsController {
   @Post()
   async createLand(
     @Body() body: CreateLandRequestDTO,
-    @WithAuditContext() auditContext: AuditContext,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<CreateLandResponseDTO> {
     const settings = await this.settingsService.getSettings();
@@ -194,7 +191,6 @@ export class LandsController {
       connection: this.dataSource,
       body,
       authContext,
-      auditContext,
       limitations: {
         limitQuantity: !authContext.user.isAdmin ? limit : undefined,
         useWorld: !authContext.user.isAdmin,
@@ -228,7 +224,6 @@ export class LandsController {
     @Param() params: UploadLandAssetsParameters,
     @UploadedFiles()
     files: { map?: Express.Multer.File[]; tileset?: Express.Multer.File[] },
-    @WithAuditContext() auditContext: AuditContext,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<void> {
     const map =
@@ -248,7 +243,6 @@ export class LandsController {
       map,
       tileset,
       params,
-      auditContext,
       authContext,
       settingsService: this.settingsService,
     });
@@ -275,12 +269,10 @@ export class LandsController {
   async editLand(
     @Param() param: EditLandParametersDTO,
     @Body() body: EditLandBodyDTO,
-    @WithAuditContext() auditContext: AuditContext,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<EditLandDTO> {
     const res = await this.landPersistenceService.editLand({
       connection: this.dataSource,
-      auditContext,
       body,
       param,
       authContext,

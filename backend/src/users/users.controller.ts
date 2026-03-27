@@ -2,8 +2,6 @@ import { Body, Controller, Get, HttpCode, Patch, UseGuards } from '@nestjs/commo
 import { AuthContext } from 'src/users/auth/auth-context';
 import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
 import { AuthGuard } from 'src/users/auth/auth.guard';
-import { AuditContext } from 'src/auditing/audit-context';
-import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { DataSource } from 'typeorm';
 import { UsersRepository } from './users.repository';
 import { GetUserWalletNonce } from '@shared/src/users/me/get-user-wallet-nonce.dto';

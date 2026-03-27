@@ -1,5 +1,4 @@
 import { DoorBlockRepository } from 'src/blocks/typeorm/door-block.repository';
-import { AuditContext } from 'src/auditing/audit-context';
 import { getSearchableName } from 'src/strings/get-searchable-name';
 import { LandRepository } from 'src/land/typeorm/land.repository';
 import { User } from 'src/users/typeorm/user.entity';
@@ -17,13 +16,11 @@ const readFile = promisify(fs.readFile);
 
 export async function seedUserLand({
   eM,
-  auditContext,
   storageService,
   user,
   appBlocksRepository,
 }: {
   eM: EntityManager;
-  auditContext: AuditContext;
   storageService: DevStorageService;
   user: User;
   appBlocksRepository: AppBlockRepository;
@@ -38,7 +35,6 @@ export async function seedUserLand({
       lands: Promise.resolve([]),
       hasStartLand: true,
     },
-    auditContext,
   );
 
   const townOfHumbleBeginnings = await landsRepository.create(
@@ -57,7 +53,6 @@ export async function seedUserLand({
       isStartingLand: true,
       isTrainStation: null,
     },
-    auditContext,
   );
 
   const townOfHumbleBeginningsUnderground1 = await landsRepository.create(
@@ -76,7 +71,6 @@ export async function seedUserLand({
       isStartingLand: null,
       isTrainStation: null,
     },
-    auditContext,
   );
 
   const townOfHumbleBeginningsUnderground2 = await landsRepository.create(
@@ -95,7 +89,6 @@ export async function seedUserLand({
       isStartingLand: null,
       isTrainStation: null,
     },
-    auditContext,
   );
 
   /* ----- */
@@ -105,7 +98,6 @@ export async function seedUserLand({
       inLand: townOfHumbleBeginnings,
       toLand: townOfHumbleBeginningsUnderground1,
     },
-    auditContext,
   );
 
   const townOfHumbleBeginningsDoor2 = await doorBlocksRepository.create(
@@ -114,7 +106,6 @@ export async function seedUserLand({
       inLand: townOfHumbleBeginnings,
       toLand: townOfHumbleBeginningsUnderground2,
     },
-    auditContext,
   );
 
   const townOfHumbleBeginningsApp1 = await appBlocksRepository.create(
@@ -123,7 +114,6 @@ export async function seedUserLand({
       inLand: Promise.resolve(townOfHumbleBeginnings),
       url: 'http://localhost:8000/apps/test',
     },
-    auditContext,
   );
 
   const townOfHumbleBeginningsMapString = await readFile(
@@ -204,7 +194,6 @@ export async function seedUserLand({
         inLand: townOfHumbleBeginningsUnderground1,
         toLand: townOfHumbleBeginningsUnderground2,
       },
-      auditContext,
     );
 
   const townOfHumbleBeginningsUnderground1MapString = await readFile(
