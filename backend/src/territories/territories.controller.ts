@@ -48,6 +48,7 @@ import { CreateTerritoryRequestJSONSchema } from '@shared/src/territories/create
 import { LandRepository } from 'src/land/land.repository';
 import { StaticBlockType } from '@shared/src/blocks/block.enums';
 import { z } from 'zod'
+import fetch from 'node-fetch'
 
 @UseGuards(AuthGuard)
 @Controller('territories')
@@ -371,23 +372,21 @@ export class TerritoriesEndUserController {
         }
       }
 
-      const landMap = await this.itselfStorageApi.get(
-        object({
-          status: equals([200]).required(),
-          body: object({
-            height: number().required(),
-            width: number().required(),
-          }).required(),
-        }).required(),
-        {
-          path: `/lands/${land.id}/map.json`,
-        },
+      const landMapResponse = await fetch(
+        `${this.storageService.getHostUrl()}/lands/${land.id}/map.json`,
       );
+      if (!landMapResponse.ok) {
+        throw new Error(`Failed to fetch land map: ${landMapResponse.status}`);
+      }
+      const landMap = z.object({
+        height: z.number(),
+        width: z.number(),
+      }).parse(await landMapResponse.json());
       if (
-        data.data.startX > landMap.body.width ||
-        data.data.startY > landMap.body.height ||
-        data.data.endX > landMap.body.width ||
-        data.data.endY > landMap.body.height
+        data.data.startX > landMap.width ||
+        data.data.startY > landMap.height ||
+        data.data.endX > landMap.width ||
+        data.data.endY > landMap.height
       ) {
         throw new ConflictException('coordinates-exceeds-bounds');
       }
