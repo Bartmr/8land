@@ -18,7 +18,7 @@ type FirebaseApp = ReturnType<typeof firebaseAdmin['initializeApp']>;
         if (EnvironmentVariables.FIREBASE_AUTH_EMULATOR_HOST) {
           app = firebaseAdmin.initializeApp(
             {
-              projectId: EnvironmentVariables.FIREBASE_PROJECT_ID || throwError(),
+              projectId: EnvironmentVariables.FIREBASE_EMULATOR_PROJECT_ID || throwError(),
             },
             v4()
           );

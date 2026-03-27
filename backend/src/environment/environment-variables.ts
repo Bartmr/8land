@@ -16,7 +16,7 @@ const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = z.object({
   DATABASE_PASSWORD: z.string(),
 
   FIREBASE_AUTH_EMULATOR_HOST: z.string().optional(),
-  FIREBASE_PROJECT_ID: z.string().optional(),
+  FIREBASE_EMULATOR_PROJECT_ID: z.string().optional(),
 
   GOOGLE_APPLICATION_CREDENTIALS: z.string().optional(),
 

@@ -32,8 +32,6 @@ export class User {
   constructor(props: {
     firebaseUid: string;
     isAdmin: boolean;
-    walletAddress: string | null;
-    walletNonce: string;
     appId: string;
   })
   constructor()
@@ -49,7 +47,7 @@ export class User {
     }
   }
 
-  toJSON() {
+  public toJSON() {
     return {
       ...this,
       firebaseUid: undefined,

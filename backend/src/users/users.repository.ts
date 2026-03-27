@@ -1,7 +1,5 @@
-import { Class } from '@shared/src/types/classes-types';
 import {
   AbstractRepository,
-  DeepPartial,
   EntityRepository,
   FindOneOptions,
 } from 'typeorm';
@@ -22,14 +20,6 @@ export class UsersRepository extends AbstractRepository<User> {
   }
 
   async saveMany(entities: User[]): Promise<void> {
-    const EntityClass = this.repository.target as Class;
-
-    for (const entity of entities) {
-      if (!(entity instanceof EntityClass)) {
-        throw new Error();
-      }
-    }
-
-    await this.repository.save(entities as unknown as DeepPartial<User>[]);
+    await this.repository.save(entities);
   }
 }

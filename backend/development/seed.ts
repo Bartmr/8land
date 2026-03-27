@@ -2,22 +2,9 @@ import dotenv from "dotenv"
 
 dotenv.config()
 
-import { tearDownDatabases } from 'test-environment-impl/base/tear-down-databases';
 import { createConnection } from 'typeorm';
-import { NODE_ENV } from 'src/environment/node-env.constants';
-import { NodeEnv } from 'src/environment/node-env.types';
-import { ProcessContextManager } from 'src/process/process-context-manager';
-import { ProcessType } from 'src/process/process-context';
-import { generateRandomUUID } from 'src/uuids/generate-random-uuid';
-import { EnvironmentVariablesService } from 'src/environment/environment-variables.service';
 import * as firebaseAdmin from 'firebase-admin';
 import { UsersRepository } from 'src/users/users.repository';
-import { Role } from 'src/users/authentication/roles/roles';
-import { JSONApiBase } from 'src/apis/json-api-base';
-import { LoggingServiceSingleton } from 'src/logging/logging.service.singleton';
-import { object } from 'not-me/lib/schemas/object/object-schema';
-import { equals } from 'not-me/lib/schemas/equals/equals-schema';
-import { FIREBASE_EMULATOR_PROJECT_ID } from 'src/firebase/firebase.constants';
 import { throwError } from 'src/throw-error';
 import { LandRepository } from 'src/land/land.repository';
 import { TerritoriesRepository } from 'src/territories/territories.repository';
@@ -29,80 +16,63 @@ import path from 'path';
 import { DevStorageService } from 'src/storage/dev-storage.service';
 import { LOCAL_TEMPORARY_FILES_PATH } from 'src/temporary-files/temporary-files';
 import { AppBlockRepository } from 'src/blocks/app-block.repository';
+import fetch from 'node-fetch';
 import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
 import { seedTrainStation } from './seed/seed-train-station';
 import { seedUserLand } from './seed/seed-user-land';
+import { EnvironmentVariables } from "src/environment/environment-variables";
+import { TYPEORM_ORMCONFIG } from "src/databases/ormconfig";
+import { v4 } from "uuid";
+import { User } from "src/users/user.entity";
+import { Land } from "src/land/land.entity";
+import { DoorBlock } from "src/blocks/door-block.entity";
+import { AppBlock } from "src/blocks/app-block.entity";
+import { Territory } from "src/territories/territory.entity";
 
 const readFile = promisify(fs.readFile);
 const rm = promisify(fs.rm);
 
-if (NODE_ENV !== NodeEnv.Development) {
-  throw new Error('Seed command is only for development');
-}
 
 async function seed() {
   const FIREBASE_AUTH_EMULATOR_HOST =
-    EnvironmentVariablesService.variables.FIREBASE_AUTH_EMULATOR_HOST;
+    EnvironmentVariables.FIREBASE_AUTH_EMULATOR_HOST;
 
   if (!FIREBASE_AUTH_EMULATOR_HOST) {
     throw new Error('Must use Firebase Auth Emulator for seeding');
   }
 
-  ProcessContextManager.setContext({
-    type: ProcessType.Script,
-    name: 'scripts-dev:seed',
-    workerId: generateRandomUUID(),
-  });
+  const defaultDBConnection = await createConnection(TYPEORM_ORMCONFIG);
 
-  const { DEFAULT_DB_TYPEORM_CONN_OPTS_WITH_MIGRATIONS } = await import(
-    'src/databases/typeorm-ormconfig-with-migrations'
-  );
+  await defaultDBConnection.runMigrations();
 
-  const defaultDBConnection = await createConnection({
-    ...DEFAULT_DB_TYPEORM_CONN_OPTS_WITH_MIGRATIONS,
-    entities: ['src/**/*.entity.ts'],
-  });
 
-  await tearDownDatabases([defaultDBConnection]);
   try {
     await rm(LOCAL_TEMPORARY_FILES_PATH, { recursive: true });
   } catch (err) {
     // NOOP
   }
 
-  const firebaseProjectId = FIREBASE_EMULATOR_PROJECT_ID || throwError();
+  const firebaseProjectId = EnvironmentVariables.FIREBASE_EMULATOR_PROJECT_ID || throwError();
 
   const firebaseApp = firebaseAdmin.initializeApp({
     projectId: firebaseProjectId,
   });
   const firebaseAuth = firebaseApp.auth();
 
-  const firebaseAuthEmulatorHost = FIREBASE_AUTH_EMULATOR_HOST;
-
-  class FirebaseAuthEmulatorApi extends JSONApiBase {
-    protected apiUrl = `http://${firebaseAuthEmulatorHost}/emulator/v1/projects/${firebaseProjectId}`;
-    protected loggingService = LoggingServiceSingleton.makeInstance();
-    protected getDefaultHeaders = () => ({});
-  }
-
-  const firebaseEmulatorApi = new FirebaseAuthEmulatorApi();
-
-  await firebaseEmulatorApi.delete(
-    object({
-      status: equals([200] as const).required(),
-      body: object({}).required(),
-    }).required(),
-    {
-      path: `/accounts`,
-    },
+  const res = await fetch(
+    `http://${FIREBASE_AUTH_EMULATOR_HOST}/emulator/v1/projects/${firebaseProjectId}/accounts`,
+    { method: 'DELETE' },
   );
 
-  await defaultDBConnection.runMigrations();
+  if (res.status !== 200) {
+    throw new Error(`Failed to clear Firebase Auth emulator accounts: ${res.status}`);
+  }
+
 
   const usersRepository =
     defaultDBConnection.getCustomRepository(UsersRepository);
 
-  const endUser = await usersRepository.create(
+  const endUser = new User(
     {
       firebaseUid: (
         await firebaseAuth.createUser({
@@ -111,14 +81,16 @@ async function seed() {
           password: 'password123',
         })
       ).uid,
-      role: Role.EndUser,
-      walletAddress: null,
-      walletNonce: generateRandomUUID(),
-      appId: generateRandomUUID(),
+      isAdmin: false,
+      appId: v4(),
     },
-  );
+  )
 
   await usersRepository.create(
+    endUser
+  );
+
+  const adminUser = new User(
     {
       firebaseUid: (
         await firebaseAuth.createUser({
@@ -127,11 +99,13 @@ async function seed() {
           password: 'password123',
         })
       ).uid,
-      role: Role.Admin,
-      walletAddress: null,
-      walletNonce: generateRandomUUID(),
-      appId: generateRandomUUID(),
+      isAdmin: true,
+      appId: v4(),
     },
+  )
+
+  await usersRepository.create(
+    adminUser
   );
 
   const landsRepository =
@@ -143,7 +117,7 @@ async function seed() {
   const storageService = new DevStorageService();
 
   const expectationsBeach = await landsRepository.create(
-    {
+    new Land({
       name: 'Expectations Beach',
       searchableName: getSearchableName('Expectations Beach'),
       backgroundMusicUrl: 'https://api.soundcloud.com/tracks/256813580',
@@ -155,11 +129,11 @@ async function seed() {
       world: null,
       isStartingLand: null,
       isTrainStation: null,
-    },
+    }),
   );
 
   const townOfHumbleBeginnings = await landsRepository.create(
-    {
+    new Land({
       name: 'Town of Humble Beginnings',
       searchableName: getSearchableName('Town of Humble Beginnings'),
       backgroundMusicUrl: 'https://api.soundcloud.com/tracks/566456658',
@@ -171,11 +145,11 @@ async function seed() {
       world: null,
       isStartingLand: null,
       isTrainStation: null,
-    },
+    }),
   );
 
   const townOfHumbleBeginningsUnderground1 = await landsRepository.create(
-    {
+    new Land({
       name: 'Town of Humble Beginnings - Underground 1',
       searchableName: getSearchableName(
         'Town of Humble Beginnings - Underground 1',
@@ -189,11 +163,11 @@ async function seed() {
       world: null,
       isStartingLand: null,
       isTrainStation: null,
-    },
+    }),
   );
 
   const townOfHumbleBeginningsUnderground2 = await landsRepository.create(
-    {
+    new Land({
       name: 'Town of Humble Beginnings - Underground 2',
       searchableName: getSearchableName(
         'Town of Humble Beginnings - Underground 2',
@@ -207,11 +181,11 @@ async function seed() {
       world: null,
       isStartingLand: null,
       isTrainStation: null,
-    },
+    }),
   );
 
   const townOfHumbleBeginningsTemple = await landsRepository.create(
-    {
+    new Land({
       name: 'Town of Humble Beginnings - Temple',
       searchableName: getSearchableName('Town of Humble Beginnings - Temple'),
       backgroundMusicUrl: null,
@@ -223,25 +197,25 @@ async function seed() {
       world: null,
       isStartingLand: null,
       isTrainStation: null,
-    },
+    }),
   );
 
   /* ----- */
 
   const expectationsBeachDoor1 = await doorBlocksRepository.create(
-    {
+    new DoorBlock({
       inTerritory: Promise.resolve(null),
       inLand: expectationsBeach,
       toLand: expectationsBeach,
-    },
+    }),
   );
 
   const expectationsBeachDoor2 = await doorBlocksRepository.create(
-    {
+    new DoorBlock({
       inTerritory: Promise.resolve(null),
       inLand: expectationsBeach,
       toLand: townOfHumbleBeginnings,
-    },
+    }),
   );
 
   const expectationsBeachMapString = await readFile(
@@ -258,16 +232,11 @@ async function seed() {
     ),
   );
 
-  const expectationsBeachMapRes = createTiledJSONSchema({
+  const expectationsBeachMap = createTiledJSONSchema({
     maxWidth: null,
     maxHeight: null,
-  }).validate(JSON.parse(expectationsBeachMapString) as unknown);
+  }).parse(JSON.parse(expectationsBeachMapString) as unknown);
 
-  if (expectationsBeachMapRes.errors) {
-    throw new Error(JSON.stringify(expectationsBeachMapRes.messagesTree));
-  }
-
-  const expectationsBeachMap = expectationsBeachMapRes.value;
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   expectationsBeachMap.tilesets[0]!.tiles =
@@ -278,12 +247,14 @@ async function seed() {
         properties: tile.properties?.map((prop) => {
           if (prop.name === 'start') {
             return {
-              ...prop,
+              name: "start",
+              type: "string" as const,
               value: `door:${expectationsBeachDoor1.id}`,
             };
           } else if (prop.name === 'town') {
             return {
-              ...prop,
+              name: "town",
+              type: "string" as const,
               value: `door:${expectationsBeachDoor2.id}`,
             };
           } else {
@@ -305,35 +276,35 @@ async function seed() {
   /* ----- */
 
   const townOfHumbleBeginningsDoor1 = await doorBlocksRepository.create(
-    {
+    new DoorBlock({
       inTerritory: Promise.resolve(null),
       inLand: townOfHumbleBeginnings,
       toLand: townOfHumbleBeginningsUnderground1,
-    },
+    }),
   );
 
   const townOfHumbleBeginningsDoor2 = await doorBlocksRepository.create(
-    {
+    new DoorBlock({
       inTerritory: Promise.resolve(null),
       inLand: townOfHumbleBeginnings,
       toLand: townOfHumbleBeginningsUnderground2,
-    },
+    }),
   );
 
   const townOfHumbleBeginningsDoor3 = await doorBlocksRepository.create(
-    {
+    new DoorBlock({
       inTerritory: Promise.resolve(null),
       inLand: townOfHumbleBeginnings,
       toLand: townOfHumbleBeginningsTemple,
-    },
+    }),
   );
 
   const townOfHumbleBeginningsApp1 = await appBlocksRepository.create(
-    {
+    new AppBlock({
       inTerritory: Promise.resolve(null),
       inLand: Promise.resolve(townOfHumbleBeginnings),
       url: 'http://localhost:8000/apps/test',
-    },
+    }),
   );
 
   const townOfHumbleBeginningsMapString = await readFile(
@@ -350,16 +321,12 @@ async function seed() {
     ),
   );
 
-  const townOfHumbleBeginningsMapRes = createTiledJSONSchema({
+  const townOfHumbleBeginningsMap = createTiledJSONSchema({
     maxWidth: null,
     maxHeight: null,
-  }).validate(JSON.parse(townOfHumbleBeginningsMapString) as unknown);
+  }).parse(JSON.parse(townOfHumbleBeginningsMapString) as unknown);
 
-  if (townOfHumbleBeginningsMapRes.errors) {
-    throw new Error(JSON.stringify(townOfHumbleBeginningsMapRes.messagesTree));
-  }
 
-  const townOfHumbleBeginningsMap = townOfHumbleBeginningsMapRes.value;
 
   const { trainStationEntrance } = await seedTrainStation({
     landOutside: townOfHumbleBeginnings,
@@ -424,11 +391,11 @@ async function seed() {
 
   const townOfHumbleBeginningsUnderground1Door1 =
     await doorBlocksRepository.create(
-      {
+      new DoorBlock({
         inTerritory: Promise.resolve(null),
         inLand: townOfHumbleBeginningsUnderground1,
         toLand: townOfHumbleBeginningsUnderground2,
-      },
+      }),
     );
 
   const townOfHumbleBeginningsUnderground1MapString = await readFile(
@@ -445,26 +412,17 @@ async function seed() {
     ),
   );
 
-  const townOfHumbleBeginningsUnderground1MapRes = createTiledJSONSchema({
+  const townOfHumbleBeginningsUnderground1Map = createTiledJSONSchema({
     maxWidth: null,
     maxHeight: null,
-  }).validate(
+  }).parse(
     JSON.parse(townOfHumbleBeginningsUnderground1MapString) as unknown,
   );
 
-  if (townOfHumbleBeginningsUnderground1MapRes.errors) {
-    throw new Error(
-      JSON.stringify(townOfHumbleBeginningsUnderground1MapRes.messagesTree),
-    );
-  }
-
-  const townOfHumbleBeginningsUnderground1Res =
-    townOfHumbleBeginningsUnderground1MapRes.value;
-
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  townOfHumbleBeginningsUnderground1Res.tilesets[0]!.tiles =
+  townOfHumbleBeginningsUnderground1Map.tilesets[0]!.tiles =
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    townOfHumbleBeginningsUnderground1Res.tilesets[0]!.tiles.map((tile) => {
+    townOfHumbleBeginningsUnderground1Map.tilesets[0]!.tiles.map((tile) => {
       return {
         ...tile,
         properties: tile.properties?.map((prop) => {
@@ -487,7 +445,7 @@ async function seed() {
 
   await storageService.saveText(
     `lands/${townOfHumbleBeginningsUnderground1.id}/map.json`,
-    JSON.stringify(townOfHumbleBeginningsUnderground1Res),
+    JSON.stringify(townOfHumbleBeginningsUnderground1Map),
   );
   await storageService.saveBuffer(
     `lands/${townOfHumbleBeginningsUnderground1.id}/tileset.png`,
@@ -510,21 +468,12 @@ async function seed() {
     ),
   );
 
-  const townOfHumbleBeginningsUnderground2MapRes = createTiledJSONSchema({
+  const townOfHumbleBeginningsUnderground2Map = createTiledJSONSchema({
     maxWidth: null,
     maxHeight: null,
-  }).validate(
+  }).parse(
     JSON.parse(townOfHumbleBeginningsUnderground2MapString) as unknown,
   );
-
-  if (townOfHumbleBeginningsUnderground2MapRes.errors) {
-    throw new Error(
-      JSON.stringify(townOfHumbleBeginningsUnderground2MapRes.messagesTree),
-    );
-  }
-
-  const townOfHumbleBeginningsUnderground2Map =
-    townOfHumbleBeginningsUnderground2MapRes.value;
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   townOfHumbleBeginningsUnderground2Map.tilesets[0]!.tiles =
@@ -577,19 +526,12 @@ async function seed() {
     ),
   );
 
-  const townOfHumbleBeginningsTempleMapRes = createTiledJSONSchema({
+  const townOfHumbleBeginningsTempleMap = createTiledJSONSchema({
     maxWidth: null,
     maxHeight: null,
-  }).validate(JSON.parse(townOfHumbleBeginningsTempleMapString) as unknown);
+  }).parse(JSON.parse(townOfHumbleBeginningsTempleMapString) as unknown);
 
-  if (townOfHumbleBeginningsTempleMapRes.errors) {
-    throw new Error(
-      JSON.stringify(townOfHumbleBeginningsTempleMapRes.messagesTree),
-    );
-  }
-
-  const townOfHumbleBeginningsTempleMap =
-    townOfHumbleBeginningsTempleMapRes.value;
+  
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   townOfHumbleBeginningsTempleMap.tilesets[0]!.tiles =
@@ -626,7 +568,7 @@ async function seed() {
   );
 
   const territory1 = await territoriesRepository.create(
-    {
+    new Territory({
       doorBlocks: [],
       appBlocks: [],
       hasAssets: true,
@@ -635,9 +577,7 @@ async function seed() {
       startY: 3,
       endX: 7,
       endY: 6,
-      tokenId: null,
-      tokenAddress: null,
-    },
+    }),
   );
 
   const territory1Map = await readFile(
@@ -663,44 +603,7 @@ async function seed() {
     terrritory1Thumbnail,
   );
 
-  const nftMetadataStorageKey = `territories/${territory1.id}/nft-metadata.json`;
-
-  await storageService.saveText(
-    nftMetadataStorageKey,
-    JSON.stringify({
-      attributes: [
-        {
-          trait_type: 'Territory ID',
-          value: `${territory1.id}`,
-        },
-        {
-          trait_type: 'In Land',
-          value: `${townOfHumbleBeginnings.name}`,
-        },
-        {
-          trait_type: 'Width',
-          value: `${territory1.endX - territory1.startX}`,
-        },
-        {
-          trait_type: 'Height',
-          value: `${territory1.endY - territory1.startY}`,
-        },
-        {
-          trait_type: 'Total Area',
-          value: `${
-            (territory1.endX - territory1.startX) *
-            (territory1.endY - territory1.startY)
-          }`,
-        },
-      ],
-      description: `8Land territory at ${townOfHumbleBeginnings.name}`,
-      image: `${storageService.getHostUrl()}/territories/${
-        territory1.id
-      }/thumbnail.jpg`,
-      name: `${townOfHumbleBeginnings.name} - territory 1`,
-    }),
-  );
-
+ 
   await territoriesRepository.save(territory1);
   /* --- */
 

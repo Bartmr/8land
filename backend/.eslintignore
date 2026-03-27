@@ -4,7 +4,4 @@ node_modules
 
 /coverage
 
-*.json
-*.js
-
 /_tmp

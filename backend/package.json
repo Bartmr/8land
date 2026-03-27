@@ -4,9 +4,6 @@
   "description": "",
   "author": "",
   "private": true,
-  "engines": {
-    "node": "16"
-  },
   "scripts": {
     "seed": "npm run ts-node ./development/seed.ts",
     "tear-down-databases": "npm run ts-node ./development/tear-down-databases.ts",
@@ -37,7 +34,7 @@
     "dotenv": "^16.0.1",
     "firebase-admin": "^11.0.0",
     "glob": "^8.0.3",
-    "not-me": "^5.3.0",
+    "node-fetch": "^3.3.2",
     "pg": "^8.7.3",
     "read-chunk": "^4.0.2",
     "reflect-metadata": "^0.1.13",

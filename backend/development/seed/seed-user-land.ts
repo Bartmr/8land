@@ -1,7 +1,11 @@
 import { DoorBlockRepository } from 'src/blocks/door-block.repository';
+import { DoorBlock } from 'src/blocks/door-block.entity';
+import { AppBlock } from 'src/blocks/app-block.entity';
 import { getSearchableName } from 'src/strings/get-searchable-name';
+import { Land } from 'src/land/land.entity';
 import { LandRepository } from 'src/land/land.repository';
 import { User } from 'src/users/user.entity';
+import { World } from 'src/worlds/worlds.entity';
 import { WorldRepository } from 'src/worlds/worlds.repository';
 import { EntityManager } from 'typeorm';
 import path from 'path';
@@ -29,16 +33,15 @@ export async function seedUserLand({
   const landsRepository = eM.getCustomRepository(LandRepository);
   const doorBlocksRepository = eM.getCustomRepository(DoorBlockRepository);
 
-  const world = await worldsRepository.create(
-    {
-      user: Promise.resolve(user),
-      lands: Promise.resolve([]),
-      hasStartLand: true,
-    },
-  );
+  const worldEntity = new World({
+    user: Promise.resolve(user),
+    lands: Promise.resolve([]),
+  });
+  worldEntity.hasStartLand = true;
+  const world = await worldsRepository.create(worldEntity);
 
   const townOfHumbleBeginnings = await landsRepository.create(
-    {
+    new Land({
       name: 'USER LAND - Town of Humble Beginnings',
       searchableName: getSearchableName(
         'USER LAND - Town of Humble Beginnings',
@@ -52,11 +55,11 @@ export async function seedUserLand({
       world,
       isStartingLand: true,
       isTrainStation: null,
-    },
+    }),
   );
 
   const townOfHumbleBeginningsUnderground1 = await landsRepository.create(
-    {
+    new Land({
       name: 'USER LAND - Town of Humble Beginnings - Underground 1',
       searchableName: getSearchableName(
         'USER LAND - Town of Humble Beginnings - Underground 1',
@@ -70,11 +73,11 @@ export async function seedUserLand({
       world,
       isStartingLand: null,
       isTrainStation: null,
-    },
+    }),
   );
 
   const townOfHumbleBeginningsUnderground2 = await landsRepository.create(
-    {
+    new Land({
       name: 'USER LAND - Town of Humble Beginnings - Underground 2',
       searchableName: getSearchableName(
         'USER LAND - Town of Humble Beginnings - Underground 2',
@@ -88,32 +91,32 @@ export async function seedUserLand({
       world,
       isStartingLand: null,
       isTrainStation: null,
-    },
+    }),
   );
 
   /* ----- */
   const townOfHumbleBeginningsDoor1 = await doorBlocksRepository.create(
-    {
+    new DoorBlock({
       inTerritory: Promise.resolve(null),
       inLand: townOfHumbleBeginnings,
       toLand: townOfHumbleBeginningsUnderground1,
-    },
+    }),
   );
 
   const townOfHumbleBeginningsDoor2 = await doorBlocksRepository.create(
-    {
+    new DoorBlock({
       inTerritory: Promise.resolve(null),
       inLand: townOfHumbleBeginnings,
       toLand: townOfHumbleBeginningsUnderground2,
-    },
+    }),
   );
 
   const townOfHumbleBeginningsApp1 = await appBlocksRepository.create(
-    {
+    new AppBlock({
       inTerritory: Promise.resolve(null),
       inLand: Promise.resolve(townOfHumbleBeginnings),
       url: 'http://localhost:8000/apps/test',
-    },
+    }),
   );
 
   const townOfHumbleBeginningsMapString = await readFile(
@@ -130,16 +133,12 @@ export async function seedUserLand({
     ),
   );
 
-  const townOfHumbleBeginningsMapRes = createTiledJSONSchema({
+  const townOfHumbleBeginningsMap = createTiledJSONSchema({
     maxWidth: null,
     maxHeight: null,
-  }).validate(JSON.parse(townOfHumbleBeginningsMapString) as unknown);
+  }).parse(JSON.parse(townOfHumbleBeginningsMapString) as unknown);
 
-  if (townOfHumbleBeginningsMapRes.errors) {
-    throw new Error(JSON.stringify(townOfHumbleBeginningsMapRes.messagesTree));
-  }
-
-  const townOfHumbleBeginningsMap = townOfHumbleBeginningsMapRes.value;
+ 
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   townOfHumbleBeginningsMap.tilesets[0]!.tiles =
@@ -150,17 +149,20 @@ export async function seedUserLand({
         properties: tile.properties?.map((prop) => {
           if (prop.name === 'underground-entrance') {
             return {
-              ...prop,
+              name: "underground-entrance",
+              type: "string",
               value: `door:${townOfHumbleBeginningsDoor1.id}`,
             };
           } else if (prop.name === 'form') {
             return {
-              ...prop,
+              name: "form",
+              type: "string",
               value: `app:${townOfHumbleBeginningsApp1.id}`,
             };
           } else if (prop.name === 'underground') {
             return {
-              ...prop,
+              name: "underground",
+              type: "string",
               value: `door:${townOfHumbleBeginningsDoor2.id}`,
             };
           } else if (prop.name === 'beach') {
@@ -189,11 +191,11 @@ export async function seedUserLand({
 
   const townOfHumbleBeginningsUnderground1Door1 =
     await doorBlocksRepository.create(
-      {
+      new DoorBlock({
         inTerritory: Promise.resolve(null),
         inLand: townOfHumbleBeginningsUnderground1,
         toLand: townOfHumbleBeginningsUnderground2,
-      },
+      }),
     );
 
   const townOfHumbleBeginningsUnderground1MapString = await readFile(
@@ -210,37 +212,32 @@ export async function seedUserLand({
     ),
   );
 
-  const townOfHumbleBeginningsUnderground1MapRes = createTiledJSONSchema({
+  const townOfHumbleBeginningsUnderground1Map = createTiledJSONSchema({
     maxWidth: null,
     maxHeight: null,
-  }).validate(
+  }).parse(
     JSON.parse(townOfHumbleBeginningsUnderground1MapString) as unknown,
   );
 
-  if (townOfHumbleBeginningsUnderground1MapRes.errors) {
-    throw new Error(
-      JSON.stringify(townOfHumbleBeginningsUnderground1MapRes.messagesTree),
-    );
-  }
-
-  const townOfHumbleBeginningsUnderground1Res =
-    townOfHumbleBeginningsUnderground1MapRes.value;
+ 
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  townOfHumbleBeginningsUnderground1Res.tilesets[0]!.tiles =
+  townOfHumbleBeginningsUnderground1Map.tilesets[0]!.tiles =
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    townOfHumbleBeginningsUnderground1Res.tilesets[0]!.tiles.map((tile) => {
+    townOfHumbleBeginningsUnderground1Map.tilesets[0]!.tiles.map((tile) => {
       return {
         ...tile,
         properties: tile.properties?.map((prop) => {
           if (prop.name === 'underground') {
             return {
-              ...prop,
+              name: "underground",
+              type: "string",
               value: `door:${townOfHumbleBeginningsUnderground1Door1.id}`,
             };
           } else if (prop.name === 'town') {
             return {
-              ...prop,
+              name: "town",
+              type: "string",
               value: `door:${townOfHumbleBeginningsDoor1.id}`,
             };
           } else {
@@ -252,7 +249,7 @@ export async function seedUserLand({
 
   await storageService.saveText(
     `lands/${townOfHumbleBeginningsUnderground1.id}/map.json`,
-    JSON.stringify(townOfHumbleBeginningsUnderground1Res),
+    JSON.stringify(townOfHumbleBeginningsUnderground1Map),
   );
   await storageService.saveBuffer(
     `lands/${townOfHumbleBeginningsUnderground1.id}/tileset.png`,
@@ -275,21 +272,12 @@ export async function seedUserLand({
     ),
   );
 
-  const townOfHumbleBeginningsUnderground2MapRes = createTiledJSONSchema({
+  const townOfHumbleBeginningsUnderground2Map = createTiledJSONSchema({
     maxWidth: null,
     maxHeight: null,
-  }).validate(
+  }).parse(
     JSON.parse(townOfHumbleBeginningsUnderground2MapString) as unknown,
   );
-
-  if (townOfHumbleBeginningsUnderground2MapRes.errors) {
-    throw new Error(
-      JSON.stringify(townOfHumbleBeginningsUnderground2MapRes.messagesTree),
-    );
-  }
-
-  const townOfHumbleBeginningsUnderground2Map =
-    townOfHumbleBeginningsUnderground2MapRes.value;
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   townOfHumbleBeginningsUnderground2Map.tilesets[0]!.tiles =
@@ -300,12 +288,14 @@ export async function seedUserLand({
         properties: tile.properties?.map((prop) => {
           if (prop.name === 'town') {
             return {
-              ...prop,
+              name: "town",
+              type: "string",
               value: `door:${townOfHumbleBeginningsDoor2.id}`,
             };
           } else if (prop.name === 'entrance') {
             return {
-              ...prop,
+              name: "entrance",
+              type: "string",
               value: `door:${townOfHumbleBeginningsUnderground1Door1.id}`,
             };
           } else {

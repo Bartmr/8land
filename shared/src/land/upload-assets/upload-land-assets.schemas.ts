@@ -172,14 +172,14 @@ export const createTiledJSONSchema = ({
           maxWidthMessage || `Must be greater than 0 and less than ${maxWidth}`,
         ),
     })
-    .refine((o) => {
+    .superRefine((o, ctx) => {
       for (const layer of o.layers) {
         if (layer.height !== o.height) {
-          return false;
+          ctx.addIssue({ code: 'custom', message: `Layer "${layer.name}" height must be equal to the map height` });
         }
 
         if (layer.width !== o.width) {
-          return false;
+          ctx.addIssue({ code: 'custom', message: `Layer "${layer.name}" width must be equal to the map width` });
         }
       }
 
@@ -188,37 +188,11 @@ export const createTiledJSONSchema = ({
           if (tile.animation) {
             for (const animation of tile.animation) {
               if (animation.tileid > tileset.tilecount) {
-                return false;
+                ctx.addIssue({ code: 'custom', message: `${animation.tileid} is bigger than the total tiles in the tileset` });
               }
             }
           }
         }
       }
-
-      return true;
-    }, (o) => {
-      for (const layer of o.layers) {
-        if (layer.height !== o.height) {
-          return { message: `Layer "${layer.name}" height must be equal to the map height` };
-        }
-
-        if (layer.width !== o.width) {
-          return { message: `Layer "${layer.name}" width must be equal to the map width` };
-        }
-      }
-
-      for (const tileset of o.tilesets) {
-        for (const tile of tileset.tiles) {
-          if (tile.animation) {
-            for (const animation of tile.animation) {
-              if (animation.tileid > tileset.tilecount) {
-                return { message: `${animation.tileid} is bigger than the total tiles in the tileset` };
-              }
-            }
-          }
-        }
-      }
-
-      return { message: 'Invalid map' };
     });
 };

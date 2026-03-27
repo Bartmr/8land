@@ -8,6 +8,8 @@ import {
 import { getSearchableName } from 'src/strings/get-searchable-name';
 import { Land } from 'src/land/land.entity';
 import { LandRepository } from 'src/land/land.repository';
+import { DoorBlock } from 'src/blocks/door-block.entity';
+import { AppBlock } from 'src/blocks/app-block.entity';
 import { EntityManager } from 'typeorm';
 import { promisify } from 'util';
 import fs from 'fs';
@@ -29,7 +31,7 @@ export async function seedTrainStation({
   const appBlocksRepo = eM.getCustomRepository(AppBlockRepository);
 
   const trainStation = await landsRepo.create(
-    {
+    new Land({
       name: 'Town of Humble Beginnings - Train Station',
       searchableName: getSearchableName(
         'Town of Humble Beginnings - Train Station',
@@ -43,23 +45,23 @@ export async function seedTrainStation({
       world: null,
       isStartingLand: null,
       isTrainStation: true,
-    },
+    }),
   );
 
   const entrance = await doorBlocksRepo.create(
-    {
+    new DoorBlock({
       inLand: landOutside,
       toLand: trainStation,
       inTerritory: Promise.resolve(null),
-    },
+    }),
   );
 
   const ticketMachine = await appBlocksRepo.create(
-    {
+    new AppBlock({
       inLand: Promise.resolve(trainStation),
       inTerritory: Promise.resolve(null),
       url: 'http://localhost:8000/apps/train-ticket-machine',
-    },
+    }),
   );
 
   const mapString = await readFile(
@@ -73,16 +75,12 @@ export async function seedTrainStation({
     ),
   );
 
-  const mapRes = createTiledJSONSchema({
+  const map = createTiledJSONSchema({
     maxWidth: null,
     maxHeight: null,
-  }).validate(JSON.parse(mapString) as unknown);
+  }).parse(JSON.parse(mapString) as unknown);
 
-  if (mapRes.errors) {
-    throw new Error(JSON.stringify(mapRes.messagesTree));
-  }
-
-  const map = mapRes.value;
+ 
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   map.tilesets[0]!.tiles =
@@ -93,12 +91,14 @@ export async function seedTrainStation({
         properties: tile.properties?.map((prop) => {
           if (prop.name === 'entrance') {
             return {
-              ...prop,
+              name: "entrance",
+              type: "string",
               value: `door:${entrance.id}`,
             };
           } else if (prop.name === 'ticket-machine') {
             return {
-              ...prop,
+              name: "ticket-machine",
+              type: "string",
               value: `app:${ticketMachine.id}`,
             };
           } else {
