@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppBlock } from 'src/blocks/app-block.entity';
 import { DoorBlock } from 'src/blocks/door-block.entity';
-import { BackendModule } from 'src/backend/backend.module';
-import { RaribleModule } from 'src/rarible/rarible.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { StorageModule } from 'src/storage/storage.module';
 import { TerritoriesEndUserController } from './territories.controller';
@@ -13,8 +11,6 @@ import { AuthModule } from 'src/users/auth/auth.module';
   imports: [
     TypeOrmModule.forFeature([Territory, DoorBlock, AppBlock]),
     StorageModule,
-    BackendModule,
-    RaribleModule,
     AuthModule,
   ],
   controllers: [TerritoriesEndUserController],

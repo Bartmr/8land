@@ -38,7 +38,6 @@ import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
-import { RaribleApi } from 'src/rarible/rarible.api';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import {
   ContentType,
@@ -58,7 +57,6 @@ import {
 } from '@shared/src/territories/create/create-territory.dto';
 import { CreateTerritoryRequestJSONSchema } from '@shared/src/territories/create/create-territory.schemas';
 import { LandRepository } from 'src/land/land.repository';
-import { BackendStorageApi } from 'src/backend/backend-storage.api';
 import { number } from 'not-me/lib/schemas/number/number-schema';
 import {
   UpdateTerritoryRaribleMetadataParametersDTO,
