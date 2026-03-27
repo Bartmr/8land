@@ -10,9 +10,8 @@ import {
   UploadedFiles,
   UseGuards,
   UseInterceptors,
-  Body,
-  Patch,
   Post,
+  NotFoundException,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/users/auth/auth.guard';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
@@ -22,10 +21,6 @@ import {
   TERRITORY_TILESET_SIZE_LIMIT,
 } from '@shared/src/territories/upload-assets/upload-territory-assets.constants';
 import {
-  GetTerritoryIdByRaribleItemIdDTO,
-  GetTerritoryIdByRaribleItemIdParamsDTO,
-} from '@shared/src/territories/get-id-by-rarible-item-id/get-territory-id-by-rarible-item-id.dto';
-import {
   GetTerritoryDTO,
   GetTerritoryParametersDTO,
 } from '@shared/src/territories/get/get-territory.dto';
@@ -33,12 +28,8 @@ import {
   UploadTerritoryAssetsParametersDTO,
   UploadTerritoryAssetsRequestDTO,
 } from '@shared/src/territories/upload-assets/upload-assets.dto';
-import { equals } from 'not-me/lib/schemas/equals/equals-schema';
-import { object } from 'not-me/lib/schemas/object/object-schema';
-import { string } from 'not-me/lib/schemas/string/string-schema';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
-import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import {
   ContentType,
   StorageService,
@@ -47,9 +38,7 @@ import { DataSource } from 'typeorm';
 import { Territory } from './territory.entity';
 import { TerritoriesRepository } from './territories.repository';
 import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
-import { InferType } from 'not-me/lib/schemas/schema';
 import { throwError } from 'src/throw-error';
-import { or } from 'not-me/lib/schemas/or/or-schema';
 import sharp from 'sharp';
 import {
   CreateTerritoryRequestDTO,
@@ -57,12 +46,8 @@ import {
 } from '@shared/src/territories/create/create-territory.dto';
 import { CreateTerritoryRequestJSONSchema } from '@shared/src/territories/create/create-territory.schemas';
 import { LandRepository } from 'src/land/land.repository';
-import { number } from 'not-me/lib/schemas/number/number-schema';
-import {
-  UpdateTerritoryRaribleMetadataParametersDTO,
-  UpdateTerritoryRaribleMetadataRequestDTO,
-} from '@shared/src/territories/update-rarible/update-territory-rarible-metadata.dto';
 import { StaticBlockType } from '@shared/src/blocks/block.enums';
+import { z } from 'zod'
 
 @UseGuards(AuthGuard)
 @Controller('territories')
@@ -70,14 +55,11 @@ export class TerritoriesEndUserController {
   constructor(
     private dataSource: DataSource,
     private storageService: StorageService,
-    private raribleApi: RaribleApi,
-    private itselfStorageApi: BackendStorageApi,
   ) {}
 
   @Get(':id')
   async getTerritory(
     @Param() params: GetTerritoryParametersDTO,
-    @WithAuthContext() authContext: AuthContext,
   ): Promise<GetTerritoryDTO> {
     const territoriesRepository = this.dataSource.getCustomRepository(
       TerritoriesRepository,
@@ -88,7 +70,7 @@ export class TerritoriesEndUserController {
       },
     });
     if (!territory) {
-      throw new ResourceNotFoundException();
+      throw new NotFoundException();
     }
 
     const land = await territory.inLand;
@@ -150,7 +132,7 @@ export class TerritoriesEndUserController {
     if (
       !territory_UNSAFE
     ) {
-      throw new ResourceNotFoundException();
+      throw new NotFoundException();
     }
 
 
@@ -200,16 +182,16 @@ export class TerritoriesEndUserController {
       maxWidth: territory_UNSAFE.endX - territory_UNSAFE.startX,
       maxHeight: territory_UNSAFE.endY - territory_UNSAFE.startY,
     });
-    const tiledJSONValidationResult = tiledJSONSchema.validate(mapJSON);
-    if (tiledJSONValidationResult.errors) {
+    const tiledJSONValidationResult = tiledJSONSchema.safeParse(mapJSON);
+    if (!tiledJSONValidationResult.success) {
       throw new BadRequestException({
         error: 'tiled-json-validation-error',
-        messageTree: tiledJSONValidationResult.messagesTree,
+        messageTree: tiledJSONValidationResult.error,
       });
     }
 
     const tilesetSpecifications =
-      tiledJSONValidationResult.value.tilesets[0] || throwError();
+      tiledJSONValidationResult.data.tilesets[0] || throwError();
 
     const hasTrainBlock = tilesetSpecifications.tiles.some((tile) => {
       const tileHasTrainBlock = tile.properties?.some((tileProp) => {
@@ -252,16 +234,16 @@ export class TerritoriesEndUserController {
         },
       });
       if (!territory) {
-        throw new ResourceNotFoundException();
+        throw new NotFoundException();
       }
       await this.storageService.saveBuffer(tilesetStorageKey, tileset.buffer, {
         contentType: ContentType.PNG,
       });
-      const toSave: InferType<typeof tiledJSONSchema> = {
-        ...tiledJSONValidationResult.value,
+      const toSave: z.infer<typeof tiledJSONSchema> = {
+        ...tiledJSONValidationResult.data,
         tilesets: [
           {
-            ...(tiledJSONValidationResult.value.tilesets[0] || throwError()),
+            ...(tiledJSONValidationResult.data.tilesets[0] || throwError()),
             image: 'tileset.png',
           },
         ],
@@ -341,14 +323,14 @@ export class TerritoriesEndUserController {
       throw new BadRequestException({ error: 'unparsable-data-json' });
     }
     const dataValidationResult =
-      CreateTerritoryRequestJSONSchema.validate(dataJSON);
-    if (dataValidationResult.errors) {
+      CreateTerritoryRequestJSONSchema.safeParse(dataJSON);
+    if (!dataValidationResult.success) {
       throw new BadRequestException({
         error: 'data-validation-error',
-        messageTree: dataValidationResult.messagesTree,
+        messageTree: dataValidationResult.error,
       });
     }
-    const data = dataValidationResult.value;
+    const data = dataValidationResult.data;
     /* --- */
     const img = sharp(thumbnailFile.buffer);
 
@@ -418,8 +400,6 @@ export class TerritoriesEndUserController {
         inLand: Promise.resolve(land),
         doorBlocks: [],
         appBlocks: [],
-        tokenId: null,
-        tokenAddress: null,
       }));
       const thumbnailStorageKey = `territories/${territory.id}/thumbnail.jpg`;
       await this.storageService.saveBuffer(thumbnailStorageKey, imgResized, {
