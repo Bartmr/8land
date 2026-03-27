@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TypeormFeatureModule } from 'src/databases/typeorm.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { LandModule } from 'src/land/land.module';
 import { Land } from 'src/land/land.entity';
 import { NavigationState } from 'src/navigation/state/navigation-state.entity';
@@ -9,9 +9,7 @@ import { AuthModule } from 'src/users/auth/auth.module';
 
 @Module({
   imports: [
-    TypeormFeatureModule.forFeature({
-      entities: [Land, NavigationState, User],
-    }),
+    TypeOrmModule.forFeature([Land, NavigationState, User]),
     LandModule,
     AuthModule,
   ],

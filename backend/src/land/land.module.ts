@@ -10,15 +10,13 @@ import { NavigationState } from 'src/navigation/state/navigation-state.entity';
 import { LandsController } from './land.controller';
 import { World } from '../worlds/worlds.entity';
 import { LandPersistenceService } from './land-persistence.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { SettingsModule } from 'src/settings/settings.module';
-import { TypeormFeatureModule } from 'src/databases/typeorm.module';
 import { AuthModule } from 'src/users/auth/auth.module';
 
 @Module({
   imports: [
-    TypeormFeatureModule.forFeature({
-      entities: [Land, Territory, DoorBlock, AppBlock, NavigationState, World],
-    }),
+    TypeOrmModule.forFeature([Land, Territory, DoorBlock, AppBlock, NavigationState, World]),
     StorageModule,
     SettingsModule,
     AuthModule,
