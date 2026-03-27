@@ -25,7 +25,7 @@ import { AuditContext } from 'src/auditing/audit-context';
 import { WithAuditContext } from 'src/auditing/audit.decorator';
 import { LoggingService } from 'src/logging/logging.service';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
-import { NavigationStateRepository } from 'src/navigation-state/navigation-state.repository';
+import { NavigationStateRepository } from 'src/navigation/state/navigation-state.repository';
 import { DataSource } from 'typeorm';
 import { LandsService } from './lands.service';
 

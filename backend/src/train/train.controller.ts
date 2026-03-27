@@ -34,7 +34,7 @@ import { throwError } from 'src/throw-error';
 import { LandsService } from 'src/land/lands.service';
 import { Land } from 'src/land/land.entity';
 import { LandRepository } from 'src/land/land.repository';
-import { NavigationStateRepository } from 'src/navigation-state/navigation-state.repository';
+import { NavigationStateRepository } from 'src/navigation/state/navigation-state.repository';
 import { DataSource } from 'typeorm';
 
 @UseGuards(AuthGuard)

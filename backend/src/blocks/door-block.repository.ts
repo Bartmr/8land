@@ -1,4 +1,4 @@
-import { NavigationState } from 'src/navigation-state/navigation-state.entity';
+import { NavigationState } from 'src/navigation/state/navigation-state.entity';
 import {
   AbstractRepository,
   EntityManager,

@@ -6,7 +6,7 @@ import { Territory } from 'src/territories/territory.entity';
 import { AppBlock } from 'src/blocks/app-block.entity';
 import { LandsService } from './lands.service';
 import { LandsInGameController } from './lands-in-game.controller';
-import { NavigationState } from 'src/navigation-state/navigation-state.entity';
+import { NavigationState } from 'src/navigation/state/navigation-state.entity';
 import { LandsController } from './land.controller';
 import { World } from '../worlds/worlds.entity';
 import { LandPersistenceService } from './land-persistence.service';
