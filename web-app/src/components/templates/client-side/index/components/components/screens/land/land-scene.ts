@@ -23,9 +23,9 @@ import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
-import { LandsAPI } from 'src/logic/lands/lands-api';
+import { LandsAPI } from 'src/lands/lands-api';
 import { NavigateToLandDTO } from '@app/shared/land/in-game/navigate/navigate-to-land.dto';
-import { TrainAPI } from 'src/logic/train/train.api';
+import { TrainAPI } from 'src/train/train.api';
 
 @HotReloadClass(module)
 export class LandScene extends Phaser.Scene {

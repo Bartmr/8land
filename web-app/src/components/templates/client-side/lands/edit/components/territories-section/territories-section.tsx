@@ -14,7 +14,7 @@ import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
-import { useTerritoriesAPI } from 'src/logic/territories/territories-api';
+import { useTerritoriesAPI } from 'src/territories/territories-api';
 import { TerritoryPreview } from './territory-preview';
 import { useMintTerritory } from './use-mint-territory';
 

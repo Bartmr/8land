@@ -16,7 +16,7 @@ import { number } from 'not-me/lib/schemas/number/number-schema';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { or } from 'not-me/lib/schemas/or/or-schema';
 import { SoundcloudSongApiUrlSchema } from '@app/shared/land/edit/edit-land.schema';
-import { useLandsAPI } from 'src/logic/lands/lands-api';
+import { useLandsAPI } from 'src/lands/lands-api';
 
 export function MainSection(props: {
   land: GetLandDTO;

@@ -12,7 +12,7 @@ import { Layout } from 'src/components/routing/layout/layout';
 import { LANDS_ROUTE } from './lands-routes';
 import { LinkAnchor } from 'src/ui/link-anchor';
 import { EDIT_LAND_ROUTE } from './edit/edit-land-routes';
-import { useLandsAPI } from 'src/logic/lands/lands-api';
+import { useLandsAPI } from 'src/lands/lands-api';
 import { Toast } from 'react-bootstrap';
 import { GetLandsToClaimDTO } from '@app/shared/land/lands-to-claim/lands-to-claim.dto';
 import { START_LANDS_LIMIT_EXCEEDED_MESSAGE } from './edit/components/assets-section/assets-section.constants';

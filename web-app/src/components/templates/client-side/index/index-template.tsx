@@ -14,7 +14,7 @@ import { LinkAnchor } from 'src/ui/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
 import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
 import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
-import { useLandsAPI } from 'src/logic/lands/lands-api';
+import { useLandsAPI } from 'src/lands/lands-api';
 
 function Content(props: {
   showHeaderAndFooter: () => void;

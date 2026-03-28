@@ -14,8 +14,8 @@ import {
   DynamicBlockType,
   StaticBlockType,
 } from '@app/shared/blocks/create/create-block.enums';
-import { LandsAPI } from 'src/logic/lands/lands-api';
-import { TrainAPI } from 'src/logic/train/train.api';
+import { LandsAPI } from 'src/lands/lands-api';
+import { TrainAPI } from 'src/train/train.api';
 
 export async function runLandGame(
   args: {

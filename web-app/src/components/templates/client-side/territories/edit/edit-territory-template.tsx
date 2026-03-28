@@ -11,7 +11,7 @@ import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
-import { useTerritoriesAPI } from 'src/logic/territories/territories-api';
+import { useTerritoriesAPI } from 'src/territories/territories-api';
 import { AssetsUploader } from './components/assets-uploader/assets-uploader';
 import { EDIT_TERRITORY_ROUTE } from './edit-territory-routes';
 

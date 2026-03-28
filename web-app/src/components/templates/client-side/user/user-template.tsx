@@ -21,10 +21,10 @@ import { Logger } from 'src/logic/app-internals/logging/logger';
 import { useMainApiSessionLogout } from 'src/logic/app-internals/apis/main/session/use-main-api-session-logout';
 import { ChangeEmail } from './components/change-email';
 import { getWalletSignMessage } from '@app/shared/users/me/receive-signed-user-nonce.utils';
-import { useUsersAPI } from 'src/logic/users/users-api';
+import { useUsersAPI } from 'src/users/users-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPersonThroughWindow } from '@fortawesome/free-solid-svg-icons';
-import { useLandsAPI } from 'src/logic/lands/lands-api';
+import { useLandsAPI } from 'src/lands/lands-api';
 import { useAuthAPI } from 'src/logic/auth/auth.api';
 
 export function WalletSectionWithNonce(props: {

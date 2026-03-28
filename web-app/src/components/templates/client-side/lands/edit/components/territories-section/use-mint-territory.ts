@@ -1,6 +1,6 @@
 import Moralis from 'moralis';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
-import { useTerritoriesAPI } from 'src/logic/territories/territories-api';
+import { useTerritoriesAPI } from 'src/territories/territories-api';
 
 export function useMintTerritory() {
   const api = useTerritoriesAPI();
