@@ -1,20 +1,20 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { LOCAL_TEMPORARY_FILES_PATH } from '../temporary-files/temporary-files';
 import express from 'express';
 import path from 'path';
 import { StorageService } from './storage.service';
 import { DevStorageService } from './dev-storage.service';
-import { throwError } from '@shared/src/internals/utils/throw-error';
+import { throwError } from '@shared/src/throw-error';
 import fs from 'fs';
 import { promisify } from 'util';
-import { EnvironmentVariablesService } from '../environment/environment-variables.service';
+import { EnvironmentVariables } from 'src/environment/environment-variables';
 import { ProdStorageService } from './prod-storage.service';
 import { S3Client } from '@aws-sdk/client-s3';
 
 const mkdir = promisify(fs.mkdir);
 
 export const USE_DEV_STORAGE =
-  !EnvironmentVariablesService.variables.AWS_ENDPOINT;
+  !EnvironmentVariables.AWS_ENDPOINT;
 
 @Module({
   providers: [
@@ -26,16 +26,16 @@ export const USE_DEV_STORAGE =
         } else {
           const s3Client = new S3Client({
             endpoint: `https://${
-              EnvironmentVariablesService.variables.AWS_ENDPOINT || throwError()
+              EnvironmentVariables.AWS_ENDPOINT || throwError()
             }`,
             region:
-              EnvironmentVariablesService.variables.AWS_REGION || throwError(),
+              EnvironmentVariables.AWS_REGION || throwError(),
             credentials: {
               accessKeyId:
-                EnvironmentVariablesService.variables.AWS_ACCESS_KEY_ID ||
+                EnvironmentVariables.AWS_ACCESS_KEY_ID ||
                 throwError(),
               secretAccessKey:
-                EnvironmentVariablesService.variables.AWS_SECRET_ACCESS_KEY ||
+                EnvironmentVariables.AWS_SECRET_ACCESS_KEY ||
                 throwError(),
             },
           });
@@ -47,7 +47,7 @@ export const USE_DEV_STORAGE =
   ],
   exports: [StorageService],
 })
-export class StorageModule {
+export class StorageModule implements NestModule {
   async configure(consumer: MiddlewareConsumer) {
     if (USE_DEV_STORAGE) {
       await mkdir(path.join(LOCAL_TEMPORARY_FILES_PATH, 'storage'), {

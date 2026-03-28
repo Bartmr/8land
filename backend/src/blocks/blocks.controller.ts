@@ -5,6 +5,7 @@ import {
   Delete,
   ForbiddenException,
   HttpCode,
+  NotFoundException,
   Param,
   Post,
   UseGuards,
@@ -15,7 +16,6 @@ import { DynamicBlockType } from '@shared/src/blocks/create/create-block.enums';
 import { DeleteBlockURLParameters } from '@shared/src/blocks/delete/delete-block.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
-import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import { getSearchableString } from 'src/strings/get-searchable-string';
 import { LandRepository } from 'src/land/land.repository';
 import { DataSource } from 'typeorm';
@@ -64,7 +64,7 @@ export class BlocksController {
       );
 
       if (!land) {
-        throw new ResourceNotFoundException({ error: 'land-not-found' });
+        throw new NotFoundException({ error: 'land-not-found' });
       }
 
       const doorBlocks = await land.doorBlocks;
@@ -84,7 +84,7 @@ export class BlocksController {
         });
 
         if (!toLand) {
-          throw new ResourceNotFoundException({
+          throw new NotFoundException({
             error: 'destination-land-not-found',
           });
         }
@@ -161,7 +161,7 @@ export class BlocksController {
       });
 
       if (!block) {
-        throw new ResourceNotFoundException();
+        throw new NotFoundException();
       }
 
       await blockRepository.remove(block);

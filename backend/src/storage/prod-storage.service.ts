@@ -3,7 +3,7 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
-import { EnvironmentVariablesService } from '../environment/environment-variables.service';
+import { EnvironmentVariables } from 'src/environment/environment-variables';
 import { throwError } from '../throw-error';
 import { ContentType, StorageService } from './storage.service';
 import { Readable } from 'stream';
@@ -52,7 +52,7 @@ export class ProdStorageService extends StorageService {
     await this.s3Client.send(
       new PutObjectCommand({
         Bucket: `${
-          EnvironmentVariablesService.variables.S3_BUCKET_NAME || throwError()
+          EnvironmentVariables.S3_BUCKET_NAME || throwError()
         }`,
         Key: `${parsedKey.path}/${parsedKey.filename}`,
         Body: stream,
@@ -97,7 +97,7 @@ export class ProdStorageService extends StorageService {
     await this.s3Client.send(
       new DeleteObjectCommand({
         Bucket: `${
-          EnvironmentVariablesService.variables.S3_BUCKET_NAME || throwError()
+          EnvironmentVariables.S3_BUCKET_NAME || throwError()
         }`,
         Key: `${parsedKey.path}/${parsedKey.filename}`,
       }),
@@ -106,7 +106,7 @@ export class ProdStorageService extends StorageService {
 
   getHostUrl(): string {
     return `https://${
-      EnvironmentVariablesService.variables.S3_BUCKET_NAME || throwError()
-    }.${EnvironmentVariablesService.variables.AWS_ENDPOINT || throwError()}`;
+      EnvironmentVariables.S3_BUCKET_NAME || throwError()
+    }.${EnvironmentVariables.AWS_ENDPOINT || throwError()}`;
   }
 }

@@ -1,15 +1,13 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { NODE_ENV } from '../environment/node-env.constants';
-import { NodeEnv } from '../environment/node-env.types';
-import { DevEmailService } from './dev-email.service';
-import { EmailService } from './email.service';
 import express from 'express';
 import path from 'path';
 import { LOCAL_TEMPORARY_FILES_PATH } from '../temporary-files/temporary-files';
 import fs from 'fs';
 import { promisify } from 'util';
 import { EnvironmentVariables } from 'src/environment/environment-variables';
-import { throwError } from '../../../shared/src/throw-error';
+import { EmailService } from './email.service';
+import { DevEmailService } from './dev-email.service';
+import { throwError } from 'src/throw-error';
 
 const mkdir = promisify(fs.mkdir);
 
