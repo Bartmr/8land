@@ -10,5 +10,3 @@ export const CONTACT_CTA =
   'Twitter <a href="https://twitter.com/explore8land">@explore8land</a>';
 
 export const PROJECT_SLOGAN = 'Pixelart RPG game with lands built by everyone.';
-
-export const TWITTER_URL = 'https://twitter.com/explore8land';

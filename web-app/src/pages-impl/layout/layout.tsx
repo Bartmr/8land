@@ -5,17 +5,14 @@ import { ReactNode, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { throwError } from 'src/throw-error';
 import { Header } from './header/header';
-import { GQLLayoutQuery } from './layout._graphql-generated_';
 import { useLocation } from '@reach/router';
 import { EnvironmentVariables } from 'src/environment-variables';
-import { PROJECT_SLOGAN, TWITTER_URL } from '@shared/project-details';
+import { PROJECT_SLOGAN } from '@shared/project-details';
 import { LinkAnchor } from 'src/ui/link-anchor';
 import { PRIVACY_POLICY_ROUTE } from 'src/pages-impl/privacy-policy/privacy-policy-routes';
 import logo from 'src/assets/vendors/this-project/logo.svg';
 import { TERMS_OF_USE_ROUTE } from 'src/pages-impl/terms-of-use/terms-of-use-routes';
 import { CONTENT_POLICY_ROUTE } from 'src/pages-impl/content-policy/content-policy-routes';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 
 type Props = {
   children: (renderProps: {
@@ -32,7 +29,24 @@ type Props = {
 export function Layout(props: Props) {
   const location = useLocation();
 
-  const { site, siteThumbnail } = useStaticQuery<GQLLayoutQuery>(graphql`
+  const { site, siteThumbnail } = useStaticQuery<{
+    site: {
+      siteMetadata: {
+        title: string,
+        siteUrl: string
+      }
+    },
+    siteThumbnail: {
+      childImageSharp: {
+        original: {
+          src: string,
+          height: number,
+          width: number
+        }
+      },
+      extension: string
+    }
+  }>(graphql`
     query Layout {
       site {
         siteMetadata {
@@ -42,7 +56,7 @@ export function Layout(props: Props) {
       }
       siteThumbnail: file(
         sourceInstanceName: { eq: "src-assets" }
-        relativePath: { eq: "vendors/this-project/thumbnail.jpeg" }
+        relativePath: { eq: "vendors/thumbnail.jpeg" }
       ) {
         childImageSharp {
           original {
@@ -169,18 +183,7 @@ export function Layout(props: Props) {
                     </li>
                   </ul>
                 </div>
-                <div className="col-12 col-lg-3">
-                  <ul className="list-unstyled mt-4 mt-lg-0">
-                    <li className="text-lg-end mb-3">
-                      <LinkAnchor
-                        className="link-body-shade"
-                        href={TWITTER_URL}
-                      >
-                        <FontAwesomeIcon icon={faTwitter} /> Twitter
-                      </LinkAnchor>
-                    </li>
-                  </ul>
-                </div>
+               
                 <div className="col-12 col-lg-6">
                   <div className="mt-4 mt-lg-0 d-flex align-items-center">
                     <img height={'48px'} src={logo} alt="8Land Logo" />
