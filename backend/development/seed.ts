@@ -8,7 +8,7 @@ import { UsersRepository } from 'src/users/users.repository';
 import { throwError } from 'src/throw-error';
 import { LandRepository } from 'src/land/land.repository';
 import { TerritoriesRepository } from 'src/territories/territories.repository';
-import { getSearchableName } from 'src/strings/get-searchable-name';
+import { getSearchableString } from 'src/strings/get-searchable-string';
 import { DoorBlockRepository } from 'src/blocks/door-block.repository';
 import fs from 'fs';
 import { promisify } from 'util';
@@ -119,7 +119,7 @@ async function seed() {
   const expectationsBeach = await landsRepository.create(
     new Land({
       name: 'Expectations Beach',
-      searchableName: getSearchableName('Expectations Beach'),
+      searchableName: getSearchableString('Expectations Beach'),
       backgroundMusicUrl: 'https://api.soundcloud.com/tracks/256813580',
       doorBlocks: Promise.resolve([]),
       doorBlocksReferencing: Promise.resolve([]),
@@ -135,7 +135,7 @@ async function seed() {
   const townOfHumbleBeginnings = await landsRepository.create(
     new Land({
       name: 'Town of Humble Beginnings',
-      searchableName: getSearchableName('Town of Humble Beginnings'),
+      searchableName: getSearchableString('Town of Humble Beginnings'),
       backgroundMusicUrl: 'https://api.soundcloud.com/tracks/566456658',
       doorBlocks: Promise.resolve([]),
       doorBlocksReferencing: Promise.resolve([]),
@@ -151,7 +151,7 @@ async function seed() {
   const townOfHumbleBeginningsUnderground1 = await landsRepository.create(
     new Land({
       name: 'Town of Humble Beginnings - Underground 1',
-      searchableName: getSearchableName(
+      searchableName: getSearchableString(
         'Town of Humble Beginnings - Underground 1',
       ),
       backgroundMusicUrl: null,
@@ -169,7 +169,7 @@ async function seed() {
   const townOfHumbleBeginningsUnderground2 = await landsRepository.create(
     new Land({
       name: 'Town of Humble Beginnings - Underground 2',
-      searchableName: getSearchableName(
+      searchableName: getSearchableString(
         'Town of Humble Beginnings - Underground 2',
       ),
       backgroundMusicUrl: null,
@@ -187,7 +187,7 @@ async function seed() {
   const townOfHumbleBeginningsTemple = await landsRepository.create(
     new Land({
       name: 'Town of Humble Beginnings - Temple',
-      searchableName: getSearchableName('Town of Humble Beginnings - Temple'),
+      searchableName: getSearchableString('Town of Humble Beginnings - Temple'),
       backgroundMusicUrl: null,
       doorBlocks: Promise.resolve([]),
       doorBlocksReferencing: Promise.resolve([]),

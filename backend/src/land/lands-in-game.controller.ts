@@ -2,6 +2,8 @@ import {
   BadRequestException,
   Controller,
   Get,
+  Logger,
+  NotFoundException,
   NotImplementedException,
   Put,
   Query,
@@ -21,8 +23,6 @@ import {
 } from 'src/users/auth/auth-context.decorator';
 import { PublicRoute } from 'src/users/auth/public-route.decorator';
 import { DoorBlockRepository } from 'src/blocks/door-block.repository';
-import { LoggingService } from 'src/logging/logging.service';
-import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
 import { NavigationStateRepository } from 'src/navigation/state/navigation-state.repository';
 import { DataSource } from 'typeorm';
 import { LandsService } from './lands.service';
@@ -30,10 +30,10 @@ import { LandsService } from './lands.service';
 @UseGuards(AuthGuard)
 @Controller('lands')
 export class LandsInGameController {
+  private logger = new Logger(LandsInGameController.name)
   constructor(
     private dataSource: DataSource,
     private landService: LandsService,
-    private loggingService: LoggingService,
   ) {}
 
   @Get('/resume')
@@ -43,7 +43,6 @@ export class LandsInGameController {
   ): Promise<ResumeLandNavigationDTO> {
     return this.landService.resume({
       eM: this.dataSource.manager,
-      loggingService: this.loggingService,
       authContext,
     });
   }
@@ -62,7 +61,7 @@ export class LandsInGameController {
     });
 
     if (!doorBlock) {
-      throw new ResourceNotFoundException();
+      throw new NotFoundException();
     }
 
     let res: GetLandDTO;
@@ -83,7 +82,7 @@ export class LandsInGameController {
     }
 
     if (!res.assets) {
-      throw new ResourceNotFoundException();
+      throw new NotFoundException();
     }
 
     if (authContext) {
@@ -138,7 +137,7 @@ export class LandsInGameController {
 
         await navigationStateRepository.save(navState);
       })().catch((err: unknown) =>
-        this.loggingService.logError('navigate:save-state', err),
+        this.logger.error('navigate:save-state', err),
       );
     }
 

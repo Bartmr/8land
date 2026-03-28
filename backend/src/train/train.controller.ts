@@ -3,6 +3,8 @@ import {
   ConflictException,
   Controller,
   Get,
+  Logger,
+  NotFoundException,
   NotImplementedException,
   Param,
   Query,
@@ -21,13 +23,10 @@ import {
   ReturnToTrainStationDTO,
   ReturnToTrainStationQueryDTO,
 } from '@shared/src/train/return/return-to-train-station.dto';
-import { getTypesafeObjectFieldPath } from 'not-me/lib/utils/get-typesafe-object-field-path';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { WithOptionalAuthContext } from 'src/users/auth/auth-context.decorator';
 import { PublicRoute } from 'src/users/auth/public-route.decorator';
-import { LoggingService } from 'src/logging/logging.service';
-import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
-import { getSearchableName } from 'src/strings/get-searchable-name';
+import { getSearchableString } from 'src/strings/get-searchable-string';
 import { throwError } from 'src/throw-error';
 import { LandsService } from 'src/land/lands.service';
 import { Land } from 'src/land/land.entity';
@@ -38,10 +37,10 @@ import { DataSource } from 'typeorm';
 @UseGuards(AuthGuard)
 @Controller('/train')
 export class TrainController {
+  private logger = new Logger(TrainController.name)
   constructor(
     private dataSource: DataSource,
     private landsService: LandsService,
-    private loggingService: LoggingService,
   ) {}
 
   @Get('/board/:worldId')
@@ -66,15 +65,13 @@ export class TrainController {
             .orderBy('land.createdAt')
             .leftJoinAndSelect('land.world', 'world')
             .andWhere(
-              `land.${getTypesafeObjectFieldPath<Land>()
-                .and('isStartingLand')
-                .end()} = true`,
+              `land.isStartingLand = true`,
             )
             .where('world.id = :id', { id: param.worldId }),
       );
 
       if (!land) {
-        throw new ResourceNotFoundException();
+        throw new NotFoundException();
       }
 
       if (!authContext) {
@@ -151,7 +148,6 @@ export class TrainController {
         } else {
           return this.landsService.resume({
             eM,
-            loggingService: this.loggingService,
             authContext,
           });
         }
@@ -169,7 +165,7 @@ export class TrainController {
       });
 
       if (!trainStation || !trainStation.isTrainStation) {
-        throw new ResourceNotFoundException();
+        throw new NotFoundException();
       }
 
       return this.landsService.mapLand(trainStation);
@@ -191,26 +187,20 @@ export class TrainController {
       (qB) => {
         let qBFinal = qB
           .orderBy(
-            `land.${getTypesafeObjectFieldPath<Land>().and('createdAt').end()}`,
+            `land.createdAt`,
             'DESC',
           )
           .where(
-            `land.${getTypesafeObjectFieldPath<Land>()
-              .and('isStartingLand')
-              .end()} = true`,
+            `land.isStartingLand = true`,
           )
           .andWhere(
-            `land.${getTypesafeObjectFieldPath<Land>()
-              .and('world')
-              .end()} IS NOT NULL`,
+            `land.world IS NOT NULL`,
           );
 
         if (query.name) {
           qBFinal = qBFinal.andWhere(
-            `land.${getTypesafeObjectFieldPath<Land>()
-              .and('searchableName')
-              .end()} = :searchableName`,
-            { searchableName: getSearchableName(query.name) },
+            `land.searchableName = :searchableName`,
+            { searchableName: getSearchableString(query.name) },
           );
         }
 

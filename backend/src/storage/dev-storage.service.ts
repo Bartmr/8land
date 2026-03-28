@@ -2,9 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import { Readable } from 'stream';
 import { promisify } from 'util';
-import { EnvironmentVariablesService } from '../environment/environment-variables.service';
 import { LOCAL_TEMPORARY_FILES_PATH } from '../temporary-files/temporary-files';
 import { StorageService } from './storage.service';
+import { EnvironmentVariables } from 'src/environment/environment-variables';
 
 const writeFile = promisify(fs.writeFile);
 const removeFile = promisify(fs.rm);
@@ -40,9 +40,11 @@ export class DevStorageService implements StorageService {
   async saveBuffer(key: string, buffer: Buffer) {
     await this.createDirectory(key);
 
+    const data = new Uint8Array(buffer)
+
     await writeFile(
       path.resolve(LOCAL_TEMPORARY_FILES_PATH, 'storage', key),
-      buffer,
+      data,
     );
   }
 
@@ -61,6 +63,6 @@ export class DevStorageService implements StorageService {
   }
 
   getHostUrl() {
-    return `http://localhost:${EnvironmentVariablesService.variables.API_PORT}/tmp/storage`;
+    return `http://localhost:${EnvironmentVariables.API_PORT}/tmp/storage`;
   }
 }

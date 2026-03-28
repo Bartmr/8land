@@ -16,7 +16,7 @@ import { DeleteBlockURLParameters } from '@shared/src/blocks/delete/delete-block
 import { AuthContext } from 'src/users/auth/auth-context';
 import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
 import { ResourceNotFoundException } from 'src/server/resource-not-found.exception';
-import { getSearchableName } from 'src/strings/get-searchable-name';
+import { getSearchableString } from 'src/strings/get-searchable-string';
 import { LandRepository } from 'src/land/land.repository';
 import { DataSource } from 'typeorm';
 import { AppBlock } from './app-block.entity';
@@ -79,7 +79,7 @@ export class BlocksController {
 
         const toLand = await landRepository.findOne({
           where: {
-            searchableName: getSearchableName(body.data.destinationLandName),
+            searchableName: getSearchableString(body.data.destinationLandName),
           },
         });
 

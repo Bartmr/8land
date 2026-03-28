@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 
 const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = z.object({
+  NODE_ENV: z.enum(["development", "production"]),
   LOG_DATABASES: z.coerce.boolean().optional(),
 
   LOG_DEBUG: z.coerce.boolean().optional(),

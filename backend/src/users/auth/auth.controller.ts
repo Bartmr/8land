@@ -14,12 +14,11 @@ import {
   NotFoundException,
   Post,
   Request,
+  Response,
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from './auth.guard';
-import { AppServerRequest } from 'src/server/types/app-server-request-types';
-import { AppServerResponse } from 'src/server/types/app-server-response-types';
 import { AuthContext } from './auth-context';
 import {
   WithAuthContext,
@@ -27,16 +26,15 @@ import {
 } from './auth-context.decorator';
 import { PublicRoute } from './public-route.decorator';
 import { FirebaseService } from 'src/firebase/firebase.service';
-import { UnwrapPromise } from '@shared/src/internals/utils/types/promise-types';
 import { DataSource } from 'typeorm';
 import { UsersRepository } from 'src/users/users.repository';
 import { AuthTokensService } from './tokens/auth-tokens.service';
 import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
-import { NODE_ENV } from 'src/environment/node-env.constants';
-import { NodeEnv } from 'src/environment/node-env.types';
-import { generateRandomUUID } from 'src/uuids/generate-random-uuid';
 import { User } from 'src/users/user.entity';
-import { Response } from 'express';
+import { Request as RequestType, Response as ResponseType } from 'express';
+import { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
+import { v4 } from 'uuid';
+import { EnvironmentVariables } from 'src/environment/environment-variables';
 
 @UseGuards(AuthGuard)
 @Controller('auth')
@@ -52,8 +50,8 @@ export class AuthController {
   @Post()
   public async login(
     @Body() body: LoginRequestDTO,
-    @Request() request: AppServerRequest,
-    @Response({ passthrough: true }) response: AppServerResponse,
+    @Request() request: RequestType,
+    @Response({ passthrough: true }) response: ResponseType,
     @WithOptionalAuthContext() authContext?: AuthContext,
   ): Promise<LoginResponseDTO> {
     const hostname = request.hostname;
@@ -68,9 +66,7 @@ export class AuthController {
 
     const firebaseAuth = this.firebaseService.getAuth();
 
-    let decodedToken: UnwrapPromise<
-      ReturnType<typeof firebaseAuth['verifyIdToken']>
-    >;
+    let decodedToken: DecodedIdToken;
 
     try {
       decodedToken = await firebaseAuth.verifyIdToken(body.firebaseIdToken);
@@ -102,9 +98,7 @@ export class AuthController {
       const newUser = await repository.create(new User({
         firebaseUid: decodedToken.uid,
         isAdmin: false,
-        walletAddress: null,
-        walletNonce: generateRandomUUID(),
-        appId: generateRandomUUID(),
+        appId: v4(),
       }));
 
       await firebaseAuth.setCustomUserClaims(firebaseUser.uid, {
@@ -135,7 +129,6 @@ export class AuthController {
       return {
         userId: authContext.user.id,
         isAdmin: authContext.user.isAdmin,
-        walletAddress: authContext.user.walletAddress,
         appId: authContext.user.appId,
       };
     } else {
@@ -149,7 +142,7 @@ export class AuthController {
     hostname,
   }: {
     user: User;
-    response: Response;
+    response: ResponseType;
     hostname: string;
   }) {
     const token = await this.tokensService.createAuthToken(
@@ -160,9 +153,9 @@ export class AuthController {
     response.cookie(AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE, token.httpOnlyKey, {
       expires: token.expires,
       httpOnly: true,
-      secure: NODE_ENV === NodeEnv.Production,
+      secure: EnvironmentVariables.NODE_ENV === "production",
       domain: hostname,
-      sameSite: NODE_ENV === NodeEnv.Production ? 'none' : undefined,
+      sameSite: EnvironmentVariables.NODE_ENV === "production" ? 'none' : undefined,
     });
 
     return {
@@ -170,7 +163,6 @@ export class AuthController {
       session: {
         userId: user.id,
         isAdmin: user.isAdmin,
-        walletAddress: user.walletAddress,
         appId: user.appId,
       },
     };

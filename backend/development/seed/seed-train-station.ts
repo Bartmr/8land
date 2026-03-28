@@ -5,7 +5,7 @@ import {
   ContentType,
   StorageService,
 } from 'src/storage/storage.service';
-import { getSearchableName } from 'src/strings/get-searchable-name';
+import { getSearchableString } from 'src/strings/get-searchable-string';
 import { Land } from 'src/land/land.entity';
 import { LandRepository } from 'src/land/land.repository';
 import { DoorBlock } from 'src/blocks/door-block.entity';
@@ -33,7 +33,7 @@ export async function seedTrainStation({
   const trainStation = await landsRepo.create(
     new Land({
       name: 'Town of Humble Beginnings - Train Station',
-      searchableName: getSearchableName(
+      searchableName: getSearchableString(
         'Town of Humble Beginnings - Train Station',
       ),
       backgroundMusicUrl: 'https://api.soundcloud.com/tracks/1118223961',

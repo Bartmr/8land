@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateLandRequestDTO } from '@shared/src/land/create/create-land.dto';
 import { UploadLandAssetsParameters } from '@shared/src/land/upload-assets/upload-land-assets.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
-import { getSearchableName } from 'src/strings/get-searchable-name';
+import { getSearchableString } from 'src/strings/get-searchable-string';
 import { World } from 'src/worlds/worlds.entity';
 import { Land } from './land.entity';
 import { WorldRepository } from 'src/worlds/worlds.repository';
@@ -73,7 +73,7 @@ export class LandPersistenceService {
 
       const landWithSameName = await landRepo.findOne({
         where: {
-          searchableName: getSearchableName(body.name),
+          searchableName: getSearchableString(body.name),
         },
       });
 
@@ -136,7 +136,7 @@ export class LandPersistenceService {
 
         land = await landRepo.create(new Land({
           name: body.name,
-          searchableName: getSearchableName(body.name),
+          searchableName: getSearchableString(body.name),
           doorBlocks: Promise.resolve([]),
           doorBlocksReferencing: Promise.resolve([]),
           backgroundMusicUrl: null,
@@ -150,7 +150,7 @@ export class LandPersistenceService {
       } else {
         land = await landRepo.create(new Land({
           name: body.name,
-          searchableName: getSearchableName(body.name),
+          searchableName: getSearchableString(body.name),
           doorBlocks: Promise.resolve([]),
           doorBlocksReferencing: Promise.resolve([]),
           backgroundMusicUrl: null,
@@ -425,7 +425,7 @@ export class LandPersistenceService {
       }
 
       if (body.name && body.name !== land.name) {
-        const searchableName = getSearchableName(body.name);
+        const searchableName = getSearchableString(body.name);
 
         const landWithSameName = await landRepository.findOne({
           where: {

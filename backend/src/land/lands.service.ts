@@ -1,7 +1,6 @@
-import { NotImplementedException } from '@nestjs/common';
+import { Logger, NotImplementedException } from '@nestjs/common';
 import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
-import { LoggingService } from 'src/logging/logging.service';
 import { StorageService } from 'src/storage/storage.service';
 import { throwError } from 'src/throw-error';
 import { NavigationState } from 'src/navigation/state/navigation-state.entity';
@@ -11,6 +10,7 @@ import { Land } from './land.entity';
 import { LandRepository } from './land.repository';
 
 export class LandsService {
+  private logger = new Logger(LandsService.name)
   constructor(
     private dataSource: DataSource,
     private storageService: StorageService,
@@ -93,11 +93,9 @@ export class LandsService {
 
   async resume({
     eM,
-    loggingService,
     authContext,
   }: {
     eM: EntityManager;
-    loggingService: LoggingService;
     authContext: AuthContext | undefined;
   }) {
     const navigationStateRepository = eM.getCustomRepository(
@@ -120,7 +118,7 @@ export class LandsService {
 
         await navigationStateRepository.save(navState);
       })().catch((err: unknown) =>
-        loggingService.logError('navigate:resume', err),
+        this.logger.error('navigate:resume', err),
       );
 
       if (navState.lastDoor) {

@@ -9,7 +9,6 @@ export class LoginRequestDTO {
 export class AuthSessionDTO {
   userId!: string;
   isAdmin!: boolean;
-  walletAddress!: string | null;
   appId!: string;
 }
 

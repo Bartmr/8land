@@ -1,7 +1,7 @@
 import { DoorBlockRepository } from 'src/blocks/door-block.repository';
 import { DoorBlock } from 'src/blocks/door-block.entity';
 import { AppBlock } from 'src/blocks/app-block.entity';
-import { getSearchableName } from 'src/strings/get-searchable-name';
+import { getSearchableString } from 'src/strings/get-searchable-string';
 import { Land } from 'src/land/land.entity';
 import { LandRepository } from 'src/land/land.repository';
 import { User } from 'src/users/user.entity';
@@ -43,7 +43,7 @@ export async function seedUserLand({
   const townOfHumbleBeginnings = await landsRepository.create(
     new Land({
       name: 'USER LAND - Town of Humble Beginnings',
-      searchableName: getSearchableName(
+      searchableName: getSearchableString(
         'USER LAND - Town of Humble Beginnings',
       ),
       backgroundMusicUrl: 'https://api.soundcloud.com/tracks/566456658',
@@ -61,7 +61,7 @@ export async function seedUserLand({
   const townOfHumbleBeginningsUnderground1 = await landsRepository.create(
     new Land({
       name: 'USER LAND - Town of Humble Beginnings - Underground 1',
-      searchableName: getSearchableName(
+      searchableName: getSearchableString(
         'USER LAND - Town of Humble Beginnings - Underground 1',
       ),
       backgroundMusicUrl: null,
@@ -79,7 +79,7 @@ export async function seedUserLand({
   const townOfHumbleBeginningsUnderground2 = await landsRepository.create(
     new Land({
       name: 'USER LAND - Town of Humble Beginnings - Underground 2',
-      searchableName: getSearchableName(
+      searchableName: getSearchableString(
         'USER LAND - Town of Humble Beginnings - Underground 2',
       ),
       backgroundMusicUrl: null,
