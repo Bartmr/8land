@@ -15,7 +15,7 @@ import { mainApiReducer } from 'src/main-api/main-api-reducer';
 import { USER_ROUTE } from 'src/pages-impl/client-side/user/user-routes';
 import { INDEX_ROUTE } from 'src/pages-impl/index-template/index-routes';
 import { LOGIN_ROUTE } from 'src/pages-impl/client-side/login/login-routes';
-import { getCurrentLocalHref } from 'src/navigation/get-current-local-href';
+import { getCurrentLocalHref } from 'src/navigation/current-local-href';
 import { HELP_ROUTE } from 'src/pages-impl/help/help-routes';
 import { CLIENT_SIDE_INDEX_ROUTE } from 'src/pages-impl/client-side/index/index-routes';
 

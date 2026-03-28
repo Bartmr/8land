@@ -11,7 +11,7 @@ import { CLIENT_SIDE_INDEX_ROUTE } from 'src/pages-impl/client-side/index/index-
 import { mainApiReducer } from 'src/main-api/main-api-reducer';
 import { RouteComponentProps } from '@reach/router';
 import { RequiredFields } from '@shared/internals/utils/types/requirement-types';
-import { getCurrentLocalHref } from 'src/navigation/get-current-local-href';
+import { getCurrentLocalHref } from 'src/navigation/current-local-href';
 import { useLocation } from '@reach/router';
 
 type Props = RequiredFields<RouteComponentProps, 'path'> & {
