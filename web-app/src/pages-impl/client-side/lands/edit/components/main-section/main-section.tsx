@@ -1,22 +1,19 @@
 import { EditLandBodyDTO } from '@shared/land/edit/edit-land.dto';
 import { CreateLandRequestSchemaObj } from '@shared/land/create/create-land.schemas';
 import { GetLandDTO } from '@shared/land/get/get-land.dto';
-import { object } from 'not-me/lib/schemas/object/object-schema';
+import { z } from 'zod';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { useFormUtils } from 'src/forms/form-utils';
-import { notMeReactHookFormResolver } from 'src/forms/not-me-react-hook-form-resolver';
 import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
-import { string } from 'not-me/lib/schemas/string/string-schema';
-import { number } from 'not-me/lib/schemas/number/number-schema';
-import { throwError } from '@shared/internals/utils/throw-error';
-import { or } from 'not-me/lib/schemas/or/or-schema';
 import { SoundcloudSongApiUrlSchema } from '@shared/land/edit/edit-land.schema';
 import { useLandsAPI } from 'src/lands/lands-api';
+import { throwError } from '@shared/throw-error';
 
 export function MainSection(props: {
   land: GetLandDTO;
@@ -25,12 +22,12 @@ export function MainSection(props: {
   const api = useLandsAPI();
 
   const form = useForm<EditLandBodyDTO>({
-    resolver: notMeReactHookFormResolver(
-      object({
+    resolver: zodResolver(
+      z.object({
         ...CreateLandRequestSchemaObj,
-        backgroundMusicUrl: or([
+        backgroundMusicUrl: z.union([
           SoundcloudSongApiUrlSchema,
-          string()
+          z.string()
             .transform((s) => (s?.trim() ? s : null))
             .transform((s) => {
               if (s != null) {
@@ -73,13 +70,13 @@ export function MainSection(props: {
                 const decodedUrl = decodeURIComponent(soundcloudApiEncoded);
 
                 const splittedApiUrl = decodedUrl.split('/');
-                const isIdANumber = number()
-                  .required()
-                  .validate(splittedApiUrl.pop());
+                const isIdANumber = z.coerce
+                  .number()
+                  .safeParse(splittedApiUrl.pop());
                 const hostPart = splittedApiUrl.join('/');
 
                 if (
-                  !isIdANumber.errors &&
+                  isIdANumber.success &&
                   hostPart === 'https://api.soundcloud.com/tracks'
                 ) {
                   return decodedUrl;
@@ -90,11 +87,11 @@ export function MainSection(props: {
                 return s;
               }
             })
-            .test((s) =>
-              s === 'failed' ? 'Invalid Soundcloud iframe input' : null,
-            ),
+            .refine((s) => s !== 'failed', 'Invalid Soundcloud iframe input'),
+        z.null()
+
         ]),
-      }).required(),
+      }),
     ),
     defaultValues: {
       name: props.land.name || '',

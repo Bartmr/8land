@@ -1,15 +1,14 @@
-import { throwError } from '@shared/internals/utils/throw-error';
 import { GetLandDTO } from '@shared/land/get/get-land.dto';
 import { CreateTerritoryRequestJSONSchemaObj } from '@shared/territories/create/create-territory.schemas';
-import { object } from 'not-me/lib/schemas/object/object-schema';
+import { z } from 'zod';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   TransportedDataGate,
   TransportedDataGateLayout,
 } from 'src/ui/transported-data-gate';
 import { useFormUtils } from 'src/forms/form-utils';
-import { notMeReactHookFormResolver } from 'src/forms/not-me-react-hook-form-resolver';
 import {
   TransportedData,
   TransportedDataStatus,
@@ -17,10 +16,11 @@ import {
 import { useTerritoriesAPI } from 'src/territories/territories-api';
 import { TerritoryPreview } from './territory-preview';
 import { useMintTerritory } from './use-mint-territory';
+import { throwError } from '@shared/throw-error';
 
-const schema = object({
+const schema = z.object({
   ...CreateTerritoryRequestJSONSchemaObj,
-}).required();
+});
 
 export function TerritoriesSection(props: {
   land: GetLandDTO;
@@ -38,7 +38,7 @@ export function TerritoriesSection(props: {
   >();
 
   const form = useForm({
-    resolver: notMeReactHookFormResolver(schema),
+    resolver: zodResolver(schema),
     reValidateMode: 'onChange',
   });
 
@@ -51,7 +51,7 @@ export function TerritoriesSection(props: {
     'data.endY',
   ]);
 
-  const pendingIntervalValidation = schema.validate({
+  const pendingIntervalValidation = schema.safeParse({
     data: {
       startX,
       startY,
@@ -300,22 +300,22 @@ export function TerritoriesSection(props: {
               land={props.land}
               intervals={props.land.territories}
               pendingInterval={
-                pendingIntervalValidation.errors
-                  ? undefined
-                  : pendingIntervalValidation.value.data
+                pendingIntervalValidation.success
+                  ? pendingIntervalValidation.data.data
+                  : undefined
               }
             />
           </div>
         </div>
       </div>
       <div className="d-none">
-        {pendingIntervalValidation.errors ? null : (
+        {pendingIntervalValidation.success ? (
           <TerritoryPreview
             land={props.land}
-            intervals={[pendingIntervalValidation.value.data]}
+            intervals={[pendingIntervalValidation.data.data]}
             onScreenshotTaken={replaceTerritoryThumbnail}
           />
-        )}
+        ):null}
       </div>
     </div>
   ) : null;

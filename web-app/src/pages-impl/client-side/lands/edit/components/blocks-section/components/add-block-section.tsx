@@ -5,7 +5,7 @@ import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { useFormUtils } from 'src/forms/form-utils';
-import { notMeReactHookFormResolver } from 'src/forms/not-me-react-hook-form-resolver';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   TransportedData,
   TransportedDataStatus,
@@ -19,7 +19,7 @@ export function AddBlockSection(props: {
   const api = useBlocksAPI();
 
   const form = useForm({
-    resolver: notMeReactHookFormResolver(CreateBlockRequestSchema),
+    resolver: zodResolver(CreateBlockRequestSchema),
     defaultValues: {
       landId: props.land.id,
       data: {

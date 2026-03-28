@@ -1,6 +1,6 @@
 import { initializeApp } from '@firebase/app';
-import { EnvironmentVariables } from '../../runtime/environment-variables';
-import { RUNNING_IN_CLIENT } from '../../runtime/running-in';
+import { EnvironmentVariables } from 'src/environment-variables';
+import { RUNNING_IN_CLIENT } from 'src/runtime';
 
 if (!RUNNING_IN_CLIENT) {
   throw new Error();
