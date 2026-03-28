@@ -9,7 +9,7 @@ import {
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+} from 'src/transported-data/transported-data-types';
 import { AppContext } from '../client-side/index/components/components/screens/app/app-screen.types';
 
 const AppContextContext = createContext<TransportedData<

@@ -1,17 +1,17 @@
 import { toQueryString } from '@app/shared/internals/urls/to-query-string';
-import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
-import { UnparsedRequestHeaders } from '../transports/http/http-types';
+import { TransportFailure } from 'src/transported-data/transport-failures';
+import { UnparsedRequestHeaders } from './http-types';
 import {
   JsonHttpOutgoingBody,
   JsonHttpResponse,
   JsonHttpResponseBase,
-} from '../transports/http/json/json-http-types';
-import { useJSONHttp } from '../transports/http/json/use-json-http';
+} from './json-http-types';
+import { useJSONHttp } from './use-json-http';
 import {
   SerializableJSONArray,
   SerializableJSONObject,
   SerializableJSONValue,
-} from '../transports/json-types';
+} from './json-types';
 
 export type SupportedRequestQueryParams = {
   [key: string]: undefined | SerializableJSONValue | SerializableJSONValue[];

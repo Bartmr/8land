@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from 'react';
 import { GamepadSingleton } from 'src/components/templates/client-side/index/gamepad-singleton';
-import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
+import { EnvironmentVariables } from 'src/environment-variables';
 import { MusicService } from '../../../music-ticker';
 import { AppService } from '../app-screen';
 import { AppContext } from '../app-screen.types';

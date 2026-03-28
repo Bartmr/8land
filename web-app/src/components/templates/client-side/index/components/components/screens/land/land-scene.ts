@@ -3,9 +3,9 @@ import {
   DynamicBlockType,
   StaticBlockType,
 } from '@app/shared/blocks/create/create-block.enums';
-import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
-import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
-import { HotReloadClass } from 'src/logic/app-internals/utils/hot-reload-class';
+import { EnvironmentVariables } from 'src/environment-variables';
+import { TransportFailure } from 'src/transported-data/transport-failures';
+import { HotReloadClass } from 'src/hot-reload-class';
 import { GridPhysics } from './grid-physics';
 import { Direction } from './grid.types';
 import {

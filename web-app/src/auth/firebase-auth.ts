@@ -1,5 +1,5 @@
 import { getAuth, connectAuthEmulator, User } from 'firebase/auth';
-import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
+import { EnvironmentVariables } from 'src/environment-variables';
 import { FirebaseApp } from '../firebase/firebase-app';
 
 const auth = getAuth(FirebaseApp);

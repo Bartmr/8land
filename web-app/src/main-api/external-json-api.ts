@@ -7,7 +7,7 @@ import { Schema, InferType } from 'not-me/lib/schemas/schema';
 import {
   JsonHttpHEADResponse,
   JsonHttpResponse,
-} from '../transports/http/json/json-http-types';
+} from './json-http-types';
 
 type JsonHttpResponseBase = {
   status: number;

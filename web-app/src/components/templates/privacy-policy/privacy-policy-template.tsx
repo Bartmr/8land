@@ -7,7 +7,7 @@ import { Layout } from 'src/components/routing/layout/layout';
 import {
   LOG_SERVICE_COMPANY,
   LOG_SERVICE_NAME,
-} from 'src/logic/app-internals/logging/logger';
+} from 'src/logging/logger';
 import { PRIVACY_POLICY_ROUTE } from './privacy-policy-routes';
 
 export function PrivacyPolicyTemplate() {

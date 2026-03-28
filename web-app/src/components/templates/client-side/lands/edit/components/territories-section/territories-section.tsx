@@ -8,12 +8,12 @@ import {
   TransportedDataGate,
   TransportedDataGateLayout,
 } from 'src/components/shared/transported-data-gate/transported-data-gate';
-import { useFormUtils } from 'src/logic/app-internals/forms/form-utils';
-import { notMeReactHookFormResolver } from 'src/logic/app-internals/forms/not-me-react-hook-form-resolver';
+import { useFormUtils } from 'src/forms/form-utils';
+import { notMeReactHookFormResolver } from 'src/forms/not-me-react-hook-form-resolver';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+} from 'src/transported-data/transported-data-types';
 import { useTerritoriesAPI } from 'src/territories/territories-api';
 import { TerritoryPreview } from './territory-preview';
 import { useMintTerritory } from './use-mint-territory';

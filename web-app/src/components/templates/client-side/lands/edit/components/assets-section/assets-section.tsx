@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+} from 'src/transported-data/transported-data-types';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
 import { TiledJSONFieldState } from './components/tiled-json-form-field';
 import { TilesetImageFieldState } from './components/tileset-image-form-field';

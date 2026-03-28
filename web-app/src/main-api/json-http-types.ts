@@ -1,5 +1,5 @@
-import { JSONData, SerializableJSONData } from '../../json-types';
-import { TransportFailure } from '../../transported-data/transport-failures';
+import { JSONData, SerializableJSONData } from './json-types';
+import { TransportFailure } from '../transported-data/transport-failures';
 
 export type JsonHttpResponseBase = {
   status: number;

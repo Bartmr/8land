@@ -4,7 +4,7 @@ import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
-import { NodeEnv } from './node-env';
+import { NodeEnv } from './runtime/node-env';
 
 const isIntegrityCheck = !!process.env.IS_INTEGRITY_CHECK;
 

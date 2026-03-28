@@ -1,7 +1,7 @@
 import { JSONData } from '@app/shared/internals/transports/json-types';
-import { Logger } from 'src/logic/app-internals/logging/logger';
-import { TransportFailure } from '../../transported-data/transport-failures';
-import { UnparsedRequestHeaders } from '../http-types';
+import { Logger } from 'src/logging/logger';
+import { TransportFailure } from '../transported-data/transport-failures';
+import { UnparsedRequestHeaders } from './http-types';
 import {
   JsonHttpHEADResponse,
   JsonHttpOutgoingBody,

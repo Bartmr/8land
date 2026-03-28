@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
 import { GamepadSingleton } from 'src/components/templates/client-side/index/gamepad-singleton';
-import { TransportedDataStatus } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+import { TransportedDataStatus } from 'src/transported-data/transported-data-types';
 import { MusicService } from '../../../music-ticker';
 import { AppContext } from '../app-screen.types';
 

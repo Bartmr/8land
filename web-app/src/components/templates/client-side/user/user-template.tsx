@@ -11,13 +11,13 @@ import {
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
 import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use-main-api-session';
-import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
+import { useStoreSelector } from 'src/store/use-store-selector';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+} from 'src/transported-data/transported-data-types';
 import { USER_ROUTE } from './user-routes';
-import { Logger } from 'src/logic/app-internals/logging/logger';
+import { Logger } from 'src/logging/logger';
 import { useMainApiSessionLogout } from 'src/logic/app-internals/apis/main/session/use-main-api-session-logout';
 import { ChangeEmail } from './components/change-email';
 import { getWalletSignMessage } from '@app/shared/users/me/receive-signed-user-nonce.utils';

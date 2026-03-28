@@ -5,12 +5,12 @@ import { object } from 'not-me/lib/schemas/object/object-schema';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
-import { useFormUtils } from 'src/logic/app-internals/forms/form-utils';
-import { notMeReactHookFormResolver } from 'src/logic/app-internals/forms/not-me-react-hook-form-resolver';
+import { useFormUtils } from 'src/forms/form-utils';
+import { notMeReactHookFormResolver } from 'src/forms/not-me-react-hook-form-resolver';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+} from 'src/transported-data/transported-data-types';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { number } from 'not-me/lib/schemas/number/number-schema';
 import { throwError } from '@app/shared/internals/utils/throw-error';

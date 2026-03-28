@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+} from 'src/transported-data/transported-data-types';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
 import { useParams } from '@reach/router';
@@ -17,7 +17,7 @@ import { Toast } from 'react-bootstrap';
 import { MainSection } from './components/main-section/main-section';
 import { BlocksSection } from './components/blocks-section/blocks-section';
 // import { TerritoriesSection } from './components/territories-section/territories-section';
-import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
+import { TransportFailure } from 'src/transported-data/transport-failures';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { navigate } from 'gatsby';

@@ -1,4 +1,4 @@
-import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
+import { TransportFailure } from 'src/transported-data/transport-failures';
 
 export enum TransportedDataStatus {
   NotInitialized = 'not-initialized',

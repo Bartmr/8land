@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser';
 import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
-import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
+import { EnvironmentVariables } from 'src/environment-variables';
 import { getLandSceneKey } from './keys';
 import { LandScene } from './land-scene';
 import { LandSceneArguments } from './land-scene.types';

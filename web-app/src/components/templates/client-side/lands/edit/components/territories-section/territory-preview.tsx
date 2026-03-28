@@ -5,12 +5,12 @@ import { InferType } from 'not-me/lib/schemas/schema';
 import { useEffect, useState } from 'react';
 import { TiledJSON } from 'src/components/templates/client-side/index/components/components/screens/land/tiled.types';
 import { TILE_SIZE } from 'src/components/templates/client-side/index/game-constants';
-import { useJSONHttp } from 'src/logic/app-internals/transports/http/json/use-json-http';
-import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
+import { useJSONHttp } from 'src/main-api/use-json-http';
+import { TransportFailure } from 'src/transported-data/transport-failures';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+} from 'src/transported-data/transported-data-types';
 import { v4 } from 'uuid';
 
 export function TerritoryPreview(props: {

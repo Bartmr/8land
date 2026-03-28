@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
-import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
+import { TransportFailure } from 'src/transported-data/transport-failures';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+} from 'src/transported-data/transported-data-types';
 
 const Component = () => {
   const [entrypoint, replaceEntrypoint] = useState<

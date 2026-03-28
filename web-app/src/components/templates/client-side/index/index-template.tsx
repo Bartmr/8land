@@ -5,10 +5,10 @@ import { RouteComponentProps } from '@reach/router';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+} from 'src/transported-data/transported-data-types';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
-import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
+import { useStoreSelector } from 'src/store/use-store-selector';
 import { GameFrame } from './components/game-frame';
 import { LinkAnchor } from 'src/ui/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';

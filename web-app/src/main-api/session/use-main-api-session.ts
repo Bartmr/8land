@@ -1,10 +1,10 @@
-import { StoreDispatch } from 'src/logic/app-internals/store/store-types';
-import { useLocalStorage } from 'src/logic/app-internals/transports/use-local-storage';
-import { useStoreDispatch } from 'src/logic/app-internals/store/use-store-dispatch';
+import { StoreDispatch } from 'src/store/store-types';
+import { useLocalStorage } from 'src/local-storage';
+import { useStoreDispatch } from 'src/store/use-store-dispatch';
 import { mainApiReducer } from '../main-api-reducer';
 import { LoginResponse, MainApiSessionData } from './main-api-session-types';
 import { useMainJSONApi } from '../use-main-json-api';
-import { TransportedDataStatus } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+import { TransportedDataStatus } from 'src/transported-data/transported-data-types';
 import { LoginRequestDTO } from '@app/shared/auth/auth.dto';
 import { MAIN_API_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY } from './main-api-session-constants';
 import { ToIndexedType } from '@app/shared/internals/transports/dto-types';

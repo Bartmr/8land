@@ -1,9 +1,9 @@
-import './logic/app-internals/logging/logger';
-import './logic/app-internals/runtime/environment-variables';
+import './logging/logger';
+import './environment-variables';
 
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Logger } from 'src/logic/app-internals/logging/logger';
-import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
+import { Logger } from 'src/logging/logger';
+import { EnvironmentVariables } from 'src/environment-variables';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StateProvider } from './state-provider';

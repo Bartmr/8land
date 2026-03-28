@@ -1,7 +1,7 @@
 import { InferType, Schema } from 'not-me/lib/schemas/schema';
-import { SerializableJSONData } from './json-types';
+import { SerializableJSONData } from './main-api/json-types';
 
-class LocalStorage {
+class SessionStorage {
   getItem<S extends Schema<unknown>>(schema: S, key: string): InferType<S> {
     const data = window.localStorage.getItem(key);
 
@@ -18,19 +18,15 @@ class LocalStorage {
     }
   }
 
-  setItem<T extends SerializableJSONData>(key: string, value: T): void {
-    window.localStorage.setItem(key, JSON.stringify(value));
-  }
-
-  removeItem(key: string): void {
-    window.localStorage.removeItem(key);
+  setItem(key: string, value: SerializableJSONData): void {
+    window.sessionStorage.setItem(key, JSON.stringify(value));
   }
 
   wipeAll(): void {
-    window.localStorage.clear();
+    window.sessionStorage.clear();
   }
 }
 
-export function useLocalStorage() {
-  return new LocalStorage();
+export function useSessionStorage() {
+  return new SessionStorage();
 }

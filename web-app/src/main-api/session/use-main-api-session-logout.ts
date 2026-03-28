@@ -1,14 +1,14 @@
 import {
   StoreDispatch,
   StoreGetState,
-} from 'src/logic/app-internals/store/store-types';
+} from 'src/store/store-types';
 import { MAIN_API_SESSION_LOGOUT } from './main-api-session-actions';
-import { useSessionStorage } from 'src/logic/app-internals/transports/use-session-storage';
-import { useLocalStorage } from 'src/logic/app-internals/transports/use-local-storage';
-import { useStoreDispatch } from 'src/logic/app-internals/store/use-store-dispatch';
+import { useSessionStorage } from 'src/session-storage';
+import { useLocalStorage } from 'src/local-storage';
+import { useStoreDispatch } from 'src/store/use-store-dispatch';
 import { mainApiReducer } from '../main-api-reducer';
-import { useStoreGetState } from 'src/logic/app-internals/store/use-store-get-state';
-import { TransportedDataStatus } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+import { useStoreGetState } from 'src/store/use-store-get-state';
+import { TransportedDataStatus } from 'src/transported-data/transported-data-types';
 
 class MainApiSessionLogout {
   constructor(

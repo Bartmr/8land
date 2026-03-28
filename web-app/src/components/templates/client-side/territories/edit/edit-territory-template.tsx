@@ -6,11 +6,11 @@ import { useEffect, useState } from 'react';
 import { Accordion, Toast } from 'react-bootstrap';
 import { Layout } from 'src/components/routing/layout/layout';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
-import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
+import { TransportFailure } from 'src/transported-data/transport-failures';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+} from 'src/transported-data/transported-data-types';
 import { useTerritoriesAPI } from 'src/territories/territories-api';
 import { AssetsUploader } from './components/assets-uploader/assets-uploader';
 import { EDIT_TERRITORY_ROUTE } from './edit-territory-routes';

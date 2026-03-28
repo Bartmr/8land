@@ -1,4 +1,4 @@
-import { TransportedData } from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+import { TransportedData } from 'src/transported-data/transported-data-types';
 import { MainApiSessionData } from './main-api-session-types';
 
 export const MAIN_API_SESSION_LOGOUT = 'MAIN_API_SESSION_LOGOUT';

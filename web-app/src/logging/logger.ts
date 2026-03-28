@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-import { EnvironmentVariables } from '../runtime/environment-variables';
-import { RUNNING_IN_CLIENT, RUNNING_IN_SERVER } from '../runtime/running-in';
+import { EnvironmentVariables } from '../environment-variables';
+import { RUNNING_IN_CLIENT, RUNNING_IN_SERVER } from '../runtime';
 import * as Sentry from '@sentry/react';
 
 const LOG_ENTRIES_LIMIT = 3;

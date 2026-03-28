@@ -7,7 +7,7 @@ import { FirebaseAuthUI } from 'src/logic/auth/firebase-auth-ui';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+} from 'src/transported-data/transported-data-types';
 import { FirebaseAuth } from 'src/logic/auth/firebase-auth';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';

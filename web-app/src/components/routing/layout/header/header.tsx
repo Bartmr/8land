@@ -10,12 +10,12 @@ import {
   TransportedDataGateLayout,
 } from 'src/components/shared/transported-data-gate/transported-data-gate';
 import { LANDS_ROUTE } from 'src/components/templates/client-side/lands/lands-routes';
-import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
+import { useStoreSelector } from 'src/store/use-store-selector';
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { USER_ROUTE } from 'src/components/templates/client-side/user/user-routes';
 import { INDEX_ROUTE } from 'src/components/templates/index-template/index-routes';
 import { LOGIN_ROUTE } from 'src/components/templates/client-side/login/login-routes';
-import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
+import { getCurrentLocalHref } from 'src/navigation/get-current-local-href';
 import { HELP_ROUTE } from 'src/components/templates/help/help-routes';
 import { CLIENT_SIDE_INDEX_ROUTE } from 'src/components/templates/client-side/index/index-routes';
 

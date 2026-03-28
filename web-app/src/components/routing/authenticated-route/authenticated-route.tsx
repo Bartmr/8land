@@ -3,7 +3,7 @@ import {
   AuthenticatedRouteRules,
   AuthenticatedRouteAccess,
 } from './authenticated-route-types';
-import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
+import { useStoreSelector } from 'src/store/use-store-selector';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
 import { Redirect } from '../redirect/redirect';
 import { LOGIN_ROUTE } from 'src/components/templates/client-side/login/login-routes';
@@ -11,7 +11,7 @@ import { CLIENT_SIDE_INDEX_ROUTE } from 'src/components/templates/client-side/in
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { RouteComponentProps } from '@reach/router';
 import { RequiredFields } from '@app/shared/internals/utils/types/requirement-types';
-import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
+import { getCurrentLocalHref } from 'src/navigation/get-current-local-href';
 import { useLocation } from '@reach/router';
 
 type Props = RequiredFields<RouteComponentProps, 'path'> & {

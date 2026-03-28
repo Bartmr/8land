@@ -1,6 +1,6 @@
 import { Link } from 'gatsby';
 import React, { ReactNode, SyntheticEvent } from 'react';
-import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
+import { EnvironmentVariables } from 'src/environment-variables';
 import { OutboundLink } from 'gatsby-plugin-google-analytics';
 
 type Props = {

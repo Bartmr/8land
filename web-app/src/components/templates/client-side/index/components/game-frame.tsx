@@ -4,7 +4,7 @@ import { useState } from 'react';
 import {  } from 'src/components/ui-kit/core/utils/missing-css-class';
 import { LinkAnchor } from 'src/ui/link-anchor';
 import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
-import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
+import { getCurrentLocalHref } from 'src/navigation/get-current-local-href';
 import { LOGIN_ROUTE } from '../../login/login-routes';
 import { Keypad } from './components/keypad';
 import { MusicService, MusicTicker } from './components/music-ticker';

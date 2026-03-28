@@ -2,12 +2,12 @@ import { throwError } from '@app/shared/internals/utils/throw-error';
 import { ValidationResult } from 'not-me/lib/schemas/schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { Fragment, useEffect, useState } from 'react';
-import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
+import { EnvironmentVariables } from 'src/environment-variables';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/logic/app-internals/transports/transported-data/transported-data-types';
-import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
+} from 'src/transported-data/transported-data-types';
+import { TransportFailure } from 'src/transported-data/transport-failures';
 import { useTerritoriesAPI } from 'src/territories/territories-api';
 
 export function TerritoryAuthenticitySection(props: {

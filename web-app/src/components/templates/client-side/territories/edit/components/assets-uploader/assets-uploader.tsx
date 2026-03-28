@@ -8,7 +8,7 @@ import { LinkAnchor } from 'src/ui/link-anchor';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+} from 'src/transported-data/transported-data-types';
 import { useTerritoriesAPI } from 'src/territories/territories-api';
 import { MapFormField } from './components/map-form-field';
 import { TilesetFormField } from './components/tileset-form-field';

@@ -4,10 +4,10 @@ import { TransportedDataGate } from 'src/components/shared/transported-data-gate
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/logic/app-internals/transports/transported-data/transported-data-types';
+} from 'src/transported-data/transported-data-types';
 import { RouteComponentProps } from '@reach/router';
-import { Logger } from 'src/logic/app-internals/logging/logger';
-import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
+import { Logger } from 'src/logging/logger';
+import { TransportFailure } from 'src/transported-data/transport-failures';
 import { Layout } from 'src/components/routing/layout/layout';
 import { LANDS_ROUTE } from './lands-routes';
 import { LinkAnchor } from 'src/ui/link-anchor';
