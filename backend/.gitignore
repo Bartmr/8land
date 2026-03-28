@@ -45,8 +45,6 @@ lerna-debug.log*
 # dotenv
 *.env
 .env.*
-!.env.development
-!.env.test
 
 # Temporary files
 /_tmp
