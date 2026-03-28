@@ -1,13 +1,17 @@
-const { PROJECT_NAME } = require('@shared/project-details');
-const { EnvironmentVariables } = require('./logic/app-internals/runtime/environment-variables');
 const path = require('path');
 
-const hostUrl = EnvironmentVariables.HOST_URL;
+function throwError() {
+  throw new Error()
+}
+
+const HOST_URL = process.env.HOST_URL || throwError();
+const SENTRY_DSN = process.env.SENTRY_DSN;
+const GOOGLE_ANALYTICS_TRACKING_ID = process.env.GOOGLE_ANALYTICS_TRACKING_ID
 
 module.exports = {
   siteMetadata: {
-    siteUrl: hostUrl,
-    title: PROJECT_NAME,
+    siteUrl: HOST_URL,
+    title: "8Land",
   },
   plugins: [
     {
@@ -72,22 +76,22 @@ module.exports = {
         mergeSecurityHeaders: false,
       },
     },
-    ...(EnvironmentVariables.SENTRY_DSN
+    ...(SENTRY_DSN
       ? [
           {
             resolve: '@sentry/gatsby',
             options: {
-              dsn: EnvironmentVariables.SENTRY_DSN,
+              dsn: SENTRY_DSN,
             },
           },
         ]
       : []),
-    ...(EnvironmentVariables.GOOGLE_ANALYTICS_TRACKING_ID
+    ...(GOOGLE_ANALYTICS_TRACKING_ID
       ? [
           {
             resolve: `gatsby-plugin-google-analytics`,
             options: {
-              trackingId: EnvironmentVariables.GOOGLE_ANALYTICS_TRACKING_ID,
+              trackingId: GOOGLE_ANALYTICS_TRACKING_ID,
               anonymize: true,
               respectDNT: true,
             },
