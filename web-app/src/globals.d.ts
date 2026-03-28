@@ -5,7 +5,7 @@ import {
   ProviderConnectInfo,
   RequestArguments,
 } from 'hardhat/types';
-import { AppContext } from 'src/pages-impl/client-side/index/components/components/screens/app/app-screen.types';
+import { AppContext } from 'src/pages-impl/client-side/index/screens/app/app-screen.types';
 
 interface EthereumEvent {
   connect: ProviderConnectInfo;

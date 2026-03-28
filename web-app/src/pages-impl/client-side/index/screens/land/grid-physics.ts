@@ -1,10 +1,10 @@
 import { throwError } from '@shared/internals/utils/throw-error';
 import { HotReloadClass } from 'src/hot-reload-class';
-import { TILE_SIZE } from '../../../../game-constants';
+import { TILE_SIZE } from '../../game-constants';
 import { Direction } from './grid.types';
 import { Block, DoorBlock } from './land-scene.types';
 import { Player } from './player';
-import { GamepadSingleton, GamepadType } from '../../../../gamepad-singleton';
+import { GamepadSingleton, GamepadType } from '../../gamepad-singleton';
 import { JSONPrimitive } from '@shared/internals/transports/json-types';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { getEnumValues } from '@shared/internals/utils/enums/get-enum-values';

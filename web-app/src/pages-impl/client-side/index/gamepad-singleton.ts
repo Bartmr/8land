@@ -1,4 +1,4 @@
-import { Direction } from './components/components/screens/land/grid.types';
+import { Direction } from './screens/land/grid.types';
 
 type ScreensWithEscape = 'appScreen' | 'dialogueScreen' | 'landScreen';
 type EscapeCallback = () => 'stop-propagation' | 'continue-propagation';

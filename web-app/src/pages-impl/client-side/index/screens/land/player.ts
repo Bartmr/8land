@@ -1,6 +1,6 @@
 import { throwError } from '@shared/internals/utils/throw-error';
 import { HotReloadClass } from 'src/hot-reload-class';
-import { TILE_SIZE } from '../../../../game-constants';
+import { TILE_SIZE } from '../../game-constants';
 import { Direction } from './grid.types';
 
 @HotReloadClass(module)

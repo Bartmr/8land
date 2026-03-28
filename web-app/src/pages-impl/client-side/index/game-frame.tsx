@@ -4,11 +4,11 @@ import { useState } from 'react';
 import { LinkAnchor } from 'src/ui/link-anchor';
 import { MainApiSessionData } from 'src/main-api/session/main-api-session-types';
 import { getCurrentLocalHref } from 'src/navigation/current-local-href';
-import { LOGIN_ROUTE } from '../../login/login-routes';
-import { Keypad } from './components/keypad';
-import { MusicService, MusicTicker } from './components/music-ticker';
+import { LOGIN_ROUTE } from '../login/login-routes';
+import { Keypad } from './keypad';
+import { MusicService, MusicTicker } from './music-ticker';
 import * as styles from './game-frame.module.scss';
-import { ScreenSwitcher } from './components/screen-switcher';
+import { ScreenSwitcher } from './screen-switcher';
 import { ResumeLandNavigationDTO } from '@shared/land/in-game/resume/resume-land-navigation.dto';
 
 export function GameFrame(props: {

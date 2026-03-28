@@ -1,7 +1,7 @@
 import { useLayoutEffect, useState } from 'react';
 import { GamepadSingleton } from 'src/pages-impl/client-side/index/gamepad-singleton';
 import { EnvironmentVariables } from 'src/environment-variables';
-import { MusicService } from '../../../music-ticker';
+import { MusicService } from '../../music-ticker';
 import { AppService } from '../app-screen';
 import { AppContext } from '../app-screen.types';
 import { IframeWrapper } from './iframe-wrapper';

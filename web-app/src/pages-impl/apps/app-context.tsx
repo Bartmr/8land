@@ -10,7 +10,7 @@ import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
-import { AppContext } from '../client-side/index/components/components/screens/app/app-screen.types';
+import { AppContext } from '../client-side/index/screens/app/app-screen.types';
 
 const AppContextContext = createContext<TransportedData<
   AppContext & { explore8Land: NonNullable<Window['explore8Land']> }

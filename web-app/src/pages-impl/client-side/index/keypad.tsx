@@ -1,6 +1,6 @@
 import nipplejs from 'nipplejs';
 import { throwError } from '@shared/internals/utils/throw-error';
-import { GamepadSingleton } from '../../gamepad-singleton';
+import { GamepadSingleton } from './gamepad-singleton';
 import { useEffect } from 'react';
 import { Direction } from './screens/land/grid.types';
 

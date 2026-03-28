@@ -18,7 +18,7 @@ import {
 import { Block, DoorBlock, LandSceneArguments } from './land-scene.types';
 import { Player } from './player';
 import { TiledJSON } from './tiled.types';
-import { TILE_SIZE } from '../../../../game-constants';
+import { TILE_SIZE } from '../../game-constants';
 import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
