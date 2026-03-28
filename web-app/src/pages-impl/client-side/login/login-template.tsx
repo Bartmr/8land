@@ -3,12 +3,12 @@ import { Layout } from 'src/pages-impl/layout/layout';
 import { LOGIN_ROUTE } from './login-routes';
 import { useEffect, useState } from 'react';
 import * as auth from 'firebase/auth';
-import { FirebaseAuthUI } from 'src/auth/firebase-auth-ui';
+import { FirebaseAuthUI } from 'src/firebase/firebase-auth-ui';
 import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
-import { FirebaseAuth } from 'src/auth/firebase-auth';
+import { FirebaseAuth } from 'src/firebase/firebase-auth';
 import { throwError } from '@shared/internals/utils/throw-error';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { useMainApiSession } from 'src/main-api/session/use-main-api-session';

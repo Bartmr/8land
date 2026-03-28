@@ -41,16 +41,7 @@ async function seed() {
     throw new Error('Must use Firebase Auth Emulator for seeding');
   }
 
-  const defaultDBConnection = await createConnection(TYPEORM_ORMCONFIG);
-
-  await defaultDBConnection.runMigrations();
-
-
-  try {
-    await rm(LOCAL_TEMPORARY_FILES_PATH, { recursive: true });
-  } catch (err) {
-    // NOOP
-  }
+  await rm(LOCAL_TEMPORARY_FILES_PATH, { recursive: true, force: true });
 
   const firebaseProjectId = EnvironmentVariables.FIREBASE_EMULATOR_PROJECT_ID || throwError();
 
@@ -68,6 +59,9 @@ async function seed() {
     throw new Error(`Failed to clear Firebase Auth emulator accounts: ${res.status}`);
   }
 
+  const defaultDBConnection = await createConnection(TYPEORM_ORMCONFIG);
+
+  await defaultDBConnection.runMigrations();
 
   const usersRepository =
     defaultDBConnection.getCustomRepository(UsersRepository);

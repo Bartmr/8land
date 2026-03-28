@@ -1,8 +1,8 @@
-import { throwError } from '@shared/internals/utils/throw-error';
 import { useEffect, useState } from 'react';
 import { LinkAnchor } from 'src/ui/link-anchor';
 import { v4 } from 'uuid';
 import { SoundcloudSong } from './soundcloud-types';
+import { throwError } from 'src/throw-error';
 
 export class MusicService {
   lastMusicUrl?: string;
