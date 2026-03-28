@@ -1,10 +1,12 @@
 import nipplejs from 'nipplejs';
-import { GamepadSingleton } from './gamepad-singleton';
 import { useEffect } from 'react';
 import { Direction } from './screens/land/grid.types';
 import { throwError } from 'src/throw-error';
+import { Gamepad } from './gamepad'
 
-export function Keypad() {
+export const ESCAPE_BUTTON_SELECTOR = '#game-button-escape';
+
+export function Keypad(props: { gamepad: Gamepad }) {
   useEffect(() => {
     const nippleZone = document.querySelector('#game-nipple') || throwError();
 
@@ -15,7 +17,7 @@ export function Keypad() {
       zone: nippleZone,
     });
 
-    const gamepad = GamepadSingleton.getInstance();
+    const gamepad = props.gamepad;
 
     nipple.on('dir:up', () => {
       gamepad.setDirection(Direction.UP);

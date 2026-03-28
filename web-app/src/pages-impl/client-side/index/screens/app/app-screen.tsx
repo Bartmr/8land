@@ -1,7 +1,7 @@
 import { throwError } from '@shared/internals/utils/throw-error';
 import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
-import { GamepadSingleton } from '../../gamepad-singleton';
+import { GamepadSingleton } from '../../gamepad';
 import { ESCAPE_BUTTON_SELECTOR } from '../../keypad-utils';
 import { MusicService } from '../../music-ticker';
 import { LandScreenService } from '../land/land-screen.service';

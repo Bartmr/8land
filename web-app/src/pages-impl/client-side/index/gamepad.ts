@@ -1,9 +1,10 @@
+import { useMemo, useRef } from 'react';
 import { Direction } from './screens/land/grid.types';
 
 type ScreensWithEscape = 'appScreen' | 'dialogueScreen' | 'landScreen';
 type EscapeCallback = () => 'stop-propagation' | 'continue-propagation';
 
-class Gamepad {
+export class Gamepad {
   private currentDirection: Direction = Direction.NONE;
   private pressedDirections: Direction[] = [];
 
@@ -170,10 +171,7 @@ class Gamepad {
   }
 }
 
-const joystick = new Gamepad();
-
-export type GamepadType = Gamepad;
-
-export const GamepadSingleton = {
-  getInstance: (): Gamepad => joystick,
-};
+export function useGamepad() {
+  const gamepad = useMemo(() => new Gamepad(), [])
+  return gamepad
+}

@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from 'react';
-import { GamepadSingleton } from 'src/pages-impl/client-side/index/gamepad-singleton';
+import { GamepadSingleton } from 'src/pages-impl/client-side/index/gamepad';
 import { EnvironmentVariables } from 'src/environment-variables';
 import { MusicService } from '../../music-ticker';
 import { AppService } from '../app-screen';

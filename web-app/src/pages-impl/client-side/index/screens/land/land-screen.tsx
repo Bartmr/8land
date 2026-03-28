@@ -12,7 +12,7 @@ import { useLandsAPI } from 'src/lands/lands-api';
 import { useTrainAPI } from 'src/train/train.api';
 import { navigate } from 'gatsby';
 import { USER_ROUTE } from 'src/pages-impl/client-side/user/user-routes';
-import { GamepadSingleton } from '../../gamepad-singleton';
+import { GamepadSingleton } from '../../gamepad';
 
 export function LandScreen(props: {
   musicService: MusicService;
