@@ -1,0 +1,7 @@
+@import "src/ui/bootstrap/variables";
+
+@import 'node_modules/bootstrap/scss/bootstrap';
+
+*:disabled {
+  cursor: not-allowed;
+}

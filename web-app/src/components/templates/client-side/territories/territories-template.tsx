@@ -6,7 +6,7 @@ import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reduc
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
 import { TERRITORIES_ROUTE } from './territories-routes';
-import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { LinkAnchor } from 'src/ui/link-anchor';
 import { USER_ROUTE } from '../user/user-routes';
 import { TerritoryAuthenticitySection } from './territory-authenticity-section';
 import { navigate } from 'gatsby';

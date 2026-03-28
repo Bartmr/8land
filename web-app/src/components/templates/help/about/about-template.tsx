@@ -1,5 +1,5 @@
 import { Layout } from 'src/components/routing/layout/layout';
-import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { LinkAnchor } from 'src/ui/link-anchor';
 import { ABOUT_ROUTE } from './about-routes';
 import raribleLogo from './rarible-logo.svg';
 import tiledLogo from './tiled-logo-white.png';

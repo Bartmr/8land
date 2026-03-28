@@ -2,7 +2,7 @@ import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { Layout } from 'src/components/routing/layout/layout';
-import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { LinkAnchor } from 'src/ui/link-anchor';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { TerritoryAuthenticitySection } from '../../client-side/territories/territory-authenticity-section';
 import { USER_ROUTE } from '../../client-side/user/user-routes';

@@ -1,5 +1,5 @@
 import { Layout } from 'src/components/routing/layout/layout';
-import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { LinkAnchor } from 'src/ui/link-anchor';
 import { BUILDING_A_LAND_ROUTE } from './building-a-land.routes';
 import landWithGrid from './images/land-with-grid.png';
 import colorShades from './images/4-color-shades.png';

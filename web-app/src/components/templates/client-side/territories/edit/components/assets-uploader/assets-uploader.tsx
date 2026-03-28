@@ -4,7 +4,7 @@ import {
   TransportedDataGate,
   TransportedDataGateLayout,
 } from 'src/components/shared/transported-data-gate/transported-data-gate';
-import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { LinkAnchor } from 'src/ui/link-anchor';
 import {
   TransportedData,
   TransportedDataStatus,

@@ -1,8 +1,8 @@
 import { faMusic } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import { missingCssClass } from 'src/components/ui-kit/core/utils/missing-css-class';
-import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import {  } from 'src/components/ui-kit/core/utils/missing-css-class';
+import { LinkAnchor } from 'src/ui/link-anchor';
 import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
 import { getCurrentLocalHref } from 'src/logic/app-internals/navigation/get-current-local-href';
 import { LOGIN_ROUTE } from '../../login/login-routes';
@@ -22,7 +22,7 @@ export function GameFrame(props: {
   const [landName, replaceLandName] = useState<string>('');
 
   return (
-    <div className={styles['gameSize'] || missingCssClass()}>
+    <div className={styles['gameSize']}>
       {musicService ? (
         <ScreenSwitcher
           session={props.session}

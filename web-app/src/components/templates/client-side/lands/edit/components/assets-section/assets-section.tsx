@@ -9,7 +9,7 @@ import { TilesetImageFieldState } from './components/tileset-image-form-field';
 import { TiledJSONField } from './components/tiled-json-form-field';
 import { TilesetImageFormField } from './components/tileset-image-form-field';
 import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
-import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { LinkAnchor } from 'src/ui/link-anchor';
 import { useLandsAPI } from 'src/logic/lands/lands-api';
 import { START_LANDS_LIMIT_EXCEEDED_MESSAGE } from './assets-section.constants';
 

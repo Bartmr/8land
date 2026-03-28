@@ -9,7 +9,7 @@ import { GQLLayoutQuery } from './layout._graphql-generated_';
 import { useLocation } from '@reach/router';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { PROJECT_SLOGAN, TWITTER_URL } from '@app/shared/project-details';
-import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { LinkAnchor } from 'src/ui/link-anchor';
 import { PRIVACY_POLICY_ROUTE } from 'src/components/templates/privacy-policy/privacy-policy-routes';
 import logo from 'src/assets/vendors/this-project/logo.svg';
 import { TERMS_OF_USE_ROUTE } from 'src/components/templates/terms-of-use/terms-of-use-routes';

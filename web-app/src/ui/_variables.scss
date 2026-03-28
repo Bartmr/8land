@@ -1,0 +1,30 @@
+$primary: #00DDDD;
+$secondary: #aaa;
+$success: #00ff00;
+$info: #006aff;
+$warning: #ffc107;
+$danger: #dc3545;
+$light: #aaa;
+$lightest: #ffffff;
+$dark: #aaa;
+$darkest: #262626;
+
+$lcd: #9ab05d;
+
+$body-bg: $darkest;
+$body-color: $lightest;
+
+$color-contrast-dark:      $body-bg;
+$color-contrast-light:     $body-color;
+
+$spacer: $spacer;
+
+$font-size-base: 1.25rem;
+
+$font-1: 'VT323', monospace;
+
+$border-width: 3px;
+$border-color: rgba($body-color, 0.3);
+
+$border-radius: 0;
+

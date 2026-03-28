@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import * as styles from './header.module.scss';
-import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { LinkAnchor } from 'src/ui/link-anchor';
 import { PROJECT_NAME } from '@app/shared/project-details';
-import { missingCssClass } from 'src/components/ui-kit/core/utils/missing-css-class';
 import { faBars, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -187,7 +186,7 @@ export function Header(props: Props) {
               collapseMenu();
             }
           }}
-          className={styles['header__backdrop'] || missingCssClass()}
+          className={styles['header__backdrop']}
           aria-checked={true}
           tabIndex={-1}
         />

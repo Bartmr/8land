@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layout } from 'src/components/routing/layout/layout';
-import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { LinkAnchor } from 'src/ui/link-anchor';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { TERRITORIES_ROUTE } from '../client-side/territories/territories-routes';
 import { NFTS_ROUTE } from './nfts-routes';

@@ -1,6 +1,6 @@
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { useEffect, useState } from 'react';
-import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { LinkAnchor } from 'src/ui/link-anchor';
 import { v4 } from 'uuid';
 import { SoundcloudSong } from '../../soundcloud-types';
 

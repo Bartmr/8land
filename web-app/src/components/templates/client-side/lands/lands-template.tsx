@@ -10,7 +10,7 @@ import { Logger } from 'src/logic/app-internals/logging/logger';
 import { TransportFailure } from 'src/logic/app-internals/transports/transported-data/transport-failures';
 import { Layout } from 'src/components/routing/layout/layout';
 import { LANDS_ROUTE } from './lands-routes';
-import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { LinkAnchor } from 'src/ui/link-anchor';
 import { EDIT_LAND_ROUTE } from './edit/edit-land-routes';
 import { useLandsAPI } from 'src/logic/lands/lands-api';
 import { Toast } from 'react-bootstrap';

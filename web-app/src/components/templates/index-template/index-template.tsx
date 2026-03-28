@@ -2,7 +2,7 @@ import { PROJECT_SLOGAN, TWITTER_URL } from '@app/shared/project-details';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layout } from 'src/components/routing/layout/layout';
-import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { LinkAnchor } from 'src/ui/link-anchor';
 import { CLIENT_SIDE_INDEX_ROUTE } from '../client-side/index/index-routes';
 import { LANDS_ROUTE } from '../client-side/lands/lands-routes';
 import { LAND_IDEAS_ROUTE } from '../help/lands/land-ideas/land-ideas-routes';

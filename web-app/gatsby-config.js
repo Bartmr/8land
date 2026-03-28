@@ -12,17 +12,12 @@ module.exports = {
   plugins: [
     {
       resolve: `gatsby-plugin-sass`,
-      options: {
-        sassOptions: {
-          includePaths: ['src/components/ui-kit/global-styles/include-path'],
-        },
-      },
     },
     /*
       Enable these two plugins below when SEO becomes a requirement
     */
-    // `gatsby-plugin-sitemap`,
-    // 'gatsby-plugin-robots-txt',
+    `gatsby-plugin-sitemap`,
+    'gatsby-plugin-robots-txt',
     //
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-image`,

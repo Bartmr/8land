@@ -12,7 +12,7 @@ import { FirebaseAuth } from 'src/logic/auth/firebase-auth';
 import { throwError } from '@app/shared/internals/utils/throw-error';
 import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
 import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use-main-api-session';
-import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { LinkAnchor } from 'src/ui/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
 import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
 

@@ -10,7 +10,7 @@ import { TransportedDataGate } from 'src/components/shared/transported-data-gate
 import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
 import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
 import { GameFrame } from './components/game-frame';
-import { LinkAnchor } from 'src/components/ui-kit/protons/link-anchor/link-anchor';
+import { LinkAnchor } from 'src/ui/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
 import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
 import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
