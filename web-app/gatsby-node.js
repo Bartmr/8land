@@ -1,8 +1,3 @@
-
-
-const {
-  setFieldsOnGraphQLNodeType,
-} = require('./src/set-fields-on-graphql-node-type');
 const fs = require('fs')
 const readFile = promisify(fs.readFile);
 const { GraphQLString } = require('gatsby/graphql');

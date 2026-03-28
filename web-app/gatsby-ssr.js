@@ -1,5 +1,5 @@
 // KEEP AS TOP IMPORT
-import { RootFrame } from './src/components/root-frame/root-frame';
+import { App } from './src/app';
 
 //
 
@@ -65,5 +65,5 @@ export const onPreRenderHTML = function (args) {
 };
 
 export const wrapRootElement = ({ element }) => {
-  return <RootFrame>{element}</RootFrame>;
+  return <App>{element}</App>;
 };

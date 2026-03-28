@@ -1,12 +1,15 @@
+import './logic/app-internals/logging/logger';
+import './logic/app-internals/runtime/environment-variables';
+
 import React, { ReactNode, useEffect, useState } from 'react';
 import { Logger } from 'src/logic/app-internals/logging/logger';
 import { EnvironmentVariables } from 'src/logic/app-internals/runtime/environment-variables';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { StateProvider } from './components/state-provider';
+import { StateProvider } from './state-provider';
 import { Helmet } from 'react-helmet';
 import { dom } from '@fortawesome/fontawesome-svg-core';
-import { USER_ROUTE } from '../templates/client-side/user/user-routes';
+import { USER_ROUTE } from './components/templates/client-side/user/user-routes';
 
 const FatalErrorFrame = () => {
   return (
@@ -122,7 +125,7 @@ export const UncaughtErrorHandler = (props: { children: ReactNode }) => {
   }
 };
 
-export const _RootFrameImpl = (props: { children: ReactNode }) => {
+export const App = (props: { children: ReactNode }) => {
   return (
     <>
       <Helmet>
@@ -132,3 +135,4 @@ export const _RootFrameImpl = (props: { children: ReactNode }) => {
     </>
   );
 };
+
