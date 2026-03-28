@@ -1,10 +1,8 @@
-import { JSONData } from '@shared/internals/transports/json-types';
 import { Logger } from 'src/logging/logger';
 import { TransportFailure } from '../transported-data/transport-failures';
 import { UnparsedRequestHeaders } from './http-types';
 import {
   JsonHttpHEADResponse,
-  JsonHttpOutgoingBody,
   JsonHttpResponse,
   JsonHttpResponseBase,
 } from './json-http-types';
@@ -24,7 +22,7 @@ function logError({
   url: string;
   method: string;
   status: number;
-  requestBody: JsonHttpOutgoingBody;
+  requestBody: unknown;
   responseText: string;
   withCredentials: boolean | undefined;
 }) {
@@ -65,8 +63,8 @@ async function makeJsonHttpRequest({
   withCredentials: boolean | undefined;
 } & (
   | { method: 'HEAD' | 'GET' | 'DELETE'; body?: undefined }
-  | { method: 'POST' | 'PATCH' | 'PUT'; body: JsonHttpOutgoingBody }
-)): Promise<JsonHttpResponse<{ status: number; body: JSONData | undefined }>> {
+  | { method: 'POST' | 'PATCH' | 'PUT'; body: unknown }
+)): Promise<JsonHttpResponse<{ status: number; body: unknown }>> {
   const headers: { [key: string]: string } = {
     Accept: 'application/json',
   };
@@ -199,7 +197,7 @@ class JSONHttp {
   }: {
     url: string;
     headers?: UnparsedRequestHeaders;
-    body: JsonHttpOutgoingBody;
+    body: unknown;
     acceptableStatusCodes: readonly R['status'][];
     withCredentials?: boolean;
   }): Promise<JsonHttpResponse<R>> {
@@ -224,7 +222,7 @@ class JSONHttp {
   }: {
     url: string;
     headers?: UnparsedRequestHeaders;
-    body: JsonHttpOutgoingBody;
+    body: unknown;
     acceptableStatusCodes: readonly R['status'][];
     withCredentials?: boolean;
   }): Promise<JsonHttpResponse<R>> {
@@ -249,7 +247,7 @@ class JSONHttp {
   }: {
     url: string;
     headers?: UnparsedRequestHeaders;
-    body: JsonHttpOutgoingBody;
+    body: unknown;
     acceptableStatusCodes: readonly R['status'][];
     withCredentials?: boolean;
   }): Promise<JsonHttpResponse<R>> {

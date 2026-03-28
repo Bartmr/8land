@@ -1,9 +1,8 @@
-import { JSONData, SerializableJSONData } from './json-types';
 import { TransportFailure } from '../transported-data/transport-failures';
 
 export type JsonHttpResponseBase = {
   status: number;
-  body: JSONData | undefined;
+  body: unknown;
 };
 
 export type JsonHttpResponse<R> =
@@ -28,5 +27,3 @@ export type JsonHttpHEADResponse = JsonHttpResponse<{
   status: number;
   body: undefined;
 }>;
-
-export type JsonHttpOutgoingBody = SerializableJSONData | FormData | undefined;

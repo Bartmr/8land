@@ -1,26 +1,13 @@
-import { toQueryString } from '@shared/internals/urls/to-query-string';
 import { TransportFailure } from 'src/transported-data/transport-failures';
 import { UnparsedRequestHeaders } from './http-types';
 import {
-  JsonHttpOutgoingBody,
   JsonHttpResponse,
   JsonHttpResponseBase,
 } from './json-http-types';
 import { useJSONHttp } from './use-json-http';
-import {
-  SerializableJSONArray,
-  SerializableJSONObject,
-  SerializableJSONValue,
-} from './json-types';
 
-export type SupportedRequestQueryParams = {
-  [key: string]: undefined | SerializableJSONValue | SerializableJSONValue[];
-};
-export type SupportedRequestBody =
-  | SerializableJSONObject
-  | SerializableJSONArray
-  | FormData
-  | undefined;
+
+
 
 export abstract class JSONApiBase {
   private jsonHttp: ReturnType<typeof useJSONHttp>;
@@ -45,14 +32,14 @@ export abstract class JSONApiBase {
       | {
           method: 'get' | 'delete' | 'head';
           path: string;
-          query: SupportedRequestQueryParams | undefined;
+          query: URLSearchParams | undefined;
           acceptableStatusCodes: readonly R['status'][];
         }
       | {
           method: 'post' | 'put' | 'patch';
           path: string;
-          query: SupportedRequestQueryParams | undefined;
-          body: JsonHttpOutgoingBody;
+          query: URLSearchParams | undefined;
+          body: unknown;
           acceptableStatusCodes: readonly R['status'][];
         },
   ): Promise<JsonHttpResponse<R>> {
@@ -69,7 +56,7 @@ export abstract class JSONApiBase {
         404,
       ],
       url: `${this.apiUrl}${params.path}${
-        params.query ? toQueryString(params.query) : ''
+        params.query ? `?${params.query.toString()}` : ''
       }`,
       withCredentials: true,
     };
@@ -120,7 +107,7 @@ export abstract class JSONApiBase {
 
   get<
     Response extends JsonHttpResponseBase = never,
-    QueryParams extends SupportedRequestQueryParams | undefined = never,
+    QueryParams extends URLSearchParams | undefined = never,
   >(params: {
     path: string;
     query: QueryParams;
@@ -134,8 +121,8 @@ export abstract class JSONApiBase {
 
   post<
     Response extends JsonHttpResponseBase = never,
-    QueryParams extends SupportedRequestQueryParams | undefined = never,
-    RequestBody extends SupportedRequestBody = never,
+    QueryParams extends URLSearchParams | undefined = never,
+    RequestBody = never,
   >(params: {
     path: string;
     query: QueryParams;
@@ -149,8 +136,8 @@ export abstract class JSONApiBase {
   }
   put<
     Response extends JsonHttpResponseBase = never,
-    QueryParams extends SupportedRequestQueryParams | undefined = never,
-    RequestBody extends SupportedRequestBody = never,
+    QueryParams extends URLSearchParams | undefined = never,
+    RequestBody = never,
   >(params: {
     path: string;
     query: QueryParams;
@@ -164,8 +151,8 @@ export abstract class JSONApiBase {
   }
   patch<
     Response extends JsonHttpResponseBase = never,
-    QueryParams extends SupportedRequestQueryParams | undefined = never,
-    RequestBody extends SupportedRequestBody = never,
+    QueryParams extends URLSearchParams | undefined = never,
+    RequestBody = never,
   >(params: {
     path: string;
     query: QueryParams;
@@ -179,7 +166,7 @@ export abstract class JSONApiBase {
   }
   delete<
     Response extends JsonHttpResponseBase = never,
-    QueryParams extends SupportedRequestQueryParams | undefined = never,
+    QueryParams extends URLSearchParams | undefined = never,
   >(params: {
     path: string;
     query: QueryParams;
@@ -192,7 +179,7 @@ export abstract class JSONApiBase {
   }
   head<
     Response extends { status: number; body: undefined } = never,
-    QueryParams extends SupportedRequestQueryParams | undefined = never,
+    QueryParams extends URLSearchParams | undefined = never,
   >(params: {
     path: string;
     query: QueryParams;

@@ -4,7 +4,7 @@ import { MainApiSessionData } from './session/main-api-session-types';
 import {
   TransportedDataStatus,
   TransportedData,
-} from '../../transports/transported-data/transported-data-types';
+} from '../transported-data/transported-data-types';
 
 export type MainApiStoreState = {
   session: TransportedData<MainApiSessionData | null>;

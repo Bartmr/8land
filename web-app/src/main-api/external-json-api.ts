@@ -1,9 +1,7 @@
+import z from 'zod';
 import {
   JSONApiBase,
-  SupportedRequestBody,
-  SupportedRequestQueryParams,
 } from './json-api-base';
-import { Schema, InferType } from 'not-me/lib/schemas/schema';
 import {
   JsonHttpHEADResponse,
   JsonHttpResponse,
@@ -22,14 +20,14 @@ export class ExternalJSONApi {
   }
 
   async get<
-    S extends Schema<JsonHttpResponseBase>,
-    I extends JsonHttpResponseBase = InferType<S>,
+    S extends z.ZodType<JsonHttpResponseBase>,
+    I extends JsonHttpResponseBase = z.infer<S>,
   >(
     schema: S,
     params: {
       acceptableStatusCodes: Array<I['status']>;
       path: string;
-      query: SupportedRequestQueryParams | undefined;
+      query: URLSearchParams | undefined;
     },
   ): Promise<JsonHttpResponse<I>> {
     const res = await this.jsonApi.get(params);
@@ -37,29 +35,29 @@ export class ExternalJSONApi {
     if (res.failure) {
       return res;
     } else {
-      const validationResult = schema.validate(res.response);
+      const validationResult = schema.safeParse(res.response);
 
-      if (validationResult.errors) {
+      if (!validationResult.success) {
         return res.logAndReturnAsUnexpected();
       } else {
         return {
           ...res,
-          response: validationResult.value as I,
+          response: validationResult.data as I,
         };
       }
     }
   }
 
   async post<
-    S extends Schema<JsonHttpResponseBase>,
-    I extends JsonHttpResponseBase = InferType<S>,
+    S extends z.ZodType<JsonHttpResponseBase>,
+    I extends JsonHttpResponseBase = z.infer<S>,
   >(
     schema: S,
     params: {
       acceptableStatusCodes: Array<I['status']>;
       path: string;
-      query: SupportedRequestQueryParams | undefined;
-      body: SupportedRequestBody;
+      query: URLSearchParams | undefined;
+      body: unknown;
     },
   ): Promise<JsonHttpResponse<I>> {
     const res = await this.jsonApi.post(params);
@@ -67,29 +65,29 @@ export class ExternalJSONApi {
     if (res.failure) {
       return res;
     } else {
-      const validationResult = schema.validate(res.response);
+      const validationResult = schema.safeParse(res.response);
 
-      if (validationResult.errors) {
+      if (!validationResult.success) {
         return res.logAndReturnAsUnexpected();
       } else {
         return {
           ...res,
-          response: validationResult.value as I,
+          response: validationResult.data as I,
         };
       }
     }
   }
 
   async put<
-    S extends Schema<JsonHttpResponseBase>,
-    I extends JsonHttpResponseBase = InferType<S>,
+    S extends z.ZodType<JsonHttpResponseBase>,
+    I extends JsonHttpResponseBase = z.infer<S>,
   >(
     schema: S,
     params: {
       acceptableStatusCodes: Array<I['status']>;
       path: string;
-      query: SupportedRequestQueryParams | undefined;
-      body: SupportedRequestBody;
+      query: URLSearchParams | undefined;
+      body: unknown;
     },
   ): Promise<JsonHttpResponse<I>> {
     const res = await this.jsonApi.put(params);
@@ -97,29 +95,29 @@ export class ExternalJSONApi {
     if (res.failure) {
       return res;
     } else {
-      const validationResult = schema.validate(res.response);
+      const validationResult = schema.safeParse(res.response);
 
-      if (validationResult.errors) {
+      if (!validationResult.success) {
         return res.logAndReturnAsUnexpected();
       } else {
         return {
           ...res,
-          response: validationResult.value as I,
+          response: validationResult.data as I,
         };
       }
     }
   }
 
   async patch<
-    S extends Schema<JsonHttpResponseBase>,
-    I extends JsonHttpResponseBase = InferType<S>,
+    S extends z.ZodType<JsonHttpResponseBase>,
+    I extends JsonHttpResponseBase = z.infer<S>,
   >(
     schema: S,
     params: {
       acceptableStatusCodes: Array<I['status']>;
       path: string;
-      query: SupportedRequestQueryParams | undefined;
-      body: SupportedRequestBody;
+      query: URLSearchParams | undefined;
+      body: unknown;
     },
   ): Promise<JsonHttpResponse<I>> {
     const res = await this.jsonApi.patch(params);
@@ -127,28 +125,28 @@ export class ExternalJSONApi {
     if (res.failure) {
       return res;
     } else {
-      const validationResult = schema.validate(res.response);
+      const validationResult = schema.safeParse(res.response);
 
-      if (validationResult.errors) {
+      if (!validationResult.success) {
         return res.logAndReturnAsUnexpected();
       } else {
         return {
           ...res,
-          response: validationResult.value as I,
+          response: validationResult.data as I,
         };
       }
     }
   }
 
   async delete<
-    S extends Schema<JsonHttpResponseBase>,
-    I extends JsonHttpResponseBase = InferType<S>,
+    S extends z.ZodType<JsonHttpResponseBase>,
+    I extends JsonHttpResponseBase = z.infer<S>,
   >(
     schema: S,
     params: {
       acceptableStatusCodes: Array<I['status']>;
       path: string;
-      query: SupportedRequestQueryParams | undefined;
+      query: URLSearchParams | undefined;
     },
   ): Promise<JsonHttpResponse<I>> {
     const res = await this.jsonApi.delete(params);
@@ -156,14 +154,14 @@ export class ExternalJSONApi {
     if (res.failure) {
       return res;
     } else {
-      const validationResult = schema.validate(res.response);
+      const validationResult = schema.safeParse(res.response);
 
-      if (validationResult.errors) {
+      if (!validationResult.success) {
         return res.logAndReturnAsUnexpected();
       } else {
         return {
           ...res,
-          response: validationResult.value as I,
+          response: validationResult.data as I,
         };
       }
     }
@@ -171,7 +169,7 @@ export class ExternalJSONApi {
 
   async head(params: {
     path: string;
-    query: SupportedRequestQueryParams | undefined;
+    query: URLSearchParams | undefined;
     acceptableStatusCodes: number[];
   }): Promise<JsonHttpHEADResponse> {
     return this.jsonApi.head(params);
