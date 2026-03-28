@@ -2,8 +2,6 @@ import {
   MainJSONApi,
   useMainJSONApi,
 } from '../main-api/use-main-json-api';
-import { ToIndexedType } from '@shared/internals/transports/dto-types';
-import { JSONData } from '../transports/json-types';
 import { CreateBlockRequestDTO } from '@shared/blocks/create/create-block.dto';
 import { DynamicBlockType } from '@shared/blocks/block.enums';
 
@@ -23,7 +21,7 @@ export class BlocksAPI {
 
   createBlock(args: CreateBlockRequestDTO) {
     return this.api.post<
-      | { status: 201; body: JSONData }
+      | { status: 201; body: unknown }
       | {
           status: 404;
           body:
@@ -33,7 +31,7 @@ export class BlocksAPI {
       | { status: 409; body: undefined | { error?: 'block-limit-exceeded' } }
       | { status: 403; body: undefined | { error?: 'land-is-outside-world' } },
       undefined,
-      ToIndexedType<CreateBlockRequestDTO>
+      CreateBlockRequestDTO
     >({
       path: `/blocks`,
       query: undefined,
