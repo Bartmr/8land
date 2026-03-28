@@ -1,1 +1,3 @@
-export * from '@shared/internals/utils/throw-error';
+export function throwError(): never {
+    throw new Error();
+}
