@@ -1,4 +1,3 @@
-import { ToIndexedType } from '@shared/internals/transports/dto-types';
 import { CreateLandRequestDTO } from '@shared/land/create/create-land.dto';
 import { EditLandBodyDTO } from '@shared/land/edit/edit-land.dto';
 import { GetLandDTO } from '@shared/land/get/get-land.dto';
@@ -17,16 +16,14 @@ import {
   useMainJSONApi,
 } from '../main-api/use-main-json-api';
 import { Logger } from '../logging/logger';
-import { JSONData } from '../transports/json-types';
-import { TransportFailure } from '../transports/transported-data/transport-failures';
 
 export class LandsAPI {
   constructor(private api: MainJSONApi) {}
 
   navigate(args: { doorBlockId: string; currentLandId: string }) {
     return this.api.get<
-      { status: 200; body: ToIndexedType<NavigateToLandDTO> },
-      ToIndexedType<NavigateToLandQueryDTO>
+      { status: 200; body: NavigateToLandDTO },
+      NavigateToLandQueryDTO
     >({
       path: `/lands/navigate`,
       query: {
