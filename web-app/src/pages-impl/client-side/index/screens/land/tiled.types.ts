@@ -1,4 +1,4 @@
 import { createTiledJSONSchema } from '@shared/land/upload-assets/upload-land-assets.schemas';
-import { InferType } from 'not-me/lib/schemas/schema';
+import z from 'zod';
 
-export type TiledJSON = InferType<ReturnType<typeof createTiledJSONSchema>>;
+export type TiledJSON = z.infer<ReturnType<typeof createTiledJSONSchema>>;

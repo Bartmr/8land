@@ -1,8 +1,8 @@
-import { throwError } from '@shared/internals/utils/throw-error';
 import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
-import { GamepadSingleton } from '../../gamepad';
 import { LandScreenService } from '../land/land-screen.service';
+import { throwError } from 'src/throw-error';
+import { Gamepad } from '../../gamepad';
 
 export class DialogueService {
   private render: () => void;
@@ -65,6 +65,7 @@ export class DialogueService {
 }
 
 export function DialogueScreen(props: {
+  gamepad: Gamepad,
   onService: (musicService: DialogueService) => void;
   onOpen: () => void;
   onClose: () => void;
@@ -81,7 +82,7 @@ export function DialogueScreen(props: {
       landScreenServiceRef: props.landScreenServiceRef,
     });
 
-    const gamepad = GamepadSingleton.getInstance();
+    const gamepad = props.gamepad;
 
     const onPressing_A = () => {
       sv.close();

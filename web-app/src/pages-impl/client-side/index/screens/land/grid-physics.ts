@@ -1,17 +1,15 @@
-import { throwError } from '@shared/internals/utils/throw-error';
-import { HotReloadClass } from 'src/hot-reload-class';
 import { TILE_SIZE } from '../../game-constants';
 import { Direction } from './grid.types';
 import { Block, DoorBlock } from './land-scene.types';
 import { Player } from './player';
-import { GamepadSingleton, GamepadType } from '../../gamepad';
-import { JSONPrimitive } from '@shared/internals/transports/json-types';
 import { DialogueService } from '../dialogue/dialogue-screen';
-import { getEnumValues } from '@shared/internals/utils/enums/get-enum-values';
 import {
   DynamicBlockType,
+  STATIC_BLOCK_TYPE_VALUES,
   StaticBlockType,
 } from '@shared/blocks/create/create-block.enums';
+import { Gamepad } from '../../gamepad';
+import { throwError } from 'src/throw-error';
 
 const Vector2 = Phaser.Math.Vector2;
 
@@ -24,9 +22,8 @@ const DIRECTION_TO_VECTOR: {
   [Direction.RIGHT]: Vector2.RIGHT,
 };
 
-@HotReloadClass(module)
 class GridPhysics {
-  private gamePad: GamepadType;
+  private gamePad: Gamepad;
 
   private movingDirection: Direction = Direction.NONE;
   private facingDirection: Direction = Direction.DOWN;
@@ -37,6 +34,7 @@ class GridPhysics {
 
   constructor(
     private player: Player,
+    private gamepad: Gamepad,
     private context: {
       land: {
         id: string;
@@ -65,7 +63,7 @@ class GridPhysics {
       dialogueService: DialogueService;
     },
   ) {
-    this.gamePad = GamepadSingleton.getInstance();
+    this.gamePad = gamepad
   }
 
   update(delta: number) {
@@ -231,7 +229,7 @@ class GridPhysics {
       };
 
       const tileProperties = tile.properties as {
-        [key: string]: JSONPrimitive;
+        [key: string]: unknown;
       };
 
       if (tileProperties['collides']) {
@@ -261,8 +259,7 @@ class GridPhysics {
       }
 
       const firstBlockEntry = Object.entries(tileProperties)
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
-        .filter((c) => !getEnumValues(StaticBlockType).includes(c[0] as any))
+        .filter((c) => ![STATIC_BLOCK_TYPE_VALUES].includes(c[0] as any))
         .find((c): c is [string, string] => typeof c[1] === 'string');
 
       if (firstBlockEntry) {

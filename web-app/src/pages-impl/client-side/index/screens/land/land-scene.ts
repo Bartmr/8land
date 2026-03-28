@@ -1,11 +1,9 @@
-import { throwError } from '@shared/internals/utils/throw-error';
 import {
   DynamicBlockType,
   StaticBlockType,
 } from '@shared/blocks/create/create-block.enums';
 import { EnvironmentVariables } from 'src/environment-variables';
 import { TransportFailure } from 'src/transported-data/transport-failures';
-import { HotReloadClass } from 'src/hot-reload-class';
 import { GridPhysics } from './grid-physics';
 import { Direction } from './grid.types';
 import {
@@ -26,14 +24,16 @@ import { AppService } from '../app/app-screen';
 import { LandsAPI } from 'src/lands/lands-api';
 import { NavigateToLandDTO } from '@shared/land/in-game/navigate/navigate-to-land.dto';
 import { TrainAPI } from 'src/train/train.api';
+import { throwError } from 'src/throw-error';
+import { Gamepad } from '../../gamepad';
 
-@HotReloadClass(module)
 export class LandScene extends Phaser.Scene {
   private gridPhysics?: GridPhysics;
 
   protected previousLandSceneArguments: LandSceneArguments | null;
   protected args: LandSceneArguments;
   protected dependencies: {
+    gamepad: Gamepad,
     musicService: MusicService;
     dialogueService: DialogueService;
     appService: AppService;
@@ -349,7 +349,7 @@ export class LandScene extends Phaser.Scene {
       new Phaser.Math.Vector2(position.x, position.y),
     );
 
-    this.gridPhysics = new GridPhysics(player, {
+    this.gridPhysics = new GridPhysics(player, this.dependencies.gamepad, {
       land: {
         id: this.args.land.id,
         blocks: [

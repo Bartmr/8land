@@ -5,16 +5,17 @@ import { globalHistory } from '@reach/router';
 import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
-import { throwError } from '@shared/internals/utils/throw-error';
 import { AppService } from '../app/app-screen';
 import { ResumeLandNavigationDTO } from '@shared/land/in-game/resume/resume-land-navigation.dto';
 import { useLandsAPI } from 'src/lands/lands-api';
 import { useTrainAPI } from 'src/train/train.api';
 import { navigate } from 'gatsby';
 import { USER_ROUTE } from 'src/pages-impl/client-side/user/user-routes';
-import { GamepadSingleton } from '../../gamepad';
+import { Gamepad } from '../../gamepad';
+import { throwError } from 'src/throw-error';
 
 export function LandScreen(props: {
+  gamepad: Gamepad,
   musicService: MusicService;
   dialogueService: DialogueService;
   appService: AppService;
@@ -41,6 +42,7 @@ export function LandScreen(props: {
       await runLandGame(
         { resumedLand: props.resumedLand, session: props.session },
         {
+          gamepad: props.gamepad,
           landsAPI: landsApi,
           musicService: props.musicService,
           dialogueService: props.dialogueService,
@@ -62,7 +64,6 @@ export function LandScreen(props: {
       props.onService(sv);
     })();
 
-    const gamepad = GamepadSingleton.getInstance();
 
     const onPressing_Escape = () => {
       (async () => {
@@ -72,10 +73,10 @@ export function LandScreen(props: {
       return 'stop-propagation' as const;
     };
 
-    gamepad.onPressing_Escape(onPressing_Escape, 'landScreen');
+    props.gamepad.onPressing_Escape(onPressing_Escape, 'landScreen');
 
     return () => {
-      gamepad.removePressing_Escape_Callback('landScreen');
+      props.gamepad.removePressing_Escape_Callback('landScreen');
     };
   }, []);
 

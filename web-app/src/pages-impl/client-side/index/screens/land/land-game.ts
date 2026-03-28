@@ -4,7 +4,6 @@ import { EnvironmentVariables } from 'src/environment-variables';
 import { getLandSceneKey } from './keys';
 import { LandScene } from './land-scene';
 import { LandSceneArguments } from './land-scene.types';
-import { throwError } from '@shared/internals/utils/throw-error';
 import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
@@ -16,6 +15,8 @@ import {
 } from '@shared/blocks/create/create-block.enums';
 import { LandsAPI } from 'src/lands/lands-api';
 import { TrainAPI } from 'src/train/train.api';
+import { throwError } from 'src/throw-error';
+import { Gamepad } from '../../gamepad';
 
 export async function runLandGame(
   args: {
@@ -23,6 +24,7 @@ export async function runLandGame(
     session: null | MainApiSessionData;
   },
   dependencies: {
+    gamepad: Gamepad;
     musicService: MusicService;
     dialogueService: DialogueService;
     appService: AppService;
