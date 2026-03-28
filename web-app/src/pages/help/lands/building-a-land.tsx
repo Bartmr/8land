@@ -1,3 +1,3 @@
-import { BuildingALandTemplate } from 'src/components/templates/help/lands/building-a-land/building-a-land.template';
+import { BuildingALandTemplate } from 'src/pages-impl/help/lands/building-a-land/building-a-land.template';
 
 export default BuildingALandTemplate;

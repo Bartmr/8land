@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { TransportedDataGate } from 'src/components/shared/transported-data-gate/transported-data-gate';
+import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { TransportFailure } from 'src/transported-data/transport-failures';
 import {
   TransportedData,
@@ -9,7 +9,7 @@ import {
 const Component = () => {
   const [entrypoint, replaceEntrypoint] = useState<
     TransportedData<
-      typeof import('../components/templates/client-side/client-side-template')
+      typeof import('../pages-impl/client-side/client-side-template')
     >
   >({ status: TransportedDataStatus.NotInitialized });
 
@@ -21,7 +21,7 @@ const Component = () => {
 
       try {
         const ep = await import(
-          '../components/templates/client-side/client-side-template'
+          '../pages-impl/client-side/client-side-template'
         );
 
         replaceEntrypoint({

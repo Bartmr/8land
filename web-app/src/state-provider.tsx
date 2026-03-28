@@ -12,7 +12,7 @@ import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reduc
 import { RUNNING_IN_CLIENT } from 'src/runtime';
 import { useStoreDispatch } from 'src/store/use-store-dispatch';
 import { navigate } from 'gatsby';
-import { LOGIN_ROUTE } from 'src/components/templates/client-side/login/login-routes';
+import { LOGIN_ROUTE } from 'src/pages-impl/client-side/login/login-routes';
 import { SSRProvider } from 'react-bootstrap';
 
 let previousRuntimeData:

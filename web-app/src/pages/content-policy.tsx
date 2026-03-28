@@ -1,3 +1,3 @@
-import { ContentPolicyTemplate } from 'src/components/templates/content-policy/content-policy-template';
+import { ContentPolicyTemplate } from 'src/pages-impl/content-policy/content-policy-template';
 
 export default ContentPolicyTemplate;

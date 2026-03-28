@@ -1,3 +1,3 @@
-import { NotFoundTemplate } from 'src/components/templates/not-found/not-found-template';
+import { NotFoundTemplate } from 'src/pages-impl/not-found/not-found-template';
 
 export default NotFoundTemplate;

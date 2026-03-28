@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StateProvider } from './state-provider';
 import { Helmet } from 'react-helmet';
 import { dom } from '@fortawesome/fontawesome-svg-core';
-import { USER_ROUTE } from './components/templates/client-side/user/user-routes';
+import { USER_ROUTE } from './pages-impl/client-side/user/user-routes';
 
 const FatalErrorFrame = () => {
   return (

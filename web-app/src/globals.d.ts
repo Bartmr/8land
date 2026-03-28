@@ -1,11 +1,11 @@
-import { SoundcloudSong } from 'src/components/templates/client-side/index/soundcloud-types';
+import { SoundcloudSong } from 'src/pages-impl/client-side/index/soundcloud-types';
 import {
   ProviderMessage,
   ProviderRpcError,
   ProviderConnectInfo,
   RequestArguments,
 } from 'hardhat/types';
-import { AppContext } from 'src/components/templates/client-side/index/components/components/screens/app/app-screen.types';
+import { AppContext } from 'src/pages-impl/client-side/index/components/components/screens/app/app-screen.types';
 
 interface EthereumEvent {
   connect: ProviderConnectInfo;

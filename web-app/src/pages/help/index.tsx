@@ -1,3 +1,3 @@
-import { HelpTemplate } from 'src/components/templates/help/help-template';
+import { HelpTemplate } from 'src/pages-impl/help/help-template';
 
 export default HelpTemplate;
