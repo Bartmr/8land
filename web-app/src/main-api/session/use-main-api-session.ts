@@ -7,7 +7,6 @@ import { useMainJSONApi } from '../use-main-json-api';
 import { TransportedDataStatus } from 'src/transported-data/transported-data-types';
 import { LoginRequestDTO } from '@shared/auth/auth.dto';
 import { MAIN_API_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY } from './main-api-session-constants';
-import { ToIndexedType } from '@shared/internals/transports/dto-types';
 
 class MainApiSession {
   constructor(
@@ -24,7 +23,7 @@ class MainApiSession {
           body: undefined | { error?: string; createdNewUser?: boolean };
         },
       undefined,
-      ToIndexedType<LoginRequestDTO>
+      LoginRequestDTO
     >({
       path: '/auth',
       query: undefined,

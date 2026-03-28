@@ -30,7 +30,7 @@ class MainApiSessionLogout {
 
     /* ----- */
 
-    const { FirebaseAuth } = await import('src/auth/firebase-auth');
+    const { FirebaseAuth } = await import('src/firebase/firebase-auth');
 
     await FirebaseAuth.signOut();
 

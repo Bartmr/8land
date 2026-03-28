@@ -1,3 +1,3 @@
-import { string } from 'not-me/lib/schemas/string/string-schema';
+import z from "zod";
 
-export const MainApiAuthTokenIdLocalStorageSchema = string();
+export const MainApiAuthTokenIdLocalStorageSchema = z.string();
