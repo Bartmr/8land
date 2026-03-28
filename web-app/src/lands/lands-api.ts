@@ -1,21 +1,16 @@
 import { CreateLandRequestDTO } from '@shared/land/create/create-land.dto';
 import { EditLandBodyDTO } from '@shared/land/edit/edit-land.dto';
 import { GetLandDTO } from '@shared/land/get/get-land.dto';
-import {
-  NavigateToLandQueryDTO,
-  NavigateToLandDTO,
-} from '@shared/land/in-game/navigate/navigate-to-land.dto';
+import { NavigateToLandDTO } from '@shared/land/in-game/navigate/navigate-to-land.dto';
 import { ResumeLandNavigationDTO } from '@shared/land/in-game/resume/resume-land-navigation.dto';
-import {
-  IndexLandsDTO,
-  IndexLandsQueryDTO,
-} from '@shared/land/index/index-lands.dto';
+import { IndexLandsDTO } from '@shared/land/index/index-lands.dto';
 import { GetLandsToClaimDTO } from '@shared/land/lands-to-claim/lands-to-claim.dto';
 import {
   MainJSONApi,
   useMainJSONApi,
 } from '../main-api/use-main-json-api';
 import { Logger } from '../logging/logger';
+import { TransportFailure } from 'src/transported-data/transport-failures';
 
 export class LandsAPI {
   constructor(private api: MainJSONApi) {}
@@ -23,20 +18,20 @@ export class LandsAPI {
   navigate(args: { doorBlockId: string; currentLandId: string }) {
     return this.api.get<
       { status: 200; body: NavigateToLandDTO },
-      NavigateToLandQueryDTO
+      URLSearchParams
     >({
       path: `/lands/navigate`,
-      query: {
+      query: new URLSearchParams({
         doorBlockId: args.doorBlockId,
         currentLandId: args.currentLandId,
-      },
+      }),
       acceptableStatusCodes: [200],
     });
   }
 
   resume() {
     return this.api.get<
-      { status: 200; body: ToIndexedType<ResumeLandNavigationDTO> },
+      { status: 200; body: ResumeLandNavigationDTO },
       undefined
     >({
       path: '/lands/resume',
@@ -47,7 +42,7 @@ export class LandsAPI {
 
   getEditableLand(args: { landId: string }) {
     return this.api.get<
-      { status: 200; body: ToIndexedType<GetLandDTO> },
+      { status: 200; body: GetLandDTO },
       undefined
     >({
       path: `/lands/getEditable/${args.landId}`,
@@ -58,13 +53,11 @@ export class LandsAPI {
 
   getLandsIndex() {
     return this.api.get<
-      { status: 200; body: ToIndexedType<IndexLandsDTO> },
-      ToIndexedType<IndexLandsQueryDTO>
+      { status: 200; body: IndexLandsDTO },
+      URLSearchParams
     >({
       path: '/lands',
-      query: {
-        skip: 0,
-      },
+      query: new URLSearchParams({ skip: '0' }),
       acceptableStatusCodes: [200],
     });
   }
@@ -104,7 +97,7 @@ export class LandsAPI {
               };
         },
       undefined,
-      ToIndexedType<CreateLandRequestDTO>
+      CreateLandRequestDTO
     >({
       path: '/lands',
       query: undefined,
@@ -219,10 +212,10 @@ export class LandsAPI {
     };
   }) {
     return this.api.put<
-      | { status: 200; body: JSONData }
+      | { status: 200; body: unknown }
       | { status: 409; body: undefined | { error: string } },
       undefined,
-      ToIndexedType<EditLandBodyDTO>
+      EditLandBodyDTO
     >({
       path: `/lands/${args.landId}`,
       query: undefined,
@@ -297,7 +290,7 @@ export class LandsAPI {
 
   getLandsToClaim() {
     return this.api.get<
-      { status: 200; body: ToIndexedType<GetLandsToClaimDTO> },
+      { status: 200; body: GetLandsToClaimDTO },
       undefined
     >({
       path: '/lands/getLandsToClaim',

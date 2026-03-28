@@ -2,7 +2,6 @@ import {
   MainJSONApi,
   useMainJSONApi,
 } from '../main-api/use-main-json-api';
-import { ToIndexedType } from '@shared/internals/transports/dto-types';
 import { GetTerritoryDTO } from '@shared/territories/get/get-territory.dto';
 import { GetTerritoryIdByRaribleItemIdDTO } from '@shared/territories/get-id-by-rarible-item-id/get-territory-id-by-rarible-item-id.dto';
 import { CreateTerritoryResponseDTO } from '@shared/territories/create/create-territory.dto';
@@ -13,7 +12,7 @@ export class TerritoriesAPI {
 
   getTerritory(args: { territoryId: string }) {
     return this.api.get<
-      { status: 200; body: ToIndexedType<GetTerritoryDTO> },
+      { status: 200; body: GetTerritoryDTO },
       undefined
     >({
       path: `/territories/${args.territoryId}`,
@@ -26,7 +25,7 @@ export class TerritoriesAPI {
     return this.api.get<
       {
         status: 200;
-        body: ToIndexedType<GetTerritoryIdByRaribleItemIdDTO>;
+        body: GetTerritoryIdByRaribleItemIdDTO;
       },
       undefined
     >({
@@ -40,7 +39,7 @@ export class TerritoriesAPI {
     return this.api.post<
       | {
           status: 201;
-          body: ToIndexedType<CreateTerritoryResponseDTO>;
+          body: CreateTerritoryResponseDTO;
         }
       | { status: 409; body: { error: string } },
       undefined,
@@ -63,7 +62,7 @@ export class TerritoriesAPI {
     return this.api.patch<
       { status: 204; body: undefined },
       undefined,
-      ToIndexedType<UpdateTerritoryRaribleMetadataRequestDTO>
+      UpdateTerritoryRaribleMetadataRequestDTO
     >({
       path: `/territories/${args.territoryId}/rarible`,
       query: undefined,

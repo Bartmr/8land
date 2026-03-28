@@ -1,16 +1,9 @@
-import { ToIndexedType } from '@shared/internals/transports/dto-types';
-import { uuid } from '@shared/internals/validation/schemas/uuid.schema';
 import {
   GetTrainDestinationQueryDTO,
   GetTrainDestinationsDTO,
 } from '@shared/train/apps/tickets/get-destinations/get-train-destinations.dto';
 import { BoardTrainDTO } from '@shared/train/board/board-train.dto';
-import {
-  ReturnToTrainStationDTO,
-  ReturnToTrainStationQueryDTO,
-} from '@shared/train/return/return-to-train-station.dto';
-import { object } from 'not-me/lib/schemas/object/object-schema';
-import { string } from 'not-me/lib/schemas/string/string-schema';
+import { ReturnToTrainStationDTO } from '@shared/train/return/return-to-train-station.dto';
 import {
   mainApiReducer,
   MainApiStoreState,
@@ -20,7 +13,8 @@ import {
   useMainJSONApi,
 } from '../main-api/use-main-json-api';
 import { useStoreGetState } from '../store/use-store-get-state';
-import { useLocalStorage } from '../transports/use-local-storage';
+import { useLocalStorage } from '../local-storage';
+import { object, uuid, string } from 'zod';
 
 export class TrainAPI {
   constructor(
@@ -32,8 +26,8 @@ export class TrainAPI {
   getTrainDestination(args: { currentStationLandId: string }) {
     return this.localStorage.getItem(
       object({
-        name: string().required(),
-        worldId: uuid().required(),
+        name: string(),
+        worldId: uuid(),
       }),
       `train-destination:${args.currentStationLandId}`,
     );
@@ -63,7 +57,7 @@ export class TrainAPI {
     this.localStorage.setItem('last-train-station', args.boardingFromLand);
 
     return this.api.get<
-      { status: 200; body: ToIndexedType<BoardTrainDTO> },
+      { status: 200; body: BoardTrainDTO },
       undefined
     >({
       path: `/train/board/${args.worldId}`,
@@ -73,22 +67,24 @@ export class TrainAPI {
   }
 
   returnToTrainStation() {
-    const query: ReturnToTrainStationQueryDTO = {};
+    const query = new URLSearchParams();
 
     const session = this.getMainApiStoreState().mainApi.session.data;
 
     if (!session) {
       const returningTrainStationId = this.localStorage.getItem(
-        uuid().required(),
+        uuid(),
         'last-train-station',
       );
 
-      query.boardedOnTrainStation = returningTrainStationId;
+      if (returningTrainStationId) {
+        query.set('boardedOnTrainStation', returningTrainStationId);
+      }
     }
 
     return this.api.get<
-      { status: 200; body: ToIndexedType<ReturnToTrainStationDTO> },
-      ToIndexedType<ReturnToTrainStationQueryDTO>
+      { status: 200; body: ReturnToTrainStationDTO },
+      URLSearchParams
     >({
       path: `/train/return`,
       query,
@@ -97,15 +93,17 @@ export class TrainAPI {
   }
 
   searchDestinations(args: { skip: number; searchQuery: string }) {
+    const query = new URLSearchParams({
+      skip: String(args.skip),
+      name: args.searchQuery,
+    });
+
     return this.api.get<
-      { status: 200; body: ToIndexedType<GetTrainDestinationsDTO> },
-      ToIndexedType<GetTrainDestinationQueryDTO>
+      { status: 200; body: GetTrainDestinationsDTO },
+      URLSearchParams
     >({
       path: `/train/apps/tickets/getDestinations`,
-      query: {
-        skip: args.skip,
-        name: args.searchQuery,
-      },
+      query,
       acceptableStatusCodes: [200],
     });
   }
