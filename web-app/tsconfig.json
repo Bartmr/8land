@@ -1,8 +1,9 @@
 {
-  "include": ["src", "type-declarations", "../../libs/shared/src"],
+  "include": ["src", "../shared/src"],
+  "exclude": ["../shared/node_modules"],
   "compilerOptions": {
     "paths": {
-      "@app/shared*": ["../../libs/shared/src*"]
+      "@shared*": ["../shared/src*"]
     },
     "noEmit": true,
     "skipLibCheck": true,
