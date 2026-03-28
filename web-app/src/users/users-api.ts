@@ -2,7 +2,6 @@ import {
   MainJSONApi,
   useMainJSONApi,
 } from '../main-api/use-main-json-api';
-import { ToIndexedType } from '@shared/internals/transports/dto-types';
 import { GetUserWalletNonce } from '@shared/users/me/get-user-wallet-nonce.dto';
 import { ReceiveSignedUserNonceRequestDTO } from '@shared/users/me/receive-signed-user-nonce.dto';
 
@@ -11,7 +10,7 @@ export class UsersAPI {
 
   getWalletNonce() {
     return this.api.get<
-      { status: 200; body: ToIndexedType<GetUserWalletNonce> },
+      { status: 200; body: GetUserWalletNonce },
       undefined
     >({
       path: '/users/me/walletNonce',
@@ -24,7 +23,7 @@ export class UsersAPI {
     return this.api.patch<
       { status: 204; body: undefined },
       undefined,
-      ToIndexedType<ReceiveSignedUserNonceRequestDTO>
+      ReceiveSignedUserNonceRequestDTO
     >({
       path: '/users/me/walletNonce',
       query: undefined,
