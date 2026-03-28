@@ -3,14 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import {  } from 'src/components/ui-kit/core/utils/missing-css-class';
 import { LinkAnchor } from 'src/ui/link-anchor';
-import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
+import { MainApiSessionData } from 'src/main-api/session/main-api-session-types';
 import { getCurrentLocalHref } from 'src/navigation/get-current-local-href';
 import { LOGIN_ROUTE } from '../../login/login-routes';
 import { Keypad } from './components/keypad';
 import { MusicService, MusicTicker } from './components/music-ticker';
 import * as styles from './game-frame.module.scss';
 import { ScreenSwitcher } from './components/screen-switcher';
-import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
+import { ResumeLandNavigationDTO } from '@shared/land/in-game/resume/resume-land-navigation.dto';
 
 export function GameFrame(props: {
   resumedLand: ResumeLandNavigationDTO;

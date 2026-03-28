@@ -2,7 +2,7 @@ import {
   CONTACT_CTA,
   CONTACT_CTA_PAST,
   CONTACT_CTA_PRESENT,
-} from '@app/shared/project-details';
+} from '@shared/project-details';
 import { Layout } from 'src/pages-impl/layout/layout';
 import {
   LOG_SERVICE_COMPANY,

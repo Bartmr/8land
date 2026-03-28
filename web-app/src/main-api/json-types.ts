@@ -1,1 +1,1 @@
-export * from '@app/shared/internals/transports/json-types';
+export * from '@shared/internals/transports/json-types';

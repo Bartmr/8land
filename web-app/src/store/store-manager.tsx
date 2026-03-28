@@ -5,7 +5,7 @@ import {
 } from 'redux';
 import { devToolsEnhancerDevelopmentOnly } from '@redux-devtools/extension';
 import { Store, StoreAction, StoreState } from './store-types';
-import { MAIN_API_SESSION_LOGOUT } from '../apis/main/session/main-api-session-actions';
+import { MAIN_API_SESSION_LOGOUT } from '../main-api/session/main-api-session-actions';
 import { StoreReducersMap } from './store-reducers-map';
 import { createContext, ReactNode, useContext } from 'react';
 import { throwError } from '../throw-error';

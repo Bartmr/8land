@@ -7,13 +7,13 @@ import {
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
-import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
+import { mainApiReducer } from 'src/main-api/main-api-reducer';
 import { useStoreSelector } from 'src/store/use-store-selector';
 import { GameFrame } from './components/game-frame';
 import { LinkAnchor } from 'src/ui/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
 import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
-import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
+import { ResumeLandNavigationDTO } from '@shared/land/in-game/resume/resume-land-navigation.dto';
 import { useLandsAPI } from 'src/lands/lands-api';
 
 function Content(props: {

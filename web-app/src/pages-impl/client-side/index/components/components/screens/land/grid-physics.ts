@@ -1,17 +1,17 @@
-import { throwError } from '@app/shared/internals/utils/throw-error';
+import { throwError } from '@shared/internals/utils/throw-error';
 import { HotReloadClass } from 'src/hot-reload-class';
 import { TILE_SIZE } from '../../../../game-constants';
 import { Direction } from './grid.types';
 import { Block, DoorBlock } from './land-scene.types';
 import { Player } from './player';
 import { GamepadSingleton, GamepadType } from '../../../../gamepad-singleton';
-import { JSONPrimitive } from '@app/shared/internals/transports/json-types';
+import { JSONPrimitive } from '@shared/internals/transports/json-types';
 import { DialogueService } from '../dialogue/dialogue-screen';
-import { getEnumValues } from '@app/shared/internals/utils/enums/get-enum-values';
+import { getEnumValues } from '@shared/internals/utils/enums/get-enum-values';
 import {
   DynamicBlockType,
   StaticBlockType,
-} from '@app/shared/blocks/create/create-block.enums';
+} from '@shared/blocks/create/create-block.enums';
 
 const Vector2 = Phaser.Math.Vector2;
 

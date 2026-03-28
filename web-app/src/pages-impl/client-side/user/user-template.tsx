@@ -1,4 +1,4 @@
-import { throwError } from '@app/shared/internals/utils/throw-error';
+import { throwError } from '@shared/internals/utils/throw-error';
 import { RouteComponentProps } from '@reach/router';
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';
@@ -8,9 +8,9 @@ import {
   TransportedDataGate,
   TransportedDataGateLayout,
 } from 'src/ui/transported-data-gate';
-import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
-import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
-import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use-main-api-session';
+import { mainApiReducer } from 'src/main-api/main-api-reducer';
+import { MainApiSessionData } from 'src/main-api/session/main-api-session-types';
+import { useMainApiSession } from 'src/main-api/session/use-main-api-session';
 import { useStoreSelector } from 'src/store/use-store-selector';
 import {
   TransportedData,
@@ -18,14 +18,14 @@ import {
 } from 'src/transported-data/transported-data-types';
 import { USER_ROUTE } from './user-routes';
 import { Logger } from 'src/logging/logger';
-import { useMainApiSessionLogout } from 'src/logic/app-internals/apis/main/session/use-main-api-session-logout';
+import { useMainApiSessionLogout } from 'src/main-api/session/use-main-api-session-logout';
 import { ChangeEmail } from './components/change-email';
-import { getWalletSignMessage } from '@app/shared/users/me/receive-signed-user-nonce.utils';
+import { getWalletSignMessage } from '@shared/users/me/receive-signed-user-nonce.utils';
 import { useUsersAPI } from 'src/users/users-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPersonThroughWindow } from '@fortawesome/free-solid-svg-icons';
 import { useLandsAPI } from 'src/lands/lands-api';
-import { useAuthAPI } from 'src/logic/auth/auth.api';
+import { useAuthAPI } from 'src/auth/auth.api';
 
 export function WalletSectionWithNonce(props: {
   session: null | MainApiSessionData;

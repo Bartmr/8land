@@ -7,11 +7,11 @@ import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
-import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
+import { GetLandDTO } from '@shared/land/get/get-land.dto';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { useParams } from '@reach/router';
 import { object } from 'not-me/lib/schemas/object/object-schema';
-import { uuid } from '@app/shared/internals/validation/schemas/uuid.schema';
+import { uuid } from '@shared/internals/validation/schemas/uuid.schema';
 import { useLandsAPI } from 'src/lands/lands-api';
 import { Toast } from 'react-bootstrap';
 import { MainSection } from './components/main-section/main-section';
@@ -22,10 +22,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { navigate } from 'gatsby';
 import { LANDS_ROUTE } from '../lands-routes';
-// import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
-// import { useStoreSelector } from 'src/logic/app-internals/store/use-store-selector';
-// import { throwError } from '@app/shared/internals/utils/throw-error';
-// import { Role } from '@app/shared/auth/auth.enums';
+// import { mainApiReducer } from 'src/main-api/main-api-reducer';
+// import { useStoreSelector } from 'src/store/use-store-selector';
+// import { throwError } from '@shared/internals/utils/throw-error';
+// import { Role } from '@shared/auth/auth.enums';
 
 export function EditLandTemplateWithRouteProps(props: { id: string }) {
   const api = useLandsAPI();

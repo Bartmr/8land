@@ -1,4 +1,4 @@
-import { throwError } from '@app/shared/internals/utils/throw-error';
+import { throwError } from '@shared/internals/utils/throw-error';
 import {
   createContext,
   ReactNode,

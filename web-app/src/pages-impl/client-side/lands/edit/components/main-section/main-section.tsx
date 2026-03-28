@@ -1,6 +1,6 @@
-import { EditLandBodyDTO } from '@app/shared/land/edit/edit-land.dto';
-import { CreateLandRequestSchemaObj } from '@app/shared/land/create/create-land.schemas';
-import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
+import { EditLandBodyDTO } from '@shared/land/edit/edit-land.dto';
+import { CreateLandRequestSchemaObj } from '@shared/land/create/create-land.schemas';
+import { GetLandDTO } from '@shared/land/get/get-land.dto';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -13,9 +13,9 @@ import {
 } from 'src/transported-data/transported-data-types';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { number } from 'not-me/lib/schemas/number/number-schema';
-import { throwError } from '@app/shared/internals/utils/throw-error';
+import { throwError } from '@shared/internals/utils/throw-error';
 import { or } from 'not-me/lib/schemas/or/or-schema';
-import { SoundcloudSongApiUrlSchema } from '@app/shared/land/edit/edit-land.schema';
+import { SoundcloudSongApiUrlSchema } from '@shared/land/edit/edit-land.schema';
 import { useLandsAPI } from 'src/lands/lands-api';
 
 export function MainSection(props: {

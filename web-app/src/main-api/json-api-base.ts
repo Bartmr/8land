@@ -1,4 +1,4 @@
-import { toQueryString } from '@app/shared/internals/urls/to-query-string';
+import { toQueryString } from '@shared/internals/urls/to-query-string';
 import { TransportFailure } from 'src/transported-data/transport-failures';
 import { UnparsedRequestHeaders } from './http-types';
 import {

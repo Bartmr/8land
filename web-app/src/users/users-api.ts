@@ -1,10 +1,10 @@
 import {
   MainJSONApi,
   useMainJSONApi,
-} from '../app-internals/apis/main/use-main-json-api';
-import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
-import { GetUserWalletNonce } from '@app/shared/users/me/get-user-wallet-nonce.dto';
-import { ReceiveSignedUserNonceRequestDTO } from '@app/shared/users/me/receive-signed-user-nonce.dto';
+} from '../main-api/use-main-json-api';
+import { ToIndexedType } from '@shared/internals/transports/dto-types';
+import { GetUserWalletNonce } from '@shared/users/me/get-user-wallet-nonce.dto';
+import { ReceiveSignedUserNonceRequestDTO } from '@shared/users/me/receive-signed-user-nonce.dto';
 
 export class UsersAPI {
   constructor(private api: MainJSONApi) {}

@@ -1,5 +1,5 @@
 /* eslint-disable node/no-process-env */
-import { throwError } from '@app/shared/internals/utils/throw-error';
+import { throwError } from '@shared/internals/utils/throw-error';
 import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
 import { equals } from 'not-me/lib/schemas/equals/equals-schema';
 import { object } from 'not-me/lib/schemas/object/object-schema';

@@ -1,4 +1,4 @@
-import { GetTrainDestinationsDTO } from '@app/shared/train/apps/tickets/get-destinations/get-train-destinations.dto';
+import { GetTrainDestinationsDTO } from '@shared/train/apps/tickets/get-destinations/get-train-destinations.dto';
 import { useEffect, useState } from 'react';
 import { AppLayout } from 'src/pages-impl/layout/app-layout';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';

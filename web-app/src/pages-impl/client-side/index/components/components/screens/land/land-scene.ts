@@ -1,8 +1,8 @@
-import { throwError } from '@app/shared/internals/utils/throw-error';
+import { throwError } from '@shared/internals/utils/throw-error';
 import {
   DynamicBlockType,
   StaticBlockType,
-} from '@app/shared/blocks/create/create-block.enums';
+} from '@shared/blocks/create/create-block.enums';
 import { EnvironmentVariables } from 'src/environment-variables';
 import { TransportFailure } from 'src/transported-data/transport-failures';
 import { HotReloadClass } from 'src/hot-reload-class';
@@ -24,7 +24,7 @@ import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
 import { LandsAPI } from 'src/lands/lands-api';
-import { NavigateToLandDTO } from '@app/shared/land/in-game/navigate/navigate-to-land.dto';
+import { NavigateToLandDTO } from '@shared/land/in-game/navigate/navigate-to-land.dto';
 import { TrainAPI } from 'src/train/train.api';
 
 @HotReloadClass(module)

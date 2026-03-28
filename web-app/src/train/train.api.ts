@@ -1,26 +1,26 @@
-import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
-import { uuid } from '@app/shared/internals/validation/schemas/uuid.schema';
+import { ToIndexedType } from '@shared/internals/transports/dto-types';
+import { uuid } from '@shared/internals/validation/schemas/uuid.schema';
 import {
   GetTrainDestinationQueryDTO,
   GetTrainDestinationsDTO,
-} from '@app/shared/train/apps/tickets/get-destinations/get-train-destinations.dto';
-import { BoardTrainDTO } from '@app/shared/train/board/board-train.dto';
+} from '@shared/train/apps/tickets/get-destinations/get-train-destinations.dto';
+import { BoardTrainDTO } from '@shared/train/board/board-train.dto';
 import {
   ReturnToTrainStationDTO,
   ReturnToTrainStationQueryDTO,
-} from '@app/shared/train/return/return-to-train-station.dto';
+} from '@shared/train/return/return-to-train-station.dto';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import {
   mainApiReducer,
   MainApiStoreState,
-} from '../app-internals/apis/main/main-api-reducer';
+} from '../main-api/main-api-reducer';
 import {
   MainJSONApi,
   useMainJSONApi,
-} from '../app-internals/apis/main/use-main-json-api';
-import { useStoreGetState } from '../app-internals/store/use-store-get-state';
-import { useLocalStorage } from '../app-internals/transports/use-local-storage';
+} from '../main-api/use-main-json-api';
+import { useStoreGetState } from '../store/use-store-get-state';
+import { useLocalStorage } from '../transports/use-local-storage';
 
 export class TrainAPI {
   constructor(

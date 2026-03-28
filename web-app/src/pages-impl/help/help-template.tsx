@@ -1,4 +1,4 @@
-import { CONTACT_CTA_PRESENT } from '@app/shared/project-details';
+import { CONTACT_CTA_PRESENT } from '@shared/project-details';
 import {
   faLightbulb,
   faPenRuler,

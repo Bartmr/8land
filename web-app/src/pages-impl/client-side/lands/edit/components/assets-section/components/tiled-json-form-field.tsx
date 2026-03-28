@@ -1,4 +1,4 @@
-import { createTiledJSONSchema } from '@app/shared/land/upload-assets/upload-land-assets.schemas';
+import { createTiledJSONSchema } from '@shared/land/upload-assets/upload-land-assets.schemas';
 import { AnyErrorMessagesTree } from 'not-me/lib/error-messages/error-messages-tree';
 import { useEffect, useState } from 'react';
 import { trackCustomEvent } from 'gatsby-plugin-google-analytics';

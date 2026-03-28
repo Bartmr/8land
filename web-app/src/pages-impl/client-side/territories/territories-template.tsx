@@ -1,8 +1,8 @@
-import { throwError } from '@app/shared/internals/utils/throw-error';
+import { throwError } from '@shared/internals/utils/throw-error';
 import { RouteComponentProps } from '@reach/router';
 import { useState } from 'react';
 import { Layout } from 'src/pages-impl/layout/layout';
-import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
+import { mainApiReducer } from 'src/main-api/main-api-reducer';
 import { EnvironmentVariables } from 'src/environment-variables';
 import { useStoreSelector } from 'src/store/use-store-selector';
 import { TERRITORIES_ROUTE } from './territories-routes';

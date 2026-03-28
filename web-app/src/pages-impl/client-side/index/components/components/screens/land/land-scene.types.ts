@@ -1,9 +1,9 @@
 import {
   DynamicBlockType,
   StaticBlockType,
-} from '@app/shared/blocks/create/create-block.enums';
-import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
-import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
+} from '@shared/blocks/create/create-block.enums';
+import { GetLandDTO } from '@shared/land/get/get-land.dto';
+import { MainApiSessionData } from 'src/main-api/session/main-api-session-types';
 
 export type LandSceneArguments = {
   player: {

@@ -1,4 +1,4 @@
-import { getEnumValues } from '@app/shared/internals/utils/enums/get-enum-values';
+import { getEnumValues } from '@shared/internals/utils/enums/get-enum-values';
 import { TransportFailure } from './transport-failures';
 
 const transportFailures = getEnumValues(TransportFailure);

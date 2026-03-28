@@ -1,4 +1,4 @@
-import { JSONData } from '@app/shared/internals/transports/json-types';
+import { JSONData } from '@shared/internals/transports/json-types';
 import { Logger } from 'src/logging/logger';
 import { TransportFailure } from '../transported-data/transport-failures';
 import { UnparsedRequestHeaders } from './http-types';

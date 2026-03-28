@@ -5,9 +5,9 @@ import { mainApiReducer } from '../main-api-reducer';
 import { LoginResponse, MainApiSessionData } from './main-api-session-types';
 import { useMainJSONApi } from '../use-main-json-api';
 import { TransportedDataStatus } from 'src/transported-data/transported-data-types';
-import { LoginRequestDTO } from '@app/shared/auth/auth.dto';
+import { LoginRequestDTO } from '@shared/auth/auth.dto';
 import { MAIN_API_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY } from './main-api-session-constants';
-import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
+import { ToIndexedType } from '@shared/internals/transports/dto-types';
 
 class MainApiSession {
   constructor(

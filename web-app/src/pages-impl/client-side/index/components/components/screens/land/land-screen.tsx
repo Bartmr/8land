@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
+import { MainApiSessionData } from 'src/main-api/session/main-api-session-types';
 import { runLandGame } from './land-game';
 import { globalHistory } from '@reach/router';
 import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
-import { throwError } from '@app/shared/internals/utils/throw-error';
+import { throwError } from '@shared/internals/utils/throw-error';
 import { AppService } from '../app/app-screen';
-import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
+import { ResumeLandNavigationDTO } from '@shared/land/in-game/resume/resume-land-navigation.dto';
 import { useLandsAPI } from 'src/lands/lands-api';
 import { useTrainAPI } from 'src/train/train.api';
 import { navigate } from 'gatsby';

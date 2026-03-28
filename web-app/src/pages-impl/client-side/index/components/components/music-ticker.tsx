@@ -1,4 +1,4 @@
-import { throwError } from '@app/shared/internals/utils/throw-error';
+import { throwError } from '@shared/internals/utils/throw-error';
 import { useEffect, useState } from 'react';
 import { LinkAnchor } from 'src/ui/link-anchor';
 import { v4 } from 'uuid';

@@ -1,6 +1,6 @@
-import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
+import { ResumeLandNavigationDTO } from '@shared/land/in-game/resume/resume-land-navigation.dto';
 import { useRef, useState } from 'react';
-import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
+import { MainApiSessionData } from 'src/main-api/session/main-api-session-types';
 import { MusicService } from './music-ticker';
 import { AppScreen, AppService } from './screens/app/app-screen';
 import {

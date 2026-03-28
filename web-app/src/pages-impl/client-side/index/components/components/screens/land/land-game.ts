@@ -1,19 +1,19 @@
 import * as Phaser from 'phaser';
-import { MainApiSessionData } from 'src/logic/app-internals/apis/main/session/main-api-session-types';
+import { MainApiSessionData } from 'src/main-api/session/main-api-session-types';
 import { EnvironmentVariables } from 'src/environment-variables';
 import { getLandSceneKey } from './keys';
 import { LandScene } from './land-scene';
 import { LandSceneArguments } from './land-scene.types';
-import { throwError } from '@app/shared/internals/utils/throw-error';
+import { throwError } from '@shared/internals/utils/throw-error';
 import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
-import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
+import { ResumeLandNavigationDTO } from '@shared/land/in-game/resume/resume-land-navigation.dto';
 import {
   DynamicBlockType,
   StaticBlockType,
-} from '@app/shared/blocks/create/create-block.enums';
+} from '@shared/blocks/create/create-block.enums';
 import { LandsAPI } from 'src/lands/lands-api';
 import { TrainAPI } from 'src/train/train.api';
 

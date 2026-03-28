@@ -1,4 +1,4 @@
-import { PROJECT_SLOGAN, TWITTER_URL } from '@app/shared/project-details';
+import { PROJECT_SLOGAN, TWITTER_URL } from '@shared/project-details';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layout } from 'src/pages-impl/layout/layout';

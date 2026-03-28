@@ -1,11 +1,11 @@
 import {
   MainJSONApi,
   useMainJSONApi,
-} from '../app-internals/apis/main/use-main-json-api';
-import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
-import { JSONData } from '../app-internals/transports/json-types';
-import { CreateBlockRequestDTO } from '@app/shared/blocks/create/create-block.dto';
-import { DynamicBlockType } from '@app/shared/blocks/block.enums';
+} from '../main-api/use-main-json-api';
+import { ToIndexedType } from '@shared/internals/transports/dto-types';
+import { JSONData } from '../transports/json-types';
+import { CreateBlockRequestDTO } from '@shared/blocks/create/create-block.dto';
+import { DynamicBlockType } from '@shared/blocks/block.enums';
 
 export class BlocksAPI {
   constructor(private api: MainJSONApi) {}

@@ -1,8 +1,8 @@
 import {
   MainJSONApi,
   useMainJSONApi,
-} from '../app-internals/apis/main/use-main-json-api';
-import { JSONData } from '../app-internals/transports/json-types';
+} from '../main-api/use-main-json-api';
+import { JSONData } from '../transports/json-types';
 
 export class AuthAPI {
   constructor(private api: MainJSONApi) {}

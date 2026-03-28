@@ -1,24 +1,24 @@
-import { ToIndexedType } from '@app/shared/internals/transports/dto-types';
-import { CreateLandRequestDTO } from '@app/shared/land/create/create-land.dto';
-import { EditLandBodyDTO } from '@app/shared/land/edit/edit-land.dto';
-import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
+import { ToIndexedType } from '@shared/internals/transports/dto-types';
+import { CreateLandRequestDTO } from '@shared/land/create/create-land.dto';
+import { EditLandBodyDTO } from '@shared/land/edit/edit-land.dto';
+import { GetLandDTO } from '@shared/land/get/get-land.dto';
 import {
   NavigateToLandQueryDTO,
   NavigateToLandDTO,
-} from '@app/shared/land/in-game/navigate/navigate-to-land.dto';
-import { ResumeLandNavigationDTO } from '@app/shared/land/in-game/resume/resume-land-navigation.dto';
+} from '@shared/land/in-game/navigate/navigate-to-land.dto';
+import { ResumeLandNavigationDTO } from '@shared/land/in-game/resume/resume-land-navigation.dto';
 import {
   IndexLandsDTO,
   IndexLandsQueryDTO,
-} from '@app/shared/land/index/index-lands.dto';
-import { GetLandsToClaimDTO } from '@app/shared/land/lands-to-claim/lands-to-claim.dto';
+} from '@shared/land/index/index-lands.dto';
+import { GetLandsToClaimDTO } from '@shared/land/lands-to-claim/lands-to-claim.dto';
 import {
   MainJSONApi,
   useMainJSONApi,
-} from '../app-internals/apis/main/use-main-json-api';
-import { Logger } from '../app-internals/logging/logger';
-import { JSONData } from '../app-internals/transports/json-types';
-import { TransportFailure } from '../app-internals/transports/transported-data/transport-failures';
+} from '../main-api/use-main-json-api';
+import { Logger } from '../logging/logger';
+import { JSONData } from '../transports/json-types';
+import { TransportFailure } from '../transports/transported-data/transport-failures';
 
 export class LandsAPI {
   constructor(private api: MainJSONApi) {}

@@ -1,6 +1,6 @@
-import { DynamicBlockType } from '@app/shared/blocks/create/create-block.enums';
-import { CreateBlockRequestSchema } from '@app/shared/blocks/create/create-block.schemas';
-import { GetLandDTO } from '@app/shared/land/get/get-land.dto';
+import { DynamicBlockType } from '@shared/blocks/create/create-block.enums';
+import { CreateBlockRequestSchema } from '@shared/blocks/create/create-block.schemas';
+import { GetLandDTO } from '@shared/land/get/get-land.dto';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';

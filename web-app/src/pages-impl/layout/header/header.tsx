@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import * as styles from './header.module.scss';
 import { LinkAnchor } from 'src/ui/link-anchor';
-import { PROJECT_NAME } from '@app/shared/project-details';
+import { PROJECT_NAME } from '@shared/project-details';
 import { faBars, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -11,7 +11,7 @@ import {
 } from 'src/ui/transported-data-gate';
 import { LANDS_ROUTE } from 'src/pages-impl/client-side/lands/lands-routes';
 import { useStoreSelector } from 'src/store/use-store-selector';
-import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
+import { mainApiReducer } from 'src/main-api/main-api-reducer';
 import { USER_ROUTE } from 'src/pages-impl/client-side/user/user-routes';
 import { INDEX_ROUTE } from 'src/pages-impl/index-template/index-routes';
 import { LOGIN_ROUTE } from 'src/pages-impl/client-side/login/login-routes';

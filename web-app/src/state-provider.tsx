@@ -5,10 +5,10 @@ import {
   createStoreManager,
   StoreManagerProvider,
 } from 'src/store/store-manager';
-import { useMainApiSession } from 'src/logic/app-internals/apis/main/session/use-main-api-session';
+import { useMainApiSession } from 'src/main-api/session/use-main-api-session';
 import { useStoreSelector } from 'src/store/use-store-selector';
 import { TransportedDataStatus } from 'src/transported-data/transported-data-types';
-import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
+import { mainApiReducer } from 'src/main-api/main-api-reducer';
 import { RUNNING_IN_CLIENT } from 'src/runtime';
 import { useStoreDispatch } from 'src/store/use-store-dispatch';
 import { navigate } from 'gatsby';

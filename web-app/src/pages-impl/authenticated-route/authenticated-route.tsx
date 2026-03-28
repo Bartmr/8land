@@ -8,9 +8,9 @@ import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { Redirect } from '../redirect/redirect';
 import { LOGIN_ROUTE } from 'src/pages-impl/client-side/login/login-routes';
 import { CLIENT_SIDE_INDEX_ROUTE } from 'src/pages-impl/client-side/index/index-routes';
-import { mainApiReducer } from 'src/logic/app-internals/apis/main/main-api-reducer';
+import { mainApiReducer } from 'src/main-api/main-api-reducer';
 import { RouteComponentProps } from '@reach/router';
-import { RequiredFields } from '@app/shared/internals/utils/types/requirement-types';
+import { RequiredFields } from '@shared/internals/utils/types/requirement-types';
 import { getCurrentLocalHref } from 'src/navigation/get-current-local-href';
 import { useLocation } from '@reach/router';
 

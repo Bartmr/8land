@@ -1,4 +1,4 @@
-import { CONTACT_CTA_PRESENT_CONTINUOUS } from '@app/shared/project-details';
+import { CONTACT_CTA_PRESENT_CONTINUOUS } from '@shared/project-details';
 import { Layout } from 'src/pages-impl/layout/layout';
 import { TERMS_OF_USE_ROUTE } from './terms-of-use-routes';
 

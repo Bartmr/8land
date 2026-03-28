@@ -1,4 +1,4 @@
-import { throwError } from '@app/shared/internals/utils/throw-error';
+import { throwError } from '@shared/internals/utils/throw-error';
 import { ValidationResult } from 'not-me/lib/schemas/schema';
 import { string } from 'not-me/lib/schemas/string/string-schema';
 import { Fragment, useEffect, useState } from 'react';

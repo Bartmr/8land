@@ -1,5 +1,5 @@
-import { uuid } from '@app/shared/internals/validation/schemas/uuid.schema';
-import { GetTerritoryDTO } from '@app/shared/territories/get/get-territory.dto';
+import { uuid } from '@shared/internals/validation/schemas/uuid.schema';
+import { GetTerritoryDTO } from '@shared/territories/get/get-territory.dto';
 import { RouteComponentProps, useParams } from '@reach/router';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { useEffect, useState } from 'react';

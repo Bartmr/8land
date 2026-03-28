@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return */
-import { throwError } from '@app/shared/internals/utils/throw-error';
+import { throwError } from '@shared/internals/utils/throw-error';
 import { AnyErrorMessagesTree } from 'not-me/lib/error-messages/error-messages-tree';
 import { InferType, Schema } from 'not-me/lib/schemas/schema';
 import { FieldError, FieldErrors, ResolverResult } from 'react-hook-form';
