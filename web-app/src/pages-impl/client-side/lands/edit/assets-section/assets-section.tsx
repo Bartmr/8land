@@ -4,10 +4,10 @@ import {
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
-import { TiledJSONFieldState } from './components/tiled-json-form-field';
-import { TilesetImageFieldState } from './components/tileset-image-form-field';
-import { TiledJSONField } from './components/tiled-json-form-field';
-import { TilesetImageFormField } from './components/tileset-image-form-field';
+import { TiledJSONFieldState } from './tiled-json-form-field';
+import { TilesetImageFieldState } from './tileset-image-form-field';
+import { TiledJSONField } from './tiled-json-form-field';
+import { TilesetImageFormField } from './tileset-image-form-field';
 import { GetLandDTO } from '@shared/land/get/get-land.dto';
 import { LinkAnchor } from 'src/ui/link-anchor';
 import { useLandsAPI } from 'src/lands/lands-api';

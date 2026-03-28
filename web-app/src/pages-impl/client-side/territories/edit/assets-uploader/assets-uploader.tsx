@@ -10,8 +10,8 @@ import {
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
 import { useTerritoriesAPI } from 'src/territories/territories-api';
-import { MapFormField } from './components/map-form-field';
-import { TilesetFormField } from './components/tileset-form-field';
+import { MapFormField } from './map-form-field';
+import { TilesetFormField } from './tileset-form-field';
 
 export function AssetsUploader(props: {
   territory: GetTerritoryDTO;

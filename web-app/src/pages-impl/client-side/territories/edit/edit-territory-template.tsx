@@ -12,7 +12,7 @@ import {
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
 import { useTerritoriesAPI } from 'src/territories/territories-api';
-import { AssetsUploader } from './components/assets-uploader/assets-uploader';
+import { AssetsUploader } from './assets-uploader/assets-uploader';
 import { EDIT_TERRITORY_ROUTE } from './edit-territory-routes';
 
 function EditTerritoryWithTerritory(props: {

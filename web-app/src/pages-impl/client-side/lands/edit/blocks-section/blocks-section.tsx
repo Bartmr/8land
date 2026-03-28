@@ -9,7 +9,7 @@ import {
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
 import { useBlocksAPI } from 'src/blocks/blocks-api';
-import { AddBlockSection } from './components/add-block-section';
+import { AddBlockSection } from './add-block-section';
 
 export function BlocksSection(props: {
   land: GetLandDTO;

@@ -1,7 +1,7 @@
 import { Layout } from 'src/pages-impl/layout/layout';
 import { EDIT_LAND_ROUTE } from './edit-land-routes';
 import { RouteComponentProps } from '@reach/router';
-import { AssetsSection } from './components/assets-section/assets-section';
+import { AssetsSection } from './assets-section/assets-section';
 import { useEffect, useState } from 'react';
 import {
   TransportedData,
@@ -14,8 +14,8 @@ import { object } from 'not-me/lib/schemas/object/object-schema';
 import { uuid } from '@shared/internals/validation/schemas/uuid.schema';
 import { useLandsAPI } from 'src/lands/lands-api';
 import { Toast } from 'react-bootstrap';
-import { MainSection } from './components/main-section/main-section';
-import { BlocksSection } from './components/blocks-section/blocks-section';
+import { MainSection } from './main-section/main-section';
+import { BlocksSection } from './blocks-section/blocks-section';
 // import { TerritoriesSection } from './components/territories-section/territories-section';
 import { TransportFailure } from 'src/transported-data/transport-failures';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
