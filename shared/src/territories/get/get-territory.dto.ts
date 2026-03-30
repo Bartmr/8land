@@ -1,6 +1,3 @@
-import { ValidationSchema } from '../../validation/validation-schema.decorator';
-import { GetTerritoryParametersSchema } from './get-territory.schemas';
-
 class GetTerritoryInLandDTO {
   name!: string;
 }
@@ -33,7 +30,6 @@ export class GetTerritoryDTO {
   thumbnailUrl!: string;
 }
 
-@ValidationSchema(GetTerritoryParametersSchema)
 export class GetTerritoryParametersDTO {
   id!: string;
 }

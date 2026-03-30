@@ -1,6 +1,3 @@
-import { ValidationSchema } from '../../validation/validation-schema.decorator';
-import { IndexLandsQuerySchema } from './index-lands.schemas';
-
 class LandFromIndex {
   id!: string;
   name!: string;
@@ -14,7 +11,6 @@ export class IndexLandsDTO {
   lands!: LandFromIndex[];
 }
 
-@ValidationSchema(IndexLandsQuerySchema)
 export class IndexLandsQueryDTO {
   skip!: number;
 }

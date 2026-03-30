@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { uuid } from '../../validation/schemas/uuid.schema';
 import { CreateLandRequestSchemaObj } from '../create/create-land.schemas';
 import { EditLandBodyDTO, EditLandParametersDTO } from './edit-land.dto';
 
@@ -16,7 +15,7 @@ export const SoundcloudSongApiUrlSchema = z.string().optional().refine((s) => {
 }, 'Invalid Soundcloud API song url');
 
 export const EditLandParametersSchema: z.ZodType<EditLandParametersDTO> = z.object({
-  landId: uuid(),
+  landId: z.uuid(),
 });
 
 export const EditLandBodySchema: z.ZodType<EditLandBodyDTO> = z.object({

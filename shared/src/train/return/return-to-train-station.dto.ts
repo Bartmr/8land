@@ -1,8 +1,5 @@
-import { ValidationSchema } from '../../validation/validation-schema.decorator';
 import { NavigateToLandDTO } from '../../land/in-game/navigate/navigate-to-land.dto';
-import { ReturnToTrainStationQuerySchema } from './return-to-train-station.schemas';
 
-@ValidationSchema(ReturnToTrainStationQuerySchema)
 export class ReturnToTrainStationQueryDTO {
   boardedOnTrainStation?: string;
 }

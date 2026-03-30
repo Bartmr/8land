@@ -1,7 +1,3 @@
-import { ValidationSchema } from '../validation/validation-schema.decorator';
-import { loginRequestSchema } from './auth.schemas';
-
-@ValidationSchema(loginRequestSchema)
 export class LoginRequestDTO {
   firebaseIdToken!: string;
 }

@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import { uuid } from '../../validation/schemas/uuid.schema';
 import { StaticBlockType } from '../../blocks/create/create-block.enums';
-import { positiveInteger } from '../../validation/schemas/positive-integer';
+
+const positiveInt = z.number().int('Must be an integer').min(0, 'Must be a positive number');
 
 export const UploadLandAssetsParametersSchema = z.object({
-  landId: uuid(),
+  landId: z.uuid(),
 });
 
 export const createTiledJSONSchema = ({
@@ -40,23 +40,23 @@ export const createTiledJSONSchema = ({
       layers: z
         .array(
           z.object({
-            data: z.array(positiveInteger()),
-            height: positiveInteger(),
-            id: positiveInteger(),
+            data: z.array(positiveInt),
+            height: positiveInt,
+            id: positiveInt,
             name: z
               .string()
               .refine((s) => s.trim().length > 0, 'Layer must have a name'),
             opacity: z.literal(1, 'All layers must have full opacity'),
             type: z.literal('tilelayer', 'Only tile layers are allowed'),
             visible: z.literal(true, 'All layers must be visible').optional(),
-            width: positiveInteger(),
+            width: positiveInt,
             x: z.literal(0, 'Must be set to 0'),
             y: z.literal(0, 'Must be set to 0'),
           }),
         )
         .min(1, 'You must have at least one layer'),
-      nextlayerid: positiveInteger(),
-      nextobjectid: positiveInteger(),
+      nextlayerid: positiveInt,
+      nextobjectid: positiveInt,
       orientation: z.literal('orthogonal', "must be set to 'orthogonal'"),
       renderorder: z.literal('right-down', "must be set to 'right-down'"),
       tiledversion: z.string(),
@@ -64,25 +64,25 @@ export const createTiledJSONSchema = ({
       tilesets: z
         .array(
           z.object({
-            columns: positiveInteger(),
-            firstgid: positiveInteger(),
+            columns: positiveInt,
+            firstgid: positiveInt,
             image: z
               .string()
               .transform((s) => s.trim())
               .refine((s) => s.length > 0, 'Tileset must have an image'),
-            imageheight: positiveInteger(),
-            imagewidth: positiveInteger(),
+            imageheight: positiveInt,
+            imagewidth: positiveInt,
             margin: z.literal(0, 'Must be set to 0'),
             name: z
               .string()
               .refine((s) => s.trim().length > 0, 'Tileset must have a name'),
             spacing: z.literal(0, 'Must be set to 0'),
-            tilecount: positiveInteger(),
+            tilecount: positiveInt,
             tileheight: z.literal(16, 'Must be set to 16'),
             tilewidth: z.literal(16, 'Must be set to 16'),
             tiles: z.array(
               z.object({
-                id: positiveInteger(),
+                id: positiveInt,
                 properties: z
                   .array(
                     z.union([
@@ -148,8 +148,8 @@ export const createTiledJSONSchema = ({
                 animation: z
                   .array(
                     z.object({
-                      duration: positiveInteger(),
-                      tileid: positiveInteger(),
+                      duration: positiveInt,
+                      tileid: positiveInt,
                     }),
                   )
                   .optional(),

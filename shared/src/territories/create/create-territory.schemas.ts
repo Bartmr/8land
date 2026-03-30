@@ -1,14 +1,14 @@
 import { z } from 'zod';
-import { positiveInteger } from '../../validation/schemas/positive-integer';
-import { uuid } from '../../validation/schemas/uuid.schema';
+
+const positiveInt = z.number().int('Must be an integer').min(0, 'Must be a positive number');
 
 export const CreateTerritoryRequestJSONSchemaObj = {
   data: z
     .object({
-      startX: positiveInteger(),
-      startY: positiveInteger(),
-      endX: positiveInteger(),
-      endY: positiveInteger(),
+      startX: positiveInt,
+      startY: positiveInt,
+      endX: positiveInt,
+      endY: positiveInt,
     })
     .refine(
       (v) => v.endX > v.startX,
@@ -22,5 +22,5 @@ export const CreateTerritoryRequestJSONSchemaObj = {
 
 export const CreateTerritoryRequestJSONSchema = z.object({
   ...CreateTerritoryRequestJSONSchemaObj,
-  landId: uuid(),
+  landId: z.uuid(),
 });

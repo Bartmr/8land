@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { uuid } from '../../validation/schemas/uuid.schema';
 import {
   UpdateTerritoryRaribleMetadataParametersDTO,
   UpdateTerritoryRaribleMetadataRequestDTO,
@@ -7,7 +6,7 @@ import {
 
 export const UpdateTerritoryRaribleMetadataParametersSchema: z.ZodType<UpdateTerritoryRaribleMetadataParametersDTO> =
   z.object({
-    id: uuid(),
+    id: z.uuid(),
   });
 
 export const UpdateTerritoryRaribleMetadataRequestSchema: z.ZodType<UpdateTerritoryRaribleMetadataRequestDTO> =

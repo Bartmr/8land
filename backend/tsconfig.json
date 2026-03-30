@@ -6,9 +6,6 @@
     "development",
     "../shared",
   ],
-  "exclude": [
-    "../shared/node_modules"
-  ],
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {

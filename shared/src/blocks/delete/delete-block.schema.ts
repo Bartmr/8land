@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { uuid } from '../../validation/schemas/uuid.schema';
 import { DynamicBlockType } from '../block.enums';
 import { DeleteBlockURLParameters } from './delete-block.dto';
 
@@ -9,5 +8,5 @@ export const DeleteBlockURLParamsSchema: z.ZodType<DeleteBlockURLParameters> =
       z.literal(DynamicBlockType.Door),
       z.literal(DynamicBlockType.App),
     ]),
-    blockId: uuid(),
+    blockId: z.uuid(),
   });

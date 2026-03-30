@@ -1,7 +1,3 @@
-import { ValidationSchema } from '../../../../validation/validation-schema.decorator';
-import { GetTrainDestinationQuerySchema } from './get-train-destinations.schemas';
-
-@ValidationSchema(GetTrainDestinationQuerySchema)
 export class GetTrainDestinationQueryDTO {
   skip!: number;
   name?: string;

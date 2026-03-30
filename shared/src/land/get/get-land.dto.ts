@@ -1,6 +1,3 @@
-import { ValidationSchema } from '../../validation/validation-schema.decorator';
-import { GetLandParametersSchema } from './get-land-schemas';
-
 class GetLandDoorReferencingDTO {
   id!: string;
   fromLandId!: string;
@@ -51,7 +48,6 @@ export class GetLandDTO {
   isStartLand!: boolean;
 }
 
-@ValidationSchema(GetLandParametersSchema)
 export class GetLandParametersDTO {
   id!: string;
 }

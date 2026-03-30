@@ -1,7 +1,3 @@
-import { ValidationSchema } from '../../validation/validation-schema.decorator';
-import { CreateLandRequestSchema } from './create-land.schemas';
-
-@ValidationSchema(CreateLandRequestSchema)
 export class CreateLandRequestDTO {
   name!: string;
 }

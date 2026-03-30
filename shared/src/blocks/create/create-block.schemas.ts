@@ -1,10 +1,9 @@
 import { z } from 'zod';
-import { uuid } from '../../validation/schemas/uuid.schema';
 import { CreateBlockRequestDTO } from './create-block.dto';
 import { DynamicBlockType } from './create-block.enums';
 
 export const CreateBlockRequestSchema = z.object({
-  landId: uuid(),
+  landId: z.uuid(),
   data: z
     .discriminatedUnion('type', [
       z.object({
