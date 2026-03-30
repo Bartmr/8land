@@ -1,7 +1,7 @@
 import {
   DynamicBlockType,
   StaticBlockType,
-} from '@shared/blocks/create/create-block.enums';
+} from '@shared/src/blocks/create/create-block.enums';
 import { EnvironmentVariables } from 'src/environment-variables';
 import { TransportFailure } from 'src/transported-data/transport-failures';
 import { GridPhysics } from './grid-physics';
@@ -22,7 +22,7 @@ import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
 import { LandsAPI } from 'src/main-api/routes/lands/lands-api';
-import { NavigateToLandDTO } from '@shared/land/in-game/navigate/navigate-to-land.dto';
+import { NavigateToLandDTO } from '@shared/src/land/in-game/navigate/navigate-to-land.dto';
 import { TrainAPI } from 'src/main-api/routes/train/train.api';
 import { throwError } from 'src/throw-error';
 import { Gamepad } from '../../gamepad';

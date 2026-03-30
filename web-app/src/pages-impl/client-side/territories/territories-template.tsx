@@ -1,4 +1,4 @@
-import { throwError } from '@shared/internals/utils/throw-error';
+import { throwError } from '@shared/src/internals/utils/throw-error';
 import { RouteComponentProps } from '@reach/router';
 import { useState } from 'react';
 import { Layout } from 'src/pages-impl/layout/layout';

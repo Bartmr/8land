@@ -2,7 +2,7 @@
   "include": ["src", "../shared/src"],
   "compilerOptions": {
     "paths": {
-      "@shared*": ["../shared/src*"]
+      "@shared/*": ["../shared/*"]
     },
     "noEmit": true,
     "skipLibCheck": true,

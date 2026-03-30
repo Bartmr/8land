@@ -9,7 +9,7 @@ import { Keypad } from './keypad';
 import { MusicService, MusicTicker } from './music-ticker';
 import * as styles from './game-frame.module.scss';
 import { ScreenSwitcher } from './screen-switcher';
-import { ResumeLandNavigationDTO } from '@shared/land/in-game/resume/resume-land-navigation.dto';
+import { ResumeLandNavigationDTO } from '@shared/src/land/in-game/resume/resume-land-navigation.dto';
 import { useGamepad } from './gamepad';
 
 export function GameFrame(props: {

@@ -1,5 +1,5 @@
-import { DynamicBlockType } from '@shared/blocks/block.enums';
-import { GetLandDTO } from '@shared/land/get/get-land.dto';
+import { DynamicBlockType } from '@shared/src/blocks/block.enums';
+import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';

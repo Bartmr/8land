@@ -1,5 +1,5 @@
-import { createTiledJSONSchema } from '@shared/land/upload-assets/upload-land-assets.schemas';
-import { AnyErrorMessagesTree } from 'not-me/lib/error-messages/error-messages-tree';
+import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
+import { z } from 'zod';
 import { useEffect, useState } from 'react';
 import { trackCustomEvent } from 'gatsby-plugin-google-analytics';
 
@@ -11,7 +11,7 @@ const schema = createTiledJSONSchema({
 export type TiledJSONFieldState =
   | undefined
   | { error: 'incompatible-file-format' | 'file-size-exceeded' }
-  | { error: 'invalid-json'; messageTree: AnyErrorMessagesTree }
+  | { error: 'invalid-json'; messageTree: z.ZodError }
   | {
       error: false;
       value: File;
@@ -42,13 +42,13 @@ export function TiledJSONField(props: {
 
         const parsedFile = JSON.parse(text) as unknown;
 
-        const validationResult = schema.validate(parsedFile);
+        const validationResult = schema.safeParse(parsedFile);
 
-        if (validationResult.errors) {
+        if (!validationResult.success) {
           trackCustomEvent({
             category: 'land:tiled-json-form-field',
             action: 'invalid-json',
-            label: JSON.stringify(validationResult.messagesTree).substring(
+            label: JSON.stringify(validationResult.error.format()).substring(
               0,
               500,
             ),
@@ -56,7 +56,7 @@ export function TiledJSONField(props: {
 
           props.onChange({
             error: 'invalid-json',
-            messageTree: validationResult.messagesTree,
+            messageTree: validationResult.error,
           });
         } else {
           props.onChange({ error: false, value: file });
@@ -99,7 +99,7 @@ export function TiledJSONField(props: {
           </div>
           <div className="card">
             <pre className="card-body text-danger">
-              {JSON.stringify(props.state.messageTree, undefined, 2)}
+              {JSON.stringify(props.state.messageTree.format(), undefined, 2)}
             </pre>
           </div>
         </>

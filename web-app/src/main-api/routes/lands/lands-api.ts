@@ -1,10 +1,10 @@
-import { CreateLandRequestDTO } from '@shared/land/create/create-land.dto';
-import { EditLandBodyDTO } from '@shared/land/edit/edit-land.dto';
-import { GetLandDTO } from '@shared/land/get/get-land.dto';
-import { NavigateToLandDTO } from '@shared/land/in-game/navigate/navigate-to-land.dto';
-import { ResumeLandNavigationDTO } from '@shared/land/in-game/resume/resume-land-navigation.dto';
-import { IndexLandsDTO } from '@shared/land/index/index-lands.dto';
-import { GetLandsToClaimDTO } from '@shared/land/lands-to-claim/lands-to-claim.dto';
+import { CreateLandRequestDTO } from '@shared/src/land/create/create-land.dto';
+import { EditLandBodyDTO } from '@shared/src/land/edit/edit-land.dto';
+import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
+import { NavigateToLandDTO } from '@shared/src/land/in-game/navigate/navigate-to-land.dto';
+import { ResumeLandNavigationDTO } from '@shared/src/land/in-game/resume/resume-land-navigation.dto';
+import { IndexLandsDTO } from '@shared/src/land/index/index-lands.dto';
+import { GetLandsToClaimDTO } from '@shared/src/land/lands-to-claim/lands-to-claim.dto';
 import {
   MainJSONApi,
   useMainJSONApi,

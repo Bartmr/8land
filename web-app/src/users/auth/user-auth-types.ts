@@ -1,4 +1,4 @@
-import { AuthSessionDTO, LoginResponseDTO } from '@shared/auth/auth.dto';
+import { AuthSessionDTO, LoginResponseDTO } from '@shared/src/auth/auth.dto';
 
 export type UserAuthSessionData = AuthSessionDTO;
 export type LoginResponse = LoginResponseDTO;

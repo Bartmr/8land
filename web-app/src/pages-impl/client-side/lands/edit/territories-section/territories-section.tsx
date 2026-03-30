@@ -1,5 +1,5 @@
-import { GetLandDTO } from '@shared/land/get/get-land.dto';
-import { CreateTerritoryRequestJSONSchemaObj } from '@shared/territories/create/create-territory.schemas';
+import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
+import { CreateTerritoryRequestJSONSchemaObj } from '@shared/src/territories/create/create-territory.schemas';
 import { z } from 'zod';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -16,7 +16,7 @@ import {
 import { useTerritoriesAPI } from 'src/main-api/routes/territories/territories-api';
 import { TerritoryPreview } from './territory-preview';
 import { useMintTerritory } from './use-mint-territory';
-import { throwError } from '@shared/throw-error';
+import { throwError } from '@shared/src/throw-error';
 
 const schema = z.object({
   ...CreateTerritoryRequestJSONSchemaObj,

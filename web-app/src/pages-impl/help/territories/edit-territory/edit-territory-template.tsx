@@ -1,4 +1,4 @@
-import { TERRITORY_TILESET_SIZE_LIMIT } from '@shared/territories/upload-assets/upload-territory-assets.constants';
+import { TERRITORY_TILESET_SIZE_LIMIT } from '@shared/src/territories/upload-assets/upload-territory-assets.constants';
 import { Layout } from 'src/pages-impl/layout/layout';
 import { LinkAnchor } from 'src/ui/link-anchor';
 import { TERRITORIES_ROUTE } from '../../../client-side/territories/territories-routes';

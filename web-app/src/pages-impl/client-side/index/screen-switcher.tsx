@@ -1,4 +1,4 @@
-import { ResumeLandNavigationDTO } from '@shared/land/in-game/resume/resume-land-navigation.dto';
+import { ResumeLandNavigationDTO } from '@shared/src/land/in-game/resume/resume-land-navigation.dto';
 import { useRef, useState } from 'react';
 import { UserAuthSessionData } from 'src/users/auth/user-auth-types';
 import { MusicService } from './music-ticker';

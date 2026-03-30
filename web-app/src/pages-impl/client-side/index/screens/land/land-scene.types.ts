@@ -1,8 +1,8 @@
 import {
   DynamicBlockType,
   StaticBlockType,
-} from '@shared/blocks/create/create-block.enums';
-import { GetLandDTO } from '@shared/land/get/get-land.dto';
+} from '@shared/src/blocks/create/create-block.enums';
+import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
 import { UserAuthSessionData } from 'src/users/auth/user-auth-types';
 
 export type LandSceneArguments = {

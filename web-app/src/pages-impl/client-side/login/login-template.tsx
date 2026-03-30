@@ -9,7 +9,7 @@ import {
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
 import { FirebaseAuth } from 'src/firebase/firebase-auth';
-import { throwError } from '@shared/internals/utils/throw-error';
+import { throwError } from '@shared/src/internals/utils/throw-error';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { useUserAuth } from 'src/users/auth/use-user-auth';
 import { LinkAnchor } from 'src/ui/link-anchor';

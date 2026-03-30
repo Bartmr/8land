@@ -7,11 +7,10 @@ import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
-import { GetLandDTO } from '@shared/land/get/get-land.dto';
+import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { useParams } from '@reach/router';
-import { object } from 'not-me/lib/schemas/object/object-schema';
-import { uuid } from '@shared/internals/validation/schemas/uuid.schema';
+import { uuid, z } from 'zod';
 import { useLandsAPI } from 'src/main-api/routes/lands/lands-api';
 import { Toast } from 'react-bootstrap';
 import { MainSection } from './main-section/main-section';
@@ -24,8 +23,8 @@ import { navigate } from 'gatsby';
 import { LANDS_ROUTE } from '../lands-routes';
 // import { mainApiReducer } from 'src/main-api/main-api-reducer';
 // import { useStoreSelector } from 'src/store/use-store-selector';
-// import { throwError } from '@shared/internals/utils/throw-error';
-// import { Role } from '@shared/auth/auth.enums';
+// import { throwError } from '@shared/src/internals/utils/throw-error';
+// import { Role } from '@shared/src/auth/auth.enums';
 
 export function EditLandTemplateWithRouteProps(props: { id: string }) {
   const api = useLandsAPI();
@@ -175,23 +174,21 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
 export function EditLandTemplate(_props: RouteComponentProps) {
   const routeParams = useParams() as unknown;
 
-  const validationResult = object({
-    id: uuid().required(),
-  })
-    .required()
-    .validate(routeParams);
+  const validationResult = z.object({
+    id: uuid(),
+  }).safeParse(routeParams);
 
   return (
     <Layout title={EDIT_LAND_ROUTE.label}>
       {() => {
-        return validationResult.errors ? (
+        return !validationResult.success ? (
           <TransportedDataGate
             dataWrapper={{ status: TransportFailure.NotFound }}
           >
             {() => null}
           </TransportedDataGate>
         ) : (
-          <EditLandTemplateWithRouteProps id={validationResult.value.id} />
+          <EditLandTemplateWithRouteProps id={validationResult.data.id} />
         );
       }}
     </Layout>

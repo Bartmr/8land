@@ -7,7 +7,7 @@ import {
   DynamicBlockType,
   STATIC_BLOCK_TYPE_VALUES,
   StaticBlockType,
-} from '@shared/blocks/create/create-block.enums';
+} from '@shared/src/blocks/create/create-block.enums';
 import { Gamepad } from '../../gamepad';
 import { throwError } from 'src/throw-error';
 

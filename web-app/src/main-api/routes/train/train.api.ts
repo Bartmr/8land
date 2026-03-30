@@ -1,9 +1,9 @@
 import {
   GetTrainDestinationQueryDTO,
   GetTrainDestinationsDTO,
-} from '@shared/train/apps/tickets/get-destinations/get-train-destinations.dto';
-import { BoardTrainDTO } from '@shared/train/board/board-train.dto';
-import { ReturnToTrainStationDTO } from '@shared/train/return/return-to-train-station.dto';
+} from '@shared/src/train/apps/tickets/get-destinations/get-train-destinations.dto';
+import { BoardTrainDTO } from '@shared/src/train/board/board-train.dto';
+import { ReturnToTrainStationDTO } from '@shared/src/train/return/return-to-train-station.dto';
 import {
   mainApiReducer,
   MainApiStoreState,

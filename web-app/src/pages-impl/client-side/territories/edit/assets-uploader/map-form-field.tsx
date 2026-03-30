@@ -1,7 +1,7 @@
-import { createTiledJSONSchema } from '@shared/land/upload-assets/upload-land-assets.schemas';
-import { TERRITORY_MAP_SIZE_LIMIT } from '@shared/territories/upload-assets/upload-territory-assets.constants';
-import { GetTerritoryDTO } from '@shared/territories/get/get-territory.dto';
-import { AnyErrorMessagesTree } from 'not-me/lib/error-messages/error-messages-tree';
+import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
+import { TERRITORY_MAP_SIZE_LIMIT } from '@shared/src/territories/upload-assets/upload-territory-assets.constants';
+import { GetTerritoryDTO } from '@shared/src/territories/get/get-territory.dto';
+import { z } from 'zod';
 import { useState } from 'react';
 import { trackCustomEvent } from 'gatsby-plugin-google-analytics';
 
@@ -18,7 +18,7 @@ export function MapFormField(props: {
       }
     | {
         error: 'invalid-json';
-        messageTree: AnyErrorMessagesTree;
+        messageTree: z.ZodError;
       }
     | {
         error: '';
@@ -61,13 +61,13 @@ export function MapFormField(props: {
               maxHeightMessage: `Your territory cannot be more than ${maxHeight} squares tall`,
             });
 
-            const validationResult = schema.validate(parsedFile);
+            const validationResult = schema.safeParse(parsedFile);
 
-            if (validationResult.errors) {
+            if (!validationResult.success) {
               trackCustomEvent({
                 category: 'territory:map-form-field',
                 action: 'invalid-json',
-                label: JSON.stringify(validationResult.messagesTree).substring(
+                label: JSON.stringify(validationResult.error.format()).substring(
                   0,
                   500,
                 ),
@@ -75,7 +75,7 @@ export function MapFormField(props: {
 
               replaceError({
                 error: 'invalid-json',
-                messageTree: validationResult.messagesTree,
+                messageTree: validationResult.error,
               });
               return;
             }
@@ -109,7 +109,7 @@ export function MapFormField(props: {
               </div>
               <div className="card">
                 <div className="card-body text-danger">
-                  <pre>{JSON.stringify(error.messageTree, undefined, 2)}</pre>
+                  <pre>{JSON.stringify(error.messageTree.format(), undefined, 2)}</pre>
                 </div>
               </div>
             </>

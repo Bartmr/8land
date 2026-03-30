@@ -1,7 +1,6 @@
-import { uuid } from '@shared/internals/validation/schemas/uuid.schema';
-import { GetTerritoryDTO } from '@shared/territories/get/get-territory.dto';
+import { GetTerritoryDTO } from '@shared/src/territories/get/get-territory.dto';
 import { RouteComponentProps, useParams } from '@reach/router';
-import { object } from 'not-me/lib/schemas/object/object-schema';
+import { uuid, z } from 'zod';
 import { useEffect, useState } from 'react';
 import { Accordion, Toast } from 'react-bootstrap';
 import { Layout } from 'src/pages-impl/layout/layout';
@@ -122,23 +121,21 @@ function EditTerritoryWithRouteProps(props: { id: string }) {
 export function EditTerritoryTemplate(_props: RouteComponentProps) {
   const routeParams = useParams() as unknown;
 
-  const validationResult = object({
-    id: uuid().required(),
-  })
-    .required()
-    .validate(routeParams);
+  const validationResult = z.object({
+    id: uuid(),
+  }).safeParse(routeParams);
 
   return (
     <Layout title={EDIT_TERRITORY_ROUTE.label}>
       {() => {
-        return validationResult.errors ? (
+        return !validationResult.success ? (
           <TransportedDataGate
             dataWrapper={{ status: TransportFailure.NotFound }}
           >
             {() => null}
           </TransportedDataGate>
         ) : (
-          <EditTerritoryWithRouteProps id={validationResult.value.id} />
+          <EditTerritoryWithRouteProps id={validationResult.data.id} />
         );
       }}
     </Layout>

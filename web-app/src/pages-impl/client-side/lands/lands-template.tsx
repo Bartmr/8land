@@ -1,4 +1,4 @@
-import { IndexLandsDTO } from '@shared/land/index/index-lands.dto';
+import { IndexLandsDTO } from '@shared/src/land/index/index-lands.dto';
 import { useEffect, useState } from 'react';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import {
@@ -14,7 +14,7 @@ import { LinkAnchor } from 'src/ui/link-anchor';
 import { EDIT_LAND_ROUTE } from './edit/edit-land-routes';
 import { useLandsAPI } from 'src/main-api/routes/lands/lands-api';
 import { Toast } from 'react-bootstrap';
-import { GetLandsToClaimDTO } from '@shared/land/lands-to-claim/lands-to-claim.dto';
+import { GetLandsToClaimDTO } from '@shared/src/land/lands-to-claim/lands-to-claim.dto';
 import { START_LANDS_LIMIT_EXCEEDED_MESSAGE } from './edit/assets-section/assets-section.constants';
 import { BUILDING_A_LAND_ROUTE } from '../../help/lands/building-a-land/building-a-land.routes';
 import { LAND_IDEAS_ROUTE } from '../../help/lands/land-ideas/land-ideas-routes';

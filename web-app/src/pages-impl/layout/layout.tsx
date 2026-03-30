@@ -7,7 +7,7 @@ import { throwError } from 'src/throw-error';
 import { Header } from './header/header';
 import { useLocation } from '@reach/router';
 import { EnvironmentVariables } from 'src/environment-variables';
-import { PROJECT_SLOGAN } from '@shared/project-details';
+import { PROJECT_SLOGAN } from '@shared/src/project-details';
 import { LinkAnchor } from 'src/ui/link-anchor';
 import { PRIVACY_POLICY_ROUTE } from 'src/pages-impl/privacy-policy/privacy-policy-routes';
 import logo from 'src/assets/vendors/this-project/logo.svg';

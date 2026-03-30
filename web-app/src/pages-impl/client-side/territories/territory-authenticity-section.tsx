@@ -1,6 +1,4 @@
-import { throwError } from '@shared/internals/utils/throw-error';
-import { ValidationResult } from 'not-me/lib/schemas/schema';
-import { string } from 'not-me/lib/schemas/string/string-schema';
+import { z } from 'zod';
 import { Fragment, useEffect, useState } from 'react';
 import { EnvironmentVariables } from 'src/environment-variables';
 import {
@@ -32,63 +30,35 @@ export function TerritoryAuthenticitySection(props: {
   });
 
   const [validation, replaceValidation] = useState<
-    ValidationResult<string> | undefined
+    { success: true; data: string } | { success: false; error: z.ZodError } | undefined
   >();
 
   useEffect(() => {
     const prefix = `${EnvironmentVariables.RARIBLE_URL}/token/`;
 
     if (url) {
-      const res = string()
-        .required()
-        .test((s) => (s.trim().length > 0 ? null : 'Must be filled'))
-        .test((s) => {
-          return s.startsWith(prefix) ? null : 'Input is not a Rarible link';
-        })
+      const res = z.string()
+        .refine((s) => s.trim().length > 0, 'Must be filled')
+        .refine((s) => s.startsWith(prefix), 'Input is not a Rarible link')
+        .transform((s) => s.split(prefix)[1] ?? '')
+        .refine((s) => s.length > 0, 'Cannot find item parameter in Rarible link')
         .transform((s) => {
-          const splitted = s.split(prefix);
-
-          return splitted[1];
-        })
-        .test((s) => {
-          return s ? null : 'Cannot find item parameter in Rarible link';
-        })
-        .transform((s) => {
-          const splitted = (s as string).split('/');
-
+          const splitted = s.split('/');
           const withoutFurtherParameters = splitted[0];
-
           const splittedWithoutQueryParams = withoutFurtherParameters
             ? withoutFurtherParameters.split('?')
             : [];
-
-          return splittedWithoutQueryParams[0];
+          return splittedWithoutQueryParams[0] ?? '';
         })
-        .test((s) => {
-          return s ? null : 'Invalid URL ending';
-        })
-        .transform((s) => {
-          const splitted = (s as string).split(':');
-
-          return {
-            tokenContract: splitted[0],
-            tokenId: splitted[1],
-          };
-        })
-        .test((o) => {
-          return o.tokenContract
-            ? null
-            : 'Token contract address is missing from item ID';
-        })
-        .test((o) => {
-          return o.tokenId ? null : 'Token ID is missing from item ID';
-        })
-        .transform((o) => {
-          return `${o.tokenContract || throwError()}:${
-            o.tokenId || throwError()
-          }`;
-        })
-        .validate(url, { abortEarly: true });
+        .refine((s) => s.length > 0, 'Invalid URL ending')
+        .transform((s) => ({
+          tokenContract: s.split(':')[0] ?? '',
+          tokenId: s.split(':')[1] ?? '',
+        }))
+        .refine((o) => o.tokenContract.length > 0, 'Token contract address is missing from item ID')
+        .refine((o) => o.tokenId.length > 0, 'Token ID is missing from item ID')
+        .transform((o) => `${o.tokenContract}:${o.tokenId}`)
+        .safeParse(url);
 
       replaceValidation(res);
     }
@@ -103,12 +73,12 @@ export function TerritoryAuthenticitySection(props: {
         (async () => {
           replaceResult({ status: TransportedDataStatus.Loading });
 
-          if (!(validation && !validation.errors)) {
+          if (!validation?.success) {
             throw new Error();
           }
 
           const res = await api.getTerritoryByRaribleItemId({
-            raribleItemId: validation.value,
+            raribleItemId: validation.data,
           });
 
           if (res.failure) {
@@ -130,17 +100,17 @@ export function TerritoryAuthenticitySection(props: {
     >
       <div>
         <input
-          className={`form-control ${validation?.errors ? 'is-invalid' : ''}`}
+          className={`form-control ${validation?.success === false ? 'is-invalid' : ''}`}
           value={url}
           onChange={(e) => replaceUrl(e.target.value)}
           placeholder={'Rarible item URL'}
         />
         <div className="invalid-feedback">
-          {validation?.errors
-            ? (validation.messagesTree as string[]).map((c) => {
+          {validation?.success === false
+            ? validation.error.issues.map((c) => {
                 return (
-                  <Fragment key={c}>
-                    {c} <br />
+                  <Fragment key={c.message}>
+                    {c.message} <br />
                   </Fragment>
                 );
               })
@@ -153,7 +123,7 @@ export function TerritoryAuthenticitySection(props: {
           className="mt-2 btn btn-primary me-3"
           disabled={
             result.status === TransportedDataStatus.Loading ||
-            !(validation && !validation.errors)
+            !validation?.success
           }
         >
           {props.buttonLabel}

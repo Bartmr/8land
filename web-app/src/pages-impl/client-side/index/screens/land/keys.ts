@@ -1,4 +1,4 @@
-import { GetLandDTO } from '@shared/land/get/get-land.dto';
+import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
 
 export function getLandSceneKey(land: GetLandDTO) {
   return `land-scene:${land.id}:scene`;

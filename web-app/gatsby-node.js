@@ -26,7 +26,7 @@ exports.onCreateWebpackConfig = async function({
           pointing the imports root directly to the root of the project.
         */
         src: path.join(process.cwd(), `src`),
-        '@shared': path.join(process.cwd(), '../shared/src'),
+        '@shared': path.join(process.cwd(), '../shared'),
       },
     },
   };

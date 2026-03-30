@@ -1,7 +1,6 @@
-import { throwError } from '@shared/internals/utils/throw-error';
-import { GetLandDTO } from '@shared/land/get/get-land.dto';
-import { createTiledJSONSchema } from '@shared/land/upload-assets/upload-land-assets.schemas';
-import { InferType } from 'not-me/lib/schemas/schema';
+import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
+import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
+import { z } from 'zod';
 import { useEffect, useState } from 'react';
 import { TiledJSON } from 'src/pages-impl/client-side/index/screens/land/tiled.types';
 import { TILE_SIZE } from 'src/pages-impl/client-side/index/game-constants';
@@ -12,6 +11,7 @@ import {
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
 import { v4 } from 'uuid';
+import { throwError } from 'src/throw-error';
 
 export function TerritoryPreview(props: {
   land: GetLandDTO;
@@ -52,7 +52,7 @@ export function TerritoryPreview(props: {
     (async () => {
       const map = await jsonHttp.get<{
         status: 200;
-        body: InferType<ReturnType<typeof createTiledJSONSchema>>;
+        body: z.infer<ReturnType<typeof createTiledJSONSchema>>;
       }>({
         url: `${(props.land.assets || throwError()).baseUrl}/${
           (props.land.assets || throwError()).mapKey

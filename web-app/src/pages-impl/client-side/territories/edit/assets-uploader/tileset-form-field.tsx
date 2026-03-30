@@ -1,4 +1,4 @@
-import { TERRITORY_TILESET_SIZE_LIMIT } from '@shared/territories/upload-assets/upload-territory-assets.constants';
+import { TERRITORY_TILESET_SIZE_LIMIT } from '@shared/src/territories/upload-assets/upload-territory-assets.constants';
 import { useState } from 'react';
 
 export function TilesetFormField(props: {

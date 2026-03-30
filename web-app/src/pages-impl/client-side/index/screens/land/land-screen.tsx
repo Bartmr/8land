@@ -6,7 +6,7 @@ import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
-import { ResumeLandNavigationDTO } from '@shared/land/in-game/resume/resume-land-navigation.dto';
+import { ResumeLandNavigationDTO } from '@shared/src/land/in-game/resume/resume-land-navigation.dto';
 import { useLandsAPI } from 'src/main-api/routes/lands/lands-api';
 import { useTrainAPI } from 'src/main-api/routes/train/train.api';
 import { navigate } from 'gatsby';

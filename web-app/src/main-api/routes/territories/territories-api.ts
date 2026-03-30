@@ -2,10 +2,10 @@ import {
   MainJSONApi,
   useMainJSONApi,
 } from '../../use-main-json-api';
-import { GetTerritoryDTO } from '@shared/territories/get/get-territory.dto';
-import { GetTerritoryIdByRaribleItemIdDTO } from '@shared/territories/get-id-by-rarible-item-id/get-territory-id-by-rarible-item-id.dto';
-import { CreateTerritoryResponseDTO } from '@shared/territories/create/create-territory.dto';
-import { UpdateTerritoryRaribleMetadataRequestDTO } from '@shared/territories/update-rarible/update-territory-rarible-metadata.dto';
+import { GetTerritoryDTO } from '@shared/src/territories/get/get-territory.dto';
+import { GetTerritoryIdByRaribleItemIdDTO } from '@shared/src/territories/get-id-by-rarible-item-id/get-territory-id-by-rarible-item-id.dto';
+import { CreateTerritoryResponseDTO } from '@shared/src/territories/create/create-territory.dto';
+import { UpdateTerritoryRaribleMetadataRequestDTO } from '@shared/src/territories/update-rarible/update-territory-rarible-metadata.dto';
 
 export class TerritoriesAPI {
   constructor(private api: MainJSONApi) {}
