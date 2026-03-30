@@ -1,114 +1,73 @@
 /* eslint-disable node/no-process-env */
-import { throwError } from '@shared/internals/utils/throw-error';
-import { boolean } from 'not-me/lib/schemas/boolean/boolean-schema';
-import { equals } from 'not-me/lib/schemas/equals/equals-schema';
-import { object } from 'not-me/lib/schemas/object/object-schema';
-import { string } from 'not-me/lib/schemas/string/string-schema';
-import { NodeEnv } from './runtime/node-env';
+import { z } from 'zod';
+import { throwError } from './throw-error';
 
 const isIntegrityCheck = !!process.env.IS_INTEGRITY_CHECK;
 
-const schema = object({
-  HOST_URL: string()
-    .required()
-    .test((hostUrl) =>
-      hostUrl.startsWith('https://') || hostUrl.startsWith('http://')
-        ? null
-        : 'Must start with http:// or https://',
+const booleanEnvVar = z.preprocess(
+  (v) => (v == null ? undefined : v === 'true' || v === '1'),
+  z.boolean().optional(),
+);
+
+const requiredString = z.string().trim().min(1, 'Must be filled');
+
+const schema = z.object({
+  HOST_URL: z
+    .string()
+    .refine(
+      (v) => v.startsWith('https://') || v.startsWith('http://'),
+      'Must start with http:// or https://',
     )
-    .test((hostUrl) =>
-      hostUrl.endsWith('/') ? 'Cannot have trailling slash' : null,
+    .refine((v) => !v.endsWith('/'), 'Cannot have trailing slash'),
+  PATH_PREFIX: z
+    .string()
+    .optional()
+    .transform((v) => v ?? '')
+    .refine(
+      (v) => v === '' || (v.startsWith('/') && !v.endsWith('/')),
+      'Path prefix must be either an empty string, or start with a "/" and also NOT end with a "/"',
     ),
-  PATH_PREFIX: string()
-    .transform((pathPrefix) => pathPrefix || '')
-    .test((pathPrefix) => {
-      if (
-        pathPrefix === '' ||
-        (pathPrefix.startsWith('/') && !pathPrefix.endsWith('/'))
-      ) {
-        return null;
-      } else {
-        return 'Path prefix must be either an empty string, or start with a "/" and also NOT end with a "/"';
-      }
-    }),
-  CI: boolean(),
-  IS_INTEGRITY_CHECK: boolean(),
-  DISABLE_ERROR_BOUNDARIES: boolean(),
-  DISABLE_LOGGING_LIMIT: boolean().transform((v) => {
+  CI: booleanEnvVar,
+  IS_INTEGRITY_CHECK: booleanEnvVar,
+  DISABLE_ERROR_BOUNDARIES: booleanEnvVar,
+  DISABLE_LOGGING_LIMIT: booleanEnvVar.transform((v) => {
     if (process.env.NODE_ENV === 'development') {
       return true;
-    } else {
-      return v;
     }
+    return v;
   }),
-  LOG_DEBUG: boolean(),
-  MAIN_API_URL: string()
-    .required()
-    .transform((s) => s.trim())
-    .test((s) => (s.length > 0 ? null : 'Must be filled')),
-  FIREBASE_AUTH_EMULATOR_URL:
-    [NodeEnv.Development, NodeEnv.Test].includes(
-      process.env.NODE_ENV as NodeEnv,
-    ) || isIntegrityCheck
-      ? string()
-          .required()
-          .transform((s) => s.trim())
-          .test((s) => (s.length > 0 ? null : 'Must be filled'))
-      : string(),
-  FIREBASE_CONFIG: object({
-    apiKey: string().required(),
-    authDomain: string().required(),
-    projectId: string().required(),
-    storageBucket: string().required(),
-    messagingSenderId: string().required(),
-    appId: string().required(),
-  }).required(),
-  TERRITORIES_STORE_URL: string()
-    .required()
-    .transform((s) => s.trim())
-    .test((s) => (s.length > 0 ? null : 'Must be filled')),
+  LOG_DEBUG: booleanEnvVar,
+  MAIN_API_URL: requiredString,
+  FIREBASE_AUTH_EMULATOR_URL: z.string().optional(),
+  FIREBASE_CONFIG: z.object({
+    apiKey: z.string(),
+    authDomain: z.string(),
+    projectId: z.string(),
+    storageBucket: z.string(),
+    messagingSenderId: z.string(),
+    appId: z.string(),
+  }),
+  TERRITORIES_STORE_URL: requiredString,
 
-  MORALIS_SERVER_URL: string()
-    .required()
-    .transform((s) => s.trim())
-    .test((s) => (s.length > 0 ? null : 'Must be filled')),
-  MORALIS_APP_ID: string()
-    .required()
-    .transform((s) => s.trim())
-    .test((s) => (s.length > 0 ? null : 'Must be filled')),
+  MORALIS_SERVER_URL: requiredString,
+  MORALIS_APP_ID: requiredString,
 
-  WEB3_NET: equals(['rinkeby', 'eth']).required(),
+  WEB3_NET: z.enum(['rinkeby', 'eth']),
 
-  RARIBLE_URL: string()
-    .required()
-    .transform((s) => s.trim())
-    .test((s) => (s.length > 0 ? null : 'Must be filled')),
+  RARIBLE_URL: requiredString,
 
-  SENTRY_DSN:
-    process.env.NODE_ENV === NodeEnv.Production &&
-    process.env.IS_INTEGRITY_CHECK !== 'true'
-      ? string()
-          .required()
-          .transform((s) => s.trim())
-          .test((s) => (s.length > 0 ? null : 'Must be filled'))
-      : equals([]),
+  SENTRY_DSN: z.string().optional(),
 
-  GOOGLE_ANALYTICS_TRACKING_ID:
-    process.env.NODE_ENV === NodeEnv.Production &&
-    process.env.IS_INTEGRITY_CHECK !== 'true'
-      ? string()
-          .required()
-          .transform((s) => s.trim())
-          .test((s) => (s.length > 0 ? null : 'Must be filled'))
-      : equals([]),
-}).required();
+  GOOGLE_ANALYTICS_TRACKING_ID: z.string().optional(),
+});
 
-const environmentVariablesValidationResult = schema.validate({
+const result = schema.safeParse({
   HOST_URL: process.env.GATSBY_HOST_URL,
   PATH_PREFIX: process.env.GATSBY_PATH_PREFIX,
   CI: process.env.CI,
   IS_INTEGRITY_CHECK: process.env.IS_INTEGRITY_CHECK,
   DISABLE_ERROR_BOUNDARIES: process.env.GATSBY_DISABLE_ERROR_BOUNDARIES,
+  DISABLE_LOGGING_LIMIT: process.env.GATSBY_DISABLE_LOGGING_LIMIT,
   LOG_DEBUG: process.env.GATSBY_LOG_DEBUG,
   MAIN_API_URL: process.env.GATSBY_MAIN_API_URL,
   FIREBASE_AUTH_EMULATOR_URL: process.env.GATSBY_FIREBASE_AUTH_EMULATOR_URL,
@@ -129,14 +88,8 @@ const environmentVariablesValidationResult = schema.validate({
   GOOGLE_ANALYTICS_TRACKING_ID: process.env.GATSBY_GOOGLE_ANALYTICS_TRACKING_ID,
 });
 
-if (environmentVariablesValidationResult.errors) {
-  throw new Error(
-    JSON.stringify(
-      environmentVariablesValidationResult.messagesTree,
-      undefined,
-      2,
-    ),
-  );
+if (!result.success) {
+  throw new Error(JSON.stringify(result.error.issues, undefined, 2));
 }
 
-export const EnvironmentVariables = environmentVariablesValidationResult.value;
+export const EnvironmentVariables = result.data;

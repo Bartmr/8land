@@ -1,24 +1,17 @@
-import { InferType, Schema } from 'not-me/lib/schemas/schema';
-import { SerializableJSONData } from './main-api/json-types';
+import z from "zod";
 
 class LocalStorage {
-  getItem<S extends Schema<unknown>>(schema: S, key: string): InferType<S> {
+  getItem<S extends z.ZodType<unknown>>(schema: S, key: string): z.infer<S> {
     const data = window.localStorage.getItem(key);
 
-    const validationResult = schema.validate(
+    const validationResult = schema.parse(
       data ? JSON.parse(data) : undefined,
     );
 
-    if (validationResult.errors) {
-      throw new Error(
-        JSON.stringify(validationResult.messagesTree, undefined, 2),
-      );
-    } else {
-      return validationResult.value;
-    }
+    return validationResult
   }
 
-  setItem<T extends SerializableJSONData>(key: string, value: T): void {
+  setItem(key: string, value: unknown): void {
     window.localStorage.setItem(key, JSON.stringify(value));
   }
 

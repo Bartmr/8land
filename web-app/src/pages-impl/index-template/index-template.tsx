@@ -1,4 +1,4 @@
-import { PROJECT_SLOGAN, TWITTER_URL } from '@shared/project-details';
+import { PROJECT_SLOGAN } from '@shared/project-details';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layout } from 'src/pages-impl/layout/layout';
@@ -20,20 +20,6 @@ export function IndexTemplate() {
             <div className="pb-4 d-flex flex-column align-items-center">
               <div className="d-flex align-items-center">
                 <h1 className="display-1">8Land</h1>
-
-                <div>
-                  <div
-                    style={{
-                      fontSize: '1.5rem',
-                      position: 'absolute',
-                    }}
-                    className="mt-n2"
-                  >
-                    <LinkAnchor className="ms-3 my-2" href={TWITTER_URL}>
-                      <FontAwesomeIcon icon={faTwitter} />
-                    </LinkAnchor>
-                  </div>
-                </div>
               </div>
               <div className="bg-secondary">
                 <p className="mb-0 display-4 text-body text-center">

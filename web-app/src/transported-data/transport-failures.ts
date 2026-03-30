@@ -5,3 +5,11 @@ export enum TransportFailure {
   Forbidden = 'forbidden',
   NotFound = 'not-found',
 }
+
+export const TRANSPORT_FAILURE_VALUES = [
+  TransportFailure.ConnectionFailure,
+  TransportFailure.UnexpectedResponse,
+  TransportFailure.AbortedAndDealtWith,
+  TransportFailure.Forbidden,
+  TransportFailure.NotFound
+]
