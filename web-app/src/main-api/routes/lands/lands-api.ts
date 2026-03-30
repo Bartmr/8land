@@ -8,8 +8,8 @@ import { GetLandsToClaimDTO } from '@shared/land/lands-to-claim/lands-to-claim.d
 import {
   MainJSONApi,
   useMainJSONApi,
-} from '../main-api/use-main-json-api';
-import { Logger } from '../logging/logger';
+} from '../../use-main-json-api';
+import { Logger } from '../../../logging/logger';
 import { TransportFailure } from 'src/transported-data/transport-failures';
 
 export class LandsAPI {

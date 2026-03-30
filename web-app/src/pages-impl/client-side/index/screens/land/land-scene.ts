@@ -21,9 +21,9 @@ import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
-import { LandsAPI } from 'src/lands/lands-api';
+import { LandsAPI } from 'src/main-api/routes/lands/lands-api';
 import { NavigateToLandDTO } from '@shared/land/in-game/navigate/navigate-to-land.dto';
-import { TrainAPI } from 'src/train/train.api';
+import { TrainAPI } from 'src/main-api/routes/train/train.api';
 import { throwError } from 'src/throw-error';
 import { Gamepad } from '../../gamepad';
 

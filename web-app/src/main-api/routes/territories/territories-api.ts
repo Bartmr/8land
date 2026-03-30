@@ -1,7 +1,7 @@
 import {
   MainJSONApi,
   useMainJSONApi,
-} from '../main-api/use-main-json-api';
+} from '../../use-main-json-api';
 import { GetTerritoryDTO } from '@shared/territories/get/get-territory.dto';
 import { GetTerritoryIdByRaribleItemIdDTO } from '@shared/territories/get-id-by-rarible-item-id/get-territory-id-by-rarible-item-id.dto';
 import { CreateTerritoryResponseDTO } from '@shared/territories/create/create-territory.dto';

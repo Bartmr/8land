@@ -10,7 +10,7 @@ import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
-import { useBlocksAPI } from 'src/blocks/blocks-api';
+import { useBlocksAPI } from 'src/main-api/routes/blocks/blocks-api';
 
 export function AddBlockSection(props: {
   land: GetLandDTO;

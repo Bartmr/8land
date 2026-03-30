@@ -12,7 +12,7 @@ import {
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
 import { SoundcloudSongApiUrlSchema } from '@shared/land/edit/edit-land.schema';
-import { useLandsAPI } from 'src/lands/lands-api';
+import { useLandsAPI } from 'src/main-api/routes/lands/lands-api';
 import { throwError } from '@shared/throw-error';
 
 export function MainSection(props: {

@@ -7,13 +7,13 @@ import { ReturnToTrainStationDTO } from '@shared/train/return/return-to-train-st
 import {
   mainApiReducer,
   MainApiStoreState,
-} from '../main-api/main-api-reducer';
+} from '../../main-api-reducer';
 import {
   MainJSONApi,
   useMainJSONApi,
-} from '../main-api/use-main-json-api';
-import { useStoreGetState } from '../store/use-store-get-state';
-import { useLocalStorage } from '../local-storage';
+} from '../../use-main-json-api';
+import { useStoreGetState } from '../../../store/use-store-get-state';
+import { useLocalStorage } from '../../../local-storage';
 import { object, uuid, string } from 'zod';
 
 export class TrainAPI {

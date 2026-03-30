@@ -12,7 +12,7 @@ import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { useParams } from '@reach/router';
 import { object } from 'not-me/lib/schemas/object/object-schema';
 import { uuid } from '@shared/internals/validation/schemas/uuid.schema';
-import { useLandsAPI } from 'src/lands/lands-api';
+import { useLandsAPI } from 'src/main-api/routes/lands/lands-api';
 import { Toast } from 'react-bootstrap';
 import { MainSection } from './main-section/main-section';
 import { BlocksSection } from './blocks-section/blocks-section';

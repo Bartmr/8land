@@ -1,7 +1,7 @@
 import {
   MainJSONApi,
   useMainJSONApi,
-} from '../../main-api/use-main-json-api';
+} from '../../../use-main-json-api';
 
 export class AuthAPI {
   constructor(private api: MainJSONApi) {}

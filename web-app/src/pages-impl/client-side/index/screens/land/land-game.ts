@@ -13,8 +13,8 @@ import {
   DynamicBlockType,
   StaticBlockType,
 } from '@shared/blocks/create/create-block.enums';
-import { LandsAPI } from 'src/lands/lands-api';
-import { TrainAPI } from 'src/train/train.api';
+import { LandsAPI } from 'src/main-api/routes/lands/lands-api';
+import { TrainAPI } from 'src/main-api/routes/train/train.api';
 import { throwError } from 'src/throw-error';
 import { Gamepad } from '../../gamepad';
 

@@ -1,7 +1,7 @@
 import {
   MainJSONApi,
   useMainJSONApi,
-} from '../main-api/use-main-json-api';
+} from '../../use-main-json-api';
 import { GetUserWalletNonce } from '@shared/users/me/get-user-wallet-nonce.dto';
 import { ReceiveSignedUserNonceRequestDTO } from '@shared/users/me/receive-signed-user-nonce.dto';
 

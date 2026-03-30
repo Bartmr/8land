@@ -8,7 +8,7 @@ import {
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
 import { TransportFailure } from 'src/transported-data/transport-failures';
-import { useTerritoriesAPI } from 'src/territories/territories-api';
+import { useTerritoriesAPI } from 'src/main-api/routes/territories/territories-api';
 
 export function TerritoryAuthenticitySection(props: {
   buttonLabel: string;

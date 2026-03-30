@@ -1,6 +1,6 @@
 import Moralis from 'moralis';
 import { EnvironmentVariables } from 'src/environment-variables';
-import { useTerritoriesAPI } from 'src/territories/territories-api';
+import { useTerritoriesAPI } from 'src/main-api/routes/territories/territories-api';
 
 export function useMintTerritory() {
   const api = useTerritoriesAPI();

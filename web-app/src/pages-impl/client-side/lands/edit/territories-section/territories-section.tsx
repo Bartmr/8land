@@ -13,7 +13,7 @@ import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
-import { useTerritoriesAPI } from 'src/territories/territories-api';
+import { useTerritoriesAPI } from 'src/main-api/routes/territories/territories-api';
 import { TerritoryPreview } from './territory-preview';
 import { useMintTerritory } from './use-mint-territory';
 import { throwError } from '@shared/throw-error';
