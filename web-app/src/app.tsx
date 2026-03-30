@@ -1,5 +1,7 @@
 import './logging/logger';
 import './environment-variables';
+import 'src/ui/bootstrap/index.scss';
+import 'src/ui/icons.scss';
 
 import React, { ReactNode, useEffect, useState } from 'react';
 import { Logger } from 'src/logging/logger';

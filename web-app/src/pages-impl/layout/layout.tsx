@@ -1,4 +1,3 @@
-import 'src/components/ui-kit/global-styles/global-styles';
 
 import { graphql, useStaticQuery } from 'gatsby';
 import { ReactNode, useState } from 'react';
