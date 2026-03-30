@@ -1,9 +1,9 @@
 import { JSONApiBase } from './json-api-base';
 import { useJSONHttp } from './use-json-http';
-import { MAIN_API_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY } from './session/main-api-session-constants';
+import { USER_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY } from '../users/auth/user-auth-constants';
 import { useLocalStorage } from '../local-storage';
-import { useMainApiSessionLogout } from './session/use-main-api-session-logout';
-import { MainApiAuthTokenIdLocalStorageSchema } from './session/main-api-session-schemas';
+import { useUserAuthLogout } from '../users/auth/use-user-auth-logout';
+import { UserAuthTokenIdLocalStorageSchema } from '../users/auth/user-auth-schemas';
 import { EnvironmentVariables } from '../environment-variables';
 
 export class MainJSONApi extends JSONApiBase {}
@@ -11,23 +11,23 @@ export class MainJSONApi extends JSONApiBase {}
 export function useMainJSONApi() {
   /*
     Note:
-    calling useMainApiSession here will cause an endless loop
-    since useMainApiSession itself already calls and uses useMainJSONApi
+    calling useUserAuth here will cause an endless loop
+    since useUserAuth itself already calls and uses useMainJSONApi
 
     To get tokens and other information,
     read them from the Redux Store or directly from the Local Storage
   */
   const jsonHttp = useJSONHttp();
   const localStorage = useLocalStorage();
-  const mainApiSessionLogout = useMainApiSessionLogout();
+  const mainApiSessionLogout = useUserAuthLogout();
 
   return new MainJSONApi({
     jsonHttp,
     apiUrl: EnvironmentVariables.MAIN_API_URL,
     getHeaders: () => {
       const authTokenId = localStorage.getItem(
-        MainApiAuthTokenIdLocalStorageSchema,
-        MAIN_API_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY,
+        UserAuthTokenIdLocalStorageSchema,
+        USER_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY,
       );
 
       if (authTokenId) {

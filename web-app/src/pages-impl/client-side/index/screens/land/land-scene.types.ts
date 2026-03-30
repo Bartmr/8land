@@ -3,7 +3,7 @@ import {
   StaticBlockType,
 } from '@shared/blocks/create/create-block.enums';
 import { GetLandDTO } from '@shared/land/get/get-land.dto';
-import { MainApiSessionData } from 'src/main-api/session/main-api-session-types';
+import { UserAuthSessionData } from 'src/users/auth/user-auth-types';
 
 export type LandSceneArguments = {
   player: {
@@ -17,7 +17,7 @@ export type LandSceneArguments = {
     | { type: StaticBlockType.Start }
     | { type: StaticBlockType.TrainPlatform };
 
-  session: null | MainApiSessionData;
+  session: null | UserAuthSessionData;
 };
 
 export type Block = DoorBlock | AppBlock;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { MainApiSessionData } from 'src/main-api/session/main-api-session-types';
+import { UserAuthSessionData } from 'src/users/auth/user-auth-types';
 import { runLandGame } from './land-game';
 import { globalHistory } from '@reach/router';
 import { MusicService } from '../../music-ticker';
@@ -20,7 +20,7 @@ export function LandScreen(props: {
   dialogueService: DialogueService;
   appService: AppService;
   resumedLand: ResumeLandNavigationDTO;
-  session: null | MainApiSessionData;
+  session: null | UserAuthSessionData;
   changeLandNameDisplay: (landName: string) => void;
   onService: (landScreenService: LandScreenService) => void;
 }) {

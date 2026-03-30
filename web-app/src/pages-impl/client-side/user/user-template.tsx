@@ -9,8 +9,8 @@ import {
   TransportedDataGateLayout,
 } from 'src/ui/transported-data-gate';
 import { mainApiReducer } from 'src/main-api/main-api-reducer';
-import { MainApiSessionData } from 'src/main-api/session/main-api-session-types';
-import { useMainApiSession } from 'src/main-api/session/use-main-api-session';
+import { UserAuthSessionData } from 'src/users/auth/user-auth-types';
+import { useUserAuth } from 'src/users/auth/use-user-auth';
 import { useStoreSelector } from 'src/store/use-store-selector';
 import {
   TransportedData,
@@ -18,7 +18,7 @@ import {
 } from 'src/transported-data/transported-data-types';
 import { USER_ROUTE } from './user-routes';
 import { Logger } from 'src/logging/logger';
-import { useMainApiSessionLogout } from 'src/main-api/session/use-main-api-session-logout';
+import { useUserAuthLogout } from 'src/users/auth/use-user-auth-logout';
 import { ChangeEmail } from './components/change-email';
 import { getWalletSignMessage } from '@shared/users/me/receive-signed-user-nonce.utils';
 import { useUsersAPI } from 'src/main-api/routes/users/users-api';
@@ -28,8 +28,8 @@ import { useLandsAPI } from 'src/main-api/routes/lands/lands-api';
 import { useAuthAPI } from 'src/auth/auth.api';
 
 export function WalletSectionWithNonce(props: {
-  session: null | MainApiSessionData;
-  refreshSession: () => Promise<MainApiSessionData | null | undefined>;
+  session: null | UserAuthSessionData;
+  refreshSession: () => Promise<UserAuthSessionData | null | undefined>;
   nonce: string;
   walletAddress: null | string;
 }) {
@@ -236,8 +236,8 @@ export function WalletSectionWithNonce(props: {
 }
 
 export function WalletSection(props: {
-  session: null | MainApiSessionData;
-  refreshSession: () => Promise<MainApiSessionData | null | undefined>;
+  session: null | UserAuthSessionData;
+  refreshSession: () => Promise<UserAuthSessionData | null | undefined>;
 }) {
   const api = useUsersAPI();
   const [nonce, replaceNonce] = useState<TransportedData<string>>({
@@ -285,12 +285,12 @@ export function UserTemplate(_props: RouteComponentProps) {
     TransportedData<undefined>
   >({ status: TransportedDataStatus.NotInitialized });
 
-  const mainApiSession = useMainApiSession();
+  const mainApiSession = useUserAuth();
   const session = useStoreSelector(
     { mainApi: mainApiReducer },
     (s) => s.mainApi.session,
   );
-  const logout = useMainApiSessionLogout();
+  const logout = useUserAuthLogout();
 
   const landsApi = useLandsAPI();
 

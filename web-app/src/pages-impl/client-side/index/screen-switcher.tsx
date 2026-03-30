@@ -1,6 +1,6 @@
 import { ResumeLandNavigationDTO } from '@shared/land/in-game/resume/resume-land-navigation.dto';
 import { useRef, useState } from 'react';
-import { MainApiSessionData } from 'src/main-api/session/main-api-session-types';
+import { UserAuthSessionData } from 'src/users/auth/user-auth-types';
 import { MusicService } from './music-ticker';
 import { AppScreen, AppService } from './screens/app/app-screen';
 import {
@@ -19,7 +19,7 @@ enum CurrentScreen {
 export function ScreenSwitcher(props: {
   musicService: MusicService;
   resumedLand: ResumeLandNavigationDTO;
-  session: null | MainApiSessionData;
+  session: null | UserAuthSessionData;
   changeLandNameDisplay: (landName: string) => void;
 }) {
   const landScreenServiceRef = useRef<null | LandScreenService>(null);

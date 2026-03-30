@@ -9,11 +9,11 @@ import {
 } from 'src/transported-data/transported-data-types';
 import * as auth from 'firebase/auth';
 import { FirebaseAuth, getFirebaseUser } from 'src/firebase/firebase-auth';
-import { useMainApiSessionLogout } from 'src/main-api/session/use-main-api-session-logout';
+import { useUserAuthLogout } from 'src/users/auth/use-user-auth-logout';
 import isEmail from 'validator/lib/isEmail';
 
 export function ChangeEmail() {
-  const logout = useMainApiSessionLogout();
+  const logout = useUserAuthLogout();
 
   const [formStatus, replaceFormStatus] = useState<TransportedData<undefined>>({
     status: TransportedDataStatus.NotInitialized,

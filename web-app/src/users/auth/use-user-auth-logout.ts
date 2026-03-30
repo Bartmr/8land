@@ -2,15 +2,15 @@ import {
   StoreDispatch,
   StoreGetState,
 } from 'src/store/store-types';
-import { MAIN_API_SESSION_LOGOUT } from './main-api-session-actions';
+import { USER_AUTH_LOGOUT } from './user-auth-actions';
 import { useSessionStorage } from 'src/session-storage';
 import { useLocalStorage } from 'src/local-storage';
 import { useStoreDispatch } from 'src/store/use-store-dispatch';
-import { mainApiReducer } from '../main-api-reducer';
+import { mainApiReducer } from 'src/main-api/main-api-reducer';
 import { useStoreGetState } from 'src/store/use-store-get-state';
 import { TransportedDataStatus } from 'src/transported-data/transported-data-types';
 
-class MainApiSessionLogout {
+class UserAuthLogout {
   constructor(
     private getState: StoreGetState<'mainApi'>,
     private dispatch: StoreDispatch<'mainApi'>,
@@ -25,7 +25,7 @@ class MainApiSessionLogout {
       return;
     }
     this.dispatch({
-      type: MAIN_API_SESSION_LOGOUT,
+      type: USER_AUTH_LOGOUT,
     });
 
     /* ----- */
@@ -38,7 +38,7 @@ class MainApiSessionLogout {
     this.sessionStorage.wipeAll();
 
     this.dispatch({
-      type: 'UPDATE_MAIN_API_SESSION',
+      type: 'UPDATE_USER_AUTH_SESSION',
       payload: {
         status: TransportedDataStatus.NotInitialized,
       },
@@ -46,14 +46,14 @@ class MainApiSessionLogout {
   }
 }
 
-export function useMainApiSessionLogout() {
+export function useUserAuthLogout() {
   const dispatch = useStoreDispatch({ mainApi: mainApiReducer });
   const getMainApiState = useStoreGetState({ mainApi: mainApiReducer });
 
   const localStorage = useLocalStorage();
   const sessionStorage = useSessionStorage();
 
-  return new MainApiSessionLogout(
+  return new UserAuthLogout(
     getMainApiState,
     dispatch,
     localStorage,

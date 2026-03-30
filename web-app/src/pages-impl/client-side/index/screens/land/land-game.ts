@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { MainApiSessionData } from 'src/main-api/session/main-api-session-types';
+import { UserAuthSessionData } from 'src/users/auth/user-auth-types';
 import { EnvironmentVariables } from 'src/environment-variables';
 import { getLandSceneKey } from './keys';
 import { LandScene } from './land-scene';
@@ -21,7 +21,7 @@ import { Gamepad } from '../../gamepad';
 export async function runLandGame(
   args: {
     resumedLand: ResumeLandNavigationDTO;
-    session: null | MainApiSessionData;
+    session: null | UserAuthSessionData;
   },
   dependencies: {
     gamepad: Gamepad;

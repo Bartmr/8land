@@ -1,16 +1,16 @@
 import { Reducer } from 'redux';
-import { MainApiSessionAction } from './session/main-api-session-actions';
-import { MainApiSessionData } from './session/main-api-session-types';
+import { UserAuthAction } from 'src/users/auth/user-auth-actions';
+import { UserAuthSessionData } from 'src/users/auth/user-auth-types';
 import {
   TransportedDataStatus,
   TransportedData,
 } from '../transported-data/transported-data-types';
 
 export type MainApiStoreState = {
-  session: TransportedData<MainApiSessionData | null>;
+  session: TransportedData<UserAuthSessionData | null>;
   isLoggingOut: boolean;
 };
-export type MainApiReducer = Reducer<MainApiStoreState, MainApiSessionAction>;
+export type MainApiReducer = Reducer<MainApiStoreState, UserAuthAction>;
 
 const initialState: MainApiStoreState = {
   session: { status: TransportedDataStatus.NotInitialized },
@@ -22,7 +22,7 @@ export const mainApiReducer: MainApiReducer = (
   action,
 ) => {
   switch (action.type) {
-    case 'UPDATE_MAIN_API_SESSION':
+    case 'UPDATE_USER_AUTH_SESSION':
       return {
         ...state,
         session: action.payload,

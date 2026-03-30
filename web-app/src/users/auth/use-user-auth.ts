@@ -1,14 +1,14 @@
 import { StoreDispatch } from 'src/store/store-types';
 import { useLocalStorage } from 'src/local-storage';
 import { useStoreDispatch } from 'src/store/use-store-dispatch';
-import { mainApiReducer } from '../main-api-reducer';
-import { LoginResponse, MainApiSessionData } from './main-api-session-types';
-import { useMainJSONApi } from '../use-main-json-api';
+import { mainApiReducer } from 'src/main-api/main-api-reducer';
+import { LoginResponse, UserAuthSessionData } from './user-auth-types';
+import { useMainJSONApi } from 'src/main-api/use-main-json-api';
 import { TransportedDataStatus } from 'src/transported-data/transported-data-types';
 import { LoginRequestDTO } from '@shared/auth/auth.dto';
-import { MAIN_API_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY } from './main-api-session-constants';
+import { USER_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY } from './user-auth-constants';
 
-class MainApiSession {
+class UserAuth {
   constructor(
     private mainApi: ReturnType<typeof useMainJSONApi>,
     private dispatch: StoreDispatch<'mainApi'>,
@@ -48,7 +48,7 @@ class MainApiSession {
       }
     } else {
       this.localStorage.setItem(
-        MAIN_API_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY,
+        USER_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY,
         res.response.body.authTokenId,
       );
       this.setSession(res.response.body.session);
@@ -57,9 +57,9 @@ class MainApiSession {
     }
   }
 
-  setSession(session: MainApiSessionData | null) {
+  setSession(session: UserAuthSessionData | null) {
     this.dispatch({
-      type: 'UPDATE_MAIN_API_SESSION',
+      type: 'UPDATE_USER_AUTH_SESSION',
       payload: {
         status: TransportedDataStatus.Done,
         data: session,
@@ -69,14 +69,14 @@ class MainApiSession {
 
   async restoreSession() {
     this.dispatch({
-      type: 'UPDATE_MAIN_API_SESSION',
+      type: 'UPDATE_USER_AUTH_SESSION',
       payload: {
         status: TransportedDataStatus.Loading,
       },
     });
 
     const res = await this.mainApi.get<
-      | { status: 200; body: MainApiSessionData }
+      | { status: 200; body: UserAuthSessionData }
       | { status: 404; body: undefined },
       undefined
     >({
@@ -87,7 +87,7 @@ class MainApiSession {
 
     if (res.failure) {
       this.dispatch({
-        type: 'UPDATE_MAIN_API_SESSION',
+        type: 'UPDATE_USER_AUTH_SESSION',
         payload: {
           status: res.failure,
         },
@@ -103,7 +103,7 @@ class MainApiSession {
 
   async refreshSession() {
     const res = await this.mainApi.get<
-      | { status: 200; body: MainApiSessionData }
+      | { status: 200; body: UserAuthSessionData }
       | { status: 404; body: undefined },
       undefined
     >({
@@ -114,7 +114,7 @@ class MainApiSession {
 
     if (res.failure) {
       this.dispatch({
-        type: 'UPDATE_MAIN_API_SESSION',
+        type: 'UPDATE_USER_AUTH_SESSION',
         payload: {
           status: res.failure,
         },
@@ -133,12 +133,12 @@ class MainApiSession {
   }
 }
 
-export function useMainApiSession() {
+export function useUserAuth() {
   const mainApi = useMainJSONApi();
 
   const dispatch = useStoreDispatch({ mainApi: mainApiReducer });
 
   const localStorage = useLocalStorage();
 
-  return new MainApiSession(mainApi, dispatch, localStorage);
+  return new UserAuth(mainApi, dispatch, localStorage);
 }

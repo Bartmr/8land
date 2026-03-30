@@ -2,7 +2,7 @@ import { faMusic } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { LinkAnchor } from 'src/ui/link-anchor';
-import { MainApiSessionData } from 'src/main-api/session/main-api-session-types';
+import { UserAuthSessionData } from 'src/users/auth/user-auth-types';
 import { getCurrentLocalHref } from 'src/navigation/current-local-href';
 import { LOGIN_ROUTE } from '../login/login-routes';
 import { Keypad } from './keypad';
@@ -14,7 +14,7 @@ import { useGamepad } from './gamepad';
 
 export function GameFrame(props: {
   resumedLand: ResumeLandNavigationDTO;
-  session: null | MainApiSessionData;
+  session: null | UserAuthSessionData;
 }) {
   const gamepad = useGamepad();
   const [musicService, replaceMusicService] = useState<

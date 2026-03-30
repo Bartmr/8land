@@ -5,7 +5,7 @@ import {
   createStoreManager,
   StoreManagerProvider,
 } from 'src/store/store-manager';
-import { useMainApiSession } from 'src/main-api/session/use-main-api-session';
+import { useUserAuth } from 'src/users/auth/use-user-auth';
 import { useStoreSelector } from 'src/store/use-store-selector';
 import { TransportedDataStatus } from 'src/transported-data/transported-data-types';
 import { mainApiReducer } from 'src/main-api/main-api-reducer';
@@ -27,7 +27,7 @@ type ModuleHotData = {
 const FrameWithState = (props: { children: ReactNode }) => {
   const dispatch = useStoreDispatch({ mainApi: mainApiReducer });
 
-  const mainApiSession = useMainApiSession();
+  const mainApiSession = useUserAuth();
 
   const mainApiState = useStoreSelector(
     { mainApi: mainApiReducer },
