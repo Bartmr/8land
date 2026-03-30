@@ -54,8 +54,6 @@ export function ClientSideTemplate() {
           path={`${LANDS_ROUTE.pathSegment}${EDIT_LAND_ROUTE.pathSegment}/:id`}
         />
         <UserTemplate path={USER_ROUTE.pathSegment} />
-        {/* <TerritoriesTemplate path={TERRITORIES_ROUTE.pathSegment} />
-        <EditTerritoryTemplate path={`${TERRITORIES_ROUTE.pathSegment}/:id`} /> */}
         <NotFoundTemplate default />
       </AuthenticatedRoute>
       <AuthenticatedRoute

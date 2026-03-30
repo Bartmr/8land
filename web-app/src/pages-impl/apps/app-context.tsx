@@ -1,4 +1,3 @@
-import { throwError } from '@shared/src/internals/utils/throw-error';
 import {
   createContext,
   ReactNode,
@@ -11,6 +10,7 @@ import {
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
 import { AppContext } from '../client-side/index/screens/app/app-screen.types';
+import { throwError } from 'src/throw-error';
 
 const AppContextContext = createContext<TransportedData<
   AppContext & { explore8Land: NonNullable<Window['explore8Land']> }

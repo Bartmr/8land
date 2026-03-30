@@ -9,12 +9,12 @@ import {
   TransportedDataStatus,
 } from 'src/transported-data/transported-data-types';
 import { FirebaseAuth } from 'src/firebase/firebase-auth';
-import { throwError } from '@shared/src/internals/utils/throw-error';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { useUserAuth } from 'src/users/auth/use-user-auth';
 import { LinkAnchor } from 'src/ui/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
 import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
+import { throwError } from 'src/throw-error';
 
 function Content() {
   const mainApiSession = useUserAuth();

@@ -10,7 +10,7 @@ import { MusicService, MusicTicker } from './music-ticker';
 import * as styles from './game-frame.module.scss';
 import { ScreenSwitcher } from './screen-switcher';
 import { ResumeLandNavigationDTO } from '@shared/src/land/in-game/resume/resume-land-navigation.dto';
-import { useGamepad } from './gamepad';
+import { Gamepad, useGamepad } from './gamepad';
 
 export function GameFrame(props: {
   resumedLand: ResumeLandNavigationDTO;
@@ -28,6 +28,7 @@ export function GameFrame(props: {
         <ScreenSwitcher
           session={props.session}
           resumedLand={props.resumedLand}
+          gamepad={gamepad}
           musicService={musicService}
           changeLandNameDisplay={replaceLandName}
         />

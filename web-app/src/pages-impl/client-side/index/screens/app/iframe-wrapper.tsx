@@ -1,13 +1,14 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
-import { GamepadSingleton } from 'src/pages-impl/client-side/index/gamepad';
 import { TransportedDataStatus } from 'src/transported-data/transported-data-types';
 import { MusicService } from '../../music-ticker';
-import { AppContext } from '../app-screen.types';
+import { AppContext } from './app-screen.types';
+import { Gamepad } from '../../gamepad';
 
 export function IframeWrapper(props: {
   context: AppContext;
+  gamepad: Gamepad;
   musicService: MusicService;
 }) {
   const iframe = useRef<null | HTMLIFrameElement>(null);
@@ -37,7 +38,7 @@ export function IframeWrapper(props: {
     return () => {
       window.removeEventListener('message', listener);
 
-      GamepadSingleton.getInstance().clearCurrentIframe();
+      props.gamepad.clearCurrentIframe();
     };
   }, []);
 
@@ -76,7 +77,7 @@ export function IframeWrapper(props: {
             if (ref) {
               iframe.current = ref;
 
-              GamepadSingleton.getInstance().setCurrentIframe(ref);
+              props.gamepad.setCurrentIframe(ref);
             }
           }}
           onLoad={() => {

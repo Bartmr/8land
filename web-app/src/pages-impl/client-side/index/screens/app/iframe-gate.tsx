@@ -1,15 +1,16 @@
 import { useLayoutEffect, useState } from 'react';
-import { GamepadSingleton } from 'src/pages-impl/client-side/index/gamepad';
 import { EnvironmentVariables } from 'src/environment-variables';
 import { MusicService } from '../../music-ticker';
-import { AppService } from '../app-screen';
-import { AppContext } from '../app-screen.types';
 import { IframeWrapper } from './iframe-wrapper';
+import { AppContext } from './app-screen.types';
+import { AppService } from './app-screen';
+import { Gamepad } from '../../gamepad';
 
 export function IframeGate(props: {
   context: AppContext;
   appService: AppService;
   musicService: MusicService;
+  gamepad: Gamepad
 }) {
   const [confirmed, replaceConfirmed] = useState(false);
 
@@ -23,7 +24,7 @@ export function IframeGate(props: {
     } else {
       replaceConfirmed(false);
 
-      const gamepad = GamepadSingleton.getInstance();
+      const gamepad = props.gamepad;
 
       const onPressing_A = () => {
         replaceConfirmed(true);
@@ -60,6 +61,7 @@ export function IframeGate(props: {
         <IframeWrapper
           context={props.context}
           musicService={props.musicService}
+          gamepad={props.gamepad}
         />
       ) : (
         <div

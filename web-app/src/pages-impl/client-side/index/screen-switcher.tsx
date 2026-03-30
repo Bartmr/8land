@@ -9,6 +9,7 @@ import {
 } from './screens/dialogue/dialogue-screen';
 import { LandScreen } from './screens/land/land-screen';
 import { LandScreenService } from './screens/land/land-screen.service';
+import { Gamepad } from './gamepad';
 
 enum CurrentScreen {
   Land = 'land',
@@ -17,6 +18,7 @@ enum CurrentScreen {
 }
 
 export function ScreenSwitcher(props: {
+  gamepad: Gamepad,
   musicService: MusicService;
   resumedLand: ResumeLandNavigationDTO;
   session: null | UserAuthSessionData;
@@ -57,6 +59,7 @@ export function ScreenSwitcher(props: {
         }}
       >
         <DialogueScreen
+          gamepad={props.gamepad}
           onService={replaceDialogueService}
           onOpen={() => {
             if (!landScreenServiceRef.current) {
@@ -82,6 +85,7 @@ export function ScreenSwitcher(props: {
         }}
       >
         <AppScreen
+          gamepad={props.gamepad}
           onService={replaceAppService}
           onOpen={() => {
             if (!landScreenServiceRef.current) {

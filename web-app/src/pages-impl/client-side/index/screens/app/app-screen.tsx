@@ -1,12 +1,12 @@
-import { throwError } from '@shared/src/internals/utils/throw-error';
 import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
-import { GamepadSingleton } from '../../gamepad';
-import { ESCAPE_BUTTON_SELECTOR } from '../../keypad-utils';
 import { MusicService } from '../../music-ticker';
 import { LandScreenService } from '../land/land-screen.service';
 import { AppContext } from './app-screen.types';
-import { IframeGate } from './components/iframe-gate';
+import { Gamepad } from '../../gamepad';
+import { ESCAPE_BUTTON_SELECTOR } from '../../keypad';
+import { IframeGate } from './iframe-gate';
+import { throwError } from 'src/throw-error';
 
 export class AppService {
   private render: () => void;
@@ -87,6 +87,7 @@ export function AppScreen(props: {
   onClose: () => void;
   landScreenServiceRef: React.MutableRefObject<LandScreenService | null>;
   musicService: MusicService;
+  gamepad: Gamepad
 }) {
   const [, replaceRenderId] = useState<string>(v4());
   const [service, replaceService] = useState<AppService | undefined>();
@@ -100,7 +101,7 @@ export function AppScreen(props: {
       musicService: props.musicService,
     });
 
-    const gamepad = GamepadSingleton.getInstance();
+    const gamepad = props.gamepad;
 
     const onPressing_Escape = () => {
       if (sv.active) {
@@ -148,6 +149,7 @@ ${ESCAPE_BUTTON_SELECTOR} {
           context={service.currentContext}
           appService={service}
           musicService={props.musicService}
+          gamepad={props.gamepad}
         />
       ) : null}
     </>
