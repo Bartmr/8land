@@ -10,7 +10,7 @@ import {
   TransportedDataGateLayout,
 } from 'src/ui/transported-data-gate';
 import { LANDS_ROUTE } from 'src/pages-impl/client-side/lands/lands-routes';
-import { useStoreSelector } from 'src/store/use-store-selector';
+import { useStoreSelector } from 'src/redux/use-store-selector';
 import { mainApiReducer } from 'src/main-api/main-api-reducer';
 import { USER_ROUTE } from 'src/pages-impl/client-side/user/user-routes';
 import { INDEX_ROUTE } from 'src/pages-impl/index-template/index-routes';

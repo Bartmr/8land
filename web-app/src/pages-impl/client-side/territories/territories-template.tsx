@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Layout } from 'src/pages-impl/layout/layout';
 import { mainApiReducer } from 'src/main-api/main-api-reducer';
 import { EnvironmentVariables } from 'src/environment-variables';
-import { useStoreSelector } from 'src/store/use-store-selector';
+import { useStoreSelector } from 'src/redux/use-store-selector';
 import { TERRITORIES_ROUTE } from './territories-routes';
 import { LinkAnchor } from 'src/ui/link-anchor';
 import { USER_ROUTE } from '../user/user-routes';

@@ -4,13 +4,13 @@ import { Provider } from 'react-redux';
 import {
   createStoreManager,
   StoreManagerProvider,
-} from 'src/store/store-manager';
+} from 'src/redux/store-manager';
 import { useUserAuth } from 'src/users/auth/use-user-auth';
-import { useStoreSelector } from 'src/store/use-store-selector';
+import { useStoreSelector } from 'src/redux/use-store-selector';
 import { TransportedDataStatus } from 'src/transported-data/transported-data-types';
 import { mainApiReducer } from 'src/main-api/main-api-reducer';
 import { RUNNING_IN_CLIENT } from 'src/runtime';
-import { useStoreDispatch } from 'src/store/use-store-dispatch';
+import { useStoreDispatch } from 'src/redux/use-store-dispatch';
 import { navigate } from 'gatsby';
 import { LOGIN_ROUTE } from 'src/pages-impl/client-side/login/login-routes';
 import { SSRProvider } from 'react-bootstrap';

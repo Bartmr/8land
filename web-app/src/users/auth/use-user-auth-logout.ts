@@ -1,13 +1,13 @@
 import {
   StoreDispatch,
   StoreGetState,
-} from 'src/store/store-types';
+} from 'src/redux/store-types';
 import { USER_AUTH_LOGOUT } from './user-auth-actions';
 import { useSessionStorage } from 'src/session-storage';
 import { useLocalStorage } from 'src/local-storage';
-import { useStoreDispatch } from 'src/store/use-store-dispatch';
+import { useStoreDispatch } from 'src/redux/use-store-dispatch';
 import { mainApiReducer } from 'src/main-api/main-api-reducer';
-import { useStoreGetState } from 'src/store/use-store-get-state';
+import { useStoreGetState } from 'src/redux/use-store-get-state';
 import { TransportedDataStatus } from 'src/transported-data/transported-data-types';
 
 class UserAuthLogout {

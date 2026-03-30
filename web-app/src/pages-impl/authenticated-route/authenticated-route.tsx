@@ -3,7 +3,7 @@ import {
   AuthenticatedRouteRules,
   AuthenticatedRouteAccess,
 } from './authenticated-route-types';
-import { useStoreSelector } from 'src/store/use-store-selector';
+import { useStoreSelector } from 'src/redux/use-store-selector';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { Redirect } from '../redirect/redirect';
 import { LOGIN_ROUTE } from 'src/pages-impl/client-side/login/login-routes';

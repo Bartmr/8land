@@ -11,7 +11,7 @@ import {
 import { mainApiReducer } from 'src/main-api/main-api-reducer';
 import { UserAuthSessionData } from 'src/users/auth/user-auth-types';
 import { useUserAuth } from 'src/users/auth/use-user-auth';
-import { useStoreSelector } from 'src/store/use-store-selector';
+import { useStoreSelector } from 'src/redux/use-store-selector';
 import {
   TransportedData,
   TransportedDataStatus,

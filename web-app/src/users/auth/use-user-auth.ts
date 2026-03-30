@@ -1,6 +1,6 @@
-import { StoreDispatch } from 'src/store/store-types';
+import { StoreDispatch } from 'src/redux/store-types';
 import { useLocalStorage } from 'src/local-storage';
-import { useStoreDispatch } from 'src/store/use-store-dispatch';
+import { useStoreDispatch } from 'src/redux/use-store-dispatch';
 import { mainApiReducer } from 'src/main-api/main-api-reducer';
 import { LoginResponse, UserAuthSessionData } from './user-auth-types';
 import { useMainJSONApi } from 'src/main-api/use-main-json-api';

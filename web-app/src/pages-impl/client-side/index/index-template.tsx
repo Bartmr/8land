@@ -8,7 +8,7 @@ import {
 } from 'src/transported-data/transported-data-types';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { mainApiReducer } from 'src/main-api/main-api-reducer';
-import { useStoreSelector } from 'src/store/use-store-selector';
+import { useStoreSelector } from 'src/redux/use-store-selector';
 import { GameFrame } from './game-frame';
 import { LinkAnchor } from 'src/ui/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';

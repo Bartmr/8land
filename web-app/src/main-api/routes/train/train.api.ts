@@ -12,7 +12,7 @@ import {
   MainJSONApi,
   useMainJSONApi,
 } from '../../use-main-json-api';
-import { useStoreGetState } from '../../../store/use-store-get-state';
+import { useStoreGetState } from '../../../redux/use-store-get-state';
 import { useLocalStorage } from '../../../local-storage';
 import { object, uuid, string } from 'zod';
 
