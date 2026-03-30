@@ -86,9 +86,7 @@ export abstract class JSONApiBase {
       return res;
     } else {
       if (res.response.status === 404) {
-        if (res.headers.get('X-Resource-Not-Found') === 'true') {
-          return { failure: CommunicationError.NotFound };
-        }
+        return { failure: CommunicationError.NotFound };
       }
 
       if (res.response.status === 403) {
