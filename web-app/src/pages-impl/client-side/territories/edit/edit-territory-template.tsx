@@ -5,11 +5,11 @@ import { useEffect, useState } from 'react';
 import { Accordion, Toast } from 'react-bootstrap';
 import { Layout } from 'src/pages-impl/layout/layout';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
-import { TransportFailure } from 'src/transported-data/transport-failures';
+import { CommunicationError } from 'src/communication-errors/communication-errors';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/transported-data/transported-data-types';
+} from 'src/communicated-data/communicated-data-types';
 import { useTerritoriesAPI } from 'src/main-api/routes/territories/territories-api';
 import { AssetsUploader } from './assets-uploader/assets-uploader';
 import { EDIT_TERRITORY_ROUTE } from './edit-territory-routes';
@@ -130,7 +130,7 @@ export function EditTerritoryTemplate(_props: RouteComponentProps) {
       {() => {
         return !validationResult.success ? (
           <TransportedDataGate
-            dataWrapper={{ status: TransportFailure.NotFound }}
+            dataWrapper={{ status: CommunicationError.NotFound }}
           >
             {() => null}
           </TransportedDataGate>

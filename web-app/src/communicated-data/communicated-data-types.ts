@@ -1,4 +1,4 @@
-import { TransportFailure } from 'src/transported-data/transport-failures';
+import { CommunicationError } from 'src/communication-errors/communication-errors';
 
 export enum TransportedDataStatus {
   NotInitialized = 'not-initialized',
@@ -29,7 +29,7 @@ export type TransportedData<Data> = Readonly<
       data: Data;
     }
   | {
-      status: TransportFailure;
+      status: CommunicationError;
       data?: Data;
     }
 >;

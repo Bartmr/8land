@@ -4,7 +4,7 @@ import { UserAuthSessionData } from 'src/users/auth/user-auth-types';
 import {
   TransportedDataStatus,
   TransportedData,
-} from '../transported-data/transported-data-types';
+} from '../communicated-data/communicated-data-types';
 
 export type MainApiStoreState = {
   session: TransportedData<UserAuthSessionData | null>;

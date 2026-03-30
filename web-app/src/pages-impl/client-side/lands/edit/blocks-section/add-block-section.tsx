@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/transported-data/transported-data-types';
+} from 'src/communicated-data/communicated-data-types';
 import { useBlocksAPI } from 'src/main-api/routes/blocks/blocks-api';
 
 export function AddBlockSection(props: {

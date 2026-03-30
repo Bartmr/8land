@@ -3,7 +3,7 @@ import {
   StaticBlockType,
 } from '@shared/src/blocks/create/create-block.enums';
 import { EnvironmentVariables } from 'src/environment-variables';
-import { TransportFailure } from 'src/transported-data/transport-failures';
+import { CommunicationError } from 'src/communication-errors/communication-errors';
 import { GridPhysics } from './grid-physics';
 import { Direction } from './grid.types';
 import {
@@ -507,11 +507,11 @@ export class LandScene extends Phaser.Scene {
       });
 
       if (res.failure) {
-        if (res.failure === TransportFailure.ConnectionFailure) {
+        if (res.failure === CommunicationError.ConnectionFailure) {
           this.dependencies.dialogueService.openText(
             "Couldn't connect to the Internet. Check your connection and enter the door again.",
           );
-        } else if (res.failure === TransportFailure.NotFound) {
+        } else if (res.failure === CommunicationError.NotFound) {
           this.dependencies.dialogueService.openText(
             "This path's destination no longer exists.",
           );
@@ -530,7 +530,7 @@ export class LandScene extends Phaser.Scene {
       const res = await this.dependencies.trainAPI.returnToTrainStation();
 
       if (res.failure) {
-        if (res.failure === TransportFailure.ConnectionFailure) {
+        if (res.failure === CommunicationError.ConnectionFailure) {
           this.dependencies.dialogueService.openText(
             "Couldn't connect to the Internet. Check your connection and enter the door again.",
           );
@@ -568,12 +568,12 @@ export class LandScene extends Phaser.Scene {
       });
 
       if (res.failure) {
-        if (res.failure === TransportFailure.ConnectionFailure) {
+        if (res.failure === CommunicationError.ConnectionFailure) {
           this.dependencies.dialogueService.openText(
             "Couldn't connect to the Internet. Check your connection and enter the door again.",
           );
         }
-        if (res.failure === TransportFailure.NotFound) {
+        if (res.failure === CommunicationError.NotFound) {
           this.dependencies.trainAPI.clearTrainDestination({
             currentStationLandId: this.args.land.id,
           });

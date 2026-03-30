@@ -1,4 +1,4 @@
-import { TransportFailure } from 'src/transported-data/transport-failures';
+import { CommunicationError } from 'src/communication-errors/communication-errors';
 import { UnparsedRequestHeaders } from './http-types';
 import {
   JsonHttpResponse,
@@ -87,18 +87,18 @@ export abstract class JSONApiBase {
     } else {
       if (res.response.status === 404) {
         if (res.headers.get('X-Resource-Not-Found') === 'true') {
-          return { failure: TransportFailure.NotFound };
+          return { failure: CommunicationError.NotFound };
         }
       }
 
       if (res.response.status === 403) {
-        return { failure: TransportFailure.Forbidden };
+        return { failure: CommunicationError.Forbidden };
       }
 
       if (res.response.status === 401 && this.onInvalidAuthToken) {
         await this.onInvalidAuthToken();
 
-        return { failure: TransportFailure.AbortedAndDealtWith };
+        return { failure: CommunicationError.AbortedAndDealtWith };
       }
 
       return res.logAndReturnAsUnexpected();

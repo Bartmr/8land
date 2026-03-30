@@ -8,7 +8,7 @@ import { useLocalStorage } from 'src/local-storage';
 import { useStoreDispatch } from 'src/redux/use-store-dispatch';
 import { mainApiReducer } from 'src/main-api/main-api-reducer';
 import { useStoreGetState } from 'src/redux/use-store-get-state';
-import { TransportedDataStatus } from 'src/transported-data/transported-data-types';
+import { TransportedDataStatus } from 'src/communicated-data/communicated-data-types';
 
 class UserAuthLogout {
   constructor(

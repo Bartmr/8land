@@ -9,7 +9,7 @@ import { USER_AUTH_LOGOUT } from '../users/auth/user-auth-actions';
 import { StoreReducersMap } from './store-reducers-map';
 import { createContext, ReactNode, useContext } from 'react';
 import { throwError } from '../throw-error';
-import { TransportedDataStatus } from '../transported-data/transported-data-types';
+import { TransportedDataStatus } from '../communicated-data/communicated-data-types';
 
 type RootReducer = Reducer<StoreState, StoreAction>;
 

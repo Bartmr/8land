@@ -11,7 +11,7 @@ import { useStoreSelector } from 'src/redux/use-store-selector';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/transported-data/transported-data-types';
+} from 'src/communicated-data/communicated-data-types';
 import { USER_ROUTE } from './user-routes';
 import { useUserAuthLogout } from 'src/users/auth/use-user-auth-logout';
 import { ChangeEmail } from './components/change-email';

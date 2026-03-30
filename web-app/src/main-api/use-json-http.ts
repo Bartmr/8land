@@ -1,5 +1,5 @@
 import { Logger } from 'src/logging/logger';
-import { TransportFailure } from '../transported-data/transport-failures';
+import { CommunicationError } from '../communication-errors/communication-errors';
 import { UnparsedRequestHeaders } from './http-types';
 import {
   JsonHttpHEADResponse,
@@ -100,7 +100,7 @@ async function makeJsonHttpRequest({
     });
   } catch (err: unknown) {
     return {
-      failure: TransportFailure.ConnectionFailure,
+      failure: CommunicationError.ConnectionFailure,
     };
   }
 
@@ -126,7 +126,7 @@ async function makeJsonHttpRequest({
     });
 
     return {
-      failure: TransportFailure.UnexpectedResponse,
+      failure: CommunicationError.UnexpectedResponse,
       status: response.status,
     };
   }
@@ -144,7 +144,7 @@ async function makeJsonHttpRequest({
     });
 
     return {
-      failure: TransportFailure.UnexpectedResponse,
+      failure: CommunicationError.UnexpectedResponse,
       status: response.status,
     } as const;
   };

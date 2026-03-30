@@ -5,11 +5,11 @@ import { useEffect, useState } from 'react';
 import { TiledJSON } from 'src/pages-impl/client-side/index/screens/land/tiled.types';
 import { TILE_SIZE } from 'src/pages-impl/client-side/index/game-constants';
 import { useJSONHttp } from 'src/main-api/use-json-http';
-import { TransportFailure } from 'src/transported-data/transport-failures';
+import { CommunicationError } from 'src/communication-errors/communication-errors';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/transported-data/transported-data-types';
+} from 'src/communicated-data/communicated-data-types';
 import { v4 } from 'uuid';
 import { throwError } from 'src/throw-error';
 
@@ -91,7 +91,7 @@ export function TerritoryPreview(props: {
 
         _game = new Phaser.Game(gameConfig);
       } catch (err) {
-        replacePreviewFrame({ status: TransportFailure.ConnectionFailure });
+        replacePreviewFrame({ status: CommunicationError.ConnectionFailure });
         return;
       }
 

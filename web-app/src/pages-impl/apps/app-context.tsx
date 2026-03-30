@@ -8,7 +8,7 @@ import {
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/transported-data/transported-data-types';
+} from 'src/communicated-data/communicated-data-types';
 import { AppContext } from '../client-side/index/screens/app/app-screen.types';
 import { throwError } from 'src/throw-error';
 

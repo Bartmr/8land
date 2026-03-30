@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/transported-data/transported-data-types';
+} from 'src/communicated-data/communicated-data-types';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { TiledJSONFieldState } from './tiled-json-form-field';
 import { TilesetImageFieldState } from './tileset-image-form-field';

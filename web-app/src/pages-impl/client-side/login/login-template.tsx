@@ -7,7 +7,7 @@ import { FirebaseAuthUI } from 'src/firebase/firebase-auth-ui';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/transported-data/transported-data-types';
+} from 'src/communicated-data/communicated-data-types';
 import { FirebaseAuth } from 'src/firebase/firebase-auth';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { useUserAuth } from 'src/users/auth/use-user-auth';

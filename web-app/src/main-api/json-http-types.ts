@@ -1,4 +1,4 @@
-import { TransportFailure } from '../transported-data/transport-failures';
+import { CommunicationError } from '../communication-errors/communication-errors';
 
 export type JsonHttpResponseBase = {
   status: number;
@@ -9,17 +9,17 @@ export type JsonHttpResponse<R> =
   | {
       failure?: undefined;
       logAndReturnAsUnexpected: () => {
-        failure: TransportFailure.UnexpectedResponse;
+        failure: CommunicationError.UnexpectedResponse;
         status: number;
       };
       response: R;
       headers: Headers;
     }
   | {
-      failure: Exclude<TransportFailure, TransportFailure.UnexpectedResponse>;
+      failure: Exclude<CommunicationError, CommunicationError.UnexpectedResponse>;
     }
   | {
-      failure: TransportFailure.UnexpectedResponse;
+      failure: CommunicationError.UnexpectedResponse;
       status: number;
     };
 

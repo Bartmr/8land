@@ -6,7 +6,7 @@ import {
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/transported-data/transported-data-types';
+} from 'src/communicated-data/communicated-data-types';
 import * as auth from 'firebase/auth';
 import { FirebaseAuth, getFirebaseUser } from 'src/firebase/firebase-auth';
 import { useUserAuthLogout } from 'src/users/auth/use-user-auth-logout';

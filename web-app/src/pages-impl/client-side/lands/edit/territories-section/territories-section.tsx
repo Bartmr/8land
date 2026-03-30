@@ -12,7 +12,7 @@ import { useFormUtils } from 'src/forms/form-utils';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/transported-data/transported-data-types';
+} from 'src/communicated-data/communicated-data-types';
 import { useTerritoriesAPI } from 'src/main-api/routes/territories/territories-api';
 import { TerritoryPreview } from './territory-preview';
 import { useMintTerritory } from './use-mint-territory';

@@ -6,7 +6,7 @@ import { LoginTemplate } from './login/login-template';
 import React, { Suspense } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
-import { TransportedDataStatus } from 'src/transported-data/transported-data-types';
+import { TransportedDataStatus } from 'src/communicated-data/communicated-data-types';
 import { EditLandTemplate } from './lands/edit/edit-land-template';
 import { EDIT_LAND_ROUTE } from './lands/edit/edit-land-routes';
 import { LANDS_ROUTE } from './lands/lands-routes';

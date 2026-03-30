@@ -10,7 +10,7 @@ import { useFormUtils } from 'src/forms/form-utils';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/transported-data/transported-data-types';
+} from 'src/communicated-data/communicated-data-types';
 import { SoundcloudSongApiUrlSchema } from '@shared/src/land/edit/edit-land.schema';
 import { useLandsAPI } from 'src/main-api/routes/lands/lands-api';
 import { throwError } from '@shared/src/throw-error';

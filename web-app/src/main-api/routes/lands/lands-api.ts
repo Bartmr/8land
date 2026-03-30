@@ -10,7 +10,7 @@ import {
   useMainJSONApi,
 } from '../../use-main-json-api';
 import { Logger } from '../../../logging/logger';
-import { TransportFailure } from 'src/transported-data/transport-failures';
+import { CommunicationError } from 'src/communication-errors/communication-errors';
 
 export class LandsAPI {
   constructor(private api: MainJSONApi) {}
@@ -64,7 +64,7 @@ export class LandsAPI {
 
   async createLand(args: { name: string }): Promise<
     | {
-        failure: TransportFailure;
+        failure: CommunicationError;
       }
     | {
         failure?: undefined;
@@ -229,7 +229,7 @@ export class LandsAPI {
 
   async deleteLand(args: { landId: string }): Promise<
     | {
-        failure: TransportFailure;
+        failure: CommunicationError;
       }
     | {
         failure?: undefined;

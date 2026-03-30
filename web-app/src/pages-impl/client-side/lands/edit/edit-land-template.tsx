@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/transported-data/transported-data-types';
+} from 'src/communicated-data/communicated-data-types';
 import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { useParams } from '@reach/router';
@@ -16,7 +16,7 @@ import { Toast } from 'react-bootstrap';
 import { MainSection } from './main-section/main-section';
 import { BlocksSection } from './blocks-section/blocks-section';
 // import { TerritoriesSection } from './components/territories-section/territories-section';
-import { TransportFailure } from 'src/transported-data/transport-failures';
+import { CommunicationError } from 'src/communication-errors/communication-errors';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { navigate } from 'gatsby';
@@ -183,7 +183,7 @@ export function EditLandTemplate(_props: RouteComponentProps) {
       {() => {
         return !validationResult.success ? (
           <TransportedDataGate
-            dataWrapper={{ status: TransportFailure.NotFound }}
+            dataWrapper={{ status: CommunicationError.NotFound }}
           >
             {() => null}
           </TransportedDataGate>

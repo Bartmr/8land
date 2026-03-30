@@ -7,12 +7,12 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { ReactNode } from 'react';
 import { Logger } from 'src/logging/logger';
-import { TransportFailure } from 'src/transported-data/transport-failures';
+import { CommunicationError } from 'src/communication-errors/communication-errors';
 import {
   TransportedData,
   TransportedDataStatus,
   UnwrapTransportedData,
-} from 'src/transported-data/transported-data-types';
+} from 'src/communicated-data/communicated-data-types';
 
 export enum TransportedDataGateLayout {
   Tape = 'tape',
@@ -107,14 +107,14 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
     );
   } else if (dataWrapper.status === TransportedDataStatus.Done) {
     gateStatusUI = null;
-  } else if (dataWrapper.status === TransportFailure.NotFound) {
+  } else if (dataWrapper.status === CommunicationError.NotFound) {
     gateStatusUI = (
       <div className={flexClassName}>
         <FontAwesomeIcon className={`${iconSizeClassName}`} icon={faSearch} />
         <p className={`${textClassName} mb-0`}>Not Found</p>
       </div>
     );
-  } else if (dataWrapper.status === TransportFailure.ConnectionFailure) {
+  } else if (dataWrapper.status === CommunicationError.ConnectionFailure) {
     gateStatusUI = (
       <div className={flexClassName}>
         <FontAwesomeIcon
@@ -129,7 +129,7 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
         </p>
       </div>
     );
-  } else if (dataWrapper.status === TransportFailure.Forbidden) {
+  } else if (dataWrapper.status === CommunicationError.Forbidden) {
     gateStatusUI = (
       <div className={flexClassName}>
         <FontAwesomeIcon className={`${iconSizeClassName}`} icon={faLock} />
@@ -140,14 +140,14 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
         </p>
       </div>
     );
-  } else if (dataWrapper.status === TransportFailure.AbortedAndDealtWith) {
+  } else if (dataWrapper.status === CommunicationError.AbortedAndDealtWith) {
     gateStatusUI = (
       <div className={flexClassName}>
         <p className={`${textClassName} mb-0`}>Redirecting...</p>
       </div>
     );
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  } else if (dataWrapper.status === TransportFailure.UnexpectedResponse) {
+  } else if (dataWrapper.status === CommunicationError.UnexpectedResponse) {
     gateStatusUI = (
       <div className={flexClassName}>
         <FontAwesomeIcon

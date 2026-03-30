@@ -7,7 +7,7 @@ import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/transported-data/transported-data-types';
+} from 'src/communicated-data/communicated-data-types';
 import { useBlocksAPI } from 'src/main-api/routes/blocks/blocks-api';
 import { AddBlockSection } from './add-block-section';
 

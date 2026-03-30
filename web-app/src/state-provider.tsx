@@ -7,7 +7,7 @@ import {
 } from 'src/redux/store-manager';
 import { useUserAuth } from 'src/users/auth/use-user-auth';
 import { useStoreSelector } from 'src/redux/use-store-selector';
-import { TransportedDataStatus } from 'src/transported-data/transported-data-types';
+import { TransportedDataStatus } from 'src/communicated-data/communicated-data-types';
 import { mainApiReducer } from 'src/main-api/main-api-reducer';
 import { RUNNING_IN_CLIENT } from 'src/runtime';
 import { useStoreDispatch } from 'src/redux/use-store-dispatch';

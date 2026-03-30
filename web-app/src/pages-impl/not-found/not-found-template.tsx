@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { Layout } from 'src/pages-impl/layout/layout';
-import { TransportFailure } from 'src/transported-data/transport-failures';
+import { CommunicationError } from 'src/communication-errors/communication-errors';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { NOT_FOUND_ROUTE } from './not-found-routes';
 
@@ -12,7 +12,7 @@ export const NotFoundTemplate = (_: Props) => (
     {() => {
       return (
         <TransportedDataGate
-          dataWrapper={{ status: TransportFailure.NotFound }}
+          dataWrapper={{ status: CommunicationError.NotFound }}
         >
           {() => null}
         </TransportedDataGate>

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
-import { TransportFailure } from 'src/transported-data/transport-failures';
+import { CommunicationError } from 'src/communication-errors/communication-errors';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/transported-data/transported-data-types';
+} from 'src/communicated-data/communicated-data-types';
 
 const Component = () => {
   const [entrypoint, replaceEntrypoint] = useState<
@@ -33,7 +33,7 @@ const Component = () => {
 
         if (error.name === 'ChunkLoadError') {
           replaceEntrypoint({
-            status: TransportFailure.ConnectionFailure,
+            status: CommunicationError.ConnectionFailure,
           });
         } else {
           throw error;

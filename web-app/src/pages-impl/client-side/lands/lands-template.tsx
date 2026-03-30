@@ -4,10 +4,10 @@ import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/transported-data/transported-data-types';
+} from 'src/communicated-data/communicated-data-types';
 import { RouteComponentProps } from '@reach/router';
 import { Logger } from 'src/logging/logger';
-import { TransportFailure } from 'src/transported-data/transport-failures';
+import { CommunicationError } from 'src/communication-errors/communication-errors';
 import { Layout } from 'src/pages-impl/layout/layout';
 import { LANDS_ROUTE } from './lands-routes';
 import { LinkAnchor } from 'src/ui/link-anchor';
@@ -62,7 +62,7 @@ export function LandsTemplate(_props: RouteComponentProps) {
         window.alert('Lands page needs pagination');
 
         replaceLands({
-          status: TransportFailure.UnexpectedResponse,
+          status: CommunicationError.UnexpectedResponse,
         });
       } else {
         replaceLands({

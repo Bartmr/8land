@@ -5,7 +5,7 @@ import { RouteComponentProps } from '@reach/router';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/transported-data/transported-data-types';
+} from 'src/communicated-data/communicated-data-types';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { mainApiReducer } from 'src/main-api/main-api-reducer';
 import { useStoreSelector } from 'src/redux/use-store-selector';
