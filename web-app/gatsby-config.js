@@ -1,10 +1,14 @@
+require("dotenv").config({
+  path: `.env`,
+})
+
 const path = require('path');
 
 function throwError() {
   throw new Error()
 }
 
-const HOST_URL = process.env.HOST_URL || throwError();
+const HOST_URL = process.env.GATSBY_HOST_URL || throwError();
 const SENTRY_DSN = process.env.SENTRY_DSN;
 const GOOGLE_ANALYTICS_TRACKING_ID = process.env.GOOGLE_ANALYTICS_TRACKING_ID
 
@@ -44,7 +48,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: PROJECT_NAME,
+        name: "8Land",
         start_url: `/`,
         background_color: `#262626`,
         theme_color: `#262626`,

@@ -9,7 +9,7 @@ import { EnvironmentVariables } from 'src/environment-variables';
 import { PROJECT_SLOGAN } from '@shared/src/project-details';
 import { LinkAnchor } from 'src/ui/link-anchor';
 import { PRIVACY_POLICY_ROUTE } from 'src/pages-impl/privacy-policy/privacy-policy-routes';
-import logo from 'src/assets/vendors/this-project/logo.svg';
+import logo from 'src/logo.svg';
 import { TERMS_OF_USE_ROUTE } from 'src/pages-impl/terms-of-use/terms-of-use-routes';
 import { CONTENT_POLICY_ROUTE } from 'src/pages-impl/content-policy/content-policy-routes';
 
