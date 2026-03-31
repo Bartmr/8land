@@ -5,7 +5,7 @@ import {
 } from './authenticated-route-types';
 import { useStoreSelector } from 'src/redux/use-store-selector';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
-import { Redirect } from '../redirect/redirect';
+import { Redirect } from '../../../pages-impl/redirect/redirect';
 import { LOGIN_ROUTE } from 'src/pages-impl/client-side/login/login-routes';
 import { CLIENT_SIDE_INDEX_ROUTE } from 'src/pages-impl/client-side/index/index-routes';
 import { mainApiReducer } from 'src/main-api/main-api-reducer';
