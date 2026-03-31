@@ -1,7 +1,9 @@
 ## Setup
 
+Create a `.env.development` with the following:
+
 ```
-GATSBY_HOST_URL=http://localhost:8000
+GATSBY_SITE_URL=http://localhost:8000
 GATSBY_DISABLE_ERROR_BOUNDARIES=true
 GATSBY_LOG_DEBUG=true
 GATSBY_MAIN_API_URL=http://localhost:3000

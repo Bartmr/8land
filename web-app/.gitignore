@@ -1,8 +1,5 @@
 node_modules
-
-/.cache
+.cache
 /public
-/dist
-
-*.env
+src/gatsby-types.d.ts
 .env.*
