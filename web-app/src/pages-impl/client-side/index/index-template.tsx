@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Layout } from 'src/pages-impl/layout/layout';
-import { CLIENT_SIDE_INDEX_ROUTE } from './index-routes';
 import { RouteComponentProps } from '@reach/router';
 import {
   TransportedData,
@@ -93,7 +92,7 @@ function Content(props: {
 }
 
 export const ClientSideIndexTemplate = (_props: RouteComponentProps) => (
-  <Layout disableScroll title={CLIENT_SIDE_INDEX_ROUTE.label}>
+  <Layout disableScroll>
     {(renderProps) => {
       return <Content {...renderProps} />;
     }}

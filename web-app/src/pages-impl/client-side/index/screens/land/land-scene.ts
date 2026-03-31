@@ -106,6 +106,9 @@ export class LandScene extends Phaser.Scene {
         0,
         0,
       );
+      if (!landLayer) {
+        throw new Error();
+      }
       landLayer.setDepth(nextDepth);
 
       nextDepth += 1;
@@ -174,6 +177,10 @@ export class LandScene extends Phaser.Scene {
         territory.startX * TILE_SIZE,
         territory.startY * TILE_SIZE,
       );
+
+      if (!territoryLayer) {
+        throw new Error()
+      }
 
       territoryLayer.setDepth(nextDepth);
 
@@ -457,7 +464,7 @@ export class LandScene extends Phaser.Scene {
 
     this.load.scenePlugin(
       'AnimatedTiles',
-      `${EnvironmentVariables.HOST_URL}/AnimatedTiles.js`,
+      `${EnvironmentVariables.SITE_URL}/AnimatedTiles.js`,
       'animatedTiles',
       'animatedTiles',
     );

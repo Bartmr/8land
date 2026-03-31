@@ -9,12 +9,11 @@ import { Layout } from 'src/pages-impl/layout/layout';
 import { LinkAnchor } from 'src/ui/link-anchor';
 import { ABOUT_ROUTE } from './about/about-routes';
 import { LAND_IDEAS_ROUTE } from './lands/land-ideas/land-ideas-routes';
-import { HELP_ROUTE } from './help-routes';
 import { BUILDING_A_LAND_ROUTE } from './lands/building-a-land/building-a-land.routes';
 
 export const HelpTemplate = () => {
   return (
-    <Layout title={HELP_ROUTE.title}>
+    <Layout>
       {() => (
         <div>
           <h2>Help</h2>

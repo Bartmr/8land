@@ -15,7 +15,7 @@ export function IframeGate(props: {
   const [confirmed, replaceConfirmed] = useState(false);
 
   useLayoutEffect(() => {
-    if (props.context.url.startsWith(EnvironmentVariables.HOST_URL)) {
+    if (props.context.url.startsWith(EnvironmentVariables.SITE_URL)) {
       replaceConfirmed(true);
 
       return () => {

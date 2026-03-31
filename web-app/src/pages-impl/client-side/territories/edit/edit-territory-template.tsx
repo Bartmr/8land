@@ -12,7 +12,6 @@ import {
 } from 'src/communicated-data/communicated-data-types';
 import { useTerritoriesAPI } from 'src/main-api/routes/territories/territories-api';
 import { AssetsUploader } from './assets-uploader/assets-uploader';
-import { EDIT_TERRITORY_ROUTE } from './edit-territory-routes';
 
 function EditTerritoryWithTerritory(props: {
   territory: GetTerritoryDTO;
@@ -126,7 +125,7 @@ export function EditTerritoryTemplate(_props: RouteComponentProps) {
   }).safeParse(routeParams);
 
   return (
-    <Layout title={EDIT_TERRITORY_ROUTE.label}>
+    <Layout>
       {() => {
         return !validationResult.success ? (
           <TransportedDataGate

@@ -1,12 +1,13 @@
-export const PROJECT_VENDOR_NAME = '8Land';
 export const PROJECT_NAME = '8Land';
-export const CONTACT_CTA_PAST =
-  'sent as a direct message on Twitter to <a href="https://twitter.com/explore8land">@explore8land</a>';
-export const CONTACT_CTA_PRESENT =
-  'send us as a direct message on Twitter to <a href="https://twitter.com/explore8land">@explore8land</a>';
-export const CONTACT_CTA_PRESENT_CONTINUOUS =
-  'sending a direct message on Twitter to <a href="https://twitter.com/explore8land">@explore8land</a>';
-export const CONTACT_CTA =
-  'Twitter <a href="https://twitter.com/explore8land">@explore8land</a>';
 
-export const PROJECT_SLOGAN = 'Pixelart RPG game with lands built by everyone.';
+// TODO
+export const CONTACT_CTA_PAST =
+  'TODO';
+export const CONTACT_CTA_PRESENT =
+  'TODO';
+export const CONTACT_CTA_PRESENT_CONTINUOUS =
+  'TODO';
+export const CONTACT_CTA =
+  'TODO';
+
+export const PROJECT_SLOGAN = 'Pixelart RPG game with lands built by users.';

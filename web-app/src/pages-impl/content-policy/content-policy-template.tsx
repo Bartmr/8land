@@ -1,9 +1,7 @@
 import { Layout } from 'src/pages-impl/layout/layout';
-import { CONTENT_POLICY_ROUTE } from './content-policy-routes';
-
 export function ContentPolicyTemplate() {
   return (
-    <Layout title={CONTENT_POLICY_ROUTE.title}>
+    <Layout>
       {() => (
         <>
           <div className="container">

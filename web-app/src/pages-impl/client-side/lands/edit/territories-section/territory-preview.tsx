@@ -127,6 +127,9 @@ export function TerritoryPreview(props: {
           landMap.addTilesetImage(landFirstTileset.name, `${sceneKey}-tileset`);
 
           const landLayer = landMap.createLayer(0, landFirstTileset.name, 0, 0);
+          if (!landLayer) {
+            throw new Error()
+          }
           landLayer.setDepth(0);
 
           setTimeout(() => {

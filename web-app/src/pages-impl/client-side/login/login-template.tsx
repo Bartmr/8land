@@ -1,6 +1,5 @@
 import { RouteComponentProps } from '@reach/router';
 import { Layout } from 'src/pages-impl/layout/layout';
-import { LOGIN_ROUTE } from './login-routes';
 import { useEffect, useState } from 'react';
 import * as auth from 'firebase/auth';
 import { FirebaseAuthUI } from 'src/firebase/firebase-auth-ui';
@@ -208,6 +207,6 @@ function FirebaseSessionGate() {
 
 export function LoginTemplate(_props: RouteComponentProps) {
   return (
-    <Layout title={LOGIN_ROUTE.title}>{() => <FirebaseSessionGate />}</Layout>
+    <Layout>{() => <FirebaseSessionGate />}</Layout>
   );
 }

@@ -12,7 +12,6 @@ import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/communicated-data/communicated-data-types';
-import { USER_ROUTE } from './user-routes';
 import { useUserAuthLogout } from 'src/users/auth/use-user-auth-logout';
 import { ChangeEmail } from './components/change-email';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -52,7 +51,7 @@ export function UserTemplate(_props: RouteComponentProps) {
   };
 
   return (
-    <Layout title={USER_ROUTE.label}>
+    <Layout>
       {() => (
         <TransportedDataGate
           dataWrapper={

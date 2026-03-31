@@ -1,9 +1,7 @@
 import { Layout } from 'src/pages-impl/layout/layout';
-import { LAND_IDEAS_ROUTE } from './land-ideas-routes';
-
 export function LandIdeasTemplate() {
   return (
-    <Layout title={LAND_IDEAS_ROUTE.title}>
+    <Layout>
       {() => {
         return (
           <>

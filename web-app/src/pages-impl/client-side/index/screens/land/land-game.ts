@@ -57,7 +57,7 @@ export async function runLandGame(
   };
 
   const player = {
-    spritesheetUrl: `${EnvironmentVariables.HOST_URL}/player.png`,
+    spritesheetUrl: `${EnvironmentVariables.SITE_URL}/player.png`,
   };
 
   const game = new Phaser.Game(gameConfig);

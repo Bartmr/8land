@@ -3,7 +3,7 @@ import { BUILDING_AN_APP_ROUTE } from './building-an-app-routes';
 
 export function BuildingALandTemplate() {
   return (
-    <Layout title={BUILDING_AN_APP_ROUTE.title}>
+    <Layout>
       {() => {
         return (
           <>

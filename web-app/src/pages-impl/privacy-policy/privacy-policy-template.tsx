@@ -8,11 +8,9 @@ import {
   LOG_SERVICE_COMPANY,
   LOG_SERVICE_NAME,
 } from 'src/logging/logger';
-import { PRIVACY_POLICY_ROUTE } from './privacy-policy-routes';
-
 export function PrivacyPolicyTemplate() {
   return (
-    <Layout title={PRIVACY_POLICY_ROUTE.title}>
+    <Layout>
       {() => (
         <>
           <div className="d-flex align-items-end justify-content-between">

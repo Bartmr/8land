@@ -1,6 +1,5 @@
 import { Layout } from 'src/pages-impl/layout/layout';
 import { LinkAnchor } from 'src/ui/link-anchor';
-import { ABOUT_ROUTE } from './about-routes';
 import raribleLogo from './rarible-logo.svg';
 import tiledLogo from './tiled-logo-white.png';
 import soundcloudLogo from './soundcloud-logo.png';
@@ -10,7 +9,7 @@ import painting2 from './painting-2.jpg';
 
 export function AboutTemplate() {
   return (
-    <Layout title={ABOUT_ROUTE.title}>
+    <Layout>
       {() => (
         <>
           <div className="card">

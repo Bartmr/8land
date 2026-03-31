@@ -4,7 +4,6 @@
   },
   "dependencies": {
     "@nestjs/common": "^11.1.17",
-    "@nestjs/swagger": "^11.2.6",
     "uuid": "^13.0.0",
     "zod": "^4.3.6"
   },

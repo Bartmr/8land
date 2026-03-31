@@ -9,7 +9,7 @@ import dynamicBlocks from './images/dynamic-blocks.png';
 
 export function BuildingALandTemplate() {
   return (
-    <Layout title={BUILDING_A_LAND_ROUTE.title}>
+    <Layout>
       {() => {
         return (
           <>

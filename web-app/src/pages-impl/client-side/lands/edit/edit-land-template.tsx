@@ -1,5 +1,4 @@
 import { Layout } from 'src/pages-impl/layout/layout';
-import { EDIT_LAND_ROUTE } from './edit-land-routes';
 import { RouteComponentProps } from '@reach/router';
 import { AssetsSection } from './assets-section/assets-section';
 import { useEffect, useState } from 'react';
@@ -179,7 +178,7 @@ export function EditLandTemplate(_props: RouteComponentProps) {
   }).safeParse(routeParams);
 
   return (
-    <Layout title={EDIT_LAND_ROUTE.label}>
+    <Layout>
       {() => {
         return !validationResult.success ? (
           <TransportedDataGate

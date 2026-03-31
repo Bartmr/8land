@@ -3,12 +3,10 @@ import './environment-variables';
 import 'src/ui/bootstrap/index.scss';
 import 'src/ui/icons.scss';
 
-import React, { ReactNode, useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import { dom } from '@fortawesome/fontawesome-svg-core';
 import { SSRProvider } from 'react-bootstrap';
 import { createStoreManager, StoreManagerProvider } from './redux/store-manager';
-import { RUNNING_IN_CLIENT } from './runtime';
 import { Provider } from 'react-redux';
 import { useStoreDispatch } from './redux/use-store-dispatch';
 import { useUserAuth } from './users/auth/use-user-auth';
@@ -17,15 +15,6 @@ import { mainApiReducer } from './main-api/main-api-reducer';
 import { TransportedDataStatus } from './communicated-data/communicated-data-types';
 import { LOGIN_ROUTE } from './pages-impl/client-side/login/login-routes';
 import { navigate } from 'gatsby';
-
-let previousRuntimeData:
-  | undefined
-  | {
-      storeManager: ReturnType<typeof createStoreManager>;
-    };
-type ModuleHotData = {
-  storeManager: ReturnType<typeof createStoreManager>;
-};
 
 const HandleAuth = (props: { children: ReactNode }) => {
   const dispatch = useStoreDispatch({ mainApi: mainApiReducer });
@@ -59,33 +48,11 @@ const HandleAuth = (props: { children: ReactNode }) => {
 };
 
 export const App = (props: { children: ReactNode }) => {
-  const [storeManager] = useState(() => {
-    const storeManagerFromPreviousRuntime = module.hot
-      ? previousRuntimeData?.storeManager ||
-        (module.hot.data as ModuleHotData | undefined)?.storeManager
-      : undefined;
-
-    const storeManagerForCurrentRuntime =
-      storeManagerFromPreviousRuntime || createStoreManager();
-
-    if (module.hot && RUNNING_IN_CLIENT) {
-      previousRuntimeData = {
-        storeManager: storeManagerForCurrentRuntime,
-      };
-
-      module.hot.dispose((data: ModuleHotData) => {
-        data.storeManager = storeManagerForCurrentRuntime;
-      });
-    }
-
-    return storeManagerForCurrentRuntime;
-  });
+  const storeManager = useMemo(() => createStoreManager(), []);
 
   return (
     <>
-      <Helmet>
-        <style>{dom.css()}</style>
-      </Helmet>
+      <style>{dom.css()}</style>
       <SSRProvider>
         <StoreManagerProvider storeManager={storeManager}>
           <Provider store={storeManager.store}>

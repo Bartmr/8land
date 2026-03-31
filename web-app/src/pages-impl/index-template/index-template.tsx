@@ -6,11 +6,9 @@ import { LinkAnchor } from 'src/ui/link-anchor';
 import { CLIENT_SIDE_INDEX_ROUTE } from '../client-side/index/index-routes';
 import { LANDS_ROUTE } from '../client-side/lands/lands-routes';
 import { LAND_IDEAS_ROUTE } from '../help/lands/land-ideas/land-ideas-routes';
-import { INDEX_ROUTE } from './index-routes';
-
 export function IndexTemplate() {
   return (
-    <Layout noContainment title={INDEX_ROUTE.label}>
+    <Layout noContainment>
       {() => (
         <>
           <div

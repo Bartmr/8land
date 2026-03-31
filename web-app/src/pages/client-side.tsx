@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { HtmlHead } from 'src/pages-impl/html-head';
+import type { PageProps } from 'gatsby';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { CommunicationError } from 'src/communication-errors/communication-errors';
 import {
@@ -54,3 +56,7 @@ const Component = () => {
 };
 
 export default Component;
+
+export function Head({ location }: PageProps) {
+  return <HtmlHead location={location} title="Play" />;
+}

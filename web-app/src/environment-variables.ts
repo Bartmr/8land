@@ -12,7 +12,7 @@ const booleanEnvVar = z.preprocess(
 const requiredString = z.string().trim().min(1, 'Must be filled');
 
 const schema = z.object({
-  HOST_URL: z
+  SITE_URL: z
     .string()
     .refine(
       (v) => v.startsWith('https://') || v.startsWith('http://'),
@@ -37,7 +37,7 @@ const schema = z.object({
 });
 
 const result = schema.safeParse({
-  HOST_URL: process.env.GATSBY_HOST_URL,
+  SITE_URL: process.env.GATSBY_SITE_URL,
   MAIN_API_URL: process.env.GATSBY_MAIN_API_URL,
   FIREBASE_AUTH_EMULATOR_URL: process.env.GATSBY_FIREBASE_AUTH_EMULATOR_URL,
   FIREBASE_CONFIG: JSON.parse(

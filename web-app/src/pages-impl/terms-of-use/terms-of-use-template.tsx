@@ -1,10 +1,8 @@
 import { CONTACT_CTA_PRESENT_CONTINUOUS } from '@shared/src/project-details';
 import { Layout } from 'src/pages-impl/layout/layout';
-import { TERMS_OF_USE_ROUTE } from './terms-of-use-routes';
-
 export function TermsOfUseTemplate() {
   return (
-    <Layout title={TERMS_OF_USE_ROUTE.title}>
+    <Layout>
       {() => (
         <>
           <div className="container">

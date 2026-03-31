@@ -9,7 +9,6 @@ import { RouteComponentProps } from '@reach/router';
 import { Logger } from 'src/logging/logger';
 import { CommunicationError } from 'src/communication-errors/communication-errors';
 import { Layout } from 'src/pages-impl/layout/layout';
-import { LANDS_ROUTE } from './lands-routes';
 import { LinkAnchor } from 'src/ui/link-anchor';
 import { EDIT_LAND_ROUTE } from './edit/edit-land-routes';
 import { useLandsAPI } from 'src/main-api/routes/lands/lands-api';
@@ -133,7 +132,7 @@ export function LandsTemplate(_props: RouteComponentProps) {
   }, []);
 
   return (
-    <Layout title={LANDS_ROUTE.label}>
+    <Layout>
       {() => (
         <>
           <h1>Lands</h1>
