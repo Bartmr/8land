@@ -21,24 +21,7 @@ class LoggerImpl {
 
   logDebug(key: string, extraData?: { [key: string]: unknown }) {
     if (EnvironmentVariables.LOG_DEBUG) {
-      const numberOfTimesLogged = this.loggedDebug[key] || 0;
-
-      if (
-        EnvironmentVariables.DISABLE_LOGGING_LIMIT ||
-        numberOfTimesLogged < LOG_ENTRIES_LIMIT
-      ) {
-        this.loggedDebug[key] = numberOfTimesLogged + 1;
-
-        // TODO: Implement remote logging here
-
-        /*
-          Some remote loggers also capture console messages.
-          Maybe it's best to just call either the remote logger or the console,
-          and not both, so we don't get twice the events.
-        */
-
-        console.log('----- DEBUG: ' + key, '\nExtra data:', extraData);
-      }
+      console.log('----- DEBUG: ' + key, '\nExtra data:', extraData);
     }
   }
 
@@ -47,13 +30,7 @@ class LoggerImpl {
     message: string,
     extraData?: { [key: string]: unknown },
   ) {
-    const numberOfTimesLogged = this.loggedWarnings[key] || 0;
 
-    if (
-      EnvironmentVariables.DISABLE_LOGGING_LIMIT ||
-      numberOfTimesLogged < LOG_ENTRIES_LIMIT
-    ) {
-      this.loggedWarnings[key] = numberOfTimesLogged + 1;
 
       // TODO: Implement remote logging here
 
@@ -75,7 +52,6 @@ class LoggerImpl {
         console.warn('Logged warning with key: ' + key + '. ' + message);
         console.warn('Extra data:', extraData);
       }
-    }
   }
 
   logError(
@@ -103,39 +79,31 @@ class LoggerImpl {
       throw caughtValue;
     }
 
-    const numberOfTimesLogged = this.loggedErrors[errorKey] || 0;
 
-    if (
-      EnvironmentVariables.DISABLE_LOGGING_LIMIT ||
-      numberOfTimesLogged < LOG_ENTRIES_LIMIT
-    ) {
-      this.loggedErrors[errorKey] = numberOfTimesLogged + 1;
+    // TODO: Implement remote logging here
 
-      // TODO: Implement remote logging here
+    /*
+      Some remote loggers also capture console messages.
+      Maybe it's best to just call either the remote logger or the console,
+      and not both, so we don't get twice the events.
+    */
 
-      /*
-        Some remote loggers also capture console messages.
-        Maybe it's best to just call either the remote logger or the console,
-        and not both, so we don't get twice the events.
-      */
-
-      if (sentryInstance) {
-        Sentry.captureException(error, {
-          extra: {
-            key: errorKey,
-            data: extraData,
-            caughtValue: caughtValueIsInstanceOfError ? undefined : caughtValue,
-          },
-        });
-      } else {
-        this.logErrorToConsole(
-          errorKey,
-          caughtValue,
-          error,
-          caughtValueIsInstanceOfError,
-          extraData,
-        );
-      }
+    if (sentryInstance) {
+      Sentry.captureException(error, {
+        extra: {
+          key: errorKey,
+          data: extraData,
+          caughtValue: caughtValueIsInstanceOfError ? undefined : caughtValue,
+        },
+      });
+    } else {
+      this.logErrorToConsole(
+        errorKey,
+        caughtValue,
+        error,
+        caughtValueIsInstanceOfError,
+        extraData,
+      );
     }
   }
 

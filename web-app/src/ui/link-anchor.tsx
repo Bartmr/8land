@@ -67,7 +67,7 @@ export function LinkAnchor(props: Props) {
     );
   } else if (props.href.includes('#')) {
     return (
-      <a href={EnvironmentVariables.PATH_PREFIX + props.href} {...commonProps}>
+      <a href={props.href} {...commonProps}>
         {props.children}
       </a>
     );

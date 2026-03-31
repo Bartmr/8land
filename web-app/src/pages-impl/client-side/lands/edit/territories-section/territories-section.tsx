@@ -15,7 +15,6 @@ import {
 } from 'src/communicated-data/communicated-data-types';
 import { useTerritoriesAPI } from 'src/main-api/routes/territories/territories-api';
 import { TerritoryPreview } from './territory-preview';
-import { useMintTerritory } from './use-mint-territory';
 import { throwError } from '@shared/src/throw-error';
 
 const schema = z.object({
@@ -60,7 +59,6 @@ export function TerritoriesSection(props: {
     },
   });
 
-  const mintTerritory = useMintTerritory();
 
   return props.land.assets ? (
     <div>
@@ -115,18 +113,7 @@ export function TerritoriesSection(props: {
                     });
                   }
                 } else {
-                  const mintRes = await mintTerritory({
-                    territoryId: res.response.body.territoryId,
-                    nftMetadata: res.response.body.nftMetadata,
-                  });
-
-                  if (mintRes.failure) {
-                    replaceFormSubmission({
-                      status: mintRes.failure,
-                    });
-                  } else {
-                    props.onSuccessfulSave();
-                  }
+                  props.onSuccessfulSave();
                 }
               }
             })}
