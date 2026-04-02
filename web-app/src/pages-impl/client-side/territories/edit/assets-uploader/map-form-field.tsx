@@ -1,5 +1,5 @@
 import { createTiledJSONSchema } from 'src/main-api/routes/lands/upload-assets/upload-land-assets.schemas';
-import { TERRITORY_MAP_SIZE_LIMIT } from '@shared/src/territories/upload-assets/upload-territory-assets.constants';
+import { TERRITORY_MAP_SIZE_LIMIT } from 'src/main-api/routes/territories/upload-assets/upload-assets.schemas';
 import { GetTerritoryDTO } from '@shared/src/territories/get/get-territory.dto';
 import { z } from 'zod';
 import { useState } from 'react';
