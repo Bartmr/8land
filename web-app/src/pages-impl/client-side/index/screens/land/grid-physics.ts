@@ -3,11 +3,8 @@ import { Direction } from './grid.types';
 import { Block, DoorBlock } from './land-scene.types';
 import { Player } from './player';
 import { DialogueService } from '../dialogue/dialogue-screen';
-import {
-  DynamicBlockType,
-  STATIC_BLOCK_TYPE_VALUES,
-  StaticBlockType,
-} from '@shared/src/blocks/create/create-block.enums';
+import { DynamicBlockType } from 'src/main-api/routes/blocks/create/create-block.schemas';
+import { StaticBlockType, STATIC_BLOCK_TYPE_VALUES } from 'src/main-api/routes/lands/upload-assets/upload-land-assets.schemas';
 import { Gamepad } from '../../gamepad';
 import { throwError } from 'src/throw-error';
 

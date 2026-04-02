@@ -1,5 +1,5 @@
 import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
-import { CreateTerritoryRequestJSONSchemaObj } from '@shared/src/territories/create/create-territory.schemas';
+import { CreateTerritoryRequestJSONSchemaObj } from 'src/main-api/routes/territories/create/create-territory.schemas';
 import { z } from 'zod';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';

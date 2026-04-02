@@ -1,7 +1,5 @@
-import {
-  DynamicBlockType,
-  StaticBlockType,
-} from '@shared/src/blocks/create/create-block.enums';
+import { DynamicBlockType } from 'src/main-api/routes/blocks/create/create-block.schemas';
+import { StaticBlockType } from 'src/main-api/routes/lands/upload-assets/upload-land-assets.schemas';
 import { EnvironmentVariables } from 'src/environment-variables';
 import { CommunicationError } from 'src/communication-errors/communication-errors';
 import { GridPhysics } from './grid-physics';

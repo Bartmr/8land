@@ -97,10 +97,6 @@
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
-    "baseUrl": "./",
-    "paths": {
-      "@shared/*": ["../shared/*"]
-    },
   },
   "include": [
     "./src/**/*",
@@ -108,7 +104,6 @@
     "./gatsby-config.ts",
     "./gatsby-browser.tsx",
     "./gatsby-ssr.tsx",
-    "./plugins/**/*",
-    "../shared/src"
+    "./plugins/**/*"
   ]
 }

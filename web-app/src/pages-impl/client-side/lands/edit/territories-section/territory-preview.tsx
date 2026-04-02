@@ -1,5 +1,5 @@
 import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
-import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
+import { createTiledJSONSchema } from 'src/main-api/routes/lands/upload-assets/upload-land-assets.schemas';
 import { z } from 'zod';
 import { useEffect, useState } from 'react';
 import { TiledJSON } from 'src/pages-impl/client-side/index/screens/land/tiled.types';

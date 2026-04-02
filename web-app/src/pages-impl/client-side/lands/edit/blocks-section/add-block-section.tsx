@@ -1,5 +1,5 @@
-import { DynamicBlockType } from '@shared/src/blocks/create/create-block.enums';
-import { CreateBlockRequestSchema } from '@shared/src/blocks/create/create-block.schemas';
+import { DynamicBlockType } from 'src/main-api/routes/blocks/create/create-block.schemas';
+import { CreateBlockRequestSchema } from 'src/main-api/routes/blocks/create/create-block.schemas';
 import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';

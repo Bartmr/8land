@@ -1,5 +1,5 @@
 import { EditLandBodyDTO } from '@shared/src/land/edit/edit-land.dto';
-import { CreateLandRequestSchemaObj } from '@shared/src/land/create/create-land.schemas';
+import { CreateLandRequestSchemaObj } from 'src/main-api/routes/lands/create/create-land.schemas';
 import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
 import { z } from 'zod';
 import { Fragment, useState } from 'react';
@@ -11,7 +11,7 @@ import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/communicated-data/communicated-data-types';
-import { SoundcloudSongApiUrlSchema } from '@shared/src/land/edit/edit-land.schema';
+import { SoundcloudSongApiUrlSchema } from 'src/main-api/routes/lands/edit/edit-land.schema';
 import { useLandsAPI } from 'src/main-api/routes/lands/lands-api';
 import { throwError } from '@shared/src/throw-error';
 

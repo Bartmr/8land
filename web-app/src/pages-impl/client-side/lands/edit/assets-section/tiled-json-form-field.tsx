@@ -1,4 +1,4 @@
-import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
+import { createTiledJSONSchema } from 'src/main-api/routes/lands/upload-assets/upload-land-assets.schemas';
 import { z } from 'zod';
 import { useEffect, useState } from 'react';
 

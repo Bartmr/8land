@@ -1,18 +1,4 @@
 import { GatsbyNode } from "gatsby";
-import path from "path";
-
-export const onCreateWebpackConfig: GatsbyNode["onCreateWebpackConfig"] = function({
-  actions,
-}) {
-  actions.setWebpackConfig({
-    resolve: {
-      alias: {
-        src: path.join(process.cwd(), `src`),
-        '@shared': path.join(process.cwd(), '../shared'),
-      }
-    }
-  })
-};
 
 export const onCreatePage: GatsbyNode["onCreatePage"] = function({ page, actions }) {
 

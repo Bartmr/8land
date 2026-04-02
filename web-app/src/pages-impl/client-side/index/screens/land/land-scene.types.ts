@@ -1,7 +1,5 @@
-import {
-  DynamicBlockType,
-  StaticBlockType,
-} from '@shared/src/blocks/create/create-block.enums';
+import { DynamicBlockType } from 'src/main-api/routes/blocks/create/create-block.schemas';
+import { StaticBlockType } from 'src/main-api/routes/lands/upload-assets/upload-land-assets.schemas';
 import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
 import { UserAuthSessionData } from 'src/users/auth/user-auth-types';
 

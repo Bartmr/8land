@@ -9,10 +9,8 @@ import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
 import { ResumeLandNavigationDTO } from '@shared/src/land/in-game/resume/resume-land-navigation.dto';
-import {
-  DynamicBlockType,
-  StaticBlockType,
-} from '@shared/src/blocks/create/create-block.enums';
+import { DynamicBlockType } from 'src/main-api/routes/blocks/create/create-block.schemas';
+import { StaticBlockType } from 'src/main-api/routes/lands/upload-assets/upload-land-assets.schemas';
 import { LandsAPI } from 'src/main-api/routes/lands/lands-api';
 import { TrainAPI } from 'src/main-api/routes/train/train.api';
 import { throwError } from 'src/throw-error';
