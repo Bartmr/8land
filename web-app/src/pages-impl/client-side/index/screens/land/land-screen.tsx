@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
-import { UserAuthSessionData } from 'src/users/auth/user-auth-types';
+import { UserAuthSessionData } from '../../../../../users/auth/user-auth-types';
 import { runLandGame } from './land-game';
 import { globalHistory } from '@reach/router';
 import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
-import { ResumeLandNavigationDTO } from 'src/main-api/routes/lands/lands.dtos';
-import { useLandsAPI } from 'src/main-api/routes/lands/lands-api';
-import { useTrainAPI } from 'src/main-api/routes/train/train.api';
+import { ResumeLandNavigationDTO } from '../../../../../main-api/routes/lands/lands.dtos';
+import { useLandsAPI } from '../../../../../main-api/routes/lands/lands-api';
+import { useTrainAPI } from '../../../../../main-api/routes/train/train.api';
 import { navigate } from 'gatsby';
-import { USER_ROUTE } from 'src/pages-impl/client-side/user/user-routes';
+import { USER_ROUTE } from '../../../user/user-routes';
 import { Gamepad } from '../../gamepad';
-import { throwError } from 'src/throw-error';
+import { throwError } from '../../../../../throw-error';
 
 export function LandScreen(props: {
   gamepad: Gamepad,

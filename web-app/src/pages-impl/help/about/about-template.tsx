@@ -1,5 +1,5 @@
-import { Layout } from 'src/pages-impl/layout/layout';
-import { LinkAnchor } from 'src/ui/link-anchor';
+import { Layout } from '../../layout/layout';
+import { LinkAnchor } from '../../../ui/link-anchor';
 import raribleLogo from './rarible-logo.svg';
 import tiledLogo from './tiled-logo-white.png';
 import soundcloudLogo from './soundcloud-logo.png';

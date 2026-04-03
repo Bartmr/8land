@@ -1,17 +1,17 @@
-import { GetLandDTO } from 'src/main-api/routes/lands/lands.dtos';
-import { createTiledJSONSchema } from 'src/main-api/routes/lands/upload-assets/upload-land-assets.schemas';
+import { GetLandDTO } from '../../../../../main-api/routes/lands/lands.dtos';
+import { createTiledJSONSchema } from '../../../../../main-api/routes/lands/upload-assets/upload-land-assets.schemas';
 import { z } from 'zod';
 import { useEffect, useState } from 'react';
-import { TiledJSON } from 'src/pages-impl/client-side/index/screens/land/tiled.types';
-import { TILE_SIZE } from 'src/pages-impl/client-side/index/game-constants';
-import { useJSONHttp } from 'src/main-api/use-json-http';
-import { CommunicationError } from 'src/communication-errors/communication-errors';
+import { TiledJSON } from '../../../index/screens/land/tiled.types';
+import { TILE_SIZE } from '../../../index/game-constants';
+import { useJSONHttp } from '../../../../../main-api/use-json-http';
+import { CommunicationError } from '../../../../../communication-errors/communication-errors';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/communicated-data/communicated-data-types';
+} from '../../../../../communicated-data/communicated-data-types';
 import { v4 } from 'uuid';
-import { throwError } from 'src/throw-error';
+import { throwError } from '../../../../../throw-error';
 
 export function TerritoryPreview(props: {
   land: GetLandDTO;

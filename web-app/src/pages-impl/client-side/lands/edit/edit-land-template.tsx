@@ -1,27 +1,27 @@
-import { Layout } from 'src/pages-impl/layout/layout';
+import { Layout } from '../../../layout/layout';
 import { RouteComponentProps } from '@reach/router';
 import { AssetsSection } from './assets-section/assets-section';
 import { useEffect, useState } from 'react';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/communicated-data/communicated-data-types';
-import { GetLandDTO } from 'src/main-api/routes/lands/lands.dtos';
-import { TransportedDataGate } from 'src/ui/transported-data-gate';
+} from '../../../../communicated-data/communicated-data-types';
+import { GetLandDTO } from '../../../../main-api/routes/lands/lands.dtos';
+import { TransportedDataGate } from '../../../../ui/transported-data-gate';
 import { useParams } from '@reach/router';
 import { uuid, z } from 'zod';
-import { useLandsAPI } from 'src/main-api/routes/lands/lands-api';
+import { useLandsAPI } from '../../../../main-api/routes/lands/lands-api';
 import { Toast } from 'react-bootstrap';
 import { MainSection } from './main-section/main-section';
 import { BlocksSection } from './blocks-section/blocks-section';
 // import { TerritoriesSection } from './components/territories-section/territories-section';
-import { CommunicationError } from 'src/communication-errors/communication-errors';
+import { CommunicationError } from '../../../../communication-errors/communication-errors';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { navigate } from 'gatsby';
 import { LANDS_ROUTE } from '../lands-routes';
-// import { mainApiReducer } from 'src/main-api/main-api-reducer';
-// import { useStoreSelector } from 'src/store/use-store-selector';
+// import { mainApiReducer } from '../../../../main-api/main-api-reducer';
+// import { useStoreSelector } from '../../../../store/use-store-selector';
 // import { throwError } from '@shared/src/internals/utils/throw-error';
 // import { Role } from '@shared/src/auth/auth.enums';
 

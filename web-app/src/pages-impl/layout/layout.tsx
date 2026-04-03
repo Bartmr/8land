@@ -3,11 +3,11 @@ import { graphql, useStaticQuery } from 'gatsby';
 import { ReactNode, useState } from 'react';
 import { Header } from './header/header';
 import { useLocation } from '@reach/router';
-import { LinkAnchor } from 'src/ui/link-anchor';
-import { PRIVACY_POLICY_ROUTE } from 'src/pages-impl/privacy-policy/privacy-policy-routes';
-import logo from 'src/logo.svg';
-import { TERMS_OF_USE_ROUTE } from 'src/pages-impl/terms-of-use/terms-of-use-routes';
-import { CONTENT_POLICY_ROUTE } from 'src/pages-impl/content-policy/content-policy-routes';
+import { LinkAnchor } from '../../ui/link-anchor';
+import { PRIVACY_POLICY_ROUTE } from '../privacy-policy/privacy-policy-routes';
+import logo from '../../logo.svg';
+import { TERMS_OF_USE_ROUTE } from '../terms-of-use/terms-of-use-routes';
+import { CONTENT_POLICY_ROUTE } from '../content-policy/content-policy-routes';
 
 type Props = {
   children: (renderProps: {

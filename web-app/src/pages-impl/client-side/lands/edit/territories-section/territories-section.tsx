@@ -1,5 +1,5 @@
-import { GetLandDTO } from 'src/main-api/routes/lands/lands.dtos';
-import { CreateTerritoryRequestJSONSchemaObj } from 'src/main-api/routes/territories/create/create-territory.schemas';
+import { GetLandDTO } from '../../../../../main-api/routes/lands/lands.dtos';
+import { CreateTerritoryRequestJSONSchemaObj } from '../../../../../main-api/routes/territories/create/create-territory.schemas';
 import { z } from 'zod';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -7,15 +7,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   TransportedDataGate,
   TransportedDataGateLayout,
-} from 'src/ui/transported-data-gate';
-import { useFormUtils } from 'src/forms/form-utils';
+} from '../../../../../ui/transported-data-gate';
+import { useFormUtils } from '../../../../../forms/form-utils';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/communicated-data/communicated-data-types';
-import { useTerritoriesAPI } from 'src/main-api/routes/territories/territories-api';
+} from '../../../../../communicated-data/communicated-data-types';
+import { useTerritoriesAPI } from '../../../../../main-api/routes/territories/territories-api';
 import { TerritoryPreview } from './territory-preview';
-import { throwError } from 'src/throw-error';
+import { throwError } from '../../../../../throw-error';
 
 const schema = z.object({
   ...CreateTerritoryRequestJSONSchemaObj,

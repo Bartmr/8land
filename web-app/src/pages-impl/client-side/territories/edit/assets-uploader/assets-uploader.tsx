@@ -1,15 +1,15 @@
-import { GetTerritoryDTO } from 'src/main-api/routes/territories/territories.dtos';
+import { GetTerritoryDTO } from '../../../../../main-api/routes/territories/territories.dtos';
 import { useState } from 'react';
 import {
   TransportedDataGate,
   TransportedDataGateLayout,
-} from 'src/ui/transported-data-gate';
-import { LinkAnchor } from 'src/ui/link-anchor';
+} from '../../../../../ui/transported-data-gate';
+import { LinkAnchor } from '../../../../../ui/link-anchor';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/communicated-data/communicated-data-types';
-import { useTerritoriesAPI } from 'src/main-api/routes/territories/territories-api';
+} from '../../../../../communicated-data/communicated-data-types';
+import { useTerritoriesAPI } from '../../../../../main-api/routes/territories/territories-api';
 import { MapFormField } from './map-form-field';
 import { TilesetFormField } from './tileset-form-field';
 

@@ -6,7 +6,7 @@ import { AppContext } from './app-screen.types';
 import { Gamepad } from '../../gamepad';
 import { ESCAPE_BUTTON_SELECTOR } from '../../keypad';
 import { IframeGate } from './iframe-gate';
-import { throwError } from 'src/throw-error';
+import { throwError } from '../../../../../throw-error';
 
 export class AppService {
   private render: () => void;

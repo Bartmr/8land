@@ -1,16 +1,16 @@
-import { GetTerritoryDTO } from 'src/main-api/routes/territories/territories.dtos';
+import { GetTerritoryDTO } from '../../../../main-api/routes/territories/territories.dtos';
 import { RouteComponentProps, useParams } from '@reach/router';
 import { uuid, z } from 'zod';
 import { useEffect, useState } from 'react';
 import { Accordion, Toast } from 'react-bootstrap';
-import { Layout } from 'src/pages-impl/layout/layout';
-import { TransportedDataGate } from 'src/ui/transported-data-gate';
-import { CommunicationError } from 'src/communication-errors/communication-errors';
+import { Layout } from '../../../layout/layout';
+import { TransportedDataGate } from '../../../../ui/transported-data-gate';
+import { CommunicationError } from '../../../../communication-errors/communication-errors';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/communicated-data/communicated-data-types';
-import { useTerritoriesAPI } from 'src/main-api/routes/territories/territories-api';
+} from '../../../../communicated-data/communicated-data-types';
+import { useTerritoriesAPI } from '../../../../main-api/routes/territories/territories-api';
 import { AssetsUploader } from './assets-uploader/assets-uploader';
 
 function EditTerritoryWithTerritory(props: {

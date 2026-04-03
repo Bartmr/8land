@@ -1,4 +1,4 @@
-import { TransportedData } from 'src/communicated-data/communicated-data-types';
+import { TransportedData } from '../../communicated-data/communicated-data-types';
 import { UserAuthSessionData } from './user-auth-types';
 
 export const USER_AUTH_LOGOUT = 'USER_AUTH_LOGOUT';

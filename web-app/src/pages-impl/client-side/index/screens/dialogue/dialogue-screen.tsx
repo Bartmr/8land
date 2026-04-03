@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 import { LandScreenService } from '../land/land-screen.service';
-import { throwError } from 'src/throw-error';
+import { throwError } from '../../../../../throw-error';
 import { Gamepad } from '../../gamepad';
 
 export class DialogueService {

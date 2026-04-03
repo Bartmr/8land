@@ -1,5 +1,5 @@
-import { NotFoundTemplate } from 'src/pages-impl/not-found/not-found-template';
-import { HtmlHead } from 'src/pages-impl/html-head';
+import { NotFoundTemplate } from '../pages-impl/not-found/not-found-template';
+import { HtmlHead } from '../pages-impl/html-head';
 import type { PageProps } from 'gatsby';
 
 export default NotFoundTemplate;

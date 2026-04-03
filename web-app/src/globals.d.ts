@@ -1,24 +1,5 @@
-import { SoundcloudSong } from 'src/pages-impl/client-side/index/soundcloud-types';
-import {
-  ProviderMessage,
-  ProviderRpcError,
-  ProviderConnectInfo,
-  RequestArguments,
-} from 'hardhat/types';
-import { AppContext } from 'src/pages-impl/client-side/index/screens/app/app-screen.types';
-
-interface EthereumEvent {
-  connect: ProviderConnectInfo;
-  disconnect: ProviderRpcError;
-  accountsChanged: Array<string>;
-  chainChanged: string;
-  message: ProviderMessage;
-}
-
-type EthereumEventKeys = keyof EthereumEvent;
-type EthereumEventHandler<K extends EthereumEventKeys> = (
-  event: EthereumEvent[K],
-) => void;
+import { SoundcloudSong } from './soundcloud/types';
+import { AppContext } from './pages-impl/client-side/index/screens/app/app-screen.types';
 
 declare global {
   interface Window {
@@ -75,28 +56,6 @@ declare global {
         isPaused(callback: (...args: unknown[]) => void): void;
       });
     };
-
-    ethereum?:
-      | { isMetaMask?: false }
-      | {
-          isMetaMask: true;
-          autoRefreshOnNetworkChange: boolean;
-          chainId: string;
-          isStatus?: boolean;
-          networkVersion: string;
-          on<K extends EthereumEventKeys>(
-            event: K,
-            eventHandler: EthereumEventHandler<K>,
-          ): void;
-          request(request: {
-            method: 'eth_requestAccounts';
-          }): Promise<string[]>;
-          request(request: {
-            method: 'personal_sign';
-            params: [string, string];
-          }): Promise<string>;
-          sendAsync: (request: RequestArguments) => Promise<unknown>;
-        };
 
     explore8Land?: {
       getContext: () => Promise<AppContext>;

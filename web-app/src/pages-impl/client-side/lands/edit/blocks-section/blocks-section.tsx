@@ -1,14 +1,14 @@
-import { DynamicBlockType } from 'src/main-api/routes/blocks/create/create-block.schemas';
-import { GetLandDTO } from 'src/main-api/routes/lands/lands.dtos';
+import { DynamicBlockType } from '../../../../../main-api/routes/blocks/create/create-block.schemas';
+import { GetLandDTO } from '../../../../../main-api/routes/lands/lands.dtos';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import { TransportedDataGate } from 'src/ui/transported-data-gate';
+import { TransportedDataGate } from '../../../../../ui/transported-data-gate';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/communicated-data/communicated-data-types';
-import { useBlocksAPI } from 'src/main-api/routes/blocks/blocks-api';
+} from '../../../../../communicated-data/communicated-data-types';
+import { useBlocksAPI } from '../../../../../main-api/routes/blocks/blocks-api';
 import { AddBlockSection } from './add-block-section';
 
 export function BlocksSection(props: {

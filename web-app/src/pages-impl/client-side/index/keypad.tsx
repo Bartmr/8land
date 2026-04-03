@@ -1,7 +1,7 @@
 import nipplejs from 'nipplejs';
 import { useEffect } from 'react';
 import { Direction } from './screens/land/grid.types';
-import { throwError } from 'src/throw-error';
+import { throwError } from '../../../throw-error';
 import { Gamepad } from './gamepad'
 
 export const ESCAPE_BUTTON_SELECTOR = '#game-button-escape';

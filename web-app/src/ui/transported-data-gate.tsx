@@ -6,13 +6,13 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { ReactNode } from 'react';
-import { Logger } from 'src/logging/logger';
-import { CommunicationError } from 'src/communication-errors/communication-errors';
+import { Logger } from '../logging/logger';
+import { CommunicationError } from '../communication-errors/communication-errors';
 import {
   TransportedData,
   TransportedDataStatus,
   UnwrapTransportedData,
-} from 'src/communicated-data/communicated-data-types';
+} from '../communicated-data/communicated-data-types';
 
 export enum TransportedDataGateLayout {
   Tape = 'tape',

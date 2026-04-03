@@ -1,4 +1,4 @@
-import { Layout } from 'src/pages-impl/layout/layout';
+import { Layout } from '../../../layout/layout';
 import { BUILDING_AN_APP_ROUTE } from './building-an-app-routes';
 
 export function BuildingALandTemplate() {

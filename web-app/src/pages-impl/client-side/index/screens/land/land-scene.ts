@@ -1,7 +1,7 @@
-import { DynamicBlockType } from 'src/main-api/routes/blocks/create/create-block.schemas';
-import { StaticBlockType } from 'src/main-api/routes/lands/upload-assets/upload-land-assets.schemas';
-import { EnvironmentVariables } from 'src/environment-variables';
-import { CommunicationError } from 'src/communication-errors/communication-errors';
+import { DynamicBlockType } from '../../../../../main-api/routes/blocks/create/create-block.schemas';
+import { StaticBlockType } from '../../../../../main-api/routes/lands/upload-assets/upload-land-assets.schemas';
+import { EnvironmentVariables } from '../../../../../environment-variables';
+import { CommunicationError } from '../../../../../communication-errors/communication-errors';
 import { GridPhysics } from './grid-physics';
 import { Direction } from './grid.types';
 import {
@@ -19,10 +19,10 @@ import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
-import { LandsAPI } from 'src/main-api/routes/lands/lands-api';
-import { NavigateToLandDTO } from 'src/main-api/routes/lands/lands.dtos';
-import { TrainAPI } from 'src/main-api/routes/train/train.api';
-import { throwError } from 'src/throw-error';
+import { LandsAPI } from '../../../../../main-api/routes/lands/lands-api';
+import { NavigateToLandDTO } from '../../../../../main-api/routes/lands/lands.dtos';
+import { TrainAPI } from '../../../../../main-api/routes/train/train.api';
+import { throwError } from '../../../../../throw-error';
 import { Gamepad } from '../../gamepad';
 
 export class LandScene extends Phaser.Scene {

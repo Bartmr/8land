@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
-import { UserAuthAction } from 'src/users/auth/user-auth-actions';
-import { UserAuthSessionData } from 'src/users/auth/user-auth-types';
+import { UserAuthAction } from '../users/auth/user-auth-actions';
+import { UserAuthSessionData } from '../users/auth/user-auth-types';
 import {
   TransportedDataStatus,
   TransportedData,

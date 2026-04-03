@@ -1,4 +1,4 @@
-import { Layout } from 'src/pages-impl/layout/layout';
+import { Layout } from '../layout/layout';
 export function ContentPolicyTemplate() {
   return (
     <Layout>

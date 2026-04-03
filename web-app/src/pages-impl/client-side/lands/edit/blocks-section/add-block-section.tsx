@@ -1,16 +1,16 @@
-import { DynamicBlockType } from 'src/main-api/routes/blocks/create/create-block.schemas';
-import { CreateBlockRequestSchema } from 'src/main-api/routes/blocks/create/create-block.schemas';
-import { GetLandDTO } from 'src/main-api/routes/lands/lands.dtos';
+import { DynamicBlockType } from '../../../../../main-api/routes/blocks/create/create-block.schemas';
+import { CreateBlockRequestSchema } from '../../../../../main-api/routes/blocks/create/create-block.schemas';
+import { GetLandDTO } from '../../../../../main-api/routes/lands/lands.dtos';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { TransportedDataGate } from 'src/ui/transported-data-gate';
-import { useFormUtils } from 'src/forms/form-utils';
+import { TransportedDataGate } from '../../../../../ui/transported-data-gate';
+import { useFormUtils } from '../../../../../forms/form-utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/communicated-data/communicated-data-types';
-import { useBlocksAPI } from 'src/main-api/routes/blocks/blocks-api';
+} from '../../../../../communicated-data/communicated-data-types';
+import { useBlocksAPI } from '../../../../../main-api/routes/blocks/blocks-api';
 
 export function AddBlockSection(props: {
   land: GetLandDTO;

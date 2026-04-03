@@ -1,6 +1,6 @@
 import { Link } from 'gatsby';
 import React, { ReactNode, SyntheticEvent } from 'react';
-import { EnvironmentVariables } from 'src/environment-variables';
+import { EnvironmentVariables } from '../environment-variables';
 
 type Props = {
   children: ReactNode;

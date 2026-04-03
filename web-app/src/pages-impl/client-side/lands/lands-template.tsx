@@ -1,17 +1,17 @@
-import { IndexLandsDTO, GetLandsToClaimDTO } from 'src/main-api/routes/lands/lands.dtos';
+import { IndexLandsDTO, GetLandsToClaimDTO } from '../../../main-api/routes/lands/lands.dtos';
 import { useEffect, useState } from 'react';
-import { TransportedDataGate } from 'src/ui/transported-data-gate';
+import { TransportedDataGate } from '../../../ui/transported-data-gate';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/communicated-data/communicated-data-types';
+} from '../../../communicated-data/communicated-data-types';
 import { RouteComponentProps } from '@reach/router';
-import { Logger } from 'src/logging/logger';
-import { CommunicationError } from 'src/communication-errors/communication-errors';
-import { Layout } from 'src/pages-impl/layout/layout';
-import { LinkAnchor } from 'src/ui/link-anchor';
+import { Logger } from '../../../logging/logger';
+import { CommunicationError } from '../../../communication-errors/communication-errors';
+import { Layout } from '../../layout/layout';
+import { LinkAnchor } from '../../../ui/link-anchor';
 import { EDIT_LAND_ROUTE } from './edit/edit-land-routes';
-import { useLandsAPI } from 'src/main-api/routes/lands/lands-api';
+import { useLandsAPI } from '../../../main-api/routes/lands/lands-api';
 import { Toast } from 'react-bootstrap';
 import { START_LANDS_LIMIT_EXCEEDED_MESSAGE } from './edit/assets-section/assets-section.constants';
 import { BUILDING_A_LAND_ROUTE } from '../../help/lands/building-a-land/building-a-land.routes';

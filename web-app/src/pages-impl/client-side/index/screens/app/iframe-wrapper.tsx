@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { TransportedDataGate } from 'src/ui/transported-data-gate';
-import { TransportedDataStatus } from 'src/communicated-data/communicated-data-types';
+import { TransportedDataGate } from '../../../../../ui/transported-data-gate';
+import { TransportedDataStatus } from '../../../../../communicated-data/communicated-data-types';
 import { MusicService } from '../../music-ticker';
 import { AppContext } from './app-screen.types';
 import { Gamepad } from '../../gamepad';

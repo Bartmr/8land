@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Layout } from 'src/pages-impl/layout/layout';
+import { Layout } from '../../layout/layout';
 import { RouteComponentProps } from '@reach/router';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/communicated-data/communicated-data-types';
-import { TransportedDataGate } from 'src/ui/transported-data-gate';
-import { mainApiReducer } from 'src/main-api/main-api-reducer';
-import { useStoreSelector } from 'src/redux/use-store-selector';
+} from '../../../communicated-data/communicated-data-types';
+import { TransportedDataGate } from '../../../ui/transported-data-gate';
+import { mainApiReducer } from '../../../main-api/main-api-reducer';
+import { useStoreSelector } from '../../../redux/use-store-selector';
 import { GameFrame } from './game-frame';
-import { LinkAnchor } from 'src/ui/link-anchor';
+import { LinkAnchor } from '../../../ui/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
 import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
-import { ResumeLandNavigationDTO } from 'src/main-api/routes/lands/lands.dtos';
-import { useLandsAPI } from 'src/main-api/routes/lands/lands-api';
+import { ResumeLandNavigationDTO } from '../../../main-api/routes/lands/lands.dtos';
+import { useLandsAPI } from '../../../main-api/routes/lands/lands-api';
 
 function Content(props: {
   showHeaderAndFooter: () => void;

@@ -1,19 +1,19 @@
 import { RouteComponentProps } from '@reach/router';
-import { Layout } from 'src/pages-impl/layout/layout';
+import { Layout } from '../../layout/layout';
 import { useEffect, useState } from 'react';
 import * as auth from 'firebase/auth';
-import { FirebaseAuthUI } from 'src/firebase/firebase-auth-ui';
+import { FirebaseAuthUI } from '../../../firebase/firebase-auth-ui';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/communicated-data/communicated-data-types';
-import { FirebaseAuth } from 'src/firebase/firebase-auth';
-import { TransportedDataGate } from 'src/ui/transported-data-gate';
-import { useUserAuth } from 'src/users/auth/use-user-auth';
-import { LinkAnchor } from 'src/ui/link-anchor';
+} from '../../../communicated-data/communicated-data-types';
+import { FirebaseAuth } from '../../../firebase/firebase-auth';
+import { TransportedDataGate } from '../../../ui/transported-data-gate';
+import { useUserAuth } from '../../../users/auth/use-user-auth';
+import { LinkAnchor } from '../../../ui/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
 import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
-import { throwError } from 'src/throw-error';
+import { throwError } from '../../../throw-error';
 
 function Content() {
   const mainApiSession = useUserAuth();

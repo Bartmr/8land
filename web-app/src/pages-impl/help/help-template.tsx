@@ -1,12 +1,12 @@
-import { CONTACT_CTA_PRESENT } from 'src/project-details';
+import { CONTACT_CTA_PRESENT } from '../../project-details';
 import {
   faLightbulb,
   faPenRuler,
   faProjectDiagram,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Layout } from 'src/pages-impl/layout/layout';
-import { LinkAnchor } from 'src/ui/link-anchor';
+import { Layout } from '../layout/layout';
+import { LinkAnchor } from '../../ui/link-anchor';
 import { ABOUT_ROUTE } from './about/about-routes';
 import { LAND_IDEAS_ROUTE } from './lands/land-ideas/land-ideas-routes';
 import { BUILDING_A_LAND_ROUTE } from './lands/building-a-land/building-a-land.routes';

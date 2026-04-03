@@ -1,4 +1,4 @@
-import { TERRITORY_TILESET_SIZE_LIMIT } from 'src/main-api/routes/territories/upload-assets/upload-assets.schemas';
+import { TERRITORY_TILESET_SIZE_LIMIT } from '../../../../../main-api/routes/territories/upload-assets/upload-assets.schemas';
 import { useState } from 'react';
 
 export function TilesetFormField(props: {

@@ -1,15 +1,15 @@
 import { faMusic } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import { LinkAnchor } from 'src/ui/link-anchor';
-import { UserAuthSessionData } from 'src/users/auth/user-auth-types';
-import { getCurrentLocalHref } from 'src/navigation/current-local-href';
+import { LinkAnchor } from '../../../ui/link-anchor';
+import { UserAuthSessionData } from '../../../users/auth/user-auth-types';
+import { getCurrentLocalHref } from '../../../navigation/current-local-href';
 import { LOGIN_ROUTE } from '../login/login-routes';
 import { Keypad } from './keypad';
 import { MusicService, MusicTicker } from './music-ticker';
 import * as styles from './game-frame.module.scss';
 import { ScreenSwitcher } from './screen-switcher';
-import { ResumeLandNavigationDTO } from 'src/main-api/routes/lands/lands.dtos';
+import { ResumeLandNavigationDTO } from '../../../main-api/routes/lands/lands.dtos';
 import { Gamepad, useGamepad } from './gamepad';
 
 export function GameFrame(props: {

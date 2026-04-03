@@ -1,5 +1,5 @@
-import { Layout } from 'src/pages-impl/layout/layout';
-import { LinkAnchor } from 'src/ui/link-anchor';
+import { Layout } from '../../../layout/layout';
+import { LinkAnchor } from '../../../../ui/link-anchor';
 import { BUILDING_A_LAND_ROUTE } from './building-a-land.routes';
 import landWithGrid from './images/land-with-grid.png';
 import colorShades from './images/4-color-shades.png';

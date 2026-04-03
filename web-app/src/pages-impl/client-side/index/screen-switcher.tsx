@@ -1,6 +1,6 @@
-import { ResumeLandNavigationDTO } from 'src/main-api/routes/lands/lands.dtos';
+import { ResumeLandNavigationDTO } from '../../../main-api/routes/lands/lands.dtos';
 import { useRef, useState } from 'react';
-import { UserAuthSessionData } from 'src/users/auth/user-auth-types';
+import { UserAuthSessionData } from '../../../users/auth/user-auth-types';
 import { MusicService } from './music-ticker';
 import { AppScreen, AppService } from './screens/app/app-screen';
 import {

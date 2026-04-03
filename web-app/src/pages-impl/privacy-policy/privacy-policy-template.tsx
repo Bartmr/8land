@@ -2,12 +2,12 @@ import {
   CONTACT_CTA,
   CONTACT_CTA_PAST,
   CONTACT_CTA_PRESENT,
-} from 'src/project-details';
-import { Layout } from 'src/pages-impl/layout/layout';
+} from '../../project-details';
+import { Layout } from '../layout/layout';
 import {
   LOG_SERVICE_COMPANY,
   LOG_SERVICE_NAME,
-} from 'src/logging/logger';
+} from '../../logging/logger';
 export function PrivacyPolicyTemplate() {
   return (
     <Layout>

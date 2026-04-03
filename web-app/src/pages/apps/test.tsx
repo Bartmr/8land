@@ -1,5 +1,5 @@
-import { TestAppTemplate } from 'src/pages-impl/apps/test/test-app-template';
-import { HtmlHead } from 'src/pages-impl/html-head';
+import { TestAppTemplate } from '../../pages-impl/apps/test/test-app-template';
+import { HtmlHead } from '../../pages-impl/html-head';
 import type { PageProps } from 'gatsby';
 
 export default TestAppTemplate;

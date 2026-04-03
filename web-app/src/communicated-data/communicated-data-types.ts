@@ -1,4 +1,4 @@
-import { CommunicationError } from 'src/communication-errors/communication-errors';
+import { CommunicationError } from '../communication-errors/communication-errors';
 
 export enum TransportedDataStatus {
   NotInitialized = 'not-initialized',

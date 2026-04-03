@@ -8,9 +8,9 @@ import {
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/communicated-data/communicated-data-types';
+} from '../../communicated-data/communicated-data-types';
 import { AppContext } from '../client-side/index/screens/app/app-screen.types';
-import { throwError } from 'src/throw-error';
+import { throwError } from '../../throw-error';
 
 const AppContextContext = createContext<TransportedData<
   AppContext & { explore8Land: NonNullable<Window['explore8Land']> }

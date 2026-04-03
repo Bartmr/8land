@@ -2,15 +2,15 @@ import { useState } from 'react';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/communicated-data/communicated-data-types';
-import { TransportedDataGate } from 'src/ui/transported-data-gate';
+} from '../../../../../communicated-data/communicated-data-types';
+import { TransportedDataGate } from '../../../../../ui/transported-data-gate';
 import { TiledJSONFieldState } from './tiled-json-form-field';
 import { TilesetImageFieldState } from './tileset-image-form-field';
 import { TiledJSONField } from './tiled-json-form-field';
 import { TilesetImageFormField } from './tileset-image-form-field';
-import { GetLandDTO } from 'src/main-api/routes/lands/lands.dtos';
-import { LinkAnchor } from 'src/ui/link-anchor';
-import { useLandsAPI } from 'src/main-api/routes/lands/lands-api';
+import { GetLandDTO } from '../../../../../main-api/routes/lands/lands.dtos';
+import { LinkAnchor } from '../../../../../ui/link-anchor';
+import { useLandsAPI } from '../../../../../main-api/routes/lands/lands-api';
 import { START_LANDS_LIMIT_EXCEEDED_MESSAGE } from './assets-section.constants';
 
 export function AssetsSection(props: {

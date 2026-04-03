@@ -1,5 +1,5 @@
-import { HelpTemplate } from 'src/pages-impl/help/help-template';
-import { HtmlHead } from 'src/pages-impl/html-head';
+import { HelpTemplate } from '../../pages-impl/help/help-template';
+import { HtmlHead } from '../../pages-impl/html-head';
 import type { PageProps } from 'gatsby';
 
 export default HelpTemplate;

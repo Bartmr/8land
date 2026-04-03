@@ -1,4 +1,4 @@
-import { LAND_TILESET_SIZE_LIMIT } from 'src/main-api/routes/lands/upload-assets/upload-land-assets.schemas';
+import { LAND_TILESET_SIZE_LIMIT } from '../../../../../main-api/routes/lands/upload-assets/upload-land-assets.schemas';
 import { useEffect, useState } from 'react';
 
 export type TilesetImageFieldState =

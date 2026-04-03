@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from 'react';
-import { EnvironmentVariables } from 'src/environment-variables';
+import { EnvironmentVariables } from '../../../../../environment-variables';
 import { MusicService } from '../../music-ticker';
 import { IframeWrapper } from './iframe-wrapper';
 import { AppContext } from './app-screen.types';

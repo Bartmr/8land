@@ -1,5 +1,5 @@
-import { BuildingALandTemplate } from 'src/pages-impl/help/lands/building-a-land/building-a-land.template';
-import { HtmlHead } from 'src/pages-impl/html-head';
+import { BuildingALandTemplate } from '../../../pages-impl/help/lands/building-a-land/building-a-land.template';
+import { HtmlHead } from '../../../pages-impl/html-head';
 import type { PageProps } from 'gatsby';
 
 export default BuildingALandTemplate;

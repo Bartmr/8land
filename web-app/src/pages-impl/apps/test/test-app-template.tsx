@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { AppLayout } from 'src/pages-impl/layout/app-layout';
-import { TransportedDataGate } from 'src/ui/transported-data-gate';
-import { TransportedDataStatus } from 'src/communicated-data/communicated-data-types';
+import { AppLayout } from '../../layout/app-layout';
+import { TransportedDataGate } from '../../../ui/transported-data-gate';
+import { TransportedDataStatus } from '../../../communicated-data/communicated-data-types';
 import { AppContextProvider, useAppContext } from '../app-context';
 
 function Content() {

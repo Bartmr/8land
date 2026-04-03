@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { HtmlHead } from 'src/pages-impl/html-head';
+import { HtmlHead } from '../pages-impl/html-head';
 import type { PageProps } from 'gatsby';
-import { TransportedDataGate } from 'src/ui/transported-data-gate';
-import { CommunicationError } from 'src/communication-errors/communication-errors';
+import { TransportedDataGate } from '../ui/transported-data-gate';
+import { CommunicationError } from '../communication-errors/communication-errors';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/communicated-data/communicated-data-types';
+} from '../communicated-data/communicated-data-types';
 
 const Component = () => {
   const [entrypoint, replaceEntrypoint] = useState<

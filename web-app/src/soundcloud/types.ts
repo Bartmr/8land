@@ -1,0 +1,123 @@
+export interface SoundcloudSong {
+  id: number;
+  resource_type: string;
+  playable: boolean;
+  artwork_url: string;
+  caption?: unknown;
+  commentable: boolean;
+  comment_count: number;
+  created_at: Date;
+  description: string;
+  downloadable: boolean;
+  download_count: number;
+  duration: number;
+  full_duration: number;
+  embeddable_by: string;
+  genre: string;
+  has_downloads_left: boolean;
+  kind: string;
+  label_name?: unknown;
+  last_modified: Date;
+  license: string;
+  likes_count: number;
+  permalink: string;
+  permalink_url: string;
+  playback_count: number;
+  public: boolean;
+  publisher_metadata: {
+    id: number;
+    urn: string;
+  };
+  purchase_title?: unknown;
+  purchase_url?: unknown;
+  release_date?: unknown;
+  reposts_count: number;
+  secret_token?: unknown;
+  sharing: string;
+  state: string;
+  streamable: boolean;
+  tag_list: string;
+  title: string;
+  track_format: string;
+  uri: string;
+  urn: string;
+  user_id: number;
+  visuals?: unknown;
+  waveform_url: string;
+  display_date: Date;
+  media: {
+    transcodings: Array<{
+      url: string;
+      preset: string;
+      duration: number;
+      snipped: boolean;
+      format: {
+        protocol: string;
+        mime_type: string;
+      };
+      quality: string;
+    }>;
+  };
+  station_urn: string;
+  station_permalink: string;
+  track_authorization: string;
+  monetization_model: string;
+  policy: string;
+  user: {
+    avatar_url: string;
+    city: string;
+    comments_count: number;
+    country_code: string;
+    created_at: Date;
+    creator_subscriptions: Array<{
+      product: {
+        id: string;
+      };
+    }>[];
+    creator_subscription: {
+      product: {
+        id: string;
+      };
+    };
+    description?: unknown;
+    followers_count: number;
+    followings_count: number;
+    first_name: string;
+    full_name: string;
+    groups_count: number;
+    id: number;
+    kind: string;
+    last_modified: Date;
+    last_name: string;
+    likes_count: number;
+    playlist_likes_count: number;
+    permalink: string;
+    permalink_url: string;
+    playlist_count: number;
+    reposts_count?: unknown;
+    track_count: number;
+    uri: string;
+    urn: string;
+    username: string;
+    verified: boolean;
+    visuals: {
+      urn: string;
+      enabled: boolean;
+      visuals: Array<{
+        urn: string;
+        entry_time: number;
+        visual_url: string;
+      }>;
+      tracking?: unknown;
+    };
+    badges: {
+      pro: boolean;
+      pro_unlimited: boolean;
+      verified: boolean;
+    };
+    station_urn: string;
+    station_permalink: string;
+  };
+  _resource_id: number;
+  _resource_type: string;
+}

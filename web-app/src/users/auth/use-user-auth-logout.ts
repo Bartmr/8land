@@ -1,14 +1,14 @@
 import {
   StoreDispatch,
   StoreGetState,
-} from 'src/redux/store-types';
+} from '../../redux/store-types';
 import { USER_AUTH_LOGOUT } from './user-auth-actions';
-import { useSessionStorage } from 'src/session-storage';
-import { useLocalStorage } from 'src/local-storage';
-import { useStoreDispatch } from 'src/redux/use-store-dispatch';
-import { mainApiReducer } from 'src/main-api/main-api-reducer';
-import { useStoreGetState } from 'src/redux/use-store-get-state';
-import { TransportedDataStatus } from 'src/communicated-data/communicated-data-types';
+import { useSessionStorage } from '../../session-storage';
+import { useLocalStorage } from '../../local-storage';
+import { useStoreDispatch } from '../../redux/use-store-dispatch';
+import { mainApiReducer } from '../../main-api/main-api-reducer';
+import { useStoreGetState } from '../../redux/use-store-get-state';
+import { TransportedDataStatus } from '../../communicated-data/communicated-data-types';
 
 class UserAuthLogout {
   constructor(
@@ -30,7 +30,7 @@ class UserAuthLogout {
 
     /* ----- */
 
-    const { FirebaseAuth } = await import('src/firebase/firebase-auth');
+    const { FirebaseAuth } = await import('../../firebase/firebase-auth');
 
     await FirebaseAuth.signOut();
 

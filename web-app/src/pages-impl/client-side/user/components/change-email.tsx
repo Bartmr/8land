@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import {
   TransportedDataGate,
   TransportedDataGateLayout,
-} from 'src/ui/transported-data-gate';
+} from '../../../../ui/transported-data-gate';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/communicated-data/communicated-data-types';
+} from '../../../../communicated-data/communicated-data-types';
 import * as auth from 'firebase/auth';
-import { FirebaseAuth, getFirebaseUser } from 'src/firebase/firebase-auth';
-import { useUserAuthLogout } from 'src/users/auth/use-user-auth-logout';
+import { FirebaseAuth, getFirebaseUser } from '../../../../firebase/firebase-auth';
+import { useUserAuthLogout } from '../../../../users/auth/use-user-auth-logout';
 import isEmail from 'validator/lib/isEmail';
 
 export function ChangeEmail() {

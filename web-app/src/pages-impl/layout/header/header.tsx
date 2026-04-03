@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import * as styles from './header.module.scss';
-import { LinkAnchor } from 'src/ui/link-anchor';
-import { PROJECT_NAME } from 'src/project-details';
+import { LinkAnchor } from '../../../ui/link-anchor';
+import { PROJECT_NAME } from '../../../project-details';
 import { faBars, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   TransportedDataGate,
   TransportedDataGateLayout,
-} from 'src/ui/transported-data-gate';
-import { LANDS_ROUTE } from 'src/pages-impl/client-side/lands/lands-routes';
-import { useStoreSelector } from 'src/redux/use-store-selector';
-import { mainApiReducer } from 'src/main-api/main-api-reducer';
-import { USER_ROUTE } from 'src/pages-impl/client-side/user/user-routes';
-import { INDEX_ROUTE } from 'src/pages-impl/index-template/index-routes';
-import { LOGIN_ROUTE } from 'src/pages-impl/client-side/login/login-routes';
-import { getCurrentLocalHref } from 'src/navigation/current-local-href';
-import { HELP_ROUTE } from 'src/pages-impl/help/help-routes';
-import { CLIENT_SIDE_INDEX_ROUTE } from 'src/pages-impl/client-side/index/index-routes';
+} from '../../../ui/transported-data-gate';
+import { LANDS_ROUTE } from '../../client-side/lands/lands-routes';
+import { useStoreSelector } from '../../../redux/use-store-selector';
+import { mainApiReducer } from '../../../main-api/main-api-reducer';
+import { USER_ROUTE } from '../../client-side/user/user-routes';
+import { INDEX_ROUTE } from '../../index-template/index-routes';
+import { LOGIN_ROUTE } from '../../client-side/login/login-routes';
+import { getCurrentLocalHref } from '../../../navigation/current-local-href';
+import { HELP_ROUTE } from '../../help/help-routes';
+import { CLIENT_SIDE_INDEX_ROUTE } from '../../client-side/index/index-routes';
 
 type Props = {
   menuHtmlId: string;

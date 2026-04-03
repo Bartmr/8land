@@ -1,10 +1,10 @@
-import { StoreDispatch } from 'src/redux/store-types';
-import { useLocalStorage } from 'src/local-storage';
-import { useStoreDispatch } from 'src/redux/use-store-dispatch';
-import { mainApiReducer } from 'src/main-api/main-api-reducer';
+import { StoreDispatch } from '../../redux/store-types';
+import { useLocalStorage } from '../../local-storage';
+import { useStoreDispatch } from '../../redux/use-store-dispatch';
+import { mainApiReducer } from '../../main-api/main-api-reducer';
 import { LoginResponse, UserAuthSessionData } from './user-auth-types';
-import { useMainJSONApi } from 'src/main-api/use-main-json-api';
-import { TransportedDataStatus } from 'src/communicated-data/communicated-data-types';
+import { useMainJSONApi } from '../../main-api/use-main-json-api';
+import { TransportedDataStatus } from '../../communicated-data/communicated-data-types';
 import { LoginRequestDTO } from '../../main-api/routes/users/auth/auth.dtos';
 import { USER_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY } from './user-auth-constants';
 

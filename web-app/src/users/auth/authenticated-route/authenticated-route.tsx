@@ -3,13 +3,13 @@ import {
   AuthenticatedRouteRules,
   AuthenticatedRouteAccess,
 } from './authenticated-route-types';
-import { useStoreSelector } from 'src/redux/use-store-selector';
-import { TransportedDataGate } from 'src/ui/transported-data-gate';
+import { useStoreSelector } from '../../../redux/use-store-selector';
+import { TransportedDataGate } from '../../../ui/transported-data-gate';
 import { Redirect } from '../../../pages-impl/redirect/redirect';
-import { LOGIN_ROUTE } from 'src/pages-impl/client-side/login/login-routes';
-import { CLIENT_SIDE_INDEX_ROUTE } from 'src/pages-impl/client-side/index/index-routes';
-import { mainApiReducer } from 'src/main-api/main-api-reducer';
-import { getCurrentLocalHref } from 'src/navigation/current-local-href';
+import { LOGIN_ROUTE } from '../../../pages-impl/client-side/login/login-routes';
+import { CLIENT_SIDE_INDEX_ROUTE } from '../../../pages-impl/client-side/index/index-routes';
+import { mainApiReducer } from '../../../main-api/main-api-reducer';
+import { getCurrentLocalHref } from '../../../navigation/current-local-href';
 import { useLocation } from '@reach/router';
 
 type Props = {

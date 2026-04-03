@@ -1,5 +1,5 @@
-import { IndexTemplate } from 'src/pages-impl/index-template/index-template';
-import { HtmlHead } from 'src/pages-impl/html-head';
+import { IndexTemplate } from '../pages-impl/index-template/index-template';
+import { HtmlHead } from '../pages-impl/html-head';
 import type { PageProps } from 'gatsby';
 
 export default IndexTemplate;

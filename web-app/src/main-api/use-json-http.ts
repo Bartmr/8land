@@ -1,4 +1,4 @@
-import { Logger } from 'src/logging/logger';
+import { Logger } from '../logging/logger';
 import { CommunicationError } from '../communication-errors/communication-errors';
 import { UnparsedRequestHeaders } from './http-types';
 import {

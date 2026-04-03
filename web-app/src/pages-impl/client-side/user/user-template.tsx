@@ -1,23 +1,23 @@
 import { RouteComponentProps } from '@reach/router';
 import { useState } from 'react';
-import { Layout } from 'src/pages-impl/layout/layout';
+import { Layout } from '../../layout/layout';
 import {
   TransportedDataGate,
   TransportedDataGateLayout,
-} from 'src/ui/transported-data-gate';
-import { mainApiReducer } from 'src/main-api/main-api-reducer';
-import { useUserAuth } from 'src/users/auth/use-user-auth';
-import { useStoreSelector } from 'src/redux/use-store-selector';
+} from '../../../ui/transported-data-gate';
+import { mainApiReducer } from '../../../main-api/main-api-reducer';
+import { useUserAuth } from '../../../users/auth/use-user-auth';
+import { useStoreSelector } from '../../../redux/use-store-selector';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/communicated-data/communicated-data-types';
-import { useUserAuthLogout } from 'src/users/auth/use-user-auth-logout';
+} from '../../../communicated-data/communicated-data-types';
+import { useUserAuthLogout } from '../../../users/auth/use-user-auth-logout';
 import { ChangeEmail } from './components/change-email';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPersonThroughWindow } from '@fortawesome/free-solid-svg-icons';
-import { useLandsAPI } from 'src/main-api/routes/lands/lands-api';
-import { useAuthAPI } from 'src/main-api/routes/users/auth/auth.api';
+import { useLandsAPI } from '../../../main-api/routes/lands/lands-api';
+import { useAuthAPI } from '../../../main-api/routes/users/auth/auth.api';
 
 
 

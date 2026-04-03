@@ -12,7 +12,7 @@ import {
   useMainJSONApi,
 } from '../../use-main-json-api';
 import { Logger } from '../../../logging/logger';
-import { CommunicationError } from 'src/communication-errors/communication-errors';
+import { CommunicationError } from '../../../communication-errors/communication-errors';
 
 export class LandsAPI {
   constructor(private api: MainJSONApi) {}

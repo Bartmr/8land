@@ -1,5 +1,5 @@
 import { getAuth, connectAuthEmulator, User } from 'firebase/auth';
-import { EnvironmentVariables } from 'src/environment-variables';
+import { EnvironmentVariables } from '../environment-variables';
 import { FirebaseApp } from './firebase-app';
 
 const auth = getAuth(FirebaseApp);

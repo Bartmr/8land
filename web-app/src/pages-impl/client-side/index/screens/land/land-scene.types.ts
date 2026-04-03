@@ -1,7 +1,7 @@
-import { DynamicBlockType } from 'src/main-api/routes/blocks/create/create-block.schemas';
-import { StaticBlockType } from 'src/main-api/routes/lands/upload-assets/upload-land-assets.schemas';
-import { GetLandDTO } from 'src/main-api/routes/lands/lands.dtos';
-import { UserAuthSessionData } from 'src/users/auth/user-auth-types';
+import { DynamicBlockType } from '../../../../../main-api/routes/blocks/create/create-block.schemas';
+import { StaticBlockType } from '../../../../../main-api/routes/lands/upload-assets/upload-land-assets.schemas';
+import { GetLandDTO } from '../../../../../main-api/routes/lands/lands.dtos';
+import { UserAuthSessionData } from '../../../../../users/auth/user-auth-types';
 
 export type LandSceneArguments = {
   player: {

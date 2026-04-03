@@ -1,6 +1,6 @@
-import { PROJECT_SLOGAN } from "@shared/src/project-details"
+import { PROJECT_SLOGAN } from "../project-details"
 import thumbnailSrc from './thumbnail.jpeg'
-import { EnvironmentVariables } from "src/environment-variables";
+import { EnvironmentVariables } from "../environment-variables";
 
 const GATSBY_SITE_URL = EnvironmentVariables.SITE_URL
 

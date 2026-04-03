@@ -1,12 +1,12 @@
 import { Router } from '@reach/router';
-import { AuthenticatedRoute } from 'src/users/auth/authenticated-route/authenticated-route';
-import { AuthenticatedRouteAccess } from 'src/users/auth/authenticated-route/authenticated-route-types';
-import NotFoundTemplate from 'src/pages/404';
+import { AuthenticatedRoute } from '../../users/auth/authenticated-route/authenticated-route';
+import { AuthenticatedRouteAccess } from '../../users/auth/authenticated-route/authenticated-route-types';
+import NotFoundTemplate from '../../pages/404';
 import { LoginTemplate } from './login/login-template';
 import React, { Suspense } from 'react';
 import { RouteComponentProps } from '@reach/router';
-import { TransportedDataGate } from 'src/ui/transported-data-gate';
-import { TransportedDataStatus } from 'src/communicated-data/communicated-data-types';
+import { TransportedDataGate } from '../../ui/transported-data-gate';
+import { TransportedDataStatus } from '../../communicated-data/communicated-data-types';
 import { EditLandTemplate } from './lands/edit/edit-land-template';
 import { EDIT_LAND_ROUTE } from './lands/edit/edit-land-routes';
 import { LANDS_ROUTE } from './lands/lands-routes';

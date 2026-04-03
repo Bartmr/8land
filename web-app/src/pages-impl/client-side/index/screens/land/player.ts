@@ -1,4 +1,4 @@
-import { throwError } from 'src/throw-error';
+import { throwError } from '../../../../../throw-error';
 import { TILE_SIZE } from '../../game-constants';
 import { Direction } from './grid.types';
 

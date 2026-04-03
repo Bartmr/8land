@@ -1,18 +1,18 @@
-import { EditLandBodyDTO, GetLandDTO } from 'src/main-api/routes/lands/lands.dtos';
-import { CreateLandRequestSchemaObj } from 'src/main-api/routes/lands/create/create-land.schemas';
+import { EditLandBodyDTO, GetLandDTO } from '../../../../../main-api/routes/lands/lands.dtos';
+import { CreateLandRequestSchemaObj } from '../../../../../main-api/routes/lands/create/create-land.schemas';
 import { z } from 'zod';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TransportedDataGate } from 'src/ui/transported-data-gate';
-import { useFormUtils } from 'src/forms/form-utils';
+import { TransportedDataGate } from '../../../../../ui/transported-data-gate';
+import { useFormUtils } from '../../../../../forms/form-utils';
 import {
   TransportedData,
   TransportedDataStatus,
-} from 'src/communicated-data/communicated-data-types';
-import { SoundcloudSongApiUrlSchema } from 'src/main-api/routes/lands/edit/edit-land.schema';
-import { useLandsAPI } from 'src/main-api/routes/lands/lands-api';
-import { throwError } from 'src/throw-error';
+} from '../../../../../communicated-data/communicated-data-types';
+import { SoundcloudSongApiUrlSchema } from '../../../../../main-api/routes/lands/edit/edit-land.schema';
+import { useLandsAPI } from '../../../../../main-api/routes/lands/lands-api';
+import { throwError } from '../../../../../throw-error';
 
 export function MainSection(props: {
   land: GetLandDTO;
