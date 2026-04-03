@@ -2,8 +2,7 @@ import {
   MainJSONApi,
   useMainJSONApi,
 } from '../../use-main-json-api';
-import { GetTerritoryDTO } from '@shared/src/territories/get/get-territory.dto';
-import { CreateTerritoryResponseDTO } from '@shared/src/territories/create/create-territory.dto';
+import { GetTerritoryDTO, CreateTerritoryResponseDTO } from './territories.dtos';
 
 export class TerritoriesAPI {
   constructor(private api: MainJSONApi) {}

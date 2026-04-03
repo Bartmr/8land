@@ -2,8 +2,7 @@ import {
   MainJSONApi,
   useMainJSONApi,
 } from '../../use-main-json-api';
-import { GetUserWalletNonce } from '@shared/src/users/me/get-user-wallet-nonce.dto';
-import { ReceiveSignedUserNonceRequestDTO } from '@shared/src/users/me/receive-signed-user-nonce.dto';
+import { GetUserWalletNonce, ReceiveSignedUserNonceRequestDTO } from './users.dtos';
 
 export class UsersAPI {
   constructor(private api: MainJSONApi) {}

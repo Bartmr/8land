@@ -2,7 +2,7 @@ import {
   MainJSONApi,
   useMainJSONApi,
 } from '../../use-main-json-api';
-import { CreateBlockRequestDTO } from '@shared/src/blocks/create/create-block.dto';
+import { CreateBlockRequestDTO } from './blocks.dtos';
 import { DynamicBlockType } from './create/create-block.schemas';
 
 export class BlocksAPI {
