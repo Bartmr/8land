@@ -1,6 +1,6 @@
 import { DynamicBlockType } from 'src/main-api/routes/blocks/create/create-block.schemas';
 import { CreateBlockRequestSchema } from 'src/main-api/routes/blocks/create/create-block.schemas';
-import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
+import { GetLandDTO } from 'src/main-api/routes/lands/lands.dtos';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';

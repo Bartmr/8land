@@ -1,4 +1,4 @@
-import { CONTACT_CTA_PRESENT_CONTINUOUS } from '@shared/src/project-details';
+import { CONTACT_CTA_PRESENT_CONTINUOUS } from 'src/project-details';
 import { Layout } from 'src/pages-impl/layout/layout';
 export function TermsOfUseTemplate() {
   return (

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import * as styles from './header.module.scss';
 import { LinkAnchor } from 'src/ui/link-anchor';
-import { PROJECT_NAME } from '@shared/src/project-details';
+import { PROJECT_NAME } from 'src/project-details';
 import { faBars, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {

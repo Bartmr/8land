@@ -6,7 +6,7 @@ import {
   TransportedData,
   TransportedDataStatus,
 } from 'src/communicated-data/communicated-data-types';
-import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
+import { GetLandDTO } from 'src/main-api/routes/lands/lands.dtos';
 import { TransportedDataGate } from 'src/ui/transported-data-gate';
 import { useParams } from '@reach/router';
 import { uuid, z } from 'zod';

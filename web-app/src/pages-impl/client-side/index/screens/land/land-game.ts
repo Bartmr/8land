@@ -8,7 +8,7 @@ import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
-import { ResumeLandNavigationDTO } from '@shared/src/land/in-game/resume/resume-land-navigation.dto';
+import { ResumeLandNavigationDTO } from 'src/main-api/routes/lands/lands.dtos';
 import { DynamicBlockType } from 'src/main-api/routes/blocks/create/create-block.schemas';
 import { StaticBlockType } from 'src/main-api/routes/lands/upload-assets/upload-land-assets.schemas';
 import { LandsAPI } from 'src/main-api/routes/lands/lands-api';

@@ -1,4 +1,4 @@
-import { GetTerritoryDTO } from '@shared/src/territories/get/get-territory.dto';
+import { GetTerritoryDTO } from 'src/main-api/routes/territories/territories.dtos';
 import { RouteComponentProps, useParams } from '@reach/router';
 import { uuid, z } from 'zod';
 import { useEffect, useState } from 'react';

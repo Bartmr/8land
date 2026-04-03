@@ -1,4 +1,4 @@
-import { GetTerritoryDTO } from '@shared/src/territories/get/get-territory.dto';
+import { GetTerritoryDTO } from 'src/main-api/routes/territories/territories.dtos';
 import { useState } from 'react';
 import {
   TransportedDataGate,

@@ -5,7 +5,7 @@ import { mainApiReducer } from 'src/main-api/main-api-reducer';
 import { LoginResponse, UserAuthSessionData } from './user-auth-types';
 import { useMainJSONApi } from 'src/main-api/use-main-json-api';
 import { TransportedDataStatus } from 'src/communicated-data/communicated-data-types';
-import { LoginRequestDTO } from '@shared/src/auth/auth.dto';
+import { LoginRequestDTO } from '../../main-api/routes/users/auth/auth.dtos';
 import { USER_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY } from './user-auth-constants';
 
 class UserAuth {

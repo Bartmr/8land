@@ -20,7 +20,7 @@ import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
 import { LandsAPI } from 'src/main-api/routes/lands/lands-api';
-import { NavigateToLandDTO } from '@shared/src/land/in-game/navigate/navigate-to-land.dto';
+import { NavigateToLandDTO } from 'src/main-api/routes/lands/lands.dtos';
 import { TrainAPI } from 'src/main-api/routes/train/train.api';
 import { throwError } from 'src/throw-error';
 import { Gamepad } from '../../gamepad';

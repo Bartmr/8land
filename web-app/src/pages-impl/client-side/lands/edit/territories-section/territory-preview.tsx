@@ -1,4 +1,4 @@
-import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
+import { GetLandDTO } from 'src/main-api/routes/lands/lands.dtos';
 import { createTiledJSONSchema } from 'src/main-api/routes/lands/upload-assets/upload-land-assets.schemas';
 import { z } from 'zod';
 import { useEffect, useState } from 'react';

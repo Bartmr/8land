@@ -1,5 +1,5 @@
 import { DynamicBlockType } from 'src/main-api/routes/blocks/create/create-block.schemas';
-import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
+import { GetLandDTO } from 'src/main-api/routes/lands/lands.dtos';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';

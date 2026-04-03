@@ -1,4 +1,4 @@
-import { PROJECT_SLOGAN } from '@shared/src/project-details';
+import { PROJECT_SLOGAN } from 'src/project-details';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layout } from 'src/pages-impl/layout/layout';
