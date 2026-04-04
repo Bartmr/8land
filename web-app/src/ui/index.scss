@@ -53,7 +53,7 @@
 
 @each $color, $value in $theme-colors {
   .bg-#{$color} {
-    --contrasting-text-rgb: color-contrast(to-rgb($value));
+    --contrasting-text-rgb: to-rgb(color-contrast($value));
   }
 }
 
