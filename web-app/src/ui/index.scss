@@ -8,6 +8,11 @@
 
 // Layout & components
 @import "../../node_modules/bootstrap/scss/root";
+
+:root {
+  --contrasting-rgb: to-rgb($body-color);
+}
+
 @import "../../node_modules/bootstrap/scss/reboot";
 
 *:disabled {
@@ -53,10 +58,10 @@
 
 @each $color, $value in $theme-colors {
   .bg-#{$color} {
-    --contrasting-text-rgb: to-rgb(color-contrast($value));
+    --contrasting-rgb: to-rgb(color-contrast($value));
   }
 }
 
 .text-contrasting {
-  color: rgba(var(--contrasting-text-rgb), var(--bs-text-opacity));
+  color: rgba(var(--contrasting-rgb), var(--bs-text-opacity)) !important;
 }
