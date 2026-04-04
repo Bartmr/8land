@@ -6,16 +6,6 @@
 @import "./mixins";
 @import "../../node_modules/bootstrap/scss/utilities";
 
-@each $color, $value in $theme-colors {
-  .bg-#{$color} {
-    --contrasting-text-rgb: color-contrast(to-rgb($value));
-  }
-}
-
-.text-contrasting {
-  color: rgba(var(--contrasting-text-rgb), var(--bs-text-opacity));
-}
-
 // Layout & components
 @import "../../node_modules/bootstrap/scss/root";
 @import "../../node_modules/bootstrap/scss/reboot";
@@ -60,3 +50,13 @@
 
 // Utilities
 @import "../../node_modules/bootstrap/scss/utilities/api";
+
+@each $color, $value in $theme-colors {
+  .bg-#{$color} {
+    --contrasting-text-rgb: color-contrast(to-rgb($value));
+  }
+}
+
+.text-contrasting {
+  color: rgba(var(--contrasting-text-rgb), var(--bs-text-opacity));
+}
