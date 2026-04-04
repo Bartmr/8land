@@ -31,8 +31,8 @@ import { UsersRepository } from 'src/users/users.repository';
 import { AuthTokensService } from './tokens/auth-tokens.service';
 import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
 import { User } from 'src/users/user.entity';
-import { Request as RequestType, Response as ResponseType } from 'express';
-import { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
+import { type Request as RequestType, type Response as ResponseType } from 'express';
+import { type DecodedIdToken } from 'firebase-admin/auth';
 import { v4 } from 'uuid';
 import { EnvironmentVariables } from 'src/environment/environment-variables';
 

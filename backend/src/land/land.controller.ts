@@ -38,7 +38,6 @@ import {
   CreateLandResponseDTO,
 } from '@shared/src/land/create/create-land.dto';
 import { UploadLandAssetsParameters } from '@shared/src/land/upload-assets/upload-land-assets.dto';
-import { ApiBody, ApiConsumes, ApiProperty } from '@nestjs/swagger';
 import {
   EditLandBodyDTO,
   EditLandDTO,
@@ -52,9 +51,7 @@ import { GetLandsToClaimDTO } from '@shared/src/land/lands-to-claim/lands-to-cla
 import { EnvironmentVariables } from 'src/environment/environment-variables';
 
 class LandAssetsRequestDTO {
-  @ApiProperty({ type: 'string', format: 'binary' })
   map!: unknown;
-  @ApiProperty({ type: 'string', format: 'binary' })
   tileset!: unknown;
 }
 
@@ -192,14 +189,16 @@ export class LandsController {
       },
     });
 
-    if (res.error) {
-      if (res.error === 'lands-limit-exceeded') {
-        throw new ConflictException({ error: res.error, limit });
-      } else {
-        throw new ConflictException({ error: res.error });
-      }
-    } else {
+    if (res.error === "name-already-taken") {
+      throw new ConflictException({ error: res.error });
+    } else if (res.error === 'lands-limit-exceeded') {
+      throw new ConflictException({ error: res.error, limit });
+    } else if (res.error === "cannot-create-more-lands-without-start-block") {
+      throw new ConflictException({ error: res.error });
+    } else if (res.res) {
       return res.res;
+    } else {
+      throw new Error()
     }
   }
 
@@ -211,10 +210,6 @@ export class LandsController {
       { name: 'tileset', maxCount: 1 },
     ]),
   )
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    type: LandAssetsRequestDTO,
-  })
   async uploadLandAssets(
     @Param() params: UploadLandAssetsParameters,
     @UploadedFiles()

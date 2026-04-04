@@ -15,7 +15,6 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from 'src/users/auth/auth.guard';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import {
   TERRITORY_MAP_SIZE_LIMIT,
   TERRITORY_TILESET_SIZE_LIMIT,
@@ -106,10 +105,6 @@ export class TerritoriesEndUserController {
       { name: 'tileset', maxCount: 1 },
     ]),
   )
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    type: UploadTerritoryAssetsRequestDTO,
-  })
   async uploadTerritoryAssets(
     @Param() params: UploadTerritoryAssetsParametersDTO,
     @UploadedFiles()
@@ -269,10 +264,6 @@ export class TerritoriesEndUserController {
       { name: 'thumbnail', maxCount: 1 },
     ]),
   )
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    type: CreateTerritoryRequestDTO,
-  })
   async createTerritory(
     @UploadedFiles()
     files: {

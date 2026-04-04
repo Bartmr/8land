@@ -54,14 +54,11 @@ export class LandPersistenceService {
     };
   }): Promise<
     | {
-        error:
+        error?:
           | 'name-already-taken'
           | 'lands-limit-exceeded'
           | 'cannot-create-more-lands-without-start-block';
-      }
-    | {
-        error?: undefined;
-        res: {
+        res?: {
           id: string;
           name: string;
         };

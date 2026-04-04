@@ -30,10 +30,10 @@ export class DevStorageService implements StorageService {
       path.resolve(LOCAL_TEMPORARY_FILES_PATH, 'storage', key),
     );
 
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       stream.pipe(fsStream);
       fsStream.on('error', reject);
-      fsStream.on('finish', resolve);
+      fsStream.on('finish', () => resolve());
     });
   }
 

@@ -15,7 +15,7 @@ import { throwError } from 'src/throw-error';
 export class AuthTokensService implements OnModuleInit, OnModuleDestroy {
   private logger: Logger = new Logger(AuthTokensRepository.name)
   private tokensRepository: AuthTokensRepository;
-  private tokensCleanupInterval?: NodeJS.Timer;
+  private tokensCleanupInterval?: NodeJS.Timeout;
 
   constructor(
     dataSource: DataSource,

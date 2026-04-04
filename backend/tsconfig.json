@@ -1,34 +1,24 @@
 {
-  "include": [
-    "src",
-     "migrations",
-    "production",
-    "development",
-    "../shared",
-  ],
   "compilerOptions": {
-    "baseUrl": "./",
     "paths": {
       "@shared/*": ["../shared/*"]
     },
-    "skipLibCheck": true,
-    "lib": ["es2021"],
-    "module": "commonjs",
-    "target": "es2021",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "resolvePackageJsonExports": true,
+    "esModuleInterop": true,
     "isolatedModules": true,
-    "declaration": false,
+    "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
     "sourceMap": true,
     "outDir": "./dist",
+    "baseUrl": "./",
     "incremental": true,
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true
+    "skipLibCheck": true
   }
 }
