@@ -146,7 +146,7 @@ function Content() {
                     TransportedDataStatus.Loading
                   }
                   onClick={resendConfirmationEmail}
-                  className="btn btn-default"
+                  className="btn btn-secondary"
                 >
                   {resendconfirmationEmailState.status ===
                   TransportedDataStatus.Loading ? (

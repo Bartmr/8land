@@ -5,7 +5,6 @@ import './ui/icons.scss';
 
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import { dom } from '@fortawesome/fontawesome-svg-core';
-import { SSRProvider } from 'react-bootstrap';
 import { createStoreManager, StoreManagerProvider } from './redux/store-manager';
 import { Provider } from 'react-redux';
 import { useStoreDispatch } from './redux/use-store-dispatch';
@@ -53,13 +52,11 @@ export const App = (props: { children: ReactNode }) => {
   return (
     <>
       <style>{dom.css()}</style>
-      <SSRProvider>
-        <StoreManagerProvider storeManager={storeManager}>
-          <Provider store={storeManager.store}>
-            <HandleAuth>{props.children}</HandleAuth>
-          </Provider>
-        </StoreManagerProvider>
-      </SSRProvider>
+      <StoreManagerProvider storeManager={storeManager}>
+        <Provider store={storeManager.store}>
+          <HandleAuth>{props.children}</HandleAuth>
+        </Provider>
+      </StoreManagerProvider>
     </>
   );
 };

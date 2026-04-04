@@ -21,7 +21,7 @@ export function HtmlHead(props: {
         extension: "jpeg",
     };
     
-    const url = EnvironmentVariables.SITE_URL + location.pathname;
+    const url = EnvironmentVariables.SITE_URL + props.location.pathname;
 
     return <>
         <html lang="en" />

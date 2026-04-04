@@ -17,6 +17,9 @@ module.exports = {
   // If you use VSCode you can also use the GraphQL plugin
   // Learn more at: https://gatsby.dev/graphql-typegen
   graphqlTypegen: true,
-  plugins: ["gatsby-plugin-sass"]
+  plugins: ["gatsby-plugin-sass"],
+  flags: {
+    DEV_SSR: true
+  },
 };
 

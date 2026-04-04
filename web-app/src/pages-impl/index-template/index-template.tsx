@@ -20,22 +20,22 @@ export function IndexTemplate() {
               <div className="d-flex align-items-center">
                 <h1 className="display-1">8Land</h1>
               </div>
-              <div className="bg-secondary">
+              <div>
                 <p className="mb-0 display-4 text-body text-center">
                   {PROJECT_SLOGAN}
                 </p>
               </div>
               <hr style={{ width: '3rem' }}></hr>
               <div className="mt-3 w-100 row g-2 justify-content-center">
-                <div className="col-12 col-md-4 col-lg-3">
+                <div className="col-12 col-md-4">
                   <LinkAnchor
-                    className="d-block btn btn-default"
+                    className="d-block btn btn-secondary"
                     href={LANDS_ROUTE.getHref()}
                   >
                     Start building lands
                   </LinkAnchor>
                 </div>
-                <div className="col-12 col-md-5 col-lg-3">
+                <div className="col-12 col-md-4">
                   <LinkAnchor
                     className="d-block btn btn-primary"
                     href={CLIENT_SIDE_INDEX_ROUTE.getHref()}
@@ -47,9 +47,9 @@ export function IndexTemplate() {
             </div>
           </div>
           <hr />
-          <div className="bg-secondary py-5">
+          <div className="bg-secondary text-secondary-text py-5">
             <div className="container">
-              <p className="display-3 text-body">What is 8Land?</p>
+              <p className="display-3">What is 8Land?</p>
               <p className="mt-4">
                 {'Imagine the discoverability of an RPG like '}
                 <span className="fst-italic">Pokemon Silver</span>

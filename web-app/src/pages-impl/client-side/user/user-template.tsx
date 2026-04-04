@@ -68,7 +68,7 @@ export function UserTemplate(_props: RouteComponentProps) {
                   <div className="col-auto">
                     <button
                       onClick={() => logout.logout()}
-                      className="btn btn-default"
+                      className="btn btn-secondary"
                     >
                       Log out
                     </button>
@@ -76,7 +76,7 @@ export function UserTemplate(_props: RouteComponentProps) {
                   <div className="col-auto">
                     <button
                       onClick={() => authApi.logoutFromAllDevices()}
-                      className="btn btn-default"
+                      className="btn btn-secondary"
                     >
                       Log out from all devices
                     </button>

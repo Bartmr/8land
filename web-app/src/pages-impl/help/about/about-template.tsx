@@ -43,20 +43,7 @@ export function AboutTemplate() {
                   </p>
                 </div>
               </div>
-              <div className="row g-3 align-items-center">
-                <div className="col-3 col-md-2 col-lg-1">
-                  <img src={raribleLogo} width={'80%'} alt={'Rarible'} />
-                </div>
-                <div className="col-9 col-md-10 col-lg-11">
-                  <p className="mb-0">
-                    <LinkAnchor href={'https://rarible.com/'}>
-                      Rarible
-                    </LinkAnchor>{' '}
-                    for making it easy to sell, manage and authenticate 8Land
-                    NFTs
-                  </p>
-                </div>
-              </div>
+              
             </div>
           </div>
           <div className="mt-4">

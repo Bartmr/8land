@@ -19,6 +19,7 @@ import { LOGIN_ROUTE } from '../../client-side/login/login-routes';
 import { getCurrentLocalHref } from '../../../navigation/current-local-href';
 import { HELP_ROUTE } from '../../help/help-routes';
 import { CLIENT_SIDE_INDEX_ROUTE } from '../../client-side/index/index-routes';
+import logo from '../../../logo.svg'
 
 type Props = {
   menuHtmlId: string;
@@ -62,7 +63,7 @@ export function Header(props: Props) {
   return (
     <>
       <header className={`border-bottom ${props.className}`}>
-        <Navbar collapseOnSelect expand="lg" expanded={expanded}>
+        <Navbar className='navbar-dark bg-body' collapseOnSelect expand="lg" expanded={expanded}>
           <div className="container">
             <Navbar.Toggle
               onClick={() => {
@@ -77,22 +78,11 @@ export function Header(props: Props) {
               <FontAwesomeIcon icon={faBars} />
             </Navbar.Toggle>
             <LinkAnchor
-              className="navbar-brand me-n3 me-lg-2"
+              className="navbar-brand d-flex align-items-center"
               href={INDEX_ROUTE.getHref()}
             >
-              <span className="h3">{PROJECT_NAME}</span>
-              <span
-                className="badge bg-warning p-1"
-                style={{
-                  position: 'relative',
-                  right: '25px',
-                  top: '1.25rem',
-                  transform: 'rotate(-25deg)',
-                  fontWeight: 100,
-                }}
-              >
-                In the making
-              </span>
+              <img src={logo} height={"48px"}/>
+              <span className="h3 m-0">and</span>
             </LinkAnchor>
             <Navbar.Collapse id={props.menuHtmlId}>
               <ul className="navbar-nav">
@@ -150,7 +140,7 @@ export function Header(props: Props) {
                           <li className="nav-item d-flex justify-content-center my-2 my-lg-0">
                             <LinkAnchor
                               href={USER_ROUTE.getHref()}
-                              className="btn btn-default"
+                              className="btn btn-secondary"
                             >
                               <FontAwesomeIcon icon={faUser} />
                             </LinkAnchor>

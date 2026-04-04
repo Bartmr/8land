@@ -1,15 +1,5 @@
-$primary: #00DDDD;
-$secondary: #aaaaaa;
-$success: #00ff00;
-$info: #006aff;
-$warning: #ffc107;
-$danger: #dc3545;
-$light: #aaaaaa;
 $lightest: #ffffff;
-$dark: #aaaaaa;
 $darkest: #262626;
-
-$lcd: #9ab05d;
 
 $body-bg: $darkest;
 $body-color: $lightest;
@@ -17,17 +7,38 @@ $body-color: $lightest;
 $color-contrast-dark:      $body-bg;
 $color-contrast-light:     $body-color;
 
+$primary: #00DDDD;
+$primary-text: $body-bg;
+
+$secondary: #aaaaaa;
+$secondary-text: $body-bg;
+
+$success: #00ff00;
+$success-text: $body-color;
+
+$info: #006aff;
+$info-text: $body-bg;
+
+$warning: #ffc107;
+$warning-text: $body-color;
+
+$danger: #dc3545;
+$danger-text: $body-bg;
+
+$light: #aaaaaa;
+$light-text: $body-color;
+
+$dark: #aaaaaa;
+$dark-text: $body-color;
+
+$lcd: #9ab05d;
+$lcd-text: $body-color;
+
 $spacer: 1rem;
 
-$font-size-base: 1.25rem;
+$font-size-base: 1.5rem;
 
-$font-family-base: 'VT323', monospace;
-
-$font-weight-lighter: 300;
-$font-weight-light: 300;
-$font-weight-normal: 400;
-$font-weight-bold: 400;
-$font-weight-bolder: 400;
+$font-family-base: 'VT323';
 
 $border-width: 3px;
 $border-color: rgba($body-color, 0.3);
@@ -56,6 +67,20 @@ $box-shadow-lg-dimensions: 0 1rem 3rem;
 $box-shadow-lg-opacity: 0.5;
 $box-shadow-lg: #{$box-shadow-lg-dimensions} rgba(#000000, $box-shadow-lg-opacity);
 
-
-@import "../../node_modules/bootstrap/scss/functions";
+@import "./functions";
 @import "../../node_modules/bootstrap/scss/variables";
+
+
+$theme-colors: map-merge(
+    $theme-colors,
+    (
+        "primary-text": $primary-text,
+        "secondary-text": $secondary-text,
+        "success-text": $success-text,
+        "info-text": $info-text,
+        "warning-text": $warning-text,
+        "danger-text": $danger-text,
+        "light-text": $light-text,
+        "dark-text": $dark-text,
+    )
+  )

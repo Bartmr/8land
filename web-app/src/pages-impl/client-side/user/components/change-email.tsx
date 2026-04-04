@@ -71,7 +71,7 @@ export function ChangeEmail() {
             </div>
             <div className="d-flex">
               <button
-                className="btn btn-default"
+                className="btn btn-secondary"
                 disabled={
                   formStatus.status === TransportedDataStatus.Loading ||
                   !(email && isEmail(email))
