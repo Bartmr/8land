@@ -10,12 +10,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/users/auth/auth.guard';
-import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
+import { GetLandDTO } from 'src/land/get/get-land.dto';
 import {
   NavigateToLandDTO,
   NavigateToLandQueryDTO,
-} from '@shared/src/land/in-game/navigate/navigate-to-land.dto';
-import { ResumeLandNavigationDTO } from '@shared/src/land/in-game/resume/resume-land-navigation.dto';
+} from 'src/land/in-game/navigate/navigate-to-land.dto';
+import { ResumeLandNavigationDTO } from 'src/land/in-game/resume/resume-land-navigation.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
 import {
   WithAuthContext,

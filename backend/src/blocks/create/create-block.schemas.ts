@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { CreateBlockRequestDTO } from './create-block.dto';
 import { DynamicBlockType } from './create-block.enums';
 
 export const CreateBlockRequestSchema = z.object({
@@ -23,4 +22,4 @@ export const CreateBlockRequestSchema = z.object({
       }),
     ])
     .refine((o) => o.type !== DynamicBlockType.Other, 'Unsupported block type'),
-}) satisfies z.ZodType<CreateBlockRequestDTO>;
+});

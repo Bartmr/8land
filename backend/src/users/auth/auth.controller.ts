@@ -2,7 +2,7 @@ import {
   AuthSessionDTO,
   LoginRequestDTO,
   LoginResponseDTO,
-} from '@shared/src/auth/auth.dto';
+} from 'src/auth/auth.dto';
 import {
   BadRequestException,
   Body,

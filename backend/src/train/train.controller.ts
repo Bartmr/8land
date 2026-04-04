@@ -14,15 +14,15 @@ import { AuthGuard } from 'src/users/auth/auth.guard';
 import {
   GetTrainDestinationsDTO,
   GetTrainDestinationQueryDTO,
-} from '@shared/src/train/apps/tickets/get-destinations/get-train-destinations.dto';
+} from 'src/train/apps/tickets/get-destinations/get-train-destinations.dto';
 import {
   BoardTrainDTO,
   BoardTrainParametersDTO,
-} from '@shared/src/train/board/board-train.dto';
+} from 'src/train/board/board-train.dto';
 import {
   ReturnToTrainStationDTO,
   ReturnToTrainStationQueryDTO,
-} from '@shared/src/train/return/return-to-train-station.dto';
+} from 'src/train/return/return-to-train-station.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { WithOptionalAuthContext } from 'src/users/auth/auth-context.decorator';
 import { PublicRoute } from 'src/users/auth/public-route.decorator';

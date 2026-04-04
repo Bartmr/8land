@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateLandRequestDTO } from '@shared/src/land/create/create-land.dto';
-import { UploadLandAssetsParameters } from '@shared/src/land/upload-assets/upload-land-assets.dto';
+import { CreateLandRequestDTO } from 'src/land/create/create-land.dto';
+import { UploadLandAssetsParameters } from 'src/land/upload-assets/upload-land-assets.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { getSearchableString } from 'src/strings/get-searchable-string';
 import { World } from 'src/worlds/worlds.entity';
@@ -9,7 +9,7 @@ import { WorldRepository } from 'src/worlds/worlds.repository';
 import { DataSource } from 'typeorm';
 import { LandRepository } from './land.repository';
 import sharp from 'sharp';
-import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
+import { createTiledJSONSchema } from 'src/land/upload-assets/upload-land-assets.schemas';
 import {
   ContentType,
   StorageService,
@@ -18,12 +18,12 @@ import { throwError } from 'src/throw-error';
 import {
   EditLandBodyDTO,
   EditLandParametersDTO,
-} from '@shared/src/land/edit/edit-land.dto';
+} from 'src/land/edit/edit-land.dto';
 import {
   LAND_MAP_SIZE_LIMIT,
   LAND_TILESET_SIZE_LIMIT,
-} from '@shared/src/land/upload-assets/upload-land-assets.constants';
-import { StaticBlockType } from '@shared/src/blocks/block.enums';
+} from 'src/land/upload-assets/upload-land-assets.constants';
+import { StaticBlockType } from 'src/blocks/block.enums';
 import { EnvironmentVariables } from 'src/environment/environment-variables';
 import { z } from "zod"
 

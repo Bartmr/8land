@@ -1,8 +1,5 @@
 {
   "compilerOptions": {
-    "paths": {
-      "@shared/*": ["../shared/*"]
-    },
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "resolvePackageJsonExports": true,

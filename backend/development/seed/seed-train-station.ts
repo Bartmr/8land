@@ -1,4 +1,4 @@
-import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
+import { createTiledJSONSchema } from 'src/land/upload-assets/upload-land-assets.schemas';
 import { AppBlockRepository } from 'src/blocks/app-block.repository';
 import { DoorBlockRepository } from 'src/blocks/door-block.repository';
 import {

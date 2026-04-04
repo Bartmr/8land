@@ -9,6 +9,6 @@ export const CreateLandRequestSchemaObj = {
     .refine((n) => n.length <= 64, 'Land name cannot be more than 64 characters'),
 };
 
-export const CreateLandRequestSchema: z.ZodType<CreateLandRequestDTO> = z.object(
+export const CreateLandRequestSchema = z.object(
   CreateLandRequestSchemaObj,
 );

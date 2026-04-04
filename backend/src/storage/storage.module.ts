@@ -4,7 +4,7 @@ import express from 'express';
 import path from 'path';
 import { StorageService } from './storage.service';
 import { DevStorageService } from './dev-storage.service';
-import { throwError } from '@shared/src/throw-error';
+import { throwError } from 'src/throw-error';
 import fs from 'fs';
 import { promisify } from 'util';
 import { EnvironmentVariables } from 'src/environment/environment-variables';

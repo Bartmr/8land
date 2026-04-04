@@ -1,5 +1,5 @@
 import { Logger, NotImplementedException } from '@nestjs/common';
-import { GetLandDTO } from '@shared/src/land/get/get-land.dto';
+import { GetLandDTO } from 'src/land/get/get-land.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { StorageService } from 'src/storage/storage.service';
 import { throwError } from 'src/throw-error';

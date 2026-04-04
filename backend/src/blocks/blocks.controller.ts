@@ -11,9 +11,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/users/auth/auth.guard';
-import { CreateBlockRequestDTO } from '@shared/src/blocks/create/create-block.dto';
-import { DynamicBlockType } from '@shared/src/blocks/create/create-block.enums';
-import { DeleteBlockURLParameters } from '@shared/src/blocks/delete/delete-block.dto';
+import { CreateBlockRequestDTO } from 'src/blocks/create/create-block.dto';
+import { DynamicBlockType } from 'src/blocks/create/create-block.enums';
+import { DeleteBlockURLParameters } from 'src/blocks/delete/delete-block.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
 import { getSearchableString } from 'src/strings/get-searchable-string';

@@ -18,15 +18,15 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import {
   TERRITORY_MAP_SIZE_LIMIT,
   TERRITORY_TILESET_SIZE_LIMIT,
-} from '@shared/src/territories/upload-assets/upload-territory-assets.constants';
+} from 'src/territories/upload-assets/upload-territory-assets.constants';
 import {
   GetTerritoryDTO,
   GetTerritoryParametersDTO,
-} from '@shared/src/territories/get/get-territory.dto';
+} from 'src/territories/get/get-territory.dto';
 import {
   UploadTerritoryAssetsParametersDTO,
   UploadTerritoryAssetsRequestDTO,
-} from '@shared/src/territories/upload-assets/upload-assets.dto';
+} from 'src/territories/upload-assets/upload-assets.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
 import {
@@ -36,16 +36,16 @@ import {
 import { DataSource } from 'typeorm';
 import { Territory } from './territory.entity';
 import { TerritoriesRepository } from './territories.repository';
-import { createTiledJSONSchema } from '@shared/src/land/upload-assets/upload-land-assets.schemas';
+import { createTiledJSONSchema } from 'src/land/upload-assets/upload-land-assets.schemas';
 import { throwError } from 'src/throw-error';
 import sharp from 'sharp';
 import {
   CreateTerritoryRequestDTO,
   CreateTerritoryResponseDTO,
-} from '@shared/src/territories/create/create-territory.dto';
-import { CreateTerritoryRequestJSONSchema } from '@shared/src/territories/create/create-territory.schemas';
+} from 'src/territories/create/create-territory.dto';
+import { CreateTerritoryRequestJSONSchema } from 'src/territories/create/create-territory.schemas';
 import { LandRepository } from 'src/land/land.repository';
-import { StaticBlockType } from '@shared/src/blocks/block.enums';
+import { StaticBlockType } from 'src/blocks/block.enums';
 import { z } from 'zod'
 import fetch from 'node-fetch'
 

@@ -20,11 +20,11 @@ import { AuthGuard } from 'src/users/auth/auth.guard';
 import {
   GetLandDTO,
   GetLandParametersDTO,
-} from '@shared/src/land/get/get-land.dto';
+} from 'src/land/get/get-land.dto';
 import {
   IndexLandsDTO,
   IndexLandsQueryDTO,
-} from '@shared/src/land/index/index-lands.dto';
+} from 'src/land/index/index-lands.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
 import { StorageService } from 'src/storage/storage.service';
@@ -36,18 +36,18 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import {
   CreateLandRequestDTO,
   CreateLandResponseDTO,
-} from '@shared/src/land/create/create-land.dto';
-import { UploadLandAssetsParameters } from '@shared/src/land/upload-assets/upload-land-assets.dto';
+} from 'src/land/create/create-land.dto';
+import { UploadLandAssetsParameters } from 'src/land/upload-assets/upload-land-assets.dto';
 import {
   EditLandBodyDTO,
   EditLandDTO,
   EditLandParametersDTO,
-} from '@shared/src/land/edit/edit-land.dto';
+} from 'src/land/edit/edit-land.dto';
 import { LandPersistenceService } from './land-persistence.service';
 import { WorldRepository } from 'src/worlds/worlds.repository';
-import { DeleteLandParametersDTO } from '@shared/src/land/delete-land/delete-land.dto';
+import { DeleteLandParametersDTO } from 'src/land/delete-land/delete-land.dto';
 import { PublicRoute } from 'src/users/auth/public-route.decorator';
-import { GetLandsToClaimDTO } from '@shared/src/land/lands-to-claim/lands-to-claim.dto';
+import { GetLandsToClaimDTO } from 'src/land/lands-to-claim/lands-to-claim.dto';
 import { EnvironmentVariables } from 'src/environment/environment-variables';
 
 class LandAssetsRequestDTO {
