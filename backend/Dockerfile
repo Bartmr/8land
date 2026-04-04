@@ -11,18 +11,12 @@ WORKDIR /usr/src/app
 RUN npm ci
 
 ENV NODE_ENV=production
-ENV TS_NODE_PROJECT=tsconfig.build.json
 
-COPY ./shared/src/ /usr/src/app/shared/src/
 COPY ./src/ /usr/src/app/src/
-COPY ./scripts/ /usr/src/app/scripts/
-COPY ./type-declarations/ /usr/src/app/type-declarations/
 
 COPY ./.nvmrc \
   ./nest-cli.json \
-  ./ormconfig.js \
-  ./tsconfig.base.json \
-  ./tsconfig.declaration-files.json \
+  ./tsconfig.json \
   ./tsconfig.build.json \
   ./firebase-env-to-file.js \
   /usr/src/app/
@@ -35,6 +29,6 @@ RUN node ./firebase-env-to-file.js
 ENV GOOGLE_APPLICATION_CREDENTIALS=/usr/src/app/service-account-file.json
 
 # RUN npm run build:smart-contracts
-RUN npm run build:api
+RUN npm run build
 
 CMD ["npm", "run", "start:prod"]

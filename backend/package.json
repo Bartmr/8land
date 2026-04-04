@@ -18,9 +18,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/jest/bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "ts-node": "ts-node --project tsconfig.build.json --transpile-only -r tsconfig-paths/register",
-    "typeorm": "typeorm -d dist/backend/src/databases/data-source.js",
+    "typeorm": "typeorm -d dist/src/database/data-source.js",
     "seed": "npm run ts-node ./development/seed.ts",
-    "tear-down-databases": "npm run ts-node ./development/tear-down-databases.ts",
     "reset-repository": "git clean -Xdf"
   },
   "dependencies": {

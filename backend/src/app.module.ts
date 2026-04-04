@@ -6,12 +6,12 @@ import { BlocksModule } from './blocks/blocks.module';
 // import { TerritoriesModule } from './territories/territories.module';
 import { UsersModule } from './users/users.module';
 import { TrainModule } from './train/train.module';
+import { AppDataSourceOptions } from './database/data-source';
 
-import { TYPEORM_ORMCONFIG } from './databases/ormconfig';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(TYPEORM_ORMCONFIG),
+    TypeOrmModule.forRoot(AppDataSourceOptions),
     AuthModule,
     LandModule,
     BlocksModule,

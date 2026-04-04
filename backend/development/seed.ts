@@ -21,13 +21,13 @@ import { createTiledJSONSchema } from 'src/land/upload-assets/upload-land-assets
 import { seedTrainStation } from './seed/seed-train-station';
 import { seedUserLand } from './seed/seed-user-land';
 import { EnvironmentVariables } from "src/environment/environment-variables";
-import { TYPEORM_ORMCONFIG } from "src/databases/ormconfig";
 import { v4 } from "uuid";
 import { User } from "src/users/user.entity";
 import { Land } from "src/land/land.entity";
 import { DoorBlock } from "src/blocks/door-block.entity";
 import { AppBlock } from "src/blocks/app-block.entity";
 import { Territory } from "src/territories/territory.entity";
+import { AppDataSourceOptions } from "src/database/data-source";
 
 const readFile = promisify(fs.readFile);
 const rm = promisify(fs.rm);
@@ -59,7 +59,7 @@ async function seed() {
     throw new Error(`Failed to clear Firebase Auth emulator accounts: ${res.status}`);
   }
 
-  const defaultDBConnection = await createConnection(TYPEORM_ORMCONFIG);
+  const defaultDBConnection = await createConnection(AppDataSourceOptions);
 
   await defaultDBConnection.runMigrations();
 

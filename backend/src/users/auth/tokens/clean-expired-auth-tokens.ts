@@ -1,11 +1,11 @@
 import { ConnectionManager } from 'typeorm';
 import { AuthTokensRepository } from './auth-token.repository';
-import { TYPEORM_ORMCONFIG } from 'src/databases/ormconfig';
+import { AppDataSourceOptions } from 'src/database/data-source';
 
 export async function cleanExpiredAuthTokens() {
   const connectionManager = new ConnectionManager();
 
-  const connection = connectionManager.create(TYPEORM_ORMCONFIG);
+  const connection = connectionManager.create(AppDataSourceOptions);
 
   await connection.connect();
 
