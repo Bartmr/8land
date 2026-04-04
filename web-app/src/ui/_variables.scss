@@ -1,12 +1,12 @@
 $primary: #00DDDD;
-$secondary: #aaa;
+$secondary: #aaaaaa;
 $success: #00ff00;
 $info: #006aff;
 $warning: #ffc107;
 $danger: #dc3545;
-$light: #aaa;
+$light: #aaaaaa;
 $lightest: #ffffff;
-$dark: #aaa;
+$dark: #aaaaaa;
 $darkest: #262626;
 
 $lcd: #9ab05d;
@@ -21,10 +21,41 @@ $spacer: 1rem;
 
 $font-size-base: 1.25rem;
 
-$font-1: 'VT323', monospace;
+$font-family-base: 'VT323', monospace;
+
+$font-weight-lighter: 300;
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-bold: 400;
+$font-weight-bolder: 400;
 
 $border-width: 3px;
 $border-color: rgba($body-color, 0.3);
 
 $border-radius: 0;
+$border-radius-lg: $border-radius;
+$border-radius-sm: $border-radius;
 
+$link-decoration: underline;
+
+$code-color: $lcd;
+
+$text-muted: rgba($body-color, 0.5);
+
+$box-shadow-inset: inset 0 1px 2px rgba(#000000, 0.5);
+
+$box-shadow-sm-dimensions: 0 0.125rem 0.25rem;
+$box-shadow-sm-opacity: 0.3;
+$box-shadow-sm: #{$box-shadow-sm-dimensions} rgba(#000000, $box-shadow-sm-opacity);
+
+$box-shadow-dimensions: 0 0.5rem 1rem;
+$box-shadow-opacity: 0.4;
+$box-shadow: #{$box-shadow-dimensions} rgba(#000000, $box-shadow-opacity);
+
+$box-shadow-lg-dimensions: 0 1rem 3rem;
+$box-shadow-lg-opacity: 0.5;
+$box-shadow-lg: #{$box-shadow-lg-dimensions} rgba(#000000, $box-shadow-lg-opacity);
+
+
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";

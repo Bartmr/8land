@@ -1,7 +1,7 @@
 import './logging/logger';
 import './environment-variables';
-import 'src/ui/bootstrap/index.scss';
-import 'src/ui/icons.scss';
+import './ui/index.scss';
+import './ui/icons.scss';
 
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import { dom } from '@fortawesome/fontawesome-svg-core';

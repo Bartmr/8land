@@ -1,6 +1,4 @@
-@import 'src/ui/variables';
-@import 'src/ui/boostrap/map-variables';
-@import 'node_modules/boostrap/scss/variables';
+@import './../../../ui/mixins';
 
 .gameSize {
   margin: auto;

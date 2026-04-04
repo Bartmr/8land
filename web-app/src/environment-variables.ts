@@ -29,20 +29,21 @@ const schema = z.object({
     storageBucket: z.string(),
     messagingSenderId: z.string(),
     appId: z.string(),
-  }),
+  }).optional(),
 
   SENTRY_DSN: z.string().optional(),
 
   GOOGLE_ANALYTICS_TRACKING_ID: z.string().optional(),
 });
 
+
 const result = schema.safeParse({
   SITE_URL: process.env.GATSBY_SITE_URL,
   MAIN_API_URL: process.env.GATSBY_MAIN_API_URL,
   FIREBASE_AUTH_EMULATOR_URL: process.env.GATSBY_FIREBASE_AUTH_EMULATOR_URL,
-  FIREBASE_CONFIG: JSON.parse(
-    process.env.GATSBY_FIREBASE_CONFIG || throwError(),
-  ) as unknown,
+  FIREBASE_CONFIG: process.env.GATSBY_FIREBASE_CONFIG ? JSON.parse(
+    process.env.GATSBY_FIREBASE_CONFIG,
+  ) : undefined,
 
   SENTRY_DSN: process.env.GATSBY_SENTRY_DSN,
 

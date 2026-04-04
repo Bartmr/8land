@@ -1,4 +1,6 @@
-import type { GatsbyConfig } from "gatsby";
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+})
 
 function throwError() {
   throw new Error()
@@ -6,7 +8,7 @@ function throwError() {
 
 const GATSBY_SITE_URL = process.env.GATSBY_SITE_URL || throwError();
 
-const config: GatsbyConfig = {
+module.exports = {
   siteMetadata: {
     title: `8Land`,
     siteUrl: GATSBY_SITE_URL
@@ -18,4 +20,3 @@ const config: GatsbyConfig = {
   plugins: ["gatsby-plugin-sass"]
 };
 
-export default config;
