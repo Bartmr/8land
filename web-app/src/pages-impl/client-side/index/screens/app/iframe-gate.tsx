@@ -1,3 +1,4 @@
+import React from 'react';
 import { useLayoutEffect, useState } from 'react';
 import { EnvironmentVariables } from '../../../../../environment-variables';
 import { MusicService } from '../../music-ticker';

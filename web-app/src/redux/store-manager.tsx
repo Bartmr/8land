@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   combineReducers,
   createStore as createReduxStore,

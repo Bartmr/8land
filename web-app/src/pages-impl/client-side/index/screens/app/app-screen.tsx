@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 import { MusicService } from '../../music-ticker';

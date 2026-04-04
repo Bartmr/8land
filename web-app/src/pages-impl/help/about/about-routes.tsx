@@ -1,3 +1,4 @@
+import React from 'react';
 import { HELP_ROUTE } from '../help-routes';
 
 export const ABOUT_ROUTE = {

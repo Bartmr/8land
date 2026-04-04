@@ -1,3 +1,4 @@
+import React from 'react';
 import { AboutTemplate } from '../../pages-impl/help/about/about-template';
 import { HtmlHead } from '../../pages-impl/html-head';
 import type { PageProps } from 'gatsby';

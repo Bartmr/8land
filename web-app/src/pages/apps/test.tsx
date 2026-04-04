@@ -1,3 +1,4 @@
+import React from 'react';
 import { TestAppTemplate } from '../../pages-impl/apps/test/test-app-template';
 import { HtmlHead } from '../../pages-impl/html-head';
 import type { PageProps } from 'gatsby';

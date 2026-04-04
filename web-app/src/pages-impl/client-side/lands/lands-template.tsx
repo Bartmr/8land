@@ -1,3 +1,4 @@
+import React from 'react';
 import { IndexLandsDTO, GetLandsToClaimDTO } from '../../../main-api/routes/lands/lands.dtos';
 import { useEffect, useState } from 'react';
 import { TransportedDataGate } from '../../../ui/transported-data-gate';

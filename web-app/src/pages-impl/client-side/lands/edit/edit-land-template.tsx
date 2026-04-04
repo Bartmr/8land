@@ -1,3 +1,4 @@
+import React from 'react';
 import { Layout } from '../../../layout/layout';
 import { RouteComponentProps } from '@reach/router';
 import { AssetsSection } from './assets-section/assets-section';

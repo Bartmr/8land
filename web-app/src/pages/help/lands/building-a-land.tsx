@@ -1,3 +1,4 @@
+import React from 'react';
 import { BuildingALandTemplate } from '../../../pages-impl/help/lands/building-a-land/building-a-land.template';
 import { HtmlHead } from '../../../pages-impl/html-head';
 import type { PageProps } from 'gatsby';

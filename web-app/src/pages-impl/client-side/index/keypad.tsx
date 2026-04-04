@@ -1,3 +1,4 @@
+import React from 'react';
 import nipplejs from 'nipplejs';
 import { useEffect } from 'react';
 import { Direction } from './screens/land/grid.types';

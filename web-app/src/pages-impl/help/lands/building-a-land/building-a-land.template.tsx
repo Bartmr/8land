@@ -1,3 +1,4 @@
+import React from 'react';
 import { Layout } from '../../../layout/layout';
 import { LinkAnchor } from '../../../../ui/link-anchor';
 import { BUILDING_A_LAND_ROUTE } from './building-a-land.routes';

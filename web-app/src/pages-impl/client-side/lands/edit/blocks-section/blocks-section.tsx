@@ -1,3 +1,4 @@
+import React from 'react';
 import { DynamicBlockType } from '../../../../../main-api/routes/blocks/create/create-block.schemas';
 import { GetLandDTO } from '../../../../../main-api/routes/lands/lands.dtos';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';

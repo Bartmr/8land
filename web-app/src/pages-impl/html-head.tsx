@@ -1,3 +1,4 @@
+import React from 'react';
 import { PROJECT_SLOGAN } from "../project-details"
 import thumbnailSrc from './thumbnail.jpeg'
 import { EnvironmentVariables } from "../environment-variables";

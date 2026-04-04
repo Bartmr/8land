@@ -1,3 +1,4 @@
+import React from 'react';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { TransportedDataGate } from '../../../../../ui/transported-data-gate';

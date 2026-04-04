@@ -1,3 +1,4 @@
+import React from 'react';
 import { TERRITORY_TILESET_SIZE_LIMIT } from '../../../../../main-api/routes/territories/upload-assets/upload-assets.schemas';
 import { useState } from 'react';
 

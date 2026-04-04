@@ -1,3 +1,4 @@
+import React from 'react';
 import { NotFoundTemplate } from '../pages-impl/not-found/not-found-template';
 import { HtmlHead } from '../pages-impl/html-head';
 import type { PageProps } from 'gatsby';

@@ -1,3 +1,4 @@
+import React from 'react';
 import { createTiledJSONSchema } from '../../../../../main-api/routes/lands/upload-assets/upload-land-assets.schemas';
 import { TERRITORY_MAP_SIZE_LIMIT } from '../../../../../main-api/routes/territories/upload-assets/upload-assets.schemas';
 import { GetTerritoryDTO } from '../../../../../main-api/routes/territories/territories.dtos';

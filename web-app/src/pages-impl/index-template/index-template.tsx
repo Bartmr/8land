@@ -1,3 +1,4 @@
+import React from 'react';
 import { PROJECT_SLOGAN } from '../../project-details';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

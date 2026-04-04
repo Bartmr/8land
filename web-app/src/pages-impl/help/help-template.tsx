@@ -1,3 +1,4 @@
+import React from 'react';
 import { CONTACT_CTA_PRESENT } from '../../project-details';
 import {
   faLightbulb,

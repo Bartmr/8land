@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { HtmlHead } from '../pages-impl/html-head';
 import type { PageProps } from 'gatsby';

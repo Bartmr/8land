@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { AppLayout } from '../../layout/app-layout';
 import { TransportedDataGate } from '../../../ui/transported-data-gate';

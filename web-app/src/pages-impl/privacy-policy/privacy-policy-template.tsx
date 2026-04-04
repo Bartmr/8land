@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   CONTACT_CTA,
   CONTACT_CTA_PAST,
