@@ -16,7 +16,6 @@ import path from 'path';
 import { DevStorageService } from 'src/storage/dev-storage.service';
 import { LOCAL_TEMPORARY_FILES_PATH } from 'src/temporary-files/temporary-files';
 import { AppBlockRepository } from 'src/blocks/app-block.repository';
-import fetch from 'node-fetch';
 import { createTiledJSONSchema } from 'src/land/upload-assets/upload-land-assets.schemas';
 import { seedTrainStation } from './seed/seed-train-station';
 import { seedUserLand } from './seed/seed-user-land';

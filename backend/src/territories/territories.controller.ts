@@ -47,7 +47,6 @@ import { CreateTerritoryRequestJSONSchema } from 'src/territories/create/create-
 import { LandRepository } from 'src/land/land.repository';
 import { StaticBlockType } from 'src/blocks/block.enums';
 import { z } from 'zod'
-import fetch from 'node-fetch'
 
 @UseGuards(AuthGuard)
 @Controller('territories')
