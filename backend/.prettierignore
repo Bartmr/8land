@@ -10,23 +10,6 @@ node_modules
 package.json
 package-lock.json
 
-/client-side/*/public
-/client-side/*/.cache
-/client-side/*/dist
-/client-side/*/.webpack-bundle-analyzer
-/client-side/*/coverage
-
-_graphql-generated_
-*._graphql-generated_.ts
-
-/infrastructure
 
 # Temporary files
 /_tmp
-
-/libs/smart-contracts/typechain
-/libs/smart-contracts/typechain-types
-/libs/smart-contracts/cache
-/libs/smart-contracts/artifacts
-
-.firebase-data
