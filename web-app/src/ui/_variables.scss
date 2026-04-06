@@ -1,8 +1,8 @@
-$lightest: #ffffff;
-$darkest: #262626;
+$ligh: #DDDDDD;
+$dark: #262626;
 
-$body-bg: $darkest;
-$body-color: $lightest;
+$body-bg: $dark;
+$body-color: $light;
 
 $color-contrast-dark:      $body-bg;
 $color-contrast-light:     $body-color;
@@ -13,8 +13,6 @@ $success: #00ff00;
 $info: #006aff;
 $warning: #ffc107;
 $danger: #dc3545;
-$light: #EEEEEE;
-$dark: #222222;
 $lcd: #9ab05d;
 
 $spacer: 1rem;
