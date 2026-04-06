@@ -1,0 +1,196 @@
+import React from 'react';
+import { Layout } from '../../../layout/layout';
+import { RouteComponentProps } from '@reach/router';
+import { AssetsSection } from './assets-section/assets-section';
+import { useEffect, useState } from 'react';
+import {
+  TransportedData,
+  TransportedDataStatus,
+} from '../../../../communicated-data/communicated-data-types';
+import { GetLandDTO } from '../../../../main-api/routes/lands/lands.dtos';
+import { TransportedDataGate } from '../../../../ui/transported-data-gate';
+import { useParams } from '@reach/router';
+import { uuid, z } from 'zod';
+import { useLandsAPI } from '../../../../main-api/routes/lands/lands-api';
+import { Toast } from 'react-bootstrap';
+import { MainSection } from './main-section/main-section';
+import { BlocksSection } from './blocks-section/blocks-section';
+// import { TerritoriesSection } from './components/territories-section/territories-section';
+import { CommunicationError } from '../../../../communication-errors/communication-errors';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { navigate } from 'gatsby';
+import { LANDS_ROUTE } from '../lands-routes';
+// import { mainApiReducer } from '../../../../main-api/main-api-reducer';
+// import { useStoreSelector } from '../../../../store/use-store-selector';
+// import { throwError } from '@shared/src/internals/utils/throw-error';
+// import { Role } from '@shared/src/auth/auth.enums';
+
+export function EditLandTemplateWithRouteProps(props: { id: string }) {
+  const api = useLandsAPI();
+
+  const [land, replaceLand] = useState<TransportedData<GetLandDTO>>({
+    status: TransportedDataStatus.NotInitialized,
+  });
+
+  const [deleteResult, replaceDeleteResult] = useState<
+    TransportedData<undefined>
+  >({
+    status: TransportedDataStatus.NotInitialized,
+  });
+
+  const [successfulSave, replaceSuccessfulSave] = useState(false);
+
+  // const session = useStoreSelector(
+  //   { mainApi: mainApiReducer },
+  //   (s) => s.mainApi.session.data || throwError(),
+  // );
+
+  const deleteLand = async () => {
+    const confirmed = window.confirm(
+      `Are you sure you want do delete this land named ${
+        land.data?.name || ''
+      }?`,
+    );
+
+    if (confirmed) {
+      replaceDeleteResult({ status: TransportedDataStatus.Loading });
+
+      const res = await api.deleteLand({ landId: props.id });
+
+      if (res.failure) {
+        replaceDeleteResult({ status: res.failure });
+      } else {
+        if (res.response.status === 'must-delete-blocks-first') {
+          window.alert(
+            'You must delete all blocks in this land and all other blocks pointing to it before can delete this land.',
+          );
+
+          replaceDeleteResult({
+            status: TransportedDataStatus.Done,
+            data: undefined,
+          });
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          navigate(LANDS_ROUTE.getHref({ deleted: true }));
+        }
+      }
+    }
+  };
+
+  const fetchLand = async () => {
+    replaceLand({ status: TransportedDataStatus.Loading });
+
+    const res = await api.getEditableLand({ landId: props.id });
+
+    if (res.failure) {
+      replaceLand({ status: res.failure });
+    } else {
+      replaceLand({
+        status: TransportedDataStatus.Done,
+        data: res.response.body,
+      });
+    }
+  };
+
+  const onSuccessfulSave = async () => {
+    replaceSuccessfulSave(true);
+
+    await fetchLand();
+  };
+
+  useEffect(() => {
+    (async () => {
+      await fetchLand();
+    })();
+  }, [props.id]);
+
+  return (
+    <>
+      <Toast
+        className="bg-success w-100 mb-4"
+        onClose={() => replaceSuccessfulSave(false)}
+        show={successfulSave}
+        delay={10000}
+        autohide
+      >
+        <Toast.Header closeButton={false}>Changes saved</Toast.Header>
+      </Toast>
+      <TransportedDataGate dataWrapper={land}>
+        {({ data }) => {
+          return (
+            <>
+              <div className="mb-4 d-flex justify-content-between align-items-center flex-wrap">
+                <h1 className="mb-0">Edit Land</h1>
+                <div>
+                  <button
+                    onClick={deleteLand}
+                    disabled={!land.data || land.data.isStartLand}
+                    className="btn btn-danger"
+                  >
+                    {deleteResult.status === TransportedDataStatus.Loading ? (
+                      <span className="spinner-border spinner-sm" />
+                    ) : (
+                      <FontAwesomeIcon icon={faTrash} />
+                    )}{' '}
+                    {land.data?.isStartLand
+                      ? 'Cannot delete lands with start block'
+                      : 'Delete land'}
+                  </button>
+                </div>
+              </div>
+              <MainSection onSuccessfulSave={onSuccessfulSave} land={data} />
+              <div className="mt-4">
+                <BlocksSection
+                  onBlockDeleted={onSuccessfulSave}
+                  onBlockCreated={onSuccessfulSave}
+                  land={data}
+                />
+              </div>
+              <div className="mt-4">
+                <AssetsSection
+                  onSuccessfulSave={onSuccessfulSave}
+                  land={data}
+                />
+              </div>
+              {/*
+              //  {session.role === Role.Admin ? (
+              //   <div className="mt-4">
+              //     <TerritoriesSection
+              //       land={data}
+              //       onSuccessfulSave={onSuccessfulSave}
+              //     />
+              //   </div>
+              // ) : null}
+              */}
+            </>
+          );
+        }}
+      </TransportedDataGate>
+    </>
+  );
+}
+
+export function EditLandTemplate(_props: RouteComponentProps) {
+  const routeParams = useParams() as unknown;
+
+  const validationResult = z.object({
+    id: uuid(),
+  }).safeParse(routeParams);
+
+  return (
+    <Layout>
+      {() => {
+        return !validationResult.success ? (
+          <TransportedDataGate
+            dataWrapper={{ status: CommunicationError.NotFound }}
+          >
+            {() => null}
+          </TransportedDataGate>
+        ) : (
+          <EditLandTemplateWithRouteProps id={validationResult.data.id} />
+        );
+      }}
+    </Layout>
+  );
+}

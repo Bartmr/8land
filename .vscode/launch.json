@@ -6,9 +6,6 @@
       "request": "attach",
       "name": "Attach to debugger",
       "port": 9229,
-      "sourceMapPathOverrides": {
-        "webpack://@app/api/*": "${workspaceFolder}/*"
-      }
     }
   ]
 }

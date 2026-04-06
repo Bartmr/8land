@@ -1,0 +1,12 @@
+import { z } from 'zod';
+import { DynamicBlockType } from '../block.enums';
+import { DeleteBlockURLParameters } from './delete-block.dto';
+
+export const DeleteBlockURLParamsSchema =
+  z.object({
+    blockType: z.union([
+      z.literal(DynamicBlockType.Door),
+      z.literal(DynamicBlockType.App),
+    ]),
+    blockId: z.uuid(),
+  });

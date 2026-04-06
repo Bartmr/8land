@@ -1,0 +1,437 @@
+import {
+  BadRequestException,
+  ConflictException,
+  Controller,
+  ForbiddenException,
+  Get,
+  HttpCode,
+  Param,
+  Put,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
+  Post,
+  NotFoundException,
+} from '@nestjs/common';
+import { AuthGuard } from 'src/users/auth/auth.guard';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import {
+  TERRITORY_MAP_SIZE_LIMIT,
+  TERRITORY_TILESET_SIZE_LIMIT,
+} from 'src/territories/upload-assets/upload-territory-assets.constants';
+import {
+  GetTerritoryDTO,
+  GetTerritoryParametersDTO,
+} from 'src/territories/get/get-territory.dto';
+import {
+  UploadTerritoryAssetsParametersDTO,
+  UploadTerritoryAssetsRequestDTO,
+} from 'src/territories/upload-assets/upload-assets.dto';
+import { AuthContext } from 'src/users/auth/auth-context';
+import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
+import {
+  ContentType,
+  StorageService,
+} from 'src/storage/storage.service';
+import { DataSource } from 'typeorm';
+import { Territory } from './territory.entity';
+import { TerritoriesRepository } from './territories.repository';
+import { createTiledJSONSchema } from 'src/land/upload-assets/upload-land-assets.schemas';
+import { throwError } from 'src/throw-error';
+import sharp from 'sharp';
+import {
+  CreateTerritoryRequestDTO,
+  CreateTerritoryResponseDTO,
+} from 'src/territories/create/create-territory.dto';
+import { CreateTerritoryRequestJSONSchema } from 'src/territories/create/create-territory.schemas';
+import { LandRepository } from 'src/land/land.repository';
+import { StaticBlockType } from 'src/blocks/block.enums';
+import { z } from 'zod'
+
+@UseGuards(AuthGuard)
+@Controller('territories')
+export class TerritoriesEndUserController {
+  constructor(
+    private dataSource: DataSource,
+    private storageService: StorageService,
+  ) {}
+
+  @Get(':id')
+  async getTerritory(
+    @Param() params: GetTerritoryParametersDTO,
+  ): Promise<GetTerritoryDTO> {
+    const territoriesRepository = this.dataSource.getCustomRepository(
+      TerritoriesRepository,
+    );
+    const territory = await territoriesRepository.findOne({
+      where: {
+        id: params.id,
+      },
+    });
+    if (!territory) {
+      throw new NotFoundException();
+    }
+
+    const land = await territory.inLand;
+    return {
+      id: territory.id,
+      startX: territory.startX,
+      startY: territory.startY,
+      endX: territory.endX,
+      endY: territory.endY,
+      doorBlocks: [],
+      assets: territory.hasAssets
+        ? {
+            baseUrl: this.storageService.getHostUrl(),
+            mapKey: `territories/${territory.id}/map.json`,
+            tilesetKey: `territories/${territory.id}/tileset.png`,
+          }
+        : undefined,
+      inLand: {
+        name: land.name,
+      },
+      thumbnailUrl: `${this.storageService.getHostUrl()}/territories/${
+        territory.id
+      }/thumbnail.jpg`,
+    };
+  }
+
+  @HttpCode(204)
+  @Put(':id/assets')
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'map', maxCount: 1 },
+      { name: 'tileset', maxCount: 1 },
+    ]),
+  )
+  async uploadTerritoryAssets(
+    @Param() params: UploadTerritoryAssetsParametersDTO,
+    @UploadedFiles()
+    files: { map?: Express.Multer.File[]; tileset?: Express.Multer.File[] },
+    @WithAuthContext() authContext: AuthContext,
+  ): Promise<void> {
+    if (!authContext.user.isAdmin) {
+      throw new ForbiddenException();
+    }
+
+    const territoriesRepository_NO_TRANSACTION =
+      this.dataSource.getCustomRepository(TerritoriesRepository);
+    const territory_UNSAFE = await territoriesRepository_NO_TRANSACTION.findOne(
+      {
+        where: {
+          id: params.id,
+        },
+      },
+    );
+    
+    if (
+      !territory_UNSAFE
+    ) {
+      throw new NotFoundException();
+    }
+
+
+    const map =
+      files.map?.[0] ||
+      (() => {
+        throw new BadRequestException({ error: 'no-map-file' });
+      })();
+    const tileset =
+      files.tileset?.[0] ||
+      (() => {
+        throw new BadRequestException({ error: 'no-tileset-file' });
+      })();
+    if (map.size > TERRITORY_MAP_SIZE_LIMIT) {
+      throw new BadRequestException({ error: 'map-exceeds-file-size-limit' });
+    }
+    if (tileset.size > TERRITORY_TILESET_SIZE_LIMIT) {
+      throw new BadRequestException({
+        error: 'tileset-exceeds-file-size-limit',
+      });
+    }
+
+    let tilesetMedatada: sharp.Metadata;
+
+    try {
+      const sharpImg = sharp(tileset.buffer);
+
+      tilesetMedatada = await sharpImg.metadata();
+
+      await sharpImg.stats();
+    } catch (err) {
+      throw new BadRequestException({ error: 'unrecognized-tileset-format' });
+    }
+
+    if (tilesetMedatada.format !== 'png') {
+      throw new BadRequestException({ error: 'unrecognized-tileset-format' });
+    }
+
+    let mapJSON;
+    try {
+      const jsonString = map.buffer.toString();
+      mapJSON = JSON.parse(jsonString) as unknown;
+    } catch (err) {
+      throw new BadRequestException({ error: 'unparsable-map-json' });
+    }
+    const tiledJSONSchema = createTiledJSONSchema({
+      maxWidth: territory_UNSAFE.endX - territory_UNSAFE.startX,
+      maxHeight: territory_UNSAFE.endY - territory_UNSAFE.startY,
+    });
+    const tiledJSONValidationResult = tiledJSONSchema.safeParse(mapJSON);
+    if (!tiledJSONValidationResult.success) {
+      throw new BadRequestException({
+        error: 'tiled-json-validation-error',
+        messageTree: tiledJSONValidationResult.error,
+      });
+    }
+
+    const tilesetSpecifications =
+      tiledJSONValidationResult.data.tilesets[0] || throwError();
+
+    const hasTrainBlock = tilesetSpecifications.tiles.some((tile) => {
+      const tileHasTrainBlock = tile.properties?.some((tileProp) => {
+        return tileProp.name === StaticBlockType.TrainPlatform;
+      });
+
+      return tileHasTrainBlock;
+    });
+
+    const hasStartBlock = tilesetSpecifications.tiles.some((tile) => {
+      const tileHasStartBlock = tile.properties?.some((tileProp) => {
+        return tileProp.name === StaticBlockType.Start;
+      });
+
+      return tileHasStartBlock;
+    });
+
+    if (hasTrainBlock || hasStartBlock) {
+      throw new BadRequestException({
+        error: 'train-and-start-block-not-allowed',
+      });
+    }
+
+    if (
+      tilesetMedatada.width !== tilesetSpecifications.imagewidth ||
+      tilesetMedatada.height !== tilesetSpecifications.imageheight
+    ) {
+      throw new BadRequestException({
+        error: 'tileset-dimensions-dont-match',
+      });
+    }
+
+    const tilesetStorageKey = `territories/${territory_UNSAFE.id}/tileset.png`;
+    const mapStorageKey = `territories/${territory_UNSAFE.id}/map.json`;
+    await this.dataSource.transaction(async (e) => {
+      const territoriesRepo = e.getCustomRepository(TerritoriesRepository);
+      const territory = await territoriesRepo.findOne({
+        where: {
+          id: params.id,
+        },
+      });
+      if (!territory) {
+        throw new NotFoundException();
+      }
+      await this.storageService.saveBuffer(tilesetStorageKey, tileset.buffer, {
+        contentType: ContentType.PNG,
+      });
+      const toSave: z.infer<typeof tiledJSONSchema> = {
+        ...tiledJSONValidationResult.data,
+        tilesets: [
+          {
+            ...(tiledJSONValidationResult.data.tilesets[0] || throwError()),
+            image: 'tileset.png',
+          },
+        ],
+      };
+      await this.storageService.saveText(
+        mapStorageKey,
+        JSON.stringify(toSave),
+        { contentType: ContentType.JSON },
+      );
+      if (!territory.hasAssets) {
+        territory.hasAssets = true;
+      }
+      territory.updatedAt = new Date();
+      await territoriesRepo.save(territory);
+    });
+  }
+
+  @Post()
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'data', maxCount: 1 },
+      { name: 'thumbnail', maxCount: 1 },
+    ]),
+  )
+  async createTerritory(
+    @UploadedFiles()
+    files: {
+      data?: Express.Multer.File[];
+      thumbnail?: Express.Multer.File[];
+    },
+    @WithAuthContext() authContext: AuthContext,
+  ): Promise<CreateTerritoryResponseDTO> {
+    if (!authContext.user.isAdmin) {
+      throw new ForbiddenException();
+    }
+
+    const dataFile =
+      files.data?.[0] ||
+      (() => {
+        throw new BadRequestException({ error: 'no-data-file' });
+      })();
+    const thumbnailFile =
+      files.thumbnail?.[0] ||
+      (() => {
+        throw new BadRequestException({ error: 'no-thumbnail-file' });
+      })();
+    if (dataFile.size > 64000) {
+      throw new BadRequestException({ error: 'data-exceeds-file-size-limit' });
+    }
+    if (thumbnailFile.size > 1024000) {
+      throw new BadRequestException({
+        error: 'thumbnail-exceeds-file-size-limit',
+      });
+    }
+    /* --- */
+    let imgMetadata: sharp.Metadata;
+
+    try {
+      imgMetadata = await sharp(thumbnailFile.buffer).metadata();
+    } catch (err) {
+      throw new BadRequestException({ error: 'unrecognized-thumbnail-format' });
+    }
+
+    if (imgMetadata.format !== 'png') {
+      throw new BadRequestException({ error: 'unrecognized-thumbnail-format' });
+    }
+    /* --- */
+    let dataJSON: unknown;
+    try {
+      const jsonString = dataFile.buffer.toString();
+      dataJSON = JSON.parse(jsonString) as unknown;
+    } catch (err) {
+      throw new BadRequestException({ error: 'unparsable-data-json' });
+    }
+    const dataValidationResult =
+      CreateTerritoryRequestJSONSchema.safeParse(dataJSON);
+    if (!dataValidationResult.success) {
+      throw new BadRequestException({
+        error: 'data-validation-error',
+        messageTree: dataValidationResult.error,
+      });
+    }
+    const data = dataValidationResult.data;
+    /* --- */
+    const img = sharp(thumbnailFile.buffer);
+
+    const imgResized = await img
+      .resize({
+        width: (imgMetadata.width || throwError()) * 2,
+        height: (imgMetadata.height || throwError()) * 2,
+        kernel: 'nearest',
+      })
+      .jpeg()
+      .toBuffer();
+    /* --- */
+    return this.dataSource.transaction(async (entityManager) => {
+      const landsRepository = entityManager.getCustomRepository(LandRepository);
+      const territoriesRepository = entityManager.getCustomRepository(
+        TerritoriesRepository,
+      );
+      const land = await landsRepository.findOne({
+        where: { id: data.landId },
+      });
+      if (!land) {
+        throw new Error();
+      }
+
+      const territories = await land.territories;
+      const totalTerritories = await territoriesRepository.count({});
+
+      for (const territory of territories) {
+        if (
+          data.data.startX <= territory.endX &&
+          data.data.endX > territory.startX &&
+          data.data.startY <= territory.endY &&
+          data.data.endY > territory.startY
+        ) {
+          throw new ConflictException({
+            error: 'intersects-existing-territory',
+          });
+        }
+      }
+
+      const landMapResponse = await fetch(
+        `${this.storageService.getHostUrl()}/lands/${land.id}/map.json`,
+      );
+      if (!landMapResponse.ok) {
+        throw new Error(`Failed to fetch land map: ${landMapResponse.status}`);
+      }
+      const landMap = z.object({
+        height: z.number(),
+        width: z.number(),
+      }).parse(await landMapResponse.json());
+      if (
+        data.data.startX > landMap.width ||
+        data.data.startY > landMap.height ||
+        data.data.endX > landMap.width ||
+        data.data.endY > landMap.height
+      ) {
+        throw new ConflictException('coordinates-exceeds-bounds');
+      }
+      const territory = await territoriesRepository.create(new Territory({
+        startX: data.data.startX,
+        startY: data.data.startY,
+        endX: data.data.endX,
+        endY: data.data.endY,
+        hasAssets: false,
+        inLand: Promise.resolve(land),
+        doorBlocks: [],
+        appBlocks: [],
+      }));
+      const thumbnailStorageKey = `territories/${territory.id}/thumbnail.jpg`;
+      await this.storageService.saveBuffer(thumbnailStorageKey, imgResized, {
+        contentType: ContentType.JPEG,
+      });
+
+      const territoryNumber = totalTerritories + 1;
+
+      const nftMetadata = {
+        name: `8Land Territory #${territoryNumber}`,
+        description: `8Land territory at ${land.name}`,
+        image: `${this.storageService.getHostUrl()}/${thumbnailStorageKey}`,
+        attributes: [
+          {
+            trait_type: 'Territory ID',
+            value: `${territory.id}`,
+          },
+          {
+            trait_type: 'In Land',
+            value: `${land.name}`,
+          },
+          {
+            trait_type: 'Width',
+            value: `${territory.endX - territory.startX}`,
+          },
+          {
+            trait_type: 'Height',
+            value: `${territory.endY - territory.startY}`,
+          },
+          {
+            trait_type: 'Total Area',
+            value: `${
+              (territory.endX - territory.startX) *
+              (territory.endY - territory.startY)
+            }`,
+          },
+        ],
+      };
+
+      return {
+        territoryId: territory.id,
+        nftMetadata: nftMetadata,
+      };
+    });
+  }
+}
