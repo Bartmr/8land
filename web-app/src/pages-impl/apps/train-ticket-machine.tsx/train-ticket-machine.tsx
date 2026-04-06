@@ -8,7 +8,7 @@ import {
   TransportedDataStatus,
 } from '../../../communicated-data/communicated-data-types';
 import { useTrainAPI } from '../../../main-api/routes/train/train.api';
-import { AppContext } from '../../client-side/index/screens/app/app-screen.types';
+import { AppContext } from '../../client/index/screens/app/app-screen.types';
 import { AppContextProvider, useAppContext } from '../app-context';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

@@ -1,5 +1,5 @@
 export const CLIENT_SIDE_INDEX_ROUTE = {
   label: 'Play',
-  path: '/client-side',
+  path: '/client',
   getHref: () => CLIENT_SIDE_INDEX_ROUTE.path,
 };

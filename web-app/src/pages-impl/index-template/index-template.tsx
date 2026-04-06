@@ -4,8 +4,8 @@ import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layout } from '../layout/layout';
 import { LinkAnchor } from '../../ui/link-anchor';
-import { CLIENT_SIDE_INDEX_ROUTE } from '../client-side/index/index-routes';
-import { LANDS_ROUTE } from '../client-side/lands/lands-routes';
+import { CLIENT_SIDE_INDEX_ROUTE } from '../client/index/index-routes';
+import { LANDS_ROUTE } from '../client/lands/lands-routes';
 import { LAND_IDEAS_ROUTE } from '../help/lands/land-ideas/land-ideas-routes';
 export function IndexTemplate() {
   return (

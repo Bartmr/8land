@@ -38,15 +38,15 @@ function Game(_props: RouteComponentProps) {
   );
 }
 
-export function ClientSideTemplate() {
+export function ClientTemplate() {
   return (
     <Router>
-      <Game path="/client-side/" />
+      <Game path="/client/" />
       <AuthenticatedRoute
         authenticationRules={{
           mainApiSession: { access: AuthenticatedRouteAccess.Allow },
         }}
-        path="/client-side"
+        path="/client"
       >
         <LandsTemplate path={`${LANDS_ROUTE.pathSegment}`} />
         <EditLandTemplate
@@ -59,7 +59,7 @@ export function ClientSideTemplate() {
         authenticationRules={{
           mainApiSession: { access: AuthenticatedRouteAccess.Block },
         }}
-        path="/client-side/login"
+        path="/client/login"
       >
         <LoginTemplate path="/" />
       </AuthenticatedRoute>

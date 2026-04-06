@@ -12,7 +12,7 @@ import {
 const Component = () => {
   const [entrypoint, replaceEntrypoint] = useState<
     TransportedData<
-      typeof import('../pages-impl/client-side/client-side-template')
+      typeof import('../pages-impl/client/client-template')
     >
   >({ status: TransportedDataStatus.NotInitialized });
 
@@ -24,7 +24,7 @@ const Component = () => {
 
       try {
         const ep = await import(
-          '../pages-impl/client-side/client-side-template'
+          '../pages-impl/client/client-template'
         );
 
         replaceEntrypoint({
@@ -48,7 +48,7 @@ const Component = () => {
   return (
     <TransportedDataGate dataWrapper={entrypoint}>
       {({ data }) => {
-        const ClientSideTemplate = data.ClientSideTemplate;
+        const ClientSideTemplate = data.ClientTemplate;
 
         return <ClientSideTemplate />;
       }}

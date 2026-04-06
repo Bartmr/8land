@@ -1,8 +1,8 @@
-import { CLIENT_SIDE_ROUTES } from '../client-side-routes';
+import { CLIENT_ROUTES } from '../client-routes';
 
 export const LOGIN_ROUTE = {
   title: 'Login',
-  path: `${CLIENT_SIDE_ROUTES.path}/login`,
+  path: `${CLIENT_ROUTES.path}/login`,
   getHref: ({ next }: { next: string | null }) => {
     const urlSearchParams = new URLSearchParams();
 

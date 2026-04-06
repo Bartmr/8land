@@ -12,7 +12,7 @@ import { useUserAuth } from './users/auth/use-user-auth';
 import { useStoreSelector } from './redux/use-store-selector';
 import { mainApiReducer } from './main-api/main-api-reducer';
 import { TransportedDataStatus } from './communicated-data/communicated-data-types';
-import { LOGIN_ROUTE } from './pages-impl/client-side/login/login-routes';
+import { LOGIN_ROUTE } from './pages-impl/client/login/login-routes';
 import { navigate } from 'gatsby';
 
 const HandleAuth = (props: { children: ReactNode }) => {
