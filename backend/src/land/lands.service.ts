@@ -1,4 +1,4 @@
-import { Logger, NotImplementedException } from '@nestjs/common';
+import { Injectable, Logger, NotImplementedException } from '@nestjs/common';
 import { GetLandDTO } from 'src/land/get/get-land.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
 import { StorageService } from 'src/storage/storage.service';
@@ -9,12 +9,19 @@ import { DataSource, EntityManager } from 'typeorm';
 import { Land } from './land.entity';
 import { LandRepository } from './land.repository';
 
+@Injectable()
 export class LandsService {
   private logger = new Logger(LandsService.name)
+  private dataSource: DataSource
+  private storageService: StorageService
+
   constructor(
-    private dataSource: DataSource,
-    private storageService: StorageService,
-  ) {}
+    dataSource: DataSource,
+    storageService: StorageService
+  ) {
+    this.dataSource = dataSource
+    this.storageService = storageService
+  }
 
   async mapLand(land: Land): Promise<GetLandDTO> {
     const [territories, doorBlocksReferencing, doorBlocks] = await Promise.all([

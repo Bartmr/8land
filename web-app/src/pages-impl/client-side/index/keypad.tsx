@@ -151,30 +151,14 @@ export function Keypad(props: { gamepad: Gamepad }) {
         <div className="d-flex align-items-center">
           <div
             id="game-button-escape"
-            className="btn-sm btn-light"
+            className="btn btn-sm btn-secondary"
             style={{ cursor: 'pointer' }}
           >
             Escape
           </div>
         </div>
         <div className="me-4 mt-4 d-flex d-xl-none align-items-center justify-content-between">
-          {/* A / B Keys */}
-          <div className="d-flex">
-            <button
-              id="game-button-a"
-              className="btn btn-light d-flex align-items-center justify-content-center"
-              style={{ width: '50px', height: '50px' }}
-            >
-              A
-            </button>
-            <button
-              id="game-button-b"
-              className="ms-3 btn btn-light d-flex align-items-center justify-content-center"
-              style={{ width: '50px', height: '50px' }}
-            >
-              B
-            </button>
-          </div>
+          
           {/* DIRECTION PAD */}
           <div className="d-flex flex-row-reverse">
             <div
@@ -183,12 +167,29 @@ export function Keypad(props: { gamepad: Gamepad }) {
             ></div>
             <div
               style={{ width: '100px', height: '100px' }}
-              className="bg-light d-flex align-items-center justify-content-center text-center small"
+              className="bg-secondary text-contrasting d-flex align-items-center justify-content-center text-center small"
             >
               DRAG HERE
               <br />
               TO MOVE
             </div>
+          </div>
+          {/* A / B Keys */}
+          <div className="d-flex">
+            <button
+              id="game-button-a"
+              className="btn btn-secondary d-flex align-items-center justify-content-center"
+              style={{ width: '50px', height: '50px' }}
+            >
+              A
+            </button>
+            <button
+              id="game-button-b"
+              className="ms-3 btn btn-secondary d-flex align-items-center justify-content-center"
+              style={{ width: '50px', height: '50px' }}
+            >
+              B
+            </button>
           </div>
         </div>
       </div>

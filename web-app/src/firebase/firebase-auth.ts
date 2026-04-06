@@ -1,13 +1,16 @@
-import { getAuth, connectAuthEmulator, User } from 'firebase/auth';
+import { getAuth, connectAuthEmulator, User, Auth } from 'firebase/auth';
 import { EnvironmentVariables } from '../environment-variables';
 import { FirebaseApp } from './firebase-app';
 
-const auth = getAuth(FirebaseApp);
+let auth: Auth
 
 if (EnvironmentVariables.FIREBASE_AUTH_EMULATOR_URL) {
+  auth = getAuth();
   connectAuthEmulator(auth, EnvironmentVariables.FIREBASE_AUTH_EMULATOR_URL, {
     disableWarnings: true,
   });
+} else {
+  auth = getAuth(FirebaseApp)
 }
 
 export const FirebaseAuth = auth;

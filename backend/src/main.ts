@@ -27,7 +27,7 @@ async function bootstrap() {
   process.on('SIGINT', shutdown);
   process.on('SIGUSR2', shutdown);
 
-  await app.listen(EnvironmentVariables.API_PORT);
+  await app.listen(EnvironmentVariables.API_PORT, "0.0.0.0");
 }
 
 bootstrap().catch((err) => {

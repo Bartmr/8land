@@ -45,25 +45,26 @@ export function GameFrame(props: {
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            fontSize: '1rem',
+            fontSize: '0.8em'
           }}
         >
           {props.session ? (
             <>{landName}</>
           ) : (
             <LinkAnchor
+              className='text-contrasting'
               href={LOGIN_ROUTE.getHref({ next: getCurrentLocalHref() })}
             >
-              Login in to save your progress
+              Login to save your progress
             </LinkAnchor>
           )}
         </span>
       </div>
       <div
-        className="mt-1 bg-secondary d-flex align-items-center py-1"
-        style={{ textTransform: 'uppercase', fontSize: '1rem' }}
+        className="mt-1 bg-lcd text-contrasting d-flex align-items-center py-1"
+        style={{ textTransform: 'uppercase', fontSize: '0.8em' }}
       >
-        <div className="px-2 bg-secondary" style={{ whiteSpace: 'nowrap' }}>
+        <div className="px-2" style={{ whiteSpace: 'nowrap' }}>
           <FontAwesomeIcon icon={faMusic} />
         </div>
 

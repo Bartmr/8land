@@ -25,7 +25,7 @@ class UserAuth {
       undefined,
       LoginRequestDTO
     >({
-      path: '/auth',
+      path: '/users/auth',
       query: undefined,
       body: args,
       acceptableStatusCodes: [201, 409],
@@ -80,7 +80,7 @@ class UserAuth {
       | { status: 404; body: undefined },
       undefined
     >({
-      path: '/auth',
+      path: '/users/auth',
       query: undefined,
       acceptableStatusCodes: [200, 404],
     });
@@ -107,7 +107,7 @@ class UserAuth {
       | { status: 404; body: undefined },
       undefined
     >({
-      path: '/auth',
+      path: '/users/auth',
       query: undefined,
       acceptableStatusCodes: [200, 404],
     });

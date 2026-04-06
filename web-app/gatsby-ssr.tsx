@@ -6,6 +6,8 @@ import { App } from './src/app';
 export const onPreRenderHTML: GatsbySSR["onPreRenderHTML"] = ({
   getHeadComponents,
   replaceHeadComponents,
+  getPostBodyComponents,
+  replacePostBodyComponents
 }) => {
   const elements = getHeadComponents();
 
@@ -27,6 +29,16 @@ export const onPreRenderHTML: GatsbySSR["onPreRenderHTML"] = ({
       href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
       rel="stylesheet"
     />,
+  ]);
+
+  const postBodyElements = getPostBodyComponents();
+
+  replacePostBodyComponents([
+    ...postBodyElements,
+    <script
+      key="soundcloud-widget-api-script"
+      src="https://w.soundcloud.com/player/api.js"
+    ></script>,
   ]);
 };
 

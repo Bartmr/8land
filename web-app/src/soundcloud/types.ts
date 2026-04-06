@@ -1,8 +1,10 @@
-export interface SoundcloudSong {
+export type SoundcloudSong = {
   id: number;
-  resource_type: string;
   playable: boolean;
-  artwork_url: string;
+  resource_type: string;
+  _resource_id: number;
+  _resource_type: string;
+} & Partial<{artwork_url: string;
   caption?: unknown;
   commentable: boolean;
   comment_count: number;
@@ -117,7 +119,4 @@ export interface SoundcloudSong {
     };
     station_urn: string;
     station_permalink: string;
-  };
-  _resource_id: number;
-  _resource_type: string;
-}
+  }}>

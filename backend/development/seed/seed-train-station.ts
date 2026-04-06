@@ -65,13 +65,13 @@ export async function seedTrainStation({
   );
 
   const mapString = await readFile(
-    path.resolve(process.cwd(), 'src/land/spec/assets/train-station-map.json'),
+    path.resolve(process.cwd(), 'development/seed/land/assets/train-station-map.json'),
     { encoding: 'utf-8' },
   );
   const tileset = await readFile(
     path.resolve(
       process.cwd(),
-      'src/land/spec/assets/train-station-tileset.png',
+      'development/seed/land/assets/train-station-tileset.png',
     ),
   );
 

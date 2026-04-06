@@ -15,6 +15,8 @@ import { useLocation } from '@reach/router';
 type Props = {
   authenticationRules: AuthenticatedRouteRules;
   children: ReactNode;
+  // For react-router
+  path: string;
 };
 
 export const AuthenticatedRoute = (props: Props) => {

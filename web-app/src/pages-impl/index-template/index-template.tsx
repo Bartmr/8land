@@ -47,7 +47,7 @@ export function IndexTemplate() {
             </div>
           </div>
           <hr />
-          <div className="bg-secondary text-secondary-text py-5">
+          <div className="bg-secondary text-contrasting py-5">
             <div className="container">
               <p className="display-3">What is 8Land?</p>
               <p className="mt-4">

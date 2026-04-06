@@ -62,6 +62,7 @@ export class MusicService {
       (async () => {
         await this.initializationPromise;
 
+
         this.soundcloudPlayer.load(musicUrl, {
           callback: () => {
             this.soundcloudPlayer.getCurrentSound((s) => {
@@ -109,6 +110,7 @@ export function MusicTicker(props: {
     props.onService(sv);
   }, []);
 
+
   return (
     <>
       <>
@@ -120,10 +122,10 @@ export function MusicTicker(props: {
               textOverflow: 'ellipsis',
             }}
           >
-            {service.song ? (
+            {service.song && service.song.permalink_url && service.song.title && service.song.user && service.song.user.username ? (
               <LinkAnchor
                 style={{ textDecoration: 'underline' }}
-                className="link-unstyled"
+                className="text-contrasting"
                 href={service.song.permalink_url}
               >
                 {service.song.title} - {service.song.user.username}

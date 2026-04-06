@@ -7,6 +7,8 @@ if (!RUNNING_IN_CLIENT) {
 }
 
 const app = initializeApp({
+  apiKey: "test",
+  projectId: "dev",
   ...EnvironmentVariables.FIREBASE_CONFIG,
 });
 

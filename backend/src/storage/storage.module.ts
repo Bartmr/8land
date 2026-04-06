@@ -13,15 +13,12 @@ import { S3Client } from '@aws-sdk/client-s3';
 
 const mkdir = promisify(fs.mkdir);
 
-export const USE_DEV_STORAGE =
-  !EnvironmentVariables.AWS_ENDPOINT;
-
 @Module({
   providers: [
     {
       provide: StorageService,
       useFactory: () => {
-        if (USE_DEV_STORAGE) {
+        if (!EnvironmentVariables.AWS_ENDPOINT) {
           return new DevStorageService();
         } else {
           const s3Client = new S3Client({
@@ -49,7 +46,7 @@ export const USE_DEV_STORAGE =
 })
 export class StorageModule implements NestModule {
   async configure(consumer: MiddlewareConsumer) {
-    if (USE_DEV_STORAGE) {
+    if (!EnvironmentVariables.AWS_ENDPOINT) {
       await mkdir(path.join(LOCAL_TEMPORARY_FILES_PATH, 'storage'), {
         recursive: true,
       });

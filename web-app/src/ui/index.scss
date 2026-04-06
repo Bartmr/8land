@@ -58,7 +58,8 @@
 
 @each $color, $value in $theme-colors {
   .bg-#{$color} {
-    --contrasting-rgb: to-rgb(color-contrast($value));
+    --bs-text-opacity: 1;
+    --contrasting-rgb: #{to-rgb(color-contrast($value))};
   }
 }
 

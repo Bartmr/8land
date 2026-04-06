@@ -1,3 +1,3 @@
 import z from "zod";
 
-export const UserAuthTokenIdLocalStorageSchema = z.string();
+export const UserAuthTokenIdLocalStorageSchema = z.string().optional();

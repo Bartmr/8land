@@ -46,6 +46,7 @@ export function ClientSideTemplate() {
         authenticationRules={{
           mainApiSession: { access: AuthenticatedRouteAccess.Allow },
         }}
+        path="/client-side"
       >
         <LandsTemplate path={`${LANDS_ROUTE.pathSegment}`} />
         <EditLandTemplate
@@ -58,6 +59,7 @@ export function ClientSideTemplate() {
         authenticationRules={{
           mainApiSession: { access: AuthenticatedRouteAccess.Block },
         }}
+        path="/client-side/login"
       >
         <LoginTemplate path="/" />
       </AuthenticatedRoute>

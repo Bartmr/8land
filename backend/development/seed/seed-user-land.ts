@@ -122,14 +122,14 @@ export async function seedUserLand({
   const townOfHumbleBeginningsMapString = await readFile(
     path.resolve(
       process.cwd(),
-      'src/land/spec/assets/town-of-humble-beginnings-map.json',
+      'development/seed/land/assets/town-of-humble-beginnings-map.json',
     ),
     { encoding: 'utf-8' },
   );
   const townOfHumbleBeginningsTileset = await readFile(
     path.resolve(
       process.cwd(),
-      'src/land/spec/assets/town-of-humble-beginnings-tileset.png',
+      'development/seed/land/assets/town-of-humble-beginnings-tileset.png',
     ),
   );
 
@@ -201,14 +201,14 @@ export async function seedUserLand({
   const townOfHumbleBeginningsUnderground1MapString = await readFile(
     path.resolve(
       process.cwd(),
-      'src/land/spec/assets/town-of-humble-beginnings-underground-1-map.json',
+      'development/seed/land/assets/town-of-humble-beginnings-underground-1-map.json',
     ),
     { encoding: 'utf-8' },
   );
   const townOfHumbleBeginningsUnderground1Tileset = await readFile(
     path.resolve(
       process.cwd(),
-      'src/land/spec/assets/town-of-humble-beginnings-underground-1-tileset.png',
+      'development/seed/land/assets/town-of-humble-beginnings-underground-1-tileset.png',
     ),
   );
 
@@ -261,14 +261,14 @@ export async function seedUserLand({
   const townOfHumbleBeginningsUnderground2MapString = await readFile(
     path.resolve(
       process.cwd(),
-      'src/land/spec/assets/town-of-humble-beginnings-underground-2-map.json',
+      'development/seed/land/assets/town-of-humble-beginnings-underground-2-map.json',
     ),
     { encoding: 'utf-8' },
   );
   const townOfHumbleBeginningsUnderground2Tileset = await readFile(
     path.resolve(
       process.cwd(),
-      'src/land/spec/assets/town-of-humble-beginnings-underground-2-tileset.png',
+      'development/seed/land/assets/town-of-humble-beginnings-underground-2-tileset.png',
     ),
   );
 

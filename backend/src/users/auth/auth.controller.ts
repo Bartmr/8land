@@ -37,7 +37,7 @@ import { v4 } from 'uuid';
 import { EnvironmentVariables } from 'src/environment/environment-variables';
 
 @UseGuards(AuthGuard)
-@Controller('auth')
+@Controller('/users/auth')
 export class AuthController {
   constructor(
     private firebaseService: FirebaseService,

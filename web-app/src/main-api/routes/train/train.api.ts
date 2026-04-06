@@ -28,7 +28,7 @@ export class TrainAPI {
       object({
         name: string(),
         worldId: uuid(),
-      }),
+      }).optional(),
       `train-destination:${args.currentStationLandId}`,
     );
   }
@@ -73,7 +73,7 @@ export class TrainAPI {
 
     if (!session) {
       const returningTrainStationId = this.localStorage.getItem(
-        uuid(),
+        uuid().optional(),
         'last-train-station',
       );
 
