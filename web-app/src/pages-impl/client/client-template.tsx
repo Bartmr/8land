@@ -1,6 +1,6 @@
 import { Router } from '@reach/router';
-import { AuthenticatedRoute } from '../../users/auth/authenticated-route/authenticated-route';
-import { AuthenticatedRouteAccess } from '../../users/auth/authenticated-route/authenticated-route-types';
+import { AuthenticatedRoute } from '../../users/authentication/authenticated-route';
+import { AuthenticatedRouteAccess } from '../../users/authentication/authenticated-route/authenticated-route-types';
 import NotFoundTemplate from '../../pages/404';
 import { LoginTemplate } from './login/login-template';
 import React, { Suspense } from 'react';

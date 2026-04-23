@@ -8,7 +8,7 @@ import { dom } from '@fortawesome/fontawesome-svg-core';
 import { createStoreManager, StoreManagerProvider } from './redux/store-manager';
 import { Provider } from 'react-redux';
 import { useStoreDispatch } from './redux/use-store-dispatch';
-import { useUserAuth } from './users/auth/use-user-auth';
+import { useUserAuth } from './users/authentication/use-user-auth';
 import { useStoreSelector } from './redux/use-store-selector';
 import { mainApiReducer } from './main-api/main-api-reducer';
 import { TransportedDataStatus } from './communicated-data/communicated-data-types';

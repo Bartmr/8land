@@ -3,7 +3,7 @@ import { faMusic } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { LinkAnchor } from '../../../ui/link-anchor';
-import { UserAuthSessionData } from '../../../users/auth/user-auth-types';
+import { UserAuthSessionData } from '../../../users/authentication/user-auth-types';
 import { getCurrentLocalHref } from '../../../navigation/current-local-href';
 import { LOGIN_ROUTE } from '../login/login-routes';
 import { Keypad } from './keypad';

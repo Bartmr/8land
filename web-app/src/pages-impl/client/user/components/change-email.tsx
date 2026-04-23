@@ -10,7 +10,7 @@ import {
 } from '../../../../communicated-data/communicated-data-types';
 import * as auth from 'firebase/auth';
 import { FirebaseAuth, getFirebaseUser } from '../../../../firebase/firebase-auth';
-import { useUserAuthLogout } from '../../../../users/auth/use-user-auth-logout';
+import { useUserAuthLogout } from '../../../../users/authentication/use-user-auth-logout';
 import isEmail from 'validator/lib/isEmail';
 
 export function ChangeEmail() {

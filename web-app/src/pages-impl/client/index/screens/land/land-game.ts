@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { UserAuthSessionData } from '../../../../../users/auth/user-auth-types';
+import { UserAuthSessionData } from '../../../../../users/authentication/user-auth-types';
 import { EnvironmentVariables } from '../../../../../environment-variables';
 import { getLandSceneKey } from './keys';
 import { LandScene } from './land-scene';

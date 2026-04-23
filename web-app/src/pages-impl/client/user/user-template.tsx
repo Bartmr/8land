@@ -7,13 +7,13 @@ import {
   TransportedDataGateLayout,
 } from '../../../ui/transported-data-gate';
 import { mainApiReducer } from '../../../main-api/main-api-reducer';
-import { useUserAuth } from '../../../users/auth/use-user-auth';
+import { useUserAuth } from '../../../users/authentication/use-user-auth';
 import { useStoreSelector } from '../../../redux/use-store-selector';
 import {
   TransportedData,
   TransportedDataStatus,
 } from '../../../communicated-data/communicated-data-types';
-import { useUserAuthLogout } from '../../../users/auth/use-user-auth-logout';
+import { useUserAuthLogout } from '../../../users/authentication/use-user-auth-logout';
 import { ChangeEmail } from './components/change-email';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPersonThroughWindow } from '@fortawesome/free-solid-svg-icons';

@@ -10,7 +10,7 @@ import {
 } from '../../../communicated-data/communicated-data-types';
 import { FirebaseAuth } from '../../../firebase/firebase-auth';
 import { TransportedDataGate } from '../../../ui/transported-data-gate';
-import { useUserAuth } from '../../../users/auth/use-user-auth';
+import { useUserAuth } from '../../../users/authentication/use-user-auth';
 import { LinkAnchor } from '../../../ui/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
 import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';

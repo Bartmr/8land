@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { UserAuthSessionData } from '../../../../../users/auth/user-auth-types';
+import { UserAuthSessionData } from '../../../../../users/authentication/user-auth-types';
 import { runLandGame } from './land-game';
 import { globalHistory } from '@reach/router';
 import { MusicService } from '../../music-ticker';

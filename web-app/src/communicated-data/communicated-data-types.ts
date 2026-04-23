@@ -8,7 +8,7 @@ export enum TransportedDataStatus {
   // Refreshing is for data that can still be used while it's being updated
   Refreshing = 'refreshing',
   //
-  // Errors related to a connection failure are tagged using TransportFailure enum
+  // Errors related to a connection failure are tagged using CommunicationError enum
 }
 
 export type TransportedData<Data> = Readonly<

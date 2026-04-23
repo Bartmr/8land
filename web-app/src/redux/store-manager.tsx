@@ -6,7 +6,7 @@ import {
 } from 'redux';
 import { devToolsEnhancerDevelopmentOnly } from '@redux-devtools/extension';
 import { Store, StoreAction, StoreState } from './store-types';
-import { USER_AUTH_LOGOUT } from '../users/auth/user-auth-actions';
+import { USER_AUTH_LOGOUT } from '../users/authentication/user-auth-actions';
 import { StoreReducersMap } from './store-reducers-map';
 import { createContext, ReactNode, useContext } from 'react';
 import { throwError } from '../throw-error';

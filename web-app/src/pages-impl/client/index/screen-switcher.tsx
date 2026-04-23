@@ -1,7 +1,7 @@
 import React from 'react';
 import { ResumeLandNavigationDTO } from '../../../main-api/routes/lands/lands.dtos';
 import { useRef, useState } from 'react';
-import { UserAuthSessionData } from '../../../users/auth/user-auth-types';
+import { UserAuthSessionData } from '../../../users/authentication/user-auth-types';
 import { MusicService } from './music-ticker';
 import { AppScreen, AppService } from './screens/app/app-screen';
 import {
