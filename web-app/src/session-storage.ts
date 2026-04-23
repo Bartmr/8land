@@ -2,7 +2,7 @@ import z from "zod";
 
 class SessionStorage {
   getItem<S extends z.ZodType<unknown>>(schema: S, key: string): z.infer<S> {
-    const data = window.localStorage.getItem(key);
+    const data = window.sessionStorage.getItem(key);
 
     const validationResult = schema.parse(
       data ? JSON.parse(data) : undefined,

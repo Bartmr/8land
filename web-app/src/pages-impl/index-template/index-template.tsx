@@ -1,7 +1,5 @@
 import React from 'react';
 import { PROJECT_SLOGAN } from '../../project-details';
-import { faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Layout } from '../layout/layout';
 import { LinkAnchor } from '../../ui/link-anchor';
 import { CLIENT_SIDE_INDEX_ROUTE } from '../client/index/index-routes';
@@ -61,11 +59,10 @@ export function IndexTemplate() {
             </div>
           </div>
           <div
-            style={{ backgroundColor: '#0000ff' }}
-            className="with-light-contrasting-colors py-5"
+            className="bg-primary text-contrasting py-5"
           >
             <div className="container">
-              <p className="display-3 text-body">
+              <p className="display-3">
                 Build your 2D lands in a single afternoon
               </p>
               <p className="mt-4">
@@ -76,7 +73,6 @@ export function IndexTemplate() {
               </p>
               <p>
                 <LinkAnchor
-                  className="text-body"
                   href={LAND_IDEAS_ROUTE.getHref()}
                 >
                   Click here to see some ideas of what you can build in this
