@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import {
   CreateLandRequestDTO,
   EditLandBodyDTO,
@@ -8,68 +9,279 @@ import {
   GetLandsToClaimDTO,
 } from './lands.dtos';
 import {
-  MainJSONApi,
-  useMainJSONApi,
-} from '../../use-main-json-api';
+  useMainApiFetchJSON,
+} from '../../fetch-json';
 import { Logger } from '../../../logging/logger';
 import { CommunicationError } from '../../../communication-errors/communication-errors';
 
+const landAssetsSchema = z.object({
+  baseUrl: z.string(),
+  mapKey: z.string(),
+  tilesetKey: z.string(),
+});
+
+const landDoorBlockDestinationSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+});
+
+const landDoorBlockEntrySchema = z.object({
+  id: z.string(),
+  toLand: landDoorBlockDestinationSchema,
+});
+
+const landDoorReferencingSchema = z.object({
+  id: z.string(),
+  fromLandId: z.string(),
+  fromLandName: z.string(),
+});
+
+const landAppBlockEntrySchema = z.object({
+  id: z.string(),
+  url: z.string(),
+});
+
+const landTerritorySchema = z.object({
+  id: z.string(),
+  startX: z.number(),
+  startY: z.number(),
+  endX: z.number(),
+  endY: z.number(),
+  doorBlocks: z.array(landDoorBlockEntrySchema),
+  appBlocks: z.array(landAppBlockEntrySchema),
+  assets: z.union([z.undefined(), landAssetsSchema]),
+});
+
+const landSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  backgroundMusicUrl: z.string().nullable(),
+  territories: z.array(landTerritorySchema),
+  doorBlocks: z.array(landDoorBlockEntrySchema),
+  doorBlocksReferencing: z.array(landDoorReferencingSchema),
+  appBlocks: z.array(landAppBlockEntrySchema),
+  assets: z.union([z.undefined(), landAssetsSchema]),
+  isStartLand: z.boolean(),
+}) satisfies z.ZodType<GetLandDTO>;
+
+const navigateResponseSchema = z.object({
+  status: z.literal(200),
+  body: landSchema,
+}) satisfies z.ZodType<{ status: 200; body: NavigateToLandDTO }>;
+
+const resumeResponseSchema = z.object({
+  status: z.literal(200),
+  body: landSchema.extend({
+    lastDoor: z
+      .object({
+        id: z.string(),
+        toLandId: z.string(),
+      })
+      .nullable(),
+    lastTrainTravel: z
+      .object({
+        comingBackToStation: z.boolean(),
+      })
+      .nullable(),
+    lastCheckpointWasDeleted: z.boolean(),
+  }),
+}) satisfies z.ZodType<{ status: 200; body: ResumeLandNavigationDTO }>;
+
+const getEditableLandResponseSchema = z.object({
+  status: z.literal(200),
+  body: landSchema,
+}) satisfies z.ZodType<{ status: 200; body: GetLandDTO }>;
+
+const indexLandsResponseSchema = z.object({
+  status: z.literal(200),
+  body: z.object({
+    total: z.number(),
+    limit: z.number(),
+    lands: z.array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        published: z.boolean(),
+        isStartingLand: z.boolean(),
+      }),
+    ),
+  }),
+}) satisfies z.ZodType<{ status: 200; body: IndexLandsDTO }>;
+
+const createLandResponseSchema = z.union([
+  z.object({
+    status: z.literal(201),
+    body: z.undefined(),
+  }),
+  z.object({
+    status: z.literal(409),
+    body: z.union([
+      z.object({ error: z.undefined() }),
+      z.object({
+        error: z.literal('lands-limit-exceeded'),
+        limit: z.number(),
+      }),
+      z.object({
+        error: z.union([
+          z.literal('name-already-taken'),
+          z.literal('cannot-create-more-lands-without-start-block'),
+        ]),
+      }),
+    ]),
+  }),
+]) satisfies z.ZodType<
+  | { status: 201; body: undefined }
+  | {
+      status: 409;
+      body:
+        | { error?: undefined }
+        | { error: 'lands-limit-exceeded'; limit: number }
+        | {
+            error:
+              | 'name-already-taken'
+              | 'cannot-create-more-lands-without-start-block';
+          };
+    }
+>;
+
+const uploadAssetsErrorSchema = z.object({
+  error: z
+    .union([
+      z.literal('start-lands-limit-exceeded'),
+      z.literal('cannot-have-train-block-in-world-lands'),
+      z.literal('only-one-land-can-have-a-start-block'),
+      z.literal('cannot-remove-start-block'),
+      z.literal('must-have-start-block-in-first-land'),
+      z.literal('cannot-have-start-block-in-admin-lands'),
+    ])
+    .optional(),
+});
+
+const uploadAssetsResponseSchema = z.union([
+  z.object({
+    status: z.literal(204),
+    body: z.undefined(),
+  }),
+  z.object({
+    status: z.literal(409),
+    body: z.union([z.undefined(), uploadAssetsErrorSchema]),
+  }),
+]) satisfies z.ZodType<
+  | { status: 204; body: undefined }
+  | {
+      status: 409;
+      body:
+        | undefined
+        | {
+            error?:
+              | 'start-lands-limit-exceeded'
+              | 'cannot-have-train-block-in-world-lands'
+              | 'only-one-land-can-have-a-start-block'
+              | 'cannot-remove-start-block'
+              | 'must-have-start-block-in-first-land'
+              | 'cannot-have-start-block-in-admin-lands';
+          };
+    }
+>;
+
+const updateLandResponseSchema = z.union([
+  z.object({
+    status: z.literal(200),
+    body: z.unknown(),
+  }),
+  z.object({
+    status: z.literal(409),
+    body: z.union([
+      z.undefined(),
+      z.object({
+        error: z.string(),
+      }),
+    ]),
+  }),
+]) satisfies z.ZodType<
+  | { status: 200; body: unknown }
+  | { status: 409; body: undefined | { error: string } }
+>;
+
+const deleteLandResponseSchema = z.union([
+  z.object({
+    status: z.literal(200),
+    body: z.undefined(),
+  }),
+  z.object({
+    status: z.literal(409),
+    body: z.union([
+      z.undefined(),
+      z.object({
+        error: z.string(),
+      }),
+    ]),
+  }),
+]) satisfies z.ZodType<
+  | { status: 200; body: undefined }
+  | { status: 409; body: undefined | { error: string } }
+>;
+
+const escapeResponseSchema = z.object({
+  status: z.literal(200),
+  body: z.undefined(),
+}) satisfies z.ZodType<{ status: 200; body: undefined }>;
+
+const getLandsToClaimResponseSchema = z.object({
+  status: z.literal(200),
+  body: z.object({
+    free: z.number(),
+  }),
+}) satisfies z.ZodType<{ status: 200; body: GetLandsToClaimDTO }>;
+
 export class LandsAPI {
-  constructor(private api: MainJSONApi) {}
+  constructor(private api: ReturnType<typeof useMainApiFetchJSON>) {}
 
   navigate(args: { doorBlockId: string; currentLandId: string }) {
-    return this.api.get<
-      { status: 200; body: NavigateToLandDTO },
-      URLSearchParams
-    >({
-      path: `/lands/navigate`,
-      query: new URLSearchParams({
-        doorBlockId: args.doorBlockId,
-        currentLandId: args.currentLandId,
-      }),
-      acceptableStatusCodes: [200],
+    const query = new URLSearchParams({
+      doorBlockId: args.doorBlockId,
+      currentLandId: args.currentLandId,
+    });
+
+    return this.api.fetchJSON({
+      schema: navigateResponseSchema,
+      path: `/lands/navigate?${query.toString()}`,
+      method: 'GET',
     });
   }
 
   resume() {
-    return this.api.get<
-      { status: 200; body: ResumeLandNavigationDTO },
-      undefined
-    >({
+    return this.api.fetchJSON({
+      schema: resumeResponseSchema,
       path: '/lands/resume',
-      query: undefined,
-      acceptableStatusCodes: [200],
+      method: 'GET',
     });
   }
 
   getEditableLand(args: { landId: string }) {
-    return this.api.get<
-      { status: 200; body: GetLandDTO },
-      undefined
-    >({
+    return this.api.fetchJSON({
+      schema: getEditableLandResponseSchema,
       path: `/lands/getEditable/${args.landId}`,
-      query: undefined,
-      acceptableStatusCodes: [200],
+      method: 'GET',
     });
   }
 
   getLandsIndex() {
-    return this.api.get<
-      { status: 200; body: IndexLandsDTO },
-      URLSearchParams
-    >({
-      path: '/lands',
-      query: new URLSearchParams({ skip: '0' }),
-      acceptableStatusCodes: [200],
+    const query = new URLSearchParams({ skip: '0' });
+
+    return this.api.fetchJSON({
+      schema: indexLandsResponseSchema,
+      path: `/lands?${query.toString()}`,
+      method: 'GET',
     });
   }
 
   async createLand(args: { name: string }): Promise<
     | {
-        failure: CommunicationError;
+        error: CommunicationError;
       }
     | {
-        failure?: undefined;
+        error?: undefined;
         response:
           | {
               error:
@@ -85,31 +297,18 @@ export class LandsAPI {
             };
       }
   > {
-    const res = await this.api.post<
-      | { status: 201; body: undefined }
-      | {
-          status: 409;
-          body:
-            | { error?: undefined }
-            | { error: 'lands-limit-exceeded'; limit: number }
-            | {
-                error:
-                  | 'name-already-taken'
-                  | 'cannot-create-more-lands-without-start-block';
-              };
-        },
-      undefined,
-      CreateLandRequestDTO
-    >({
+    const body: CreateLandRequestDTO = {
+      name: args.name,
+    };
+
+    const res = await this.api.fetchJSON({
+      schema: createLandResponseSchema,
       path: '/lands',
-      query: undefined,
-      acceptableStatusCodes: [201, 409],
-      body: {
-        name: args.name,
-      },
+      method: 'POST',
+      body,
     });
 
-    if (res.failure) {
+    if (res.error) {
       return res;
     } else {
       if (res.response.status === 409) {
@@ -132,7 +331,9 @@ export class LandsAPI {
             },
           };
         } else {
-          return res.logAndReturnAsUnexpected();
+          return {
+            error: CommunicationError.UnexpectedResponse,
+          };
         }
       } else {
         return {
@@ -143,32 +344,14 @@ export class LandsAPI {
   }
 
   async uploadAssets(args: { landId: string; formData: FormData }) {
-    const res = await this.api.put<
-      | { status: 204; body: undefined }
-      | {
-          status: 409;
-          body:
-            | undefined
-            | {
-                error?:
-                  | 'start-lands-limit-exceeded'
-                  | 'cannot-have-train-block-in-world-lands'
-                  | 'only-one-land-can-have-a-start-block'
-                  | 'cannot-remove-start-block'
-                  | 'must-have-start-block-in-first-land'
-                  | 'cannot-have-start-block-in-admin-lands';
-              };
-        },
-      undefined,
-      FormData
-    >({
+    const res = await this.api.fetchJSON({
+      schema: uploadAssetsResponseSchema,
       path: `/lands/${args.landId}/assets`,
-      query: undefined,
-      acceptableStatusCodes: [204, 409],
+      method: 'PUT',
       body: args.formData,
     });
 
-    if (res.failure) {
+    if (res.error) {
       return res;
     } else {
       if (res.response.status === 409) {
@@ -187,17 +370,19 @@ export class LandsAPI {
           body?.error === 'cannot-have-start-block-in-admin-lands'
         ) {
           return {
-            failure: undefined,
+            error: undefined,
             response: {
               error: body.error,
             } as const,
           };
         } else {
-          return res.logAndReturnAsUnexpected();
+          return {
+            error: CommunicationError.UnexpectedResponse,
+          };
         }
       } else {
         return {
-          failure: undefined,
+          error: undefined,
           response: {
             error: undefined,
           },
@@ -213,28 +398,25 @@ export class LandsAPI {
       backgroundMusicUrl?: string | null;
     };
   }) {
-    return this.api.put<
-      | { status: 200; body: unknown }
-      | { status: 409; body: undefined | { error: string } },
-      undefined,
-      EditLandBodyDTO
-    >({
+    const body: EditLandBodyDTO = {
+      name: args.formData.name,
+      backgroundMusicUrl: args.formData.backgroundMusicUrl,
+    };
+
+    return this.api.fetchJSON({
+      schema: updateLandResponseSchema,
       path: `/lands/${args.landId}`,
-      query: undefined,
-      body: {
-        name: args.formData.name,
-        backgroundMusicUrl: args.formData.backgroundMusicUrl,
-      },
-      acceptableStatusCodes: [200, 409],
+      method: 'PUT',
+      body,
     });
   }
 
   async deleteLand(args: { landId: string }): Promise<
     | {
-        failure: CommunicationError;
+        error: CommunicationError;
       }
     | {
-        failure?: undefined;
+        error?: undefined;
         response:
           | {
               status: 'must-delete-blocks-first';
@@ -244,17 +426,13 @@ export class LandsAPI {
             };
       }
   > {
-    const res = await this.api.delete<
-      | { status: 200; body: undefined }
-      | { status: 409; body: undefined | { error: string } },
-      undefined
-    >({
+    const res = await this.api.fetchJSON({
+      schema: deleteLandResponseSchema,
       path: `/lands/${args.landId}`,
-      query: undefined,
-      acceptableStatusCodes: [200, 409],
+      method: 'DELETE',
     });
 
-    if (res.failure) {
+    if (res.error) {
       return res;
     } else {
       if (res.response.status === 409) {
@@ -267,7 +445,9 @@ export class LandsAPI {
             },
           };
         } else {
-          return res.logAndReturnAsUnexpected();
+          return {
+            error: CommunicationError.UnexpectedResponse,
+          };
         }
       } else {
         return {
@@ -280,30 +460,25 @@ export class LandsAPI {
   }
 
   escape() {
-    return this.api.put<{ status: 200; body: undefined }, undefined, undefined>(
-      {
-        path: '/lands/escape',
-        query: undefined,
-        acceptableStatusCodes: [200],
-        body: undefined,
-      },
-    );
+    return this.api.fetchJSON({
+      schema: escapeResponseSchema,
+      path: '/lands/escape',
+      method: 'PUT',
+      body: undefined,
+    });
   }
 
   getLandsToClaim() {
-    return this.api.get<
-      { status: 200; body: GetLandsToClaimDTO },
-      undefined
-    >({
+    return this.api.fetchJSON({
+      schema: getLandsToClaimResponseSchema,
       path: '/lands/getLandsToClaim',
-      query: undefined,
-      acceptableStatusCodes: [200],
+      method: 'GET',
     });
   }
 }
 
 export function useLandsAPI() {
-  const api = useMainJSONApi();
+  const api = useMainApiFetchJSON();
 
   return new LandsAPI(api);
 }

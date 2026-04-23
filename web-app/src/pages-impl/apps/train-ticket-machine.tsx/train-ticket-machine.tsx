@@ -51,8 +51,8 @@ function Content(props: { appContext: AppContext }) {
       searchQuery,
     });
 
-    if (res.failure) {
-      replaceDestinations({ status: res.failure });
+    if (res.error) {
+      replaceDestinations({ status: res.error });
     } else {
       replaceDestinations({
         status: TransportedDataStatus.Done,

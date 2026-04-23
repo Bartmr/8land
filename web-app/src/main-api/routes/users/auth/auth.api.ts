@@ -1,22 +1,27 @@
-import {
-  MainJSONApi,
-  useMainJSONApi,
-} from '../../../use-main-json-api';
+import { z } from 'zod';
+import { useMainApiFetchJSON } from '../../../fetch-json';
+
+type MainApiFetchJSON = ReturnType<typeof useMainApiFetchJSON>;
+
+const logoutFromAllDevicesResponseSchema = z.object({
+  status: z.number(),
+  body: z.unknown(),
+});
 
 export class AuthAPI {
-  constructor(private api: MainJSONApi) {}
+  constructor(private api: MainApiFetchJSON) {}
 
   logoutFromAllDevices() {
-    return this.api.delete<{ status: number; body: unknown }, undefined>({
+    return this.api.fetchJSON({
+      schema: logoutFromAllDevicesResponseSchema,
       path: '/auth',
-      query: undefined,
-      acceptableStatusCodes: [],
+      method: 'DELETE',
     });
   }
 }
 
 export function useAuthAPI() {
-  const api = useMainJSONApi();
+  const api = useMainApiFetchJSON();
 
   return new AuthAPI(api);
 }

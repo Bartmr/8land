@@ -1,39 +1,49 @@
+import { z } from 'zod';
 import {
-  MainJSONApi,
-  useMainJSONApi,
-} from '../../use-main-json-api';
-import { GetUserWalletNonce, ReceiveSignedUserNonceRequestDTO } from './users.dtos';
+  useMainApiFetchJSON,
+} from '../../fetch-json';
+import {
+  GetUserWalletNonce,
+  ReceiveSignedUserNonceRequestDTO,
+} from './users.dtos';
+
+const getWalletNonceResponseSchema = z.object({
+  status: z.literal(200),
+  body: z.object({
+    walletNonce: z.string(),
+  }),
+}) satisfies z.ZodType<{ status: 200; body: GetUserWalletNonce }>;
+
+const sendSignedWalletNonceResponseSchema = z.object({
+  status: z.literal(204),
+  body: z.undefined(),
+}) satisfies z.ZodType<{ status: 204; body: undefined }>;
 
 export class UsersAPI {
-  constructor(private api: MainJSONApi) {}
+  constructor(private api: ReturnType<typeof useMainApiFetchJSON>) {}
 
   getWalletNonce() {
-    return this.api.get<
-      { status: 200; body: GetUserWalletNonce },
-      undefined
-    >({
+    return this.api.fetchJSON({
+      schema: getWalletNonceResponseSchema,
       path: '/users/me/walletNonce',
-      query: undefined,
-      acceptableStatusCodes: [200],
+      method: 'GET',
     });
   }
 
   sendSignedWalletNonce(args: { signedNonce: string }) {
-    return this.api.patch<
-      { status: 204; body: undefined },
-      undefined,
-      ReceiveSignedUserNonceRequestDTO
-    >({
+    const body: ReceiveSignedUserNonceRequestDTO = args;
+
+    return this.api.fetchJSON({
+      schema: sendSignedWalletNonceResponseSchema,
       path: '/users/me/walletNonce',
-      query: undefined,
-      body: args,
-      acceptableStatusCodes: [204],
+      method: 'PATCH',
+      body,
     });
   }
 }
 
 export function useUsersAPI() {
-  const api = useMainJSONApi();
+  const api = useMainApiFetchJSON();
 
   return new UsersAPI(api);
 }

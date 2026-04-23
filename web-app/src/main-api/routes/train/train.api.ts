@@ -1,5 +1,4 @@
 import {
-  GetTrainDestinationQueryDTO,
   GetTrainDestinationsDTO,
   BoardTrainDTO,
   ReturnToTrainStationDTO,
@@ -8,27 +7,113 @@ import {
   mainApiReducer,
   MainApiStoreState,
 } from '../../main-api-reducer';
-import {
-  MainJSONApi,
-  useMainJSONApi,
-} from '../../use-main-json-api';
+import { useMainApiFetchJSON } from '../../fetch-json';
 import { useStoreGetState } from '../../../redux/use-store-get-state';
 import { useLocalStorage } from '../../../local-storage';
-import { object, uuid, string } from 'zod';
+import { z } from 'zod';
+
+type MainApiFetchJSON = ReturnType<typeof useMainApiFetchJSON>;
+
+const trainDestinationStorageSchema = z.object({
+  name: z.string(),
+  worldId: z.uuid(),
+});
+
+const landAssetsResponseBodySchema = z.object({
+  baseUrl: z.string(),
+  mapKey: z.string(),
+  tilesetKey: z.string(),
+});
+
+const landAssetsResponseBodyPropertySchema = z
+  .union([landAssetsResponseBodySchema, z.undefined()])
+  .transform((assets) => assets);
+
+const landDoorBlockEntryResponseBodySchema = z.object({
+  id: z.string(),
+  toLand: z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
+});
+
+const landAppBlockEntryResponseBodySchema = z.object({
+  id: z.string(),
+  url: z.string(),
+});
+
+const navigateToLandResponseBodySchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  backgroundMusicUrl: z.string().nullable(),
+  territories: z.array(
+    z.object({
+      id: z.string(),
+      startX: z.number(),
+      startY: z.number(),
+      endX: z.number(),
+      endY: z.number(),
+      doorBlocks: z.array(landDoorBlockEntryResponseBodySchema),
+      appBlocks: z.array(landAppBlockEntryResponseBodySchema),
+      assets: landAssetsResponseBodyPropertySchema,
+    }),
+  ),
+  doorBlocks: z.array(landDoorBlockEntryResponseBodySchema),
+  doorBlocksReferencing: z.array(
+    z.object({
+      id: z.string(),
+      fromLandId: z.string(),
+      fromLandName: z.string(),
+    }),
+  ),
+  appBlocks: z.array(landAppBlockEntryResponseBodySchema),
+  assets: landAssetsResponseBodyPropertySchema,
+  isStartLand: z.boolean(),
+});
+
+const boardTrainResponseSchema: z.ZodType<{
+  status: 200;
+  body: BoardTrainDTO;
+}> = z.object({
+  status: z.literal(200),
+  body: navigateToLandResponseBodySchema,
+});
+
+const returnToTrainStationResponseSchema: z.ZodType<{
+  status: 200;
+  body: ReturnToTrainStationDTO;
+}> = z.object({
+  status: z.literal(200),
+  body: navigateToLandResponseBodySchema,
+});
+
+const getTrainDestinationsResponseSchema: z.ZodType<{
+  status: 200;
+  body: GetTrainDestinationsDTO;
+}> = z.object({
+  status: z.literal(200),
+  body: z.object({
+    limit: z.number(),
+    total: z.number(),
+    rows: z.array(
+      z.object({
+        name: z.string(),
+        worldId: z.string(),
+      }),
+    ),
+  }),
+});
 
 export class TrainAPI {
   constructor(
-    private api: MainJSONApi,
+    private api: MainApiFetchJSON,
     private localStorage: ReturnType<typeof useLocalStorage>,
     private getMainApiStoreState: () => { mainApi: MainApiStoreState },
   ) {}
 
   getTrainDestination(args: { currentStationLandId: string }) {
     return this.localStorage.getItem(
-      object({
-        name: string(),
-        worldId: uuid(),
-      }).optional(),
+      trainDestinationStorageSchema.optional(),
       `train-destination:${args.currentStationLandId}`,
     );
   }
@@ -56,13 +141,10 @@ export class TrainAPI {
   board(args: { worldId: string; boardingFromLand: string }) {
     this.localStorage.setItem('last-train-station', args.boardingFromLand);
 
-    return this.api.get<
-      { status: 200; body: BoardTrainDTO },
-      undefined
-    >({
+    return this.api.fetchJSON({
+      schema: boardTrainResponseSchema,
       path: `/train/board/${args.worldId}`,
-      query: undefined,
-      acceptableStatusCodes: [200],
+      method: 'GET',
     });
   }
 
@@ -73,7 +155,7 @@ export class TrainAPI {
 
     if (!session) {
       const returningTrainStationId = this.localStorage.getItem(
-        uuid().optional(),
+        z.uuid().optional(),
         'last-train-station',
       );
 
@@ -82,13 +164,12 @@ export class TrainAPI {
       }
     }
 
-    return this.api.get<
-      { status: 200; body: ReturnToTrainStationDTO },
-      URLSearchParams
-    >({
-      path: `/train/return`,
-      query,
-      acceptableStatusCodes: [200],
+    const queryString = query.toString();
+
+    return this.api.fetchJSON({
+      schema: returnToTrainStationResponseSchema,
+      path: `/train/return${queryString ? `?${queryString}` : ''}`,
+      method: 'GET',
     });
   }
 
@@ -98,19 +179,16 @@ export class TrainAPI {
       name: args.searchQuery,
     });
 
-    return this.api.get<
-      { status: 200; body: GetTrainDestinationsDTO },
-      URLSearchParams
-    >({
-      path: `/train/apps/tickets/getDestinations`,
-      query,
-      acceptableStatusCodes: [200],
+    return this.api.fetchJSON({
+      schema: getTrainDestinationsResponseSchema,
+      path: `/train/apps/tickets/getDestinations?${query.toString()}`,
+      method: 'GET',
     });
   }
 }
 
 export function useTrainAPI() {
-  const api = useMainJSONApi();
+  const api = useMainApiFetchJSON();
   const localStorage = useLocalStorage();
   const getStoreState = useStoreGetState({ mainApi: mainApiReducer });
 

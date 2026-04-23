@@ -13,6 +13,7 @@ import {
 import { useTerritoriesAPI } from '../../../../../main-api/routes/territories/territories-api';
 import { MapFormField } from './map-form-field';
 import { TilesetFormField } from './tileset-form-field';
+import { CommunicationError } from '../../../../../communication-errors/communication-errors';
 
 export function AssetsUploader(props: {
   territory: GetTerritoryDTO;
@@ -60,8 +61,8 @@ export function AssetsUploader(props: {
       formData,
     });
 
-    if (res.failure) {
-      replaceFormSubmissionStatus({ status: res.failure });
+    if (res.error) {
+      replaceFormSubmissionStatus({ status: res.error });
     } else {
       replaceFormSubmissionStatus({
         status: TransportedDataStatus.NotInitialized,
@@ -76,7 +77,7 @@ export function AssetsUploader(props: {
           replaceErrors('train-and-start-block-not-allowed');
         } else {
           replaceFormSubmissionStatus({
-            status: res.logAndReturnAsUnexpected().failure,
+            status: CommunicationError.UnexpectedResponse,
           });
         }
       } else {

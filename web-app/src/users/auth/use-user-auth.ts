@@ -2,38 +2,67 @@ import { StoreDispatch } from '../../redux/store-types';
 import { useLocalStorage } from '../../local-storage';
 import { useStoreDispatch } from '../../redux/use-store-dispatch';
 import { mainApiReducer } from '../../main-api/main-api-reducer';
-import { LoginResponse, UserAuthSessionData } from './user-auth-types';
-import { useMainJSONApi } from '../../main-api/use-main-json-api';
+import { UserAuthSessionData } from './user-auth-types';
+import { useMainApiFetchJSON } from '../../main-api/fetch-json';
 import { TransportedDataStatus } from '../../communicated-data/communicated-data-types';
-import { LoginRequestDTO } from '../../main-api/routes/users/auth/auth.dtos';
 import { USER_AUTH_TOKEN_ID_LOCAL_STORAGE_KEY } from './user-auth-constants';
+import { z } from 'zod';
+import { CommunicationError } from '../../communication-errors/communication-errors';
+
+const userAuthSessionDataSchema = z.object({
+  userId: z.string(),
+  isAdmin: z.boolean(),
+  appId: z.string(),
+});
+
+const loginResponseSchema = z.discriminatedUnion('status', [
+  z.object({
+    status: z.literal(201),
+    body: z.object({
+      authTokenId: z.string(),
+      session: userAuthSessionDataSchema,
+    }),
+  }),
+  z.object({
+    status: z.literal(409),
+    body: z
+      .object({
+        error: z.string().optional(),
+        createdNewUser: z.boolean().optional(),
+      })
+      .optional(),
+  }),
+]);
+
+const sessionResponseSchema = z.discriminatedUnion('status', [
+  z.object({
+    status: z.literal(200),
+    body: userAuthSessionDataSchema,
+  }),
+  z.object({
+    status: z.literal(404),
+    body: z.undefined(),
+  }),
+]);
 
 class UserAuth {
   constructor(
-    private mainApi: ReturnType<typeof useMainJSONApi>,
+    private mainApi: ReturnType<typeof useMainApiFetchJSON>,
     private dispatch: StoreDispatch<'mainApi'>,
     private localStorage: ReturnType<typeof useLocalStorage>,
   ) {}
 
   async login(args: { firebaseIdToken: string }) {
-    const res = await this.mainApi.post<
-      | { status: 201; body: LoginResponse }
-      | {
-          status: 409;
-          body: undefined | { error?: string; createdNewUser?: boolean };
-        },
-      undefined,
-      LoginRequestDTO
-    >({
+    const res = await this.mainApi.fetchJSON({
+      schema: loginResponseSchema,
       path: '/users/auth',
-      query: undefined,
+      method: 'POST',
       body: args,
-      acceptableStatusCodes: [201, 409],
     });
 
-    if (res.failure) {
+    if (res.error) {
       return {
-        error: res.failure,
+        error: res.error,
       } as const;
     } else if (res.response.status === 409) {
       if (res.response.body?.error === 'needs-verification') {
@@ -43,7 +72,7 @@ class UserAuth {
         } as const;
       } else {
         return {
-          error: res.logAndReturnAsUnexpected().failure,
+          error: CommunicationError.UnexpectedResponse,
         } as const;
       }
     } else {
@@ -75,21 +104,17 @@ class UserAuth {
       },
     });
 
-    const res = await this.mainApi.get<
-      | { status: 200; body: UserAuthSessionData }
-      | { status: 404; body: undefined },
-      undefined
-    >({
+    const res = await this.mainApi.fetchJSON({
+      schema: sessionResponseSchema,
       path: '/users/auth',
-      query: undefined,
-      acceptableStatusCodes: [200, 404],
+      method: 'GET',
     });
 
-    if (res.failure) {
+    if (res.error) {
       this.dispatch({
         type: 'UPDATE_USER_AUTH_SESSION',
         payload: {
-          status: res.failure,
+          status: res.error,
         },
       });
     } else {
@@ -102,21 +127,17 @@ class UserAuth {
   }
 
   async refreshSession() {
-    const res = await this.mainApi.get<
-      | { status: 200; body: UserAuthSessionData }
-      | { status: 404; body: undefined },
-      undefined
-    >({
+    const res = await this.mainApi.fetchJSON({
+      schema: sessionResponseSchema,
       path: '/users/auth',
-      query: undefined,
-      acceptableStatusCodes: [200, 404],
+      method: 'GET',
     });
 
-    if (res.failure) {
+    if (res.error) {
       this.dispatch({
         type: 'UPDATE_USER_AUTH_SESSION',
         payload: {
-          status: res.failure,
+          status: res.error,
         },
       });
 
@@ -134,7 +155,7 @@ class UserAuth {
 }
 
 export function useUserAuth() {
-  const mainApi = useMainJSONApi();
+  const mainApi = useMainApiFetchJSON();
 
   const dispatch = useStoreDispatch({ mainApi: mainApiReducer });
 

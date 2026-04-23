@@ -511,12 +511,12 @@ export class LandScene extends Phaser.Scene {
         currentLandId: this.args.land.id,
       });
 
-      if (res.failure) {
-        if (res.failure === CommunicationError.ConnectionFailure) {
+      if (res.error) {
+        if (res.error === CommunicationError.ConnectionFailure) {
           this.dependencies.dialogueService.openText(
             "Couldn't connect to the Internet. Check your connection and enter the door again.",
           );
-        } else if (res.failure === CommunicationError.NotFound) {
+        } else if (res.error === CommunicationError.NotFound) {
           this.dependencies.dialogueService.openText(
             "This path's destination no longer exists.",
           );
@@ -534,8 +534,8 @@ export class LandScene extends Phaser.Scene {
     } else if (block.type === StaticBlockType.Start) {
       const res = await this.dependencies.trainAPI.returnToTrainStation();
 
-      if (res.failure) {
-        if (res.failure === CommunicationError.ConnectionFailure) {
+      if (res.error) {
+        if (res.error === CommunicationError.ConnectionFailure) {
           this.dependencies.dialogueService.openText(
             "Couldn't connect to the Internet. Check your connection and enter the door again.",
           );
@@ -572,13 +572,13 @@ export class LandScene extends Phaser.Scene {
         boardingFromLand: this.args.land.id,
       });
 
-      if (res.failure) {
-        if (res.failure === CommunicationError.ConnectionFailure) {
+      if (res.error) {
+        if (res.error === CommunicationError.ConnectionFailure) {
           this.dependencies.dialogueService.openText(
             "Couldn't connect to the Internet. Check your connection and enter the door again.",
           );
         }
-        if (res.failure === CommunicationError.NotFound) {
+        if (res.error === CommunicationError.NotFound) {
           this.dependencies.trainAPI.clearTrainDestination({
             currentStationLandId: this.args.land.id,
           });

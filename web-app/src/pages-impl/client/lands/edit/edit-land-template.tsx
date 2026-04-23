@@ -58,8 +58,8 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
 
       const res = await api.deleteLand({ landId: props.id });
 
-      if (res.failure) {
-        replaceDeleteResult({ status: res.failure });
+      if (res.error) {
+        replaceDeleteResult({ status: res.error });
       } else {
         if (res.response.status === 'must-delete-blocks-first') {
           window.alert(
@@ -83,8 +83,8 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
 
     const res = await api.getEditableLand({ landId: props.id });
 
-    if (res.failure) {
-      replaceLand({ status: res.failure });
+    if (res.error) {
+      replaceLand({ status: res.error });
     } else {
       replaceLand({
         status: TransportedDataStatus.Done,

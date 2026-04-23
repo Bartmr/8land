@@ -53,8 +53,8 @@ export function AssetsSection(props: {
       formData,
     });
 
-    if (res.failure) {
-      replaceFormSubmissionStatus({ status: res.failure });
+    if (res.error) {
+      replaceFormSubmissionStatus({ status: res.error });
     } else {
       if (res.response.error) {
         replaceFormSubmissionStatus({

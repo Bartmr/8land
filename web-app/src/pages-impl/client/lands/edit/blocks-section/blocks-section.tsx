@@ -40,8 +40,8 @@ Players who are currently in this land will be teleported back to the train stat
 
     const res = await api.deleteBlock({ blockType, blockId });
 
-    if (res.failure) {
-      replaceDeletionState({ status: res.failure });
+    if (res.error) {
+      replaceDeletionState({ status: res.error });
     } else {
       replaceDeletionState({
         status: TransportedDataStatus.Done,

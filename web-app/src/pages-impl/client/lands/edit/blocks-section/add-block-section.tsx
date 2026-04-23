@@ -12,6 +12,7 @@ import {
   TransportedDataStatus,
 } from '../../../../../communicated-data/communicated-data-types';
 import { useBlocksAPI } from '../../../../../main-api/routes/blocks/blocks-api';
+import { CommunicationError } from '../../../../../communication-errors/communication-errors';
 
 export function AddBlockSection(props: {
   land: GetLandDTO;
@@ -51,8 +52,8 @@ export function AddBlockSection(props: {
 
               const res = await api.createBlock(formData);
 
-              if (res.failure) {
-                replaceFormSubmission({ status: res.failure });
+              if (res.error) {
+                replaceFormSubmission({ status: res.error });
               } else {
                 if (res.response.status === 403) {
                   if (res.response.body?.error === 'land-is-outside-world') {
@@ -71,7 +72,7 @@ export function AddBlockSection(props: {
                     });
                   } else {
                     replaceFormSubmission({
-                      status: res.logAndReturnAsUnexpected().failure,
+                      status: CommunicationError.UnexpectedResponse,
                     });
                   }
                 } else if (res.response.status === 409) {

@@ -38,8 +38,8 @@ function Content(props: {
 
       const res = await api.resume();
 
-      if (res.failure) {
-        replaceLandToResumeFrom({ status: res.failure });
+      if (res.error) {
+        replaceLandToResumeFrom({ status: res.error });
       } else {
         replaceLandToResumeFrom({
           status: TransportedDataStatus.Done,

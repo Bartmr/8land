@@ -96,3 +96,7 @@ class LoggerImpl {
 const Logger = new LoggerImpl();
 
 export { Logger };
+
+export function useLogger() {
+  return Logger;
+}

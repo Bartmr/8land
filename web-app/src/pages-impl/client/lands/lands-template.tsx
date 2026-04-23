@@ -50,9 +50,9 @@ export function LandsTemplate(_props: RouteComponentProps) {
 
     const res = await api.getLandsIndex();
 
-    if (res.failure) {
+    if (res.error) {
       replaceLands({
-        status: res.failure,
+        status: res.error,
       });
     } else {
       if (res.response.body.total > res.response.body.limit) {
@@ -77,9 +77,9 @@ export function LandsTemplate(_props: RouteComponentProps) {
 
     const res = await api.getLandsToClaim();
 
-    if (res.failure) {
+    if (res.error) {
       replaceLands({
-        status: res.failure,
+        status: res.error,
       });
     } else {
       replaceLandsToClaim({
@@ -102,9 +102,9 @@ export function LandsTemplate(_props: RouteComponentProps) {
 
     const res = await api.createLand({ name: newLandName });
 
-    if (res.failure) {
+    if (res.error) {
       replaceNewLandSubmission({
-        status: res.failure,
+        status: res.error,
       });
     } else {
       if (res.response.error) {

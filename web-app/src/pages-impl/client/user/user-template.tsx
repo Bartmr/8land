@@ -41,8 +41,8 @@ export function UserTemplate(_props: RouteComponentProps) {
   const handleEscape = async () => {
     const res = await landsApi.escape();
 
-    if (res.failure) {
-      replaceEscapeStatus({ status: res.failure });
+    if (res.error) {
+      replaceEscapeStatus({ status: res.error });
     } else {
       replaceEscapeStatus({
         status: TransportedDataStatus.Done,

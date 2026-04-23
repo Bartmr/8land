@@ -17,6 +17,7 @@ import {
 import { useTerritoriesAPI } from '../../../../../main-api/routes/territories/territories-api';
 import { TerritoryPreview } from './territory-preview';
 import { throwError } from '../../../../../throw-error';
+import { CommunicationError } from '../../../../../communication-errors/communication-errors';
 
 const schema = z.object({
   ...CreateTerritoryRequestJSONSchemaObj,
@@ -97,8 +98,8 @@ export function TerritoriesSection(props: {
 
               const res = await api.createTerritory(body);
 
-              if (res.failure) {
-                replaceFormSubmission({ status: res.failure });
+              if (res.error) {
+                replaceFormSubmission({ status: res.error });
               } else {
                 if (res.response.status === 409) {
                   if (
@@ -110,7 +111,7 @@ export function TerritoriesSection(props: {
                     });
                   } else {
                     replaceFormSubmission({
-                      status: res.logAndReturnAsUnexpected().failure,
+                      status: CommunicationError.UnexpectedResponse,
                     });
                   }
                 } else {

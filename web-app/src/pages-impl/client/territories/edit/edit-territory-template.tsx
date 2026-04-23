@@ -90,8 +90,8 @@ function EditTerritoryWithRouteProps(props: { id: string }) {
   const fetchTerritory = async () => {
     const res = await api.getTerritory({ territoryId: props.id });
 
-    if (res.failure) {
-      replaceTerritory({ status: res.failure });
+    if (res.error) {
+      replaceTerritory({ status: res.error });
     } else {
       replaceTerritory({
         status: TransportedDataStatus.Done,

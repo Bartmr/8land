@@ -14,6 +14,7 @@ import {
 import { SoundcloudSongApiUrlSchema } from '../../../../../main-api/routes/lands/edit/edit-land.schema';
 import { useLandsAPI } from '../../../../../main-api/routes/lands/lands-api';
 import { throwError } from '../../../../../throw-error';
+import { CommunicationError } from '../../../../../communication-errors/communication-errors';
 
 export function MainSection(props: {
   land: GetLandDTO;
@@ -123,8 +124,8 @@ export function MainSection(props: {
                     formData,
                   });
 
-                  if (res.failure) {
-                    replaceFormSubmission({ status: res.failure });
+                  if (res.error) {
+                    replaceFormSubmission({ status: res.error });
                   } else {
                     if (res.response.status === 409) {
                       if (res.response.body?.error === 'name-already-taken') {
@@ -134,7 +135,7 @@ export function MainSection(props: {
                         });
                       } else {
                         replaceFormSubmission({
-                          status: res.logAndReturnAsUnexpected().failure,
+                          status: CommunicationError.UnexpectedResponse,
                         });
                       }
                     } else {
