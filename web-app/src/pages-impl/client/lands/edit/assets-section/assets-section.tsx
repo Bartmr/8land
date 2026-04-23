@@ -1,10 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
 import {
-  TransportedData,
-  TransportedDataStatus,
+  CommunicatedData,
+  CommunicatedDataStatus,
 } from '../../../../../communicated-data/communicated-data-types';
-import { TransportedDataGate } from '../../../../../ui/transported-data-gate';
+import { CommunicatedDataGate } from '../../../../../ui/communicated-data-gate';
 import { TiledJSONFieldState } from './tiled-json-form-field';
 import { TilesetImageFieldState } from './tileset-image-form-field';
 import { TiledJSONField } from './tiled-json-form-field';
@@ -26,7 +26,7 @@ export function AssetsSection(props: {
     useState<TilesetImageFieldState>(undefined);
 
   const [formSubmissionStatus, replaceFormSubmissionStatus] = useState<
-    TransportedData<
+    CommunicatedData<
       | {
           error:
             | 'start-lands-limit-exceeded'
@@ -38,10 +38,10 @@ export function AssetsSection(props: {
         }
       | undefined
     >
-  >({ status: TransportedDataStatus.NotInitialized });
+  >({ status: CommunicatedDataStatus.NotInitialized });
 
   const submitForm = async (args: { mapFile: File; tilesetFile: File }) => {
-    replaceFormSubmissionStatus({ status: TransportedDataStatus.Loading });
+    replaceFormSubmissionStatus({ status: CommunicatedDataStatus.Loading });
 
     const formData = new FormData();
 
@@ -58,12 +58,12 @@ export function AssetsSection(props: {
     } else {
       if (res.response.error) {
         replaceFormSubmissionStatus({
-          status: TransportedDataStatus.Done,
+          status: CommunicatedDataStatus.Done,
           data: res.response,
         });
       } else {
         replaceFormSubmissionStatus({
-          status: TransportedDataStatus.NotInitialized,
+          status: CommunicatedDataStatus.NotInitialized,
         });
 
         replaceTiledJSONFieldState(undefined);
@@ -113,7 +113,7 @@ export function AssetsSection(props: {
           ) : null}
 
           <div className="my-3">
-            <TransportedDataGate dataWrapper={formSubmissionStatus}>
+            <CommunicatedDataGate dataWrapper={formSubmissionStatus}>
               {({ data }) => {
                 return (
                   <span className="text-danger">
@@ -145,7 +145,7 @@ export function AssetsSection(props: {
                   </span>
                 );
               }}
-            </TransportedDataGate>
+            </CommunicatedDataGate>
           </div>
 
           {!tiledJSONFieldState?.error &&
@@ -156,7 +156,7 @@ export function AssetsSection(props: {
               <button
                 className="d-block w-100 btn btn-success"
                 disabled={
-                  formSubmissionStatus.status === TransportedDataStatus.Loading
+                  formSubmissionStatus.status === CommunicatedDataStatus.Loading
                 }
                 onClick={async () => {
                   await submitForm({

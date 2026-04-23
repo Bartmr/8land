@@ -4,11 +4,11 @@ import { RouteComponentProps } from '@reach/router';
 import { AssetsSection } from './assets-section/assets-section';
 import { useEffect, useState } from 'react';
 import {
-  TransportedData,
-  TransportedDataStatus,
+  CommunicatedData,
+  CommunicatedDataStatus,
 } from '../../../../communicated-data/communicated-data-types';
 import { GetLandDTO } from '../../../../main-api/routes/lands/lands.dtos';
-import { TransportedDataGate } from '../../../../ui/transported-data-gate';
+import { CommunicatedDataGate } from '../../../../ui/communicated-data-gate';
 import { useParams } from '@reach/router';
 import { uuid, z } from 'zod';
 import { useLandsAPI } from '../../../../main-api/routes/lands/lands-api';
@@ -29,14 +29,14 @@ import { LANDS_ROUTE } from '../lands-routes';
 export function EditLandTemplateWithRouteProps(props: { id: string }) {
   const api = useLandsAPI();
 
-  const [land, replaceLand] = useState<TransportedData<GetLandDTO>>({
-    status: TransportedDataStatus.NotInitialized,
+  const [land, replaceLand] = useState<CommunicatedData<GetLandDTO>>({
+    status: CommunicatedDataStatus.NotInitialized,
   });
 
   const [deleteResult, replaceDeleteResult] = useState<
-    TransportedData<undefined>
+    CommunicatedData<undefined>
   >({
-    status: TransportedDataStatus.NotInitialized,
+    status: CommunicatedDataStatus.NotInitialized,
   });
 
   const [successfulSave, replaceSuccessfulSave] = useState(false);
@@ -54,7 +54,7 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
     );
 
     if (confirmed) {
-      replaceDeleteResult({ status: TransportedDataStatus.Loading });
+      replaceDeleteResult({ status: CommunicatedDataStatus.Loading });
 
       const res = await api.deleteLand({ landId: props.id });
 
@@ -67,7 +67,7 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
           );
 
           replaceDeleteResult({
-            status: TransportedDataStatus.Done,
+            status: CommunicatedDataStatus.Done,
             data: undefined,
           });
         } else {
@@ -79,7 +79,7 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
   };
 
   const fetchLand = async () => {
-    replaceLand({ status: TransportedDataStatus.Loading });
+    replaceLand({ status: CommunicatedDataStatus.Loading });
 
     const res = await api.getEditableLand({ landId: props.id });
 
@@ -87,7 +87,7 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
       replaceLand({ status: res.error });
     } else {
       replaceLand({
-        status: TransportedDataStatus.Done,
+        status: CommunicatedDataStatus.Done,
         data: res.response.body,
       });
     }
@@ -116,7 +116,7 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
       >
         <Toast.Header closeButton={false}>Changes saved</Toast.Header>
       </Toast>
-      <TransportedDataGate dataWrapper={land}>
+      <CommunicatedDataGate dataWrapper={land}>
         {({ data }) => {
           return (
             <>
@@ -128,7 +128,7 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
                     disabled={!land.data || land.data.isStartLand}
                     className="btn btn-danger"
                   >
-                    {deleteResult.status === TransportedDataStatus.Loading ? (
+                    {deleteResult.status === CommunicatedDataStatus.Loading ? (
                       <span className="spinner-border spinner-sm" />
                     ) : (
                       <FontAwesomeIcon icon={faTrash} />
@@ -166,7 +166,7 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
             </>
           );
         }}
-      </TransportedDataGate>
+      </CommunicatedDataGate>
     </>
   );
 }
@@ -182,11 +182,11 @@ export function EditLandTemplate(_props: RouteComponentProps) {
     <Layout>
       {() => {
         return !validationResult.success ? (
-          <TransportedDataGate
+          <CommunicatedDataGate
             dataWrapper={{ status: CommunicationError.NotFound }}
           >
             {() => null}
-          </TransportedDataGate>
+          </CommunicatedDataGate>
         ) : (
           <EditLandTemplateWithRouteProps id={validationResult.data.id} />
         );

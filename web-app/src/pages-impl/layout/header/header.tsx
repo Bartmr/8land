@@ -7,9 +7,9 @@ import { PROJECT_NAME } from '../../../project-details';
 import { faBars, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  TransportedDataGate,
-  TransportedDataGateLayout,
-} from '../../../ui/transported-data-gate';
+  CommunicatedDataGate,
+  CommunicatedDataGateLayout,
+} from '../../../ui/communicated-data-gate';
 import { LANDS_ROUTE } from '../../client/lands/lands-routes';
 import { useStoreSelector } from '../../../redux/use-store-selector';
 import { mainApiReducer } from '../../../main-api/main-api-reducer';
@@ -127,8 +127,8 @@ export function Header(props: Props) {
                 </li>
               </ul>
 
-              <TransportedDataGate
-                layout={TransportedDataGateLayout.Tape}
+              <CommunicatedDataGate
+                layout={CommunicatedDataGateLayout.Tape}
                 dataWrapper={session}
                 className="ms-auto"
               >
@@ -161,7 +161,7 @@ export function Header(props: Props) {
                     </ul>
                   );
                 }}
-              </TransportedDataGate>
+              </CommunicatedDataGate>
             </Navbar.Collapse>
           </div>
         </Navbar>

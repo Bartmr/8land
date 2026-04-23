@@ -6,13 +6,13 @@ import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  TransportedDataGate,
-  TransportedDataGateLayout,
-} from '../../../../../ui/transported-data-gate';
+  CommunicatedDataGate,
+  CommunicatedDataGateLayout,
+} from '../../../../../ui/communicated-data-gate';
 import { useFormUtils } from '../../../../../forms/form-utils';
 import {
-  TransportedData,
-  TransportedDataStatus,
+  CommunicatedData,
+  CommunicatedDataStatus,
 } from '../../../../../communicated-data/communicated-data-types';
 import { useTerritoriesAPI } from '../../../../../main-api/routes/territories/territories-api';
 import { TerritoryPreview } from './territory-preview';
@@ -30,10 +30,10 @@ export function TerritoriesSection(props: {
   const api = useTerritoriesAPI();
 
   const [formSubmission, replaceFormSubmission] = useState<
-    TransportedData<
+    CommunicatedData<
       undefined | 'intersects-existing-territory' | 'coordinates-exceeds-bounds'
     >
-  >({ status: TransportedDataStatus.Done, data: undefined });
+  >({ status: CommunicatedDataStatus.Done, data: undefined });
   const [territoryThumbnail, replaceTerritoryThumbnail] = useState<
     undefined | Blob
   >();
@@ -75,7 +75,7 @@ export function TerritoriesSection(props: {
                 return;
               }
 
-              replaceFormSubmission({ status: TransportedDataStatus.Loading });
+              replaceFormSubmission({ status: CommunicatedDataStatus.Loading });
 
               const body = new FormData();
 
@@ -106,7 +106,7 @@ export function TerritoriesSection(props: {
                     res.response.body.error === 'intersects-existing-territory'
                   ) {
                     replaceFormSubmission({
-                      status: TransportedDataStatus.Done,
+                      status: CommunicatedDataStatus.Done,
                       data: res.response.body.error,
                     });
                   } else {
@@ -265,7 +265,7 @@ export function TerritoriesSection(props: {
             <div className="mt-3 d-flex align-items-center">
               <button
                 disabled={
-                  formSubmission.status === TransportedDataStatus.Loading ||
+                  formSubmission.status === CommunicatedDataStatus.Loading ||
                   !territoryThumbnail
                 }
                 className="btn btn-success"
@@ -273,13 +273,13 @@ export function TerritoriesSection(props: {
               >
                 Create
               </button>
-              <TransportedDataGate
+              <CommunicatedDataGate
                 className="ms-3"
-                layout={TransportedDataGateLayout.Tape}
+                layout={CommunicatedDataGateLayout.Tape}
                 dataWrapper={formSubmission}
               >
                 {() => null}
-              </TransportedDataGate>
+              </CommunicatedDataGate>
             </div>
           </form>
         </div>

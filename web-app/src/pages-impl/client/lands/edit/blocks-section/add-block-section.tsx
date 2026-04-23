@@ -4,12 +4,12 @@ import { CreateBlockRequestSchema } from '../../../../../main-api/routes/blocks/
 import { GetLandDTO } from '../../../../../main-api/routes/lands/lands.dtos';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { TransportedDataGate } from '../../../../../ui/transported-data-gate';
+import { CommunicatedDataGate } from '../../../../../ui/communicated-data-gate';
 import { useFormUtils } from '../../../../../forms/form-utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  TransportedData,
-  TransportedDataStatus,
+  CommunicatedData,
+  CommunicatedDataStatus,
 } from '../../../../../communicated-data/communicated-data-types';
 import { useBlocksAPI } from '../../../../../main-api/routes/blocks/blocks-api';
 import { CommunicationError } from '../../../../../communication-errors/communication-errors';
@@ -32,23 +32,23 @@ export function AddBlockSection(props: {
   const formUtils = useFormUtils(form);
 
   const [formSubmission, replaceFormSubmission] = useState<
-    TransportedData<
+    CommunicatedData<
       | undefined
       | 'block-limit-exceeded'
       | 'destination-land-not-found'
       | 'land-is-outside-world'
     >
-  >({ status: TransportedDataStatus.Done, data: undefined });
+  >({ status: CommunicatedDataStatus.Done, data: undefined });
 
   const type = form.watch('data.type') as DynamicBlockType | undefined;
 
   return (
     <>
-      <TransportedDataGate dataWrapper={formSubmission}>
+      <CommunicatedDataGate dataWrapper={formSubmission}>
         {({ data }) => (
           <form
             onSubmit={form.handleSubmit(async (formData) => {
-              replaceFormSubmission({ status: TransportedDataStatus.Loading });
+              replaceFormSubmission({ status: CommunicatedDataStatus.Loading });
 
               const res = await api.createBlock(formData);
 
@@ -58,7 +58,7 @@ export function AddBlockSection(props: {
                 if (res.response.status === 403) {
                   if (res.response.body?.error === 'land-is-outside-world') {
                     replaceFormSubmission({
-                      status: TransportedDataStatus.Done,
+                      status: CommunicatedDataStatus.Done,
                       data: 'land-is-outside-world',
                     });
                   }
@@ -67,7 +67,7 @@ export function AddBlockSection(props: {
                     res.response.body?.error === 'destination-land-not-found'
                   ) {
                     replaceFormSubmission({
-                      status: TransportedDataStatus.Done,
+                      status: CommunicatedDataStatus.Done,
                       data: 'destination-land-not-found',
                     });
                   } else {
@@ -78,13 +78,13 @@ export function AddBlockSection(props: {
                 } else if (res.response.status === 409) {
                   if (res.response.body?.error === 'block-limit-exceeded') {
                     replaceFormSubmission({
-                      status: TransportedDataStatus.Done,
+                      status: CommunicatedDataStatus.Done,
                       data: 'block-limit-exceeded',
                     });
                   }
                 } else {
                   replaceFormSubmission({
-                    status: TransportedDataStatus.Done,
+                    status: CommunicatedDataStatus.Done,
                     data: undefined,
                   });
 
@@ -193,7 +193,7 @@ export function AddBlockSection(props: {
             </button>
           </form>
         )}
-      </TransportedDataGate>
+      </CommunicatedDataGate>
     </>
   );
 }

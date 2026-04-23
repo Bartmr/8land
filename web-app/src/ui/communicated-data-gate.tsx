@@ -9,55 +9,55 @@ import React, { ReactNode } from 'react';
 import { Logger } from '../logging/logger';
 import { CommunicationError } from '../communication-errors/communication-errors';
 import {
-  TransportedData,
-  TransportedDataStatus,
-  UnwrapTransportedData,
+  CommunicatedData,
+  CommunicatedDataStatus,
+  UnwrapCommunicatedData,
 } from '../communicated-data/communicated-data-types';
 
-export enum TransportedDataGateLayout {
+export enum CommunicatedDataGateLayout {
   Tape = 'tape',
   Default = 'default',
   Small = 'small',
 }
 
-type Props<T extends TransportedData<unknown>> = {
-  layout?: TransportedDataGateLayout;
+type Props<T extends CommunicatedData<unknown>> = {
+  layout?: CommunicatedDataGateLayout;
   dataWrapper: T;
   className?: string;
-  children: (props: { data: UnwrapTransportedData<T> }) => ReactNode;
+  children: (props: { data: UnwrapCommunicatedData<T> }) => ReactNode;
   loadingMessage?: string;
 };
 
-export function TransportedDataGate<T extends TransportedData<unknown>>({
+export function CommunicatedDataGate<T extends CommunicatedData<unknown>>({
   children,
   dataWrapper,
-  layout = TransportedDataGateLayout.Default,
+  layout = CommunicatedDataGateLayout.Default,
   className,
   loadingMessage,
 }: Props<T>) {
   const flexClassName = `d-flex ${
-    layout === TransportedDataGateLayout.Tape
+    layout === CommunicatedDataGateLayout.Tape
       ? 'flex-row justify-content-center align-items-center'
       : 'flex-column justify-content-center align-items-center'
   }`;
 
   const spinnerSizeClass =
-    layout === TransportedDataGateLayout.Default ? 'spinner-lg' : 'spinner-sm';
+    layout === CommunicatedDataGateLayout.Default ? 'spinner-lg' : 'spinner-sm';
 
   const iconSizeClassName =
-    layout === TransportedDataGateLayout.Default ? 'icon-badge' : '';
+    layout === CommunicatedDataGateLayout.Default ? 'icon-badge' : '';
   const textClassName =
-    layout === TransportedDataGateLayout.Tape
+    layout === CommunicatedDataGateLayout.Tape
       ? 'ms-2'
-      : layout === TransportedDataGateLayout.Small
+      : layout === CommunicatedDataGateLayout.Small
       ? 'small mt-2 text-center'
       : 'mt-3 text-center';
 
   let gateStatusUI: ReactNode;
 
-  if (dataWrapper.status === TransportedDataStatus.NotInitialized) {
+  if (dataWrapper.status === CommunicatedDataStatus.NotInitialized) {
     gateStatusUI = null;
-  } else if (dataWrapper.status === TransportedDataStatus.Loading) {
+  } else if (dataWrapper.status === CommunicatedDataStatus.Loading) {
     gateStatusUI = (
       <div className={flexClassName}>
         <div
@@ -73,18 +73,18 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
         ) : null}
       </div>
     );
-  } else if (dataWrapper.status === TransportedDataStatus.Refreshing) {
+  } else if (dataWrapper.status === CommunicatedDataStatus.Refreshing) {
     gateStatusUI = (
       <div
         className={`${
-          layout === TransportedDataGateLayout.Small ? 'drop-shadow-sm' : ''
+          layout === CommunicatedDataGateLayout.Small ? 'drop-shadow-sm' : ''
         }`}
         style={
-          layout === TransportedDataGateLayout.Tape
+          layout === CommunicatedDataGateLayout.Tape
             ? {
                 marginRight: 'var(--spacer-2)',
               }
-            : layout === TransportedDataGateLayout.Small
+            : layout === CommunicatedDataGateLayout.Small
             ? {
                 zIndex: 1,
                 padding: 'var(--spacer-2)',
@@ -105,7 +105,7 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
         </div>
       </div>
     );
-  } else if (dataWrapper.status === TransportedDataStatus.Done) {
+  } else if (dataWrapper.status === CommunicatedDataStatus.Done) {
     gateStatusUI = null;
   } else if (dataWrapper.status === CommunicationError.NotFound) {
     gateStatusUI = (
@@ -123,7 +123,7 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
         />
         <p className={`${textClassName} text-danger mb-0`}>
           No Internet
-          {layout === TransportedDataGateLayout.Default
+          {layout === CommunicatedDataGateLayout.Default
             ? '. Check your connection and try again.'
             : null}
         </p>
@@ -134,7 +134,7 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
       <div className={flexClassName}>
         <FontAwesomeIcon className={`${iconSizeClassName}`} icon={faLock} />
         <p className={`${textClassName} mb-0`}>
-          {layout === TransportedDataGateLayout.Default
+          {layout === CommunicatedDataGateLayout.Default
             ? 'You are not allowed to access this content'
             : 'Not Allowed'}
         </p>
@@ -155,7 +155,7 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
           icon={faExclamationCircle}
         />
         <p className={`text-danger ${textClassName} mb-0`}>
-          {layout === TransportedDataGateLayout.Default
+          {layout === CommunicatedDataGateLayout.Default
             ? 'An unexpected error occurred. Try again later.'
             : 'Unexpected Error'}
         </p>
@@ -166,7 +166,7 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
       'unknown-transported-data-status-in-transported-data-gate',
       new Error(),
       {
-        dataStatus: (dataWrapper as TransportedData<T>).status,
+        dataStatus: (dataWrapper as CommunicatedData<T>).status,
       },
     );
 
@@ -174,16 +174,16 @@ export function TransportedDataGate<T extends TransportedData<unknown>>({
   }
 
   const gateContent =
-    dataWrapper.status === TransportedDataStatus.Done ||
-    dataWrapper.status === TransportedDataStatus.Refreshing
-      ? children({ data: dataWrapper.data as UnwrapTransportedData<T> })
+    dataWrapper.status === CommunicatedDataStatus.Done ||
+    dataWrapper.status === CommunicatedDataStatus.Refreshing
+      ? children({ data: dataWrapper.data as UnwrapCommunicatedData<T> })
       : null;
 
   return (
     <div
       className={`${
-        layout === TransportedDataGateLayout.Tape &&
-        dataWrapper.status === TransportedDataStatus.Refreshing
+        layout === CommunicatedDataGateLayout.Tape &&
+        dataWrapper.status === CommunicatedDataStatus.Refreshing
           ? 'd-flex flex-row align-items-center'
           : ''
       } ${className || ''}`}

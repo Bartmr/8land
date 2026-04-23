@@ -10,7 +10,7 @@ import { USER_AUTH_LOGOUT } from '../users/authentication/user-auth-actions';
 import { StoreReducersMap } from './store-reducers-map';
 import { createContext, ReactNode, useContext } from 'react';
 import { throwError } from '../throw-error';
-import { TransportedDataStatus } from '../communicated-data/communicated-data-types';
+import { CommunicatedDataStatus } from '../communicated-data/communicated-data-types';
 
 type RootReducer = Reducer<StoreState, StoreAction>;
 
@@ -44,7 +44,7 @@ class StoreManager {
         state = {
           mainApi: {
             session: {
-              status: TransportedDataStatus.Loading,
+              status: CommunicatedDataStatus.Loading,
             },
             isLoggingOut: true,
           },

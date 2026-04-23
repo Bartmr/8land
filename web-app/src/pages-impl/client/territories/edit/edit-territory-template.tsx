@@ -5,11 +5,11 @@ import { uuid, z } from 'zod';
 import { useEffect, useState } from 'react';
 import { Accordion, Toast } from 'react-bootstrap';
 import { Layout } from '../../../layout/layout';
-import { TransportedDataGate } from '../../../../ui/transported-data-gate';
+import { CommunicatedDataGate } from '../../../../ui/communicated-data-gate';
 import { CommunicationError } from '../../../../communication-errors/communication-errors';
 import {
-  TransportedData,
-  TransportedDataStatus,
+  CommunicatedData,
+  CommunicatedDataStatus,
 } from '../../../../communicated-data/communicated-data-types';
 import { useTerritoriesAPI } from '../../../../main-api/routes/territories/territories-api';
 import { AssetsUploader } from './assets-uploader/assets-uploader';
@@ -84,8 +84,8 @@ function EditTerritoryWithRouteProps(props: { id: string }) {
   const api = useTerritoriesAPI();
 
   const [territory, replaceTerritory] = useState<
-    TransportedData<GetTerritoryDTO>
-  >({ status: TransportedDataStatus.NotInitialized });
+    CommunicatedData<GetTerritoryDTO>
+  >({ status: CommunicatedDataStatus.NotInitialized });
 
   const fetchTerritory = async () => {
     const res = await api.getTerritory({ territoryId: props.id });
@@ -94,7 +94,7 @@ function EditTerritoryWithRouteProps(props: { id: string }) {
       replaceTerritory({ status: res.error });
     } else {
       replaceTerritory({
-        status: TransportedDataStatus.Done,
+        status: CommunicatedDataStatus.Done,
         data: res.response.body,
       });
     }
@@ -107,14 +107,14 @@ function EditTerritoryWithRouteProps(props: { id: string }) {
   }, [props.id]);
 
   return (
-    <TransportedDataGate dataWrapper={territory}>
+    <CommunicatedDataGate dataWrapper={territory}>
       {({ data: loadedTerritory }) => (
         <EditTerritoryWithTerritory
           fetchTerritory={fetchTerritory}
           territory={loadedTerritory}
         />
       )}
-    </TransportedDataGate>
+    </CommunicatedDataGate>
   );
 }
 
@@ -129,11 +129,11 @@ export function EditTerritoryTemplate(_props: RouteComponentProps) {
     <Layout>
       {() => {
         return !validationResult.success ? (
-          <TransportedDataGate
+          <CommunicatedDataGate
             dataWrapper={{ status: CommunicationError.NotFound }}
           >
             {() => null}
-          </TransportedDataGate>
+          </CommunicatedDataGate>
         ) : (
           <EditTerritoryWithRouteProps id={validationResult.data.id} />
         );

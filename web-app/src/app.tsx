@@ -11,7 +11,7 @@ import { useStoreDispatch } from './redux/use-store-dispatch';
 import { useUserAuth } from './users/authentication/use-user-auth';
 import { useStoreSelector } from './redux/use-store-selector';
 import { mainApiReducer } from './main-api/main-api-reducer';
-import { TransportedDataStatus } from './communicated-data/communicated-data-types';
+import { CommunicatedDataStatus } from './communicated-data/communicated-data-types';
 import { LOGIN_ROUTE } from './pages-impl/client/login/login-routes';
 import { navigate } from 'gatsby';
 
@@ -28,7 +28,7 @@ const HandleAuth = (props: { children: ReactNode }) => {
   useEffect(() => {
     (async () => {
       if (
-        mainApiState.session.status === TransportedDataStatus.NotInitialized
+        mainApiState.session.status === CommunicatedDataStatus.NotInitialized
       ) {
         if (mainApiState.isLoggingOut) {
           await navigate(LOGIN_ROUTE.getHref({ next: null }));

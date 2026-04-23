@@ -2,10 +2,10 @@ import React from 'react';
 import { GetTrainDestinationsDTO } from '../../../main-api/routes/train/train.dtos';
 import { useEffect, useState } from 'react';
 import { AppLayout } from '../../layout/app-layout';
-import { TransportedDataGate } from '../../../ui/transported-data-gate';
+import { CommunicatedDataGate } from '../../../ui/communicated-data-gate';
 import {
-  TransportedData,
-  TransportedDataStatus,
+  CommunicatedData,
+  CommunicatedDataStatus,
 } from '../../../communicated-data/communicated-data-types';
 import { useTrainAPI } from '../../../main-api/routes/train/train.api';
 import { AppContext } from '../../client/index/screens/app/app-screen.types';
@@ -22,8 +22,8 @@ function Content(props: { appContext: AppContext }) {
   const [lastTotal, replaceLastTotal] = useState<number | undefined>();
 
   const [destinations, replaceDestinations] = useState<
-    TransportedData<GetTrainDestinationsDTO['rows']>
-  >({ status: TransportedDataStatus.NotInitialized });
+    CommunicatedData<GetTrainDestinationsDTO['rows']>
+  >({ status: CommunicatedDataStatus.NotInitialized });
 
   const [selectedWorld, replaceSelectedWorld] = useState<
     { name: string; worldId: string } | undefined
@@ -37,11 +37,11 @@ function Content(props: { appContext: AppContext }) {
     if (args?.reset || !destinations.data) {
       replaceLastTotal(undefined);
       replaceDestinations({
-        status: TransportedDataStatus.Loading,
+        status: CommunicatedDataStatus.Loading,
       });
     } else {
       replaceDestinations({
-        status: TransportedDataStatus.Refreshing,
+        status: CommunicatedDataStatus.Refreshing,
         data: destinations.data,
       });
     }
@@ -55,7 +55,7 @@ function Content(props: { appContext: AppContext }) {
       replaceDestinations({ status: res.error });
     } else {
       replaceDestinations({
-        status: TransportedDataStatus.Done,
+        status: CommunicatedDataStatus.Done,
         data: [...(destinations.data ?? []), ...res.response.body.rows],
       });
 
@@ -64,7 +64,7 @@ function Content(props: { appContext: AppContext }) {
   };
 
   useEffect(() => {
-    if (destinations.status === TransportedDataStatus.NotInitialized) {
+    if (destinations.status === CommunicatedDataStatus.NotInitialized) {
       (async () => {
         await fetchDestinations({ reset: true });
       })();
@@ -99,7 +99,7 @@ function Content(props: { appContext: AppContext }) {
           Go throught the station gates to board
         </p>
       ) : null}
-      <TransportedDataGate className="mt-3" dataWrapper={destinations}>
+      <CommunicatedDataGate className="mt-3" dataWrapper={destinations}>
         {({ data }) => {
           return (
             <InfiniteScroll
@@ -109,8 +109,8 @@ function Content(props: { appContext: AppContext }) {
               loader={
                 (
                   [
-                    TransportedDataStatus.Loading,
-                    TransportedDataStatus.Refreshing,
+                    CommunicatedDataStatus.Loading,
+                    CommunicatedDataStatus.Refreshing,
                   ] as string[]
                 ).includes(destinations.status) ? (
                   <span className="d-block text-center">Loading...</span>
@@ -168,7 +168,7 @@ function Content(props: { appContext: AppContext }) {
             </InfiniteScroll>
           );
         }}
-      </TransportedDataGate>
+      </CommunicatedDataGate>
     </div>
   );
 }
@@ -177,9 +177,9 @@ function LoadingGate() {
   const appContext = useAppContext();
 
   return (
-    <TransportedDataGate dataWrapper={appContext}>
+    <CommunicatedDataGate dataWrapper={appContext}>
       {({ data }) => <Content appContext={data} />}
-    </TransportedDataGate>
+    </CommunicatedDataGate>
   );
 }
 

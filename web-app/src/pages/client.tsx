@@ -2,24 +2,24 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { HtmlHead } from '../pages-impl/html-head';
 import type { PageProps } from 'gatsby';
-import { TransportedDataGate } from '../ui/transported-data-gate';
+import { CommunicatedDataGate } from '../ui/communicated-data-gate';
 import { CommunicationError } from '../communication-errors/communication-errors';
 import {
-  TransportedData,
-  TransportedDataStatus,
+  CommunicatedData,
+  CommunicatedDataStatus,
 } from '../communicated-data/communicated-data-types';
 
 const Component = () => {
   const [entrypoint, replaceEntrypoint] = useState<
-    TransportedData<
+    CommunicatedData<
       typeof import('../pages-impl/client/client-template')
     >
-  >({ status: TransportedDataStatus.NotInitialized });
+  >({ status: CommunicatedDataStatus.NotInitialized });
 
   useEffect(() => {
     (async () => {
       replaceEntrypoint({
-        status: TransportedDataStatus.Loading,
+        status: CommunicatedDataStatus.Loading,
       });
 
       try {
@@ -28,7 +28,7 @@ const Component = () => {
         );
 
         replaceEntrypoint({
-          status: TransportedDataStatus.Done,
+          status: CommunicatedDataStatus.Done,
           data: ep,
         });
       } catch (err) {
@@ -46,13 +46,13 @@ const Component = () => {
   }, []);
 
   return (
-    <TransportedDataGate dataWrapper={entrypoint}>
+    <CommunicatedDataGate dataWrapper={entrypoint}>
       {({ data }) => {
         const ClientSideTemplate = data.ClientTemplate;
 
         return <ClientSideTemplate />;
       }}
-    </TransportedDataGate>
+    </CommunicatedDataGate>
   );
 };
 

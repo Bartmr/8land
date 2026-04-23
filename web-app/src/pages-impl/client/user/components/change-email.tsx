@@ -1,12 +1,12 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import {
-  TransportedDataGate,
-  TransportedDataGateLayout,
-} from '../../../../ui/transported-data-gate';
+  CommunicatedDataGate,
+  CommunicatedDataGateLayout,
+} from '../../../../ui/communicated-data-gate';
 import {
-  TransportedData,
-  TransportedDataStatus,
+  CommunicatedData,
+  CommunicatedDataStatus,
 } from '../../../../communicated-data/communicated-data-types';
 import * as auth from 'firebase/auth';
 import { FirebaseAuth, getFirebaseUser } from '../../../../firebase/firebase-auth';
@@ -16,14 +16,14 @@ import isEmail from 'validator/lib/isEmail';
 export function ChangeEmail() {
   const logout = useUserAuthLogout();
 
-  const [formStatus, replaceFormStatus] = useState<TransportedData<undefined>>({
-    status: TransportedDataStatus.NotInitialized,
+  const [formStatus, replaceFormStatus] = useState<CommunicatedData<undefined>>({
+    status: CommunicatedDataStatus.NotInitialized,
   });
 
   const [email, replaceEmail] = useState('');
 
   const sendVerificationEmail = async () => {
-    replaceFormStatus({ status: TransportedDataStatus.Loading });
+    replaceFormStatus({ status: CommunicatedDataStatus.Loading });
 
     const firebaseUser = await getFirebaseUser();
 
@@ -34,7 +34,7 @@ export function ChangeEmail() {
 
     await auth.verifyBeforeUpdateEmail(firebaseUser, email);
 
-    replaceFormStatus({ status: TransportedDataStatus.Done, data: undefined });
+    replaceFormStatus({ status: CommunicatedDataStatus.Done, data: undefined });
   };
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export function ChangeEmail() {
     <div className="card">
       <div className="card-body">
         <h2 className="card-title h3">Change your email</h2>
-        {formStatus.status === TransportedDataStatus.Done ? (
+        {formStatus.status === CommunicatedDataStatus.Done ? (
           <>
             <p className="text-success">
               A confirmation email was sent to your newly set email address
@@ -73,19 +73,19 @@ export function ChangeEmail() {
               <button
                 className="btn btn-secondary"
                 disabled={
-                  formStatus.status === TransportedDataStatus.Loading ||
+                  formStatus.status === CommunicatedDataStatus.Loading ||
                   !(email && isEmail(email))
                 }
                 onClick={sendVerificationEmail}
               >
                 Send verification email
               </button>
-              <TransportedDataGate
+              <CommunicatedDataGate
                 dataWrapper={formStatus}
-                layout={TransportedDataGateLayout.Tape}
+                layout={CommunicatedDataGateLayout.Tape}
               >
                 {() => null}
-              </TransportedDataGate>
+              </CommunicatedDataGate>
             </div>
           </>
         )}

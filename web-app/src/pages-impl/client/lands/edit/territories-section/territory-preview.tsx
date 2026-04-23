@@ -8,8 +8,8 @@ import { TILE_SIZE } from '../../../index/game-constants';
 import { useJSONHttp } from '../../../../../main-api/use-json-http';
 import { CommunicationError } from '../../../../../communication-errors/communication-errors';
 import {
-  TransportedData,
-  TransportedDataStatus,
+  CommunicatedData,
+  CommunicatedDataStatus,
 } from '../../../../../communicated-data/communicated-data-types';
 import { v4 } from 'uuid';
 import { throwError } from '../../../../../throw-error';
@@ -34,12 +34,12 @@ export function TerritoryPreview(props: {
   const jsonHttp = useJSONHttp();
 
   const [previewFrame, replacePreviewFrame] = useState<
-    TransportedData<{
+    CommunicatedData<{
       scene: Phaser.Scene;
       game: Phaser.Game;
     }>
   >({
-    status: TransportedDataStatus.NotInitialized,
+    status: CommunicatedDataStatus.NotInitialized,
   });
   const [previousRectangles] = useState<Phaser.GameObjects.Rectangle[]>([]);
   const [pendingIntervalRectangle, replacePendingIntervalRectangle] =
@@ -135,7 +135,7 @@ export function TerritoryPreview(props: {
 
           setTimeout(() => {
             replacePreviewFrame({
-              status: TransportedDataStatus.Done,
+              status: CommunicatedDataStatus.Done,
               data: { scene: this, game: _game },
             });
           }, 1000);

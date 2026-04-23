@@ -7,13 +7,13 @@ import {
   useState,
 } from 'react';
 import {
-  TransportedData,
-  TransportedDataStatus,
+  CommunicatedData,
+  CommunicatedDataStatus,
 } from '../../communicated-data/communicated-data-types';
 import { AppContext } from '../client/index/screens/app/app-screen.types';
 import { throwError } from '../../throw-error';
 
-const AppContextContext = createContext<TransportedData<
+const AppContextContext = createContext<CommunicatedData<
   AppContext & { explore8Land: NonNullable<Window['explore8Land']> }
 > | null>(null);
 
@@ -25,11 +25,11 @@ export function useAppContext() {
 
 export function AppContextProvider(props: { children: ReactNode }) {
   const [state, replaceState] = useState<
-    TransportedData<
+    CommunicatedData<
       AppContext & { explore8Land: NonNullable<Window['explore8Land']> }
     >
   >({
-    status: TransportedDataStatus.Loading,
+    status: CommunicatedDataStatus.Loading,
   });
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export function AppContextProvider(props: { children: ReactNode }) {
         const context = await window.explore8Land.getContext();
 
         replaceState({
-          status: TransportedDataStatus.Done,
+          status: CommunicatedDataStatus.Done,
           data: { ...context, explore8Land: window.explore8Land },
         });
       }

@@ -2,13 +2,13 @@ import React from 'react';
 import { GetTerritoryDTO } from '../../../../../main-api/routes/territories/territories.dtos';
 import { useState } from 'react';
 import {
-  TransportedDataGate,
-  TransportedDataGateLayout,
-} from '../../../../../ui/transported-data-gate';
+  CommunicatedDataGate,
+  CommunicatedDataGateLayout,
+} from '../../../../../ui/communicated-data-gate';
 import { LinkAnchor } from '../../../../../ui/link-anchor';
 import {
-  TransportedData,
-  TransportedDataStatus,
+  CommunicatedData,
+  CommunicatedDataStatus,
 } from '../../../../../communicated-data/communicated-data-types';
 import { useTerritoriesAPI } from '../../../../../main-api/routes/territories/territories-api';
 import { MapFormField } from './map-form-field';
@@ -30,8 +30,8 @@ export function AssetsUploader(props: {
   >(undefined);
 
   const [formSubmissionStatus, replaceFormSubmissionStatus] = useState<
-    TransportedData<undefined>
-  >({ status: TransportedDataStatus.NotInitialized });
+    CommunicatedData<undefined>
+  >({ status: CommunicatedDataStatus.NotInitialized });
 
   const [tilesetFile, replaceTilesetFile] = useState<File | undefined>();
   const [mapFile, replaceMapFile] = useState<File | undefined>();
@@ -49,7 +49,7 @@ export function AssetsUploader(props: {
 
     replaceErrors(undefined);
 
-    replaceFormSubmissionStatus({ status: TransportedDataStatus.Loading });
+    replaceFormSubmissionStatus({ status: CommunicatedDataStatus.Loading });
 
     const formData = new FormData();
 
@@ -65,7 +65,7 @@ export function AssetsUploader(props: {
       replaceFormSubmissionStatus({ status: res.error });
     } else {
       replaceFormSubmissionStatus({
-        status: TransportedDataStatus.NotInitialized,
+        status: CommunicatedDataStatus.NotInitialized,
       });
 
       if (res.response.status === 400) {
@@ -124,19 +124,19 @@ export function AssetsUploader(props: {
           <button
             onClick={submitForm}
             disabled={
-              formSubmissionStatus.status === TransportedDataStatus.Loading
+              formSubmissionStatus.status === CommunicatedDataStatus.Loading
             }
             className="btn btn-success"
           >
             Submit
           </button>
-          <TransportedDataGate
+          <CommunicatedDataGate
             className="ms-3"
-            layout={TransportedDataGateLayout.Tape}
+            layout={CommunicatedDataGateLayout.Tape}
             dataWrapper={formSubmissionStatus}
           >
             {() => null}
-          </TransportedDataGate>
+          </CommunicatedDataGate>
           {errors === 'tileset-missing' ? (
             <span className="text-danger">
               You need to select a tileset file

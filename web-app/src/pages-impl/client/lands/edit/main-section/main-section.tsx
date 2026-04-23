@@ -5,11 +5,11 @@ import { z } from 'zod';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TransportedDataGate } from '../../../../../ui/transported-data-gate';
+import { CommunicatedDataGate } from '../../../../../ui/communicated-data-gate';
 import { useFormUtils } from '../../../../../forms/form-utils';
 import {
-  TransportedData,
-  TransportedDataStatus,
+  CommunicatedData,
+  CommunicatedDataStatus,
 } from '../../../../../communicated-data/communicated-data-types';
 import { SoundcloudSongApiUrlSchema } from '../../../../../main-api/routes/lands/edit/edit-land.schema';
 import { useLandsAPI } from '../../../../../main-api/routes/lands/lands-api';
@@ -102,21 +102,21 @@ export function MainSection(props: {
   const formUtils = useFormUtils(form);
 
   const [formSubmission, replaceFormSubmission] = useState<
-    TransportedData<undefined | 'name-already-taken'>
-  >({ status: TransportedDataStatus.Done, data: undefined });
+    CommunicatedData<undefined | 'name-already-taken'>
+  >({ status: CommunicatedDataStatus.Done, data: undefined });
 
   const backgroundMusicUrl = form.watch('backgroundMusicUrl');
 
   return (
     <div className="card">
       <div className="card-body">
-        <TransportedDataGate dataWrapper={formSubmission}>
+        <CommunicatedDataGate dataWrapper={formSubmission}>
           {({ data }) => {
             return (
               <form
                 onSubmit={form.handleSubmit(async (formData) => {
                   replaceFormSubmission({
-                    status: TransportedDataStatus.Loading,
+                    status: CommunicatedDataStatus.Loading,
                   });
 
                   const res = await api.updateLand({
@@ -130,7 +130,7 @@ export function MainSection(props: {
                     if (res.response.status === 409) {
                       if (res.response.body?.error === 'name-already-taken') {
                         replaceFormSubmission({
-                          status: TransportedDataStatus.Done,
+                          status: CommunicatedDataStatus.Done,
                           data: res.response.body.error,
                         });
                       } else {
@@ -140,7 +140,7 @@ export function MainSection(props: {
                       }
                     } else {
                       replaceFormSubmission({
-                        status: TransportedDataStatus.Done,
+                        status: CommunicatedDataStatus.Done,
                         data: undefined,
                       });
 
@@ -244,7 +244,7 @@ export function MainSection(props: {
               </form>
             );
           }}
-        </TransportedDataGate>
+        </CommunicatedDataGate>
       </div>
     </div>
   );

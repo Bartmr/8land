@@ -4,10 +4,10 @@ import { GetLandDTO } from '../../../../../main-api/routes/lands/lands.dtos';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import { TransportedDataGate } from '../../../../../ui/transported-data-gate';
+import { CommunicatedDataGate } from '../../../../../ui/communicated-data-gate';
 import {
-  TransportedData,
-  TransportedDataStatus,
+  CommunicatedData,
+  CommunicatedDataStatus,
 } from '../../../../../communicated-data/communicated-data-types';
 import { useBlocksAPI } from '../../../../../main-api/routes/blocks/blocks-api';
 import { AddBlockSection } from './add-block-section';
@@ -20,8 +20,8 @@ export function BlocksSection(props: {
   const api = useBlocksAPI();
 
   const [deletionState, replaceDeletionState] = useState<
-    TransportedData<undefined>
-  >({ status: TransportedDataStatus.Done, data: undefined });
+    CommunicatedData<undefined>
+  >({ status: CommunicatedDataStatus.Done, data: undefined });
 
   const deleteBlock = async (
     blockType: DynamicBlockType.Door | DynamicBlockType.App,
@@ -36,7 +36,7 @@ Players who are currently in this land will be teleported back to the train stat
       return;
     }
 
-    replaceDeletionState({ status: TransportedDataStatus.Loading });
+    replaceDeletionState({ status: CommunicatedDataStatus.Loading });
 
     const res = await api.deleteBlock({ blockType, blockId });
 
@@ -44,7 +44,7 @@ Players who are currently in this land will be teleported back to the train stat
       replaceDeletionState({ status: res.error });
     } else {
       replaceDeletionState({
-        status: TransportedDataStatus.Done,
+        status: CommunicatedDataStatus.Done,
         data: undefined,
       });
       props.onBlockDeleted();
@@ -79,7 +79,7 @@ Players who are currently in this land will be teleported back to the train stat
 
           <hr />
           <h3>Door Blocks</h3>
-          <TransportedDataGate dataWrapper={deletionState}>
+          <CommunicatedDataGate dataWrapper={deletionState}>
             {() => {
               return (
                 <ul className="list-group">
@@ -111,7 +111,7 @@ Players who are currently in this land will be teleported back to the train stat
                 </ul>
               );
             }}
-          </TransportedDataGate>
+          </CommunicatedDataGate>
 
           <hr />
           <h3>App Blocks</h3>

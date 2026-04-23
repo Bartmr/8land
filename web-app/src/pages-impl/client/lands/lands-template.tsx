@@ -1,10 +1,10 @@
 import React from 'react';
 import { IndexLandsDTO, GetLandsToClaimDTO } from '../../../main-api/routes/lands/lands.dtos';
 import { useEffect, useState } from 'react';
-import { TransportedDataGate } from '../../../ui/transported-data-gate';
+import { CommunicatedDataGate } from '../../../ui/communicated-data-gate';
 import {
-  TransportedData,
-  TransportedDataStatus,
+  CommunicatedData,
+  CommunicatedDataStatus,
 } from '../../../communicated-data/communicated-data-types';
 import { RouteComponentProps } from '@reach/router';
 import { Logger } from '../../../logging/logger';
@@ -24,29 +24,29 @@ export function LandsTemplate(_props: RouteComponentProps) {
   const [newLandName, replaceNewLandName] = useState('');
 
   const [newLandSubmission, replaceNewLandSubmission] = useState<
-    TransportedData<
+    CommunicatedData<
       | undefined
       | { error: 'name-already-taken' }
       | { error: 'lands-limit-exceeded'; limit: number }
       | { error: 'cannot-create-more-lands-without-start-block' }
     >
   >({
-    status: TransportedDataStatus.Done,
+    status: CommunicatedDataStatus.Done,
     data: undefined,
   });
 
   const [landsToClaim, replaceLandsToClaim] = useState<
-    TransportedData<GetLandsToClaimDTO>
+    CommunicatedData<GetLandsToClaimDTO>
   >({
-    status: TransportedDataStatus.NotInitialized,
+    status: CommunicatedDataStatus.NotInitialized,
   });
 
-  const [lands, replaceLands] = useState<TransportedData<IndexLandsDTO>>({
-    status: TransportedDataStatus.NotInitialized,
+  const [lands, replaceLands] = useState<CommunicatedData<IndexLandsDTO>>({
+    status: CommunicatedDataStatus.NotInitialized,
   });
 
   const fetchLands = async () => {
-    replaceLands({ status: TransportedDataStatus.Loading });
+    replaceLands({ status: CommunicatedDataStatus.Loading });
 
     const res = await api.getLandsIndex();
 
@@ -65,7 +65,7 @@ export function LandsTemplate(_props: RouteComponentProps) {
         });
       } else {
         replaceLands({
-          status: TransportedDataStatus.Done,
+          status: CommunicatedDataStatus.Done,
           data: res.response.body,
         });
       }
@@ -73,7 +73,7 @@ export function LandsTemplate(_props: RouteComponentProps) {
   };
 
   const fetchLandsToClaim = async () => {
-    replaceLandsToClaim({ status: TransportedDataStatus.Loading });
+    replaceLandsToClaim({ status: CommunicatedDataStatus.Loading });
 
     const res = await api.getLandsToClaim();
 
@@ -83,7 +83,7 @@ export function LandsTemplate(_props: RouteComponentProps) {
       });
     } else {
       replaceLandsToClaim({
-        status: TransportedDataStatus.Done,
+        status: CommunicatedDataStatus.Done,
         data: res.response.body,
       });
     }
@@ -98,7 +98,7 @@ export function LandsTemplate(_props: RouteComponentProps) {
       return;
     }
 
-    replaceNewLandSubmission({ status: TransportedDataStatus.Loading });
+    replaceNewLandSubmission({ status: CommunicatedDataStatus.Loading });
 
     const res = await api.createLand({ name: newLandName });
 
@@ -109,12 +109,12 @@ export function LandsTemplate(_props: RouteComponentProps) {
     } else {
       if (res.response.error) {
         replaceNewLandSubmission({
-          status: TransportedDataStatus.Done,
+          status: CommunicatedDataStatus.Done,
           data: res.response,
         });
       } else {
         replaceNewLandSubmission({
-          status: TransportedDataStatus.Done,
+          status: CommunicatedDataStatus.Done,
           data: undefined,
         });
 
@@ -161,7 +161,7 @@ export function LandsTemplate(_props: RouteComponentProps) {
                 </LinkAnchor>
               </p>
             </div>
-            <TransportedDataGate
+            <CommunicatedDataGate
               className="col-12 col-md-6"
               dataWrapper={landsToClaim}
             >
@@ -179,9 +179,9 @@ export function LandsTemplate(_props: RouteComponentProps) {
                   </div>
                 );
               }}
-            </TransportedDataGate>
+            </CommunicatedDataGate>
           </div>
-          <TransportedDataGate dataWrapper={newLandSubmission}>
+          <CommunicatedDataGate dataWrapper={newLandSubmission}>
             {({ data }) => {
               return (
                 <div className="input-group mb-3">
@@ -224,9 +224,9 @@ export function LandsTemplate(_props: RouteComponentProps) {
                 </div>
               );
             }}
-          </TransportedDataGate>
+          </CommunicatedDataGate>
           <hr />
-          <TransportedDataGate dataWrapper={lands}>
+          <CommunicatedDataGate dataWrapper={lands}>
             {({ data }) => {
               return (
                 <div className="list-group">
@@ -252,7 +252,7 @@ export function LandsTemplate(_props: RouteComponentProps) {
                 </div>
               );
             }}
-          </TransportedDataGate>
+          </CommunicatedDataGate>
         </>
       )}
     </Layout>

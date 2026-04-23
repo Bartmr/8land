@@ -3,15 +3,15 @@ import { RouteComponentProps } from '@reach/router';
 import { useState } from 'react';
 import { Layout } from '../../layout/layout';
 import {
-  TransportedDataGate,
-  TransportedDataGateLayout,
-} from '../../../ui/transported-data-gate';
+  CommunicatedDataGate,
+  CommunicatedDataGateLayout,
+} from '../../../ui/communicated-data-gate';
 import { mainApiReducer } from '../../../main-api/main-api-reducer';
 import { useUserAuth } from '../../../users/authentication/use-user-auth';
 import { useStoreSelector } from '../../../redux/use-store-selector';
 import {
-  TransportedData,
-  TransportedDataStatus,
+  CommunicatedData,
+  CommunicatedDataStatus,
 } from '../../../communicated-data/communicated-data-types';
 import { useUserAuthLogout } from '../../../users/authentication/use-user-auth-logout';
 import { ChangeEmail } from './components/change-email';
@@ -24,8 +24,8 @@ import { useAuthAPI } from '../../../main-api/routes/users/auth/auth.api';
 
 export function UserTemplate(_props: RouteComponentProps) {
   const [escapeStatus, replaceEscapeStatus] = useState<
-    TransportedData<undefined>
-  >({ status: TransportedDataStatus.NotInitialized });
+    CommunicatedData<undefined>
+  >({ status: CommunicatedDataStatus.NotInitialized });
 
   const mainApiSession = useUserAuth();
   const session = useStoreSelector(
@@ -45,7 +45,7 @@ export function UserTemplate(_props: RouteComponentProps) {
       replaceEscapeStatus({ status: res.error });
     } else {
       replaceEscapeStatus({
-        status: TransportedDataStatus.Done,
+        status: CommunicatedDataStatus.Done,
         data: undefined,
       });
     }
@@ -54,10 +54,10 @@ export function UserTemplate(_props: RouteComponentProps) {
   return (
     <Layout>
       {() => (
-        <TransportedDataGate
+        <CommunicatedDataGate
           dataWrapper={
-            session.status === TransportedDataStatus.Refreshing
-              ? { status: TransportedDataStatus.Loading }
+            session.status === CommunicatedDataStatus.Refreshing
+              ? { status: CommunicatedDataStatus.Loading }
               : session
           }
         >
@@ -97,15 +97,15 @@ export function UserTemplate(_props: RouteComponentProps) {
                     <button
                       onClick={handleEscape}
                       disabled={
-                        escapeStatus.status === TransportedDataStatus.Loading
+                        escapeStatus.status === CommunicatedDataStatus.Loading
                       }
                       className="btn btn-danger"
                     >
                       <FontAwesomeIcon icon={faPersonThroughWindow} /> Escape
                     </button>
                     <div className="ms-3">
-                      <TransportedDataGate
-                        layout={TransportedDataGateLayout.Tape}
+                      <CommunicatedDataGate
+                        layout={CommunicatedDataGateLayout.Tape}
                         dataWrapper={escapeStatus}
                       >
                         {() => (
@@ -113,7 +113,7 @@ export function UserTemplate(_props: RouteComponentProps) {
                             Escape was successful
                           </span>
                         )}
-                      </TransportedDataGate>
+                      </CommunicatedDataGate>
                     </div>
                   </div>
                 </div>
@@ -123,7 +123,7 @@ export function UserTemplate(_props: RouteComponentProps) {
               </div>
             </>
           )}
-        </TransportedDataGate>
+        </CommunicatedDataGate>
       )}
     </Layout>
   );

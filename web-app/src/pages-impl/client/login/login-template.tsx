@@ -5,11 +5,11 @@ import { useEffect, useState } from 'react';
 import * as auth from 'firebase/auth';
 import { FirebaseAuthUI } from '../../../firebase/firebase-auth-ui';
 import {
-  TransportedData,
-  TransportedDataStatus,
+  CommunicatedData,
+  CommunicatedDataStatus,
 } from '../../../communicated-data/communicated-data-types';
 import { FirebaseAuth } from '../../../firebase/firebase-auth';
-import { TransportedDataGate } from '../../../ui/transported-data-gate';
+import { CommunicatedDataGate } from '../../../ui/communicated-data-gate';
 import { useUserAuth } from '../../../users/authentication/use-user-auth';
 import { LinkAnchor } from '../../../ui/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
@@ -23,23 +23,23 @@ function Content() {
   const [needsEmailVerification, replaceNeedsEmailVerification] =
     useState(false);
 
-  const [loginState, replaceLoginState] = useState<TransportedData<undefined>>({
-    status: TransportedDataStatus.NotInitialized,
+  const [loginState, replaceLoginState] = useState<CommunicatedData<undefined>>({
+    status: CommunicatedDataStatus.NotInitialized,
   });
 
   const [resendconfirmationEmailState, replaceResendConfirmationEmailState] =
-    useState<TransportedData<undefined | 'done'>>({
-      status: TransportedDataStatus.Done,
+    useState<CommunicatedData<undefined | 'done'>>({
+      status: CommunicatedDataStatus.Done,
       data: undefined,
     });
 
   const resendConfirmationEmail = async () => {
     replaceResendConfirmationEmailState({
-      status: TransportedDataStatus.Loading,
+      status: CommunicatedDataStatus.Loading,
     });
     await auth.sendEmailVerification(FirebaseAuth.currentUser || throwError());
     replaceResendConfirmationEmailState({
-      status: TransportedDataStatus.Done,
+      status: CommunicatedDataStatus.Done,
       data: 'done',
     });
   };
@@ -78,7 +78,7 @@ function Content() {
             };
           }) {
             replaceLoginState({
-              status: TransportedDataStatus.Loading,
+              status: CommunicatedDataStatus.Loading,
             });
 
             (async () => {
@@ -100,7 +100,7 @@ function Content() {
 
                 replaceNeedsEmailVerification(true);
                 replaceLoginState({
-                  status: TransportedDataStatus.Done,
+                  status: CommunicatedDataStatus.Done,
                   data: undefined,
                 });
               } else {
@@ -133,7 +133,7 @@ function Content() {
             {"Don't forget to check your "}
             <span style={{ textDecoration: 'underline' }}>spam folder.</span>
           </p>
-          <TransportedDataGate dataWrapper={resendconfirmationEmailState}>
+          <CommunicatedDataGate dataWrapper={resendconfirmationEmailState}>
             {({ data }) =>
               data ? (
                 <span className="text-success">
@@ -143,13 +143,13 @@ function Content() {
                 <button
                   disabled={
                     resendconfirmationEmailState.status ===
-                    TransportedDataStatus.Loading
+                    CommunicatedDataStatus.Loading
                   }
                   onClick={resendConfirmationEmail}
                   className="btn btn-secondary"
                 >
                   {resendconfirmationEmailState.status ===
-                  TransportedDataStatus.Loading ? (
+                  CommunicatedDataStatus.Loading ? (
                     <span
                       className="spinner-border spinner-border-sm"
                       role="status"
@@ -160,7 +160,7 @@ function Content() {
                 </button>
               )
             }
-          </TransportedDataGate>
+          </CommunicatedDataGate>
         </div>
       ) : null}
       <p className="mt-4 text-center">
@@ -175,9 +175,9 @@ function Content() {
         </LinkAnchor>
       </p>
 
-      <TransportedDataGate dataWrapper={loginState}>
+      <CommunicatedDataGate dataWrapper={loginState}>
         {() => null}
-      </TransportedDataGate>
+      </CommunicatedDataGate>
     </>
   );
 }
@@ -194,15 +194,15 @@ function FirebaseSessionGate() {
   }, []);
 
   return (
-    <TransportedDataGate
+    <CommunicatedDataGate
       dataWrapper={
         isSigningOut
-          ? { status: TransportedDataStatus.Loading }
-          : { status: TransportedDataStatus.Done, data: undefined }
+          ? { status: CommunicatedDataStatus.Loading }
+          : { status: CommunicatedDataStatus.Done, data: undefined }
       }
     >
       {() => <Content />}
-    </TransportedDataGate>
+    </CommunicatedDataGate>
   );
 }
 

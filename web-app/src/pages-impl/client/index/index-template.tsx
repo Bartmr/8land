@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Layout } from '../../layout/layout';
 import { RouteComponentProps } from '@reach/router';
 import {
-  TransportedData,
-  TransportedDataStatus,
+  CommunicatedData,
+  CommunicatedDataStatus,
 } from '../../../communicated-data/communicated-data-types';
-import { TransportedDataGate } from '../../../ui/transported-data-gate';
+import { CommunicatedDataGate } from '../../../ui/communicated-data-gate';
 import { mainApiReducer } from '../../../main-api/main-api-reducer';
 import { useStoreSelector } from '../../../redux/use-store-selector';
 import { GameFrame } from './game-frame';
@@ -29,12 +29,12 @@ function Content(props: {
   const [pressedStart, replacePressedStart] = useState(false);
 
   const [landToResumeFrom, replaceLandToResumeFrom] = useState<
-    TransportedData<ResumeLandNavigationDTO>
-  >({ status: TransportedDataStatus.NotInitialized });
+    CommunicatedData<ResumeLandNavigationDTO>
+  >({ status: CommunicatedDataStatus.NotInitialized });
 
   useEffect(() => {
     (async () => {
-      replaceLandToResumeFrom({ status: TransportedDataStatus.Loading });
+      replaceLandToResumeFrom({ status: CommunicatedDataStatus.Loading });
 
       const res = await api.resume();
 
@@ -42,7 +42,7 @@ function Content(props: {
         replaceLandToResumeFrom({ status: res.error });
       } else {
         replaceLandToResumeFrom({
-          status: TransportedDataStatus.Done,
+          status: CommunicatedDataStatus.Done,
           data: res.response.body,
         });
       }
@@ -54,9 +54,9 @@ function Content(props: {
   }, []);
 
   return (
-    <TransportedDataGate dataWrapper={session}>
+    <CommunicatedDataGate dataWrapper={session}>
       {({ data: sessionData }) => (
-        <TransportedDataGate dataWrapper={landToResumeFrom}>
+        <CommunicatedDataGate dataWrapper={landToResumeFrom}>
           {({ data: landData }) =>
             pressedStart ? (
               <GameFrame session={sessionData} resumedLand={landData} />
@@ -85,9 +85,9 @@ function Content(props: {
               </div>
             )
           }
-        </TransportedDataGate>
+        </CommunicatedDataGate>
       )}
-    </TransportedDataGate>
+    </CommunicatedDataGate>
   );
 }
 

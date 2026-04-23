@@ -1,8 +1,8 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { AppLayout } from '../../layout/app-layout';
-import { TransportedDataGate } from '../../../ui/transported-data-gate';
-import { TransportedDataStatus } from '../../../communicated-data/communicated-data-types';
+import { CommunicatedDataGate } from '../../../ui/communicated-data-gate';
+import { CommunicatedDataStatus } from '../../../communicated-data/communicated-data-types';
 import { AppContextProvider, useAppContext } from '../app-context';
 
 function Content() {
@@ -10,7 +10,7 @@ function Content() {
   const [eventData, replaceEventData] = useState<string | undefined>();
 
   useEffect(() => {
-    if (appContext.status === TransportedDataStatus.Done) {
+    if (appContext.status === CommunicatedDataStatus.Done) {
       const explore8Land = appContext.data.explore8Land;
 
       explore8Land.listenToGamepad((e) => {
@@ -21,11 +21,11 @@ function Content() {
 
   return (
     <>
-      <TransportedDataGate dataWrapper={appContext}>
+      <CommunicatedDataGate dataWrapper={appContext}>
         {({ data }) => {
           return <pre>{JSON.stringify(data, undefined, 2)}</pre>;
         }}
-      </TransportedDataGate>
+      </CommunicatedDataGate>
       <div className="mt-3">Last Event: {eventData}</div>
       <button
         className="mt-3"

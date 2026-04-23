@@ -1,13 +1,13 @@
 import React, { ReactNode, useContext } from 'react';
 import { useStoreSelector } from '../../redux/use-store-selector';
-import { TransportedDataGate } from '../../ui/transported-data-gate';
+import { CommunicatedDataGate } from '../../ui/communicated-data-gate';
 import { Redirect } from '../../pages-impl/redirect/redirect';
 import { LOGIN_ROUTE } from '../../pages-impl/client/login/login-routes';
 import { getCurrentLocalHref } from '../../navigation/current-local-href';
 import { useLocation } from '@reach/router';
 import { AuthenticationStateContext } from './authentication-state';
 import { throwError } from '../../throw-error';
-import { TransportedDataStatus } from '../../communicated-data/communicated-data-types';
+import { CommunicatedDataStatus } from '../../communicated-data/communicated-data-types';
 
 type Props = {
   children: ReactNode;
@@ -23,15 +23,15 @@ export const AuthenticatedRoute = (props: Props) => {
   if (typeof sessionState.data === 'undefined') {
     if (sessionState.error) {
       return (
-        <TransportedDataGate className="py-3" dataWrapper={{ status: sessionState.error }}>
+        <CommunicatedDataGate className="py-3" dataWrapper={{ status: sessionState.error }}>
           {() => null}
-        </TransportedDataGate>
+        </CommunicatedDataGate>
       );
     } else {
       return (
-        <TransportedDataGate className="py-3" dataWrapper={{ status: TransportedDataStatus.Loading, data: undefined }}>
+        <CommunicatedDataGate className="py-3" dataWrapper={{ status: CommunicatedDataStatus.Loading, data: undefined }}>
           {() => null}
-        </TransportedDataGate>
+        </CommunicatedDataGate>
       );
     }
 

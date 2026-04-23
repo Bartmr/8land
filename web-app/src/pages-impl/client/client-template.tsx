@@ -1,12 +1,11 @@
 import { Router } from '@reach/router';
 import { AuthenticatedRoute } from '../../users/authentication/authenticated-route';
-import { AuthenticatedRouteAccess } from '../../users/authentication/authenticated-route/authenticated-route-types';
 import NotFoundTemplate from '../../pages/404';
 import { LoginTemplate } from './login/login-template';
 import React, { Suspense } from 'react';
 import { RouteComponentProps } from '@reach/router';
-import { TransportedDataGate } from '../../ui/transported-data-gate';
-import { TransportedDataStatus } from '../../communicated-data/communicated-data-types';
+import { CommunicatedDataGate } from '../../ui/communicated-data-gate';
+import { CommunicatedDataStatus } from '../../communicated-data/communicated-data-types';
 import { EditLandTemplate } from './lands/edit/edit-land-template';
 import { EDIT_LAND_ROUTE } from './lands/edit/edit-land-routes';
 import { LANDS_ROUTE } from './lands/lands-routes';
@@ -26,11 +25,11 @@ function Game(_props: RouteComponentProps) {
   return (
     <Suspense
       fallback={
-        <TransportedDataGate
-          dataWrapper={{ status: TransportedDataStatus.Loading }}
+        <CommunicatedDataGate
+          dataWrapper={{ status: CommunicatedDataStatus.Loading }}
         >
           {() => null}
-        </TransportedDataGate>
+        </CommunicatedDataGate>
       }
     >
       <LazyLoadedRoute />
@@ -43,9 +42,6 @@ export function ClientTemplate() {
     <Router>
       <Game path="/client/" />
       <AuthenticatedRoute
-        authenticationRules={{
-          mainApiSession: { access: AuthenticatedRouteAccess.Allow },
-        }}
         path="/client"
       >
         <LandsTemplate path={`${LANDS_ROUTE.pathSegment}`} />
@@ -56,9 +52,6 @@ export function ClientTemplate() {
         <NotFoundTemplate default />
       </AuthenticatedRoute>
       <AuthenticatedRoute
-        authenticationRules={{
-          mainApiSession: { access: AuthenticatedRouteAccess.Block },
-        }}
         path="/client/login"
       >
         <LoginTemplate path="/" />

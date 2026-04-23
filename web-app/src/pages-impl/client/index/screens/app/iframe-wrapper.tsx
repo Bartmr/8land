@@ -1,8 +1,8 @@
 import React from 'react';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { TransportedDataGate } from '../../../../../ui/transported-data-gate';
-import { TransportedDataStatus } from '../../../../../communicated-data/communicated-data-types';
+import { CommunicatedDataGate } from '../../../../../ui/communicated-data-gate';
+import { CommunicatedDataStatus } from '../../../../../communicated-data/communicated-data-types';
 import { MusicService } from '../../music-ticker';
 import { AppContext } from './app-screen.types';
 import { Gamepad } from '../../gamepad';
@@ -59,11 +59,11 @@ export function IframeWrapper(props: {
       <>
         {loading ? (
           <div className="p-3" style={{ position: 'absolute' }}>
-            <TransportedDataGate
-              dataWrapper={{ status: TransportedDataStatus.Loading }}
+            <CommunicatedDataGate
+              dataWrapper={{ status: CommunicatedDataStatus.Loading }}
             >
               {() => null}
-            </TransportedDataGate>
+            </CommunicatedDataGate>
           </div>
         ) : null}
       </>

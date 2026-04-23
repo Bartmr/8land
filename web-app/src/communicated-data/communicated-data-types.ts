@@ -1,6 +1,6 @@
 import { CommunicationError } from '../communication-errors/communication-errors';
 
-export enum TransportedDataStatus {
+export enum CommunicatedDataStatus {
   NotInitialized = 'not-initialized',
   // Loading is for data that is not available or should not be used when loading or updating
   Loading = 'loading',
@@ -11,21 +11,21 @@ export enum TransportedDataStatus {
   // Errors related to a connection failure are tagged using CommunicationError enum
 }
 
-export type TransportedData<Data> = Readonly<
+export type CommunicatedData<Data> = Readonly<
   | {
-      status: TransportedDataStatus.NotInitialized;
+      status: CommunicatedDataStatus.NotInitialized;
       data?: undefined;
     }
   | {
-      status: TransportedDataStatus.Loading;
+      status: CommunicatedDataStatus.Loading;
       data?: undefined;
     }
   | {
-      status: TransportedDataStatus.Done;
+      status: CommunicatedDataStatus.Done;
       data: Data;
     }
   | {
-      status: TransportedDataStatus.Refreshing;
+      status: CommunicatedDataStatus.Refreshing;
       data: Data;
     }
   | {
@@ -34,9 +34,9 @@ export type TransportedData<Data> = Readonly<
     }
 >;
 
-export type UnwrapTransportedData<T extends TransportedData<unknown>> =
+export type UnwrapCommunicatedData<T extends CommunicatedData<unknown>> =
   T extends {
-    status: TransportedDataStatus.Done;
+    status: CommunicatedDataStatus.Done;
     data: infer U;
   }
     ? U
