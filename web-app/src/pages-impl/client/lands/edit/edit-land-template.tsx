@@ -21,7 +21,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { navigate } from 'gatsby';
 import { LANDS_ROUTE } from '../lands-routes';
-// import { mainApiReducer } from '../../../../main-api/main-api-reducer';
 // import { useStoreSelector } from '../../../../store/use-store-selector';
 // import { throwError } from '@shared/src/internals/utils/throw-error';
 // import { Role } from '@shared/src/auth/auth.enums';
@@ -40,11 +39,6 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
   });
 
   const [successfulSave, replaceSuccessfulSave] = useState(false);
-
-  // const session = useStoreSelector(
-  //   { mainApi: mainApiReducer },
-  //   (s) => s.mainApi.session.data || throwError(),
-  // );
 
   const deleteLand = async () => {
     const confirmed = window.confirm(

@@ -6,7 +6,7 @@ import { throwError } from "../../throw-error";
 import { AuthenticationStateContext } from "./authentication-state";
 import { AuthenticationSessionSchema } from "./authentication-schemas";
 
-export function Authenticationffects() {
+export function AuthenticationEffects() {
   const mainApi = useMainApiFetchJSON();
   const { sessionState, setSessionState } =
     useContext(AuthenticationStateContext) || throwError();
@@ -21,7 +21,7 @@ export function Authenticationffects() {
         setSessionState({ loading: true });
 
         const res = await mainApi.fetchJSON({
-          path: "/accountant_users/session",
+          path: "/users/auth",
           method: "GET",
           schema: z.union([
             z.object({

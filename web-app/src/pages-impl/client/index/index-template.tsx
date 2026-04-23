@@ -6,14 +6,13 @@ import {
   CommunicatedDataStatus,
 } from '../../../communicated-data/communicated-data-types';
 import { CommunicatedDataGate } from '../../../ui/communicated-data-gate';
-import { mainApiReducer } from '../../../main-api/main-api-reducer';
-import { useStoreSelector } from '../../../redux/use-store-selector';
 import { GameFrame } from './game-frame';
 import { LinkAnchor } from '../../../ui/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
 import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
 import { ResumeLandNavigationDTO } from '../../../main-api/routes/lands/lands.dtos';
 import { useLandsAPI } from '../../../main-api/routes/lands/lands-api';
+import { useAuthenticationSessionState } from '../../../users/authentication/authentication-state';
 
 function Content(props: {
   showHeaderAndFooter: () => void;
@@ -21,10 +20,7 @@ function Content(props: {
 }) {
   const api = useLandsAPI();
 
-  const session = useStoreSelector(
-    { mainApi: mainApiReducer },
-    (s) => s.mainApi.session,
-  );
+  const session = useAuthenticationSessionState();
 
   const [pressedStart, replacePressedStart] = useState(false);
 

@@ -3,14 +3,13 @@ import {
   BoardTrainDTO,
   ReturnToTrainStationDTO,
 } from './train.dtos';
-import {
-  mainApiReducer,
-  MainApiStoreState,
-} from '../../main-api-reducer';
 import { useMainApiFetchJSON } from '../../fetch-json';
-import { useStoreGetState } from '../../../redux/use-store-get-state';
 import { useLocalStorage } from '../../../local-storage';
 import { z } from 'zod';
+import {
+  AuthenticationSession,
+  useOptionalAuthenticationSession,
+} from '../../../users/authentication/authentication-state';
 
 type MainApiFetchJSON = ReturnType<typeof useMainApiFetchJSON>;
 
@@ -108,7 +107,7 @@ export class TrainAPI {
   constructor(
     private api: MainApiFetchJSON,
     private localStorage: ReturnType<typeof useLocalStorage>,
-    private getMainApiStoreState: () => { mainApi: MainApiStoreState },
+    private session: null | AuthenticationSession,
   ) {}
 
   getTrainDestination(args: { currentStationLandId: string }) {
@@ -151,9 +150,7 @@ export class TrainAPI {
   returnToTrainStation() {
     const query = new URLSearchParams();
 
-    const session = this.getMainApiStoreState().mainApi.session.data;
-
-    if (!session) {
+    if (!this.session) {
       const returningTrainStationId = this.localStorage.getItem(
         z.uuid().optional(),
         'last-train-station',
@@ -190,7 +187,7 @@ export class TrainAPI {
 export function useTrainAPI() {
   const api = useMainApiFetchJSON();
   const localStorage = useLocalStorage();
-  const getStoreState = useStoreGetState({ mainApi: mainApiReducer });
+  const session = useOptionalAuthenticationSession();
 
-  return new TrainAPI(api, localStorage, getStoreState);
+  return new TrainAPI(api, localStorage, session);
 }

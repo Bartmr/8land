@@ -6,19 +6,17 @@ import {
   CommunicatedDataGate,
   CommunicatedDataGateLayout,
 } from '../../../ui/communicated-data-gate';
-import { mainApiReducer } from '../../../main-api/main-api-reducer';
-import { useUserAuth } from '../../../users/authentication/use-user-auth';
-import { useStoreSelector } from '../../../redux/use-store-selector';
 import {
   CommunicatedData,
   CommunicatedDataStatus,
 } from '../../../communicated-data/communicated-data-types';
-import { useUserAuthLogout } from '../../../users/authentication/use-user-auth-logout';
 import { ChangeEmail } from './components/change-email';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPersonThroughWindow } from '@fortawesome/free-solid-svg-icons';
 import { useLandsAPI } from '../../../main-api/routes/lands/lands-api';
 import { useAuthAPI } from '../../../main-api/routes/users/auth/auth.api';
+import { useAuthenticationLogout } from '../../../users/authentication/logout';
+import { useAuthenticationSessionState } from '../../../users/authentication/authentication-state';
 
 
 
@@ -27,12 +25,8 @@ export function UserTemplate(_props: RouteComponentProps) {
     CommunicatedData<undefined>
   >({ status: CommunicatedDataStatus.NotInitialized });
 
-  const mainApiSession = useUserAuth();
-  const session = useStoreSelector(
-    { mainApi: mainApiReducer },
-    (s) => s.mainApi.session,
-  );
-  const logout = useUserAuthLogout();
+  const session = useAuthenticationSessionState();
+  const logout = useAuthenticationLogout();
 
   const landsApi = useLandsAPI();
 
@@ -56,9 +50,7 @@ export function UserTemplate(_props: RouteComponentProps) {
       {() => (
         <CommunicatedDataGate
           dataWrapper={
-            session.status === CommunicatedDataStatus.Refreshing
-              ? { status: CommunicatedDataStatus.Loading }
-              : session
+            session
           }
         >
           {({ data: sessionData }) => (
@@ -67,7 +59,7 @@ export function UserTemplate(_props: RouteComponentProps) {
                 <div className="card-body row g-2 justify-content-end">
                   <div className="col-auto">
                     <button
-                      onClick={() => logout.logout()}
+                      onClick={() => logout()}
                       className="btn btn-secondary"
                     >
                       Log out
@@ -75,7 +67,10 @@ export function UserTemplate(_props: RouteComponentProps) {
                   </div>
                   <div className="col-auto">
                     <button
-                      onClick={() => authApi.logoutFromAllDevices()}
+                      onClick={async () => {
+                        await authApi.logoutFromAllDevices();
+                        await logout();
+                      }}
                       className="btn btn-secondary"
                     >
                       Log out from all devices

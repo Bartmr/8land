@@ -1,14 +1,14 @@
 import { useCallback, useContext } from "react";
-import { AccountantAuthenticationStateContext } from "./authentication-state";
+import { AuthenticationStateContext } from "./authentication-state";
 import { throwError } from "../../throw-error";
-import { MAIN_API_URL } from "../../main-api/urls";
+import { MAIN_API_URL } from "../../main-api/fetch";
 import { CommunicationError } from "../../communication-errors/communication-errors";
 import { useLogger } from "../../logging/logger";
 
-export function useAccountantLogout() {
+export function useAuthenticationLogout() {
   const logger = useLogger();
   const { setSessionState } =
-    useContext(AccountantAuthenticationStateContext) || throwError();
+    useContext(AuthenticationStateContext) || throwError();
 
   const logout = useCallback(async () => {
     setSessionState({
@@ -18,12 +18,12 @@ export function useAccountantLogout() {
     let response: Response;
 
     try {
-      response = await fetch(`${MAIN_API_URL}/accountant_users/logout`, {
-        method: "POST",
+      response = await fetch(`${MAIN_API_URL}/users/auth`, {
+        method: "DELETE",
         credentials: "include",
       });
     } catch (err) {
-      logger.logError(err);
+      logger.logError("logout-connection-failure", err);
 
       setSessionState({
         error: CommunicationError.ConnectionFailure,
@@ -32,14 +32,14 @@ export function useAccountantLogout() {
       return;
     }
 
-    if (response.status === 200) {
+    if (response.status === 200 || response.status === 204 || response.status === 401) {
       setSessionState({
         data: null,
       });
     } else {
       const text = await response.text();
 
-      logger.logError(new Error(), {
+      logger.logError("logout-unexpected-response", new Error(), {
         response: {
           status: response.status,
           text,

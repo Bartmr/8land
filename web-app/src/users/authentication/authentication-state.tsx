@@ -11,9 +11,11 @@ import { CommunicationError } from "../../communication-errors/communication-err
 import { z } from "zod";
 import { AuthenticationSessionSchema } from "./authentication-schemas";
 import { throwError } from "../../throw-error";
+import { CommunicatedData, CommunicatedDataStatus } from "../../communicated-data/communicated-data-types";
 
-type AuthenticationSession = z.TypeOf<typeof AuthenticationSessionSchema>;
-type AuthenticationSessionState = {
+export type AuthenticationSession = z.TypeOf<typeof AuthenticationSessionSchema>;
+export type UserAuthSessionData = AuthenticationSession;
+export type AuthenticationSessionState = {
   loading?: boolean;
   error?: CommunicationError;
   data?: null | AuthenticationSession;
@@ -56,4 +58,29 @@ export function useAuthenticationSession() {
   }
 
   return sessionState.data;
+}
+
+export function useOptionalAuthenticationSession() {
+  const { sessionState } =
+    useContext(AuthenticationStateContext) || throwError();
+
+  return sessionState.data ?? null;
+}
+
+export function useAuthenticationSessionState(): CommunicatedData<null | AuthenticationSession> {
+  const { sessionState } =
+    useContext(AuthenticationStateContext) || throwError();
+
+  if (sessionState.error) {
+    return { status: sessionState.error };
+  }
+
+  if (sessionState.data !== undefined) {
+    return {
+      status: CommunicatedDataStatus.Done,
+      data: sessionState.data,
+    };
+  }
+
+  return { status: CommunicatedDataStatus.Loading };
 }

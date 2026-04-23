@@ -5,7 +5,6 @@ import { z } from 'zod';
 import { useEffect, useState } from 'react';
 import { TiledJSON } from '../../../index/screens/land/tiled.types';
 import { TILE_SIZE } from '../../../index/game-constants';
-import { useJSONHttp } from '../../../../../main-api/use-json-http';
 import { CommunicationError } from '../../../../../communication-errors/communication-errors';
 import {
   CommunicatedData,
@@ -13,6 +12,7 @@ import {
 } from '../../../../../communicated-data/communicated-data-types';
 import { v4 } from 'uuid';
 import { throwError } from '../../../../../throw-error';
+import { useLogger } from '../../../../../logging/logger';
 
 export function TerritoryPreview(props: {
   land: GetLandDTO;
@@ -31,7 +31,8 @@ export function TerritoryPreview(props: {
   maxHeight?: string;
   onScreenshotTaken?: (blob: Blob) => void;
 }) {
-  const jsonHttp = useJSONHttp();
+
+  const logger = useLogger();
 
   const [previewFrame, replacePreviewFrame] = useState<
     CommunicatedData<{
@@ -47,24 +48,47 @@ export function TerritoryPreview(props: {
 
   const [elementId] = useState(v4());
 
+  const tiledJSONSchema = createTiledJSONSchema({
+    maxWidth: null,
+    maxHeight: null,
+    maxWidthMessage: undefined,
+    maxHeightMessage: undefined
+
+  });
+
   useEffect(() => {
     let _game: Phaser.Game;
 
     (async () => {
-      const map = await jsonHttp.get<{
-        status: 200;
-        body: z.infer<ReturnType<typeof createTiledJSONSchema>>;
-      }>({
-        url: `${(props.land.assets || throwError()).baseUrl}/${
+      const response = await (async () => {
+        try {
+          const response = await fetch(`${(props.land.assets || throwError()).baseUrl}/${
           (props.land.assets || throwError()).mapKey
-        }`,
-        acceptableStatusCodes: [200],
-      });
+        }`);
+          return { response, error: undefined };
+        } catch (err) {
+          return { error: CommunicationError.ConnectionFailure };
+        }
+      })()
 
-      if (map.failure) {
-        replacePreviewFrame({ status: map.failure });
+      if (response.error) {
+        replacePreviewFrame({ status: response.error });
         return;
       }
+
+      const rawResponseJSON = await response.response.json();
+      const parseResult = tiledJSONSchema.safeParse(rawResponseJSON);
+
+      if (!parseResult.success) {
+        logger.logError('invalid-land-tiled-json', {
+          error: parseResult.error,
+          landId: props.land.id,
+        });
+        replacePreviewFrame({ status: CommunicationError.UnexpectedResponse });
+        return;
+      }
+
+      const map = parseResult.data;
 
       try {
         const Phaser = await import('phaser');
@@ -77,8 +101,8 @@ export function TerritoryPreview(props: {
           pixelArt: true,
           type: Phaser.AUTO,
           scale: {
-            width: map.response.body.width * TILE_SIZE,
-            height: map.response.body.height * TILE_SIZE,
+            width: map.width * TILE_SIZE,
+            height: map.height * TILE_SIZE,
             mode: props.onScreenshotTaken
               ? Phaser.Scale.ZOOM_2X
               : Phaser.Scale.WIDTH_CONTROLS_HEIGHT,
@@ -87,7 +111,7 @@ export function TerritoryPreview(props: {
           parent: elementId,
           backgroundColor: '#000000',
           canvasStyle:
-            'border-color: var(--body-contrasting-color); border-width: 3px; border-style: solid;',
+            'border-color: rgb(var(--contrasting-rgb)); border-width: 3px; border-style: solid;',
         };
 
         _game = new Phaser.Game(gameConfig);

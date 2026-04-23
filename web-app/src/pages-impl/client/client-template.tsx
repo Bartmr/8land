@@ -51,11 +51,9 @@ export function ClientTemplate() {
         <UserTemplate path={USER_ROUTE.pathSegment} />
         <NotFoundTemplate default />
       </AuthenticatedRoute>
-      <AuthenticatedRoute
+      <LoginTemplate
         path="/client/login"
-      >
-        <LoginTemplate path="/" />
-      </AuthenticatedRoute>
+      />
       <NotFoundTemplate default />
     </Router>
   );

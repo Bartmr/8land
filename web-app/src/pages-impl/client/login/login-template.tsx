@@ -10,14 +10,40 @@ import {
 } from '../../../communicated-data/communicated-data-types';
 import { FirebaseAuth } from '../../../firebase/firebase-auth';
 import { CommunicatedDataGate } from '../../../ui/communicated-data-gate';
-import { useUserAuth } from '../../../users/authentication/use-user-auth';
 import { LinkAnchor } from '../../../ui/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
 import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
 import { throwError } from '../../../throw-error';
+import { useMainApiFetchJSON } from '../../../main-api/fetch-json';
+import { z } from 'zod';
+import { AuthenticationSessionSchema } from '../../../users/authentication/authentication-schemas';
+import { useContext } from 'react';
+import { AuthenticationStateContext } from '../../../users/authentication/authentication-state';
+import { navigate } from 'gatsby';
+import { useLocation } from '@reach/router';
+import { CLIENT_SIDE_INDEX_ROUTE } from '../index/index-routes';
+
+const loginResponseSchema = z.union([
+  z.object({
+    status: z.literal(201),
+    body: z.object({
+      authTokenId: z.string(),
+      session: AuthenticationSessionSchema,
+    }),
+  }),
+  z.object({
+    status: z.literal(409),
+    body: z.object({
+      error: z.literal('needs-verification'),
+      createdNewUser: z.boolean().optional(),
+    }),
+  }),
+]);
 
 function Content() {
-  const mainApiSession = useUserAuth();
+  const mainApi = useMainApiFetchJSON();
+  const { setSessionState } = useContext(AuthenticationStateContext) || throwError();
+  const location = useLocation();
   const [hasStarted, replaceHasStarted] = useState(false);
 
   const [needsEmailVerification, replaceNeedsEmailVerification] =
@@ -82,17 +108,35 @@ function Content() {
             });
 
             (async () => {
-              const res = await mainApiSession.login({
-                firebaseIdToken: await (
-                  FirebaseAuth.currentUser || throwError()
-                ).getIdToken(),
+              const res = await mainApi.fetchJSON({
+                path: '/users/auth',
+                method: 'POST',
+                body: {
+                  firebaseIdToken: await (
+                    FirebaseAuth.currentUser || throwError()
+                  ).getIdToken(),
+                },
+                schema: loginResponseSchema,
               });
 
-              if (res === 'ok') {
+              if (res.error) {
+                replaceLoginState({
+                  status: res.error,
+                });
                 return;
               }
-              if (res.error === 'needs-verification') {
-                if (res.createdNewUser) {
+
+              if (res.response.status === 201) {
+                setSessionState({ data: res.response.body.session });
+                await navigate(
+                  new URLSearchParams(location.search).get('next') ||
+                    CLIENT_SIDE_INDEX_ROUTE.getHref(),
+                );
+                return;
+              }
+
+              if (res.response.body.error === 'needs-verification') {
+                if (res.response.body.createdNewUser) {
                   await auth.sendEmailVerification(
                     FirebaseAuth.currentUser || throwError(),
                   );
@@ -102,10 +146,6 @@ function Content() {
                 replaceLoginState({
                   status: CommunicatedDataStatus.Done,
                   data: undefined,
-                });
-              } else {
-                replaceLoginState({
-                  status: res.error,
                 });
               }
             })();
@@ -117,7 +157,7 @@ function Content() {
 
       replaceHasStarted(true);
     }
-  }, []);
+  }, [hasStarted, location.search, mainApi, setSessionState]);
   return (
     <>
       <div id="firebase-ui"></div>

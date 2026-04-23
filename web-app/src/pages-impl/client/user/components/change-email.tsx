@@ -10,11 +10,11 @@ import {
 } from '../../../../communicated-data/communicated-data-types';
 import * as auth from 'firebase/auth';
 import { FirebaseAuth, getFirebaseUser } from '../../../../firebase/firebase-auth';
-import { useUserAuthLogout } from '../../../../users/authentication/use-user-auth-logout';
+import { useAuthenticationLogout } from '../../../../users/authentication/logout';
 import isEmail from 'validator/lib/isEmail';
 
 export function ChangeEmail() {
-  const logout = useUserAuthLogout();
+  const logout = useAuthenticationLogout();
 
   const [formStatus, replaceFormStatus] = useState<CommunicatedData<undefined>>({
     status: CommunicatedDataStatus.NotInitialized,
@@ -28,7 +28,7 @@ export function ChangeEmail() {
     const firebaseUser = await getFirebaseUser();
 
     if (!firebaseUser) {
-      await logout.logout();
+      await logout();
       return;
     }
 
@@ -42,7 +42,7 @@ export function ChangeEmail() {
       const firebaseUser = FirebaseAuth.currentUser;
 
       if (!firebaseUser) {
-        await logout.logout();
+        await logout();
       }
     })();
   }, []);

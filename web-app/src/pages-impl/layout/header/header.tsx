@@ -11,8 +11,6 @@ import {
   CommunicatedDataGateLayout,
 } from '../../../ui/communicated-data-gate';
 import { LANDS_ROUTE } from '../../client/lands/lands-routes';
-import { useStoreSelector } from '../../../redux/use-store-selector';
-import { mainApiReducer } from '../../../main-api/main-api-reducer';
 import { USER_ROUTE } from '../../client/user/user-routes';
 import { INDEX_ROUTE } from '../../index-template/index-routes';
 import { LOGIN_ROUTE } from '../../client/login/login-routes';
@@ -20,6 +18,7 @@ import { getCurrentLocalHref } from '../../../navigation/current-local-href';
 import { HELP_ROUTE } from '../../help/help-routes';
 import { CLIENT_SIDE_INDEX_ROUTE } from '../../client/index/index-routes';
 import logo from '../../../logo.svg'
+import { useAuthenticationSessionState } from '../../../users/authentication/authentication-state';
 
 type Props = {
   menuHtmlId: string;
@@ -33,10 +32,7 @@ type Props = {
 export function Header(props: Props) {
   const [expanded, replaceExpanded] = useState<boolean>(false);
 
-  const session = useStoreSelector(
-    { mainApi: mainApiReducer },
-    (s) => s.mainApi.session,
-  );
+  const session = useAuthenticationSessionState();
 
   const expandMenu = () => {
     replaceExpanded(true);
