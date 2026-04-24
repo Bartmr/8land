@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import { Direction } from './screens/land/grid.types';
 
 type ScreensWithEscape = 'appScreen' | 'dialogueScreen' | 'landScreen';
@@ -22,7 +22,7 @@ export class Gamepad {
 
   sendToIframe(
     message:
-      | `8land:gamepad:${Direction}`
+      | `8land:gamepad:direction:${Direction}`
       | `8land:gamepad:${'a' | 'b'}:${'pressed' | 'released'}`,
   ) {
     this.currentIframe?.contentWindow?.postMessage(message, '*');
@@ -33,7 +33,7 @@ export class Gamepad {
     this.pressedDirections.push(direction);
     this.currentDirection = direction;
 
-    this.sendToIframe(`8land:gamepad:${this.currentDirection}`);
+    this.sendToIframe(`8land:gamepad:direction:${this.currentDirection}`);
   }
   directionWasReleased(direction: Direction) {
     this.pressedDirections = this.pressedDirections.filter(
@@ -42,20 +42,20 @@ export class Gamepad {
 
     if (this.pressedDirections.length === 0) {
       this.currentDirection = Direction.NONE;
-      this.sendToIframe(`8land:gamepad:none`);
+      this.sendToIframe(`8land:gamepad:direction:none`);
     } else {
       this.currentDirection =
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         this.pressedDirections[this.pressedDirections.length - 1]!;
 
-      this.sendToIframe(`8land:gamepad:${this.currentDirection}`);
+      this.sendToIframe(`8land:gamepad:direction:${this.currentDirection}`);
     }
   }
   // NIPPLE METHODS
   setDirection(direction: Direction) {
     this.currentDirection = direction;
 
-    this.sendToIframe(`8land:gamepad:${this.currentDirection}`);
+    this.sendToIframe(`8land:gamepad:direction:${this.currentDirection}`);
   }
   getDirection() {
     return this.currentDirection;

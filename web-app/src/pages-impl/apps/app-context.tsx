@@ -33,24 +33,19 @@ export function AppContextProvider(props: { children: ReactNode }) {
   });
 
   useEffect(() => {
-    const script = document.createElement('script');
-
-    script.src = '/app-plugin.js';
-
-    document.body.appendChild(script);
-
-    const interval = window.setInterval(async () => {
-      if (window.explore8Land) {
-        window.clearInterval(interval);
-
-        const context = await window.explore8Land.getContext();
-
-        replaceState({
-          status: CommunicatedDataStatus.Done,
-          data: { ...context, explore8Land: window.explore8Land },
-        });
+    const listener = (e: MessageEvent) => {
+      if (
+        e.data &&
+        typeof e.data === 'object' &&
+        e.data.event === '8land:context'
+      ) {
+        window.removeEventListener('message', listener);
       }
-    }, 500);
+    };
+
+    window.addEventListener('message', listener);
+
+    window.parent.postMessage('8land:context:get', '*');
   }, []);
 
   return (

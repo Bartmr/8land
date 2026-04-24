@@ -14,7 +14,28 @@ function Content() {
       const explore8Land = appContext.data.explore8Land;
 
       explore8Land.listenToGamepad((e) => {
-        replaceEventData(e);
+        window.addEventListener('message', (e) => {
+          if (
+            [
+              '8land:gamepad:direction:up',
+              '8land:gamepad:direction:down',
+              '8land:gamepad:direction:left',
+              '8land:gamepad:direction:right',
+              '8land:gamepad:direction:none',
+
+              '8land:gamepad:a:pressed',
+              '8land:gamepad:a:released',
+
+              '8land:gamepad:b:pressed',
+              '8land:gamepad:b:released',
+            ].includes(e.data)
+          ) {
+            const trimmed = e.data.replace('8land:gamepad:', '');
+
+            replaceEventData(trimmed);
+          }
+        });
+
       });
     }
   }, [appContext]);
@@ -30,7 +51,7 @@ function Content() {
       <button
         className="mt-3"
         onClick={() => {
-          appContext.data?.explore8Land.stopMusic();
+          window.parent.postMessage('8land:music:stop', '*');
         }}
       >
         Stop music
