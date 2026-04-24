@@ -4,7 +4,7 @@ import { Direction } from './screens/land/grid.types';
 type ScreensWithEscape = 'appScreen' | 'dialogueScreen' | 'landScreen';
 type EscapeCallback = () => 'stop-propagation' | 'continue-propagation';
 
-export class Gamepad {
+export class KeypadBroker {
   private currentDirection: Direction = Direction.NONE;
   private pressedDirections: Direction[] = [];
 
@@ -22,8 +22,8 @@ export class Gamepad {
 
   sendToIframe(
     message:
-      | `8land:gamepad:direction:${Direction}`
-      | `8land:gamepad:${'a' | 'b'}:${'pressed' | 'released'}`,
+      | `8land:keypad:direction:${Direction}`
+      | `8land:keypad:${'a' | 'b'}:${'pressed' | 'released'}`,
   ) {
     this.currentIframe?.contentWindow?.postMessage(message, '*');
   }
@@ -33,7 +33,7 @@ export class Gamepad {
     this.pressedDirections.push(direction);
     this.currentDirection = direction;
 
-    this.sendToIframe(`8land:gamepad:direction:${this.currentDirection}`);
+    this.sendToIframe(`8land:keypad:direction:${this.currentDirection}`);
   }
   directionWasReleased(direction: Direction) {
     this.pressedDirections = this.pressedDirections.filter(
@@ -42,20 +42,20 @@ export class Gamepad {
 
     if (this.pressedDirections.length === 0) {
       this.currentDirection = Direction.NONE;
-      this.sendToIframe(`8land:gamepad:direction:none`);
+      this.sendToIframe(`8land:keypad:direction:none`);
     } else {
       this.currentDirection =
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         this.pressedDirections[this.pressedDirections.length - 1]!;
 
-      this.sendToIframe(`8land:gamepad:direction:${this.currentDirection}`);
+      this.sendToIframe(`8land:keypad:direction:${this.currentDirection}`);
     }
   }
   // NIPPLE METHODS
   setDirection(direction: Direction) {
     this.currentDirection = direction;
 
-    this.sendToIframe(`8land:gamepad:direction:${this.currentDirection}`);
+    this.sendToIframe(`8land:keypad:direction:${this.currentDirection}`);
   }
   getDirection() {
     return this.currentDirection;
@@ -68,7 +68,7 @@ export class Gamepad {
   A_keyWasPressed() {
     this.A_isPressed = true;
 
-    this.sendToIframe(`8land:gamepad:a:pressed`);
+    this.sendToIframe(`8land:keypad:a:pressed`);
 
     this.A_pressed_callbacks.forEach((cb) => {
       cb();
@@ -77,7 +77,7 @@ export class Gamepad {
   A_keyWasReleased() {
     this.A_isPressed = false;
 
-    this.sendToIframe(`8land:gamepad:a:released`);
+    this.sendToIframe(`8land:keypad:a:released`);
   }
   isAPressed() {
     return this.A_isPressed;
@@ -96,7 +96,7 @@ export class Gamepad {
   B_keyWasPressed() {
     this.B_isPressed = true;
 
-    this.sendToIframe(`8land:gamepad:b:pressed`);
+    this.sendToIframe(`8land:keypad:b:pressed`);
 
     this.B_pressed_callbacks.forEach((cb) => {
       cb();
@@ -105,7 +105,7 @@ export class Gamepad {
   B_keyWasReleased() {
     this.B_isPressed = false;
 
-    this.sendToIframe(`8land:gamepad:b:released`);
+    this.sendToIframe(`8land:keypad:b:released`);
   }
   isBPressed() {
     return this.B_isPressed;
@@ -171,7 +171,7 @@ export class Gamepad {
   }
 }
 
-export function useGamepad() {
-  const gamepad = useMemo(() => new Gamepad(), [])
-  return gamepad
+export function useKeypadBroker() {
+  const keypad = useMemo(() => new KeypadBroker(), [])
+  return keypad
 }

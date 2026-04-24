@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 import { LandScreenService } from '../land/land-screen.service';
 import { throwError } from '../../../../../throw-error';
-import { Gamepad } from '../../gamepad';
+import { KeypadBroker } from '../../keypad-broker';
 
 export class DialogueService {
   private render: () => void;
@@ -66,7 +66,7 @@ export class DialogueService {
 }
 
 export function DialogueScreen(props: {
-  gamepad: Gamepad,
+  keypad: KeypadBroker,
   onService: (musicService: DialogueService) => void;
   onOpen: () => void;
   onClose: () => void;
@@ -83,19 +83,19 @@ export function DialogueScreen(props: {
       landScreenServiceRef: props.landScreenServiceRef,
     });
 
-    const gamepad = props.gamepad;
+    const keypad = props.keypad;
 
     const onPressing_A = () => {
       sv.close();
     };
 
-    gamepad.onPressing_A(onPressing_A);
+    keypad.onPressing_A(onPressing_A);
 
     const onPressing_B = () => {
       sv.close();
     };
 
-    gamepad.onPressing_B(onPressing_B);
+    keypad.onPressing_B(onPressing_B);
 
     replaceService(sv);
     props.onService(sv);
@@ -110,15 +110,15 @@ export function DialogueScreen(props: {
       return 'continue-propagation' as const;
     };
 
-    gamepad.onPressing_Escape(onPressing_Escape, 'dialogueScreen');
+    keypad.onPressing_Escape(onPressing_Escape, 'dialogueScreen');
 
     replaceService(sv);
     props.onService(sv);
 
     return () => {
-      gamepad.removePressing_A_Callback(onPressing_A);
-      gamepad.removePressing_B_Callback(onPressing_B);
-      gamepad.removePressing_Escape_Callback('dialogueScreen');
+      keypad.removePressing_A_Callback(onPressing_A);
+      keypad.removePressing_B_Callback(onPressing_B);
+      keypad.removePressing_Escape_Callback('dialogueScreen');
     };
   }, []);
 

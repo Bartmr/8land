@@ -5,13 +5,13 @@ import { MusicService } from '../../music-ticker';
 import { IframeWrapper } from './iframe-wrapper';
 import { AppContext } from './app-screen.types';
 import { AppService } from './app-screen';
-import { Gamepad } from '../../gamepad';
+import { KeypadBroker } from '../../keypad-broker';
 
 export function IframeGate(props: {
   context: AppContext;
   appService: AppService;
   musicService: MusicService;
-  gamepad: Gamepad
+  keypad: KeypadBroker
 }) {
   const [confirmed, replaceConfirmed] = useState(false);
 
@@ -25,25 +25,25 @@ export function IframeGate(props: {
     } else {
       replaceConfirmed(false);
 
-      const gamepad = props.gamepad;
+      const keypad = props.keypad;
 
       const onPressing_A = () => {
         replaceConfirmed(true);
-        gamepad.removePressing_A_Callback(onPressing_A);
-        gamepad.removePressing_B_Callback(onPressing_B);
+        keypad.removePressing_A_Callback(onPressing_A);
+        keypad.removePressing_B_Callback(onPressing_B);
       };
 
-      gamepad.onPressing_A(onPressing_A);
+      keypad.onPressing_A(onPressing_A);
 
       const onPressing_B = () => {
         props.appService.close();
       };
 
-      gamepad.onPressing_B(onPressing_B);
+      keypad.onPressing_B(onPressing_B);
 
       return () => {
-        gamepad.removePressing_A_Callback(onPressing_A);
-        gamepad.removePressing_B_Callback(onPressing_B);
+        keypad.removePressing_A_Callback(onPressing_A);
+        keypad.removePressing_B_Callback(onPressing_B);
       };
     }
   }, [props.context.url]);
@@ -62,7 +62,7 @@ export function IframeGate(props: {
         <IframeWrapper
           context={props.context}
           musicService={props.musicService}
-          gamepad={props.gamepad}
+          keypad={props.keypad}
         />
       ) : (
         <div

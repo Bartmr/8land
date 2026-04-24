@@ -4,8 +4,8 @@ import { v4 } from 'uuid';
 import { MusicService } from '../../music-ticker';
 import { LandScreenService } from '../land/land-screen.service';
 import { AppContext } from './app-screen.types';
-import { Gamepad } from '../../gamepad';
-import { ESCAPE_BUTTON_SELECTOR } from '../../keypad';
+import { KeypadBroker } from '../../keypad-broker';
+import { EscapeKeyActive } from '../../keypad';
 import { IframeGate } from './iframe-gate';
 import { throwError } from '../../../../../throw-error';
 
@@ -88,7 +88,7 @@ export function AppScreen(props: {
   onClose: () => void;
   landScreenServiceRef: React.MutableRefObject<LandScreenService | null>;
   musicService: MusicService;
-  gamepad: Gamepad
+  keypad: KeypadBroker
 }) {
   const [, replaceRenderId] = useState<string>(v4());
   const [service, replaceService] = useState<AppService | undefined>();
@@ -102,7 +102,7 @@ export function AppScreen(props: {
       musicService: props.musicService,
     });
 
-    const gamepad = props.gamepad;
+    const keypad = props.keypad;
 
     const onPressing_Escape = () => {
       if (sv.active) {
@@ -113,44 +113,27 @@ export function AppScreen(props: {
       return 'continue-propagation' as const;
     };
 
-    gamepad.onPressing_Escape(onPressing_Escape, 'appScreen');
+    keypad.onPressing_Escape(onPressing_Escape, 'appScreen');
 
     replaceService(sv);
     props.onService(sv);
 
     return () => {
-      gamepad.removePressing_Escape_Callback('appScreen');
+      keypad.removePressing_Escape_Callback('appScreen');
     };
   }, []);
 
   return (
     <>
       {service && service.active ? (
-        <style>
-          {`
-@keyframes escape-pulse {
-  10% {
-    background-color: #ffff55;
-    transform: scale3d(1.05, 1.05, 1.05);
-  }
-  100% {
-    background-color: var(--bs-light);
-    transform: scale3d(1, 1, 1);
-  }
-}
-
-${ESCAPE_BUTTON_SELECTOR} {
-  animation: escape-pulse 1.5s infinite;
-}
-    `}
-        </style>
+        <EscapeKeyActive />
       ) : null}
       {service && service.currentContext ? (
         <IframeGate
           context={service.currentContext}
           appService={service}
           musicService={props.musicService}
-          gamepad={props.gamepad}
+          keypad={props.keypad}
         />
       ) : null}
     </>

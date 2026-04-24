@@ -11,13 +11,13 @@ import { MusicService, MusicTicker } from './music-ticker';
 import * as styles from './game-frame.module.scss';
 import { ScreenSwitcher } from './screen-switcher';
 import { ResumeLandNavigationDTO } from '../../../main-api/routes/lands/lands.dtos';
-import { Gamepad, useGamepad } from './gamepad';
+import { KeypadBroker, useKeypadBroker } from './keypad-broker';
 
 export function GameFrame(props: {
   resumedLand: ResumeLandNavigationDTO;
   session: null | UserAuthSessionData;
 }) {
-  const gamepad = useGamepad();
+  const keypad = useKeypadBroker();
   const [musicService, replaceMusicService] = useState<
     MusicService | undefined
   >();
@@ -29,7 +29,7 @@ export function GameFrame(props: {
         <ScreenSwitcher
           session={props.session}
           resumedLand={props.resumedLand}
-          gamepad={gamepad}
+          keypad={keypad}
           musicService={musicService}
           changeLandNameDisplay={replaceLandName}
         />
@@ -70,7 +70,7 @@ export function GameFrame(props: {
 
         <MusicTicker onService={(s) => replaceMusicService(s)} />
       </div>
-      <Keypad gamepad={gamepad}/>
+      <Keypad keypad={keypad}/>
     </div>
   );
 }

@@ -5,11 +5,11 @@ import { CommunicatedDataGate } from '../../../../../ui/communicated-data-gate';
 import { CommunicatedDataStatus } from '../../../../../communicated-data/communicated-data-types';
 import { MusicService } from '../../music-ticker';
 import { AppContext } from './app-screen.types';
-import { Gamepad } from '../../gamepad';
+import { KeypadBroker } from '../../keypad-broker';
 
 export function IframeWrapper(props: {
   context: AppContext;
-  gamepad: Gamepad;
+  keypad: KeypadBroker;
   musicService: MusicService;
 }) {
   const iframe = useRef<null | HTMLIFrameElement>(null);
@@ -39,7 +39,7 @@ export function IframeWrapper(props: {
     return () => {
       window.removeEventListener('message', listener);
 
-      props.gamepad.clearCurrentIframe();
+      props.keypad.clearCurrentIframe();
     };
   }, []);
 
@@ -78,7 +78,7 @@ export function IframeWrapper(props: {
             if (ref) {
               iframe.current = ref;
 
-              props.gamepad.setCurrentIframe(ref);
+              props.keypad.setCurrentIframe(ref);
             }
           }}
           onLoad={() => {

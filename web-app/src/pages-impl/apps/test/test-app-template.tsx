@@ -15,20 +15,20 @@ function Content() {
       window.addEventListener('message', (e) => {
         if (
           [
-            '8land:gamepad:direction:up',
-            '8land:gamepad:direction:down',
-            '8land:gamepad:direction:left',
-            '8land:gamepad:direction:right',
-            '8land:gamepad:direction:none',
+            '8land:keypad:direction:up',
+            '8land:keypad:direction:down',
+            '8land:keypad:direction:left',
+            '8land:keypad:direction:right',
+            '8land:keypad:direction:none',
 
-            '8land:gamepad:a:pressed',
-            '8land:gamepad:a:released',
+            '8land:keypad:a:pressed',
+            '8land:keypad:a:released',
 
-            '8land:gamepad:b:pressed',
-            '8land:gamepad:b:released',
+            '8land:keypad:b:pressed',
+            '8land:keypad:b:released',
           ].includes(e.data)
         ) {
-          const trimmed = e.data.replace('8land:gamepad:', '');
+          const trimmed = e.data.replace('8land:keypad:', '');
 
           replaceEventData(trimmed);
         }

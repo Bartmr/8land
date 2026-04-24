@@ -23,7 +23,7 @@ import { LandsAPI } from '../../../../../main-api/routes/lands/lands-api';
 import { NavigateToLandDTO } from '../../../../../main-api/routes/lands/lands.dtos';
 import { TrainAPI } from '../../../../../main-api/routes/train/train.api';
 import { throwError } from '../../../../../throw-error';
-import { Gamepad } from '../../gamepad';
+import { KeypadBroker } from '../../keypad-broker';
 
 export class LandScene extends Phaser.Scene {
   private gridPhysics?: GridPhysics;
@@ -31,7 +31,7 @@ export class LandScene extends Phaser.Scene {
   protected previousLandSceneArguments: LandSceneArguments | null;
   protected args: LandSceneArguments;
   protected dependencies: {
-    gamepad: Gamepad,
+    keypad: KeypadBroker,
     musicService: MusicService;
     dialogueService: DialogueService;
     appService: AppService;
@@ -354,7 +354,7 @@ export class LandScene extends Phaser.Scene {
       new Phaser.Math.Vector2(position.x, position.y),
     );
 
-    this.gridPhysics = new GridPhysics(player, this.dependencies.gamepad, {
+    this.gridPhysics = new GridPhysics(player, this.dependencies.keypad, {
       land: {
         id: this.args.land.id,
         blocks: [

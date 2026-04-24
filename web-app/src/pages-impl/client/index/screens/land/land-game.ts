@@ -14,7 +14,7 @@ import { StaticBlockType } from '../../../../../main-api/routes/lands/upload-ass
 import { LandsAPI } from '../../../../../main-api/routes/lands/lands-api';
 import { TrainAPI } from '../../../../../main-api/routes/train/train.api';
 import { throwError } from '../../../../../throw-error';
-import { Gamepad } from '../../gamepad';
+import { KeypadBroker } from '../../keypad-broker';
 
 export async function runLandGame(
   args: {
@@ -22,7 +22,7 @@ export async function runLandGame(
     session: null | UserAuthSessionData;
   },
   dependencies: {
-    gamepad: Gamepad;
+    keypad: KeypadBroker;
     musicService: MusicService;
     dialogueService: DialogueService;
     appService: AppService;

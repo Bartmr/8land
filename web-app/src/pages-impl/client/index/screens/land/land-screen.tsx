@@ -12,11 +12,11 @@ import { useLandsAPI } from '../../../../../main-api/routes/lands/lands-api';
 import { useTrainAPI } from '../../../../../main-api/routes/train/train.api';
 import { navigate } from 'gatsby';
 import { USER_ROUTE } from '../../../user/user-routes';
-import { Gamepad } from '../../gamepad';
+import { KeypadBroker } from '../../keypad-broker';
 import { throwError } from '../../../../../throw-error';
 
 export function LandScreen(props: {
-  gamepad: Gamepad,
+  keypad: KeypadBroker,
   musicService: MusicService;
   dialogueService: DialogueService;
   appService: AppService;
@@ -43,7 +43,7 @@ export function LandScreen(props: {
       await runLandGame(
         { resumedLand: props.resumedLand, session: props.session },
         {
-          gamepad: props.gamepad,
+          keypad: props.keypad,
           landsAPI: landsApi,
           musicService: props.musicService,
           dialogueService: props.dialogueService,
@@ -74,10 +74,10 @@ export function LandScreen(props: {
       return 'stop-propagation' as const;
     };
 
-    props.gamepad.onPressing_Escape(onPressing_Escape, 'landScreen');
+    props.keypad.onPressing_Escape(onPressing_Escape, 'landScreen');
 
     return () => {
-      props.gamepad.removePressing_Escape_Callback('landScreen');
+      props.keypad.removePressing_Escape_Callback('landScreen');
     };
   }, []);
 

@@ -3,11 +3,32 @@ import nipplejs from 'nipplejs';
 import { useEffect } from 'react';
 import { Direction } from './screens/land/grid.types';
 import { throwError } from '../../../throw-error';
-import { Gamepad } from './gamepad'
+import { KeypadBroker } from './keypad-broker'
 
-export const ESCAPE_BUTTON_SELECTOR = '#game-button-escape';
+const ESCAPE_BUTTON_SELECTOR = '#game-button-escape';
 
-export function Keypad(props: { gamepad: Gamepad }) {
+export function EscapeKeyActive() {
+  return <style>
+          {`
+@keyframes escape-pulse {
+  10% {
+    background-color: #ffff55;
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+  100% {
+    background-color: var(--bs-light);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+${ESCAPE_BUTTON_SELECTOR} {
+  animation: escape-pulse 1.5s infinite;
+}
+    `}
+  </style>
+}
+
+export function Keypad(props: { keypad: KeypadBroker }) {
   useEffect(() => {
     const nippleZone = document.querySelector('#game-nipple') || throwError();
 
@@ -18,61 +39,61 @@ export function Keypad(props: { gamepad: Gamepad }) {
       zone: nippleZone,
     });
 
-    const gamepad = props.gamepad;
+    const keypad = props.keypad;
 
     nipple.on('dir:up', () => {
-      gamepad.setDirection(Direction.UP);
+      keypad.setDirection(Direction.UP);
     });
 
     nipple.on('dir:down', () => {
-      gamepad.setDirection(Direction.DOWN);
+      keypad.setDirection(Direction.DOWN);
     });
 
     nipple.on('dir:left', () => {
-      gamepad.setDirection(Direction.LEFT);
+      keypad.setDirection(Direction.LEFT);
     });
 
     nipple.on('dir:right', () => {
-      gamepad.setDirection(Direction.RIGHT);
+      keypad.setDirection(Direction.RIGHT);
     });
 
     nipple.on('end', () => {
-      gamepad.setDirection(Direction.NONE);
+      keypad.setDirection(Direction.NONE);
     });
 
     const gameButtonA =
       document.querySelector('#game-button-a') || throwError();
     const gameButtonAPressedListener = () => {
-      gamepad.A_keyWasPressed();
+      keypad.A_keyWasPressed();
     };
     gameButtonA.addEventListener('pointerdown', gameButtonAPressedListener);
     const gameButtonAReleasedListener = () => {
-      gamepad.A_keyWasReleased();
+      keypad.A_keyWasReleased();
     };
     gameButtonA.addEventListener('pointerup', gameButtonAReleasedListener);
 
     const gameButtonB =
       document.querySelector('#game-button-b') || throwError();
     const gameButtonBPressedListener = () => {
-      gamepad.B_keyWasPressed();
+      keypad.B_keyWasPressed();
     };
     gameButtonB.addEventListener('pointerdown', gameButtonBPressedListener);
     const gameButtonBReleasedListener = () => {
-      gamepad.B_keyWasReleased();
+      keypad.B_keyWasReleased();
     };
     gameButtonB.addEventListener('pointerup', gameButtonBReleasedListener);
 
     const gameButtonEscape =
       document.querySelector('#game-button-escape') || throwError();
     const gameButtonEscapePressedListener = () => {
-      gamepad.Escape_keyWasPressed();
+      keypad.Escape_keyWasPressed();
     };
     gameButtonEscape.addEventListener(
       'pointerdown',
       gameButtonEscapePressedListener,
     );
     const gameButtonEscapeReleasedListener = () => {
-      gamepad.Escape_keyWasReleased();
+      keypad.Escape_keyWasReleased();
     };
     gameButtonEscape.addEventListener(
       'pointerup',
@@ -81,33 +102,33 @@ export function Keypad(props: { gamepad: Gamepad }) {
 
     const keyDownListener = (e: KeyboardEvent) => {
       if (e.key === 'ArrowUp') {
-        gamepad.directionWasPressed(Direction.UP);
+        keypad.directionWasPressed(Direction.UP);
       } else if (e.key === 'ArrowDown') {
-        gamepad.directionWasPressed(Direction.DOWN);
+        keypad.directionWasPressed(Direction.DOWN);
       } else if (e.key === 'ArrowLeft') {
-        gamepad.directionWasPressed(Direction.LEFT);
+        keypad.directionWasPressed(Direction.LEFT);
       } else if (e.key === 'ArrowRight') {
-        gamepad.directionWasPressed(Direction.RIGHT);
+        keypad.directionWasPressed(Direction.RIGHT);
       } else if (e.key === 'a') {
-        gamepad.A_keyWasPressed();
+        keypad.A_keyWasPressed();
       } else if (e.key === 's') {
-        gamepad.B_keyWasPressed();
+        keypad.B_keyWasPressed();
       }
     };
 
     const keyUpListener = (e: KeyboardEvent) => {
       if (e.key === 'ArrowUp') {
-        gamepad.directionWasReleased(Direction.UP);
+        keypad.directionWasReleased(Direction.UP);
       } else if (e.key === 'ArrowDown') {
-        gamepad.directionWasReleased(Direction.DOWN);
+        keypad.directionWasReleased(Direction.DOWN);
       } else if (e.key === 'ArrowLeft') {
-        gamepad.directionWasReleased(Direction.LEFT);
+        keypad.directionWasReleased(Direction.LEFT);
       } else if (e.key === 'ArrowRight') {
-        gamepad.directionWasReleased(Direction.RIGHT);
+        keypad.directionWasReleased(Direction.RIGHT);
       } else if (e.key === 'a') {
-        gamepad.A_keyWasReleased();
+        keypad.A_keyWasReleased();
       } else if (e.key === 's') {
-        gamepad.B_keyWasReleased();
+        keypad.B_keyWasReleased();
       }
     };
 

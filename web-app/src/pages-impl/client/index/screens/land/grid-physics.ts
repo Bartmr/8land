@@ -5,7 +5,7 @@ import { Player } from './player';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { DynamicBlockType } from '../../../../../main-api/routes/blocks/create/create-block.schemas';
 import { StaticBlockType, STATIC_BLOCK_TYPE_VALUES } from '../../../../../main-api/routes/lands/upload-assets/upload-land-assets.schemas';
-import { Gamepad } from '../../gamepad';
+import { KeypadBroker } from '../../keypad-broker';
 import { throwError } from '../../../../../throw-error';
 
 const Vector2 = Phaser.Math.Vector2;
@@ -20,7 +20,7 @@ const DIRECTION_TO_VECTOR: {
 };
 
 class GridPhysics {
-  private gamePad: Gamepad;
+  private gamePad: KeypadBroker;
 
   private movingDirection: Direction = Direction.NONE;
   private facingDirection: Direction = Direction.DOWN;
@@ -31,7 +31,7 @@ class GridPhysics {
 
   constructor(
     private player: Player,
-    private gamepad: Gamepad,
+    private keypad: KeypadBroker,
     private context: {
       land: {
         id: string;
@@ -60,7 +60,7 @@ class GridPhysics {
       dialogueService: DialogueService;
     },
   ) {
-    this.gamePad = gamepad
+    this.gamePad = keypad
   }
 
   update(delta: number) {
