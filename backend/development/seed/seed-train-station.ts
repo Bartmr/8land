@@ -30,6 +30,13 @@ export async function seedTrainStation({
   const doorBlocksRepo = eM.getCustomRepository(DoorBlockRepository);
   const appBlocksRepo = eM.getCustomRepository(AppBlockRepository);
 
+  const ticketMachine = await appBlocksRepo.create(
+    new AppBlock({
+      url: 'http://localhost:8000/apps/train-ticket-machine',
+    }),
+  );
+
+
   const trainStation = await landsRepo.create(
     new Land({
       name: 'Town of Humble Beginnings - Train Station',
@@ -39,7 +46,7 @@ export async function seedTrainStation({
       backgroundMusicUrl: 'https://api.soundcloud.com/tracks/1118223961',
       doorBlocks: Promise.resolve([]),
       doorBlocksReferencing: Promise.resolve([]),
-      appBlocks: [],
+      appBlocks: [ticketMachine],
       hasAssets: true,
       territories: Promise.resolve([]),
       world: null,
@@ -56,14 +63,7 @@ export async function seedTrainStation({
     }),
   );
 
-  const ticketMachine = await appBlocksRepo.create(
-    new AppBlock({
-      inLand: Promise.resolve(trainStation),
-      inTerritory: Promise.resolve(null),
-      url: 'http://localhost:8000/apps/train-ticket-machine',
-    }),
-  );
-
+  
   const mapString = await readFile(
     path.resolve(process.cwd(), 'development/seed/land/assets/train-station-map.json'),
     { encoding: 'utf-8' },

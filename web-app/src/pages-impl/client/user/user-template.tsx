@@ -85,7 +85,7 @@ export function UserTemplate(_props: RouteComponentProps) {
                   </h2>
                   <p>
                     If you are having trouble leaving a land, you can teleport
-                    yourself back to a safe place, like the trains station, by
+                    yourself escape to a safe place, like the trains station, by
                     clicking the button below
                   </p>
                   <div className="d-flex align-items-center">

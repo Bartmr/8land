@@ -328,7 +328,7 @@ export class LandScene extends Phaser.Scene {
 
     if (!position) {
       this.dependencies.dialogueService.openText(
-        'This land does not have any exits. You should use the escape button in the user settings to go back to the outdoors',
+        'This land does not have any exits. You should use the back button in the user settings to go back to the outdoors',
       );
 
       position = {

@@ -40,6 +40,11 @@ export function AppContextProvider(props: { children: ReactNode }) {
         e.data.event === '8land:context'
       ) {
         window.removeEventListener('message', listener);
+
+        replaceState({
+          status: CommunicatedDataStatus.Done,
+          data: e.data.data,
+        });
       }
     };
 

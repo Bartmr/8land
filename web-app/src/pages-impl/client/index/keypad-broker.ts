@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { Direction } from './screens/land/grid.types';
 
-type ScreensWithEscape = 'appScreen' | 'dialogueScreen' | 'landScreen';
-type EscapeCallback = () => 'stop-propagation' | 'continue-propagation';
+type ScreensWithBack = 'appScreen' | 'dialogueScreen' | 'landScreen';
+type BackCallback = () => 'stop-propagation' | 'continue-propagation';
 
 export class KeypadBroker {
   private currentDirection: Direction = Direction.NONE;
@@ -10,12 +10,12 @@ export class KeypadBroker {
 
   private A_isPressed = false;
   private B_isPressed = false;
-  private Escape_isPressed = false;
+  private Back_isPressed = false;
 
   private A_pressed_callbacks: Set<() => void> = new Set();
   private B_pressed_callbacks: Set<() => void> = new Set();
-  private Escape_pressed_callbacks: {
-    [K in ScreensWithEscape]?: EscapeCallback;
+  private Back_pressed_callbacks: {
+    [K in ScreensWithBack]?: BackCallback;
   } = {};
 
   private currentIframe?: HTMLIFrameElement;
@@ -121,43 +121,43 @@ export class KeypadBroker {
   //
   //
 
-  Escape_keyWasPressed() {
-    this.Escape_isPressed = true;
+  Back_keyWasPressed() {
+    this.Back_isPressed = true;
 
     let stop = false;
 
-    if (this.Escape_pressed_callbacks['appScreen']) {
+    if (this.Back_pressed_callbacks['appScreen']) {
       stop =
-        this.Escape_pressed_callbacks['appScreen']() === 'stop-propagation'
+        this.Back_pressed_callbacks['appScreen']() === 'stop-propagation'
           ? true
           : false;
     }
 
-    if (this.Escape_pressed_callbacks['dialogueScreen'] && !stop) {
+    if (this.Back_pressed_callbacks['dialogueScreen'] && !stop) {
       stop =
-        this.Escape_pressed_callbacks['dialogueScreen']() === 'stop-propagation'
+        this.Back_pressed_callbacks['dialogueScreen']() === 'stop-propagation'
           ? true
           : false;
     }
 
-    if (this.Escape_pressed_callbacks['landScreen'] && !stop) {
+    if (this.Back_pressed_callbacks['landScreen'] && !stop) {
       stop =
-        this.Escape_pressed_callbacks['landScreen']() === 'stop-propagation'
+        this.Back_pressed_callbacks['landScreen']() === 'stop-propagation'
           ? true
           : false;
     }
   }
-  Escape_keyWasReleased() {
-    this.Escape_isPressed = false;
+  Back_keyWasReleased() {
+    this.Back_isPressed = false;
   }
-  isEscapePressed() {
-    return this.Escape_isPressed;
+  isBackPressed() {
+    return this.Back_isPressed;
   }
-  onPressing_Escape(cb: EscapeCallback, screen: ScreensWithEscape) {
-    this.Escape_pressed_callbacks[screen] = cb;
+  onPressing_Back(cb: BackCallback, screen: ScreensWithBack) {
+    this.Back_pressed_callbacks[screen] = cb;
   }
-  removePressing_Escape_Callback(screen: ScreensWithEscape) {
-    this.Escape_pressed_callbacks[screen] = undefined;
+  removePressing_Back_Callback(screen: ScreensWithBack) {
+    this.Back_pressed_callbacks[screen] = undefined;
   }
 
   //

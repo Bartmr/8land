@@ -127,6 +127,12 @@ async function seed() {
       }),
     );
 
+    const townOfHumbleBeginningsApp1 = await appBlocksRepository.create(
+      new AppBlock({
+        url: 'http://localhost:8000/apps/test',
+      }),
+    );
+
     const townOfHumbleBeginnings = await landsRepository.create(
       new Land({
         name: 'Town of Humble Beginnings',
@@ -134,7 +140,7 @@ async function seed() {
         backgroundMusicUrl: 'https://api.soundcloud.com/tracks/566456658',
         doorBlocks: Promise.resolve([]),
         doorBlocksReferencing: Promise.resolve([]),
-        appBlocks: [],
+        appBlocks: [townOfHumbleBeginningsApp1],
         hasAssets: true,
         territories: Promise.resolve([]),
         world: null,
@@ -291,14 +297,6 @@ async function seed() {
         inTerritory: Promise.resolve(null),
         inLand: townOfHumbleBeginnings,
         toLand: townOfHumbleBeginningsTemple,
-      }),
-    );
-
-    const townOfHumbleBeginningsApp1 = await appBlocksRepository.create(
-      new AppBlock({
-        inTerritory: Promise.resolve(null),
-        inLand: Promise.resolve(townOfHumbleBeginnings),
-        url: 'http://localhost:8000/apps/test',
       }),
     );
 

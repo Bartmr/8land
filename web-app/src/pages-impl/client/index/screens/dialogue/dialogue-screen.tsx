@@ -100,7 +100,7 @@ export function DialogueScreen(props: {
     replaceService(sv);
     props.onService(sv);
 
-    const onPressing_Escape = () => {
+    const onPressing_Back = () => {
       if (sv.lockCurrentScreen) {
         sv.close();
 
@@ -110,7 +110,7 @@ export function DialogueScreen(props: {
       return 'continue-propagation' as const;
     };
 
-    keypad.onPressing_Escape(onPressing_Escape, 'dialogueScreen');
+    keypad.onPressing_Back(onPressing_Back, 'dialogueScreen');
 
     replaceService(sv);
     props.onService(sv);
@@ -118,7 +118,7 @@ export function DialogueScreen(props: {
     return () => {
       keypad.removePressing_A_Callback(onPressing_A);
       keypad.removePressing_B_Callback(onPressing_B);
-      keypad.removePressing_Escape_Callback('dialogueScreen');
+      keypad.removePressing_Back_Callback('dialogueScreen');
     };
   }, []);
 

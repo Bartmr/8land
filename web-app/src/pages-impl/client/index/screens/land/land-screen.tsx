@@ -66,7 +66,7 @@ export function LandScreen(props: {
     })();
 
 
-    const onPressing_Escape = () => {
+    const onPressing_Back = () => {
       (async () => {
         await navigate(USER_ROUTE.getHref({ section: 'escape' }));
       })();
@@ -74,10 +74,10 @@ export function LandScreen(props: {
       return 'stop-propagation' as const;
     };
 
-    props.keypad.onPressing_Escape(onPressing_Escape, 'landScreen');
+    props.keypad.onPressing_Back(onPressing_Back, 'landScreen');
 
     return () => {
-      props.keypad.removePressing_Escape_Callback('landScreen');
+      props.keypad.removePressing_Back_Callback('landScreen');
     };
   }, []);
 

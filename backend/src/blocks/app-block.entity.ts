@@ -6,11 +6,12 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 't
 export class AppBlock {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
-  @ManyToOne(() => Land, { lazy: true, nullable: true })
+
+  @ManyToOne(() => Land, (land) => land.appBlocks, { nullable: true })
   @JoinColumn()
   inLand!: Promise<Land | null>;
 
-  @ManyToOne(() => Territory, { lazy: true, nullable: true })
+  @ManyToOne(() => Territory, (territory) => territory.appBlocks, { nullable: true })
   @JoinColumn()
   inTerritory!: Promise<Territory | null>;
 
@@ -18,19 +19,13 @@ export class AppBlock {
   url!: string;
 
   constructor(props: {
-    inLand: Promise<Land | null>;
-    inTerritory: Promise<Territory | null>;
     url: string;
   })
   constructor()
   constructor(props?: {
-    inLand: Promise<Land | null>;
-    inTerritory: Promise<Territory | null>;
     url: string;
   }) {
     if (props) {
-      this.inLand = props.inLand;
-      this.inTerritory = props.inTerritory;
       this.url = props.url;
     }
   }
