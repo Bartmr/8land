@@ -56,25 +56,5 @@ declare global {
         isPaused(callback: (...args: unknown[]) => void): void;
       });
     };
-
-    explore8Land?: {
-      getContext: () => Promise<AppContext>;
-      listenToGamepad(
-        listener: (
-          event:
-            | 'up'
-            | 'down'
-            | 'left'
-            | 'right'
-            | 'none'
-            | 'a:pressed'
-            | 'a:released'
-            | 'b:pressed'
-            | 'b:released',
-        ) => void,
-      ): void;
-      removeGamepadListener(listener: Function): void;
-      stopMusic(): void;
-    };
   }
 }

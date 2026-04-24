@@ -11,32 +11,29 @@ function Content() {
 
   useEffect(() => {
     if (appContext.status === CommunicatedDataStatus.Done) {
-      const explore8Land = appContext.data.explore8Land;
 
-      explore8Land.listenToGamepad((e) => {
-        window.addEventListener('message', (e) => {
-          if (
-            [
-              '8land:gamepad:direction:up',
-              '8land:gamepad:direction:down',
-              '8land:gamepad:direction:left',
-              '8land:gamepad:direction:right',
-              '8land:gamepad:direction:none',
+      window.addEventListener('message', (e) => {
+        if (
+          [
+            '8land:gamepad:direction:up',
+            '8land:gamepad:direction:down',
+            '8land:gamepad:direction:left',
+            '8land:gamepad:direction:right',
+            '8land:gamepad:direction:none',
 
-              '8land:gamepad:a:pressed',
-              '8land:gamepad:a:released',
+            '8land:gamepad:a:pressed',
+            '8land:gamepad:a:released',
 
-              '8land:gamepad:b:pressed',
-              '8land:gamepad:b:released',
-            ].includes(e.data)
-          ) {
-            const trimmed = e.data.replace('8land:gamepad:', '');
+            '8land:gamepad:b:pressed',
+            '8land:gamepad:b:released',
+          ].includes(e.data)
+        ) {
+          const trimmed = e.data.replace('8land:gamepad:', '');
 
-            replaceEventData(trimmed);
-          }
-        });
-
+          replaceEventData(trimmed);
+        }
       });
+
     }
   }, [appContext]);
 

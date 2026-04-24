@@ -14,7 +14,7 @@ import { AppContext } from '../client/index/screens/app/app-screen.types';
 import { throwError } from '../../throw-error';
 
 const AppContextContext = createContext<CommunicatedData<
-  AppContext & { explore8Land: NonNullable<Window['explore8Land']> }
+  AppContext
 > | null>(null);
 
 export function useAppContext() {
@@ -26,7 +26,7 @@ export function useAppContext() {
 export function AppContextProvider(props: { children: ReactNode }) {
   const [state, replaceState] = useState<
     CommunicatedData<
-      AppContext & { explore8Land: NonNullable<Window['explore8Land']> }
+      AppContext 
     >
   >({
     status: CommunicatedDataStatus.Loading,
