@@ -1,13 +1,13 @@
 import 'dotenv/config'
 
 import { DataSource } from "typeorm";
-import { EnvironmentVariables } from 'src/environment/environment-variables';
+import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
 import { AppBlock } from 'src/blocks/app-block.entity';
 import { DoorBlock } from 'src/blocks/door-block.entity';
 import { Land } from 'src/land/land.entity';
 import { NavigationState } from 'src/navigation/state/navigation-state.entity';
 import { Territory } from 'src/territories/territory.entity';
-import { AuthToken } from 'src/users/auth/tokens/auth-token.entity';
+import { UserAuthSession } from 'src/users/auth/sessions/auth-session.entity';
 import { World } from 'src/worlds/worlds.entity';
 import { User } from 'src/users/user.entity';
 import { Squash1775318794517 } from 'src/database/migrations/1775318794517-squash';
@@ -26,7 +26,7 @@ export const AppDataSourceOptions: DataSourceOptions = {
     Land,
     NavigationState,
     Territory,
-    AuthToken,
+    UserAuthSession,
     World,
     User,
   ],

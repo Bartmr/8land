@@ -7,7 +7,7 @@ import { DevStorageService } from './dev-storage.service';
 import { throwError } from 'src/throw-error';
 import fs from 'fs';
 import { promisify } from 'util';
-import { EnvironmentVariables } from 'src/environment/environment-variables';
+import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
 import { ProdStorageService } from './prod-storage.service';
 import { S3Client } from '@aws-sdk/client-s3';
 

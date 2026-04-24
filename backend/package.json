@@ -33,6 +33,7 @@
     "dotenv": "^16.0.1",
     "firebase-admin": "^13.7.0",
     "glob": "^8.0.3",
+    "jsonwebtoken": "^9.0.3",
     "pg": "^8.7.3",
     "read-chunk": "^4.0.2",
     "reflect-metadata": "^0.2.2",

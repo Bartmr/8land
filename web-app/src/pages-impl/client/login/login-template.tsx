@@ -27,7 +27,6 @@ const loginResponseSchema = z.union([
   z.object({
     status: z.literal(201),
     body: z.object({
-      authTokenId: z.string(),
       session: AuthenticationSessionSchema,
     }),
   }),

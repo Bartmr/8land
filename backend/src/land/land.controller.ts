@@ -48,7 +48,7 @@ import { WorldRepository } from 'src/worlds/worlds.repository';
 import { DeleteLandParametersDTO } from 'src/land/delete-land/delete-land.dto';
 import { PublicRoute } from 'src/users/auth/public-route.decorator';
 import { GetLandsToClaimDTO } from 'src/land/lands-to-claim/lands-to-claim.dto';
-import { EnvironmentVariables } from 'src/environment/environment-variables';
+import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
 
 class LandAssetsRequestDTO {
   map!: unknown;

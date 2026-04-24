@@ -4,7 +4,7 @@ import path from 'path';
 import { LOCAL_TEMPORARY_FILES_PATH } from '../temporary-files/temporary-files';
 import fs from 'fs';
 import { promisify } from 'util';
-import { EnvironmentVariables } from 'src/environment/environment-variables';
+import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
 import { EmailService } from './email.service';
 import { DevEmailService } from './dev-email.service';
 import { throwError } from 'src/throw-error';

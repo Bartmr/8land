@@ -2,6 +2,7 @@
 
 ```
 API_PORT=3000
+JWT_SECRET=secret
 
 LOG_DATABASES=true
 

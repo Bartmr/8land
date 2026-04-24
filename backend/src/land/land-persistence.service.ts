@@ -24,7 +24,7 @@ import {
   LAND_TILESET_SIZE_LIMIT,
 } from 'src/land/upload-assets/upload-land-assets.constants';
 import { StaticBlockType } from 'src/blocks/block.enums';
-import { EnvironmentVariables } from 'src/environment/environment-variables';
+import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
 import { z } from "zod"
 
 function getLandStorageKeys(landId: string) {

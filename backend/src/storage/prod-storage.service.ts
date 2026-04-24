@@ -3,7 +3,7 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
-import { EnvironmentVariables } from 'src/environment/environment-variables';
+import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
 import { throwError } from '../throw-error';
 import { ContentType, StorageService } from './storage.service';
 import { Readable } from 'stream';

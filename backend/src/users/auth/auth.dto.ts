@@ -9,6 +9,5 @@ export class AuthSessionDTO {
 }
 
 export class LoginResponseDTO {
-  authTokenId!: string;
   session!: AuthSessionDTO;
 }

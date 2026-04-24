@@ -19,7 +19,7 @@ import { AppBlockRepository } from 'src/blocks/app-block.repository';
 import { createTiledJSONSchema } from 'src/land/upload-assets/upload-land-assets.schemas';
 import { seedTrainStation } from './seed/seed-train-station';
 import { seedUserLand } from './seed/seed-user-land';
-import { EnvironmentVariables } from "src/environment/environment-variables";
+import { EnvironmentVariables } from "src/environment-variables/environment-variables";
 import { v4 } from "uuid";
 import { User } from "src/users/user.entity";
 import { Land } from "src/land/land.entity";

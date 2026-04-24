@@ -6,12 +6,11 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthContext } from './auth-context';
-import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
 import {
   PublicRouteMetadata,
   PUBLIC_ROUTE_METADATA_KEY,
 } from './public-route.decorator';
-import { AuthTokensService } from './tokens/auth-tokens.service';
+import { AuthSessionsService } from './sessions/auth-sessions.service';
 import { z } from 'zod';
 import { AppRequest } from 'src/requests/request-types';
 
@@ -28,7 +27,7 @@ const authTokenKeySchema = z.uuid();
 export class AuthGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private tokensService: AuthTokensService,
+    private tokensService: AuthSessionsService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<true> {
@@ -56,23 +55,18 @@ export class AuthGuard implements CanActivate {
     const authTokenId = authTokenIdResult.data;
 
     if (authTokenId) {
-      const authTokenKeyFromCookie = (
-        request.cookies as { [key: string]: unknown }
-      )[AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE];
+      const cookiesValidationResult = z.object({
+        ['user-authentication-token']: authTokenKeySchema.optional(),
+      }).safeParse(request.cookies);
 
-      const authTokenKeyResult = authTokenKeySchema.safeParse(
-        authTokenKeyFromCookie,
-      );
-
-      if (!authTokenKeyResult.success) {
+      if (!cookiesValidationResult.success) {
         throw new UnauthorizedException();
       }
 
-      const authTokenKey = authTokenKeyResult.data;
+      const authToken = cookiesValidationResult.data['user-authentication-token'];
 
-      const user = await this.tokensService.validateAuthToken(
-        authTokenId,
-        authTokenKey,
+      const user = await this.tokensService.verifyAuthToken(
+        authToken,
       );
 
       const authContext = new AuthContext({ user });

@@ -3,7 +3,7 @@ import * as firebaseAdmin from 'firebase-admin';
 import { applicationDefault } from 'firebase-admin/app';
 import { throwError } from 'src/throw-error';
 import { FirebaseService } from './firebase.service';
-import { EnvironmentVariables } from 'src/environment/environment-variables';
+import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
 import { v4 } from 'uuid';
 
 type FirebaseApp = ReturnType<typeof firebaseAdmin['initializeApp']>;

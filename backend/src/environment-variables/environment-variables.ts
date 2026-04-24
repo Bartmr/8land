@@ -4,9 +4,15 @@ import { z } from 'zod';
 
 const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = z.object({
   NODE_ENV: z.enum(["production"]).optional(),
+
+  API_PORT: z.coerce.number(),
+
+  JWT_SECRET: z.string(),
+
   LOG_DATABASES: z.coerce.boolean().optional(),
 
   LOG_DEBUG: z.coerce.boolean().optional(),
+
 
   WEB_APP_ORIGIN: z.string(),
 
@@ -21,7 +27,6 @@ const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = z.object({
 
   GOOGLE_APPLICATION_CREDENTIALS: z.string().optional(),
 
-  API_PORT: z.coerce.number(),
 
   AWS_ENDPOINT: z.string().optional(),
   AWS_REGION: z.string().optional(),

@@ -36,8 +36,8 @@ export function GameFrame(props: {
       ) : null}
       <div
         className={`mt-2 p-1 bg-${
-          props.session ? 'secondary' : 'warning'
-        } d-flex align-items-center`}
+          props.session ? 'lcd' : 'warning'
+        } text-contrasting d-flex align-items-center`}
         style={{ textTransform: 'uppercase' }}
       >
         <span

@@ -2,7 +2,7 @@ import {
   AuthSessionDTO,
   LoginRequestDTO,
   LoginResponseDTO,
-} from 'src/auth/auth.dto';
+} from 'src/users/auth/auth.dto';
 import {
   BadRequestException,
   Body,
@@ -28,13 +28,13 @@ import { PublicRoute } from './public-route.decorator';
 import { FirebaseService } from 'src/firebase/firebase.service';
 import { DataSource } from 'typeorm';
 import { UsersRepository } from 'src/users/users.repository';
-import { AuthTokensService } from './tokens/auth-tokens.service';
-import { AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE } from './auth.constants';
+import { AuthSessionsService } from './sessions/auth-sessions.service';
 import { User } from 'src/users/user.entity';
 import { type Request as RequestType, type Response as ResponseType } from 'express';
 import { type DecodedIdToken } from 'firebase-admin/auth';
 import { v4 } from 'uuid';
-import { EnvironmentVariables } from 'src/environment/environment-variables';
+import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
+import * as jwt from 'jsonwebtoken';
 
 @UseGuards(AuthGuard)
 @Controller('/users/auth')
@@ -42,7 +42,7 @@ export class AuthController {
   constructor(
     private firebaseService: FirebaseService,
     private dataSource: DataSource,
-    private tokensService: AuthTokensService,
+    private authSessionsService: AuthSessionsService,
   ) {}
 
   @HttpCode(201)
@@ -78,23 +78,13 @@ export class AuthController {
 
     const repository = this.dataSource.getCustomRepository(UsersRepository);
 
-    const user = await repository.findOne({
+    let user = await repository.findOne({
       where: {
         firebaseUid: decodedToken.uid,
       },
     });
 
-    if (user) {
-      if (!firebaseUser.emailVerified) {
-        throw new ConflictException({ error: 'needs-verification' });
-      }
-
-      return this.createTokenAndReturnResponse({
-        user,
-        response,
-        hostname,
-      });
-    } else {
+    if (!user) {
       const newUser = await repository.create(new User({
         firebaseUid: decodedToken.uid,
         isAdmin: false,
@@ -105,18 +95,19 @@ export class AuthController {
         userIdInDatabase: newUser.id,
       });
 
-      if (firebaseUser.emailVerified) {
-        return this.createTokenAndReturnResponse({
-          user: newUser,
-          response,
-          hostname,
-        });
-      } else {
-        throw new ConflictException({
-          error: 'needs-verification',
-          createdNewUser: true,
-        });
-      }
+    }   
+
+    if (firebaseUser.emailVerified) {
+      return this.createTokenAndReturnResponse({
+        user,
+        response,
+        hostname,
+      });
+    } else {
+      throw new ConflictException({
+        error: 'needs-verification',
+        createdNewUser: true,
+      });
     }
   }
 
@@ -145,13 +136,22 @@ export class AuthController {
     response: ResponseType;
     hostname: string;
   }) {
-    const token = await this.tokensService.createAuthToken(
+    const session = await this.authSessionsService.createSession(
       this.dataSource.manager,
       user,
     );
+    
+    const exp = Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 365)
 
-    response.cookie(AUTH_TOKEN_HTTP_ONLY_KEY_COOKIE, token.httpOnlyKey, {
-      expires: token.expires,
+    const token = jwt.sign({
+      exp,
+      data: {
+        sessionId: session.id,
+      }
+    }, EnvironmentVariables.JWT_SECRET);
+
+    response.cookie('user-authentication-token', token, {
+      expires: new Date(exp),
       httpOnly: true,
       secure: EnvironmentVariables.NODE_ENV === "production",
       domain: hostname,
@@ -159,7 +159,6 @@ export class AuthController {
     });
 
     return {
-      authTokenId: token.id,
       session: {
         userId: user.id,
         isAdmin: user.isAdmin,
@@ -172,7 +171,7 @@ export class AuthController {
   async logoutFromAllDevices(
     @WithAuthContext() authContext: AuthContext,
   ): Promise<void> {
-    await this.tokensService.deleteAllTokensFromUser(authContext.user);
+    await this.authSessionsService.deleteAllSessionsFromUser(authContext.user);
 
     throw new UnauthorizedException();
   }
