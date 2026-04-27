@@ -2,8 +2,7 @@ import { DynamicBlockType } from '../../../../../main-api/routes/blocks/create/c
 import { StaticBlockType } from '../../../../../main-api/routes/lands/upload-assets/upload-land-assets.schemas';
 import { EnvironmentVariables } from '../../../../../environment-variables';
 import { CommunicationError } from '../../../../../communication-errors/communication-errors';
-import { GridPhysics } from './grid-physics';
-import { Direction } from './grid.types';
+import { Direction, PlayerPosition } from "./player-position";
 import {
   getLandSceneKey,
   getLandSceneTiledJSONKey,
@@ -26,7 +25,7 @@ import { throwError } from '../../../../../throw-error';
 import { KeypadBroker } from '../../keypad-broker';
 
 export class LandScene extends Phaser.Scene {
-  private gridPhysics?: GridPhysics;
+  private playerPosition?: PlayerPosition;
 
   protected previousLandSceneArguments: LandSceneArguments | null;
   protected args: LandSceneArguments;
@@ -354,7 +353,7 @@ export class LandScene extends Phaser.Scene {
       new Phaser.Math.Vector2(position.x, position.y),
     );
 
-    this.gridPhysics = new GridPhysics(player, this.dependencies.keypad, {
+    this.playerPosition = new PlayerPosition(player, this.dependencies.keypad, {
       land: {
         id: this.args.land.id,
         blocks: [
@@ -492,7 +491,7 @@ export class LandScene extends Phaser.Scene {
       return;
     }
 
-    (this.gridPhysics || throwError()).update(delta);
+    (this.playerPosition || throwError()).update(delta);
   }
 
   private async handleStepIntoDoor(

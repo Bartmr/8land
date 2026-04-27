@@ -1,5 +1,4 @@
 import { TILE_SIZE } from '../../game-constants';
-import { Direction } from './grid.types';
 import { Block, DoorBlock } from './land-scene.types';
 import { Player } from './player';
 import { DialogueService } from '../dialogue/dialogue-screen';
@@ -7,6 +6,14 @@ import { DynamicBlockType } from '../../../../../main-api/routes/blocks/create/c
 import { StaticBlockType, STATIC_BLOCK_TYPE_VALUES } from '../../../../../main-api/routes/lands/upload-assets/upload-land-assets.schemas';
 import { KeypadBroker } from '../../keypad-broker';
 import { throwError } from '../../../../../throw-error';
+
+export enum Direction {
+    NONE = 'none',
+    LEFT = 'left',
+    UP = 'up',
+    RIGHT = 'right',
+    DOWN = 'down'
+  }
 
 const Vector2 = Phaser.Math.Vector2;
 
@@ -19,7 +26,7 @@ const DIRECTION_TO_VECTOR: {
   [Direction.RIGHT]: Vector2.RIGHT,
 };
 
-class GridPhysics {
+export class PlayerPosition {
   private gamePad: KeypadBroker;
 
   private movingDirection: Direction = Direction.NONE;
@@ -400,4 +407,5 @@ class GridPhysics {
   }
 }
 
-export { GridPhysics };
+
+

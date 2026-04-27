@@ -1,7 +1,7 @@
 import React from 'react';
 import nipplejs from 'nipplejs';
 import { useEffect } from 'react';
-import { Direction } from './screens/land/grid.types';
+import { Direction } from "./screens/land/player-position";
 import { throwError } from '../../../throw-error';
 import { KeypadBroker } from './keypad-broker'
 

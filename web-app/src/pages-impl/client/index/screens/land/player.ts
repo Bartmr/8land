@@ -1,6 +1,6 @@
 import { throwError } from '../../../../../throw-error';
 import { TILE_SIZE } from '../../game-constants';
-import { Direction } from './grid.types';
+import { Direction } from "./player-position";
 
 export class Player {
   constructor(
