@@ -69,11 +69,11 @@ export class LandsInGameController {
     if (doorBlock.inLand) {
       // player came back
       if (query.currentLandId == doorBlock.toLand.id) {
-        res = await this.landService.mapLand(doorBlock.inLand);
+        res = await this.landService.toGetLandDTO(doorBlock.inLand);
       }
       // player entered
       else if (query.currentLandId == doorBlock.inLand.id) {
-        res = await this.landService.mapLand(doorBlock.toLand);
+        res = await this.landService.toGetLandDTO(doorBlock.toLand);
       } else {
         throw new Error();
       }

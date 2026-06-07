@@ -23,7 +23,7 @@ export class LandsService {
     this.storageService = storageService
   }
 
-  async mapLand(land: Land): Promise<GetLandDTO> {
+  async toGetLandDTO(land: Land): Promise<GetLandDTO> {
     const [territories, doorBlocksReferencing, doorBlocks, appBlocks] = await Promise.all([
       land.territories,
       land.doorBlocksReferencing,
@@ -142,7 +142,7 @@ export class LandsService {
                 'Lands and worlds cannot loose their start block',
               );
             }
-            const land = await this.mapLand(navState.lastDoor.inLand);
+            const land = await this.toGetLandDTO(navState.lastDoor.inLand);
 
             return {
               ...land,
@@ -167,7 +167,7 @@ export class LandsService {
             throw new Error('Lands and worlds cannot loose their start block');
           }
 
-          const land = await this.mapLand(navState.lastDoor.toLand);
+          const land = await this.toGetLandDTO(navState.lastDoor.toLand);
 
           return {
             ...land,
@@ -182,7 +182,7 @@ export class LandsService {
           };
         }
       } else if (navState.traveledByTrainToLand) {
-        const land = await this.mapLand(navState.traveledByTrainToLand);
+        const land = await this.toGetLandDTO(navState.traveledByTrainToLand);
 
         return {
           ...land,
@@ -193,7 +193,7 @@ export class LandsService {
           lastCheckpointWasDeleted,
         };
       } else if (navState.boardedOnTrainStation) {
-        const land = await this.mapLand(navState.boardedOnTrainStation);
+        const land = await this.toGetLandDTO(navState.boardedOnTrainStation);
 
         return {
           ...land,
@@ -222,7 +222,7 @@ export class LandsService {
       throw new Error();
     }
 
-    const land = await this.mapLand(firstLand);
+    const land = await this.toGetLandDTO(firstLand);
 
     return {
       ...land,

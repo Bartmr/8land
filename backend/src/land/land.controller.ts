@@ -168,7 +168,7 @@ export class LandsController {
     if (!land) {
       throw new NotFoundException();
     } else {
-      return this.landService.mapLand(land);
+      return this.landService.toGetLandDTO(land);
     }
   }
 
