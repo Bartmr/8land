@@ -26,7 +26,6 @@ import { KeypadBroker } from '../../keypad-broker';
 import { Math } from 'phaser';
 
 export class LandScene extends Phaser.Scene {
-  private player?: Player;
   protected previousLandSceneArguments: LandSceneArguments | null;
   protected args: LandSceneArguments;
   protected dependencies: {
@@ -50,6 +49,8 @@ export class LandScene extends Phaser.Scene {
   };
 
   private isLocked = false;
+
+  private player?: Player;
 
   constructor(
     previousLandSceneArguments: LandScene['previousLandSceneArguments'],
