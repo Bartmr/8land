@@ -14,6 +14,6 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 
 **Let me remind you that this codebase is old**.
 
-It favours owning and customizing abstractions even for the build pipeline, so I could share Typescript code and guarantee type-safety between backend and frontend back then. It's also very bloated and made during my free hours, with the objective of just having an MVP.
+I wasn't confortable with the tech stack when I started this project. It's also very bloated and was made during my free hours, with the objective of just having an MVP.
 
 **This is no longer the methodology I follow** , since it takes a lot of time, and brings a lot of non-product related code into your workload. With the advance of Large Language Models, I also try to stick with the defaults of frameworks and use 3rd party providers the most, since it makes it easier to use these models to generate new code.

@@ -6,6 +6,7 @@ import { DynamicBlockType } from '../../../../../main-api/routes/blocks/create/c
 import { StaticBlockType, STATIC_BLOCK_TYPE_VALUES } from '../../../../../main-api/routes/lands/upload-assets/upload-land-assets.schemas';
 import { KeypadBroker } from '../../keypad-broker';
 import { throwError } from '../../../../../throw-error';
+import { PlayerSprite } from './player-sprite';
 
 export enum Direction {
     NONE = 'none',
@@ -26,8 +27,35 @@ const DIRECTION_TO_VECTOR: {
   [Direction.RIGHT]: Vector2.RIGHT,
 };
 
-export class PlayerPosition {
-  private gamePad: KeypadBroker;
+export type PlayerGridLandContext = {
+  land: {
+    id: string;
+    tilemap: Phaser.Tilemaps.Tilemap;
+    blocks: Block[];
+  };
+  territories: Array<{
+    id: string;
+    blocks: Block[];
+    startX: number;
+    endX: number;
+    startY: number;
+    endY: number;
+    tilemap: Phaser.Tilemaps.Tilemap;
+  }>;
+  onStepIntoDoor: (
+    block:
+      | DoorBlock
+      | { type: StaticBlockType.Start }
+      | { type: StaticBlockType.TrainPlatform },
+  ) => void;
+  onOpenApp: (args: {
+    url: string;
+    territoryId: string | undefined;
+  }) => void;
+  dialogueService: DialogueService;
+}
+
+export class PlayerGrid {
 
   private movingDirection: Direction = Direction.NONE;
   private facingDirection: Direction = Direction.DOWN;
@@ -37,37 +65,12 @@ export class PlayerPosition {
   private hasSteppedOnSafeTile = false;
 
   constructor(
-    private player: Player,
-    private keypad: KeypadBroker,
-    private context: {
-      land: {
-        id: string;
-        tilemap: Phaser.Tilemaps.Tilemap;
-        blocks: Block[];
-      };
-      territories: Array<{
-        id: string;
-        blocks: Block[];
-        startX: number;
-        endX: number;
-        startY: number;
-        endY: number;
-        tilemap: Phaser.Tilemaps.Tilemap;
-      }>;
-      onStepIntoDoor: (
-        block:
-          | DoorBlock
-          | { type: StaticBlockType.Start }
-          | { type: StaticBlockType.TrainPlatform },
-      ) => void;
-      onOpenApp: (args: {
-        url: string;
-        territoryId: string | undefined;
-      }) => void;
-      dialogueService: DialogueService;
-    },
+    private playerSprite: PlayerSprite,
+    private keypadBroker: KeypadBroker,
+    private playerPositionLandContext: PlayerGridLandContext,
+    private gridPosition: Phaser.Math.Vector2
   ) {
-    this.gamePad = keypad
+
   }
 
   update(delta: number) {
@@ -81,10 +84,10 @@ export class PlayerPosition {
     //
     // TRIGGER NEW ACTIONS BASED ON BUTTONS PRESSED
     //
-    const pressingLeft = this.gamePad.getDirection() === Direction.LEFT;
-    const pressingRight = this.gamePad.getDirection() === Direction.RIGHT;
-    const pressingUp = this.gamePad.getDirection() === Direction.UP;
-    const pressingDown = this.gamePad.getDirection() === Direction.DOWN;
+    const pressingLeft = this.keypadBroker.getDirection() === Direction.LEFT;
+    const pressingRight = this.keypadBroker.getDirection() === Direction.RIGHT;
+    const pressingUp = this.keypadBroker.getDirection() === Direction.UP;
+    const pressingDown = this.keypadBroker.getDirection() === Direction.DOWN;
 
     if (pressingLeft) {
       this.facingDirection = Direction.LEFT;
@@ -102,7 +105,7 @@ export class PlayerPosition {
       // user wants to stop by not pressing any key
     }
 
-    if (this.gamePad.isAPressed()) {
+    if (this.keypadBroker.isAPressed()) {
       this.searchForActionInFrontOfCharacter();
     }
   }
@@ -111,9 +114,9 @@ export class PlayerPosition {
     if (this.isMoving()) return;
 
     if (this.willCollideInNextBlock(direction)) {
-      this.player.stopAnimation(direction);
+      this.playerSprite.stopAnimation(direction);
     } else {
-      this.player.startAnimation(direction);
+      this.playerSprite.startAnimation(direction);
       this.movingDirection = direction;
       this.changePlayerGridPosition();
     }
@@ -128,39 +131,34 @@ export class PlayerPosition {
 
     if (this.willWalkOverANewTile(pixelsToWalkThisUpdate)) {
       if (this.shouldContinueMovingInSameDirection()) {
-        this.setPlayerAbsolutePosition(pixelsToWalkThisUpdate);
+        this.setPlayerSpritePosition(pixelsToWalkThisUpdate);
         this.changePlayerGridPosition();
       } else {
-        this.setPlayerAbsolutePosition(TILE_SIZE - this.tileSizePixelsWalked);
+        this.setPlayerSpritePosition(TILE_SIZE - this.tileSizePixelsWalked);
         this.stopMoving();
       }
 
       this.reactToCurrentTile();
     } else {
-      this.setPlayerAbsolutePosition(pixelsToWalkThisUpdate);
+      this.setPlayerSpritePosition(pixelsToWalkThisUpdate);
     }
   }
 
   private changePlayerGridPosition() {
-    this.player.setGridPosition(
-      this.player
-        .getGridPosition()
-        .add(DIRECTION_TO_VECTOR[this.movingDirection] || throwError()),
-    );
+    this.gridPosition = this.gridPosition.clone().add(DIRECTION_TO_VECTOR[this.movingDirection] || throwError())
   }
 
-  private setPlayerAbsolutePosition(pixelsToMove: number) {
+  private setPlayerSpritePosition(pixelsToMove: number) {
     const directionVec = (
       DIRECTION_TO_VECTOR[this.movingDirection] || throwError()
     ).clone();
     const movementDistance = directionVec.multiply(new Vector2(pixelsToMove));
 
-    this.player.setAbsolutePosition(
-      this.player.getAbsolutePosition().add(movementDistance),
+    this.playerSprite.setPosition(
+      this.playerSprite.getPosition().add(movementDistance),
     );
 
-    this.tileSizePixelsWalked += pixelsToMove;
-    this.tileSizePixelsWalked %= TILE_SIZE;
+    this.tileSizePixelsWalked = (this.tileSizePixelsWalked + pixelsToMove) % TILE_SIZE;
   }
 
   private getPixelsToWalkThisUpdate(delta: number): number {
@@ -172,7 +170,7 @@ export class PlayerPosition {
   }
 
   private stopMoving(): void {
-    this.player.stopAnimation(this.movingDirection);
+    this.playerSprite.stopAnimation(this.movingDirection);
     this.movingDirection = Direction.NONE;
   }
 
@@ -182,8 +180,8 @@ export class PlayerPosition {
 
   private shouldContinueMovingInSameDirection(): boolean {
     return (
-      this.movingDirection === this.gamePad.getDirection() &&
-      !this.willCollideInNextBlock(this.gamePad.getDirection())
+      this.movingDirection === this.keypadBroker.getDirection() &&
+      !this.willCollideInNextBlock(this.keypadBroker.getDirection())
     );
   }
 
@@ -198,14 +196,13 @@ export class PlayerPosition {
   }
 
   private getNextTilePosition(direction: Direction): Phaser.Math.Vector2 {
-    return this.player
-      .getGridPosition()
+    return this.gridPosition.clone()
       .add(DIRECTION_TO_VECTOR[direction] || throwError());
   }
 
   private isOutsideLandBoundaries(pos: Phaser.Math.Vector2): boolean {
-    return !this.context.land.tilemap.layers.some((layer) => {
-      return this.context.land.tilemap.hasTileAt(pos.x, pos.y, layer.name);
+    return this.playerPositionLandContext.land.tilemap.layers.some((layer) => {
+      return this.playerPositionLandContext.land.tilemap.hasTileAt(pos.x, pos.y, layer.name);
     });
   }
 
@@ -284,7 +281,7 @@ export class PlayerPosition {
       }
     };
 
-    for (const territory of this.context.territories) {
+    for (const territory of this.playerPositionLandContext.territories) {
       if (
         !(
           (pos.x >= territory.startX || pos.x <= territory.endX) &&
@@ -313,8 +310,8 @@ export class PlayerPosition {
         }
       }
     }
-    for (const layer of this.context.land.tilemap.layers) {
-      const tile = this.context.land.tilemap.getTileAt(
+    for (const layer of this.playerPositionLandContext.land.tilemap.layers) {
+      const tile = this.playerPositionLandContext.land.tilemap.getTileAt(
         pos.x,
         pos.y,
         false,
@@ -336,7 +333,7 @@ export class PlayerPosition {
   }
 
   private reactToCurrentTile() {
-    const pos = this.player.getGridPosition();
+    const pos = this.gridPosition.clone();
 
     const tileProps = this.getTopTileProperties(pos);
 
@@ -344,7 +341,7 @@ export class PlayerPosition {
       const dynamicBlock = tileProps.dynamicBlock;
 
       if (dynamicBlock) {
-        const block = this.context.land.blocks.find(
+        const block = this.playerPositionLandContext.land.blocks.find(
           (b) => b.type === dynamicBlock.type && b.id === dynamicBlock.id,
         );
 
@@ -352,7 +349,7 @@ export class PlayerPosition {
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           if (block.type === DynamicBlockType.Door) {
             if (this.hasSteppedOnSafeTile) {
-              this.context.onStepIntoDoor(block);
+              this.playerPositionLandContext.onStepIntoDoor(block);
             }
 
             this.hasSteppedOnSafeTile = false;
@@ -360,13 +357,13 @@ export class PlayerPosition {
         }
       } else if (tileProps.static.start) {
         if (this.hasSteppedOnSafeTile) {
-          this.context.onStepIntoDoor({ type: StaticBlockType.Start });
+          this.playerPositionLandContext.onStepIntoDoor({ type: StaticBlockType.Start });
         }
 
         this.hasSteppedOnSafeTile = false;
       } else if (tileProps.static.train) {
         if (this.hasSteppedOnSafeTile) {
-          this.context.onStepIntoDoor({ type: StaticBlockType.TrainPlatform });
+          this.playerPositionLandContext.onStepIntoDoor({ type: StaticBlockType.TrainPlatform });
         }
 
         this.hasSteppedOnSafeTile = false;
@@ -384,19 +381,19 @@ export class PlayerPosition {
     const props = this.getTopTileProperties(pos);
 
     if (props?.static.text) {
-      this.context.dialogueService.openText(props.static.text);
+      this.playerPositionLandContext.dialogueService.openText(props.static.text);
     } else {
       const dynamicBlock = props?.dynamicBlock;
 
       if (dynamicBlock) {
-        const block = this.context.land.blocks.find(
+        const block = this.playerPositionLandContext.land.blocks.find(
           (b) => b.type === dynamicBlock.type && b.id === dynamicBlock.id,
         );
 
         if (block) {
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           if (block.type === DynamicBlockType.App) {
-            this.context.onOpenApp({
+            this.playerPositionLandContext.onOpenApp({
               url: block.url,
               territoryId: props.inTerritoryId,
             });

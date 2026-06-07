@@ -126,7 +126,7 @@ export function DialogueScreen(props: {
     <>
       {service ? (
         <div
-          className="bg-light text-contrasting"
+          className="bg-light"
           style={{
             width: '100%',
             aspectRatio: '160 / 144',

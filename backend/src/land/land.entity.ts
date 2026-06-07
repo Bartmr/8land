@@ -45,8 +45,8 @@ export class Land {
   @OneToMany(() => Territory, (e) => e.inLand, { lazy: true })
   territories!: Promise<Territory[]>;
 
-  @OneToMany(() => AppBlock, (b) => b.inLand, { eager: true })
-  appBlocks!: AppBlock[];
+  @OneToMany(() => AppBlock, (b) => b.inLand, { lazy: true })
+  appBlocks!: Promise<AppBlock[]>;
 
   @ManyToOne(() => World, (e) => e.lands, { eager: true })
   world!: World | null;
@@ -65,7 +65,7 @@ export class Land {
     doorBlocks: Promise<DoorBlock[]>;
     doorBlocksReferencing: Promise<DoorBlock[]>;
     territories: Promise<Territory[]>;
-    appBlocks: AppBlock[];
+    appBlocks: Promise<AppBlock[]>;
     world: World | null;
     isStartingLand: boolean | null;
     isTrainStation: boolean | null;
@@ -79,7 +79,7 @@ export class Land {
     doorBlocks: Promise<DoorBlock[]>;
     doorBlocksReferencing: Promise<DoorBlock[]>;
     territories: Promise<Territory[]>;
-    appBlocks: AppBlock[];
+    appBlocks: Promise<AppBlock[]>;
     world: World | null;
     isStartingLand: boolean | null;
     isTrainStation: boolean | null;

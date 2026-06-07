@@ -30,11 +30,7 @@ export async function seedTrainStation({
   const doorBlocksRepo = eM.getCustomRepository(DoorBlockRepository);
   const appBlocksRepo = eM.getCustomRepository(AppBlockRepository);
 
-  const ticketMachine = await appBlocksRepo.create(
-    new AppBlock({
-      url: 'http://localhost:8000/apps/train-ticket-machine',
-    }),
-  );
+  
 
 
   const trainStation = await landsRepo.create(
@@ -46,7 +42,7 @@ export async function seedTrainStation({
       backgroundMusicUrl: 'https://api.soundcloud.com/tracks/1118223961',
       doorBlocks: Promise.resolve([]),
       doorBlocksReferencing: Promise.resolve([]),
-      appBlocks: [ticketMachine],
+      appBlocks: Promise.resolve([]),
       hasAssets: true,
       territories: Promise.resolve([]),
       world: null,
@@ -60,6 +56,14 @@ export async function seedTrainStation({
       inLand: landOutside,
       toLand: trainStation,
       inTerritory: Promise.resolve(null),
+    }),
+  );
+
+  const ticketMachine = await appBlocksRepo.create(
+    new AppBlock({
+      inLand: trainStation,
+      inTerritory: null,
+      url: 'http://localhost:8000/apps/train-ticket-machine',
     }),
   );
 

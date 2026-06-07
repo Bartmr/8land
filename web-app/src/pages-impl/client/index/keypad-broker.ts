@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Direction } from "./screens/land/player-position";
+import { Direction } from "./screens/land/player-grid";
 
 type ScreensWithBack = 'appScreen' | 'dialogueScreen' | 'landScreen';
 type BackCallback = () => 'stop-propagation' | 'continue-propagation';

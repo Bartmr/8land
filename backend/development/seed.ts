@@ -18,7 +18,6 @@ import { LOCAL_TEMPORARY_FILES_PATH } from 'src/temporary-files/temporary-files'
 import { AppBlockRepository } from 'src/blocks/app-block.repository';
 import { createTiledJSONSchema } from 'src/land/upload-assets/upload-land-assets.schemas';
 import { seedTrainStation } from './seed/seed-train-station';
-import { seedUserLand } from './seed/seed-user-land';
 import { EnvironmentVariables } from "src/environment-variables/environment-variables";
 import { v4 } from "uuid";
 import { User } from "src/users/user.entity";
@@ -118,7 +117,25 @@ async function seed() {
         backgroundMusicUrl: 'https://api.soundcloud.com/tracks/256813580',
         doorBlocks: Promise.resolve([]),
         doorBlocksReferencing: Promise.resolve([]),
-        appBlocks: [],
+        appBlocks: Promise.resolve([]),
+        hasAssets: true,
+        territories: Promise.resolve([]),
+        world: null,
+        isStartingLand: null,
+        isTrainStation: null,
+      }),
+    );
+
+    
+
+    const townOfHumbleBeginnings = await landsRepository.create(
+      new Land({
+        name: 'Town of Humble Beginnings',
+        searchableName: getSearchableString('Town of Humble Beginnings'),
+        backgroundMusicUrl: 'https://api.soundcloud.com/tracks/566456658',
+        doorBlocks: Promise.resolve([]),
+        doorBlocksReferencing: Promise.resolve([]),
+        appBlocks: Promise.resolve([]),
         hasAssets: true,
         territories: Promise.resolve([]),
         world: null,
@@ -129,23 +146,9 @@ async function seed() {
 
     const townOfHumbleBeginningsApp1 = await appBlocksRepository.create(
       new AppBlock({
+        inLand: townOfHumbleBeginnings,
+        inTerritory: null,
         url: 'http://localhost:8000/apps/test',
-      }),
-    );
-
-    const townOfHumbleBeginnings = await landsRepository.create(
-      new Land({
-        name: 'Town of Humble Beginnings',
-        searchableName: getSearchableString('Town of Humble Beginnings'),
-        backgroundMusicUrl: 'https://api.soundcloud.com/tracks/566456658',
-        doorBlocks: Promise.resolve([]),
-        doorBlocksReferencing: Promise.resolve([]),
-        appBlocks: [townOfHumbleBeginningsApp1],
-        hasAssets: true,
-        territories: Promise.resolve([]),
-        world: null,
-        isStartingLand: null,
-        isTrainStation: null,
       }),
     );
 
@@ -158,7 +161,7 @@ async function seed() {
         backgroundMusicUrl: null,
         doorBlocks: Promise.resolve([]),
         doorBlocksReferencing: Promise.resolve([]),
-        appBlocks: [],
+        appBlocks: Promise.resolve([]),
         hasAssets: true,
         territories: Promise.resolve([]),
         world: null,
@@ -176,7 +179,7 @@ async function seed() {
         backgroundMusicUrl: null,
         doorBlocks: Promise.resolve([]),
         doorBlocksReferencing: Promise.resolve([]),
-        appBlocks: [],
+        appBlocks: Promise.resolve([]),
         hasAssets: true,
         territories: Promise.resolve([]),
         world: null,
@@ -192,7 +195,7 @@ async function seed() {
         backgroundMusicUrl: null,
         doorBlocks: Promise.resolve([]),
         doorBlocksReferencing: Promise.resolve([]),
-        appBlocks: [],
+        appBlocks: Promise.resolve([]),
         hasAssets: true,
         territories: Promise.resolve([]),
         world: null,
@@ -560,8 +563,8 @@ async function seed() {
 
     const territory1 = await territoriesRepository.create(
       new Territory({
-        doorBlocks: [],
-        appBlocks: [],
+        doorBlocks: Promise.resolve([]),
+        appBlocks: Promise.resolve([]),
         hasAssets: true,
         inLand: Promise.resolve(townOfHumbleBeginnings),
         startX: 3,
@@ -596,13 +599,6 @@ async function seed() {
 
     await territoriesRepository.save(territory1);
     /* --- */
-
-    await seedUserLand({
-      storageService,
-      eM,
-      appBlocksRepository,
-      user: endUser,
-    });
   });
 
   await defaultDBConnection.close();

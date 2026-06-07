@@ -43,7 +43,7 @@ export function LandScreen(props: {
       await runLandGame(
         { resumedLand: props.resumedLand, session: props.session },
         {
-          keypad: props.keypad,
+          keypadBroker: props.keypad,
           landsAPI: landsApi,
           musicService: props.musicService,
           dialogueService: props.dialogueService,

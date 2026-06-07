@@ -2,7 +2,7 @@ import { DynamicBlockType } from '../../../../../main-api/routes/blocks/create/c
 import { StaticBlockType } from '../../../../../main-api/routes/lands/upload-assets/upload-land-assets.schemas';
 import { EnvironmentVariables } from '../../../../../environment-variables';
 import { CommunicationError } from '../../../../../communication-errors/communication-errors';
-import { Direction, PlayerPosition } from "./player-position";
+import { Direction, PlayerGrid, PlayerGridLandContext } from "./player-grid";
 import {
   getLandSceneKey,
   getLandSceneTiledJSONKey,
@@ -25,12 +25,11 @@ import { throwError } from '../../../../../throw-error';
 import { KeypadBroker } from '../../keypad-broker';
 
 export class LandScene extends Phaser.Scene {
-  private playerPosition?: PlayerPosition;
-
+  private player?: Player;
   protected previousLandSceneArguments: LandSceneArguments | null;
   protected args: LandSceneArguments;
   protected dependencies: {
-    keypad: KeypadBroker,
+    keypadBroker: KeypadBroker,
     musicService: MusicService;
     dialogueService: DialogueService;
     appService: AppService;
@@ -69,6 +68,17 @@ export class LandScene extends Phaser.Scene {
     deps.landScreenService.currentScene = this;
   }
 
+  public getLandTiledJSON() {
+    const landTiledJSON =
+      (
+        this.cache.tilemap.get(getLandSceneTiledJSONKey(this.args.land)) as
+          | { data: TiledJSON }
+          | undefined
+      )?.data || throwError();
+
+    return landTiledJSON
+  }
+
   public create() {
     if (this.previousLandSceneArguments) {
       this.scene.remove(getLandSceneKey(this.previousLandSceneArguments.land));
@@ -77,13 +87,8 @@ export class LandScene extends Phaser.Scene {
     this.dependencies.changeLandNameDisplay(this.args.land.name);
 
     // LAND
-    const landTiledJSON =
-      (
-        this.cache.tilemap.get(getLandSceneTiledJSONKey(this.args.land)) as
-          | { data: TiledJSON }
-          | undefined
-      )?.data || throwError();
-
+    
+    const landTiledJSON = this.getLandTiledJSON();
     const landFirstTileset = landTiledJSON.tilesets[0] || throwError();
 
     const landMap = this.make.tilemap({
@@ -336,24 +341,9 @@ export class LandScene extends Phaser.Scene {
       };
     }
 
-    const playerSprite = this.add.sprite(0, 0, 'player');
-    playerSprite.setDepth(nextDepth);
 
-    this.cameras.main.startFollow(playerSprite);
-    this.cameras.main.roundPixels = true;
-    this.cameras.main.setBounds(
-      0,
-      0,
-      landTiledJSON.width * TILE_SIZE,
-      landTiledJSON.height * TILE_SIZE,
-    );
 
-    const player = new Player(
-      playerSprite,
-      new Phaser.Math.Vector2(position.x, position.y),
-    );
-
-    this.playerPosition = new PlayerPosition(player, this.dependencies.keypad, {
+    const playerPositionLandContext: PlayerGridLandContext = {
       land: {
         id: this.args.land.id,
         blocks: [
@@ -422,12 +412,15 @@ export class LandScene extends Phaser.Scene {
           land: { id: this.args.land.id, name: this.args.land.name },
         });
       },
-    });
+    };
 
-    this.createPlayerAnimation(Direction.UP, 9, 8);
-    this.createPlayerAnimation(Direction.RIGHT, 1, 0);
-    this.createPlayerAnimation(Direction.DOWN, 6, 5);
-    this.createPlayerAnimation(Direction.LEFT, 3, 2);
+    this.player = new Player(
+      this,
+      nextDepth,
+      new Phaser.Math.Vector2(position.x, position.y),
+      this.dependencies.keypadBroker,
+      playerPositionLandContext
+    );
   }
 
   public preload() {
@@ -469,29 +462,12 @@ export class LandScene extends Phaser.Scene {
     this.dependencies.musicService.playMusic(this.args.land.backgroundMusicUrl);
   }
 
-  private createPlayerAnimation(
-    name: string,
-    startFrame: number,
-    endFrame: number,
-  ) {
-    this.anims.create({
-      key: name,
-      frames: this.anims.generateFrameNumbers('player', {
-        start: startFrame,
-        end: endFrame,
-      }),
-      frameRate: 8,
-      repeat: -1,
-      yoyo: true,
-    });
-  }
-
   public update(_time: number, delta: number) {
     if (this.isLocked) {
       return;
     }
 
-    (this.playerPosition || throwError()).update(delta);
+    (this.player?.playerGrid || throwError()).update(delta);
   }
 
   private async handleStepIntoDoor(

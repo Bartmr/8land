@@ -62,11 +62,7 @@
 
 @each $color, $value in $theme-colors {
   .bg-#{$color} {
-    --bs-text-opacity: 1;
-    --contrasting-rgb: #{to-rgb(color-contrast($value))};
+    --bs-body-color: #{color-contrast($value)};
+    color: var(--bs-body-color);
   }
-}
-
-.text-contrasting {
-  color: rgba(var(--contrasting-rgb), var(--bs-text-opacity)) !important;
 }

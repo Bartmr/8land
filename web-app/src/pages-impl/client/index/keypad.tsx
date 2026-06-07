@@ -1,7 +1,7 @@
 import React from 'react';
 import nipplejs from 'nipplejs';
 import { useEffect } from 'react';
-import { Direction } from "./screens/land/player-position";
+import { Direction } from "./screens/land/player-grid";
 import { throwError } from '../../../throw-error';
 import { KeypadBroker } from './keypad-broker'
 
@@ -188,7 +188,7 @@ export function Keypad(props: { keypad: KeypadBroker }) {
             ></div>
             <div
               style={{ width: '100px', height: '100px' }}
-              className="bg-secondary text-contrasting d-flex align-items-center justify-content-center text-center small"
+              className="bg-secondary d-flex align-items-center justify-content-center text-center small"
             >
               DRAG HERE
               <br />

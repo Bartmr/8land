@@ -45,7 +45,7 @@ export function IndexTemplate() {
             </div>
           </div>
           <hr />
-          <div className="bg-lcd text-contrasting py-5">
+          <div className="bg-lcd py-5">
             <div className="container">
               <p className="display-3">What is 8Land?</p>
               <p className="mt-4">
@@ -59,7 +59,7 @@ export function IndexTemplate() {
             </div>
           </div>
           <div
-            className="bg-primary text-contrasting py-5"
+            className="bg-primary py-5"
           >
             <div className="container">
               <p className="display-3">

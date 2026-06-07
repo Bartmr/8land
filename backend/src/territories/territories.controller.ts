@@ -387,8 +387,8 @@ export class TerritoriesEndUserController {
         endY: data.data.endY,
         hasAssets: false,
         inLand: Promise.resolve(land),
-        doorBlocks: [],
-        appBlocks: [],
+        doorBlocks: Promise.resolve([]),
+        appBlocks: Promise.resolve([]),
       }));
       const thumbnailStorageKey = `territories/${territory.id}/thumbnail.jpg`;
       await this.storageService.saveBuffer(thumbnailStorageKey, imgResized, {

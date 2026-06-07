@@ -41,11 +41,11 @@ export class Territory {
   @JoinColumn()
   inLand!: Promise<Land>;
 
-  @OneToMany(() => DoorBlock, (e) => e.inTerritory, { eager: true })
-  doorBlocks!: DoorBlock[];
+  @OneToMany(() => DoorBlock, (e) => e.inTerritory, { lazy: true })
+  doorBlocks!: Promise<DoorBlock[]>;
 
-  @OneToMany(() => AppBlock, (e) => e.inTerritory, { eager: true })
-  appBlocks!: AppBlock[];
+  @OneToMany(() => AppBlock, (e) => e.inTerritory, { lazy: true })
+  appBlocks!: Promise<AppBlock[]>;
 
  
 
@@ -56,8 +56,8 @@ export class Territory {
     endY: number;
     hasAssets: boolean | null;
     inLand: Promise<Land>;
-    doorBlocks: DoorBlock[];
-    appBlocks: AppBlock[];
+    doorBlocks: Promise<DoorBlock[]>;
+    appBlocks: Promise<AppBlock[]>;
   })
   constructor()
   constructor(props?: {
@@ -67,8 +67,8 @@ export class Territory {
     endY: number;
     hasAssets: boolean | null;
     inLand: Promise<Land>;
-    doorBlocks: DoorBlock[];
-    appBlocks: AppBlock[];
+    doorBlocks: Promise<DoorBlock[]>;
+    appBlocks: Promise<AppBlock[]>;
     
   }) {
     if (props) {

@@ -7,25 +7,31 @@ export class AppBlock {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @ManyToOne(() => Land, (land) => land.appBlocks, { nullable: true })
+  @ManyToOne(() => Land, (land) => land.appBlocks, { nullable: true, eager: true })
   @JoinColumn()
-  inLand!: Promise<Land | null>;
+  inLand!: Land | null;
 
-  @ManyToOne(() => Territory, (territory) => territory.appBlocks, { nullable: true })
+  @ManyToOne(() => Territory, (territory) => territory.appBlocks, { nullable: true, eager: true })
   @JoinColumn()
-  inTerritory!: Promise<Territory | null>;
+  inTerritory!: Territory | null;
 
   @Column('text')
   url!: string;
 
   constructor(props: {
+    inLand: Land | null;
+    inTerritory: Territory | null;
     url: string;
   })
   constructor()
   constructor(props?: {
+    inLand: Land | null;
+    inTerritory: Territory | null;
     url: string;
   }) {
     if (props) {
+      this.inLand = props.inLand;
+      this.inTerritory = props.inTerritory;
       this.url = props.url;
     }
   }

@@ -125,7 +125,7 @@ export function MusicTicker(props: {
             {service.song && service.song.permalink_url && service.song.title && service.song.user && service.song.user.username ? (
               <LinkAnchor
                 style={{ textDecoration: 'underline' }}
-                className="text-contrasting"
+                className="text-body"
                 href={service.song.permalink_url}
               >
                 {service.song.title} - {service.song.user.username}

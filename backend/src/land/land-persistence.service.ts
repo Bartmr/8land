@@ -139,7 +139,7 @@ export class LandPersistenceService {
           backgroundMusicUrl: null,
           hasAssets: null,
           territories: Promise.resolve([]),
-          appBlocks: [],
+          appBlocks: Promise.resolve([]),
           isStartingLand: null,
           isTrainStation: null,
           world,
@@ -153,7 +153,7 @@ export class LandPersistenceService {
           backgroundMusicUrl: null,
           hasAssets: null,
           territories: Promise.resolve([]),
-          appBlocks: [],
+          appBlocks: Promise.resolve([]),
           isStartingLand: null,
           isTrainStation: null,
           world: null,
@@ -496,11 +496,12 @@ export class LandPersistenceService {
 
       const doorBlocks = await land.doorBlocks;
       const doorBlocksReferencing = await land.doorBlocksReferencing;
+      const appBlocks = await land.appBlocks
 
       if (
-        land.appBlocks.length !== 0 ||
         doorBlocks.length !== 0 ||
-        doorBlocksReferencing.length !== 0
+        doorBlocksReferencing.length !== 0 ||
+        appBlocks.length !== 0
       ) {
         return { status: 'must-delete-blocks-first' } as const;
       }

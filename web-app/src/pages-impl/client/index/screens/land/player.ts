@@ -1,49 +1,29 @@
+import { Scene } from 'phaser';
 import { throwError } from '../../../../../throw-error';
 import { TILE_SIZE } from '../../game-constants';
-import { Direction } from "./player-position";
+import { LandScene } from './land-scene';
+import { Direction, PlayerGrid, PlayerGridLandContext } from "./player-grid";
+import { PlayerSprite } from './player-sprite';
+import { KeypadBroker } from '../../keypad-broker';
 
 export class Player {
+  public playerGrid: PlayerGrid;
+
   constructor(
-    private sprite: Phaser.GameObjects.Sprite,
-    private tilePos: Phaser.Math.Vector2,
+    land: LandScene,
+    depth: number,
+    gridPosition: Phaser.Math.Vector2,
+    keypadBroker: KeypadBroker,
+    playerPositionLandContext: PlayerGridLandContext,
   ) {
-    const offsetX = TILE_SIZE / 2;
-    const offsetY = TILE_SIZE;
+    const playerSprite = new PlayerSprite(land, depth, gridPosition);
 
-    this.sprite.setOrigin(0.5, 1);
-    this.sprite.setPosition(
-      tilePos.x * TILE_SIZE + offsetX,
-      tilePos.y * TILE_SIZE + offsetY,
-    );
-    this.sprite.setFrame(4);
+    this.playerGrid = new PlayerGrid(
+      playerSprite,
+      keypadBroker,
+      playerPositionLandContext,
+      gridPosition
+    )
   }
-
-  getAbsolutePosition(): Phaser.Math.Vector2 {
-    return this.sprite.getBottomCenter();
-  }
-
-  setAbsolutePosition(position: Phaser.Math.Vector2): void {
-    this.sprite.setPosition(position.x, position.y);
-  }
-
-  getGridPosition(): Phaser.Math.Vector2 {
-    return this.tilePos.clone();
-  }
-
-  setGridPosition(tilePosition: Phaser.Math.Vector2): void {
-    this.tilePos = tilePosition.clone();
-  }
-
-  stopAnimation(direction: Direction) {
-    const animationManager = this.sprite.anims.animationManager;
-    const standingFrame = (
-      animationManager.get(direction).frames[1] || throwError()
-    ).frame.name;
-    this.sprite.anims.stop();
-    this.sprite.setFrame(standingFrame);
-  }
-
-  startAnimation(direction: Direction) {
-    this.sprite.anims.play(direction);
-  }
+  
 }

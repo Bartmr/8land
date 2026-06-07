@@ -68,8 +68,9 @@ export class BlocksController {
       }
 
       const doorBlocks = await land.doorBlocks;
+      const appBlocks = await land.appBlocks;
 
-      if (doorBlocks.length + land.appBlocks.length > 50) {
+      if (doorBlocks.length + appBlocks.length > 50) {
         throw new BadRequestException({ error: 'block-limit-exceeded' });
       }
 
@@ -117,11 +118,11 @@ export class BlocksController {
       } else if (body.data.type === DynamicBlockType.App) {
         const appBlockRepository = e.getCustomRepository(AppBlockRepository);
 
-        land.appBlocks.push(await appBlockRepository.create(new AppBlock({
-          inLand: Promise.resolve(land),
-          inTerritory: Promise.resolve(null),
+        await appBlockRepository.create(new AppBlock({
+          inLand: land,
+          inTerritory: null,
           url: body.data.url,
-        })));
+        }));
       } else {
         throw new BadRequestException();
       }

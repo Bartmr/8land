@@ -37,7 +37,7 @@ export function GameFrame(props: {
       <div
         className={`mt-2 p-1 bg-${
           props.session ? 'lcd' : 'warning'
-        } text-contrasting d-flex align-items-center`}
+        } d-flex align-items-center`}
         style={{ textTransform: 'uppercase' }}
       >
         <span
@@ -52,7 +52,7 @@ export function GameFrame(props: {
             <>{landName}</>
           ) : (
             <LinkAnchor
-              className='text-contrasting'
+              className="text-body"
               href={LOGIN_ROUTE.getHref({ next: getCurrentLocalHref() })}
             >
               Login to save your progress
@@ -61,7 +61,7 @@ export function GameFrame(props: {
         </span>
       </div>
       <div
-        className="mt-1 bg-lcd text-contrasting d-flex align-items-center py-1"
+        className="mt-1 bg-lcd d-flex align-items-center py-1"
         style={{ textTransform: 'uppercase', fontSize: '0.8em' }}
       >
         <div className="px-2" style={{ whiteSpace: 'nowrap' }}>

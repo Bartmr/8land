@@ -22,7 +22,7 @@ export async function runLandGame(
     session: null | UserAuthSessionData;
   },
   dependencies: {
-    keypad: KeypadBroker;
+    keypadBroker: KeypadBroker;
     musicService: MusicService;
     dialogueService: DialogueService;
     appService: AppService;
