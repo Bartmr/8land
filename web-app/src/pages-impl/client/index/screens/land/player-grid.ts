@@ -77,7 +77,21 @@ export class PlayerGrid {
     // CONTINUE PREVIOUS ACTIONS
     //
     if (this.isMoving()) {
-      this.updatePlayer(delta);
+      const pixelsToWalkThisUpdate = this.getPixelsToWalkThisUpdate(delta);
+
+      if (this.willWalkOverANewTile(pixelsToWalkThisUpdate)) {
+        if (this.shouldContinueMovingInSameDirection()) {
+          this.setPlayerSpritePosition(pixelsToWalkThisUpdate);
+          this.changePlayerGridPosition();
+        } else {
+          this.setPlayerSpritePosition(TILE_SIZE - this.tileSizePixelsWalked);
+          this.stopMoving();
+        }
+
+        this.reactToCurrentTile();
+      } else {
+        this.setPlayerSpritePosition(pixelsToWalkThisUpdate);
+      }
     }
 
     //
@@ -125,23 +139,7 @@ export class PlayerGrid {
     return this.movingDirection !== Direction.NONE;
   }
 
-  private updatePlayer(delta: number) {
-    const pixelsToWalkThisUpdate = this.getPixelsToWalkThisUpdate(delta);
 
-    if (this.willWalkOverANewTile(pixelsToWalkThisUpdate)) {
-      if (this.shouldContinueMovingInSameDirection()) {
-        this.setPlayerSpritePosition(pixelsToWalkThisUpdate);
-        this.changePlayerGridPosition();
-      } else {
-        this.setPlayerSpritePosition(TILE_SIZE - this.tileSizePixelsWalked);
-        this.stopMoving();
-      }
-
-      this.reactToCurrentTile();
-    } else {
-      this.setPlayerSpritePosition(pixelsToWalkThisUpdate);
-    }
-  }
 
   private changePlayerGridPosition() {
     this.gridPosition = this.gridPosition.clone().add(DIRECTION_TO_VECTOR[this.movingDirection] || throwError())
@@ -200,7 +198,7 @@ export class PlayerGrid {
   }
 
   private isOutsideLandBoundaries(pos: Math.Vector2): boolean {
-    return this.playerPositionLandContext.land.tilemap.layers.some((layer) => {
+    return !this.playerPositionLandContext.land.tilemap.layers.some((layer) => {
       return this.playerPositionLandContext.land.tilemap.hasTileAt(pos.x, pos.y, layer.name);
     });
   }

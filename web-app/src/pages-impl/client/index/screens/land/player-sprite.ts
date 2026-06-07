@@ -41,7 +41,7 @@ export class PlayerSprite {
       key: Direction.UP,
       frames: scene.anims.generateFrameNumbers('player', {
         start: 9,
-        end: 9,
+        end: 8,
       }),
       frameRate: 8,
       repeat: -1,

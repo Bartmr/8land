@@ -424,6 +424,14 @@ export class LandScene extends Phaser.Scene {
     );
   }
 
+  public update(_time: number, delta: number) {
+    if (this.isLocked) {
+      return;
+    }
+
+    (this.player || throwError()).update(delta);
+  }
+
   public preload() {
     this.load.setBaseURL(`${(this.args.land.assets || throwError()).baseUrl}/`);
     this.load.image(
@@ -461,14 +469,6 @@ export class LandScene extends Phaser.Scene {
     );
 
     this.dependencies.musicService.playMusic(this.args.land.backgroundMusicUrl);
-  }
-
-  public update(_time: number, delta: number) {
-    if (this.isLocked) {
-      return;
-    }
-
-    (this.player?.playerGrid || throwError()).update(delta);
   }
 
   private async handleStepIntoDoor(

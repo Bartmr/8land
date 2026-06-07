@@ -25,5 +25,9 @@ export class Player {
       gridPosition
     )
   }
+
+  update(delta: number) {
+    this.playerGrid.update(delta);
+  }
   
 }
