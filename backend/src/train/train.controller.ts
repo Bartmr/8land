@@ -28,7 +28,7 @@ import { WithOptionalAuthContext } from 'src/users/auth/auth-context.decorator';
 import { PublicRoute } from 'src/users/auth/public-route.decorator';
 import { getSearchableString } from 'src/strings/get-searchable-string';
 import { throwError } from 'src/throw-error';
-import { LandsService } from 'src/land/lands.service';
+import { LandsInGameService } from 'src/land/lands-in-game.service';
 import { Land } from 'src/land/land.entity';
 import { LandRepository } from 'src/land/land.repository';
 import { NavigationStateRepository } from 'src/navigation/state/navigation-state.repository';
@@ -40,7 +40,7 @@ export class TrainController {
   private logger = new Logger(TrainController.name)
   constructor(
     private dataSource: DataSource,
-    private landsService: LandsService,
+    private landsInGameService: LandsInGameService,
   ) {}
 
   @Get('/board/:worldId')
@@ -75,7 +75,7 @@ export class TrainController {
       }
 
       if (!authContext) {
-        return this.landsService.toGetLandDTO(land);
+        return this.landsInGameService.toInGameLandDTO(land);
       } else {
         const navState = await navStatesRepository.getNavigationStateFromUser(
           authContext.user,
@@ -114,7 +114,7 @@ export class TrainController {
 
         await navStatesRepository.save(navState);
 
-        return this.landsService.toGetLandDTO(land);
+        return this.landsInGameService.toInGameLandDTO(land);
       }
     });
   }
@@ -144,9 +144,9 @@ export class TrainController {
 
           await navStateRepo.save(navState);
 
-          return this.landsService.toGetLandDTO(boardedOnTrainStation);
+          return this.landsInGameService.toInGameLandDTO(boardedOnTrainStation);
         } else {
-          return this.landsService.resume({
+          return this.landsInGameService.resume({
             eM,
             authContext,
           });
@@ -168,7 +168,7 @@ export class TrainController {
         throw new NotFoundException();
       }
 
-      return this.landsService.toGetLandDTO(trainStation);
+      return this.landsInGameService.toInGameLandDTO(trainStation);
     }
   }
 

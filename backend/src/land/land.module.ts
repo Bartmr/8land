@@ -4,12 +4,12 @@ import { DoorBlock } from '../blocks/door-block.entity';
 import { Land } from './land.entity';
 import { Territory } from 'src/territories/territory.entity';
 import { AppBlock } from 'src/blocks/app-block.entity';
-import { LandsService } from './lands.service';
+import { LandsInGameService } from './lands-in-game.service';
 import { LandsInGameController } from './lands-in-game.controller';
 import { NavigationState } from 'src/navigation/state/navigation-state.entity';
 import { LandsController } from './land.controller';
 import { World } from '../worlds/worlds.entity';
-import { LandPersistenceService } from './land-persistence.service';
+import { LandService } from './land.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/users/auth/auth.module';
 
@@ -19,8 +19,8 @@ import { AuthModule } from 'src/users/auth/auth.module';
     StorageModule,
     AuthModule,
   ],
-  exports: [LandsService],
-  providers: [LandsService, LandPersistenceService],
+  exports: [LandsInGameService],
+  providers: [LandsInGameService, LandService],
   controllers: [LandsController, LandsInGameController],
 })
 export class LandModule {}

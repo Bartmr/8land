@@ -25,7 +25,7 @@ import { PublicRoute } from 'src/users/auth/public-route.decorator';
 import { DoorBlockRepository } from 'src/blocks/door-block.repository';
 import { NavigationStateRepository } from 'src/navigation/state/navigation-state.repository';
 import { DataSource } from 'typeorm';
-import { LandsService } from './lands.service';
+import { LandsInGameService } from './lands-in-game.service';
 
 @UseGuards(AuthGuard)
 @Controller('lands')
@@ -33,7 +33,7 @@ export class LandsInGameController {
   private logger = new Logger(LandsInGameController.name)
   constructor(
     private dataSource: DataSource,
-    private landService: LandsService,
+    private landService: LandsInGameService,
   ) {}
 
   @Get('/resume')
@@ -69,11 +69,11 @@ export class LandsInGameController {
     if (doorBlock.inLand) {
       // player came back
       if (query.currentLandId == doorBlock.toLand.id) {
-        res = await this.landService.toGetLandDTO(doorBlock.inLand);
+        res = await this.landService.toInGameLandDTO(doorBlock.inLand);
       }
       // player entered
       else if (query.currentLandId == doorBlock.inLand.id) {
-        res = await this.landService.toGetLandDTO(doorBlock.toLand);
+        res = await this.landService.toInGameLandDTO(doorBlock.toLand);
       } else {
         throw new Error();
       }

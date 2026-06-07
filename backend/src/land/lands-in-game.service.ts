@@ -8,10 +8,12 @@ import { NavigationStateRepository } from 'src/navigation/state/navigation-state
 import { DataSource, EntityManager } from 'typeorm';
 import { Land } from './land.entity';
 import { LandRepository } from './land.repository';
+import { ResumeLandNavigationDTO } from './in-game/resume/resume-land-navigation.dto';
+import { InGameLandDTO } from './in-game/in-game.dto';
 
 @Injectable()
-export class LandsService {
-  private logger = new Logger(LandsService.name)
+export class LandsInGameService {
+  private logger = new Logger(LandsInGameService.name)
   private dataSource: DataSource
   private storageService: StorageService
 
@@ -23,7 +25,7 @@ export class LandsService {
     this.storageService = storageService
   }
 
-  async toGetLandDTO(land: Land): Promise<GetLandDTO> {
+  async toInGameLandDTO(land: Land): Promise<InGameLandDTO> {
     const [territories, doorBlocksReferencing, doorBlocks, appBlocks] = await Promise.all([
       land.territories,
       land.doorBlocksReferencing,
@@ -107,7 +109,7 @@ export class LandsService {
   }: {
     eM: EntityManager;
     authContext: AuthContext | undefined;
-  }) {
+  }): Promise<ResumeLandNavigationDTO> {
     const navigationStateRepository = eM.getCustomRepository(
       NavigationStateRepository,
     );
@@ -142,7 +144,7 @@ export class LandsService {
                 'Lands and worlds cannot loose their start block',
               );
             }
-            const land = await this.toGetLandDTO(navState.lastDoor.inLand);
+            const land = await this.toInGameLandDTO(navState.lastDoor.inLand);
 
             return {
               ...land,
@@ -167,7 +169,7 @@ export class LandsService {
             throw new Error('Lands and worlds cannot loose their start block');
           }
 
-          const land = await this.toGetLandDTO(navState.lastDoor.toLand);
+          const land = await this.toInGameLandDTO(navState.lastDoor.toLand);
 
           return {
             ...land,
@@ -182,7 +184,7 @@ export class LandsService {
           };
         }
       } else if (navState.traveledByTrainToLand) {
-        const land = await this.toGetLandDTO(navState.traveledByTrainToLand);
+        const land = await this.toInGameLandDTO(navState.traveledByTrainToLand);
 
         return {
           ...land,
@@ -193,7 +195,7 @@ export class LandsService {
           lastCheckpointWasDeleted,
         };
       } else if (navState.boardedOnTrainStation) {
-        const land = await this.toGetLandDTO(navState.boardedOnTrainStation);
+        const land = await this.toInGameLandDTO(navState.boardedOnTrainStation);
 
         return {
           ...land,
@@ -222,7 +224,7 @@ export class LandsService {
       throw new Error();
     }
 
-    const land = await this.toGetLandDTO(firstLand);
+    const land = await this.toInGameLandDTO(firstLand);
 
     return {
       ...land,

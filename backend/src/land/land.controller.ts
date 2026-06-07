@@ -29,7 +29,6 @@ import { AuthContext } from 'src/users/auth/auth-context';
 import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
 import { StorageService } from 'src/storage/storage.service';
 import { DataSource } from 'typeorm';
-import { LandsService } from './lands.service';
 import { LandRepository } from './land.repository';
 
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
@@ -43,19 +42,12 @@ import {
   EditLandDTO,
   EditLandParametersDTO,
 } from 'src/land/edit/edit-land.dto';
-import { LandPersistenceService } from './land-persistence.service';
+import { LandService } from './land.service';
 import { WorldRepository } from 'src/worlds/worlds.repository';
 import { DeleteLandParametersDTO } from 'src/land/delete-land/delete-land.dto';
 import { PublicRoute } from 'src/users/auth/public-route.decorator';
 import { GetLandsToClaimDTO } from 'src/land/lands-to-claim/lands-to-claim.dto';
 import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
-
-class LandAssetsRequestDTO {
-  map!: unknown;
-  tileset!: unknown;
-}
-
-// TODO redo all
 
 @UseGuards(AuthGuard)
 @Controller('lands')
@@ -63,8 +55,7 @@ export class LandsController {
   constructor(
     private dataSource: DataSource,
     private storageService: StorageService,
-    private landService: LandsService,
-    private landPersistenceService: LandPersistenceService,
+    private landService: LandService,
   ) {}
 
   @Get()
@@ -179,7 +170,7 @@ export class LandsController {
   ): Promise<CreateLandResponseDTO> {
     const limit = EnvironmentVariables.LAND_LIMIT_PER_WORLD;
 
-    const res = await this.landPersistenceService.createLand({
+    const res = await this.landService.createLand({
       connection: this.dataSource,
       body,
       authContext,
@@ -227,7 +218,7 @@ export class LandsController {
         throw new BadRequestException({ error: 'no-tileset-file' });
       })();
 
-    const res = await this.landPersistenceService.uploadLandAssets({
+    const res = await this.landService.uploadLandAssets({
       connection: this.dataSource,
       storageService: this.storageService,
       map,
@@ -260,7 +251,7 @@ export class LandsController {
     @Body() body: EditLandBodyDTO,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<EditLandDTO> {
-    const res = await this.landPersistenceService.editLand({
+    const res = await this.landService.editLand({
       connection: this.dataSource,
       body,
       param,
@@ -285,7 +276,7 @@ export class LandsController {
       throw new ForbiddenException();
     }
 
-    const res = await this.landPersistenceService.deleteLand({
+    const res = await this.landService.deleteLand({
       landId: param.landId,
       connection: this.dataSource,
       storageService: this.storageService,
