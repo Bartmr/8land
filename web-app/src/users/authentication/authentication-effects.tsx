@@ -11,6 +11,8 @@ export function AuthenticationEffects() {
   const { sessionState, setSessionState } =
     useContext(AuthenticationStateContext) || throwError();
 
+  console.log(JSON.stringify(sessionState))
+
   useEffect(() => {
     (async () => {
       if (

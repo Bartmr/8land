@@ -1,15 +1,16 @@
+import { GameObjects, Math } from "phaser";
 import { throwError } from "../../../../../throw-error";
 import { TILE_SIZE } from "../../game-constants";
 import { LandScene } from "./land-scene";
 import { Direction } from "./player-grid";
 
 export class PlayerSprite {
-  private sprite: Phaser.GameObjects.Sprite;
+  private sprite: GameObjects.Sprite;
 
   constructor(
     scene: LandScene,
     depth: number,
-    position: Phaser.Math.Vector2
+    position: Math.Vector2
   ) {
     this.sprite = scene.add.sprite(0, 0, 'player');
     this.sprite.setDepth(depth);
@@ -84,11 +85,11 @@ export class PlayerSprite {
 
  
 
-  getPosition(): Phaser.Math.Vector2 {
+  getPosition(): Math.Vector2 {
     return this.sprite.getBottomCenter();
   }
 
-  setPosition(position: Phaser.Math.Vector2): void {
+  setPosition(position: Math.Vector2): void {
     this.sprite.setPosition(position.x, position.y);
   }
 

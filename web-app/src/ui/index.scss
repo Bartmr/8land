@@ -13,10 +13,6 @@
 // Layout & components
 @import "../../node_modules/bootstrap/scss/root";
 
-:root {
-  --contrasting-rgb: to-rgb($body-color);
-}
-
 @import "../../node_modules/bootstrap/scss/reboot";
 
 *:disabled {
@@ -63,6 +59,7 @@
 @each $color, $value in $theme-colors {
   .bg-#{$color} {
     --bs-body-color: #{color-contrast($value)};
+    --bs-body-color-rgb: #{to-rgb(color-contrast($value))};
     color: var(--bs-body-color);
   }
 }

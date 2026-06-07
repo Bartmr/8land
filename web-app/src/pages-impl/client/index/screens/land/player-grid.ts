@@ -7,6 +7,7 @@ import { StaticBlockType, STATIC_BLOCK_TYPE_VALUES } from '../../../../../main-a
 import { KeypadBroker } from '../../keypad-broker';
 import { throwError } from '../../../../../throw-error';
 import { PlayerSprite } from './player-sprite';
+import { Math } from 'phaser';
 
 export enum Direction {
     NONE = 'none',
@@ -16,15 +17,13 @@ export enum Direction {
     DOWN = 'down'
   }
 
-const Vector2 = Phaser.Math.Vector2;
-
 const DIRECTION_TO_VECTOR: {
-  [key in Direction]?: Phaser.Math.Vector2;
+  [key in Direction]?: Math.Vector2;
 } = {
-  [Direction.UP]: Vector2.UP,
-  [Direction.DOWN]: Vector2.DOWN,
-  [Direction.LEFT]: Vector2.LEFT,
-  [Direction.RIGHT]: Vector2.RIGHT,
+  [Direction.UP]: Math.Vector2.UP,
+  [Direction.DOWN]: Math.Vector2.DOWN,
+  [Direction.LEFT]: Math.Vector2.LEFT,
+  [Direction.RIGHT]: Math.Vector2.RIGHT,
 };
 
 export type PlayerGridLandContext = {
@@ -68,7 +67,7 @@ export class PlayerGrid {
     private playerSprite: PlayerSprite,
     private keypadBroker: KeypadBroker,
     private playerPositionLandContext: PlayerGridLandContext,
-    private gridPosition: Phaser.Math.Vector2
+    private gridPosition: Math.Vector2
   ) {
 
   }
@@ -152,7 +151,7 @@ export class PlayerGrid {
     const directionVec = (
       DIRECTION_TO_VECTOR[this.movingDirection] || throwError()
     ).clone();
-    const movementDistance = directionVec.multiply(new Vector2(pixelsToMove));
+    const movementDistance = directionVec.multiply(new Math.Vector2(pixelsToMove));
 
     this.playerSprite.setPosition(
       this.playerSprite.getPosition().add(movementDistance),
@@ -195,18 +194,18 @@ export class PlayerGrid {
     return !!topTileProps?.static.collides;
   }
 
-  private getNextTilePosition(direction: Direction): Phaser.Math.Vector2 {
+  private getNextTilePosition(direction: Direction): Math.Vector2 {
     return this.gridPosition.clone()
       .add(DIRECTION_TO_VECTOR[direction] || throwError());
   }
 
-  private isOutsideLandBoundaries(pos: Phaser.Math.Vector2): boolean {
+  private isOutsideLandBoundaries(pos: Math.Vector2): boolean {
     return this.playerPositionLandContext.land.tilemap.layers.some((layer) => {
       return this.playerPositionLandContext.land.tilemap.hasTileAt(pos.x, pos.y, layer.name);
     });
   }
 
-  private getTopTileProperties(pos: Phaser.Math.Vector2) {
+  private getTopTileProperties(pos: Math.Vector2) {
     const resolveTileProps = (
       tile: Phaser.Tilemaps.Tile,
       inTerritoryId: string | undefined,

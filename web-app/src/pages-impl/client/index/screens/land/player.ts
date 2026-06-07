@@ -1,4 +1,4 @@
-import { Scene } from 'phaser';
+import { Math, Scene } from 'phaser';
 import { throwError } from '../../../../../throw-error';
 import { TILE_SIZE } from '../../game-constants';
 import { LandScene } from './land-scene';
@@ -12,7 +12,7 @@ export class Player {
   constructor(
     land: LandScene,
     depth: number,
-    gridPosition: Phaser.Math.Vector2,
+    gridPosition: Math.Vector2,
     keypadBroker: KeypadBroker,
     playerPositionLandContext: PlayerGridLandContext,
   ) {

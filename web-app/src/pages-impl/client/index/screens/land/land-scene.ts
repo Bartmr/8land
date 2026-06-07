@@ -23,6 +23,7 @@ import { NavigateToLandDTO } from '../../../../../main-api/routes/lands/lands.dt
 import { TrainAPI } from '../../../../../main-api/routes/train/train.api';
 import { throwError } from '../../../../../throw-error';
 import { KeypadBroker } from '../../keypad-broker';
+import { Math } from 'phaser';
 
 export class LandScene extends Phaser.Scene {
   private player?: Player;
@@ -417,7 +418,7 @@ export class LandScene extends Phaser.Scene {
     this.player = new Player(
       this,
       nextDepth,
-      new Phaser.Math.Vector2(position.x, position.y),
+      new Math.Vector2(position.x, position.y),
       this.dependencies.keypadBroker,
       playerPositionLandContext
     );
