@@ -15,7 +15,7 @@ import {
   NavigateToLandDTO,
   NavigateToLandQueryDTO,
 } from 'src/land/in-game/navigate/navigate-to-land.dto';
-import { ResumeLandNavigationDTO } from 'src/land/in-game/resume/resume-land-navigation.dto';
+import { ResumeLandNavigationDTO } from './in-game/resume/resume-land-navigation.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
 import {
   WithAuthContext,

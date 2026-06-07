@@ -1,4 +1,4 @@
-import { GetLandDTO } from '../../get/get-land.dto';
+import { InGameLandDTO } from '../in-game.dto';
 
 class LastDoorDTO {
   id!: string;
@@ -9,7 +9,7 @@ class LastTrainTravelDTO {
   comingBackToStation!: boolean;
 }
 
-export class ResumeLandNavigationDTO extends GetLandDTO {
+export class ResumeLandNavigationDTO extends InGameLandDTO {
   lastDoor!: null | LastDoorDTO;
   lastTrainTravel!: null | LastTrainTravelDTO;
   lastCheckpointWasDeleted!: boolean;
