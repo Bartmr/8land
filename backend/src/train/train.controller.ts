@@ -14,7 +14,7 @@ import { AuthGuard } from 'src/users/auth/auth.guard';
 import {
   GetTrainDestinationsDTO,
   GetTrainDestinationQueryDTO,
-} from 'src/train/apps/tickets/get-destinations/get-train-destinations.dto';
+} from 'src/train/get-destinations/get-train-destinations.dto';
 import {
   BoardTrainDTO,
   BoardTrainParametersDTO,
