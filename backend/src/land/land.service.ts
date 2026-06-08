@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, NotImplementedException } from '@nestjs/common';
 import { CreateLandRequestDTO } from 'src/land/create/create-land.dto';
 import { UploadLandAssetsParameters } from 'src/land/upload-assets/upload-land-assets.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
@@ -6,7 +6,7 @@ import { getSearchableString } from 'src/strings/get-searchable-string';
 import { World } from 'src/worlds/worlds.entity';
 import { Land } from './land.entity';
 import { WorldRepository } from 'src/worlds/worlds.repository';
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { LandRepository } from './land.repository';
 import sharp from 'sharp';
 import { createTiledJSONSchema } from 'src/land/upload-assets/upload-land-assets.schemas';
@@ -27,6 +27,10 @@ import { StaticBlockType } from 'src/blocks/block.enums';
 import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
 import { z } from "zod"
 import { GetLandDTO } from './get/get-land.dto';
+import { NavigationState } from 'src/navigation/state/navigation-state.entity';
+import { NavigationStateRepository } from 'src/navigation/state/navigation-state.repository';
+import { ResumeLandNavigationDTO } from './in-game/resume/resume-land-navigation.dto';
+import { InGameLandDTO } from './in-game/in-game.dto';
 
 function getLandStorageKeys(landId: string) {
   const tilesetStorageKey = `lands/${landId}/tileset.png`;
@@ -40,9 +44,221 @@ function getLandStorageKeys(landId: string) {
 
 @Injectable()
 export class LandService {
+  private logger = new Logger(LandService.name)
+
   constructor(private storageService: StorageService) {
 
   }
+
+  async toInGameLandDTO(land: Land): Promise<InGameLandDTO> {
+    const [territories, doorBlocksReferencing, doorBlocks, appBlocks] = await Promise.all([
+      land.territories,
+      land.doorBlocksReferencing,
+      land.doorBlocks,
+      land.appBlocks
+    ]);
+
+    const loadedTerritories = await Promise.all(territories.map(async (territory) => {
+      const doorBlocks = await territory.doorBlocks;
+      const appBlocks = await territory.appBlocks;
+      return {
+        id: territory.id,
+        startX: territory.startX,
+        startY: territory.startY,
+        endX: territory.endX,
+        endY: territory.endY,
+        assets: territory.hasAssets
+          ? {
+              baseUrl: this.storageService.getHostUrl(),
+              mapKey: `territories/${territory.id}/map.json`,
+              tilesetKey: `territories/${territory.id}/tileset.png`,
+            }
+          : undefined,
+        doorBlocks: doorBlocks.map((b) => {
+          return {
+            id: b.id,
+            toLand: {
+              id: b.toLand.id,
+              name: b.toLand.name,
+            },
+          };
+        }),
+        appBlocks: appBlocks.map((b) => ({
+          id: b.id,
+          url: b.url,
+        })),
+      };
+    }))
+
+    return {
+      id: land.id,
+      name: land.name,
+      backgroundMusicUrl: land.backgroundMusicUrl,
+      assets: land.hasAssets
+        ? {
+            baseUrl: this.storageService.getHostUrl(),
+            mapKey: `lands/${land.id}/map.json`,
+            tilesetKey: `lands/${land.id}/tileset.png`,
+          }
+        : undefined,
+      doorBlocksReferencing: doorBlocksReferencing.map((b) => {
+        if (!b.inLand) throwError();
+
+        return {
+          id: b.id,
+          fromLandId: b.inLand.id,
+          fromLandName: b.inLand.name,
+        };
+      }),
+      doorBlocks: doorBlocks.map((b) => {
+        return {
+          id: b.id,
+          toLand: {
+            id: b.toLand.id,
+            name: b.toLand.name,
+          },
+        };
+      }),
+      appBlocks: appBlocks.map((b) => ({
+        id: b.id,
+        url: b.url,
+      })),
+      territories: loadedTerritories,
+      isStartLand: !!land.isStartingLand,
+    };
+  }
+
+  async resume({
+    eM,
+    authContext,
+  }: {
+    eM: EntityManager;
+    authContext: AuthContext | undefined;
+  }): Promise<ResumeLandNavigationDTO> {
+    const navigationStateRepository = eM.getCustomRepository(
+      NavigationStateRepository,
+    );
+
+    let navState: NavigationState | undefined;
+
+    if (authContext) {
+      navState = await navigationStateRepository.getNavigationStateFromUser(
+        authContext.user,
+      );
+    }
+
+    const lastCheckpointWasDeleted = !!navState?.lastCheckpointWasDeleted;
+
+    if (navState) {
+      (async () => {
+        navState.lastCheckpointWasDeleted = false;
+
+        await navigationStateRepository.save(navState);
+      })().catch((err: unknown) =>
+        this.logger.error('navigate:resume', err),
+      );
+
+      if (navState.lastDoor) {
+        if (navState.cameBack) {
+          if (navState.lastDoor.inLand) {
+            if (
+              navState.lastDoor.inLand.world &&
+              !navState.lastDoor.inLand.world.hasStartLand
+            ) {
+              throw new Error(
+                'Lands and worlds cannot loose their start block',
+              );
+            }
+            const land = await this.toInGameLandDTO(navState.lastDoor.inLand);
+
+            return {
+              ...land,
+              backgroundMusicUrl:
+                land.backgroundMusicUrl ||
+                navState.lastPlayedBackgroundMusicUrl,
+              lastDoor: {
+                id: navState.lastDoor.id,
+                toLandId: navState.lastDoor.inLand.id,
+              },
+              lastTrainTravel: null,
+              lastCheckpointWasDeleted,
+            };
+          } else {
+            throw new NotImplementedException();
+          }
+        } else {
+          if (
+            navState.lastDoor.toLand.world &&
+            !navState.lastDoor.toLand.world.hasStartLand
+          ) {
+            throw new Error('Lands and worlds cannot loose their start block');
+          }
+
+          const land = await this.toInGameLandDTO(navState.lastDoor.toLand);
+
+          return {
+            ...land,
+            backgroundMusicUrl:
+              land.backgroundMusicUrl || navState.lastPlayedBackgroundMusicUrl,
+            lastDoor: {
+              id: navState.lastDoor.id,
+              toLandId: navState.lastDoor.toLand.id,
+            },
+            lastTrainTravel: null,
+            lastCheckpointWasDeleted,
+          };
+        }
+      } else if (navState.traveledByTrainToLand) {
+        const land = await this.toInGameLandDTO(navState.traveledByTrainToLand);
+
+        return {
+          ...land,
+          lastDoor: null,
+          lastTrainTravel: {
+            comingBackToStation: false,
+          },
+          lastCheckpointWasDeleted,
+        };
+      } else if (navState.boardedOnTrainStation) {
+        const land = await this.toInGameLandDTO(navState.boardedOnTrainStation);
+
+        return {
+          ...land,
+          lastDoor: null,
+          lastTrainTravel: {
+            comingBackToStation: true,
+          },
+          lastCheckpointWasDeleted,
+        };
+      }
+    }
+
+    const landsRepository = eM.getCustomRepository(LandRepository);
+
+    const firstLand = await landsRepository.selectOne(
+      { alias: 'land' },
+      (qB) => {
+        return qB
+          .where('land.hasAssets = :hasAssets', { hasAssets: true })
+          .andWhere('land.world IS NULL')
+          .orderBy('land.createdAt', 'ASC');
+      },
+    );
+
+    if (!firstLand) {
+      throw new Error();
+    }
+
+    const land = await this.toInGameLandDTO(firstLand);
+
+    return {
+      ...land,
+      lastDoor: null,
+      lastCheckpointWasDeleted,
+      lastTrainTravel: null,
+    };
+  }
+
   async createLand({
     connection,
     body,

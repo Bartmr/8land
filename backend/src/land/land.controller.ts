@@ -15,6 +15,8 @@ import {
   UseInterceptors,
   Delete,
   NotFoundException,
+  Logger,
+  NotImplementedException,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/users/auth/auth.guard';
 import {
@@ -26,7 +28,10 @@ import {
   IndexLandsQueryDTO,
 } from 'src/land/index/index-lands.dto';
 import { AuthContext } from 'src/users/auth/auth-context';
-import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
+import {
+  WithAuthContext,
+  WithOptionalAuthContext,
+} from 'src/users/auth/auth-context.decorator';
 import { StorageService } from 'src/storage/storage.service';
 import { DataSource } from 'typeorm';
 import { LandRepository } from './land.repository';
@@ -48,10 +53,19 @@ import { DeleteLandParametersDTO } from 'src/land/delete-land/delete-land.dto';
 import { PublicRoute } from 'src/users/auth/public-route.decorator';
 import { GetLandsToClaimDTO } from 'src/land/lands-to-claim/lands-to-claim.dto';
 import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
+import {
+  NavigateToLandDTO,
+  NavigateToLandQueryDTO,
+} from 'src/land/in-game/navigate/navigate-to-land.dto';
+import { ResumeLandNavigationDTO } from 'src/land/in-game/resume/resume-land-navigation.dto';
+import { DoorBlockRepository } from 'src/blocks/door-block.repository';
+import { NavigationStateRepository } from 'src/navigation/state/navigation-state.repository';
 
 @UseGuards(AuthGuard)
 @Controller('lands')
 export class LandsController {
+  private logger = new Logger(LandsController.name)
+
   constructor(
     private dataSource: DataSource,
     private storageService: StorageService,
@@ -290,5 +304,151 @@ export class LandsController {
     } else {
       throw new ConflictException({ error: res.status });
     }
+  }
+
+  @Get('/resume')
+  @PublicRoute()
+  async resumeLandNavigation(
+    @WithOptionalAuthContext() authContext?: AuthContext,
+  ): Promise<ResumeLandNavigationDTO> {
+    return this.landService.resume({
+      eM: this.dataSource.manager,
+      authContext,
+    });
+  }
+
+  @Get('/navigate')
+  @PublicRoute()
+  async navigate(
+    @Query() query: NavigateToLandQueryDTO,
+    @WithOptionalAuthContext() authContext?: AuthContext,
+  ): Promise<NavigateToLandDTO> {
+    const doorBlocksRepository =
+      this.dataSource.getCustomRepository(DoorBlockRepository);
+
+    const doorBlock = await doorBlocksRepository.findOne({
+      where: { id: query.doorBlockId },
+    });
+
+    if (!doorBlock) {
+      throw new NotFoundException();
+    }
+
+    let res: GetLandDTO;
+
+    if (doorBlock.inLand) {
+      // player came back
+      if (query.currentLandId == doorBlock.toLand.id) {
+        res = await this.landService.toInGameLandDTO(doorBlock.inLand);
+      }
+      // player entered
+      else if (query.currentLandId == doorBlock.inLand.id) {
+        res = await this.landService.toInGameLandDTO(doorBlock.toLand);
+      } else {
+        throw new Error();
+      }
+    } else {
+      throw new NotImplementedException();
+    }
+
+    if (!res.assets) {
+      throw new NotFoundException();
+    }
+
+    if (authContext) {
+      (async () => {
+        const navigationStateRepository = this.dataSource.getCustomRepository(
+          NavigationStateRepository,
+        );
+
+        const navState =
+          await navigationStateRepository.getNavigationStateFromUser(
+            authContext.user,
+          );
+
+        navState.lastDoor = doorBlock;
+
+        let lastPlayedBackgroundMusicUrl: string | null;
+
+        if (doorBlock.inLand) {
+          // player came back
+          if (query.currentLandId == doorBlock.toLand.id) {
+            navState.cameBack = true;
+
+            if (!doorBlock.inLand.world) {
+              navState.traveledByTrainToLand = null;
+              navState.boardedOnTrainStation = null;
+            }
+
+            lastPlayedBackgroundMusicUrl =
+              doorBlock.inLand.backgroundMusicUrl ||
+              navState.lastPlayedBackgroundMusicUrl;
+          }
+          // player entered
+          else if (query.currentLandId == doorBlock.inLand.id) {
+            navState.cameBack = false;
+
+            if (!doorBlock.toLand.world) {
+              navState.traveledByTrainToLand = null;
+              navState.boardedOnTrainStation = null;
+            }
+
+            lastPlayedBackgroundMusicUrl =
+              doorBlock.toLand.backgroundMusicUrl ||
+              navState.lastPlayedBackgroundMusicUrl;
+          } else {
+            throw new BadRequestException();
+          }
+        } else {
+          throw new NotImplementedException();
+        }
+
+        navState.lastPlayedBackgroundMusicUrl = lastPlayedBackgroundMusicUrl;
+
+        await navigationStateRepository.save(navState);
+      })().catch((err: unknown) =>
+        this.logger.error('navigate:save-state', err),
+      );
+    }
+
+    return res;
+  }
+
+  @Put('/escape')
+  async escape(
+    @WithAuthContext() authContext: AuthContext,
+  ) {
+    return this.dataSource.transaction(async (eM) => {
+      const navigationStatesRepository = eM.getCustomRepository(
+        NavigationStateRepository,
+      );
+
+      const navigationState =
+        await navigationStatesRepository.getNavigationStateFromUser(
+          authContext.user,
+        );
+
+      const lastDoor = navigationState.lastDoor;
+      const traveledByTrainToLand = navigationState.traveledByTrainToLand;
+
+      navigationState.lastDoor = null;
+      navigationState.traveledByTrainToLand = null;
+      navigationState.cameBack = null;
+      navigationState.lastPlayedBackgroundMusicUrl = null;
+
+      if (
+        navigationState.boardedOnTrainStation &&
+        !lastDoor &&
+        !traveledByTrainToLand
+      ) {
+        navigationState.boardedOnTrainStation = null;
+      }
+
+      if (lastDoor && !lastDoor.inLand) {
+        // MEANS IT'S A BLOCK INSIDE A TERRITORY
+        throw new NotImplementedException();
+      }
+      await navigationStatesRepository.save(navigationState);
+    });
   }
 }
