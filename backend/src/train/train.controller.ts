@@ -75,7 +75,7 @@ export class TrainController {
       }
 
       if (!authContext) {
-        return this.landService.toInGameLandDTO(land);
+        return this.landService.toNavigateToLandDTO(land);
       } else {
         const navState = await navStatesRepository.getNavigationStateFromUser(
           authContext.user,
@@ -114,7 +114,7 @@ export class TrainController {
 
         await navStatesRepository.save(navState);
 
-        return this.landService.toInGameLandDTO(land);
+        return this.landService.toNavigateToLandDTO(land);
       }
     });
   }
@@ -144,7 +144,7 @@ export class TrainController {
 
           await navStateRepo.save(navState);
 
-          return this.landService.toInGameLandDTO(boardedOnTrainStation);
+          return this.landService.toNavigateToLandDTO(boardedOnTrainStation);
         } else {
           return this.landService.resume({
             eM,
@@ -168,7 +168,7 @@ export class TrainController {
         throw new NotFoundException();
       }
 
-      return this.landService.toInGameLandDTO(trainStation);
+      return this.landService.toNavigateToLandDTO(trainStation);
     }
   }
 

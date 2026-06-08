@@ -29,8 +29,8 @@ import { z } from "zod"
 import { GetLandDTO } from './get/get-land.dto';
 import { NavigationState } from 'src/navigation/state/navigation-state.entity';
 import { NavigationStateRepository } from 'src/navigation/state/navigation-state.repository';
-import { ResumeLandNavigationDTO } from './in-game/resume/resume-land-navigation.dto';
-import { InGameLandDTO } from './in-game/in-game.dto';
+import { ResumeLandNavigationDTO } from './resume/resume-land-navigation.dto';
+import { NavigateToLandDTO } from './navigate/navigate-to-land.dto';
 
 function getLandStorageKeys(landId: string) {
   const tilesetStorageKey = `lands/${landId}/tileset.png`;
@@ -50,7 +50,7 @@ export class LandService {
 
   }
 
-  async toInGameLandDTO(land: Land): Promise<InGameLandDTO> {
+  async toNavigateToLandDTO(land: Land): Promise<NavigateToLandDTO> {
     const [doorBlocksReferencing, doorBlocks, appBlocks] = await Promise.all([
       land.doorBlocksReferencing,
       land.doorBlocks,
@@ -137,7 +137,7 @@ export class LandService {
                 'Lands and worlds cannot loose their start block',
               );
             }
-            const land = await this.toInGameLandDTO(navState.lastDoor.inLand);
+            const land = await this.toNavigateToLandDTO(navState.lastDoor.inLand);
 
             return {
               ...land,
@@ -162,7 +162,7 @@ export class LandService {
             throw new Error('Lands and worlds cannot loose their start block');
           }
 
-          const land = await this.toInGameLandDTO(navState.lastDoor.toLand);
+          const land = await this.toNavigateToLandDTO(navState.lastDoor.toLand);
 
           return {
             ...land,
@@ -177,7 +177,7 @@ export class LandService {
           };
         }
       } else if (navState.traveledByTrainToLand) {
-        const land = await this.toInGameLandDTO(navState.traveledByTrainToLand);
+        const land = await this.toNavigateToLandDTO(navState.traveledByTrainToLand);
 
         return {
           ...land,
@@ -188,7 +188,7 @@ export class LandService {
           lastCheckpointWasDeleted,
         };
       } else if (navState.boardedOnTrainStation) {
-        const land = await this.toInGameLandDTO(navState.boardedOnTrainStation);
+        const land = await this.toNavigateToLandDTO(navState.boardedOnTrainStation);
 
         return {
           ...land,
@@ -217,7 +217,7 @@ export class LandService {
       throw new Error();
     }
 
-    const land = await this.toInGameLandDTO(firstLand);
+    const land = await this.toNavigateToLandDTO(firstLand);
 
     return {
       ...land,

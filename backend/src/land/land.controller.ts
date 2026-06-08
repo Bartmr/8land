@@ -56,8 +56,8 @@ import { EnvironmentVariables } from 'src/environment-variables/environment-vari
 import {
   NavigateToLandDTO,
   NavigateToLandQueryDTO,
-} from 'src/land/in-game/navigate/navigate-to-land.dto';
-import { ResumeLandNavigationDTO } from 'src/land/in-game/resume/resume-land-navigation.dto';
+} from 'src/land/navigate/navigate-to-land.dto';
+import { ResumeLandNavigationDTO } from 'src/land/resume/resume-land-navigation.dto';
 import { DoorBlockRepository } from 'src/blocks/door-block.repository';
 import { NavigationStateRepository } from 'src/navigation/state/navigation-state.repository';
 
@@ -339,11 +339,11 @@ export class LandsController {
     if (doorBlock.inLand) {
       // player came back
       if (query.currentLandId == doorBlock.toLand.id) {
-        res = await this.landService.toInGameLandDTO(doorBlock.inLand);
+        res = await this.landService.toNavigateToLandDTO(doorBlock.inLand);
       }
       // player entered
       else if (query.currentLandId == doorBlock.inLand.id) {
-        res = await this.landService.toInGameLandDTO(doorBlock.toLand);
+        res = await this.landService.toNavigateToLandDTO(doorBlock.toLand);
       } else {
         throw new Error();
       }
