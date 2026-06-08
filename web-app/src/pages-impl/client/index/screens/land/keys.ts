@@ -11,15 +11,3 @@ export function getLandSceneTilesetKey(land: GetLandDTO) {
 export function getLandSceneTiledJSONKey(land: GetLandDTO) {
   return `land-scene:${land.id}:tiled-json`;
 }
-
-export function getTerritoryTilesetKey(
-  territory: GetLandDTO['territories'][number],
-) {
-  return `land-scene:territory:${territory.id}:tileset`;
-}
-
-export function getTerritoryTiledJSONKey(
-  territory: GetLandDTO['territories'][number],
-) {
-  return `land-scene:territory:${territory.id}:tiled-json`;
-}

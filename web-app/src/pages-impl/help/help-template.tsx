@@ -20,40 +20,7 @@ export const HelpTemplate = () => {
           <h2>Help</h2>
           <hr />
 
-          {/* <div>
-            <h3>Collectibles and NFT Territories</h3>
-            <div className="row g-3">
-              {[
-                {
-                  icon: <FontAwesomeIcon icon={faHandHolding} />,
-                  title: 'How to acquire territory?',
-                  href: ACQUIRING_TERRITORIES_ROUTE.getHref(),
-                },
-                {
-                  icon: <FontAwesomeIcon icon={faPen} />,
-                  title: 'How to edit my territory?',
-                  href: HOW_TO_EDIT_TERRITORY_ROUTE.getHref(),
-                },
-              ].map((c) => {
-                return (
-                  <div key={c.title} className="col-6 col-md-4">
-                    <div
-                      className={`h-100 d-block text-center bg-${'lightest'}`}
-                    >
-                      <LinkAnchor
-                        href={c.href}
-                        className="h-100 link-unstyled selectable d-block p-3"
-                      >
-                        <div className="icon-badge mb-2">{c.icon}</div>
-                        {c.title}
-                      </LinkAnchor>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <hr /> */}
+        
 
           <div>
             <h3>Lands</h3>

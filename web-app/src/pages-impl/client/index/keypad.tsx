@@ -175,7 +175,7 @@ export function Keypad(props: { keypad: KeypadBroker }) {
             className="btn btn-sm btn-secondary"
             style={{ cursor: 'pointer' }}
           >
-            Back
+            Escape
           </div>
         </div>
         <div className="me-4 mt-4 d-flex d-xl-none align-items-center justify-content-between">

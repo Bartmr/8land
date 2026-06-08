@@ -7,7 +7,6 @@ import * as firebaseAdmin from 'firebase-admin';
 import { UsersRepository } from 'src/users/users.repository';
 import { throwError } from 'src/throw-error';
 import { LandRepository } from 'src/land/land.repository';
-import { TerritoriesRepository } from 'src/territories/territories.repository';
 import { getSearchableString } from 'src/strings/get-searchable-string';
 import { DoorBlockRepository } from 'src/blocks/door-block.repository';
 import fs from 'fs';
@@ -24,7 +23,6 @@ import { User } from "src/users/user.entity";
 import { Land } from "src/land/land.entity";
 import { DoorBlock } from "src/blocks/door-block.entity";
 import { AppBlock } from "src/blocks/app-block.entity";
-import { Territory } from "src/territories/territory.entity";
 import { AppDataSourceOptions } from "src/database/data-source";
 
 const readFile = promisify(fs.readFile);
@@ -119,7 +117,6 @@ async function seed() {
         doorBlocksReferencing: Promise.resolve([]),
         appBlocks: Promise.resolve([]),
         hasAssets: true,
-        territories: Promise.resolve([]),
         world: null,
         isStartingLand: null,
         isTrainStation: null,
@@ -137,7 +134,6 @@ async function seed() {
         doorBlocksReferencing: Promise.resolve([]),
         appBlocks: Promise.resolve([]),
         hasAssets: true,
-        territories: Promise.resolve([]),
         world: null,
         isStartingLand: null,
         isTrainStation: null,
@@ -147,7 +143,6 @@ async function seed() {
     const townOfHumbleBeginningsApp1 = await appBlocksRepository.create(
       new AppBlock({
         inLand: townOfHumbleBeginnings,
-        inTerritory: null,
         url: 'http://localhost:8000/apps/test',
       }),
     );
@@ -163,7 +158,6 @@ async function seed() {
         doorBlocksReferencing: Promise.resolve([]),
         appBlocks: Promise.resolve([]),
         hasAssets: true,
-        territories: Promise.resolve([]),
         world: null,
         isStartingLand: null,
         isTrainStation: null,
@@ -181,7 +175,6 @@ async function seed() {
         doorBlocksReferencing: Promise.resolve([]),
         appBlocks: Promise.resolve([]),
         hasAssets: true,
-        territories: Promise.resolve([]),
         world: null,
         isStartingLand: null,
         isTrainStation: null,
@@ -197,7 +190,6 @@ async function seed() {
         doorBlocksReferencing: Promise.resolve([]),
         appBlocks: Promise.resolve([]),
         hasAssets: true,
-        territories: Promise.resolve([]),
         world: null,
         isStartingLand: null,
         isTrainStation: null,
@@ -208,7 +200,6 @@ async function seed() {
 
     const expectationsBeachDoor1 = await doorBlocksRepository.create(
       new DoorBlock({
-        inTerritory: Promise.resolve(null),
         inLand: expectationsBeach,
         toLand: expectationsBeach,
       }),
@@ -216,7 +207,6 @@ async function seed() {
 
     const expectationsBeachDoor2 = await doorBlocksRepository.create(
       new DoorBlock({
-        inTerritory: Promise.resolve(null),
         inLand: expectationsBeach,
         toLand: townOfHumbleBeginnings,
       }),
@@ -281,7 +271,6 @@ async function seed() {
 
     const townOfHumbleBeginningsDoor1 = await doorBlocksRepository.create(
       new DoorBlock({
-        inTerritory: Promise.resolve(null),
         inLand: townOfHumbleBeginnings,
         toLand: townOfHumbleBeginningsUnderground1,
       }),
@@ -289,7 +278,6 @@ async function seed() {
 
     const townOfHumbleBeginningsDoor2 = await doorBlocksRepository.create(
       new DoorBlock({
-        inTerritory: Promise.resolve(null),
         inLand: townOfHumbleBeginnings,
         toLand: townOfHumbleBeginningsUnderground2,
       }),
@@ -297,7 +285,6 @@ async function seed() {
 
     const townOfHumbleBeginningsDoor3 = await doorBlocksRepository.create(
       new DoorBlock({
-        inTerritory: Promise.resolve(null),
         inLand: townOfHumbleBeginnings,
         toLand: townOfHumbleBeginningsTemple,
       }),
@@ -388,7 +375,6 @@ async function seed() {
     const townOfHumbleBeginningsUnderground1Door1 =
       await doorBlocksRepository.create(
         new DoorBlock({
-          inTerritory: Promise.resolve(null),
           inLand: townOfHumbleBeginningsUnderground1,
           toLand: townOfHumbleBeginningsUnderground2,
         }),
@@ -557,48 +543,6 @@ async function seed() {
       townOfHumbleBeginningsTempleTileset,
     );
 
-    /* ----- */
-
-    const territoriesRepository = eM.getCustomRepository(TerritoriesRepository);
-
-    const territory1 = await territoriesRepository.create(
-      new Territory({
-        doorBlocks: Promise.resolve([]),
-        appBlocks: Promise.resolve([]),
-        hasAssets: true,
-        inLand: Promise.resolve(townOfHumbleBeginnings),
-        startX: 3,
-        startY: 3,
-        endX: 7,
-        endY: 6,
-      }),
-    );
-
-    const territory1Map = await readFile(
-      path.resolve(process.cwd(), 'development/seed/territory/assets/territory-map.json'),
-      { encoding: 'utf-8' },
-    );
-    const terrritory1Tileset = await readFile(
-      path.resolve(process.cwd(), 'development/seed/territory/assets/territory-tileset.png'),
-    );
-    const terrritory1Thumbnail = await readFile(
-      path.resolve(process.cwd(), 'development/seed/territory/assets/territory-thumbnail.jpg'),
-    );
-    await storageService.saveText(
-      `territories/${territory1.id}/map.json`,
-      territory1Map,
-    );
-    await storageService.saveBuffer(
-      `territories/${territory1.id}/tileset.png`,
-      terrritory1Tileset,
-    );
-    await storageService.saveBuffer(
-      `territories/${territory1.id}/thumbnail.jpg`,
-      terrritory1Thumbnail,
-    );
-
-    await territoriesRepository.save(territory1);
-    /* --- */
   });
 
   await defaultDBConnection.close();

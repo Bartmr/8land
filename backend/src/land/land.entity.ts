@@ -1,6 +1,5 @@
 import { AppBlock } from 'src/blocks/app-block.entity';
 import { DoorBlock } from 'src/blocks/door-block.entity';
-import { Territory } from 'src/territories/territory.entity';
 import { World } from 'src/worlds/worlds.entity';
 import {
   Column,
@@ -42,9 +41,6 @@ export class Land {
   @OneToMany(() => DoorBlock, (b) => b.toLand, { lazy: true })
   doorBlocksReferencing!: Promise<DoorBlock[]>;
 
-  @OneToMany(() => Territory, (e) => e.inLand, { lazy: true })
-  territories!: Promise<Territory[]>;
-
   @OneToMany(() => AppBlock, (b) => b.inLand, { lazy: true })
   appBlocks!: Promise<AppBlock[]>;
 
@@ -64,7 +60,6 @@ export class Land {
     hasAssets: boolean | null;
     doorBlocks: Promise<DoorBlock[]>;
     doorBlocksReferencing: Promise<DoorBlock[]>;
-    territories: Promise<Territory[]>;
     appBlocks: Promise<AppBlock[]>;
     world: World | null;
     isStartingLand: boolean | null;
@@ -78,7 +73,6 @@ export class Land {
     hasAssets: boolean | null;
     doorBlocks: Promise<DoorBlock[]>;
     doorBlocksReferencing: Promise<DoorBlock[]>;
-    territories: Promise<Territory[]>;
     appBlocks: Promise<AppBlock[]>;
     world: World | null;
     isStartingLand: boolean | null;
@@ -91,7 +85,6 @@ export class Land {
       this.hasAssets = props.hasAssets;
       this.doorBlocks = props.doorBlocks;
       this.doorBlocksReferencing = props.doorBlocksReferencing;
-      this.territories = props.territories;
       this.appBlocks = props.appBlocks;
       this.world = props.world;
       this.isStartingLand = props.isStartingLand;

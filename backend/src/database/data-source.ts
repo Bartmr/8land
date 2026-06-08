@@ -6,7 +6,6 @@ import { AppBlock } from 'src/blocks/app-block.entity';
 import { DoorBlock } from 'src/blocks/door-block.entity';
 import { Land } from 'src/land/land.entity';
 import { NavigationState } from 'src/navigation/state/navigation-state.entity';
-import { Territory } from 'src/territories/territory.entity';
 import { UserAuthSession } from 'src/users/auth/sessions/auth-session.entity';
 import { World } from 'src/worlds/worlds.entity';
 import { User } from 'src/users/user.entity';
@@ -25,7 +24,6 @@ export const AppDataSourceOptions: DataSourceOptions = {
     DoorBlock,
     Land,
     NavigationState,
-    Territory,
     UserAuthSession,
     World,
     User,

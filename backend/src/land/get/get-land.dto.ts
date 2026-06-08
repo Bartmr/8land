@@ -40,7 +40,6 @@ export class GetLandDTO {
   id!: string;
   name!: string;
   backgroundMusicUrl!: string | null;
-  territories!: GetLandTerritoryDTO[];
   doorBlocks!: GetLandDoorBlockEntryDTO[];
   doorBlocksReferencing!: GetLandDoorReferencingDTO[];
   appBlocks!: GetLandAppBlockEntryDTO[];

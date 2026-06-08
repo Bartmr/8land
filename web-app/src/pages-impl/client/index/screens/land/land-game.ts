@@ -108,7 +108,6 @@ export async function runLandGame(
         player,
         land: {
           ...args.resumedLand,
-          territories: args.resumedLand.territories.filter((t) => !!t.assets),
         },
         comingFrom: comingFrom,
         session: args.session,

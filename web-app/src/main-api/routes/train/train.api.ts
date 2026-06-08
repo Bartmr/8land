@@ -45,18 +45,6 @@ const navigateToLandResponseBodySchema = z.object({
   id: z.string(),
   name: z.string(),
   backgroundMusicUrl: z.string().nullable(),
-  territories: z.array(
-    z.object({
-      id: z.string(),
-      startX: z.number(),
-      startY: z.number(),
-      endX: z.number(),
-      endY: z.number(),
-      doorBlocks: z.array(landDoorBlockEntryResponseBodySchema),
-      appBlocks: z.array(landAppBlockEntryResponseBodySchema),
-      assets: landAssetsResponseBodyPropertySchema,
-    }),
-  ),
   doorBlocks: z.array(landDoorBlockEntryResponseBodySchema),
   doorBlocksReferencing: z.array(
     z.object({

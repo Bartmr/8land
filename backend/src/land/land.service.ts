@@ -51,44 +51,13 @@ export class LandService {
   }
 
   async toInGameLandDTO(land: Land): Promise<InGameLandDTO> {
-    const [territories, doorBlocksReferencing, doorBlocks, appBlocks] = await Promise.all([
-      land.territories,
+    const [doorBlocksReferencing, doorBlocks, appBlocks] = await Promise.all([
       land.doorBlocksReferencing,
       land.doorBlocks,
       land.appBlocks
     ]);
 
-    const loadedTerritories = await Promise.all(territories.map(async (territory) => {
-      const doorBlocks = await territory.doorBlocks;
-      const appBlocks = await territory.appBlocks;
-      return {
-        id: territory.id,
-        startX: territory.startX,
-        startY: territory.startY,
-        endX: territory.endX,
-        endY: territory.endY,
-        assets: territory.hasAssets
-          ? {
-              baseUrl: this.storageService.getHostUrl(),
-              mapKey: `territories/${territory.id}/map.json`,
-              tilesetKey: `territories/${territory.id}/tileset.png`,
-            }
-          : undefined,
-        doorBlocks: doorBlocks.map((b) => {
-          return {
-            id: b.id,
-            toLand: {
-              id: b.toLand.id,
-              name: b.toLand.name,
-            },
-          };
-        }),
-        appBlocks: appBlocks.map((b) => ({
-          id: b.id,
-          url: b.url,
-        })),
-      };
-    }))
+   
 
     return {
       id: land.id,
@@ -123,7 +92,6 @@ export class LandService {
         id: b.id,
         url: b.url,
       })),
-      territories: loadedTerritories,
       isStartLand: !!land.isStartingLand,
     };
   }
@@ -358,7 +326,6 @@ export class LandService {
           doorBlocksReferencing: Promise.resolve([]),
           backgroundMusicUrl: null,
           hasAssets: null,
-          territories: Promise.resolve([]),
           appBlocks: Promise.resolve([]),
           isStartingLand: null,
           isTrainStation: null,
@@ -372,7 +339,6 @@ export class LandService {
           doorBlocksReferencing: Promise.resolve([]),
           backgroundMusicUrl: null,
           hasAssets: null,
-          territories: Promise.resolve([]),
           appBlocks: Promise.resolve([]),
           isStartingLand: null,
           isTrainStation: null,
@@ -748,44 +714,11 @@ export class LandService {
   }
 
   async toGetLandDTO(land: Land): Promise<GetLandDTO> {
-      const [territories, doorBlocksReferencing, doorBlocks, appBlocks] = await Promise.all([
-        land.territories,
+      const [doorBlocksReferencing, doorBlocks, appBlocks] = await Promise.all([
         land.doorBlocksReferencing,
         land.doorBlocks,
         land.appBlocks
       ]);
-  
-      const loadedTerritories = await Promise.all(territories.map(async (territory) => {
-        const doorBlocks = await territory.doorBlocks;
-        const appBlocks = await territory.appBlocks;
-        return {
-          id: territory.id,
-          startX: territory.startX,
-          startY: territory.startY,
-          endX: territory.endX,
-          endY: territory.endY,
-          assets: territory.hasAssets
-            ? {
-                baseUrl: this.storageService.getHostUrl(),
-                mapKey: `territories/${territory.id}/map.json`,
-                tilesetKey: `territories/${territory.id}/tileset.png`,
-              }
-            : undefined,
-          doorBlocks: doorBlocks.map((b) => {
-            return {
-              id: b.id,
-              toLand: {
-                id: b.toLand.id,
-                name: b.toLand.name,
-              },
-            };
-          }),
-          appBlocks: appBlocks.map((b) => ({
-            id: b.id,
-            url: b.url,
-          })),
-        };
-      }))
   
       return {
         id: land.id,
@@ -820,7 +753,6 @@ export class LandService {
           id: b.id,
           url: b.url,
         })),
-        territories: loadedTerritories,
         isStartLand: !!land.isStartingLand,
       };
     }

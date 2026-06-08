@@ -106,7 +106,6 @@ export class BlocksController {
 
         await doorBlockRepository.create(new DoorBlock({
           inLand: land,
-          inTerritory: Promise.resolve(null),
           toLand,
         }));
 
@@ -120,7 +119,6 @@ export class BlocksController {
 
         await appBlockRepository.create(new AppBlock({
           inLand: land,
-          inTerritory: null,
           url: body.data.url,
         }));
       } else {

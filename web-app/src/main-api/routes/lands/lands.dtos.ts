@@ -33,22 +33,10 @@ export class GetLandAssetsDTO {
   tilesetKey!: string;
 }
 
-class GetLandTerritoryDTO {
-  id!: string;
-  startX!: number;
-  startY!: number;
-  endX!: number;
-  endY!: number;
-  doorBlocks!: GetLandDoorBlockEntryDTO[];
-  appBlocks!: GetLandAppBlockEntryDTO[];
-  assets: undefined | GetLandAssetsDTO;
-}
-
 export class GetLandDTO {
   id!: string;
   name!: string;
   backgroundMusicUrl!: string | null;
-  territories!: GetLandTerritoryDTO[];
   doorBlocks!: GetLandDoorBlockEntryDTO[];
   doorBlocksReferencing!: GetLandDoorReferencingDTO[];
   appBlocks!: GetLandAppBlockEntryDTO[];

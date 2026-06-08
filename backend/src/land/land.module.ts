@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { StorageModule } from 'src/storage/storage.module';
 import { DoorBlock } from '../blocks/door-block.entity';
 import { Land } from './land.entity';
-import { Territory } from 'src/territories/territory.entity';
 import { AppBlock } from 'src/blocks/app-block.entity';
 import { NavigationState } from 'src/navigation/state/navigation-state.entity';
 import { LandsController } from './land.controller';
@@ -13,7 +12,7 @@ import { AuthModule } from 'src/users/auth/auth.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Land, Territory, DoorBlock, AppBlock, NavigationState, World]),
+    TypeOrmModule.forFeature([Land, DoorBlock, AppBlock, NavigationState, World]),
     StorageModule,
     AuthModule,
   ],

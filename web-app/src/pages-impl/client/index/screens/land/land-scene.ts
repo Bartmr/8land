@@ -7,8 +7,6 @@ import {
   getLandSceneKey,
   getLandSceneTiledJSONKey,
   getLandSceneTilesetKey,
-  getTerritoryTiledJSONKey,
-  getTerritoryTilesetKey,
 } from './keys';
 import { Block, DoorBlock, LandSceneArguments } from './land-scene.types';
 import { Player } from './player';
@@ -121,79 +119,6 @@ export class LandScene extends Phaser.Scene {
     this.animatedTiles.init(landMap);
     //
 
-    // PROPERTIES
-    const territoryContexts: Array<{
-      id: string;
-      startX: number;
-      endX: number;
-      startY: number;
-      endY: number;
-      tilemap: Phaser.Tilemaps.Tilemap;
-      blocks: Block[];
-    }> = [];
-    for (let i = 0; i < this.args.land.territories.length; i++) {
-      const territory = this.args.land.territories[i] || throwError();
-
-      const territoryTiledJSON = (
-        this.cache.tilemap.get(getTerritoryTiledJSONKey(territory)) as
-          | { data: TiledJSON }
-          | undefined
-      )?.data;
-
-      const territoryFirstTileset =
-        (territoryTiledJSON || throwError()).tilesets[0] || throwError();
-
-      const territoryMap = this.make.tilemap({
-        key: getTerritoryTiledJSONKey(territory),
-      });
-      territoryMap.addTilesetImage(
-        territoryFirstTileset.name,
-        getTerritoryTilesetKey(territory),
-      );
-      territoryContexts.push({
-        id: territory.id,
-        startX: territory.startX,
-        endX: territory.endX,
-        startY: territory.startY,
-        endY: territory.endY,
-        tilemap: territoryMap,
-        blocks: [
-          ...territory.doorBlocks.map((dB) => {
-            return {
-              type: DynamicBlockType.Door as const,
-              toLandId: dB.toLand.id,
-              id: dB.id,
-            };
-          }),
-          ...territory.appBlocks.map((aB) => {
-            return {
-              type: DynamicBlockType.App as const,
-              url: aB.url,
-              id: aB.id,
-            };
-          }),
-        ],
-      });
-
-      const territoryLayer = territoryMap.createLayer(
-        0,
-        territoryFirstTileset.name,
-        territory.startX * TILE_SIZE,
-        territory.startY * TILE_SIZE,
-      );
-
-      if (!territoryLayer) {
-        throw new Error()
-      }
-
-      territoryLayer.setDepth(nextDepth);
-
-      nextDepth += 1;
-
-      this.animatedTiles.init(territoryMap);
-    }
-    //
-
     let position: { x: number; y: number } | undefined;
 
     // Search for tile that matches this.previousLandSceneArguments.comingFromDoorBlock
@@ -261,77 +186,6 @@ export class LandScene extends Phaser.Scene {
       }
     }
 
-    // Returning block might be present in territory instead
-    for (const territoryContext of territoryContexts) {
-      for (const layer of territoryContext.tilemap.layers) {
-        for (const row of layer.data) {
-          for (const tile of row) {
-            if (this.args.comingFrom.type === DynamicBlockType.Door) {
-              const properties = Object.values(
-                tile.properties as { [key: string]: unknown },
-              );
-
-              if (properties.includes(`door:${this.args.comingFrom.id}`)) {
-                position = {
-                  x: tile.x,
-                  y: tile.y,
-                };
-                break;
-              }
-            } else if (this.args.comingFrom.type === StaticBlockType.Start) {
-              const properties = Object.entries(
-                tile.properties as { [key: string]: unknown },
-              );
-
-              if (
-                properties.find(
-                  (p) => p[0] === StaticBlockType.Start && p[1] === true,
-                )
-              ) {
-                position = {
-                  x: tile.x,
-                  y: tile.y,
-                };
-                break;
-              }
-            } else if (
-              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-              this.args.comingFrom.type === StaticBlockType.TrainPlatform
-            ) {
-              const properties = Object.entries(
-                tile.properties as { [key: string]: unknown },
-              );
-
-              if (
-                properties.find(
-                  (p) =>
-                    p[0] === StaticBlockType.TrainPlatform && p[1] === true,
-                )
-              ) {
-                position = {
-                  x: tile.x,
-                  y: tile.y,
-                };
-                break;
-              }
-            }
-          }
-
-          if (position) {
-            break;
-          }
-        }
-
-        if (position) {
-          break;
-        }
-      }
-
-      if (position) {
-        break;
-      }
-    }
-
     if (!position) {
       this.dependencies.dialogueService.openText(
         'This land does not have any exits. You should use the back button in the user settings to go back to the outdoors',
@@ -342,8 +196,6 @@ export class LandScene extends Phaser.Scene {
         y: 0,
       };
     }
-
-
 
     const playerPositionLandContext: PlayerGridLandContext = {
       land: {
@@ -373,7 +225,6 @@ export class LandScene extends Phaser.Scene {
         ],
         tilemap: landMap,
       },
-      territories: territoryContexts,
       onStepIntoDoor: async (block) => {
         if (
           block.type === DynamicBlockType.Door &&
@@ -443,17 +294,6 @@ export class LandScene extends Phaser.Scene {
       getLandSceneTiledJSONKey(this.args.land),
       (this.args.land.assets || throwError()).mapKey,
     );
-
-    for (const territory of this.args.land.territories) {
-      this.load.image(
-        getTerritoryTilesetKey(territory),
-        (territory.assets || throwError()).tilesetKey,
-      );
-      this.load.tilemapTiledJSON(
-        getTerritoryTiledJSONKey(territory),
-        (territory.assets || throwError()).mapKey,
-      );
-    }
 
     //
 
@@ -593,7 +433,6 @@ export class LandScene extends Phaser.Scene {
           player: this.args.player,
           land: {
             ...nextLand,
-            territories: nextLand.territories.filter((t) => !!t.assets),
           },
           comingFrom: (() => {
             if (navType === 'door') {

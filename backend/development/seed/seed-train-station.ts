@@ -44,7 +44,6 @@ export async function seedTrainStation({
       doorBlocksReferencing: Promise.resolve([]),
       appBlocks: Promise.resolve([]),
       hasAssets: true,
-      territories: Promise.resolve([]),
       world: null,
       isStartingLand: null,
       isTrainStation: true,
@@ -55,14 +54,12 @@ export async function seedTrainStation({
     new DoorBlock({
       inLand: landOutside,
       toLand: trainStation,
-      inTerritory: Promise.resolve(null),
     }),
   );
 
   const ticketMachine = await appBlocksRepo.create(
     new AppBlock({
       inLand: trainStation,
-      inTerritory: null,
       url: 'http://localhost:8000/apps/train-ticket-machine',
     }),
   );

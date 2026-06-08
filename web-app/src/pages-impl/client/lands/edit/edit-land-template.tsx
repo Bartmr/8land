@@ -15,7 +15,6 @@ import { useLandsAPI } from '../../../../main-api/routes/lands/lands-api';
 import { Toast } from 'react-bootstrap';
 import { MainSection } from './main-section/main-section';
 import { BlocksSection } from './blocks-section/blocks-section';
-// import { TerritoriesSection } from './components/territories-section/territories-section';
 import { CommunicationError } from '../../../../communication-errors/communication-errors';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -147,16 +146,6 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
                   land={data}
                 />
               </div>
-              {/*
-              //  {session.role === Role.Admin ? (
-              //   <div className="mt-4">
-              //     <TerritoriesSection
-              //       land={data}
-              //       onSuccessfulSave={onSuccessfulSave}
-              //     />
-              //   </div>
-              // ) : null}
-              */}
             </>
           );
         }}

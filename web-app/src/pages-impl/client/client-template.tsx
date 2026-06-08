@@ -12,9 +12,6 @@ import { LANDS_ROUTE } from './lands/lands-routes';
 import { LandsTemplate } from './lands/lands-template';
 import { UserTemplate } from './user/user-template';
 import { USER_ROUTE } from './user/user-routes';
-// import { TerritoriesTemplate } from './territories/territories-template';
-// import { TERRITORIES_ROUTE } from './territories/territories-routes';
-// import { EditTerritoryTemplate } from './territories/edit/edit-territory-template';
 
 function Game(_props: RouteComponentProps) {
   const LazyLoadedRoute = React.lazy(async () => {

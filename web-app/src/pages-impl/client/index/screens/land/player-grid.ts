@@ -32,15 +32,6 @@ export type PlayerGridLandContext = {
     tilemap: Phaser.Tilemaps.Tilemap;
     blocks: Block[];
   };
-  territories: Array<{
-    id: string;
-    blocks: Block[];
-    startX: number;
-    endX: number;
-    startY: number;
-    endY: number;
-    tilemap: Phaser.Tilemaps.Tilemap;
-  }>;
   onStepIntoDoor: (
     block:
       | DoorBlock
@@ -278,35 +269,6 @@ export class PlayerGrid {
       }
     };
 
-    for (const territory of this.playerPositionLandContext.territories) {
-      if (
-        !(
-          (pos.x >= territory.startX || pos.x <= territory.endX) &&
-          (pos.y >= territory.startY || pos.y <= territory.endY)
-        )
-      ) {
-        continue;
-      }
-
-      for (const layer of territory.tilemap.layers) {
-        const tile = territory.tilemap.getTileAt(
-          pos.x - territory.startX,
-          pos.y - territory.startY,
-          false,
-          layer.name,
-        ) as Phaser.Tilemaps.Tile | null;
-
-        if (!tile) {
-          continue;
-        }
-
-        const props = resolveTileProps(tile, territory.id);
-
-        if (props) {
-          return props;
-        }
-      }
-    }
     for (const layer of this.playerPositionLandContext.land.tilemap.layers) {
       const tile = this.playerPositionLandContext.land.tilemap.getTileAt(
         pos.x,

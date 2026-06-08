@@ -56,7 +56,6 @@ const landSchema = z.object({
   id: z.string(),
   name: z.string(),
   backgroundMusicUrl: z.string().nullable(),
-  territories: z.array(landTerritorySchema),
   doorBlocks: z.array(landDoorBlockEntrySchema),
   doorBlocksReferencing: z.array(landDoorReferencingSchema),
   appBlocks: z.array(landAppBlockEntrySchema),
