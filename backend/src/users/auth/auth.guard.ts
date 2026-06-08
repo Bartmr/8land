@@ -44,27 +44,9 @@ export class AuthGuard implements CanActivate {
       context.getHandler(),
     );
 
-    const authTokenIdResult = authTokenIdSchema.safeParse(
-      request.header('authorization'),
-    );
+    const authToken = request.cookies['user-authentication-token'];
 
-    if (!authTokenIdResult.success) {
-      throw new UnauthorizedException();
-    }
-
-    const authTokenId = authTokenIdResult.data;
-
-    if (authTokenId) {
-      const cookiesValidationResult = z.object({
-        ['user-authentication-token']: authTokenKeySchema.optional(),
-      }).safeParse(request.cookies);
-
-      if (!cookiesValidationResult.success) {
-        throw new UnauthorizedException();
-      }
-
-      const authToken = cookiesValidationResult.data['user-authentication-token'];
-
+    if (authToken) {
       const user = await this.tokensService.verifyAuthToken(
         authToken,
       );
@@ -72,6 +54,7 @@ export class AuthGuard implements CanActivate {
       const authContext = new AuthContext({ user });
       request.authContext = authContext;
     }
+    
 
     if (isPublic) {
       return true;
