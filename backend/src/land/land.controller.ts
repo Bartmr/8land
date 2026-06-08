@@ -359,59 +359,56 @@ export class LandsController {
     }
 
     if (authContext) {
-      (async () => {
-        const navigationStateRepository = this.dataSource.getCustomRepository(
-          NavigationStateRepository,
+      const navigationStateRepository = this.dataSource.getCustomRepository(
+        NavigationStateRepository,
+      );
+
+      const navState =
+        await navigationStateRepository.getNavigationStateFromUser(
+          authContext.user,
         );
 
-        const navState =
-          await navigationStateRepository.getNavigationStateFromUser(
-            authContext.user,
-          );
+      navState.lastDoor = doorBlock;
 
-        navState.lastDoor = doorBlock;
+      let lastPlayedBackgroundMusicUrl: string | null;
 
-        let lastPlayedBackgroundMusicUrl: string | null;
+      if (doorBlock.inLand) {
+        // player came back
+        if (query.currentLandId == doorBlock.toLand.id) {
+          navState.cameBack = true;
 
-        if (doorBlock.inLand) {
-          // player came back
-          if (query.currentLandId == doorBlock.toLand.id) {
-            navState.cameBack = true;
-
-            if (!doorBlock.inLand.world) {
-              navState.traveledByTrainToLand = null;
-              navState.boardedOnTrainStation = null;
-            }
-
-            lastPlayedBackgroundMusicUrl =
-              doorBlock.inLand.backgroundMusicUrl ||
-              navState.lastPlayedBackgroundMusicUrl;
+          if (!doorBlock.inLand.world) {
+            navState.traveledByTrainToLand = null;
+            navState.boardedOnTrainStation = null;
           }
-          // player entered
-          else if (query.currentLandId == doorBlock.inLand.id) {
-            navState.cameBack = false;
 
-            if (!doorBlock.toLand.world) {
-              navState.traveledByTrainToLand = null;
-              navState.boardedOnTrainStation = null;
-            }
-
-            lastPlayedBackgroundMusicUrl =
-              doorBlock.toLand.backgroundMusicUrl ||
-              navState.lastPlayedBackgroundMusicUrl;
-          } else {
-            throw new BadRequestException();
-          }
-        } else {
-          throw new NotImplementedException();
+          lastPlayedBackgroundMusicUrl =
+            doorBlock.inLand.backgroundMusicUrl ||
+            navState.lastPlayedBackgroundMusicUrl;
         }
+        // player entered
+        else if (query.currentLandId == doorBlock.inLand.id) {
+          navState.cameBack = false;
 
-        navState.lastPlayedBackgroundMusicUrl = lastPlayedBackgroundMusicUrl;
+          if (!doorBlock.toLand.world) {
+            navState.traveledByTrainToLand = null;
+            navState.boardedOnTrainStation = null;
+          }
 
-        await navigationStateRepository.save(navState);
-      })().catch((err: unknown) =>
-        this.logger.error('navigate:save-state', err),
-      );
+          lastPlayedBackgroundMusicUrl =
+            doorBlock.toLand.backgroundMusicUrl ||
+            navState.lastPlayedBackgroundMusicUrl;
+        } else {
+          throw new BadRequestException();
+        }
+      } else {
+        throw new NotImplementedException();
+      }
+
+      navState.lastPlayedBackgroundMusicUrl = lastPlayedBackgroundMusicUrl;
+
+      await navigationStateRepository.save(navState);
+
     }
 
     return res;
