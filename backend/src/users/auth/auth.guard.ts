@@ -11,17 +11,7 @@ import {
   PUBLIC_ROUTE_METADATA_KEY,
 } from './public-route.decorator';
 import { AuthSessionsService } from './sessions/auth-sessions.service';
-import { z } from 'zod';
 import { AppRequest } from 'src/requests/request-types';
-
-const authTokenIdSchema = z
-  .string()
-  .optional()
-  .refine((s) => s === undefined || s.startsWith('Bearer '), 'must-be-bearer-scheme')
-  .transform((s) => (s ? s.replace('Bearer ', '') : s))
-  .pipe(z.uuid().optional());
-
-const authTokenKeySchema = z.uuid();
 
 @Injectable()
 export class AuthGuard implements CanActivate {
