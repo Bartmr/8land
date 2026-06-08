@@ -1,13 +1,10 @@
 import { createTiledJSONSchema } from 'src/land/upload-assets/upload-land-assets.schemas';
-import { AppBlockRepository } from 'src/blocks/app-block.repository';
-import { DoorBlockRepository } from 'src/blocks/door-block.repository';
 import {
   ContentType,
   StorageService,
 } from 'src/storage/storage.service';
 import { getSearchableString } from 'src/strings/get-searchable-string';
 import { Land } from 'src/land/land.entity';
-import { LandRepository } from 'src/land/land.repository';
 import { DoorBlock } from 'src/blocks/door-block.entity';
 import { AppBlock } from 'src/blocks/app-block.entity';
 import { EntityManager } from 'typeorm';
@@ -26,14 +23,14 @@ export async function seedTrainStation({
   landOutside: Land;
   storageService: StorageService;
 }) {
-  const landsRepo = eM.getCustomRepository(LandRepository);
-  const doorBlocksRepo = eM.getCustomRepository(DoorBlockRepository);
-  const appBlocksRepo = eM.getCustomRepository(AppBlockRepository);
+  const landsRepo = eM.getRepository(Land);
+  const doorBlocksRepo = eM.getRepository(DoorBlock);
+  const appBlocksRepo = eM.getRepository(AppBlock);
 
   
 
 
-  const trainStation = await landsRepo.create(
+  const trainStation = await landsRepo.save(
     new Land({
       name: 'Town of Humble Beginnings - Train Station',
       searchableName: getSearchableString(
@@ -50,14 +47,14 @@ export async function seedTrainStation({
     }),
   );
 
-  const entrance = await doorBlocksRepo.create(
+  const entrance = await doorBlocksRepo.save(
     new DoorBlock({
       inLand: landOutside,
       toLand: trainStation,
     }),
   );
 
-  const ticketMachine = await appBlocksRepo.create(
+  const ticketMachine = await appBlocksRepo.save(
     new AppBlock({
       inLand: trainStation,
       url: 'http://localhost:8000/apps/train-ticket-machine',

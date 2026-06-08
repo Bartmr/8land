@@ -30,8 +30,7 @@ import { getSearchableString } from 'src/strings/get-searchable-string';
 import { throwError } from 'src/throw-error';
 import { LandService } from 'src/land/land.service';
 import { Land } from 'src/land/land.entity';
-import { LandRepository } from 'src/land/land.repository';
-import { NavigationStateRepository } from 'src/navigation/state/navigation-state.repository';
+import { NavigationState } from 'src/navigation/state/navigation-state.entity';
 import { DataSource } from 'typeorm';
 
 @UseGuards(AuthGuard)
@@ -50,25 +49,13 @@ export class TrainController {
     @WithOptionalAuthContext() authContext?: AuthContext,
   ): Promise<BoardTrainDTO> {
     return this.dataSource.transaction(async (eM) => {
-      const landsRepository = eM.getCustomRepository(LandRepository);
-      const navStatesRepository = eM.getCustomRepository(
-        NavigationStateRepository,
-      );
-
-      const land = await landsRepository.selectOne(
-        {
-          alias: 'land',
-        },
-
-        (qb) =>
-          qb
-            .orderBy('land.createdAt')
-            .leftJoinAndSelect('land.world', 'world')
-            .andWhere(
-              `land.isStartingLand = true`,
-            )
-            .where('world.id = :id', { id: param.worldId }),
-      );
+      const land = await eM.getRepository(Land)
+        .createQueryBuilder('land')
+        .leftJoinAndSelect('land.world', 'world')
+        .where('world.id = :id', { id: param.worldId })
+        .andWhere('land.isStartingLand = true')
+        .orderBy('land.createdAt')
+        .getOne();
 
       if (!land) {
         throw new NotFoundException();
@@ -77,9 +64,16 @@ export class TrainController {
       if (!authContext) {
         return this.landService.toNavigateToLandDTO(land);
       } else {
-        const navState = await navStatesRepository.getNavigationStateFromUser(
-          authContext.user,
-        );
+        const navStatesRepository = eM.getRepository(NavigationState);
+
+        let navState = await navStatesRepository.findOne({
+          where: { user: { id: authContext.user.id } },
+        });
+
+        if (!navState) {
+          navState = navStatesRepository.create({ user: Promise.resolve(authContext.user) });
+          navState = await navStatesRepository.save(navState);
+        }
 
         if (!navState.lastDoor) {
           throw new ConflictException({
@@ -127,11 +121,16 @@ export class TrainController {
   ): Promise<ReturnToTrainStationDTO> {
     if (authContext) {
       return this.dataSource.transaction(async (eM) => {
-        const navStateRepo = eM.getCustomRepository(NavigationStateRepository);
+        const navStateRepo = eM.getRepository(NavigationState);
 
-        const navState = await navStateRepo.getNavigationStateFromUser(
-          authContext.user,
-        );
+        let navState = await navStateRepo.findOne({
+          where: { user: { id: authContext.user.id } },
+        });
+
+        if (!navState) {
+          navState = navStateRepo.create({ user: Promise.resolve(authContext.user) });
+          navState = await navStateRepo.save(navState);
+        }
 
         const boardedOnTrainStation = navState.boardedOnTrainStation;
 
@@ -157,10 +156,7 @@ export class TrainController {
         throw new BadRequestException();
       }
 
-      const landsRepository =
-        this.dataSource.getCustomRepository(LandRepository);
-
-      const trainStation = await landsRepository.findOne({
+      const trainStation = await this.dataSource.getRepository(Land).findOne({
         where: { id: query.boardedOnTrainStation },
       });
 
@@ -177,41 +173,31 @@ export class TrainController {
   async getTrainDestinations(
     @Query() query: GetTrainDestinationQueryDTO,
   ): Promise<GetTrainDestinationsDTO> {
-    const landsRepo = this.dataSource.getCustomRepository(LandRepository);
+    const limit = 50;
 
-    const res = await landsRepo.selectManyAndCount(
-      {
-        alias: 'land',
-        skip: query.skip,
-      },
-      (qB) => {
-        let qBFinal = qB
-          .orderBy(
-            `land.createdAt`,
-            'DESC',
-          )
-          .where(
-            `land.isStartingLand = true`,
-          )
-          .andWhere(
-            `land.world IS NOT NULL`,
-          );
+    let landQuery = this.dataSource.getRepository(Land)
+      .createQueryBuilder('land')
+      .leftJoinAndSelect('land.world', 'world')
+      .orderBy('land.createdAt', 'DESC')
+      .where('land.isStartingLand = true')
+      .andWhere('land.world IS NOT NULL');
 
-        if (query.name) {
-          qBFinal = qBFinal.andWhere(
-            `land.searchableName = :searchableName`,
-            { searchableName: getSearchableString(query.name) },
-          );
-        }
+    if (query.name) {
+      landQuery = landQuery.andWhere(
+        'land.searchableName = :searchableName',
+        { searchableName: getSearchableString(query.name) },
+      );
+    }
 
-        return qBFinal;
-      },
-    );
+    const [rows, total] = await landQuery
+      .skip(query.skip)
+      .take(limit)
+      .getManyAndCount();
 
     return {
-      limit: res.limit,
-      total: res.total,
-      rows: res.rows.map((r) => {
+      limit,
+      total,
+      rows: rows.map((r) => {
         return {
           name: r.name,
           worldId: r.world?.id ?? throwError(),

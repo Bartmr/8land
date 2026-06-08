@@ -34,7 +34,6 @@ import {
 } from 'src/users/auth/auth-context.decorator';
 import { StorageService } from 'src/storage/storage.service';
 import { DataSource } from 'typeorm';
-import { LandRepository } from './land.repository';
 
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import {
@@ -48,7 +47,8 @@ import {
   EditLandParametersDTO,
 } from 'src/land/edit/edit-land.dto';
 import { LandService } from './land.service';
-import { WorldRepository } from 'src/worlds/worlds.repository';
+import { Land } from './land.entity';
+import { World } from 'src/worlds/worlds.entity';
 import { DeleteLandParametersDTO } from 'src/land/delete-land/delete-land.dto';
 import { PublicRoute } from 'src/users/auth/public-route.decorator';
 import { GetLandsToClaimDTO } from 'src/land/lands-to-claim/lands-to-claim.dto';
@@ -58,8 +58,8 @@ import {
   NavigateToLandQueryDTO,
 } from 'src/land/navigate/navigate-to-land.dto';
 import { ResumeLandNavigationDTO } from 'src/land/resume/resume-land-navigation.dto';
-import { DoorBlockRepository } from 'src/blocks/door-block.repository';
-import { NavigationStateRepository } from 'src/navigation/state/navigation-state.repository';
+import { DoorBlock } from 'src/blocks/door-block.entity';
+import { NavigationState } from 'src/navigation/state/navigation-state.entity';
 import { ZodValidationPipe } from 'src/zod/zod.pipe';
 import { CreateLandRequestSchema } from './create/create-land.schemas';
 import { EditLandBodySchema } from './edit/edit-land.schema';
@@ -80,45 +80,44 @@ export class LandsController {
     @Query() query: IndexLandsQueryDTO,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<IndexLandsDTO> {
-    const landsRepository = this.dataSource.getCustomRepository(LandRepository);
-    const worldsRepository =
-      this.dataSource.getCustomRepository(WorldRepository);
+    const landsRepository = this.dataSource.getRepository(Land);
+    const worldsRepository = this.dataSource.getRepository(World);
 
-    const [results, world] = await Promise.all([
-      landsRepository.selectManyAndCount(
-        {
-          alias: 'land',
-          skip: query.skip || 0,
-        },
+    const limit = 50;
 
-        (qb) => {
-          if (authContext.user.isAdmin) {
-            return qb
-              .orderBy('land.createdAt', 'DESC')
-              .where('land.world IS NULL');
-          } else {
-            return qb
-              .orderBy('land.createdAt')
-              .leftJoinAndSelect('land.world', 'world')
-              .where('world.user = :id', { id: authContext.user.id });
-          }
-        },
-      ),
-      worldsRepository.findOne({ where: { user: { id: authContext.user.id }} }),
-    ]);
+    let landQuery = landsRepository
+      .createQueryBuilder('land')
+      .leftJoinAndSelect('land.world', 'world');
+
+    if (authContext.user.isAdmin) {
+      landQuery = landQuery
+        .orderBy('land.createdAt', 'DESC')
+        .where('land.world IS NULL');
+    } else {
+      landQuery = landQuery
+        .orderBy('land.createdAt')
+        .where('world.user = :id', { id: authContext.user.id });
+    }
+
+    const [rows, total] = await landQuery
+      .skip(query.skip || 0)
+      .take(limit)
+      .getManyAndCount();
+
+    const world = await worldsRepository.findOne({ where: { user: { id: authContext.user.id }} });
 
     if (!authContext.user.isAdmin && !world) {
       return {
         total: 0,
-        limit: results.limit,
+        limit,
         lands: [],
       };
     }
 
     return {
-      total: results.total,
-      limit: results.limit,
-      lands: results.rows.map((c) => ({
+      total,
+      limit,
+      lands: rows.map((c) => ({
         id: c.id,
         name: c.name,
         published:
@@ -133,7 +132,7 @@ export class LandsController {
   @Get('/getLandsToClaim')
   @PublicRoute()
   async getLandsToClaim(): Promise<GetLandsToClaimDTO> {
-    const landsRepository = this.dataSource.getCustomRepository(LandRepository);
+    const landsRepository = this.dataSource.getRepository(Land);
 
     const landsWithStartCount = await landsRepository.count({
         where: {
@@ -151,27 +150,18 @@ export class LandsController {
     @Param() parameters: GetLandParametersDTO,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<GetLandDTO> {
-    const landsRepository = this.dataSource.getCustomRepository(LandRepository);
+    const landsRepository = this.dataSource.getRepository(Land);
 
-    const land = await landsRepository.selectOne(
-      {
-        alias: 'land',
-      },
+    let landQuery = landsRepository
+      .createQueryBuilder('land')
+      .where('land.id = :id', { id: parameters.id })
+      .leftJoinAndSelect('land.world', 'world');
 
-      (qb) => {
-        let resQb = qb;
+    if (!authContext.user.isAdmin) {
+      landQuery = landQuery.andWhere('world.user = :userId', { userId: authContext.user.id });
+    }
 
-        resQb = resQb.where('land.id = :id', { id: parameters.id });
-
-        if (!authContext.user.isAdmin) {
-          resQb = resQb
-            .leftJoinAndSelect('land.world', 'world')
-            .andWhere('world.user = :userId', { userId: authContext.user.id });
-        }
-
-        return resQb;
-      },
-    );
+    const land = await landQuery.getOne();
 
     if (!land) {
       throw new NotFoundException();
@@ -326,10 +316,7 @@ export class LandsController {
     @Query() query: NavigateToLandQueryDTO,
     @WithOptionalAuthContext() authContext?: AuthContext,
   ): Promise<NavigateToLandDTO> {
-    const doorBlocksRepository =
-      this.dataSource.getCustomRepository(DoorBlockRepository);
-
-    const doorBlock = await doorBlocksRepository.findOne({
+    const doorBlock = await this.dataSource.getRepository(DoorBlock).findOne({
       where: { id: query.doorBlockId },
     });
 
@@ -359,14 +346,16 @@ export class LandsController {
     }
 
     if (authContext) {
-      const navigationStateRepository = this.dataSource.getCustomRepository(
-        NavigationStateRepository,
-      );
+      const navigationStateRepository = this.dataSource.getRepository(NavigationState);
 
-      const navState =
-        await navigationStateRepository.getNavigationStateFromUser(
-          authContext.user,
-        );
+      let navState = await navigationStateRepository.findOne({
+        where: { user: { id: authContext.user.id } },
+      });
+
+      if (!navState) {
+        navState = new NavigationState({ user: Promise.resolve(authContext.user) });
+        navState = await navigationStateRepository.save(navState);
+      }
 
       navState.lastDoor = doorBlock;
 
@@ -419,14 +408,16 @@ export class LandsController {
     @WithAuthContext() authContext: AuthContext,
   ) {
     return this.dataSource.transaction(async (eM) => {
-      const navigationStatesRepository = eM.getCustomRepository(
-        NavigationStateRepository,
-      );
+      const navigationStatesRepository = eM.getRepository(NavigationState);
 
-      const navigationState =
-        await navigationStatesRepository.getNavigationStateFromUser(
-          authContext.user,
-        );
+      let navigationState = await navigationStatesRepository.findOne({
+        where: { user: { id: authContext.user.id } },
+      });
+
+      if (!navigationState) {
+        navigationState = new NavigationState({ user: Promise.resolve(authContext.user) });
+        navigationState = await navigationStatesRepository.save(navigationState);
+      }
 
       const lastDoor = navigationState.lastDoor;
       const traveledByTrainToLand = navigationState.traveledByTrainToLand;

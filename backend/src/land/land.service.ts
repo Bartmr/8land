@@ -5,9 +5,7 @@ import { AuthContext } from 'src/users/auth/auth-context';
 import { getSearchableString } from 'src/strings/get-searchable-string';
 import { World } from 'src/worlds/worlds.entity';
 import { Land } from './land.entity';
-import { WorldRepository } from 'src/worlds/worlds.repository';
 import { DataSource, EntityManager } from 'typeorm';
-import { LandRepository } from './land.repository';
 import sharp from 'sharp';
 import { createTiledJSONSchema } from 'src/land/upload-assets/upload-land-assets.schemas';
 import {
@@ -28,7 +26,6 @@ import { EnvironmentVariables } from 'src/environment-variables/environment-vari
 import { z } from "zod"
 import { GetLandDTO } from './get/get-land.dto';
 import { NavigationState } from 'src/navigation/state/navigation-state.entity';
-import { NavigationStateRepository } from 'src/navigation/state/navigation-state.repository';
 import { ResumeLandNavigationDTO } from './resume/resume-land-navigation.dto';
 import { NavigateToLandDTO } from './navigate/navigate-to-land.dto';
 
@@ -103,16 +100,21 @@ export class LandService {
     eM: EntityManager;
     authContext: AuthContext | undefined;
   }): Promise<ResumeLandNavigationDTO> {
-    const navigationStateRepository = eM.getCustomRepository(
-      NavigationStateRepository,
-    );
+    const navigationStateRepository = eM.getRepository(NavigationState);
 
-    let navState: NavigationState | undefined;
+    let navState: NavigationState | null;
 
     if (authContext) {
-      navState = await navigationStateRepository.getNavigationStateFromUser(
-        authContext.user,
-      );
+      navState = await navigationStateRepository.findOne({
+        where: { user: { id: authContext.user.id } },
+      });
+
+      if (!navState) {
+        navState = new NavigationState({ user: Promise.resolve(authContext.user) });
+        navState = await navigationStateRepository.save(navState);
+      }
+    } else {
+      navState = null;
     }
 
     const lastCheckpointWasDeleted = !!navState?.lastCheckpointWasDeleted;
@@ -201,17 +203,13 @@ export class LandService {
       }
     }
 
-    const landsRepository = eM.getCustomRepository(LandRepository);
-
-    const firstLand = await landsRepository.selectOne(
-      { alias: 'land' },
-      (qB) => {
-        return qB
-          .where('land.hasAssets = :hasAssets', { hasAssets: true })
-          .andWhere('land.world IS NULL')
-          .orderBy('land.createdAt', 'ASC');
-      },
-    );
+    const firstLand = await eM.getRepository(Land)
+      .createQueryBuilder('land')
+      .leftJoinAndSelect('land.world', 'world')
+      .where('land.hasAssets = :hasAssets', { hasAssets: true })
+      .andWhere('land.world IS NULL')
+      .orderBy('land.createdAt', 'ASC')
+      .getOne();
 
     if (!firstLand) {
       throw new Error();
@@ -253,8 +251,8 @@ export class LandService {
       }
   > {
     return connection.transaction(async (e) => {
-      const landRepo = e.getCustomRepository(LandRepository);
-      const worldRepository = connection.getCustomRepository(WorldRepository);
+      const landRepo = e.getRepository(Land);
+      const worldRepository = e.getRepository(World);
 
       const landWithSameName = await landRepo.findOne({
         where: {
@@ -268,24 +266,17 @@ export class LandService {
         };
       }
 
-      const landsTotal: number = await landRepo.selectAndCount(
-        {
-          alias: 'land',
-        },
-        (qb) => {
-          let finalQb = qb;
+      let landsQuery = landRepo.createQueryBuilder('land');
 
-          if (limitations.useWorld) {
-            finalQb = finalQb
-              .leftJoinAndSelect('land.world', 'world')
-              .where('world.user = :userId', { userId: authContext.user.id });
-          } else {
-            finalQb = finalQb.where('land.world IS NULL');
-          }
+      if (limitations.useWorld) {
+        landsQuery = landsQuery
+          .leftJoinAndSelect('land.world', 'world')
+          .where('world.user = :userId', { userId: authContext.user.id });
+      } else {
+        landsQuery = landsQuery.where('land.world IS NULL');
+      }
 
-          return finalQb;
-        },
-      );
+      const landsTotal = await landsQuery.getCount();
 
       if (
         limitations.limitQuantity != null &&
@@ -308,7 +299,7 @@ export class LandService {
         });
 
         if (!previousWorld) {
-          world = await worldRepository.create(new World({
+          world = await worldRepository.save(new World({
             user: Promise.resolve(authContext.user),
             lands: Promise.resolve([]),
           }));
@@ -319,7 +310,7 @@ export class LandService {
           world = previousWorld;
         }
 
-        land = await landRepo.create(new Land({
+        land = await landRepo.save(new Land({
           name: body.name,
           searchableName: getSearchableString(body.name),
           doorBlocks: Promise.resolve([]),
@@ -332,7 +323,7 @@ export class LandService {
           world,
         }));
       } else {
-        land = await landRepo.create(new Land({
+        land = await landRepo.save(new Land({
           name: body.name,
           searchableName: getSearchableString(body.name),
           doorBlocks: Promise.resolve([]),
@@ -372,8 +363,8 @@ export class LandService {
   }) {
 
     return connection.transaction(async (e) => {
-      const landRepo = e.getCustomRepository(LandRepository);
-      const worldRepo = e.getCustomRepository(WorldRepository);
+      const landRepo = e.getRepository(Land);
+      const worldRepo = e.getRepository(World);
 
       const totalStartLands = await landRepo.count({
         where: { isStartingLand: true },
@@ -383,26 +374,20 @@ export class LandService {
         return { status: 'start-lands-limit-exceeded' } as const;
       }
 
-      const land = await landRepo.selectOne(
-        {
-          alias: 'land',
-        },
-        (qb) => {
-          let finalQb = qb
-            .leftJoinAndSelect('land.world', 'world')
-            .where('land.id = :id', { id: params.landId });
+      let landQuery = landRepo
+        .createQueryBuilder('land')
+        .leftJoinAndSelect('land.world', 'world')
+        .where('land.id = :id', { id: params.landId });
 
-          if (authContext.user.isAdmin) {
-            finalQb = finalQb.andWhere('land.world IS NULL');
-          } else {
-            finalQb = finalQb.andWhere('world.user = :userId', {
-              userId: authContext.user.id,
-            });
-          }
+      if (authContext.user.isAdmin) {
+        landQuery = landQuery.andWhere('land.world IS NULL');
+      } else {
+        landQuery = landQuery.andWhere('world.user = :userId', {
+          userId: authContext.user.id,
+        });
+      }
 
-          return finalQb;
-        },
-      );
+      const land = await landQuery.getOne();
 
       if (!land) {
         return { status: 'not-found' } as const;
@@ -580,28 +565,22 @@ export class LandService {
     authContext: AuthContext;
   }) {
     return connection.transaction(async (e) => {
-      const landRepository = e.getCustomRepository(LandRepository);
+      const landRepository = e.getRepository(Land);
 
-      const land = await landRepository.selectOne(
-        {
-          alias: 'land',
-        },
-        (qb) => {
-          let finalQb = qb
-            .leftJoinAndSelect('land.world', 'world')
-            .where('land.id = :id', { id: param.landId });
+      let landQuery = landRepository
+        .createQueryBuilder('land')
+        .leftJoinAndSelect('land.world', 'world')
+        .where('land.id = :id', { id: param.landId });
 
-          if (authContext.user.isAdmin) {
-            finalQb = finalQb.andWhere('land.world IS NULL');
-          } else {
-            finalQb = finalQb.andWhere('world.user = :userId', {
-              userId: authContext.user.id,
-            });
-          }
+      if (authContext.user.isAdmin) {
+        landQuery = landQuery.andWhere('land.world IS NULL');
+      } else {
+        landQuery = landQuery.andWhere('world.user = :userId', {
+          userId: authContext.user.id,
+        });
+      }
 
-          return finalQb;
-        },
-      );
+      const land = await landQuery.getOne();
 
       if (!land) {
         return { status: 'not-found' } as const;
@@ -655,26 +634,20 @@ export class LandService {
     authContext: AuthContext;
   }) {
     const res = await connection.transaction(async (e) => {
-      const landRepository = e.getCustomRepository(LandRepository);
+      const landRepository = e.getRepository(Land);
 
-      const land = await landRepository.selectOne(
-        {
-          alias: 'land',
-        },
-        (qb) => {
-          let finalQb = qb
-            .leftJoinAndSelect('land.world', 'world')
-            .where('land.id = :id', { id: landId });
+      let landQuery = landRepository
+        .createQueryBuilder('land')
+        .leftJoinAndSelect('land.world', 'world')
+        .where('land.id = :id', { id: landId });
 
-          if (!authContext.user.isAdmin) {
-            finalQb = finalQb.andWhere('world.user = :userId', {
-              userId: authContext.user.id,
-            });
-          }
+      if (!authContext.user.isAdmin) {
+        landQuery = landQuery.andWhere('world.user = :userId', {
+          userId: authContext.user.id,
+        });
+      }
 
-          return finalQb;
-        },
-      );
+      const land = await landQuery.getOne();
 
       if (!land) {
         return { status: 'not-found' } as const;
@@ -695,6 +668,33 @@ export class LandService {
       if (land.isStartingLand) {
         return { status: 'cannot-delete-start-land' } as const;
       }
+
+      // Inline LandRepository.remove logic: update NavigationState
+      const navigationStateRepository = e.getRepository(NavigationState);
+      await navigationStateRepository
+        .createQueryBuilder()
+        .update()
+        .set({
+          traveledByTrainToLand: null,
+          lastCheckpointWasDeleted: true,
+        })
+        .where('traveledByTrainToLand = :traveledByTrainToLandId', {
+          traveledByTrainToLandId: land.id,
+        })
+        .execute();
+
+      await navigationStateRepository
+        .createQueryBuilder()
+        .update()
+        .set({
+          traveledByTrainToLand: null,
+          boardedOnTrainStation: null,
+          lastCheckpointWasDeleted: true,
+        })
+        .where('boardedOnTrainStation = :boardedOnTrainStationId', {
+          boardedOnTrainStationId: land.id,
+        })
+        .execute();
 
       await landRepository.remove(land);
 

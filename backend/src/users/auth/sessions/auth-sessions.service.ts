@@ -3,8 +3,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { User } from 'src/users/user.entity';
-import { AuthSessionsRepository } from './auth-sessions.repository';
-import { DataSource, EntityManager } from 'typeorm';
+import { UserAuthSession } from './auth-session.entity';
+import { DataSource, EntityManager, Repository } from 'typeorm';
 import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
 import * as jwt from 'jsonwebtoken';
 import z from 'zod';
@@ -12,19 +12,17 @@ import z from 'zod';
 @Injectable()
 export class AuthSessionsService {
 
-  private tokensRepository: AuthSessionsRepository;
+  private tokensRepository: Repository<UserAuthSession>;
 
   constructor(
     dataSource: DataSource,
   ) {
     this.tokensRepository =
-      dataSource.getCustomRepository(AuthSessionsRepository);
+      dataSource.getRepository(UserAuthSession);
   }
 
   async createSession(manager: EntityManager, user: User) {
-    const tokensRepository = manager.getCustomRepository(AuthSessionsRepository);
-
-    const token = await tokensRepository.createSession(user);
+    const token = await manager.getRepository(UserAuthSession).save(new UserAuthSession({ user }));
 
     return token;
   }
@@ -65,16 +63,22 @@ export class AuthSessionsService {
   }
 
   findSession(tokenString: string) {
-    return this.tokensRepository.findSessionById(tokenString);
+    return this.tokensRepository.findOne({
+      where: { id: tokenString },
+    });
   }
 
   deleteSession(tokenString: string) {
-    return this.tokensRepository.deleteSession(tokenString);
+    return this.tokensRepository.delete({
+      id: tokenString,
+    });
   }
 
 
 
   deleteAllSessionsFromUser(user: User) {
-    return this.tokensRepository.deleteAllSessionsFromUser(user);
+    return this.tokensRepository.delete({
+      user,
+    });
   }
 }

@@ -27,9 +27,8 @@ import {
 } from './auth-context.decorator';
 import { PublicRoute } from './public-route.decorator';
 import { DataSource } from 'typeorm';
-import { UsersRepository } from 'src/users/users.repository';
-import { AuthSessionsService } from './sessions/auth-sessions.service';
 import { User } from 'src/users/user.entity';
+import { AuthSessionsService } from './sessions/auth-sessions.service';
 import { type Request as RequestType, type Response as ResponseType } from 'express';
 import { v4 } from 'uuid';
 import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
@@ -67,9 +66,7 @@ export class AuthController {
       throw new BadRequestException();
     }
 
-    const repository = this.dataSource.getCustomRepository(UsersRepository);
-
-    const user = await repository.findOne({
+    const user = await this.dataSource.getRepository(User).findOne({
       where: {
         email: body.email,
       },
@@ -111,9 +108,7 @@ export class AuthController {
       throw new BadRequestException();
     }
 
-    const repository = this.dataSource.getCustomRepository(UsersRepository);
-
-    const existingUser = await repository.findOne({
+    const existingUser = await this.dataSource.getRepository(User).findOne({
       where: {
         email: body.email,
       },
@@ -125,7 +120,7 @@ export class AuthController {
 
     const passwordHash = await bcrypt.hash(body.password, SALT_ROUNDS);
 
-    const user = await repository.create(new User({
+    const user = await this.dataSource.getRepository(User).save(new User({
       email: body.email,
       passwordHash,
       isAdmin: false,

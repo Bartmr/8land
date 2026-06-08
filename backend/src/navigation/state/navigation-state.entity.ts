@@ -44,4 +44,10 @@ export class NavigationState {
 
   @Column('bool', { nullable: true })
   lastCheckpointWasDeleted!: boolean | null;
+
+  constructor(args?: { user: Promise<User> }) {
+    if (args) {
+      this.user = args.user;
+    }
+  }
 }

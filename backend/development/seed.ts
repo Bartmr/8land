@@ -3,16 +3,12 @@ import dotenv from "dotenv"
 dotenv.config()
 
 import { createConnection } from 'typeorm';
-import { UsersRepository } from 'src/users/users.repository';
-import { LandRepository } from 'src/land/land.repository';
 import { getSearchableString } from 'src/strings/get-searchable-string';
-import { DoorBlockRepository } from 'src/blocks/door-block.repository';
 import fs from 'fs';
 import { promisify } from 'util';
 import path from 'path';
 import { DevStorageService } from 'src/storage/dev-storage.service';
 import { LOCAL_TEMPORARY_FILES_PATH } from 'src/temporary-files';
-import { AppBlockRepository } from 'src/blocks/app-block.repository';
 import { createTiledJSONSchema } from 'src/land/upload-assets/upload-land-assets.schemas';
 import { seedTrainStation } from './seed/seed-train-station';
 import { EnvironmentVariables } from "src/environment-variables/environment-variables";
@@ -40,7 +36,7 @@ async function seed() {
   const passwordHash = await bcrypt.hash('password123', 10);
 
   await defaultDBConnection.manager.transaction(async (eM) => {
-    const usersRepository = eM.getCustomRepository(UsersRepository);
+    const usersRepository = eM.getRepository(User);
 
     const endUser = new User(
       {
@@ -51,7 +47,7 @@ async function seed() {
       },
     )
 
-    await usersRepository.create(
+    await usersRepository.save(
       endUser
     );
 
@@ -64,15 +60,15 @@ async function seed() {
       },
     )
 
-    await usersRepository.create(
+    await usersRepository.save(
       adminUser
     );
 
-    const landsRepository = eM.getCustomRepository(LandRepository);
-    const doorBlocksRepository = eM.getCustomRepository(DoorBlockRepository);
-    const appBlocksRepository = eM.getCustomRepository(AppBlockRepository);
+    const landsRepository = eM.getRepository(Land);
+    const doorBlocksRepository = eM.getRepository(DoorBlock);
+    const appBlocksRepository = eM.getRepository(AppBlock);
 
-    const expectationsBeach = await landsRepository.create(
+    const expectationsBeach = await landsRepository.save(
       new Land({
         name: 'Expectations Beach',
         searchableName: getSearchableString('Expectations Beach'),
@@ -89,7 +85,7 @@ async function seed() {
 
     
 
-    const townOfHumbleBeginnings = await landsRepository.create(
+    const townOfHumbleBeginnings = await landsRepository.save(
       new Land({
         name: 'Town of Humble Beginnings',
         searchableName: getSearchableString('Town of Humble Beginnings'),
@@ -104,14 +100,14 @@ async function seed() {
       }),
     );
 
-    const townOfHumbleBeginningsApp1 = await appBlocksRepository.create(
+    const townOfHumbleBeginningsApp1 = await appBlocksRepository.save(
       new AppBlock({
         inLand: townOfHumbleBeginnings,
         url: 'http://localhost:8000/apps/test',
       }),
     );
 
-    const townOfHumbleBeginningsUnderground1 = await landsRepository.create(
+    const townOfHumbleBeginningsUnderground1 = await landsRepository.save(
       new Land({
         name: 'Town of Humble Beginnings - Underground 1',
         searchableName: getSearchableString(
@@ -128,7 +124,7 @@ async function seed() {
       }),
     );
 
-    const townOfHumbleBeginningsUnderground2 = await landsRepository.create(
+    const townOfHumbleBeginningsUnderground2 = await landsRepository.save(
       new Land({
         name: 'Town of Humble Beginnings - Underground 2',
         searchableName: getSearchableString(
@@ -145,7 +141,7 @@ async function seed() {
       }),
     );
 
-    const townOfHumbleBeginningsTemple = await landsRepository.create(
+    const townOfHumbleBeginningsTemple = await landsRepository.save(
       new Land({
         name: 'Town of Humble Beginnings - Temple',
         searchableName: getSearchableString('Town of Humble Beginnings - Temple'),
@@ -162,14 +158,14 @@ async function seed() {
 
     /* ----- */
 
-    const expectationsBeachDoor1 = await doorBlocksRepository.create(
+    const expectationsBeachDoor1 = await doorBlocksRepository.save(
       new DoorBlock({
         inLand: expectationsBeach,
         toLand: expectationsBeach,
       }),
     );
 
-    const expectationsBeachDoor2 = await doorBlocksRepository.create(
+    const expectationsBeachDoor2 = await doorBlocksRepository.save(
       new DoorBlock({
         inLand: expectationsBeach,
         toLand: townOfHumbleBeginnings,
@@ -233,21 +229,21 @@ async function seed() {
 
     /* ----- */
 
-    const townOfHumbleBeginningsDoor1 = await doorBlocksRepository.create(
+    const townOfHumbleBeginningsDoor1 = await doorBlocksRepository.save(
       new DoorBlock({
         inLand: townOfHumbleBeginnings,
         toLand: townOfHumbleBeginningsUnderground1,
       }),
     );
 
-    const townOfHumbleBeginningsDoor2 = await doorBlocksRepository.create(
+    const townOfHumbleBeginningsDoor2 = await doorBlocksRepository.save(
       new DoorBlock({
         inLand: townOfHumbleBeginnings,
         toLand: townOfHumbleBeginningsUnderground2,
       }),
     );
 
-    const townOfHumbleBeginningsDoor3 = await doorBlocksRepository.create(
+    const townOfHumbleBeginningsDoor3 = await doorBlocksRepository.save(
       new DoorBlock({
         inLand: townOfHumbleBeginnings,
         toLand: townOfHumbleBeginningsTemple,
@@ -337,7 +333,7 @@ async function seed() {
     /* ----- */
 
     const townOfHumbleBeginningsUnderground1Door1 =
-      await doorBlocksRepository.create(
+      await doorBlocksRepository.save(
         new DoorBlock({
           inLand: townOfHumbleBeginningsUnderground1,
           toLand: townOfHumbleBeginningsUnderground2,
