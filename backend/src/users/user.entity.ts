@@ -11,8 +11,12 @@ import {
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
+
   @Column({ unique: true })
-  firebaseUid!: string;
+  email!: string;
+
+  @Column()
+  passwordHash!: string;
 
   @CreateDateColumn()
   createdAt!: Date;
@@ -30,18 +34,21 @@ export class User {
   appId!: string;
 
   constructor(props: {
-    firebaseUid: string;
+    email: string;
+    passwordHash: string;
     isAdmin: boolean;
     appId: string;
   })
   constructor()
   constructor(props?: {
-    firebaseUid: string;
+    email: string;
+    passwordHash: string;
     isAdmin: boolean;
     appId: string;
   }) {
     if (props) {
-      this.firebaseUid = props.firebaseUid;
+      this.email = props.email;
+      this.passwordHash = props.passwordHash;
       this.isAdmin = props.isAdmin;
       this.appId = props.appId;
     }
@@ -50,7 +57,7 @@ export class User {
   public toJSON() {
     return {
       ...this,
-      firebaseUid: undefined,
+      passwordHash: undefined,
     };
   }
 }

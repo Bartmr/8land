@@ -22,12 +22,6 @@ const ENVIRONMENT_VARIABLES_VALIDATION_SCHEMA = z.object({
   DATABASE_USER: z.string(),
   DATABASE_PASSWORD: z.string(),
 
-  FIREBASE_AUTH_EMULATOR_HOST: z.string().optional(),
-  FIREBASE_EMULATOR_PROJECT_ID: z.string().optional(),
-
-  GOOGLE_APPLICATION_CREDENTIALS: z.string().optional(),
-
-
   AWS_ENDPOINT: z.string().optional(),
   AWS_REGION: z.string().optional(),
   AWS_ACCESS_KEY_ID: z.string().optional(),

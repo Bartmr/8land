@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { Readable } from 'stream';
 import { promisify } from 'util';
-import { LOCAL_TEMPORARY_FILES_PATH } from '../temporary-files/temporary-files';
+import { LOCAL_TEMPORARY_FILES_PATH } from '../temporary-files';
 import { StorageService } from './storage.service';
 import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
 

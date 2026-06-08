@@ -13,8 +13,6 @@
     "@redux-devtools/extension": "^3.2.2",
     "bootstrap": "^5.3.8",
     "date-fns": "^2.28.0",
-    "firebase": "^9.9.0",
-    "firebaseui": "^6.0.1",
     "gatsby": "^5.14.6",
     "gatsby-plugin-sass": "^6.16.0",
     "lodash": "^4.17.21",

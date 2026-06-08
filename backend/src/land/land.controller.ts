@@ -60,6 +60,9 @@ import {
 import { ResumeLandNavigationDTO } from 'src/land/resume/resume-land-navigation.dto';
 import { DoorBlockRepository } from 'src/blocks/door-block.repository';
 import { NavigationStateRepository } from 'src/navigation/state/navigation-state.repository';
+import { ZodValidationPipe } from 'src/zod/zod.pipe';
+import { CreateLandRequestSchema } from './create/create-land.schemas';
+import { EditLandBodySchema } from './edit/edit-land.schema';
 
 @UseGuards(AuthGuard)
 @Controller('lands')
@@ -179,7 +182,7 @@ export class LandsController {
 
   @Post()
   async createLand(
-    @Body() body: CreateLandRequestDTO,
+    @Body(new ZodValidationPipe(CreateLandRequestSchema)) body: CreateLandRequestDTO,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<CreateLandResponseDTO> {
     const limit = EnvironmentVariables.LAND_LIMIT_PER_WORLD;
@@ -262,7 +265,7 @@ export class LandsController {
   @Put(':landId')
   async editLand(
     @Param() param: EditLandParametersDTO,
-    @Body() body: EditLandBodyDTO,
+    @Body(new ZodValidationPipe(EditLandBodySchema)) body: EditLandBodyDTO,
     @WithAuthContext() authContext: AuthContext,
   ): Promise<EditLandDTO> {
     const res = await this.landService.editLand({

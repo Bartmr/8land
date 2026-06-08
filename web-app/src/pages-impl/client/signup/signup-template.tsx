@@ -1,5 +1,5 @@
 import React from 'react';
-import { RouteComponentProps } from '@reach/router';
+import { RouteComponentProps, useLocation } from '@reach/router';
 import { Layout } from '../../layout/layout';
 import { useState, useContext } from 'react';
 import {
@@ -15,12 +15,11 @@ import { z } from 'zod';
 import { AuthenticationSessionSchema } from '../../../users/authentication/authentication-schemas';
 import { AuthenticationStateContext } from '../../../users/authentication/authentication-state';
 import { navigate } from 'gatsby';
-import { useLocation } from '@reach/router';
 import { CLIENT_SIDE_INDEX_ROUTE } from '../index/index-routes';
-import { SIGNUP_ROUTE } from '../signup/signup-routes';
+import { LOGIN_ROUTE } from '../login/login-routes';
 import isEmail from 'validator/lib/isEmail';
 
-const loginResponseSchema = z.union([
+const signupResponseSchema = z.union([
   z.object({
     status: z.literal(201),
     body: z.object({
@@ -28,7 +27,7 @@ const loginResponseSchema = z.union([
     }),
   }),
   z.object({
-    status: z.literal(404),
+    status: z.literal(409),
     body: z.unknown(),
   }),
 ]);
@@ -41,7 +40,7 @@ function Content() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [formState, setFormState] = useState<
-    CommunicatedData<undefined | 'invalid-credentials'>
+    CommunicatedData<undefined | 'email-already-in-use'>
   >({
     status: CommunicatedDataStatus.NotInitialized,
   });
@@ -58,8 +57,8 @@ function Content() {
     setFormState({ status: CommunicatedDataStatus.Loading });
 
     const res = await mainApi.fetchJSON({
-      schema: loginResponseSchema,
-      path: '/users/auth/login',
+      schema: signupResponseSchema,
+      path: '/users/auth/signup',
       method: 'POST',
       body: { email, password },
     });
@@ -69,10 +68,10 @@ function Content() {
       return;
     }
 
-    if (res.response.status === 404) {
+    if (res.response.status === 409) {
       setFormState({
         status: CommunicatedDataStatus.Done,
-        data: 'invalid-credentials' as const,
+        data: 'email-already-in-use' as const,
       });
       return;
     }
@@ -90,7 +89,7 @@ function Content() {
         <div className="col-12 col-sm-8 col-md-6 col-lg-4">
           <div className="card">
             <div className="card-body">
-              <h2 className="card-title h4 mb-4">Sign In</h2>
+              <h2 className="card-title h4 mb-4">Create Account</h2>
 
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
@@ -149,16 +148,23 @@ function Content() {
                       aria-hidden="true"
                     ></span>
                   ) : (
-                    'Sign In'
+                    'Create Account'
                   )}
                 </button>
 
                 <CommunicatedDataGate dataWrapper={formState}>
                   {(wrapper) => {
-                    if (wrapper.data === 'invalid-credentials') {
+                    if (wrapper.data === 'email-already-in-use') {
                       return (
                         <div className="alert alert-warning mt-3 mb-0">
-                          Invalid email or password. Please try again.
+                          An account with this email already exists.{' '}
+                          <LinkAnchor
+                            href={LOGIN_ROUTE.getHref({
+                              next: new URLSearchParams(location.search).get('next'),
+                            })}
+                          >
+                            Sign In
+                          </LinkAnchor>
                         </div>
                       );
                     }
@@ -169,16 +175,16 @@ function Content() {
               </form>
 
               <p className="mt-3 mb-0 text-center">
-                Don&apos;t have an account?{' '}
-                <LinkAnchor href={SIGNUP_ROUTE.getHref({ next: new URLSearchParams(location.search).get('next') })}>
-                  Sign Up
+                Already have an account?{' '}
+                <LinkAnchor href={LOGIN_ROUTE.getHref({ next: new URLSearchParams(location.search).get('next') })}>
+                  Sign In
                 </LinkAnchor>
               </p>
             </div>
           </div>
 
           <p className="mt-4 text-center">
-            By signing in, you are agreeing with
+            By creating an account, you are agreeing with
             8Land&apos;s{' '}
             <LinkAnchor href={TERMS_OF_USE_ROUTE.getHref()}>
               Terms of Use
@@ -194,7 +200,7 @@ function Content() {
   );
 }
 
-export function LoginTemplate(_props: RouteComponentProps) {
+export function SignupTemplate(_props: RouteComponentProps) {
   return (
     <Layout>{() => <Content />}</Layout>
   );

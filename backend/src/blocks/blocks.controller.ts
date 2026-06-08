@@ -23,6 +23,8 @@ import { AppBlock } from './app-block.entity';
 import { AppBlockRepository } from './app-block.repository';
 import { DoorBlock } from './door-block.entity';
 import { DoorBlockRepository } from './door-block.repository';
+import { ZodValidationPipe } from 'src/zod/zod.pipe';
+import { CreateBlockRequestSchema } from './create/create-block.schemas';
 
 @UseGuards(AuthGuard)
 @Controller('blocks')
@@ -31,7 +33,7 @@ export class BlocksController {
 
   @Post()
   createBlock(
-    @Body() body: CreateBlockRequestDTO,
+    @Body(new ZodValidationPipe(CreateBlockRequestSchema)) body: CreateBlockRequestDTO,
     @WithAuthContext() authContext: AuthContext,
   ) {
     if (!authContext.user.isAdmin) {

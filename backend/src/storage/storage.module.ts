@@ -1,5 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { LOCAL_TEMPORARY_FILES_PATH } from '../temporary-files/temporary-files';
+import { LOCAL_TEMPORARY_FILES_PATH } from '../temporary-files';
 import express from 'express';
 import path from 'path';
 import { StorageService } from './storage.service';

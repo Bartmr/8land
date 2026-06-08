@@ -38,7 +38,9 @@ export class AuthSessionsService {
     );
 
     const tokenDataValidationResult = z.object({
-      tokenId: z.string().uuid(),
+      data: z.object({
+        sessionId: z.string().uuid(),
+      }),
     }).safeParse(rawTokenData);
 
     if (!tokenDataValidationResult.success) {
@@ -47,7 +49,7 @@ export class AuthSessionsService {
 
     const tokenData = tokenDataValidationResult.data;
 
-    const session = await this.findSession(tokenData.tokenId);
+    const session = await this.findSession(tokenData.data.sessionId);
 
     if (!session) {
       throw new UnauthorizedException();

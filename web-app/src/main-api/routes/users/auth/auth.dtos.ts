@@ -1,5 +1,11 @@
 export class LoginRequestDTO {
-  firebaseIdToken!: string;
+  email!: string;
+  password!: string;
+}
+
+export class SignupRequestDTO {
+  email!: string;
+  password!: string;
 }
 
 export class AuthSessionDTO {

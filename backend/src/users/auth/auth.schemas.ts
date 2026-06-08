@@ -1,6 +1,12 @@
 import { z } from 'zod';
-import { LoginRequestDTO } from './auth.dto';
+import { LoginRequestDTO, SignupRequestDTO } from './auth.dto';
 
 export const loginRequestSchema: z.ZodType<LoginRequestDTO> = z.object({
-  firebaseIdToken: z.string(),
+  email: z.string().email(),
+  password: z.string().min(1),
+});
+
+export const signupRequestSchema: z.ZodType<SignupRequestDTO> = z.object({
+  email: z.string().email(),
+  password: z.string().min(1),
 });

@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import express from 'express';
 import path from 'path';
-import { LOCAL_TEMPORARY_FILES_PATH } from '../temporary-files/temporary-files';
+import { LOCAL_TEMPORARY_FILES_PATH } from '../temporary-files';
 import fs from 'fs';
 import { promisify } from 'util';
 import { EnvironmentVariables } from 'src/environment-variables/environment-variables';

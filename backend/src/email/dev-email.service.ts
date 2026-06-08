@@ -1,7 +1,7 @@
 import util from 'util';
 import fs from 'fs';
 import path from 'path';
-import { LOCAL_TEMPORARY_FILES_PATH } from 'src/temporary-files/temporary-files';
+import { LOCAL_TEMPORARY_FILES_PATH } from 'src/temporary-files';
 import { Email, EmailService } from './email.service';
 import { HttpAdapterHost } from '@nestjs/core';
 import { Injectable, Logger } from '@nestjs/common';

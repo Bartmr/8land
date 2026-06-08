@@ -9,8 +9,8 @@ import { NavigationState } from 'src/navigation/state/navigation-state.entity';
 import { UserAuthSession } from 'src/users/auth/sessions/auth-session.entity';
 import { World } from 'src/worlds/worlds.entity';
 import { User } from 'src/users/user.entity';
-import { Squash1775318794517 } from 'src/database/migrations/1775318794517-squash';
 import { DataSourceOptions } from 'typeorm/browser';
+import { Initialize1780932515218 } from 'backend/src/database/1780932515218-initialize';
 
 export const AppDataSourceOptions: DataSourceOptions = {
   type: 'postgres' as const,
@@ -40,7 +40,7 @@ export const AppDataSourceOptions: DataSourceOptions = {
   */
   migrationsRun: true,
   migrations: [
-    Squash1775318794517
+    Initialize1780932515218
   ],
 }
 export const AppDataSource = new DataSource(AppDataSourceOptions)

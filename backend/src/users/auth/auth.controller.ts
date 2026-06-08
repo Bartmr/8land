@@ -2,6 +2,7 @@ import {
   AuthSessionDTO,
   LoginRequestDTO,
   LoginResponseDTO,
+  SignupRequestDTO,
 } from 'src/users/auth/auth.dto';
 import {
   BadRequestException,
@@ -25,31 +26,33 @@ import {
   WithOptionalAuthContext,
 } from './auth-context.decorator';
 import { PublicRoute } from './public-route.decorator';
-import { FirebaseService } from 'src/firebase/firebase.service';
 import { DataSource } from 'typeorm';
 import { UsersRepository } from 'src/users/users.repository';
 import { AuthSessionsService } from './sessions/auth-sessions.service';
 import { User } from 'src/users/user.entity';
 import { type Request as RequestType, type Response as ResponseType } from 'express';
-import { type DecodedIdToken } from 'firebase-admin/auth';
 import { v4 } from 'uuid';
 import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
 import * as jwt from 'jsonwebtoken';
+import * as bcrypt from 'bcrypt';
+import { loginRequestSchema, signupRequestSchema } from './auth.schemas';
+import { ZodValidationPipe } from 'src/zod/zod.pipe';
+
+const SALT_ROUNDS = 10;
 
 @UseGuards(AuthGuard)
 @Controller('/users/auth')
 export class AuthController {
   constructor(
-    private firebaseService: FirebaseService,
     private dataSource: DataSource,
     private authSessionsService: AuthSessionsService,
   ) {}
 
   @HttpCode(201)
   @PublicRoute()
-  @Post()
+  @Post('/login')
   public async login(
-    @Body() body: LoginRequestDTO,
+    @Body(new ZodValidationPipe(loginRequestSchema)) body: LoginRequestDTO,
     @Request() request: RequestType,
     @Response({ passthrough: true }) response: ResponseType,
     @WithOptionalAuthContext() authContext?: AuthContext,
@@ -64,51 +67,76 @@ export class AuthController {
       throw new BadRequestException();
     }
 
-    const firebaseAuth = this.firebaseService.getAuth();
-
-    let decodedToken: DecodedIdToken;
-
-    try {
-      decodedToken = await firebaseAuth.verifyIdToken(body.firebaseIdToken);
-    } catch (err) {
-      throw new BadRequestException();
-    }
-
-    const firebaseUser = await firebaseAuth.getUser(decodedToken.uid);
-
     const repository = this.dataSource.getCustomRepository(UsersRepository);
 
-    let user = await repository.findOne({
+    const user = await repository.findOne({
       where: {
-        firebaseUid: decodedToken.uid,
+        email: body.email,
       },
     });
 
     if (!user) {
-      const newUser = await repository.create(new User({
-        firebaseUid: decodedToken.uid,
-        isAdmin: false,
-        appId: v4(),
-      }));
-
-      await firebaseAuth.setCustomUserClaims(firebaseUser.uid, {
-        userIdInDatabase: newUser.id,
-      });
-
-    }   
-
-    if (firebaseUser.emailVerified) {
-      return this.createTokenAndReturnResponse({
-        user,
-        response,
-        hostname,
-      });
-    } else {
-      throw new ConflictException({
-        error: 'needs-verification',
-        createdNewUser: true,
-      });
+      throw new NotFoundException();
     }
+
+    const passwordValid = await bcrypt.compare(body.password, user.passwordHash);
+
+    if (!passwordValid) {
+      throw new NotFoundException();
+    }
+
+    return this.createTokenAndReturnResponse({
+      user,
+      response,
+      hostname,
+    });
+  }
+
+  @HttpCode(201)
+  @PublicRoute()
+  @Post('/signup')
+  public async signup(
+    @Body(new ZodValidationPipe(signupRequestSchema)) body: SignupRequestDTO,
+    @Request() request: RequestType,
+    @Response({ passthrough: true }) response: ResponseType,
+    @WithOptionalAuthContext() authContext?: AuthContext,
+  ): Promise<LoginResponseDTO> {
+    const hostname = request.hostname;
+
+    if (!hostname) {
+      throw new BadRequestException();
+    }
+
+    if (authContext) {
+      throw new BadRequestException();
+    }
+
+    const repository = this.dataSource.getCustomRepository(UsersRepository);
+
+    const existingUser = await repository.findOne({
+      where: {
+        email: body.email,
+      },
+    });
+
+    if (existingUser) {
+      throw new ConflictException();
+    }
+
+    const passwordHash = await bcrypt.hash(body.password, SALT_ROUNDS);
+
+    const user = await repository.create(new User({
+      email: body.email,
+      passwordHash,
+      isAdmin: false,
+      appId: v4(),
+    }));
+
+    return this.createTokenAndReturnResponse({
+      user,
+      response,
+      hostname,
+    });
   }
 
   @Get()
@@ -151,7 +179,7 @@ export class AuthController {
     }, EnvironmentVariables.JWT_SECRET);
 
     response.cookie('user-authentication-token', token, {
-      expires: new Date(exp),
+      expires: new Date(exp * 1000),
       httpOnly: true,
       secure: EnvironmentVariables.NODE_ENV === "production",
       domain: hostname,

@@ -3,9 +3,7 @@ import dotenv from "dotenv"
 dotenv.config()
 
 import { createConnection } from 'typeorm';
-import * as firebaseAdmin from 'firebase-admin';
 import { UsersRepository } from 'src/users/users.repository';
-import { throwError } from 'src/throw-error';
 import { LandRepository } from 'src/land/land.repository';
 import { getSearchableString } from 'src/strings/get-searchable-string';
 import { DoorBlockRepository } from 'src/blocks/door-block.repository';
@@ -13,7 +11,7 @@ import fs from 'fs';
 import { promisify } from 'util';
 import path from 'path';
 import { DevStorageService } from 'src/storage/dev-storage.service';
-import { LOCAL_TEMPORARY_FILES_PATH } from 'src/temporary-files/temporary-files';
+import { LOCAL_TEMPORARY_FILES_PATH } from 'src/temporary-files';
 import { AppBlockRepository } from 'src/blocks/app-block.repository';
 import { createTiledJSONSchema } from 'src/land/upload-assets/upload-land-assets.schemas';
 import { seedTrainStation } from './seed/seed-train-station';
@@ -24,57 +22,30 @@ import { Land } from "src/land/land.entity";
 import { DoorBlock } from "src/blocks/door-block.entity";
 import { AppBlock } from "src/blocks/app-block.entity";
 import { AppDataSourceOptions } from "src/database/data-source";
+import * as bcrypt from 'bcrypt';
 
 const readFile = promisify(fs.readFile);
 const rm = promisify(fs.rm);
 
 
 async function seed() {
-  const FIREBASE_AUTH_EMULATOR_HOST =
-    EnvironmentVariables.FIREBASE_AUTH_EMULATOR_HOST;
-
-  if (!FIREBASE_AUTH_EMULATOR_HOST) {
-    throw new Error('Must use Firebase Auth Emulator for seeding');
-  }
-
   await rm(LOCAL_TEMPORARY_FILES_PATH, { recursive: true, force: true });
 
-  const firebaseProjectId = EnvironmentVariables.FIREBASE_EMULATOR_PROJECT_ID || throwError();
-
-  const firebaseApp = firebaseAdmin.initializeApp({
-    projectId: firebaseProjectId,
-  });
-  const firebaseAuth = firebaseApp.auth();
-
   const storageService = new DevStorageService();
-
-  const res = await fetch(
-    `http://${FIREBASE_AUTH_EMULATOR_HOST}/emulator/v1/projects/${firebaseProjectId}/accounts`,
-    { method: 'DELETE' },
-  );
-
-  if (res.status !== 200) {
-    throw new Error(`Failed to clear Firebase Auth emulator accounts: ${res.status}`);
-  }
 
   const defaultDBConnection = await createConnection(AppDataSourceOptions);
 
   await defaultDBConnection.runMigrations();
 
+  const passwordHash = await bcrypt.hash('password123', 10);
+
   await defaultDBConnection.manager.transaction(async (eM) => {
-    const endUserFirebaseUid = (
-      await firebaseAuth.createUser({
-        email: 'end-user@8land.com',
-        emailVerified: true,
-        password: 'password123',
-      })
-    ).uid;
-    
     const usersRepository = eM.getCustomRepository(UsersRepository);
 
     const endUser = new User(
       {
-        firebaseUid: endUserFirebaseUid,
+        email: 'end-user@8land.com',
+        passwordHash,
         isAdmin: false,
         appId: v4(),
       },
@@ -84,17 +55,10 @@ async function seed() {
       endUser
     );
 
-    const adminUserFirebaseUid = (
-    await firebaseAuth.createUser({
-      email: 'admin@8land.com',
-      emailVerified: true,
-      password: 'password123',
-    })
-  ).uid;
-
     const adminUser = new User(
       {
-        firebaseUid: adminUserFirebaseUid,
+        email: 'admin@8land.com',
+        passwordHash,
         isAdmin: true,
         appId: v4(),
       },

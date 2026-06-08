@@ -2,6 +2,7 @@ import { Router } from '@reach/router';
 import { AuthenticatedRoute } from '../../users/authentication/authenticated-route';
 import NotFoundTemplate from '../../pages/404';
 import { LoginTemplate } from './login/login-template';
+import { SignupTemplate } from './signup/signup-template';
 import React, { Suspense } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { CommunicatedDataGate } from '../../ui/communicated-data-gate';
@@ -50,6 +51,9 @@ export function ClientTemplate() {
       </AuthenticatedRoute>
       <LoginTemplate
         path="/client/login"
+      />
+      <SignupTemplate
+        path="/client/signup"
       />
       <NotFoundTemplate default />
     </Router>
