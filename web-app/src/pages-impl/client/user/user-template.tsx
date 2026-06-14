@@ -15,7 +15,7 @@ import { FaPersonThroughWindow } from 'react-icons/fa6';
 import { useLandsAPI } from '../../../main-api/routes/lands/lands-api';
 import { useAuthAPI } from '../../../main-api/routes/users/auth/auth.api';
 import { useAuthenticationLogout } from '../../../users/authentication/logout';
-import { useAuthenticationSessionState } from '../../../users/authentication/authentication-state';
+import { useAuthenticationStateSession } from '../../../users/authentication/authentication-state';
 
 
 
@@ -24,7 +24,7 @@ export function UserTemplate(_props: RouteComponentProps) {
     CommunicatedData<undefined>
   >({ status: CommunicatedDataStatus.NotInitialized });
 
-  const session = useAuthenticationSessionState();
+  const session = useAuthenticationStateSession();
   const logout = useAuthenticationLogout();
 
   const landsApi = useLandsAPI();

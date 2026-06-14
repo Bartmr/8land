@@ -8,7 +8,7 @@ import { useLocalStorage } from '../../../local-storage';
 import { z } from 'zod';
 import {
   AuthenticationSession,
-  useOptionalAuthenticationSession,
+  useOptionalAuthenticationStateSessionData,
 } from '../../../users/authentication/authentication-state';
 
 type MainApiFetchJSON = ReturnType<typeof useMainApiFetchJSON>;
@@ -175,7 +175,7 @@ export class TrainAPI {
 export function useTrainAPI() {
   const api = useMainApiFetchJSON();
   const localStorage = useLocalStorage();
-  const session = useOptionalAuthenticationSession();
+  const session = useOptionalAuthenticationStateSessionData();
 
   return new TrainAPI(api, localStorage, session);
 }

@@ -49,7 +49,7 @@ export function AuthenticationStateProvider(props: {
   );
 }
 
-export function useAuthenticationSessionState(): CommunicatedData<null | AuthenticationSession> {
+export function useAuthenticationStateSession(): CommunicatedData<null | AuthenticationSession> {
   const { sessionState } =
     useContext(AuthenticationStateContext) || throwError();
 
@@ -68,7 +68,7 @@ export function useAuthenticationSessionState(): CommunicatedData<null | Authent
 }
 
 
-export function useAuthenticationSession() {
+export function useAuthenticationStateSessionData() {
   const { sessionState } =
     useContext(AuthenticationStateContext) || throwError();
 
@@ -79,7 +79,7 @@ export function useAuthenticationSession() {
   return sessionState.data;
 }
 
-export function useOptionalAuthenticationSession() {
+export function useOptionalAuthenticationStateSessionData() {
   const { sessionState } =
     useContext(AuthenticationStateContext) || throwError();
 

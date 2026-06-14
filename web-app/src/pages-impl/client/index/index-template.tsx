@@ -12,7 +12,7 @@ import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
 import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
 import { ResumeLandNavigationDTO } from '../../../main-api/routes/lands/lands.dtos';
 import { useLandsAPI } from '../../../main-api/routes/lands/lands-api';
-import { useAuthenticationSessionState } from '../../../users/authentication/authentication-state';
+import { useAuthenticationStateSession } from '../../../users/authentication/authentication-state';
 
 function Content(props: {
   showHeaderAndFooter: () => void;
@@ -20,7 +20,7 @@ function Content(props: {
 }) {
   const api = useLandsAPI();
 
-  const session = useAuthenticationSessionState();
+  const session = useAuthenticationStateSession();
 
   const [pressedStart, replacePressedStart] = useState(false);
 

@@ -4,7 +4,7 @@ import { CommunicationError } from "../communication-errors/communication-errors
 import { useLogger } from "../logging/logger";
 import { MAIN_API_URL } from "./fetch";
 import { useAuthenticationLogout } from "../users/authentication/logout";
-import { AuthenticationStateContext, useAuthenticationSession, useAuthenticationSessionState } from "../users/authentication/authentication-state";
+import { AuthenticationStateContext, useAuthenticationStateSessionData, useAuthenticationStateSession } from "../users/authentication/authentication-state";
 import { throwError } from "../throw-error";
 
 export type MainApiFetchJSONResult<T> =

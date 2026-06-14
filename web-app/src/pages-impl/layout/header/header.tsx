@@ -17,7 +17,7 @@ import { getCurrentLocalHref } from '../../../navigation/current-local-href';
 import { HELP_ROUTE } from '../../help/help-routes';
 import { CLIENT_SIDE_INDEX_ROUTE } from '../../client/index/index-routes';
 import logo from '../../../logo.svg'
-import { useAuthenticationSessionState } from '../../../users/authentication/authentication-state';
+import { useAuthenticationStateSession } from '../../../users/authentication/authentication-state';
 
 type Props = {
   menuHtmlId: string;
@@ -31,7 +31,7 @@ type Props = {
 export function Header(props: Props) {
   const [expanded, replaceExpanded] = useState<boolean>(false);
 
-  const session = useAuthenticationSessionState();
+  const session = useAuthenticationStateSession();
 
   const expandMenu = () => {
     replaceExpanded(true);
