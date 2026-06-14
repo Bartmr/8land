@@ -8,6 +8,7 @@ import { DataSource, EntityManager, Repository } from 'typeorm';
 import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
 import * as jwt from 'jsonwebtoken';
 import z from 'zod';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthSessionsService {
@@ -29,6 +30,7 @@ export class AuthSessionsService {
 
   public async verifyAuthToken(
     authToken: string,
+    response: Response,
   ): Promise<User> {
     const rawTokenData = jwt.verify(
       authToken,
@@ -42,6 +44,7 @@ export class AuthSessionsService {
     }).safeParse(rawTokenData);
 
     if (!tokenDataValidationResult.success) {
+      response.clearCookie('user-authentication-token')
       throw new UnauthorizedException();
     }
 
@@ -50,12 +53,14 @@ export class AuthSessionsService {
     const session = await this.findSession(tokenData.data.sessionId);
 
     if (!session) {
+      response.clearCookie('user-authentication-token')
       throw new UnauthorizedException();
     }
 
     const user = session.user;
 
     if (user.deletedAt) {
+      response.clearCookie('user-authentication-token')
       throw new UnauthorizedException();
     }
 

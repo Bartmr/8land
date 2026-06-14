@@ -4,8 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import * as styles from './header.module.scss';
 import { LinkAnchor } from '../../../ui/link-anchor';
 import { PROJECT_NAME } from '../../../project-details';
-import { faBars, faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaBars, FaUser } from 'react-icons/fa';
 import {
   CommunicatedDataGate,
   CommunicatedDataGateLayout,
@@ -71,7 +70,7 @@ export function Header(props: Props) {
               }}
               aria-controls={props.menuHtmlId}
             >
-              <FontAwesomeIcon icon={faBars} />
+              <FaBars />
             </Navbar.Toggle>
             <LinkAnchor
               className="navbar-brand d-flex align-items-center"
@@ -138,7 +137,7 @@ export function Header(props: Props) {
                               href={USER_ROUTE.getHref()}
                               className="btn btn-secondary"
                             >
-                              <FontAwesomeIcon icon={faUser} />
+                              <FaUser />
                             </LinkAnchor>
                           </li>
                         ) : (

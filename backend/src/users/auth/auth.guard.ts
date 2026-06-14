@@ -12,6 +12,7 @@ import {
 } from './public-route.decorator';
 import { AuthSessionsService } from './sessions/auth-sessions.service';
 import { AppRequest } from 'src/requests/request-types';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -29,6 +30,8 @@ export class AuthGuard implements CanActivate {
       .switchToHttp()
       .getRequest<AppRequest>();
 
+    const response = context.switchToHttp().getResponse<Response>()
+
     const isPublic = this.reflector.get<PublicRouteMetadata | undefined>(
       PUBLIC_ROUTE_METADATA_KEY,
       context.getHandler(),
@@ -39,6 +42,7 @@ export class AuthGuard implements CanActivate {
     if (authToken) {
       const user = await this.tokensService.verifyAuthToken(
         authToken,
+        response,
       );
 
       const authContext = new AuthContext({ user });

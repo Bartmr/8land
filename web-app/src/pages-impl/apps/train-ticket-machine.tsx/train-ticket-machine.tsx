@@ -11,8 +11,7 @@ import { useTrainAPI } from '../../../main-api/routes/train/train.api';
 import { AppContext } from '../../client/index/screens/app/app-screen.types';
 import { AppContextProvider, useAppContext } from '../app-context';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FaCheck } from 'react-icons/fa';
 
 function Content(props: { appContext: AppContext }) {
   const trainsApi = useTrainAPI();
@@ -154,7 +153,7 @@ function Content(props: { appContext: AppContext }) {
                         >
                           {selectedWorld?.worldId === destination.worldId ? (
                             <>
-                              <FontAwesomeIcon icon={faCheck} /> Picked
+                              <FaCheck /> Picked
                             </>
                           ) : (
                             'Pick'

@@ -1,8 +1,7 @@
 import React from 'react';
 import { DynamicBlockType } from '../../../../../main-api/routes/blocks/create/create-block.schemas';
 import { GetLandDTO } from '../../../../../main-api/routes/lands/lands.dtos';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaTrash } from 'react-icons/fa';
 import { useState } from 'react';
 import { CommunicatedDataGate } from '../../../../../ui/communicated-data-gate';
 import {
@@ -103,7 +102,7 @@ Players who are currently in this land will be teleported back to the train stat
                           }}
                           className="btn btn-danger"
                         >
-                          <FontAwesomeIcon icon={faTrash} />
+                          <FaTrash />
                         </button>
                       </li>
                     );
@@ -136,7 +135,7 @@ Players who are currently in this land will be teleported back to the train stat
                     }}
                     className="btn btn-danger"
                   >
-                    <FontAwesomeIcon icon={faTrash} />
+                    <FaTrash />
                   </button>
                 </li>
               );

@@ -1,9 +1,11 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import { z } from "zod";
 import { CommunicationError } from "../communication-errors/communication-errors";
 import { useLogger } from "../logging/logger";
 import { MAIN_API_URL } from "./fetch";
 import { useAuthenticationLogout } from "../users/authentication/logout";
+import { AuthenticationStateContext, useAuthenticationSession, useAuthenticationSessionState } from "../users/authentication/authentication-state";
+import { throwError } from "../throw-error";
 
 export type MainApiFetchJSONResult<T> =
   | {
@@ -30,7 +32,7 @@ type MainApiFetchJSON = {
 
 export function useMainApiFetchJSON() {
   const logger = useLogger();
-  const logout = useAuthenticationLogout();
+  const { setSessionState } = useContext(AuthenticationStateContext) || throwError();
 
   const fetchJSON: MainApiFetchJSON = useCallback(async (args) => {
     const headers: HeadersInit = {};
@@ -86,7 +88,7 @@ export function useMainApiFetchJSON() {
 
     if (!validationResult.success) {
       if (response.status == 401) {
-        logout();
+        setSessionState({ data: null })
 
         return {
           error: CommunicationError.AbortedAndDealtWith

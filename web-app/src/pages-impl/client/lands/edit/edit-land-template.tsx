@@ -16,8 +16,7 @@ import { Toast } from 'react-bootstrap';
 import { MainSection } from './main-section/main-section';
 import { BlocksSection } from './blocks-section/blocks-section';
 import { CommunicationError } from '../../../../communication-errors/communication-errors';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FaTrash } from 'react-icons/fa';
 import { navigate } from 'gatsby';
 import { LANDS_ROUTE } from '../lands-routes';
 // import { useStoreSelector } from '../../../../store/use-store-selector';
@@ -124,7 +123,7 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
                     {deleteResult.status === CommunicatedDataStatus.Loading ? (
                       <span className="spinner-border spinner-sm" />
                     ) : (
-                      <FontAwesomeIcon icon={faTrash} />
+                      <FaTrash />
                     )}{' '}
                     {land.data?.isStartLand
                       ? 'Cannot delete lands with start block'

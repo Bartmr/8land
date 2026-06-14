@@ -49,24 +49,6 @@ export function AuthenticationStateProvider(props: {
   );
 }
 
-export function useAuthenticationSession() {
-  const { sessionState } =
-    useContext(AuthenticationStateContext) || throwError();
-
-  if (!sessionState.data) {
-    throwError();
-  }
-
-  return sessionState.data;
-}
-
-export function useOptionalAuthenticationSession() {
-  const { sessionState } =
-    useContext(AuthenticationStateContext) || throwError();
-
-  return sessionState.data ?? null;
-}
-
 export function useAuthenticationSessionState(): CommunicatedData<null | AuthenticationSession> {
   const { sessionState } =
     useContext(AuthenticationStateContext) || throwError();
@@ -83,4 +65,23 @@ export function useAuthenticationSessionState(): CommunicatedData<null | Authent
   }
 
   return { status: CommunicatedDataStatus.Loading };
+}
+
+
+export function useAuthenticationSession() {
+  const { sessionState } =
+    useContext(AuthenticationStateContext) || throwError();
+
+  if (!sessionState.data) {
+    throwError();
+  }
+
+  return sessionState.data;
+}
+
+export function useOptionalAuthenticationSession() {
+  const { sessionState } =
+    useContext(AuthenticationStateContext) || throwError();
+
+  return sessionState.data ?? null;
 }

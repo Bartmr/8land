@@ -11,8 +11,7 @@ import {
   CommunicatedDataStatus,
 } from '../../../communicated-data/communicated-data-types';
 import { ChangeEmail } from './components/change-email';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPersonThroughWindow } from '@fortawesome/free-solid-svg-icons';
+import { FaPersonThroughWindow } from 'react-icons/fa6';
 import { useLandsAPI } from '../../../main-api/routes/lands/lands-api';
 import { useAuthAPI } from '../../../main-api/routes/users/auth/auth.api';
 import { useAuthenticationLogout } from '../../../users/authentication/logout';
@@ -69,7 +68,6 @@ export function UserTemplate(_props: RouteComponentProps) {
                     <button
                       onClick={async () => {
                         await authApi.logoutFromAllDevices();
-                        await logout();
                       }}
                       className="btn btn-secondary"
                     >
@@ -96,7 +94,7 @@ export function UserTemplate(_props: RouteComponentProps) {
                       }
                       className="btn btn-danger"
                     >
-                      <FontAwesomeIcon icon={faPersonThroughWindow} /> Escape
+                      <FaPersonThroughWindow /> Escape
                     </button>
                     <div className="ms-3">
                       <CommunicatedDataGate

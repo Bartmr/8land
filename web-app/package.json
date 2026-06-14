@@ -6,10 +6,6 @@
   "author": "Bartolomeu Rodrigues",
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.29.7",
-    "@fortawesome/fontawesome-svg-core": "^6.1.1",
-    "@fortawesome/free-brands-svg-icons": "^6.1.1",
-    "@fortawesome/free-solid-svg-icons": "^6.1.1",
-    "@fortawesome/react-fontawesome": "^0.2.0",
     "@hookform/resolvers": "^5.2.2",
     "@redux-devtools/extension": "^3.2.2",
     "bootstrap": "^5.3.8",
@@ -24,6 +20,7 @@
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.33.1",
+    "react-icons": "^5.6.0",
     "react-infinite-scroll-component": "^6.1.0",
     "react-redux": "^8.0.2",
     "redux": "^4.2.0",

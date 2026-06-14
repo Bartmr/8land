@@ -63,7 +63,7 @@ export function AboutTemplate() {
                   <LinkAnchor href={'https://bartolomeu-rodrigues.com/'}>
                     Bartolomeu Rodrigues
                   </LinkAnchor>
-                  . I&apos;m a full-stack developer and oldtime wanna-be artist.
+                  . I&apos;m a full-stack developer and wanna-be artist.
                 </p>
               </div>
               <div className="mt-4">

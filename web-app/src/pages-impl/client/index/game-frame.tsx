@@ -1,6 +1,5 @@
 import React from 'react';
-import { faMusic } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaMusic } from 'react-icons/fa';
 import { useState } from 'react';
 import { LinkAnchor } from '../../../ui/link-anchor';
 import { UserAuthSessionData } from '../../../users/authentication/user-auth-types';
@@ -65,7 +64,7 @@ export function GameFrame(props: {
         style={{ textTransform: 'uppercase', fontSize: '0.8em' }}
       >
         <div className="px-2" style={{ whiteSpace: 'nowrap' }}>
-          <FontAwesomeIcon icon={faMusic} />
+          <FaMusic />
         </div>
 
         <MusicTicker onService={(s) => replaceMusicService(s)} />

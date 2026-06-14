@@ -1,11 +1,7 @@
 import React from 'react';
 import { CONTACT_CTA_PRESENT } from '../../project-details';
-import {
-  faLightbulb,
-  faPenRuler,
-  faProjectDiagram,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaLightbulb, FaProjectDiagram } from 'react-icons/fa';
+import { FaPenRuler } from 'react-icons/fa6';
 import { Layout } from '../layout/layout';
 import { LinkAnchor } from '../../ui/link-anchor';
 import { ABOUT_ROUTE } from './about/about-routes';
@@ -27,12 +23,12 @@ export const HelpTemplate = () => {
             <div className="row g-3">
               {[
                 {
-                  icon: <FontAwesomeIcon icon={faLightbulb} />,
+                  icon: <FaLightbulb />,
                   title: LAND_IDEAS_ROUTE.title,
                   href: LAND_IDEAS_ROUTE.getHref(),
                 },
                 {
-                  icon: <FontAwesomeIcon icon={faPenRuler} />,
+                  icon: <FaPenRuler />,
                   title: BUILDING_A_LAND_ROUTE.title,
                   href: BUILDING_A_LAND_ROUTE.getHref(),
                 },
@@ -59,32 +55,21 @@ export const HelpTemplate = () => {
 
           <div>
             <h3>Other</h3>
-            {[
-              {
-                icon: <FontAwesomeIcon icon={faProjectDiagram} />,
-                title: 'About 8Land',
-                href: ABOUT_ROUTE.getHref(),
-                color: 'info',
-              },
-            ].map((c) => {
-              return (
-                <div key={c.title} className="col-6 col-md-4">
-                  <div
-                    className={`h-100 d-block text-center bg-${
-                      c.color || 'lightest'
-                    }`}
-                  >
-                    <LinkAnchor
-                      href={c.href}
-                      className="h-100 link-unstyled selectable d-block p-3"
-                    >
-                      <div className="icon-badge mb-2">{c.icon}</div>
-                      {c.title}
-                    </LinkAnchor>
-                  </div>
-                </div>
-              );
-            })}
+
+            <div className="col-6 col-md-4">
+              <div
+                className={`h-100 d-block text-center`}
+              >
+                <LinkAnchor
+                  href={ABOUT_ROUTE.getHref()}
+                  className="h-100 selectable d-block p-3"
+                >
+                  <div className="icon-badge mb-2"><FaProjectDiagram /></div>
+                  About 8Land
+                </LinkAnchor>
+              </div>
+            </div>
+
 
             <div className="mt-4">
               <p>

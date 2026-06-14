@@ -1,10 +1,4 @@
-import {
-  faExclamationCircle,
-  faLock,
-  faSearch,
-  faWifi,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaExclamationCircle, FaLock, FaSearch, FaWifi } from 'react-icons/fa';
 import React, { ReactNode } from 'react';
 import { Logger } from '../logging/logger';
 import { CommunicationError } from '../communication-errors/communication-errors';
@@ -110,17 +104,14 @@ export function CommunicatedDataGate<T extends CommunicatedData<unknown>>({
   } else if (dataWrapper.status === CommunicationError.NotFound) {
     gateStatusUI = (
       <div className={flexClassName}>
-        <FontAwesomeIcon className={`${iconSizeClassName}`} icon={faSearch} />
+        <FaSearch className={`${iconSizeClassName}`} />
         <p className={`${textClassName} mb-0`}>Not Found</p>
       </div>
     );
   } else if (dataWrapper.status === CommunicationError.ConnectionFailure) {
     gateStatusUI = (
       <div className={flexClassName}>
-        <FontAwesomeIcon
-          className={`text-danger ${iconSizeClassName}`}
-          icon={faWifi}
-        />
+        <FaWifi className={`text-danger ${iconSizeClassName}`} />
         <p className={`${textClassName} text-danger mb-0`}>
           No Internet
           {layout === CommunicatedDataGateLayout.Default
@@ -132,7 +123,7 @@ export function CommunicatedDataGate<T extends CommunicatedData<unknown>>({
   } else if (dataWrapper.status === CommunicationError.Forbidden) {
     gateStatusUI = (
       <div className={flexClassName}>
-        <FontAwesomeIcon className={`${iconSizeClassName}`} icon={faLock} />
+        <FaLock className={`${iconSizeClassName}`} />
         <p className={`${textClassName} mb-0`}>
           {layout === CommunicatedDataGateLayout.Default
             ? 'You are not allowed to access this content'
@@ -150,10 +141,7 @@ export function CommunicatedDataGate<T extends CommunicatedData<unknown>>({
   } else if (dataWrapper.status === CommunicationError.UnexpectedResponse) {
     gateStatusUI = (
       <div className={flexClassName}>
-        <FontAwesomeIcon
-          className={`text-danger ${iconSizeClassName}`}
-          icon={faExclamationCircle}
-        />
+        <FaExclamationCircle className={`text-danger ${iconSizeClassName}`} />
         <p className={`text-danger ${textClassName} mb-0`}>
           {layout === CommunicatedDataGateLayout.Default
             ? 'An unexpected error occurred. Try again later.'
