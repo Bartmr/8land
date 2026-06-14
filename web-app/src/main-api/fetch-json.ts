@@ -3,6 +3,7 @@ import { z } from "zod";
 import { CommunicationError } from "../communication-errors/communication-errors";
 import { useLogger } from "../logging/logger";
 import { MAIN_API_URL } from "./fetch";
+import { useAuthenticationLogout } from "../users/authentication/logout";
 
 export type MainApiFetchJSONResult<T> =
   | {
@@ -29,9 +30,9 @@ type MainApiFetchJSON = {
 
 export function useMainApiFetchJSON() {
   const logger = useLogger();
+  const logout = useAuthenticationLogout();
 
   const fetchJSON: MainApiFetchJSON = useCallback(async (args) => {
-    let response: Response;
     const headers: HeadersInit = {};
     let body: BodyInit | undefined;
 
@@ -43,6 +44,8 @@ export function useMainApiFetchJSON() {
         body = JSON.stringify(args.body);
       }
     }
+
+    let response: Response;
 
     try {
       response = await fetch(`${MAIN_API_URL}${args.path}`, {
@@ -82,21 +85,29 @@ export function useMainApiFetchJSON() {
     });
 
     if (!validationResult.success) {
-      logger.logError('invalid-response-data', new Error(), {
-        request: {
-          path: args.path,
-          method: args.method,
-        },
-        response: {
-          status: response.status,
-          body: response.status >= 400 ? responseJSON : undefined,
-          validationErrors: validationResult.error.format(),
-        },
-      });
+      if (response.status == 401) {
+        logout();
 
-      return {
-        error: CommunicationError.UnexpectedResponse,
-      };
+        return {
+          error: CommunicationError.AbortedAndDealtWith
+        }
+      } else {
+        logger.logError('invalid-response-data', new Error(), {
+          request: {
+            path: args.path,
+            method: args.method,
+          },
+          response: {
+            status: response.status,
+            body: response.status >= 400 ? responseJSON : undefined,
+            validationErrors: validationResult.error.format(),
+          },
+        });
+
+        return {
+          error: CommunicationError.UnexpectedResponse,
+        };
+      }
     }
 
     return {
