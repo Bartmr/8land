@@ -27,9 +27,6 @@ export async function seedTrainStation({
   const doorBlocksRepo = eM.getRepository(DoorBlock);
   const appBlocksRepo = eM.getRepository(AppBlock);
 
-  
-
-
   const trainStation = await landsRepo.save(
     new Land({
       name: 'Town of Humble Beginnings - Train Station',
@@ -63,13 +60,13 @@ export async function seedTrainStation({
 
   
   const mapString = await readFile(
-    path.resolve(process.cwd(), 'development/seed/land/assets/train-station-map.json'),
+    path.resolve(process.cwd(), 'development/seed/train-station-map.json'),
     { encoding: 'utf-8' },
   );
   const tileset = await readFile(
     path.resolve(
       process.cwd(),
-      'development/seed/land/assets/train-station-tileset.png',
+      'development/seed/train-station-tileset.png',
     ),
   );
 

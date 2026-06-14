@@ -37,6 +37,6 @@ Make sure the necessary infrastructure is up.
 
 ```
 npm run build
-node dist/development/seed.js
+node dist/development/seed/main.js
 npm run start:dev
 ```

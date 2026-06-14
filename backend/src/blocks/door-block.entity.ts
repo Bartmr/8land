@@ -5,9 +5,9 @@ import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 export class DoorBlock {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
-  @ManyToOne(() => Land, { eager: true, nullable: true })
+  @ManyToOne(() => Land, { eager: true})
   @JoinColumn()
-  inLand!: Land | null;
+  inLand!: Land;
 
 
   @ManyToOne(() => Land, { eager: true })
@@ -15,12 +15,12 @@ export class DoorBlock {
   toLand!: Land;
 
   constructor(props: {
-    inLand: Land | null;
+    inLand: Land;
     toLand: Land;
   })
   constructor()
   constructor(props?: {
-    inLand: Land | null;
+    inLand: Land;
     toLand: Land;
   }) {
     if (props) {
