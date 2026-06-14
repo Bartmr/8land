@@ -11,7 +11,7 @@ export class AppBlock {
   inLand!: Land | null;
 
 
-  @Column()
+  @Column("text")
   url!: string;
 
   constructor(props: {
