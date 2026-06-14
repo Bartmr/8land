@@ -9,5 +9,5 @@
     - `-a`: include hidden files.
     - `-F`: append `/` to directories and `*` to executables for clarity.
     - Optionally add `-L [depth]` to limit depth in large trees.
-- do not create unnecessary functions. if code is not reused, just inline it.
+- do not create unnecessary functions and variables. if code is not reused, just inline it.
 - Avoid try/catch. Let the error bubble up, hit the global loggers and crash the thread.
