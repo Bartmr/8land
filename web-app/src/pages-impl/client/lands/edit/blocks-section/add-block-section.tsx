@@ -1,7 +1,7 @@
 import React from 'react';
 import { DynamicBlockType } from '../../../../../main-api/routes/blocks/create/create-block.schemas';
 import { CreateBlockRequestSchema } from '../../../../../main-api/routes/blocks/create/create-block.schemas';
-import { GetLandDTO } from '../../../../../main-api/routes/lands/lands.dtos';
+import { GetLandDTO } from '../../../../../main-api/routes/lands/lands-api';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { CommunicatedDataGate } from '../../../../../ui/communicated-data-gate';

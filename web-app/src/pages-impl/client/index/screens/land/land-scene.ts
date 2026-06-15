@@ -17,7 +17,7 @@ import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
 import { LandsAPI } from '../../../../../main-api/routes/lands/lands-api';
-import { NavigateToLandDTO } from '../../../../../main-api/routes/lands/lands.dtos';
+import { NavigateToLandDTO } from '../../../../../main-api/routes/lands/lands-api';
 import { TrainAPI } from '../../../../../main-api/routes/train/train.api';
 import { throwError } from '../../../../../throw-error';
 import { KeypadBroker } from '../../keypad-broker';

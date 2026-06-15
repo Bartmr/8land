@@ -1,8 +1,3 @@
-import {
-  GetTrainDestinationsDTO,
-  BoardTrainDTO,
-  ReturnToTrainStationDTO,
-} from './train.dtos';
 import { useMainApiFetchJSON } from '../../fetch-json';
 import { useLocalStorage } from '../../../local-storage';
 import { z } from 'zod';
@@ -58,17 +53,34 @@ const navigateToLandResponseBodySchema = z.object({
   isStartLand: z.boolean(),
 });
 
+type NavigateToLandDTO = z.infer<typeof navigateToLandResponseBodySchema>;
+
 const boardTrainResponseSchema: z.ZodType<{
   status: 200;
-  body: BoardTrainDTO;
+  body: NavigateToLandDTO;
 }> = z.object({
   status: z.literal(200),
   body: navigateToLandResponseBodySchema,
 });
 
+const getTrainDestinationsResponseBodySchema = z.object({
+  limit: z.number(),
+  total: z.number(),
+  rows: z.array(
+    z.object({
+      name: z.string(),
+      worldId: z.string(),
+    }),
+  ),
+});
+
+export type GetTrainDestinationsDTO = z.infer<
+  typeof getTrainDestinationsResponseBodySchema
+>;
+
 const returnToTrainStationResponseSchema: z.ZodType<{
   status: 200;
-  body: ReturnToTrainStationDTO;
+  body: NavigateToLandDTO;
 }> = z.object({
   status: z.literal(200),
   body: navigateToLandResponseBodySchema,
@@ -79,16 +91,7 @@ const getTrainDestinationsResponseSchema: z.ZodType<{
   body: GetTrainDestinationsDTO;
 }> = z.object({
   status: z.literal(200),
-  body: z.object({
-    limit: z.number(),
-    total: z.number(),
-    rows: z.array(
-      z.object({
-        name: z.string(),
-        worldId: z.string(),
-      }),
-    ),
-  }),
+  body: getTrainDestinationsResponseBodySchema,
 });
 
 export class TrainAPI {

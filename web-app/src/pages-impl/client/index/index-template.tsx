@@ -10,7 +10,7 @@ import { GameFrame } from './game-frame';
 import { LinkAnchor } from '../../../ui/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
 import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
-import { ResumeLandNavigationDTO } from '../../../main-api/routes/lands/lands.dtos';
+import { ResumeLandNavigationDTO } from '../../../main-api/routes/lands/lands-api';
 import { useLandsAPI } from '../../../main-api/routes/lands/lands-api';
 import { useAuthenticationStateSession } from '../../../users/authentication/authentication-state';
 

@@ -1,7 +1,9 @@
 import { z } from 'zod';
 import { useMainApiFetchJSON } from '../../fetch-json';
-import { CreateBlockRequestDTO } from './blocks.dtos';
-import { DynamicBlockType } from './create/create-block.schemas';
+import {
+  CreateBlockRequestSchema,
+  DynamicBlockType,
+} from './create/create-block.schemas';
 
 const DeleteBlockResponseSchema = z.object({
   status: z.literal(204),
@@ -55,7 +57,7 @@ export class BlocksAPI {
     });
   }
 
-  createBlock(args: CreateBlockRequestDTO) {
+  createBlock(args: z.infer<typeof CreateBlockRequestSchema>) {
     return this.api.fetchJSON({
       schema: CreateBlockResponseSchema,
       path: `/blocks`,

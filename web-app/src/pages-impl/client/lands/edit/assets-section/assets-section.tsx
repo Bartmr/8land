@@ -9,7 +9,7 @@ import { TiledJSONFieldState } from './tiled-json-form-field';
 import { TilesetImageFieldState } from './tileset-image-form-field';
 import { TiledJSONField } from './tiled-json-form-field';
 import { TilesetImageFormField } from './tileset-image-form-field';
-import { GetLandDTO } from '../../../../../main-api/routes/lands/lands.dtos';
+import { GetLandDTO } from '../../../../../main-api/routes/lands/lands-api';
 import { LinkAnchor } from '../../../../../ui/link-anchor';
 import { useLandsAPI } from '../../../../../main-api/routes/lands/lands-api';
 import { START_LANDS_LIMIT_EXCEEDED_MESSAGE } from './assets-section.constants';

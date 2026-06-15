@@ -7,7 +7,7 @@ import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
-import { ResumeLandNavigationDTO } from '../../../../../main-api/routes/lands/lands.dtos';
+import { ResumeLandNavigationDTO } from '../../../../../main-api/routes/lands/lands-api';
 import { useLandsAPI } from '../../../../../main-api/routes/lands/lands-api';
 import { useTrainAPI } from '../../../../../main-api/routes/train/train.api';
 import { navigate } from 'gatsby';

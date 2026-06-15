@@ -1,7 +1,8 @@
 import React from 'react';
-import { EditLandBodyDTO, GetLandDTO } from '../../../../../main-api/routes/lands/lands.dtos';
+import { GetLandDTO } from '../../../../../main-api/routes/lands/lands-api';
 import { CreateLandRequestSchemaObj } from '../../../../../main-api/routes/lands/create/create-land.schemas';
 import { z } from 'zod';
+
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -22,7 +23,10 @@ export function MainSection(props: {
 }) {
   const api = useLandsAPI();
 
-  const form = useForm<EditLandBodyDTO>({
+  const form = useForm<{
+    name: string;
+    backgroundMusicUrl?: string | null;
+  }>({
     resolver: zodResolver(
       z.object({
         ...CreateLandRequestSchemaObj,

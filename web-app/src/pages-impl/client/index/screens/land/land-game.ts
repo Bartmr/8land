@@ -8,7 +8,7 @@ import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
-import { ResumeLandNavigationDTO } from '../../../../../main-api/routes/lands/lands.dtos';
+import { ResumeLandNavigationDTO } from '../../../../../main-api/routes/lands/lands-api';
 import { DynamicBlockType } from '../../../../../main-api/routes/blocks/create/create-block.schemas';
 import { StaticBlockType } from '../../../../../main-api/routes/lands/upload-assets/upload-land-assets.schemas';
 import { LandsAPI } from '../../../../../main-api/routes/lands/lands-api';

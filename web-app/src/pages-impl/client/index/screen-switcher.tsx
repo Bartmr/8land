@@ -1,5 +1,5 @@
 import React from 'react';
-import { ResumeLandNavigationDTO } from '../../../main-api/routes/lands/lands.dtos';
+import { ResumeLandNavigationDTO } from '../../../main-api/routes/lands/lands-api';
 import { useRef, useState } from 'react';
 import { UserAuthSessionData } from '../../../users/authentication/user-auth-types';
 import { MusicService } from './music-ticker';

@@ -7,7 +7,7 @@ import {
   CommunicatedData,
   CommunicatedDataStatus,
 } from '../../../../communicated-data/communicated-data-types';
-import { GetLandDTO } from '../../../../main-api/routes/lands/lands.dtos';
+import { GetLandDTO } from '../../../../main-api/routes/lands/lands-api';
 import { CommunicatedDataGate } from '../../../../ui/communicated-data-gate';
 import { useParams } from '@reach/router';
 import { uuid, z } from 'zod';

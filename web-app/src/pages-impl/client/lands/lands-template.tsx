@@ -1,5 +1,5 @@
 import React from 'react';
-import { IndexLandsDTO, GetLandsToClaimDTO } from '../../../main-api/routes/lands/lands.dtos';
+import { IndexLandsDTO, GetLandsToClaimDTO } from '../../../main-api/routes/lands/lands-api';
 import { useEffect, useState } from 'react';
 import { CommunicatedDataGate } from '../../../ui/communicated-data-gate';
 import {

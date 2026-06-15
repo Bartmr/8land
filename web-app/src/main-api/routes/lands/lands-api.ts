@@ -1,14 +1,5 @@
 import { z } from 'zod';
 import {
-  CreateLandRequestDTO,
-  EditLandBodyDTO,
-  GetLandDTO,
-  NavigateToLandDTO,
-  ResumeLandNavigationDTO,
-  IndexLandsDTO,
-  GetLandsToClaimDTO,
-} from './lands.dtos';
-import {
   useMainApiFetchJSON,
 } from '../../fetch-json';
 import { Logger } from '../../../logging/logger';
@@ -41,17 +32,6 @@ const landAppBlockEntrySchema = z.object({
   url: z.string(),
 });
 
-const landTerritorySchema = z.object({
-  id: z.string(),
-  startX: z.number(),
-  startY: z.number(),
-  endX: z.number(),
-  endY: z.number(),
-  doorBlocks: z.array(landDoorBlockEntrySchema),
-  appBlocks: z.array(landAppBlockEntrySchema),
-  assets: z.union([z.undefined(), landAssetsSchema]),
-});
-
 const landSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -61,30 +41,39 @@ const landSchema = z.object({
   appBlocks: z.array(landAppBlockEntrySchema),
   assets: z.union([z.undefined(), landAssetsSchema]),
   isStartLand: z.boolean(),
-}) satisfies z.ZodType<GetLandDTO>;
+});
+
+export type GetLandDTO = z.infer<typeof landSchema>;
+
+
+const resumeLandSchema = landSchema.extend({
+  lastDoor: z
+    .object({
+      id: z.string(),
+      toLandId: z.string(),
+    })
+    .nullable(),
+  lastTrainTravel: z
+    .object({
+      comingBackToStation: z.boolean(),
+    })
+    .nullable(),
+  lastCheckpointWasDeleted: z.boolean(),
+});
 
 const navigateResponseSchema = z.object({
   status: z.literal(200),
   body: landSchema,
-}) satisfies z.ZodType<{ status: 200; body: NavigateToLandDTO }>;
+});
+
+export type NavigateToLandDTO = GetLandDTO;
 
 const resumeResponseSchema = z.object({
   status: z.literal(200),
-  body: landSchema.extend({
-    lastDoor: z
-      .object({
-        id: z.string(),
-        toLandId: z.string(),
-      })
-      .nullable(),
-    lastTrainTravel: z
-      .object({
-        comingBackToStation: z.boolean(),
-      })
-      .nullable(),
-    lastCheckpointWasDeleted: z.boolean(),
-  }),
-}) satisfies z.ZodType<{ status: 200; body: ResumeLandNavigationDTO }>;
+  body: resumeLandSchema,
+});
+
+export type ResumeLandNavigationDTO = z.infer<typeof resumeLandSchema>;
 
 const getEditableLandResponseSchema = z.object({
   status: z.literal(200),
@@ -105,7 +94,10 @@ const indexLandsResponseSchema = z.object({
       }),
     ),
   }),
-}) satisfies z.ZodType<{ status: 200; body: IndexLandsDTO }>;
+});
+
+export type IndexLandsDTO = z.infer<typeof indexLandsResponseSchema>['body'];
+
 
 const createLandResponseSchema = z.union([
   z.object({
@@ -226,12 +218,16 @@ const escapeResponseSchema = z.object({
   body: z.undefined(),
 }) satisfies z.ZodType<{ status: 200; body: undefined }>;
 
+const getLandsToClaimResponseBodySchema = z.object({
+  free: z.number(),
+});
+
 const getLandsToClaimResponseSchema = z.object({
   status: z.literal(200),
-  body: z.object({
-    free: z.number(),
-  }),
+  body: getLandsToClaimResponseBodySchema,
 }) satisfies z.ZodType<{ status: 200; body: GetLandsToClaimDTO }>;
+
+export type GetLandsToClaimDTO = z.infer<typeof getLandsToClaimResponseBodySchema>;
 
 export class LandsAPI {
   constructor(private api: ReturnType<typeof useMainApiFetchJSON>) {}
@@ -296,7 +292,7 @@ export class LandsAPI {
             };
       }
   > {
-    const body: CreateLandRequestDTO = {
+    const body = {
       name: args.name,
     };
 
@@ -397,7 +393,7 @@ export class LandsAPI {
       backgroundMusicUrl?: string | null;
     };
   }) {
-    const body: EditLandBodyDTO = {
+    const body = {
       name: args.formData.name,
       backgroundMusicUrl: args.formData.backgroundMusicUrl,
     };
