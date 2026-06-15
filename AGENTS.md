@@ -11,3 +11,13 @@
     - Optionally add `-L [depth]` to limit depth in large trees.
 - do not create unnecessary functions and variables. if code is not reused, just inline it.
 - Avoid try/catch. Let the error bubble up, hit the global loggers and crash the thread.
+
+## web-app
+
+### Tech Stack
+
+- Typescript
+- React
+- Gatsby
+- Bootstrap
+- Phaser.js
