@@ -22,47 +22,41 @@ import { AuthGuard } from 'src/users/auth/auth.guard';
 import {
   GetLandDTO,
   GetLandParametersDTO,
-} from 'src/land/get/get-land.dto';
-import {
   IndexLandsDTO,
   IndexLandsQueryDTO,
-} from 'src/land/index/index-lands.dto';
-import { AuthContext } from 'src/users/auth/auth-context';
+  CreateLandRequestDTO,
+  CreateLandResponseDTO,
+  UploadLandAssetsParameters,
+  EditLandBodyDTO,
+  EditLandDTO,
+  EditLandParametersDTO,
+  DeleteLandParametersDTO,
+  GetLandsToClaimDTO,
+  NavigateToLandDTO,
+  NavigateToLandQueryDTO,
+  ResumeLandNavigationDTO,
+} from 'src/land/land.dto';
 import {
+  AuthContext,
   WithAuthContext,
   WithOptionalAuthContext,
-} from 'src/users/auth/auth-context.decorator';
+  PublicRoute,
+} from 'src/users/auth/auth.guard';
 import { StorageService } from 'src/storage/storage.service';
 import { DataSource } from 'typeorm';
 
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import {
-  CreateLandRequestDTO,
-  CreateLandResponseDTO,
-} from 'src/land/create/create-land.dto';
-import { UploadLandAssetsParameters } from 'src/land/upload-assets/upload-land-assets.dto';
-import {
-  EditLandBodyDTO,
-  EditLandDTO,
-  EditLandParametersDTO,
-} from 'src/land/edit/edit-land.dto';
 import { LandService } from './land.service';
 import { Land } from './land.entity';
 import { World } from 'src/worlds/worlds.entity';
-import { DeleteLandParametersDTO } from 'src/land/delete-land/delete-land.dto';
-import { PublicRoute } from 'src/users/auth/public-route.decorator';
-import { GetLandsToClaimDTO } from 'src/land/lands-to-claim/lands-to-claim.dto';
 import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
-import {
-  NavigateToLandDTO,
-  NavigateToLandQueryDTO,
-} from 'src/land/navigate/navigate-to-land.dto';
-import { ResumeLandNavigationDTO } from 'src/land/resume/resume-land-navigation.dto';
 import { DoorBlock } from 'src/blocks/door-block.entity';
 import { NavigationState } from 'src/navigation/state/navigation-state.entity';
 import { ZodValidationPipe } from 'src/zod/zod.pipe';
-import { CreateLandRequestSchema } from './create/create-land.schemas';
-import { EditLandBodySchema } from './edit/edit-land.schema';
+import {
+  CreateLandRequestSchema,
+  EditLandBodySchema,
+} from 'src/land/land.dto';
 
 @UseGuards(AuthGuard)
 @Controller('lands')

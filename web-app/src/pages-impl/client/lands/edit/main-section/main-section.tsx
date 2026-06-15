@@ -1,6 +1,5 @@
 import React from 'react';
-import { GetLandDTO } from '../../../../../main-api/routes/lands/lands-api';
-import { CreateLandRequestSchemaObj } from '../../../../../main-api/routes/lands/create/create-land.schemas';
+import { GetLandDTO, CreateLandRequestSchemaObj } from '../../../../../main-api/routes/lands/lands-api';
 import { z } from 'zod';
 
 import { Fragment, useState } from 'react';
@@ -12,10 +11,21 @@ import {
   CommunicatedData,
   CommunicatedDataStatus,
 } from '../../../../../communicated-data/communicated-data-types';
-import { SoundcloudSongApiUrlSchema } from '../../../../../main-api/routes/lands/edit/edit-land.schema';
 import { useLandsAPI } from '../../../../../main-api/routes/lands/lands-api';
 import { throwError } from '../../../../../throw-error';
 import { CommunicationError } from '../../../../../communication-errors/communication-errors';
+
+const SoundcloudSongApiUrlSchema = z.string().optional().refine((s) => {
+  if (!s) {
+    return true;
+  }
+
+  const parts = s.split('/');
+  const isIdANumber = z.coerce.number().safeParse(parts.pop());
+  const hostPart = parts.join('/');
+
+  return isIdANumber.success && hostPart === 'https://api.soundcloud.com/tracks';
+}, 'Invalid Soundcloud API song url');
 
 export function MainSection(props: {
   land: GetLandDTO;

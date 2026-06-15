@@ -14,18 +14,16 @@ import { AuthGuard } from 'src/users/auth/auth.guard';
 import {
   GetTrainDestinationsDTO,
   GetTrainDestinationQueryDTO,
-} from 'src/train/get-destinations/get-train-destinations.dto';
-import {
   BoardTrainDTO,
   BoardTrainParametersDTO,
-} from 'src/train/board/board-train.dto';
-import {
   ReturnToTrainStationDTO,
   ReturnToTrainStationQueryDTO,
-} from 'src/train/return/return-to-train-station.dto';
-import { AuthContext } from 'src/users/auth/auth-context';
-import { WithOptionalAuthContext } from 'src/users/auth/auth-context.decorator';
-import { PublicRoute } from 'src/users/auth/public-route.decorator';
+} from 'src/train/train.dto';
+import {
+  AuthContext,
+  WithOptionalAuthContext,
+  PublicRoute,
+} from 'src/users/auth/auth.guard';
 import { getSearchableString } from 'src/strings/get-searchable-string';
 import { throwError } from 'src/throw-error';
 import { LandService } from 'src/land/land.service';

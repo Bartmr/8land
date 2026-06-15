@@ -1,5 +1,5 @@
 import React from 'react';
-import { DynamicBlockType } from '../../../../../main-api/routes/blocks/create/create-block.schemas';
+import { DynamicBlockType } from '../../../../../main-api/routes/blocks/blocks-api';
 import { GetLandDTO } from '../../../../../main-api/routes/lands/lands-api';
 import { FaTrash } from 'react-icons/fa';
 import { useState } from 'react';

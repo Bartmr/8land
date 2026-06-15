@@ -20,12 +20,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from './auth.guard';
-import { AuthContext } from './auth-context';
 import {
+  AuthContext,
   WithAuthContext,
   WithOptionalAuthContext,
-} from './auth-context.decorator';
-import { PublicRoute } from './public-route.decorator';
+  PublicRoute,
+} from './auth.guard';
 import { DataSource } from 'typeorm';
 import { User } from 'src/users/user.entity';
 import { AuthSessionsService } from './sessions/auth-sessions.service';

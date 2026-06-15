@@ -9,7 +9,6 @@ import { promisify } from 'util';
 import path from 'path';
 import { DevStorageService } from 'src/storage/dev-storage.service';
 import { LOCAL_TEMPORARY_FILES_PATH } from 'src/temporary-files';
-import { createTiledJSONSchema } from 'src/land/upload-assets/upload-land-assets.schemas';
 import { seedTrainStation } from './seed-train-station';
 import { EnvironmentVariables } from "src/environment-variables/environment-variables";
 import { v4 } from "uuid";
@@ -19,6 +18,7 @@ import { DoorBlock } from "src/blocks/door-block.entity";
 import { AppBlock } from "src/blocks/app-block.entity";
 import { AppDataSourceOptions } from "src/database/data-source";
 import * as bcrypt from 'bcrypt';
+import { createTiledJSONSchema } from "src/land/land.dto";
 
 const readFile = promisify(fs.readFile);
 const rm = promisify(fs.rm);

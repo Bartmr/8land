@@ -1,5 +1,5 @@
 import React from 'react';
-import { LAND_TILESET_SIZE_LIMIT } from '../../../../../main-api/routes/lands/upload-assets/upload-land-assets.schemas';
+import { LAND_TILESET_SIZE_LIMIT } from '../../../../../main-api/routes/lands/lands-api';
 import { useEffect, useState } from 'react';
 
 export type TilesetImageFieldState =

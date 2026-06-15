@@ -11,11 +11,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/users/auth/auth.guard';
-import { CreateBlockRequestDTO } from 'src/blocks/create/create-block.dto';
-import { DynamicBlockType } from 'src/blocks/create/create-block.enums';
-import { DeleteBlockURLParameters } from 'src/blocks/delete/delete-block.dto';
-import { AuthContext } from 'src/users/auth/auth-context';
-import { WithAuthContext } from 'src/users/auth/auth-context.decorator';
+import {
+  CreateBlockRequestDTO,
+  CreateBlockRequestSchema,
+  DeleteBlockURLParameters,
+  DynamicBlockType,
+} from 'src/blocks/blocks.dto';
+import { AuthContext, WithAuthContext } from 'src/users/auth/auth.guard';
 import { getSearchableString } from 'src/strings/get-searchable-string';
 import { DataSource } from 'typeorm';
 import { Land } from 'src/land/land.entity';
@@ -23,7 +25,6 @@ import { AppBlock } from './app-block.entity';
 import { DoorBlock } from './door-block.entity';
 import { NavigationState } from 'src/navigation/state/navigation-state.entity';
 import { ZodValidationPipe } from 'src/zod/zod.pipe';
-import { CreateBlockRequestSchema } from './create/create-block.schemas';
 
 @UseGuards(AuthGuard)
 @Controller('blocks')

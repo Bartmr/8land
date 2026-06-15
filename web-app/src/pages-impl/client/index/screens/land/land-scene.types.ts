@@ -1,5 +1,5 @@
-import { DynamicBlockType } from '../../../../../main-api/routes/blocks/create/create-block.schemas';
-import { StaticBlockType } from '../../../../../main-api/routes/lands/upload-assets/upload-land-assets.schemas';
+import { DynamicBlockType } from '../../../../../main-api/routes/blocks/blocks-api';
+import { StaticBlockType } from '../../../../../main-api/routes/lands/lands-api';
 import { GetLandDTO } from '../../../../../main-api/routes/lands/lands-api';
 import { UserAuthSessionData } from '../../../../../users/authentication/user-auth-types';
 

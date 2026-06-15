@@ -1,33 +1,31 @@
 import { Injectable, Logger, NotImplementedException } from '@nestjs/common';
-import { CreateLandRequestDTO } from 'src/land/create/create-land.dto';
-import { UploadLandAssetsParameters } from 'src/land/upload-assets/upload-land-assets.dto';
-import { AuthContext } from 'src/users/auth/auth-context';
+import {
+  CreateLandRequestDTO,
+  UploadLandAssetsParameters,
+  EditLandBodyDTO,
+  EditLandParametersDTO,
+  GetLandDTO,
+  NavigateToLandDTO,
+  ResumeLandNavigationDTO,
+  createTiledJSONSchema,
+  LAND_MAP_SIZE_LIMIT,
+  LAND_TILESET_SIZE_LIMIT,
+} from 'src/land/land.dto';
+import { AuthContext } from 'src/users/auth/auth.guard';
 import { getSearchableString } from 'src/strings/get-searchable-string';
 import { World } from 'src/worlds/worlds.entity';
 import { Land } from './land.entity';
 import { DataSource, EntityManager } from 'typeorm';
 import sharp from 'sharp';
-import { createTiledJSONSchema } from 'src/land/upload-assets/upload-land-assets.schemas';
 import {
   ContentType,
   StorageService,
 } from 'src/storage/storage.service';
 import { throwError } from 'src/throw-error';
-import {
-  EditLandBodyDTO,
-  EditLandParametersDTO,
-} from 'src/land/edit/edit-land.dto';
-import {
-  LAND_MAP_SIZE_LIMIT,
-  LAND_TILESET_SIZE_LIMIT,
-} from 'src/land/upload-assets/upload-land-assets.constants';
-import { StaticBlockType } from 'src/blocks/block.enums';
 import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
-import { z } from "zod"
-import { GetLandDTO } from './get/get-land.dto';
+import { z } from 'zod';
 import { NavigationState } from 'src/navigation/state/navigation-state.entity';
-import { ResumeLandNavigationDTO } from './resume/resume-land-navigation.dto';
-import { NavigateToLandDTO } from './navigate/navigate-to-land.dto';
+import { StaticBlockType } from 'src/blocks/blocks.dto';
 
 function getLandStorageKeys(landId: string) {
   const tilesetStorageKey = `lands/${landId}/tileset.png`;

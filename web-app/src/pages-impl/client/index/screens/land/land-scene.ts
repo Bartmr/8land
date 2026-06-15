@@ -1,5 +1,5 @@
-import { DynamicBlockType } from '../../../../../main-api/routes/blocks/create/create-block.schemas';
-import { StaticBlockType } from '../../../../../main-api/routes/lands/upload-assets/upload-land-assets.schemas';
+import { DynamicBlockType } from '../../../../../main-api/routes/blocks/blocks-api';
+import { StaticBlockType } from '../../../../../main-api/routes/lands/lands-api';
 import { EnvironmentVariables } from '../../../../../environment-variables';
 import { CommunicationError } from '../../../../../communication-errors/communication-errors';
 import { Direction, PlayerGrid, PlayerGridLandContext } from "./player-grid";

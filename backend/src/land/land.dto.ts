@@ -1,27 +1,173 @@
 import { z } from 'zod';
+import { StaticBlockType } from 'src/blocks/blocks.dto';
 
-export const LAND_TILESET_SIZE_LIMIT = 128000;
-export const LAND_MAP_SIZE_LIMIT = 128000;
-
-export enum StaticBlockType {
-  Collides = 'collides',
-  Text = 'text',
-  TrainPlatform = 'train-platform',
-  Start = 'start',
+export class CreateLandRequestDTO {
+  name!: string;
 }
 
-export const STATIC_BLOCK_TYPE_VALUES = [
-  StaticBlockType.Collides,
-  StaticBlockType.Text,
-  StaticBlockType.TrainPlatform,
-  StaticBlockType.Start,
-];
+export class CreateLandResponseDTO {
+  id!: string;
+  name!: string;
+}
 
-const positiveInt = z.number().int('Must be an integer').min(0, 'Must be a positive number');
+export class DeleteLandParametersDTO {
+  landId!: string;
+}
+
+export class EditLandParametersDTO {
+  landId!: string;
+}
+
+export class EditLandBodyDTO extends CreateLandRequestDTO {
+  backgroundMusicUrl?: string | null;
+}
+
+export class EditLandDTO extends CreateLandResponseDTO {}
+
+class GetLandDoorReferencingDTO {
+  id!: string;
+  fromLandId!: string;
+  fromLandName!: string;
+}
+
+class GetLandDoorBlockDestinationDTO {
+  id!: string;
+  name!: string;
+}
+
+class GetLandDoorBlockEntryDTO {
+  id!: string;
+  toLand!: GetLandDoorBlockDestinationDTO;
+}
+
+export class GetLandAppBlockEntryDTO {
+  id!: string;
+  url!: string;
+}
+
+export class GetLandAssetsDTO {
+  baseUrl!: string;
+  mapKey!: string;
+  tilesetKey!: string;
+}
+
+export class GetLandDTO {
+  id!: string;
+  name!: string;
+  backgroundMusicUrl!: string | null;
+  doorBlocks!: GetLandDoorBlockEntryDTO[];
+  doorBlocksReferencing!: GetLandDoorReferencingDTO[];
+  appBlocks!: GetLandAppBlockEntryDTO[];
+  assets: undefined | GetLandAssetsDTO;
+  isStartLand!: boolean;
+}
+
+export class GetLandParametersDTO {
+  id!: string;
+}
+
+class LandFromIndex {
+  id!: string;
+  name!: string;
+  published!: boolean;
+  isStartingLand!: boolean;
+}
+
+export class IndexLandsDTO {
+  total!: number;
+  limit!: number;
+  lands!: LandFromIndex[];
+}
+
+export class IndexLandsQueryDTO {
+  skip!: number;
+}
+
+export class GetLandsToClaimDTO {
+  free!: number;
+}
+
+export class NavigateToLandQueryDTO {
+  doorBlockId!: string;
+  currentLandId!: string;
+}
+
+export class NavigateToLandDTO extends GetLandDTO {}
+
+class LastDoorDTO {
+  id!: string;
+  toLandId!: string;
+}
+
+class LastTrainTravelDTO {
+  comingBackToStation!: boolean;
+}
+
+export class ResumeLandNavigationDTO extends NavigateToLandDTO {
+  lastDoor!: null | LastDoorDTO;
+  lastTrainTravel!: null | LastTrainTravelDTO;
+  lastCheckpointWasDeleted!: boolean;
+}
+
+export class UploadLandAssetsParameters {
+  landId!: string;
+}
+
+export const CreateLandRequestSchemaObj = {
+  name: z
+    .string()
+    .transform((s) => s.trim())
+    .refine((n) => n.length >= 1, 'Land name must have at least 1 character')
+    .refine((n) => n.length <= 64, 'Land name cannot be more than 64 characters'),
+};
+
+export const CreateLandRequestSchema = z.object(CreateLandRequestSchemaObj);
+
+export const DeleteLandParametersSchema: z.ZodType<DeleteLandParametersDTO> =
+  z.object({
+    landId: z.uuid(),
+  });
+
+export const SoundcloudSongApiUrlSchema = z.string().optional().refine((s) => {
+  if (!s) {
+    return true;
+  }
+
+  const parts = s.split('/');
+  const isIdANumber = z.coerce.number().safeParse(parts.pop());
+  const hostPart = parts.join('/');
+
+  return isIdANumber.success && hostPart === 'https://api.soundcloud.com/tracks';
+}, 'Invalid Soundcloud API song url');
+
+export const EditLandParametersSchema: z.ZodType<EditLandParametersDTO> = z.object({
+  landId: z.uuid(),
+});
+
+export const EditLandBodySchema = z.object({
+  ...CreateLandRequestSchemaObj,
+  backgroundMusicUrl: SoundcloudSongApiUrlSchema,
+});
+
+export const GetLandParametersSchema = z.object({
+  id: z.uuid(),
+});
+
+export const IndexLandsQuerySchema: z.ZodType<IndexLandsQueryDTO> = z.object({
+  skip: z.number().int('Must be an integer'),
+});
+
+export const NavigateToLandQuerySchema = z.object({
+  doorBlockId: z.uuid(),
+  currentLandId: z.uuid(),
+});
 
 export const UploadLandAssetsParametersSchema = z.object({
   landId: z.uuid(),
 });
+
+export const LAND_TILESET_SIZE_LIMIT = 128000;
+export const LAND_MAP_SIZE_LIMIT = 128000;
 
 export const createTiledJSONSchema = ({
   maxWidth: _maxWidth,
@@ -56,23 +202,23 @@ export const createTiledJSONSchema = ({
       layers: z
         .array(
           z.object({
-            data: z.array(positiveInt),
-            height: positiveInt,
-            id: positiveInt,
+            data: z.array(z.number().int('Must be an integer').min(0, 'Must be a positive number')),
+            height: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
+            id: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
             name: z
               .string()
               .refine((s) => s.trim().length > 0, 'Layer must have a name'),
             opacity: z.literal(1, 'All layers must have full opacity'),
             type: z.literal('tilelayer', 'Only tile layers are allowed'),
             visible: z.literal(true, 'All layers must be visible').optional(),
-            width: positiveInt,
+            width: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
             x: z.literal(0, 'Must be set to 0'),
             y: z.literal(0, 'Must be set to 0'),
           }),
         )
         .min(1, 'You must have at least one layer'),
-      nextlayerid: positiveInt,
-      nextobjectid: positiveInt,
+      nextlayerid: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
+      nextobjectid: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
       orientation: z.literal('orthogonal', "must be set to 'orthogonal'"),
       renderorder: z.literal('right-down', "must be set to 'right-down'"),
       tiledversion: z.string(),
@@ -80,25 +226,25 @@ export const createTiledJSONSchema = ({
       tilesets: z
         .array(
           z.object({
-            columns: positiveInt,
-            firstgid: positiveInt,
+            columns: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
+            firstgid: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
             image: z
               .string()
               .transform((s) => s.trim())
               .refine((s) => s.length > 0, 'Tileset must have an image'),
-            imageheight: positiveInt,
-            imagewidth: positiveInt,
+            imageheight: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
+            imagewidth: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
             margin: z.literal(0, 'Must be set to 0'),
             name: z
               .string()
               .refine((s) => s.trim().length > 0, 'Tileset must have a name'),
             spacing: z.literal(0, 'Must be set to 0'),
-            tilecount: positiveInt,
+            tilecount: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
             tileheight: z.literal(16, 'Must be set to 16'),
             tilewidth: z.literal(16, 'Must be set to 16'),
             tiles: z.array(
               z.object({
-                id: positiveInt,
+                id: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
                 properties: z
                   .array(
                     z.union([
@@ -164,8 +310,8 @@ export const createTiledJSONSchema = ({
                 animation: z
                   .array(
                     z.object({
-                      duration: positiveInt,
-                      tileid: positiveInt,
+                      duration: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
+                      tileid: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
                     }),
                   )
                   .optional(),

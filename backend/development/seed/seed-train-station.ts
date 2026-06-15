@@ -1,4 +1,3 @@
-import { createTiledJSONSchema } from 'src/land/upload-assets/upload-land-assets.schemas';
 import {
   ContentType,
   StorageService,
@@ -11,6 +10,7 @@ import { EntityManager } from 'typeorm';
 import { promisify } from 'util';
 import fs from 'fs';
 import path from 'path';
+import { createTiledJSONSchema } from 'src/land/land.dto';
 
 const readFile = promisify(fs.readFile);
 

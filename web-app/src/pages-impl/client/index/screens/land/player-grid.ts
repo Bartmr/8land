@@ -1,9 +1,11 @@
 import { TILE_SIZE } from '../../game-constants';
 import { Block, DoorBlock } from './land-scene.types';
-import { Player } from './player';
 import { DialogueService } from '../dialogue/dialogue-screen';
-import { DynamicBlockType } from '../../../../../main-api/routes/blocks/create/create-block.schemas';
-import { StaticBlockType, STATIC_BLOCK_TYPE_VALUES } from '../../../../../main-api/routes/lands/upload-assets/upload-land-assets.schemas';
+import { DynamicBlockType } from '../../../../../main-api/routes/blocks/blocks-api';
+import {
+  StaticBlockType,
+  STATIC_BLOCK_TYPE_VALUES,
+} from '../../../../../main-api/routes/lands/lands-api';
 import { KeypadBroker } from '../../keypad-broker';
 import { throwError } from '../../../../../throw-error';
 import { PlayerSprite } from './player-sprite';
@@ -129,8 +131,6 @@ export class PlayerGrid {
   private isMoving(): boolean {
     return this.movingDirection !== Direction.NONE;
   }
-
-
 
   private changePlayerGridPosition() {
     this.gridPosition = this.gridPosition.clone().add(DIRECTION_TO_VECTOR[this.movingDirection] || throwError())
