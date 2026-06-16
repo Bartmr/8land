@@ -56,12 +56,17 @@
 // Utilities
 @import "../../node_modules/bootstrap/scss/utilities/api";
 
-body {
+:root {
   --bs-body-color: #{color-contrast($body-bg)};
   --bs-body-color-rgb: #{to-rgb(color-contrast($body-bg))};
 
   --bs-border-color: #{rgba(color-contrast($body-bg), 0.3)};
   --bs-border-color-translucent: #{rgba(color-contrast($body-bg), 0.3)};
+  font-size: 28px;
+}
+
+body {
+
   
   color: var(--bs-body-color);
 }

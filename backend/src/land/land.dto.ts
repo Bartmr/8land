@@ -133,11 +133,7 @@ export const SoundcloudSongApiUrlSchema = z.string().optional().refine((s) => {
     return true;
   }
 
-  const parts = s.split('/');
-  const isIdANumber = z.coerce.number().safeParse(parts.pop());
-  const hostPart = parts.join('/');
-
-  return isIdANumber.success && hostPart === 'https://api.soundcloud.com/tracks';
+  return s.startsWith('https://api.soundcloud.com/tracks');
 }, 'Invalid Soundcloud API song url');
 
 export const EditLandParametersSchema: z.ZodType<EditLandParametersDTO> = z.object({

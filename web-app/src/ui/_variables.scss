@@ -17,8 +17,6 @@ $lcd: #9ab05d;
 
 $spacer: 1rem;
 
-$font-size-base: 1.5rem;
-
 $font-family-base: 'VT323';
 
 $border-width: 3px;
@@ -48,6 +46,8 @@ $box-shadow: #{$box-shadow-dimensions} rgba(#000000, $box-shadow-opacity);
 $box-shadow-lg-dimensions: 0 1rem 3rem;
 $box-shadow-lg-opacity: 0.5;
 $box-shadow-lg: #{$box-shadow-lg-dimensions} rgba(#000000, $box-shadow-lg-opacity);
+
+$toast-font-size: 1rem;
 
 @import "../../node_modules/bootstrap/scss/variables";
 

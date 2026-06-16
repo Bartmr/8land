@@ -102,8 +102,8 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
       <Toast
         className="bg-success w-100 mb-4"
         onClose={() => replaceSuccessfulSave(false)}
-        show={successfulSave}
-        delay={10000}
+        show={true}
+        // delay={10000}
         autohide
       >
         <Toast.Header closeButton={false}>Changes saved</Toast.Header>

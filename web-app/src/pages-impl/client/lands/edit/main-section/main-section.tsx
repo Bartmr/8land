@@ -6,7 +6,6 @@ import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CommunicatedDataGate } from '../../../../../ui/communicated-data-gate';
-import { useFormUtils } from '../../../../../forms/form-utils';
 import {
   CommunicatedData,
   CommunicatedDataStatus,
@@ -15,17 +14,7 @@ import { useLandsAPI } from '../../../../../main-api/routes/lands/lands-api';
 import { throwError } from '../../../../../throw-error';
 import { CommunicationError } from '../../../../../communication-errors/communication-errors';
 
-const SoundcloudSongApiUrlSchema = z.string().optional().refine((s) => {
-  if (!s) {
-    return true;
-  }
 
-  const parts = s.split('/');
-  const isIdANumber = z.coerce.number().safeParse(parts.pop());
-  const hostPart = parts.join('/');
-
-  return isIdANumber.success && hostPart === 'https://api.soundcloud.com/tracks';
-}, 'Invalid Soundcloud API song url');
 
 export function MainSection(props: {
   land: GetLandDTO;
@@ -41,66 +30,34 @@ export function MainSection(props: {
       z.object({
         ...CreateLandRequestSchemaObj,
         backgroundMusicUrl: z.union([
-          SoundcloudSongApiUrlSchema,
+          z.string().optional().refine((s) => {
+            if (s == null) {
+              return true;
+            }
+
+            return s.startsWith('https://api.soundcloud.com/tracks');
+          }, 'Invalid Soundcloud API song url'),
           z.string()
-            .transform((s) => (s?.trim() ? s : null))
+            .transform((s) => (s.trim()))
             .transform((s) => {
-              if (s != null) {
-                let iframeSrc: string;
+              // 1. Create a temporary DOM element to parse the HTML string
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(s, 'text/html');
+              const iframe = doc.querySelector('iframe');
+              
+              if (!iframe) return 'failed';
+              
+              // 2. Extract the 'src' attribute
+              const src = iframe.getAttribute('src');
 
-                try {
-                  const temp = document.createElement('div');
-                  temp.innerHTML = s;
-                  const htmlObject = temp.firstChild || throwError();
+              if(!src) return 'failed'
+              
+              // 3. Parse the URL query parameters
+              const urlObj = new URL(src);
 
-                  if (!(htmlObject instanceof HTMLElement)) {
-                    throw new Error();
-                  }
-
-                  const iSrc = htmlObject.getAttribute('src');
-
-                  if (!iSrc) {
-                    return 'failed';
-                  }
-
-                  iframeSrc = iSrc;
-                } catch (err) {
-                  return 'failed';
-                }
-
-                const queryString = iframeSrc.split('?')[1];
-
-                if (!queryString) {
-                  return 'failed';
-                }
-
-                const queryParams = new URLSearchParams(queryString);
-
-                const soundcloudApiEncoded = queryParams.get('url');
-
-                if (!soundcloudApiEncoded) {
-                  return 'failed';
-                }
-
-                const decodedUrl = decodeURIComponent(soundcloudApiEncoded);
-
-                const splittedApiUrl = decodedUrl.split('/');
-                const isIdANumber = z.coerce
-                  .number()
-                  .safeParse(splittedApiUrl.pop());
-                const hostPart = splittedApiUrl.join('/');
-
-                if (
-                  isIdANumber.success &&
-                  hostPart === 'https://api.soundcloud.com/tracks'
-                ) {
-                  return decodedUrl;
-                } else {
-                  return 'failed';
-                }
-              } else {
-                return s;
-              }
+              const apiLink = urlObj.searchParams.get('url');
+              
+              return apiLink; // Returns the fully decoded URL string
             })
             .refine((s) => s !== 'failed', 'Invalid Soundcloud iframe input'),
         z.null()
@@ -113,7 +70,6 @@ export function MainSection(props: {
       backgroundMusicUrl: props.land.backgroundMusicUrl || '',
     },
   });
-  const formUtils = useFormUtils(form);
 
   const [formSubmission, replaceFormSubmission] = useState<
     CommunicatedData<undefined | 'name-already-taken'>
@@ -170,7 +126,7 @@ export function MainSection(props: {
                   <input
                     {...form.register('name')}
                     className={`form-control ${
-                      data || formUtils.hasErrors('name') ? 'is-invalid' : ''
+                      data || form.formState.errors.name ? 'is-invalid' : ''
                     }`}
                     id="name-input"
                   />
@@ -179,16 +135,7 @@ export function MainSection(props: {
                     {data === 'name-already-taken'
                       ? 'This name is already taken'
                       : null}
-                    {Object.keys(formUtils.getErrorTypesFromField('name')).map(
-                      (e) => {
-                        return (
-                          <Fragment key={e}>
-                            <br />
-                            {e}
-                          </Fragment>
-                        );
-                      },
-                    )}
+                    {form.formState.errors.name?.message}
                   </div>
                 </div>
 
@@ -198,11 +145,12 @@ export function MainSection(props: {
                     className="form-label"
                   >
                     Soundcloud Iframe
+                    <p className="text-small" style={{fontSize: '0.8rem'}}>{"(Go to the song, then Share > Embed, and copy the code to here)"}</p>
                   </label>
                   <textarea
                     {...form.register('backgroundMusicUrl')}
                     className={`form-control ${
-                      formUtils.hasErrors('backgroundMusicUrl')
+                      form.formState.errors.backgroundMusicUrl
                         ? 'is-invalid'
                         : ''
                     }`}
@@ -210,21 +158,12 @@ export function MainSection(props: {
                   />
 
                   <div className="invalid-feedback">
-                    {Object.keys(
-                      formUtils.getErrorTypesFromField('backgroundMusicUrl'),
-                    ).map((e) => {
-                      return (
-                        <Fragment key={e}>
-                          {e}
-                          <br />
-                        </Fragment>
-                      );
-                    })}
+                    {form.formState.errors.backgroundMusicUrl?.message}
                   </div>
                 </div>
 
                 {backgroundMusicUrl &&
-                !formUtils.hasErrors('backgroundMusicUrl') ? (
+                !form.formState.errors.backgroundMusicUrl ? (
                   backgroundMusicUrl.startsWith('https://') ? (
                     <div className="mb-3">
                       <iframe

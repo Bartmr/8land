@@ -33,7 +33,7 @@ export async function seedTrainStation({
       searchableName: getSearchableString(
         'Town of Humble Beginnings - Train Station',
       ),
-      backgroundMusicUrl: 'https://api.soundcloud.com/tracks/1118223961',
+      backgroundMusicUrl: null,
       doorBlocks: Promise.resolve([]),
       doorBlocksReferencing: Promise.resolve([]),
       appBlocks: Promise.resolve([]),

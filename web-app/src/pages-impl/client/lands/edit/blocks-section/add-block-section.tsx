@@ -4,7 +4,6 @@ import { GetLandDTO } from '../../../../../main-api/routes/lands/lands-api';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { CommunicatedDataGate } from '../../../../../ui/communicated-data-gate';
-import { useFormUtils } from '../../../../../forms/form-utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   CommunicatedData,
@@ -28,7 +27,15 @@ export function AddBlockSection(props: {
       },
     },
   });
-  const formUtils = useFormUtils(form);
+
+  const getFieldErrorMessages = (error: any): string[] =>
+    error
+      ? Object.values(error.types || { default: error.message })
+          .filter(Boolean)
+          .map((message) => String(message))
+      : [];
+
+
 
   const [formSubmission, replaceFormSubmission] = useState<
     CommunicatedData<
@@ -114,7 +121,7 @@ export function AddBlockSection(props: {
                   {...form.register('data.destinationLandName')}
                   className={`form-control ${
                     data === 'destination-land-not-found' ||
-                    formUtils.hasErrors('data.destinationLandName')
+                    form.formState.errors.data?.destinationLandName
                       ? 'is-invalid'
                       : ''
                   }`}
@@ -128,18 +135,9 @@ export function AddBlockSection(props: {
                   {data === 'land-is-outside-world'
                     ? 'You can only create doors for lands that belong to you'
                     : null}
-                  {Object.keys(
-                    formUtils.getErrorTypesFromField(
-                      'data.destinationLandName',
-                    ),
-                  ).map((e) => {
-                    return (
-                      <Fragment key={e}>
-                        {e}
-                        <br />
-                      </Fragment>
-                    );
-                  })}
+                  {
+                    form.formState.errors.data?.destinationLandName?.message
+                  }
                 </div>
               </div>
             ) : null}
@@ -154,22 +152,13 @@ export function AddBlockSection(props: {
                 <input
                   {...form.register('data.url')}
                   className={`form-control ${
-                    formUtils.hasErrors('data.url') ? 'is-invalid' : ''
+                    form.formState.errors.data?.url ? 'is-invalid' : ''
                   }`}
                   id="app-url-input"
                 />
 
                 <div className="invalid-feedback">
-                  {Object.keys(
-                    formUtils.getErrorTypesFromField('data.url'),
-                  ).map((e) => {
-                    return (
-                      <Fragment key={e}>
-                        {e}
-                        <br />
-                      </Fragment>
-                    );
-                  })}
+                  {form.formState.errors.data?.url?.message}
                 </div>
               </div>
             ) : null}

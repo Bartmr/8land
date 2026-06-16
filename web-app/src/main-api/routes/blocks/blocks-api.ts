@@ -18,13 +18,17 @@ export const CreateBlockRequestSchema = z.object({
           .string()
           .transform((s) => s.trim())
           .refine((s) => s.length > 0, 'Must be filled'),
+        url: z.undefined()
       }),
       z.object({
         type: z.literal(DynamicBlockType.App),
+        destinationLandName: z.undefined(),
         url: z.url(),
       }),
       z.object({
         type: z.literal(DynamicBlockType.Other),
+        destinationLandName: z.undefined(),
+        url: z.url(),
       }),
     ])
     .refine((o) => o.type !== DynamicBlockType.Other, 'Unsupported block type'),
