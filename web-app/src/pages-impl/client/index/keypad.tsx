@@ -1,6 +1,6 @@
 import React from 'react';
 import nipplejs from 'nipplejs';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Direction } from "./screens/land/player-grid";
 import { throwError } from '../../../throw-error';
 import { KeypadBroker } from './keypad-broker'
@@ -29,17 +29,17 @@ ${ESCAPE_BUTTON_SELECTOR} {
 }
 
 export function Keypad(props: { keypad: KeypadBroker }) {
-  useEffect(() => {
-    const nippleZone = document.querySelector('#game-nipple') || throwError();
+  const nippleZoneRef = useRef<HTMLDivElement | null>(null);
+  const keypad = props.keypad;
 
-    if (!(nippleZone instanceof HTMLElement)) {
+  useEffect(() => {
+    if (!nippleZoneRef.current) {
       throwError();
     }
-    const nipple = nipplejs.create({
-      zone: nippleZone,
-    });
 
-    const keypad = props.keypad;
+    const nipple = nipplejs.create({
+      zone: nippleZoneRef.current,
+    });
 
     nipple.on('dir:up', () => {
       keypad.setDirection(Direction.UP);
@@ -61,46 +61,14 @@ export function Keypad(props: { keypad: KeypadBroker }) {
       keypad.setDirection(Direction.NONE);
     });
 
-    const gameButtonA =
-      document.querySelector('#game-button-a') || throwError();
-    const gameButtonAPressedListener = () => {
-      keypad.A_keyWasPressed();
+    return () => {
+      nipple.destroy();
     };
-    gameButtonA.addEventListener('pointerdown', gameButtonAPressedListener);
-    const gameButtonAReleasedListener = () => {
-      keypad.A_keyWasReleased();
-    };
-    gameButtonA.addEventListener('pointerup', gameButtonAReleasedListener);
+    
+  }, [keypad]);
 
-    const gameButtonB =
-      document.querySelector('#game-button-b') || throwError();
-    const gameButtonBPressedListener = () => {
-      keypad.B_keyWasPressed();
-    };
-    gameButtonB.addEventListener('pointerdown', gameButtonBPressedListener);
-    const gameButtonBReleasedListener = () => {
-      keypad.B_keyWasReleased();
-    };
-    gameButtonB.addEventListener('pointerup', gameButtonBReleasedListener);
-
-    const gameButtonEscape =
-      document.querySelector(ESCAPE_BUTTON_SELECTOR) || throwError();
-    const gameButtonEscapePressedListener: EventListenerOrEventListenerObject = () => {
-      keypad.Escape_keyWasPressed();
-    };
-    gameButtonEscape.addEventListener(
-      'pointerdown',
-      gameButtonEscapePressedListener,
-    );
-    const gameButtonEscapeReleasedListener = () => {
-      keypad.Escape_keyWasReleased();
-    };
-    gameButtonEscape.addEventListener(
-      'pointerup',
-      gameButtonEscapeReleasedListener,
-    );
-
-    const keyDownListener = (e: KeyboardEvent) => {
+  useEffect(() => {
+const keyDownListener = (e: KeyboardEvent) => {
       if (e.key === 'ArrowUp') {
         keypad.directionWasPressed(Direction.UP);
       } else if (e.key === 'ArrowDown') {
@@ -133,37 +101,37 @@ export function Keypad(props: { keypad: KeypadBroker }) {
     };
 
     window.addEventListener('keydown', keyDownListener);
-
     window.addEventListener('keyup', keyUpListener);
 
     return () => {
-      nipple.destroy();
-
       window.removeEventListener('keyup', keyUpListener);
       window.removeEventListener('keydown', keyDownListener);
-
-      gameButtonA.removeEventListener(
-        'pointerdown',
-        gameButtonAPressedListener,
-      );
-      gameButtonA.removeEventListener('pointerup', gameButtonAReleasedListener);
-
-      gameButtonB.removeEventListener(
-        'pointerdown',
-        gameButtonBPressedListener,
-      );
-      gameButtonB.removeEventListener('pointerup', gameButtonBReleasedListener);
-
-      gameButtonEscape.removeEventListener(
-        'pointerdown',
-        gameButtonEscapePressedListener,
-      );
-      gameButtonEscape.removeEventListener(
-        'pointerup',
-        gameButtonEscapeReleasedListener,
-      );
     };
-  }, []);
+  }, [keypad])
+
+  const handleAKeyDown = () => {
+    keypad.A_keyWasPressed();
+  };
+
+  const handleAKeyUp = () => {
+    keypad.A_keyWasReleased();
+  };
+
+  const handleBKeyDown = () => {
+    keypad.B_keyWasPressed();
+  };
+
+  const handleBKeyUp = () => {
+    keypad.B_keyWasReleased();
+  };
+
+  const handleEscapeDown = () => {
+    keypad.Escape_keyWasPressed();
+  };
+
+  const handleEscapeUp = () => {
+    keypad.Escape_keyWasReleased();
+  };
 
   return (
     <>
@@ -174,21 +142,25 @@ export function Keypad(props: { keypad: KeypadBroker }) {
             id="game-button-escape"
             className="btn btn-sm btn-secondary"
             style={{ cursor: 'pointer' }}
+            onPointerDown={handleEscapeDown}
+            onPointerUp={handleEscapeUp}
           >
             Escape
           </div>
         </div>
-        <div className="me-4 mt-4 d-flex d-xl-none align-items-center justify-content-between">
+        <div className="mt-4 d-flex d-xl-none align-items-center justify-content-between">
           
           {/* DIRECTION PAD */}
           <div className="d-flex flex-row-reverse">
             <div
               style={{ position: 'absolute', width: '100px', height: '100px' }}
               id="game-nipple"
+              ref={nippleZoneRef}
             ></div>
             <div
-              style={{ width: '100px', height: '100px' }}
+              style={{ width: '150px', height: '150px', userSelect: "none" }}
               className="bg-secondary d-flex align-items-center justify-content-center text-center small"
+
             >
               DRAG HERE
               <br />
@@ -196,21 +168,28 @@ export function Keypad(props: { keypad: KeypadBroker }) {
             </div>
           </div>
           {/* A / B Keys */}
-          <div className="d-flex">
-            <button
-              id="game-button-a"
-              className="btn btn-secondary d-flex align-items-center justify-content-center"
-              style={{ width: '50px', height: '50px' }}
-            >
-              A
-            </button>
+          <div className="d-flex align-items-center gap-3">
             <button
               id="game-button-b"
+              type="button"
               className="ms-3 btn btn-secondary d-flex align-items-center justify-content-center"
-              style={{ width: '50px', height: '50px' }}
+              style={{ width: '60px', height: '60px' }}
+              onPointerDown={handleBKeyDown}
+              onPointerUp={handleBKeyUp}
             >
               B
             </button>
+            <button
+              id="game-button-a"
+              type="button"
+              className="btn btn-secondary d-flex align-items-center justify-content-center"
+              style={{ width: '70px', height: '70px' }}
+              onPointerDown={handleAKeyDown}
+              onPointerUp={handleAKeyUp}
+            >
+              A
+            </button>
+            
           </div>
         </div>
       </div>
