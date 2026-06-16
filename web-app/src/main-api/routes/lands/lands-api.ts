@@ -321,7 +321,6 @@ export type IndexLandsDTO = z.infer<typeof indexLandsResponseSchema>['body'];
 const createLandResponseSchema = z.union([
   z.object({
     status: z.literal(201),
-    body: z.undefined(),
   }),
   z.object({
     status: z.literal(409),
@@ -340,7 +339,7 @@ const createLandResponseSchema = z.union([
     ]),
   }),
 ]) satisfies z.ZodType<
-  | { status: 201; body: undefined }
+  | { status: 201 }
   | {
       status: 409;
       body:

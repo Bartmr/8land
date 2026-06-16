@@ -20,9 +20,6 @@ DATABASE_NAME=postgres
 DATABASE_USER=postgres
 DATABASE_PASSWORD=postgres
 
-FIREBASE_AUTH_EMULATOR_HOST=localhost:9099|firebase-emulator:9099
-FIREBASE_EMULATOR_PROJECT_ID=dev
-
 USE_DEV_EMAIL=true
 
 START_LANDS_TOTAL_LIMIT=5
@@ -31,12 +28,15 @@ LAND_LIMIT_PER_WORLD=5
 
 Run `npm install`
 
-## Start
+Seed development data
 
-Make sure the necessary infrastructure is up.
-
-```
+```bash
 npm run build
 node dist/development/seed/main.js
+```
+
+## Start
+
+```
 npm run start:dev
 ```

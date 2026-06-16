@@ -1,7 +1,17 @@
-## Start without devcontainer
+## Setup
+
+No setup needed.
+
+## Start 
+
+### with devcontainer
+
+If you started VSCode in a devcontainer, the services are running.
+
+### without devcontainer
 
 ```bash
-docker compose up postgres firebase-emulator
+docker compose up postgres
 ```
 
 ## Handling with devcontainer
