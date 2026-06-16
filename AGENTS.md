@@ -12,7 +12,7 @@ This repository is a monorepo containing all the projects that make 8Land.
     - `-a`: include hidden files.
     - `-F`: append `/` to directories and `*` to executables for clarity.
     - Optionally add `-L [depth]` to limit depth in large trees.
-- there should be the least amount of moving parts (state, asynchronous logic, variables, etc.) to achieve something.
+- there should be the least amount of moving parts (state, variables, asynchronous logic, effects, etc.) to achieve something.
 - do not create unnecessary functions and variables. if code is not reused, just inline it.
 - Avoid try/catch. Let the error bubble up, hit the global loggers and crash the thread.
 
