@@ -71,7 +71,7 @@ async function seed() {
       new Land({
         name: 'Expectations Beach',
         searchableName: getSearchableString('Expectations Beach'),
-        backgroundMusicUrl: 'https://api.soundcloud.com/tracks/256813580',
+        backgroundMusicUrl: 'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A591562281',
         doorBlocks: Promise.resolve([]),
         doorBlocksReferencing: Promise.resolve([]),
         appBlocks: Promise.resolve([]),
@@ -88,7 +88,7 @@ async function seed() {
       new Land({
         name: 'Town of Humble Beginnings',
         searchableName: getSearchableString('Town of Humble Beginnings'),
-        backgroundMusicUrl: 'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A591562281',
+        backgroundMusicUrl: null,
         doorBlocks: Promise.resolve([]),
         doorBlocksReferencing: Promise.resolve([]),
         appBlocks: Promise.resolve([]),

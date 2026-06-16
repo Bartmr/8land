@@ -5,12 +5,12 @@ import { Direction } from "./screens/land/player-grid";
 import { throwError } from '../../../throw-error';
 import { KeypadBroker } from './keypad-broker'
 
-const ESCAPE_BUTTON_SELECTOR = '#game-button-back';
+const ESCAPE_BUTTON_SELECTOR = '#game-button-escape';
 
-export function BackKeyActive() {
+export function EscapeKeyActive() {
   return <style>
           {`
-@keyframes back-button-pulse {
+@keyframes escape-button-pulse {
   10% {
     background-color: #ffff55;
     transform: scale3d(1.05, 1.05, 1.05);
@@ -22,7 +22,7 @@ export function BackKeyActive() {
 }
 
 ${ESCAPE_BUTTON_SELECTOR} {
-  animation: back-button-pulse 1.5s infinite;
+  animation: escape-button-pulse 1.5s infinite;
 }
     `}
   </style>
@@ -83,21 +83,21 @@ export function Keypad(props: { keypad: KeypadBroker }) {
     };
     gameButtonB.addEventListener('pointerup', gameButtonBReleasedListener);
 
-    const gameButtonBack =
-      document.querySelector('#game-button-back') || throwError();
-    const gameButtonBackPressedListener = () => {
-      keypad.Back_keyWasPressed();
+    const gameButtonEscape =
+      document.querySelector(ESCAPE_BUTTON_SELECTOR) || throwError();
+    const gameButtonEscapePressedListener: EventListenerOrEventListenerObject = () => {
+      keypad.Escape_keyWasPressed();
     };
-    gameButtonBack.addEventListener(
+    gameButtonEscape.addEventListener(
       'pointerdown',
-      gameButtonBackPressedListener,
+      gameButtonEscapePressedListener,
     );
-    const gameButtonBackReleasedListener = () => {
-      keypad.Back_keyWasReleased();
+    const gameButtonEscapeReleasedListener = () => {
+      keypad.Escape_keyWasReleased();
     };
-    gameButtonBack.addEventListener(
+    gameButtonEscape.addEventListener(
       'pointerup',
-      gameButtonBackReleasedListener,
+      gameButtonEscapeReleasedListener,
     );
 
     const keyDownListener = (e: KeyboardEvent) => {
@@ -154,13 +154,13 @@ export function Keypad(props: { keypad: KeypadBroker }) {
       );
       gameButtonB.removeEventListener('pointerup', gameButtonBReleasedListener);
 
-      gameButtonBack.removeEventListener(
+      gameButtonEscape.removeEventListener(
         'pointerdown',
-        gameButtonBackPressedListener,
+        gameButtonEscapePressedListener,
       );
-      gameButtonBack.removeEventListener(
+      gameButtonEscape.removeEventListener(
         'pointerup',
-        gameButtonBackReleasedListener,
+        gameButtonEscapeReleasedListener,
       );
     };
   }, []);
@@ -171,7 +171,7 @@ export function Keypad(props: { keypad: KeypadBroker }) {
         {/* Secondary buttons*/}
         <div className="d-flex align-items-center">
           <div
-            id="game-button-back"
+            id="game-button-escape"
             className="btn btn-sm btn-secondary"
             style={{ cursor: 'pointer' }}
           >

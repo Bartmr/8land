@@ -5,7 +5,7 @@ import { MusicService } from '../../music-ticker';
 import { LandScreenService } from '../land/land-screen.service';
 import { AppContext } from './app-screen.types';
 import { KeypadBroker } from '../../keypad-broker';
-import { BackKeyActive } from '../../keypad';
+import { EscapeKeyActive } from '../../keypad';
 import { IframeGate } from './iframe-gate';
 import { throwError } from '../../../../../throw-error';
 
@@ -104,7 +104,7 @@ export function AppScreen(props: {
 
     const keypad = props.keypad;
 
-    const onPressing_Back = () => {
+    const onPressing_Escape = () => {
       if (sv.active) {
         sv.close();
         return 'stop-propagation' as const;
@@ -113,20 +113,20 @@ export function AppScreen(props: {
       return 'continue-propagation' as const;
     };
 
-    keypad.onPressing_Back(onPressing_Back, 'appScreen');
+    keypad.onPressing_Escape(onPressing_Escape, 'appScreen');
 
     replaceService(sv);
     props.onService(sv);
 
     return () => {
-      keypad.removePressing_Back_Callback('appScreen');
+      keypad.removePressing_Escape_Callback('appScreen');
     };
   }, []);
 
   return (
     <>
       {service && service.active ? (
-        <BackKeyActive />
+        <EscapeKeyActive />
       ) : null}
       {service && service.currentContext ? (
         <IframeGate
