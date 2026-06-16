@@ -3,8 +3,10 @@ import { throwError } from "../../../../../throw-error";
 import { TILE_SIZE } from "../../game-constants";
 import { LandScene } from "./land-scene";
 import { Direction } from "./player-grid";
+import { v4 } from "uuid";
 
 export class PlayerSprite {
+  private id: string;
   private sprite: GameObjects.Sprite;
 
   constructor(
@@ -12,6 +14,7 @@ export class PlayerSprite {
     depth: number,
     position: Math.Vector2
   ) {
+    this.id = v4();
     this.sprite = scene.add.sprite(0, 0, 'player');
     this.sprite.setDepth(depth);
 
@@ -38,7 +41,7 @@ export class PlayerSprite {
     this.sprite.setFrame(4);
 
     scene.anims.create({
-      key: Direction.UP,
+      key: `player:${this.id}:${Direction.UP}`,
       frames: scene.anims.generateFrameNumbers('player', {
         start: 9,
         end: 8,
@@ -49,7 +52,7 @@ export class PlayerSprite {
     });
 
     scene.anims.create({
-      key: Direction.RIGHT,
+      key: `player:${this.id}:${Direction.RIGHT}`,
       frames: scene.anims.generateFrameNumbers('player', {
         start: 1,
         end: 0,
@@ -60,7 +63,7 @@ export class PlayerSprite {
     });
 
     scene.anims.create({
-      key: Direction.DOWN,
+      key: `player:${this.id}:${Direction.DOWN}`,
       frames: scene.anims.generateFrameNumbers('player', {
         start: 6,
         end: 5,
@@ -71,7 +74,7 @@ export class PlayerSprite {
     });
 
     scene.anims.create({
-      key: Direction.LEFT,
+      key: `player:${this.id}:${Direction.LEFT}`,
       frames: scene.anims.generateFrameNumbers('player', {
         start: 3,
         end: 2,
@@ -96,13 +99,13 @@ export class PlayerSprite {
   stopAnimation(direction: Direction) {
     const animationManager = this.sprite.anims.animationManager;
     const standingFrame = (
-      animationManager.get(direction).frames[1] || throwError()
+      animationManager.get(`player:${this.id}:${direction}`).frames[1] || throwError()
     ).frame.name;
     this.sprite.anims.stop();
     this.sprite.setFrame(standingFrame);
   }
 
   startAnimation(direction: Direction) {
-    this.sprite.anims.play(direction);
+    this.sprite.anims.play(`player:${this.id}:${direction}`);
   }
 }

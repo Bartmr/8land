@@ -1,22 +1,24 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
-import { UserAuthSessionData } from '../../../../../users/authentication/user-auth-types';
-import { runLandGame } from './land-game';
-import { globalHistory } from '@reach/router';
-import { MusicService } from '../../music-ticker';
-import { DialogueService } from '../dialogue/dialogue-screen';
-import { LandScreenService } from './land-screen.service';
-import { AppService } from '../app/app-screen';
-import { ResumeLandNavigationDTO } from '../../../../../main-api/routes/lands/lands-api';
-import { useLandsAPI } from '../../../../../main-api/routes/lands/lands-api';
-import { useTrainAPI } from '../../../../../main-api/routes/train/train.api';
-import { navigate } from 'gatsby';
-import { USER_ROUTE } from '../../../user/user-routes';
-import { KeypadBroker } from '../../keypad-broker';
-import { throwError } from '../../../../../throw-error';
+import React from "react";
+import { useEffect, useState } from "react";
+import { UserAuthSessionData } from "../../../../../users/authentication/user-auth-types";
+import { runLandGame } from "./land-game";
+import { globalHistory } from "@reach/router";
+import { MusicService } from "../../music-ticker";
+import { DialogueService } from "../dialogue/dialogue-screen";
+import { LandScreenService } from "./land-screen.service";
+import { AppService } from "../app/app-screen";
+import { ResumeLandNavigationDTO } from "../../../../../main-api/routes/lands/lands-api";
+import { useLandsAPI } from "../../../../../main-api/routes/lands/lands-api";
+import { useTrainAPI } from "../../../../../main-api/routes/train/train.api";
+import { navigate } from "gatsby";
+import { USER_ROUTE } from "../../../user/user-routes";
+import { KeypadBroker } from "../../keypad-broker";
+import { throwError } from "../../../../../throw-error";
+
+export const FOCUS_SHIFTER_ID = "game-focus-shifter";
 
 export function LandScreen(props: {
-  keypad: KeypadBroker,
+  keypad: KeypadBroker;
   musicService: MusicService;
   dialogueService: DialogueService;
   appService: AppService;
@@ -65,25 +67,49 @@ export function LandScreen(props: {
       props.onService(sv);
     })();
 
-
     const onPressing_Escape = () => {
       (async () => {
-        await navigate(USER_ROUTE.getHref({ section: 'escape' }));
+        await navigate(USER_ROUTE.getHref({ section: "escape" }));
       })();
 
-      return 'stop-propagation' as const;
+      return "stop-propagation" as const;
     };
 
-    props.keypad.onPressing_Escape(onPressing_Escape, 'landScreen');
+    props.keypad.onPressing_Escape(onPressing_Escape, "landScreen");
 
     return () => {
-      props.keypad.removePressing_Escape_Callback('landScreen');
+      props.keypad.removePressing_Escape_Callback("landScreen");
     };
   }, []);
+
+  /*
+    Fix focus changing to soundcloud iframe after exiting from the app screen
+  */
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      const focusShiftingElement = document.getElementById(FOCUS_SHIFTER_ID);
+
+      if (focusShiftingElement == document.activeElement) {
+        return;
+      }
+
+      focusShiftingElement?.focus();
+    }, 500);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  });
 
   return (
     <>
       <div id="game-root"></div>
+      <button
+        style={{ display: "block", height: "1px", opacity: 0 }}
+        id={FOCUS_SHIFTER_ID}
+      >
+        Focus shifter
+      </button>
     </>
   );
 }
