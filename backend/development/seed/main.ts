@@ -12,13 +12,13 @@ import { LOCAL_TEMPORARY_FILES_PATH } from 'src/temporary-files';
 import { seedTrainStation } from './seed-train-station';
 import { EnvironmentVariables } from "src/environment-variables/environment-variables";
 import { v4 } from "uuid";
-import { User } from "src/users/user.entity";
-import { Land } from "src/land/land.entity";
-import { DoorBlock } from "src/blocks/door-block.entity";
-import { AppBlock } from "src/blocks/app-block.entity";
+import { User } from "src/users/user.entities";
+import { Land } from "src/land/land.entities";
+import { DoorBlock } from "src/blocks/door-block.entities";
+import { AppBlock } from "src/blocks/app-block.entities";
 import { AppDataSourceOptions } from "src/database/data-source";
 import * as bcrypt from 'bcrypt';
-import { createTiledJSONSchema } from "src/land/land.dto";
+import { createTiledJSONSchema } from "src/land/land.dtos";
 
 const readFile = promisify(fs.readFile);
 const rm = promisify(fs.rm);
@@ -29,7 +29,7 @@ async function seed() {
 
   const storageService = new DevStorageService();
 
-  const defaultDBConnection = await createConnection(AppDataSourceOptions);
+  const defaultDBConnection = await createConnection(AppDataSourceOptions)
 
   await defaultDBConnection.runMigrations();
 

@@ -1,4 +1,4 @@
-import { Land } from 'src/land/land.entity';
+import { Land } from 'src/land/land.entities';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

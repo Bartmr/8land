@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { StorageModule } from 'src/storage/storage.module';
-import { DoorBlock } from '../blocks/door-block.entity';
-import { Land } from './land.entity';
-import { AppBlock } from 'src/blocks/app-block.entity';
-import { NavigationState } from 'src/navigation/state/navigation-state.entity';
+import { DoorBlock } from '../blocks/door-block.entities';
+import { Land } from './land.entities';
+import { AppBlock } from 'src/blocks/app-block.entities';
+import { NavigationState } from 'src/navigation/state/navigation-state.entities';
 import { LandsController } from './land.controller';
-import { World } from '../worlds/worlds.entity';
+import { World } from '../worlds/worlds.entities';
 import { LandService } from './land.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/users/auth/auth.module';

@@ -2,13 +2,13 @@ import 'dotenv/config'
 
 import { DataSource } from "typeorm";
 import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
-import { AppBlock } from 'src/blocks/app-block.entity';
-import { DoorBlock } from 'src/blocks/door-block.entity';
-import { Land } from 'src/land/land.entity';
-import { NavigationState } from 'src/navigation/state/navigation-state.entity';
-import { UserAuthSession } from 'src/users/auth/sessions/auth-session.entity';
-import { World } from 'src/worlds/worlds.entity';
-import { User } from 'src/users/user.entity';
+import { AppBlock } from 'src/blocks/app-block.entities';
+import { DoorBlock } from 'src/blocks/door-block.entities';
+import { Land } from 'src/land/land.entities';
+import { NavigationState } from 'src/navigation/state/navigation-state.entities';
+import { UserAuthSession } from 'src/users/auth/sessions/auth-session.entities';
+import { World } from 'src/worlds/worlds.entities';
+import { User } from 'src/users/user.entities';
 import { DataSourceOptions } from 'typeorm/browser';
 import { Initialize1780932515218 } from 'src/database/migrations/1780932515218-initialize';
 

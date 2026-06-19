@@ -1,6 +1,6 @@
-import { AppBlock } from 'src/blocks/app-block.entity';
-import { DoorBlock } from 'src/blocks/door-block.entity';
-import { World } from 'src/worlds/worlds.entity';
+import { AppBlock } from 'src/blocks/app-block.entities';
+import { DoorBlock } from 'src/blocks/door-block.entities';
+import { World } from 'src/worlds/worlds.entities';
 import {
   Column,
   CreateDateColumn,

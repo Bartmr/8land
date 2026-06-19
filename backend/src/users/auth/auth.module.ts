@@ -3,8 +3,8 @@ import { AuthController } from './auth.controller';
 import { AuthGuard } from './auth.guard';
 import { AuthSessionsService } from './sessions/auth-sessions.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '../user.entity';
-import { UserAuthSession } from './sessions/auth-session.entity';
+import { User } from '../user.entities';
+import { UserAuthSession } from './sessions/auth-session.entities';
 
 @Module({
   imports: [

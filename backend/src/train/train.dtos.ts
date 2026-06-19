@@ -1,4 +1,4 @@
-import { NavigateToLandDTO } from 'src/land/land.dto';
+import { NavigateToLandDTO } from 'src/land/land.dtos';
 
 export class BoardTrainParametersDTO {
   worldId!: string;

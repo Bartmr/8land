@@ -2,8 +2,8 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { User } from 'src/users/user.entity';
-import { UserAuthSession } from './auth-session.entity';
+import { User } from 'src/users/user.entities';
+import { UserAuthSession } from './auth-session.entities';
 import { DataSource, EntityManager, Repository } from 'typeorm';
 import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
 import * as jwt from 'jsonwebtoken';

@@ -1,5 +1,5 @@
-import { Land } from 'src/land/land.entity';
-import { User } from 'src/users/user.entity';
+import { Land } from 'src/land/land.entities';
+import { User } from 'src/users/user.entities';
 import {
   Column,
   CreateDateColumn,

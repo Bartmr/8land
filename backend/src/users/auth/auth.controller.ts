@@ -3,7 +3,7 @@ import {
   LoginRequestDTO,
   LoginResponseDTO,
   SignupRequestDTO,
-} from 'src/users/auth/auth.dto';
+} from 'src/users/auth/auth.dtos';
 import {
   BadRequestException,
   Body,
@@ -27,7 +27,7 @@ import {
   PublicRoute,
 } from './auth.guard';
 import { DataSource } from 'typeorm';
-import { User } from 'src/users/user.entity';
+import { User } from 'src/users/user.entities';
 import { AuthSessionsService } from './sessions/auth-sessions.service';
 import { type Request as RequestType, type Response as ResponseType } from 'express';
 import { v4 } from 'uuid';

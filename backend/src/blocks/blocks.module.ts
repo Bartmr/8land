@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DoorBlock } from './door-block.entity';
-import { Land } from 'src/land/land.entity';
+import { DoorBlock } from './door-block.entities';
+import { Land } from 'src/land/land.entities';
 import { BlocksController } from './blocks.controller';
-import { AppBlock } from './app-block.entity';
+import { AppBlock } from './app-block.entities';
 import { AuthModule } from 'src/users/auth/auth.module';
 
 @Module({

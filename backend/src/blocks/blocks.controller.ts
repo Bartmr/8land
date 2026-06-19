@@ -16,14 +16,14 @@ import {
   CreateBlockRequestSchema,
   DeleteBlockURLParameters,
   DynamicBlockType,
-} from 'src/blocks/blocks.dto';
+} from 'src/blocks/blocks.dtos';
 import { AuthContext, WithAuthContext } from 'src/users/auth/auth.guard';
 import { getSearchableString } from 'src/strings/get-searchable-string';
 import { DataSource } from 'typeorm';
-import { Land } from 'src/land/land.entity';
-import { AppBlock } from './app-block.entity';
-import { DoorBlock } from './door-block.entity';
-import { NavigationState } from 'src/navigation/state/navigation-state.entity';
+import { Land } from 'src/land/land.entities';
+import { AppBlock } from './app-block.entities';
+import { DoorBlock } from './door-block.entities';
+import { NavigationState } from 'src/navigation/state/navigation-state.entities';
 import { ZodValidationPipe } from 'src/zod/zod.pipe';
 
 @UseGuards(AuthGuard)

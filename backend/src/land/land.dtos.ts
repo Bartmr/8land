@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { StaticBlockType } from 'src/blocks/blocks.dto';
+import { StaticBlockType } from 'src/blocks/blocks.dtos';
 
 export class CreateLandRequestDTO {
   name!: string;

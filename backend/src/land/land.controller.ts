@@ -35,7 +35,7 @@ import {
   NavigateToLandDTO,
   NavigateToLandQueryDTO,
   ResumeLandNavigationDTO,
-} from 'src/land/land.dto';
+} from 'src/land/land.dtos';
 import {
   AuthContext,
   WithAuthContext,
@@ -47,16 +47,16 @@ import { DataSource } from 'typeorm';
 
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { LandService } from './land.service';
-import { Land } from './land.entity';
-import { World } from 'src/worlds/worlds.entity';
+import { Land } from './land.entities';
+import { World } from 'src/worlds/worlds.entities';
 import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
-import { DoorBlock } from 'src/blocks/door-block.entity';
-import { NavigationState } from 'src/navigation/state/navigation-state.entity';
+import { DoorBlock } from 'src/blocks/door-block.entities';
+import { NavigationState } from 'src/navigation/state/navigation-state.entities';
 import { ZodValidationPipe } from 'src/zod/zod.pipe';
 import {
   CreateLandRequestSchema,
   EditLandBodySchema,
-} from 'src/land/land.dto';
+} from 'src/land/land.dtos';
 
 @UseGuards(AuthGuard)
 @Controller('lands')

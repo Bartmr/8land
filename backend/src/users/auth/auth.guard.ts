@@ -11,7 +11,7 @@ import { AuthSessionsService } from './sessions/auth-sessions.service';
 import { AppRequest } from 'src/requests/request-types';
 import { Response } from 'express';
 import { throwError } from 'src/throw-error';
-import { User } from 'src/users/user.entity';
+import { User } from 'src/users/user.entities';
 
 export class AuthContext {
   user: User;

@@ -18,7 +18,7 @@ import {
   BoardTrainParametersDTO,
   ReturnToTrainStationDTO,
   ReturnToTrainStationQueryDTO,
-} from 'src/train/train.dto';
+} from 'src/train/train.dtos';
 import {
   AuthContext,
   WithOptionalAuthContext,
@@ -27,8 +27,8 @@ import {
 import { getSearchableString } from 'src/strings/get-searchable-string';
 import { throwError } from 'src/throw-error';
 import { LandService } from 'src/land/land.service';
-import { Land } from 'src/land/land.entity';
-import { NavigationState } from 'src/navigation/state/navigation-state.entity';
+import { Land } from 'src/land/land.entities';
+import { NavigationState } from 'src/navigation/state/navigation-state.entities';
 import { DataSource } from 'typeorm';
 
 @UseGuards(AuthGuard)

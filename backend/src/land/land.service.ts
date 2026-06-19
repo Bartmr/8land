@@ -10,11 +10,11 @@ import {
   createTiledJSONSchema,
   LAND_MAP_SIZE_LIMIT,
   LAND_TILESET_SIZE_LIMIT,
-} from 'src/land/land.dto';
+} from 'src/land/land.dtos';
 import { AuthContext } from 'src/users/auth/auth.guard';
 import { getSearchableString } from 'src/strings/get-searchable-string';
-import { World } from 'src/worlds/worlds.entity';
-import { Land } from './land.entity';
+import { World } from 'src/worlds/worlds.entities';
+import { Land } from './land.entities';
 import { DataSource, EntityManager } from 'typeorm';
 import sharp from 'sharp';
 import {
@@ -24,8 +24,8 @@ import {
 import { throwError } from 'src/throw-error';
 import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
 import { z } from 'zod';
-import { NavigationState } from 'src/navigation/state/navigation-state.entity';
-import { StaticBlockType } from 'src/blocks/blocks.dto';
+import { NavigationState } from 'src/navigation/state/navigation-state.entities';
+import { StaticBlockType } from 'src/blocks/blocks.dtos';
 
 function getLandStorageKeys(landId: string) {
   const tilesetStorageKey = `lands/${landId}/tileset.png`;

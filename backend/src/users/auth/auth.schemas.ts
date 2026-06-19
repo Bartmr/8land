@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { LoginRequestDTO, SignupRequestDTO } from './auth.dto';
+import { LoginRequestDTO, SignupRequestDTO } from './auth.dtos';
 
 export const loginRequestSchema: z.ZodType<LoginRequestDTO> = z.object({
   email: z.string().email(),
