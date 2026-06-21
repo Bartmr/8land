@@ -61,8 +61,8 @@ In the example below, the tileset has 10 tiles horizontally and 9 tiles vertical
 
                   }
                 </p>
-                <p>1 darkest color (e.g. black)</p>
-                <p>1 lightest color (e.g. white)</p>
+                <p>1 darkest color in the whole artwork (e.g. black)</p>
+                <p>1 lightest color in the whole artwork (e.g. white)</p>
                 <p>For each other color you pick:</p>
                 <ul>
                   <li>a dark shade</li>
