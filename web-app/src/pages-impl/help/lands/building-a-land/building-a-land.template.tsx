@@ -2,11 +2,10 @@ import React from 'react';
 import { Layout } from '../../../layout/layout';
 import { LinkAnchor } from '../../../../ui/link-anchor';
 import { BUILDING_A_LAND_ROUTE } from './building-a-land.routes';
-import landWithGrid from './images/land-with-grid.png';
-import colorShades from './images/4-color-shades.png';
-import editTileset from './images/edit-tileset.png';
-import staticBlocks from './images/static-blocks.png';
-import dynamicBlocks from './images/dynamic-blocks.png';
+import landWithGrid from './land-with-grid.png';
+import editTileset from './edit-tileset.png';
+import staticBlocks from './static-blocks.png';
+import dynamicBlocks from './dynamic-blocks.png';
 
 export function BuildingALandTemplate() {
   return (
@@ -58,17 +57,29 @@ In the example below, the tileset has 10 tiles horizontally and 9 tiles vertical
                 </p>
                 <p>
                   {
-                    "If you're new to pixelart, we recommend you to setup some kind of 16 by 16 pixel grid in your image editor, and only use 4 shades of a given color, like the example below:"
+                    "If you're new to pixelart, we recommend you to setup some kind of 16 by 16 pixel grid in your image editor, and a color palette with the following:"
+
                   }
                 </p>
-                <p>
-                  <img
-                    src={colorShades}
-                    alt="4 color shades"
-                    className="border"
-                    height={'72px'}
-                  />
-                </p>
+                <p>1 darkest color (e.g. black)</p>
+                <p>1 lightest color (e.g. white)</p>
+                <p>For each other color you pick:</p>
+                <ul>
+                  <li>a dark shade</li>
+                  <li>a saturated shade</li>
+                  <li>a light share</li>
+                </ul>
+
+                <div className='d-flex'>
+                  <div className='d-flex border'>
+                    <div className='p-4' style={{background: "#000000"}}></div>
+                    <div className='p-4' style={{background: "#ffffff"}}></div>
+                    <div className='p-4' style={{background: "#297300"}}></div>
+                    <div className='p-4' style={{background: "#63ce08"}}></div>
+                    <div className='p-4' style={{background: "#b5ff52"}}></div>
+                  </div>
+                </div>
+               
               </li>
               <li>
                 <p>{"Now it's time to add some interactivity to our land"}</p>
