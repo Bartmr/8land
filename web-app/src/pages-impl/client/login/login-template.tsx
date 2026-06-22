@@ -46,14 +46,9 @@ function Content() {
     status: CommunicatedDataStatus.NotInitialized,
   });
 
-  const isFormValid = email && isEmail(email) && password.length >= 6;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!isFormValid) {
-      return;
-    }
 
     setFormState({ status: CommunicatedDataStatus.Loading });
 
@@ -100,17 +95,12 @@ function Content() {
                   <input
                     id="email"
                     type="email"
-                    className={`form-control ${
-                      email && !isEmail(email) ? 'is-invalid' : ''
-                    }`}
+                    className={`form-control`}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
                     required
                   />
-                  <div className="invalid-feedback">
-                    Please enter a valid email address
-                  </div>
                 </div>
 
                 <div className="mb-3">
@@ -127,19 +117,14 @@ function Content() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="At least 6 characters"
                     required
-                    minLength={6}
                   />
-                  <div className="invalid-feedback">
-                    Password must be at least 6 characters
-                  </div>
                 </div>
 
                 <button
                   type="submit"
                   className="btn btn-primary w-100"
                   disabled={
-                    formState.status === CommunicatedDataStatus.Loading ||
-                    !isFormValid
+                    formState.status === CommunicatedDataStatus.Loading
                   }
                 >
                   {formState.status === CommunicatedDataStatus.Loading ? (
