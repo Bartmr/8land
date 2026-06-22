@@ -1,4 +1,4 @@
-@mixin with-contrasting-foreground($bg-color) {
+@mixin contrasting-foreground($bg-color) {
     $contrasting-body-color: color-contrast($bg-color);
 
     --bs-body-color: #{$contrasting-body-color};
@@ -6,18 +6,4 @@
 
     --bs-border-color: #{rgba($contrasting-body-color, 0.3)};
     --bs-border-color-translucent: #{rgba($contrasting-body-color, 0.3)};
-
-    color: var(--bs-body-color);
-}
-
-@mixin reset-contrasting-foreground {
-    $contrasting-body-color: color-contrast($body-bg);
-
-    --bs-body-color: #{$contrasting-body-color};
-    --bs-body-color-rgb: #{to-rgb($contrasting-body-color)};
-
-    --bs-border-color: #{rgba($contrasting-body-color, 0.3)};
-    --bs-border-color-translucent: #{rgba($contrasting-body-color, 0.3)};
-
-    color: var(--bs-body-color);
 }

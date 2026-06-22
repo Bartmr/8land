@@ -61,13 +61,13 @@
 
 
 :root {
-  @include reset-contrasting-foreground;
-  
   font-size: 28px;
 }
 
 @each $color, $value in $theme-colors {
   .bg-#{$color} {
-    @include with-contrasting-foreground($value);
+    @include contrasting-foreground($value);
+
+    color: var(--bs-body-color);
   }
 }
