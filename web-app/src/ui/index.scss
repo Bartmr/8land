@@ -56,8 +56,9 @@
 // Utilities
 @import "../../node_modules/bootstrap/scss/utilities/api";
 
-// Contrasting Foreground
+// Contrasting foreground
 @import "./contrasting-foreground-mixins";
+@import "./contrasting-foreground";
 
 @each $color, $value in $theme-colors {
   .bg-#{$color} {

@@ -1,0 +1,3 @@
+.reset-contrasting-foreground {
+    @include contrasting-foreground($body-bg);
+}

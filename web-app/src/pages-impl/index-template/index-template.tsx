@@ -83,7 +83,7 @@ export function IndexTemplate() {
           </div>
           <div className="py-5">
             <div className="container text-center">
-              <p className="display-4 text-white">
+              <p className="display-4 text-body">
                 What are you waiting for?
                 <br />
               </p>
