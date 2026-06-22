@@ -38,8 +38,8 @@ export function CommunicatedDataGate<T extends CommunicatedData<unknown>>({
   const spinnerSizeClass =
     layout === CommunicatedDataGateLayout.Default ? 'spinner-lg' : 'spinner-sm';
 
-  const iconSizeClassName =
-    layout === CommunicatedDataGateLayout.Default ? 'icon-badge' : '';
+  const iconSizeStyle =
+    layout === CommunicatedDataGateLayout.Default ? { fontSize: '2rem'} : {};
   const textClassName =
     layout === CommunicatedDataGateLayout.Tape
       ? 'ms-2'
@@ -104,14 +104,14 @@ export function CommunicatedDataGate<T extends CommunicatedData<unknown>>({
   } else if (dataWrapper.status === CommunicationError.NotFound) {
     gateStatusUI = (
       <div className={flexClassName}>
-        <FaSearch className={`${iconSizeClassName}`} />
+        <FaSearch style={iconSizeStyle} />
         <p className={`${textClassName} mb-0`}>Not Found</p>
       </div>
     );
   } else if (dataWrapper.status === CommunicationError.ConnectionFailure) {
     gateStatusUI = (
       <div className={flexClassName}>
-        <FaWifi className={`text-danger ${iconSizeClassName}`} />
+        <FaWifi className={`text-danger`} style={iconSizeStyle} />
         <p className={`${textClassName} text-danger mb-0`}>
           No Internet
           {layout === CommunicatedDataGateLayout.Default
@@ -123,7 +123,7 @@ export function CommunicatedDataGate<T extends CommunicatedData<unknown>>({
   } else if (dataWrapper.status === CommunicationError.Forbidden) {
     gateStatusUI = (
       <div className={flexClassName}>
-        <FaLock className={`${iconSizeClassName}`} />
+        <FaLock style={iconSizeStyle} />
         <p className={`${textClassName} mb-0`}>
           {layout === CommunicatedDataGateLayout.Default
             ? 'You are not allowed to access this content'
@@ -141,7 +141,7 @@ export function CommunicatedDataGate<T extends CommunicatedData<unknown>>({
   } else if (dataWrapper.status === CommunicationError.UnexpectedResponse) {
     gateStatusUI = (
       <div className={flexClassName}>
-        <FaExclamationCircle className={`text-danger ${iconSizeClassName}`} />
+        <FaExclamationCircle className={`text-danger`} style={iconSizeStyle} />
         <p className={`text-danger ${textClassName} mb-0`}>
           {layout === CommunicatedDataGateLayout.Default
             ? 'An unexpected error occurred. Try again later.'

@@ -42,7 +42,7 @@ export const HelpTemplate = () => {
                         href={c.href}
                         className="h-100 link-unstyled selectable d-block p-3"
                       >
-                        <div className="icon-badge mb-2">{c.icon}</div>
+                        <div className="mb-2" style={{fontSize: '2rem'}}>{c.icon}</div>
                         {c.title}
                       </LinkAnchor>
                     </div>
@@ -64,7 +64,7 @@ export const HelpTemplate = () => {
                   href={ABOUT_ROUTE.getHref()}
                   className="h-100 selectable d-block p-3"
                 >
-                  <div className="icon-badge mb-2"><FaProjectDiagram /></div>
+                  <div className="mb-2" style={{fontSize: '2rem'}}><FaProjectDiagram /></div>
                   About 8Land
                 </LinkAnchor>
               </div>
