@@ -98,7 +98,6 @@ function Content() {
                     className={`form-control`}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
                     required
                   />
                 </div>
@@ -115,7 +114,6 @@ function Content() {
                     }`}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="At least 6 characters"
                     required
                   />
                 </div>
