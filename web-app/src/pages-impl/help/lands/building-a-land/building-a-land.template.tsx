@@ -81,11 +81,56 @@ In the example below, the tileset has 10 tiles horizontally and 9 tiles vertical
                 </div>
                
               </li>
+
+
               <li>
-                <p>{"Now it's time to add some interactivity to our land"}</p>
+                <p>
+                  {"Now it's time to add some interactivity to our land by creating a "}
+                  <span style={{ fontWeight: 'bold' }}>map</span>
+                  {" and a "}
+                  <span style={{ fontWeight: 'bold' }}>tileset</span>
+                  {"."}
+                </p>
+                <div className='alert alert-info'>
+                  We have a demo <a className="alert-link" href="/demo-room-1-map.json" download={true}>map</a> and <a className="alert-link" href="/demo-room-1-tileset.png" download={true}>tileset</a> available.
+                </div>
+                <p>{'Lets open Tiled and click on "New Map"'}</p>
+                <p>
+                  We can leave all the prefilled options. We just need to change
+                  the map dimensions to match the size of our land, and set the
+                  tile size to 16 by 16 pixels.
+                </p>
+                <p>Save your new map as a JSON file.</p>
+              </li>
+
+              <li>
+                <p>{'Click on "New Tileset", check "Embed in map" and import your tileset.'}</p>
+              </li>
+              <li>
+                <p>
+                  {
+                    'Click on "Edit Tileset", on the bottom of the left sidebar. We will now assign Tiled properties to our tiles. These properties will represent Static or Dynamic blocks.'
+                  }
+                </p>
+                <p>
+                  <img
+                    src={editTileset}
+                    alt="Edit Tileset"
+                    className="border"
+                    height={'300px'}
+                  />
+                </p>
+              </li>
+
+              <li>
                 <p>
                   Lands have <span>blocks</span> that fire actions when a user
                   steps on them or interacts with them.
+                </p>
+                 <p>
+                  {
+                    'You can have multiple properties per tile. A tile can be solid and open an app when interacted with, by assigning both a "collides" property and an app block id property.'
+                  }
                 </p>
                 <p>There are two types of blocks:</p>
 
@@ -99,7 +144,7 @@ In the example below, the tileset has 10 tiles horizontally and 9 tiles vertical
                     </p>
                     <ul>
                       <li>
-                        <span className="text-secondary">Door blocks</span>:
+                        <span className="text-primary">Door blocks</span>:
                         when the user steps on a door block, he walks into the
                         land that was assigned to said block.
                         <br />
@@ -114,7 +159,7 @@ In the example below, the tileset has 10 tiles horizontally and 9 tiles vertical
                         }
                       </li>
                       <li>
-                        <span className="text-secondary">App blocks</span>:
+                        <span className="text-primary">App blocks</span>:
                         These blocks open a given URL with an 8Land app, when
                         the user is facing torwards the block and interacts with
                         it
@@ -154,7 +199,7 @@ In the example below, the tileset has 10 tiles horizontally and 9 tiles vertical
                       created. After the user lands on your{' '}
                       <span className="text-primary">start</span> block, he will
                       then travel to your other lands by using the{' '}
-                      <span className="text-secondary">Door blocks.</span>
+                      <span className="text-primary">Door blocks.</span>
                       <br />
                       After you you upload a map with a{' '}
                       <span className="text-primary">start</span>
@@ -166,40 +211,7 @@ In the example below, the tileset has 10 tiles horizontally and 9 tiles vertical
                 </div>
               </li>
 
-              <li>
-                <p>{"It's time to add our blocks to our land"}</p>
-                <p>{'Lets open Tiled and click on "New Map"'}</p>
-                <p>
-                  We can leave all the prefilled options. We just need to change
-                  the map dimensions to match the size of our land, and set the
-                  tile size to 16 by 16 pixels.
-                </p>
-                <p>Save your new map as a JSON file.</p>
-              </li>
-
-              <li>
-                <p>{'Click on "New Tileset" and import your tileset.'}</p>
-              </li>
-              <li>
-                <p>
-                  {
-                    'Click on "Edit Tileset", on the bottom of the left sidebar. We will now assign Tiled properties to our tiles. These properties will represent Static or Dynamic blocks.'
-                  }
-                </p>
-                <div className="alert alert-info">
-                  {
-                    'You can have multiple properties per tile. A tile can be solid and open an app when interacted with, by assigning both a "collides" property and an app block id property.'
-                  }
-                </div>
-                <p>
-                  <img
-                    src={editTileset}
-                    alt="Edit Tileset"
-                    className="border"
-                    height={'300px'}
-                  />
-                </p>
-              </li>
+              
               <li>
                 <p>
                   {
