@@ -2,7 +2,6 @@
   https://github.com/twbs/bootstrap/blob/v5.3.8/scss/bootstrap.scss
 */
 
-
 @import "../../node_modules/bootstrap/scss/functions";
 @import "./variables";
 @import "../../node_modules/bootstrap/scss/variables-dark";
@@ -68,3 +67,5 @@
 // Contrasting foreground
 @import "./contrasting-foreground";
 
+// Icons
+@import "./icons"
