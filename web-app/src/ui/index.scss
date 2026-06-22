@@ -59,11 +59,6 @@
 // Contrasting Foreground
 @import "./contrasting-foreground-mixins";
 
-
-:root {
-  font-size: 28px;
-}
-
 @each $color, $value in $theme-colors {
   .bg-#{$color} {
     @include contrasting-foreground($value);
