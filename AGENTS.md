@@ -10,7 +10,7 @@ This repository is a monorepo containing all the projects that make 8Land.
 - Avoid try/catch. Let errors bubble up, hit the global error handlers, and crash the thread. Use return values for expected failure paths - not exceptions. Reserve exceptions only for truly unexpected conditions that the code cannot reasonably recover from.
 - do not type values with `any` or use unsafe type casts. Either validate the value at runtime with something like Zod, check the instance type and throw an explicit error, or type it as `unknown`.
 - avoid referencing the app's name in the code.
-    - example: `PhoneKeyBleManager` should be `AppBleManager`
+    - example: `8Land` should be `App`
 - Avoid ternaries inside other ternaries.
 
 ## Project `./backend`
