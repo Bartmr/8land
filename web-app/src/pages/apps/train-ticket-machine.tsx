@@ -1,6 +1,6 @@
 import React from 'react';
-import { TrainTicketMachineTemplate } from '../../pages-impl/apps/train-ticket-machine.tsx/train-ticket-machine';
-import { HtmlHead } from '../../pages-impl/html-head';
+import { TrainTicketMachineTemplate } from '../../apps/train-ticket-machine.tsx/train-ticket-machine';
+import { HtmlHead } from '../../html-head';
 import type { PageProps } from 'gatsby';
 
 export default TrainTicketMachineTemplate;

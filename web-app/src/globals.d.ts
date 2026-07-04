@@ -1,5 +1,5 @@
 import { SoundcloudSong } from './soundcloud/types';
-import { AppContext } from './pages-impl/client/index/screens/app/app-screen.types';
+import { AppContext } from './client/index/screens/app/app-screen.types';
 
 declare global {
   interface Window {
