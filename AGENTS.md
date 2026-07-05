@@ -4,8 +4,8 @@ This repository is a monorepo containing all the projects that make 8Land.
 
 ## Shared conventions
 
-- Do not create generic directories like `utils`, `helpers`, etc.
-- there should be the least amount of moving parts (state, variables, asynchronous logic, effects, etc.) to achieve something.
+- Do not create generic directories like `utils`, `helpers`, `shared`, etc.
+- To keep the logic simple and easy to understand, minimize mutable state and side effects. Prefer pure functions that take inputs and return outputs.
 - do not create unnecessary functions, constants and variables. if code is not reused, just inline it.
 - Avoid try/catch. Let errors bubble up, hit the global error handlers, and crash the thread. Use return values for expected failure paths - not exceptions. Reserve exceptions only for truly unexpected conditions that the code cannot reasonably recover from.
 - do not type values with `any` or use unsafe type casts. Either validate the value at runtime with Zod, check the instance type and throw an explicit error, or type it as `unknown`.
