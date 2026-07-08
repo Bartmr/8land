@@ -1,5 +1,5 @@
 import React from 'react';
-import { IndexTemplate } from '../index-template/index-template';
+import { IndexTemplate } from '../pages-impl/index-template/index-template';
 import { HtmlHead } from '../html-head';
 import type { PageProps } from 'gatsby';
 

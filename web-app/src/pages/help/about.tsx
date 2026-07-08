@@ -1,5 +1,5 @@
 import React from 'react';
-import { AboutTemplate } from '../../help/about/about-template';
+import { AboutTemplate } from '../../pages-impl/help/about/about-template';
 import { HtmlHead } from '../../html-head';
 import type { PageProps } from 'gatsby';
 

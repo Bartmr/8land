@@ -1,7 +1,7 @@
 import React, { ReactNode, useContext } from 'react';
 import { CommunicatedDataGate } from '../../ui/communicated-data-gate';
-import { Redirect } from '../../redirect/redirect';
-import { LOGIN_ROUTE } from '../../client/login/login-routes';
+import { Redirect } from '../../navigation/redirect/redirect';
+import { LOGIN_ROUTE } from '../../pages-impl/client/login/login-routes';
 import { getCurrentLocalHref } from '../../navigation/current-local-href';
 import { useLocation } from '@reach/router';
 import { AuthenticationStateContext } from './authentication-state';

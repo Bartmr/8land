@@ -12,7 +12,7 @@ import {
 const Component = () => {
   const [entrypoint, replaceEntrypoint] = useState<
     CommunicatedData<
-      typeof import('../client/client-template')
+      typeof import('../pages-impl/client/client-template')
     >
   >({ status: CommunicatedDataStatus.NotInitialized });
 
@@ -24,7 +24,7 @@ const Component = () => {
 
       try {
         const ep = await import(
-          '../client/client-template'
+          '../pages-impl/client/client-template'
         );
 
         replaceEntrypoint({
