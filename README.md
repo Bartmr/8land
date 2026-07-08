@@ -1,5 +1,8 @@
 # 8Land
 
+> [!TIP]
+> Curious about my AI coding setup? Reach out to me on [Linkedin](https://www.linkedin.com/in/bartmr/)
+
 8Land is an open pixel-art RPG game where players design their own lands and launch their own public games. The objective is to have the gameplay of [Decentraland](https://decentraland.org/) and the feel and nostalgia of Pokemon Gold and Silver
 
 ![alt text](screenshot.png 'Screenshot')
