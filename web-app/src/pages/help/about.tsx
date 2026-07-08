@@ -1,6 +1,6 @@
 import React from 'react';
 import { AboutTemplate } from '../../pages-impl/help/about/about-template';
-import { HtmlHead } from '../../html-head';
+import { HtmlHead } from '../../pages-impl/html-head/html-head';
 import type { PageProps } from 'gatsby';
 
 export default AboutTemplate;

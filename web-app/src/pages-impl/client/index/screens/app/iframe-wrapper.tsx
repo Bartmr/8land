@@ -1,8 +1,8 @@
 import React from 'react';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { CommunicatedDataGate } from '../../../../../ui/communicated-data-gate';
-import { CommunicatedDataStatus } from '../../../../../communicated-data/communicated-data-types';
+import { CommunicatedDataGate } from '../../../../../core/ui/communicated-data-gate';
+import { CommunicatedDataStatus } from '../../../../../core/communicated-data/communicated-data-types';
 import { MusicService } from '../../music-ticker';
 import { AppContext } from './app-screen.types';
 import { KeypadBroker } from '../../keypad-broker';

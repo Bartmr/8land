@@ -1,9 +1,9 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { LinkAnchor } from '../../../ui/link-anchor';
+import { LinkAnchor } from '../../../core/ui/link-anchor';
 import { v4 } from 'uuid';
-import { SoundcloudSong } from '../../../soundcloud/types';
-import { throwError } from '../../../throw-error';
+import { SoundcloudSong } from '../../../core/soundcloud/types';
+import { throwError } from '../../../core/throw-error';
 
 export class MusicService {
   lastMusicUrl?: string;

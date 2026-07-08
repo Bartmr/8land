@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout } from '../../layout/layout';
-import { LinkAnchor } from '../../../ui/link-anchor';
+import { LinkAnchor } from '../../../core/ui/link-anchor';
 import raribleLogo from './rarible-logo.svg';
 import tiledLogo from './tiled-logo-white.png';
 import soundcloudLogo from './soundcloud-logo.png';

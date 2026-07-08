@@ -1,7 +1,7 @@
 import React from 'react';
-import { PROJECT_SLOGAN } from '../../project-details';
+import { PROJECT_SLOGAN } from '../../core/project-details';
 import { Layout } from '../layout/layout';
-import { LinkAnchor } from '../../ui/link-anchor';
+import { LinkAnchor } from '../../core/ui/link-anchor';
 import { CLIENT_SIDE_INDEX_ROUTE } from '../client/index/index-routes';
 import { LANDS_ROUTE } from '../client/lands/lands-routes';
 import { LAND_IDEAS_ROUTE } from '../help/lands/land-ideas/land-ideas-routes';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout } from '../../../layout/layout';
-import { LinkAnchor } from '../../../../ui/link-anchor';
+import { LinkAnchor } from '../../../../core/ui/link-anchor';
 import { BUILDING_A_LAND_ROUTE } from './building-a-land.routes';
 import landWithGrid from './land-with-grid.png';
 import editTileset from './edit-tileset.png';

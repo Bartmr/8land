@@ -1,6 +1,6 @@
 import React from 'react';
-import { IndexTemplate } from '../pages-impl/index-template/index-template';
-import { HtmlHead } from '../html-head';
+import { IndexTemplate } from '../pages-impl/index/index-template';
+import { HtmlHead } from '../pages-impl/html-head/html-head';
 import type { PageProps } from 'gatsby';
 
 export default IndexTemplate;

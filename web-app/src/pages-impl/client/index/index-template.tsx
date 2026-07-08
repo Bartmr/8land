@@ -4,15 +4,15 @@ import { RouteComponentProps } from '@reach/router';
 import {
   CommunicatedData,
   CommunicatedDataStatus,
-} from '../../../communicated-data/communicated-data-types';
-import { CommunicatedDataGate } from '../../../ui/communicated-data-gate';
+} from '../../../core/communicated-data/communicated-data-types';
+import { CommunicatedDataGate } from '../../../core/ui/communicated-data-gate';
 import { GameFrame } from './game-frame';
-import { LinkAnchor } from '../../../ui/link-anchor';
+import { LinkAnchor } from '../../../core/ui/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
 import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
-import { ResumeLandNavigationDTO } from '../../../main-api/routes/lands/lands-api';
-import { useLandsAPI } from '../../../main-api/routes/lands/lands-api';
-import { useAuthenticationStateSession } from '../../../users/authentication/authentication-state';
+import { ResumeLandNavigationDTO } from '../../../core/main-api/routes/lands/lands-api';
+import { useLandsAPI } from '../../../core/main-api/routes/lands/lands-api';
+import { useAuthenticationStateSession } from '../../../core/users/authentication/authentication-state';
 
 function Content(props: {
   showHeaderAndFooter: () => void;

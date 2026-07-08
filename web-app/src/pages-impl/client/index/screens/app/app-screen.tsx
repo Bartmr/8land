@@ -7,7 +7,7 @@ import { AppContext } from './app-screen.types';
 import { KeypadBroker } from '../../keypad-broker';
 import { EscapeKeyActive } from '../../keypad';
 import { IframeGate } from './iframe-gate';
-import { throwError } from '../../../../../throw-error';
+import { throwError } from '../../../../../core/throw-error';
 
 export class AppService {
   private render: () => void;

@@ -1,7 +1,7 @@
 import React from 'react';
-import { PROJECT_SLOGAN } from "./project-details"
+import { PROJECT_SLOGAN } from "../../core/project-details"
 import thumbnailSrc from './thumbnail.jpeg'
-import { EnvironmentVariables } from "./environment-variables";
+import { EnvironmentVariables } from "../../core/environment-variables";
 
 const GATSBY_SITE_URL = EnvironmentVariables.SITE_URL
 

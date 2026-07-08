@@ -1,13 +1,13 @@
 import React from 'react';
-import { GetTrainDestinationsDTO } from '../../../main-api/routes/train/train.api';
+import { GetTrainDestinationsDTO } from '../../../core/main-api/routes/train/train.api';
 import { useEffect, useState } from 'react';
 import { AppLayout } from '../../layout/app-layout';
-import { CommunicatedDataGate } from '../../../ui/communicated-data-gate';
+import { CommunicatedDataGate } from '../../../core/ui/communicated-data-gate';
 import {
   CommunicatedData,
   CommunicatedDataStatus,
-} from '../../../communicated-data/communicated-data-types';
-import { useTrainAPI } from '../../../main-api/routes/train/train.api';
+} from '../../../core/communicated-data/communicated-data-types';
+import { useTrainAPI } from '../../../core/main-api/routes/train/train.api';
 import { AppContext } from '../../client/index/screens/app/app-screen.types';
 import { AppContextProvider, useAppContext } from '../app-context';
 import InfiniteScroll from 'react-infinite-scroll-component';

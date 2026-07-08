@@ -51,6 +51,6 @@ $box-shadow-lg: #{$box-shadow-lg-dimensions} rgba(#000000, $box-shadow-lg-opacit
 
 $toast-font-size: 1rem;
 
-@import "../../node_modules/bootstrap/scss/variables";
+@import "../../../node_modules/bootstrap/scss/variables";
 
 $theme-colors: map-merge($map1: $theme-colors, $map2: ("lcd": $lcd))

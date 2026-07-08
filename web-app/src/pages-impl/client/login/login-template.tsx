@@ -5,15 +5,15 @@ import { useState, useContext } from 'react';
 import {
   CommunicatedData,
   CommunicatedDataStatus,
-} from '../../../communicated-data/communicated-data-types';
-import { CommunicatedDataGate } from '../../../ui/communicated-data-gate';
-import { LinkAnchor } from '../../../ui/link-anchor';
+} from '../../../core/communicated-data/communicated-data-types';
+import { CommunicatedDataGate } from '../../../core/ui/communicated-data-gate';
+import { LinkAnchor } from '../../../core/ui/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
 import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
-import { useMainApiFetchJSON } from '../../../main-api/fetch-json';
+import { useMainApiFetchJSON } from '../../../core/main-api/fetch-json';
 import { z } from 'zod';
-import { AuthenticationSessionSchema } from '../../../users/authentication/authentication-schemas';
-import { AuthenticationStateContext } from '../../../users/authentication/authentication-state';
+import { AuthenticationSessionSchema } from '../../../core/users/authentication/authentication-schemas';
+import { AuthenticationStateContext } from '../../../core/users/authentication/authentication-state';
 import { navigate } from 'gatsby';
 import { useLocation } from '@reach/router';
 import { CLIENT_SIDE_INDEX_ROUTE } from '../index/index-routes';

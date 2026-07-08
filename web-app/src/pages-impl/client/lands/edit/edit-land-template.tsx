@@ -6,16 +6,16 @@ import { useEffect, useState } from 'react';
 import {
   CommunicatedData,
   CommunicatedDataStatus,
-} from '../../../../communicated-data/communicated-data-types';
-import { GetLandDTO } from '../../../../main-api/routes/lands/lands-api';
-import { CommunicatedDataGate } from '../../../../ui/communicated-data-gate';
+} from '../../../../core/communicated-data/communicated-data-types';
+import { GetLandDTO } from '../../../../core/main-api/routes/lands/lands-api';
+import { CommunicatedDataGate } from '../../../../core/ui/communicated-data-gate';
 import { useParams } from '@reach/router';
 import { uuid, z } from 'zod';
-import { useLandsAPI } from '../../../../main-api/routes/lands/lands-api';
+import { useLandsAPI } from '../../../../core/main-api/routes/lands/lands-api';
 import { Toast } from 'react-bootstrap';
 import { MainSection } from './main-section/main-section';
 import { BlocksSection } from './blocks-section/blocks-section';
-import { CommunicationError } from '../../../../communication-errors/communication-errors';
+import { CommunicationError } from '../../../../core/communication-errors/communication-errors';
 import { FaTrash } from 'react-icons/fa';
 import { navigate } from 'gatsby';
 import { LANDS_ROUTE } from '../lands-routes';

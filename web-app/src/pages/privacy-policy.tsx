@@ -1,6 +1,6 @@
 import React from 'react';
 import { PrivacyPolicyTemplate } from '../pages-impl/privacy-policy/privacy-policy-template';
-import { HtmlHead } from '../html-head';
+import { HtmlHead } from '../pages-impl/html-head/html-head';
 import type { PageProps } from 'gatsby';
 
 export default PrivacyPolicyTemplate;

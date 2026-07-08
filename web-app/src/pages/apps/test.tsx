@@ -1,6 +1,6 @@
 import React from 'react';
 import { TestAppTemplate } from '../../pages-impl/apps/test/test-app-template';
-import { HtmlHead } from '../../html-head';
+import { HtmlHead } from '../../pages-impl/html-head/html-head';
 import type { PageProps } from 'gatsby';
 
 export default TestAppTemplate;

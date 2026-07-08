@@ -1,14 +1,14 @@
 import React from 'react';
-import { DynamicBlockType } from '../../../../../main-api/routes/blocks/blocks-api';
-import { GetLandDTO } from '../../../../../main-api/routes/lands/lands-api';
+import { DynamicBlockType } from '../../../../../core/main-api/routes/blocks/blocks-api';
+import { GetLandDTO } from '../../../../../core/main-api/routes/lands/lands-api';
 import { FaTrash } from 'react-icons/fa';
 import { useState } from 'react';
-import { CommunicatedDataGate } from '../../../../../ui/communicated-data-gate';
+import { CommunicatedDataGate } from '../../../../../core/ui/communicated-data-gate';
 import {
   CommunicatedData,
   CommunicatedDataStatus,
-} from '../../../../../communicated-data/communicated-data-types';
-import { useBlocksAPI } from '../../../../../main-api/routes/blocks/blocks-api';
+} from '../../../../../core/communicated-data/communicated-data-types';
+import { useBlocksAPI } from '../../../../../core/main-api/routes/blocks/blocks-api';
 import { AddBlockSection } from './add-block-section';
 
 export function BlocksSection(props: {

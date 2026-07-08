@@ -2,22 +2,22 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import * as styles from './header.module.scss';
-import { LinkAnchor } from '../../../ui/link-anchor';
-import { PROJECT_NAME } from '../../../project-details';
+import { LinkAnchor } from '../../../core/ui/link-anchor';
+import { PROJECT_NAME } from '../../../core/project-details';
 import { FaBars, FaUser } from 'react-icons/fa';
 import {
   CommunicatedDataGate,
   CommunicatedDataGateLayout,
-} from '../../../ui/communicated-data-gate';
+} from '../../../core/ui/communicated-data-gate';
 import { LANDS_ROUTE } from '../../client/lands/lands-routes';
 import { USER_ROUTE } from '../../client/user/user-routes';
-import { INDEX_ROUTE } from '../../index-template/index-routes';
+import { INDEX_ROUTE } from '../../index/index-routes';
 import { LOGIN_ROUTE } from '../../client/login/login-routes';
-import { getCurrentLocalHref } from '../../../navigation/current-local-href';
+import { getCurrentLocalHref } from '../../../core/navigation/current-local-href';
 import { HELP_ROUTE } from '../../help/help-routes';
 import { CLIENT_SIDE_INDEX_ROUTE } from '../../client/index/index-routes';
 import logo from '../../../logo.svg'
-import { useAuthenticationStateSession } from '../../../users/authentication/authentication-state';
+import { useAuthenticationStateSession } from '../../../core/users/authentication/authentication-state';
 
 type Props = {
   menuHtmlId: string;

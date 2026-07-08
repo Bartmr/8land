@@ -2,7 +2,7 @@ import React from 'react';
 import nipplejs from 'nipplejs';
 import { useEffect, useRef } from 'react';
 import { Direction } from "./screens/land/player-grid";
-import { throwError } from '../../../throw-error';
+import { throwError } from '../../../core/throw-error';
 import { KeypadBroker } from './keypad-broker'
 
 const ESCAPE_BUTTON_SELECTOR = '#game-button-escape';

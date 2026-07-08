@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 import { LandScreenService } from '../land/land-screen.service';
-import { throwError } from '../../../../../throw-error';
+import { throwError } from '../../../../../core/throw-error';
 import { KeypadBroker } from '../../keypad-broker';
 
 export class DialogueService {

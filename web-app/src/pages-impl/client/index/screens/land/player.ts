@@ -1,5 +1,5 @@
 import { Math, Scene } from 'phaser';
-import { throwError } from '../../../../../throw-error';
+import { throwError } from '../../../../../core/throw-error';
 import { TILE_SIZE } from '../../game-constants';
 import { LandScene } from './land-scene';
 import { Direction, PlayerGrid, PlayerGridLandContext } from "./player-grid";

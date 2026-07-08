@@ -1,15 +1,15 @@
 import React from 'react';
 import { FaMusic } from 'react-icons/fa';
 import { useState } from 'react';
-import { LinkAnchor } from '../../../ui/link-anchor';
-import { UserAuthSessionData } from '../../../users/authentication/user-auth-types';
-import { getCurrentLocalHref } from '../../../navigation/current-local-href';
+import { LinkAnchor } from '../../../core/ui/link-anchor';
+import { UserAuthSessionData } from '../../../core/users/authentication/user-auth-types';
+import { getCurrentLocalHref } from '../../../core/navigation/current-local-href';
 import { LOGIN_ROUTE } from '../login/login-routes';
 import { Keypad } from './keypad';
 import { MusicService, MusicTicker } from './music-ticker';
 import * as styles from './game-frame.module.scss';
 import { ScreenSwitcher } from './screen-switcher';
-import { ResumeLandNavigationDTO } from '../../../main-api/routes/lands/lands-api';
+import { ResumeLandNavigationDTO } from '../../../core/main-api/routes/lands/lands-api';
 import { KeypadBroker, useKeypadBroker } from './keypad-broker';
 
 export function GameFrame(props: {

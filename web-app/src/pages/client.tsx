@@ -1,13 +1,13 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { HtmlHead } from '../html-head';
+import { HtmlHead } from '../pages-impl/html-head/html-head';
 import type { PageProps } from 'gatsby';
-import { CommunicatedDataGate } from '../ui/communicated-data-gate';
-import { CommunicationError } from '../communication-errors/communication-errors';
+import { CommunicatedDataGate } from '../core/ui/communicated-data-gate';
+import { CommunicationError } from '../core/communication-errors/communication-errors';
 import {
   CommunicatedData,
   CommunicatedDataStatus,
-} from '../communicated-data/communicated-data-types';
+} from '../core/communicated-data/communicated-data-types';
 
 const Component = () => {
   const [entrypoint, replaceEntrypoint] = useState<

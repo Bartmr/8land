@@ -1,19 +1,19 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { UserAuthSessionData } from "../../../../../users/authentication/user-auth-types";
+import { UserAuthSessionData } from "../../../../../core/users/authentication/user-auth-types";
 import { runLandGame } from "./land-game";
 import { globalHistory } from "@reach/router";
 import { MusicService } from "../../music-ticker";
 import { DialogueService } from "../dialogue/dialogue-screen";
 import { LandScreenService } from "./land-screen.service";
 import { AppService } from "../app/app-screen";
-import { ResumeLandNavigationDTO } from "../../../../../main-api/routes/lands/lands-api";
-import { useLandsAPI } from "../../../../../main-api/routes/lands/lands-api";
-import { useTrainAPI } from "../../../../../main-api/routes/train/train.api";
+import { ResumeLandNavigationDTO } from "../../../../../core/main-api/routes/lands/lands-api";
+import { useLandsAPI } from "../../../../../core/main-api/routes/lands/lands-api";
+import { useTrainAPI } from "../../../../../core/main-api/routes/train/train.api";
 import { navigate } from "gatsby";
 import { USER_ROUTE } from "../../../user/user-routes";
 import { KeypadBroker } from "../../keypad-broker";
-import { throwError } from "../../../../../throw-error";
+import { throwError } from "../../../../../core/throw-error";
 
 export const FOCUS_SHIFTER_ID = "game-focus-shifter";
 

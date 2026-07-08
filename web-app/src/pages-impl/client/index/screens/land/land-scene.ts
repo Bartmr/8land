@@ -1,7 +1,7 @@
-import { DynamicBlockType } from '../../../../../main-api/routes/blocks/blocks-api';
-import { StaticBlockType } from '../../../../../main-api/routes/lands/lands-api';
-import { EnvironmentVariables } from '../../../../../environment-variables';
-import { CommunicationError } from '../../../../../communication-errors/communication-errors';
+import { DynamicBlockType } from '../../../../../core/main-api/routes/blocks/blocks-api';
+import { StaticBlockType } from '../../../../../core/main-api/routes/lands/lands-api';
+import { EnvironmentVariables } from '../../../../../core/environment-variables';
+import { CommunicationError } from '../../../../../core/communication-errors/communication-errors';
 import { Direction, PlayerGrid, PlayerGridLandContext } from "./player-grid";
 import {
   getLandSceneKey,
@@ -16,10 +16,10 @@ import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
-import { LandsAPI } from '../../../../../main-api/routes/lands/lands-api';
-import { NavigateToLandDTO } from '../../../../../main-api/routes/lands/lands-api';
-import { TrainAPI } from '../../../../../main-api/routes/train/train.api';
-import { throwError } from '../../../../../throw-error';
+import { LandsAPI } from '../../../../../core/main-api/routes/lands/lands-api';
+import { NavigateToLandDTO } from '../../../../../core/main-api/routes/lands/lands-api';
+import { TrainAPI } from '../../../../../core/main-api/routes/train/train.api';
+import { throwError } from '../../../../../core/throw-error';
 import { KeypadBroker } from '../../keypad-broker';
 import { Math } from 'phaser';
 

@@ -1,9 +1,9 @@
 import React from 'react';
-import { CONTACT_CTA_PRESENT } from '../../project-details';
+import { CONTACT_CTA_PRESENT } from '../../core/project-details';
 import { FaLightbulb, FaProjectDiagram } from 'react-icons/fa';
 import { FaPenRuler } from 'react-icons/fa6';
 import { Layout } from '../layout/layout';
-import { LinkAnchor } from '../../ui/link-anchor';
+import { LinkAnchor } from '../../core/ui/link-anchor';
 import { ABOUT_ROUTE } from './about/about-routes';
 import { LAND_IDEAS_ROUTE } from './lands/land-ideas/land-ideas-routes';
 import { BUILDING_A_LAND_ROUTE } from './lands/building-a-land/building-a-land.routes';
