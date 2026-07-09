@@ -23,7 +23,7 @@ import { DataSource } from 'typeorm';
 import { Land } from 'src/features/land/land.entities';
 import { AppBlock } from './app-block.entities';
 import { DoorBlock } from './door-block.entities';
-import { NavigationState } from 'src/features/navigation/state/navigation-state.entities';
+import { NavigationState } from 'src/features/navigation/navigation-state.entities';
 import { ZodValidationPipe } from 'src/core/zod/zod.pipe';
 
 @UseGuards(AuthGuard)

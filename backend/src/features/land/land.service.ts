@@ -24,7 +24,7 @@ import {
 import { throwError } from 'src/core/throw-error';
 import { EnvironmentVariables } from 'src/core/environment-variables/environment-variables';
 import { z } from 'zod';
-import { NavigationState } from 'src/features/navigation/state/navigation-state.entities';
+import { NavigationState } from 'src/features/navigation/navigation-state.entities';
 import { StaticBlockType } from 'src/features/blocks/blocks.dtos';
 
 function getLandStorageKeys(landId: string) {

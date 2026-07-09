@@ -1,7 +1,7 @@
 import { DoorBlock } from 'src/features/blocks/door-block.entities';
 import { Land } from 'src/features/land/land.entities';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from '../../users/user.entities';
+import { User } from '../users/user.entities';
 
 @Entity()
 export class NavigationState {

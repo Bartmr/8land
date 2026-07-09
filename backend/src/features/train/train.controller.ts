@@ -28,7 +28,7 @@ import { getSearchableString } from 'src/core/strings/get-searchable-string';
 import { throwError } from 'src/core/throw-error';
 import { LandService } from 'src/features/land/land.service';
 import { Land } from 'src/features/land/land.entities';
-import { NavigationState } from 'src/features/navigation/state/navigation-state.entities';
+import { NavigationState } from 'src/features/navigation/navigation-state.entities';
 import { DataSource } from 'typeorm';
 
 @UseGuards(AuthGuard)

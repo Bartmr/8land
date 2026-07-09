@@ -5,7 +5,7 @@ import { EnvironmentVariables } from 'src/core/environment-variables/environment
 import { AppBlock } from 'src/features/blocks/app-block.entities';
 import { DoorBlock } from 'src/features/blocks/door-block.entities';
 import { Land } from 'src/features/land/land.entities';
-import { NavigationState } from 'src/features/navigation/state/navigation-state.entities';
+import { NavigationState } from 'src/features/navigation/navigation-state.entities';
 import { UserAuthSession } from 'src/features/users/auth/sessions/auth-session.entities';
 import { World } from 'src/features/worlds/worlds.entities';
 import { User } from 'src/features/users/user.entities';
