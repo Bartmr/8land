@@ -3,22 +3,22 @@ import dotenv from "dotenv"
 dotenv.config()
 
 import { createConnection } from 'typeorm';
-import { getSearchableString } from 'src/strings/get-searchable-string';
+import { getSearchableString } from 'src/core/strings/get-searchable-string';
 import fs from 'fs';
 import { promisify } from 'util';
 import path from 'path';
-import { DevStorageService } from 'src/storage/dev-storage.service';
-import { LOCAL_TEMPORARY_FILES_PATH } from 'src/temporary-files';
+import { DevStorageService } from 'src/core/storage/dev-storage.service';
+import { LOCAL_TEMPORARY_FILES_PATH } from 'src/core/temporary-files';
 import { seedTrainStation } from './seed-train-station';
-import { EnvironmentVariables } from "src/environment-variables/environment-variables";
+import { EnvironmentVariables } from "src/core/environment-variables/environment-variables";
 import { v4 } from "uuid";
-import { User } from "src/users/user.entities";
-import { Land } from "src/land/land.entities";
-import { DoorBlock } from "src/blocks/door-block.entities";
-import { AppBlock } from "src/blocks/app-block.entities";
-import { AppDataSourceOptions } from "src/database/data-source";
+import { User } from "src/features/users/user.entities";
+import { Land } from "src/features/land/land.entities";
+import { DoorBlock } from "src/features/blocks/door-block.entities";
+import { AppBlock } from "src/features/blocks/app-block.entities";
+import { AppDataSourceOptions } from "src/core/database/data-source";
 import * as bcrypt from 'bcrypt';
-import { createTiledJSONSchema } from "src/land/land.dtos";
+import { createTiledJSONSchema } from "src/features/land/land.dtos";
 
 const readFile = promisify(fs.readFile);
 const rm = promisify(fs.rm);

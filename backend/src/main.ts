@@ -6,7 +6,7 @@ dotenv.config();
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import cookieParser from 'cookie-parser';
-import { EnvironmentVariables } from './environment-variables/environment-variables';
+import { EnvironmentVariables } from './core/environment-variables/environment-variables';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

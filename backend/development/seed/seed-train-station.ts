@@ -1,16 +1,16 @@
 import {
   ContentType,
   StorageService,
-} from 'src/storage/storage.service';
-import { getSearchableString } from 'src/strings/get-searchable-string';
-import { Land } from 'src/land/land.entities';
-import { DoorBlock } from 'src/blocks/door-block.entities';
-import { AppBlock } from 'src/blocks/app-block.entities';
+} from 'src/core/storage/storage.service';
+import { getSearchableString } from 'src/core/strings/get-searchable-string';
+import { Land } from 'src/features/land/land.entities';
+import { DoorBlock } from 'src/features/blocks/door-block.entities';
+import { AppBlock } from 'src/features/blocks/app-block.entities';
 import { EntityManager } from 'typeorm';
 import { promisify } from 'util';
 import fs from 'fs';
 import path from 'path';
-import { createTiledJSONSchema } from 'src/land/land.dtos';
+import { createTiledJSONSchema } from 'src/features/land/land.dtos';
 
 const readFile = promisify(fs.readFile);
 
