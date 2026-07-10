@@ -24,7 +24,7 @@ import { Land } from 'src/features/land/land.entities';
 import { AppBlock } from './app-block.entities';
 import { DoorBlock } from './door-block.entities';
 import { NavigationState } from 'src/features/navigation/navigation-state.entities';
-import { ZodValidationPipe } from 'src/core/zod/zod.pipe';
+import { ZodValidationPipe } from 'src/core/validation/zod.pipe';
 
 @UseGuards(AuthGuard)
 @Controller('blocks')

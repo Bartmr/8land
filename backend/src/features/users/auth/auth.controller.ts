@@ -35,7 +35,7 @@ import { EnvironmentVariables } from 'src/core/environment-variables/environment
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import { loginRequestSchema, signupRequestSchema } from './auth.schemas';
-import { ZodValidationPipe } from 'src/core/zod/zod.pipe';
+import { ZodValidationPipe } from 'src/core/validation/zod.pipe';
 
 const SALT_ROUNDS = 10;
 

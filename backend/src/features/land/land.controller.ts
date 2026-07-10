@@ -52,7 +52,7 @@ import { World } from 'src/features/worlds/worlds.entities';
 import { EnvironmentVariables } from 'src/core/environment-variables/environment-variables';
 import { DoorBlock } from 'src/features/blocks/door-block.entities';
 import { NavigationState } from 'src/features/navigation/navigation-state.entities';
-import { ZodValidationPipe } from 'src/core/zod/zod.pipe';
+import { ZodValidationPipe } from 'src/core/validation/zod.pipe';
 import {
   CreateLandRequestSchema,
   EditLandBodySchema,
