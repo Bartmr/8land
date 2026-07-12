@@ -49,7 +49,7 @@ export const createTiledJSONSchema = ({
   const maxHeight = _maxHeight ? _maxHeight + 1 : 41;
 
   return z
-    .object({
+    .looseObject({
       compressionlevel: z.literal(
         -1,
         'Must set to -1, which is the default value in Tiled',
@@ -66,7 +66,7 @@ export const createTiledJSONSchema = ({
         .refine((i) => !i, 'Map cannot be infinite'),
       layers: z
         .array(
-          z.object({
+          z.looseObject({
             data: z.array(z.number().int('Must be an integer').min(0, 'Must be a positive number')),
             height: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
             id: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
@@ -90,7 +90,7 @@ export const createTiledJSONSchema = ({
       tileheight: z.literal(16, 'Must be set to 16'),
       tilesets: z
         .array(
-          z.object({
+          z.looseObject({
             columns: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
             firstgid: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
             image: z
@@ -108,7 +108,7 @@ export const createTiledJSONSchema = ({
             tileheight: z.literal(16, 'Must be set to 16'),
             tilewidth: z.literal(16, 'Must be set to 16'),
             tiles: z.array(
-              z.object({
+              z.looseObject({
                 id: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
                 properties: z
                   .array(
@@ -174,7 +174,7 @@ export const createTiledJSONSchema = ({
                   .optional(),
                 animation: z
                   .array(
-                    z.object({
+                    z.looseObject({
                       duration: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
                       tileid: z.number().int('Must be an integer').min(0, 'Must be a positive number'),
                     }),
