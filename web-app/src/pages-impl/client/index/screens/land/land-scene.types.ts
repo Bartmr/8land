@@ -1,6 +1,6 @@
-import { DynamicBlockType } from '../../../../../core/main-api/routes/blocks/blocks-api';
-import { StaticBlockType } from '../../../../../core/main-api/routes/lands/lands-api';
-import { GetLandDTO } from '../../../../../core/main-api/routes/lands/lands-api';
+import { DynamicBlockType } from '../../../../../core/api/routes/blocks/blocks-api';
+import { StaticBlockType } from '../../../../../core/api/routes/lands/lands-api';
+import { GetLandDTO } from '../../../../../core/api/routes/lands/lands-api';
 import { UserAuthSessionData } from '../../../../../core/users/authentication/user-auth-types';
 
 export type LandSceneArguments = {

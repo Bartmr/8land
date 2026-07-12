@@ -1,5 +1,5 @@
 import React from 'react';
-import { IndexLandsDTO, GetLandsToClaimDTO } from '../../../core/main-api/routes/lands/lands-api';
+import { IndexLandsDTO, GetLandsToClaimDTO } from '../../../core/api/routes/lands/lands-api';
 import { useEffect, useState } from 'react';
 import { CommunicatedDataGate } from '../../../core/ui/communicated-data-gate';
 import {
@@ -12,7 +12,7 @@ import { CommunicationError } from '../../../core/communication-errors/communica
 import { Layout } from '../../layout/layout';
 import { LinkAnchor } from '../../../core/ui/link-anchor';
 import { EDIT_LAND_ROUTE } from './edit/edit-land-routes';
-import { useLandsAPI } from '../../../core/main-api/routes/lands/lands-api';
+import { useLandsAPI } from '../../../core/api/routes/lands/lands-api';
 import { Toast } from 'react-bootstrap';
 import { START_LANDS_LIMIT_EXCEEDED_MESSAGE } from './edit/assets-section/assets-section.constants';
 import { BUILDING_A_LAND_ROUTE } from '../../help/lands/building-a-land/building-a-land.routes';

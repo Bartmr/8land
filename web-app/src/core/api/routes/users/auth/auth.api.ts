@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { useMainApiFetchJSON } from '../../../fetch-json';
+import { useApiFetchJSON } from '../../../fetch-json';
 import { AuthenticationSessionSchema } from '../../../../users/authentication/authentication-schemas';
 
-type MainApiFetchJSON = ReturnType<typeof useMainApiFetchJSON>;
+type ApiFetchJSON = ReturnType<typeof useApiFetchJSON>;
 
 const logoutFromAllDevicesResponseSchema = z.object({
   status: z.number(),
@@ -17,7 +17,7 @@ const authResponseSchema = z.object({
 });
 
 export class AuthAPI {
-  constructor(private api: MainApiFetchJSON) {}
+  constructor(private api: ApiFetchJSON) {}
 
   login(args: { email: string; password: string }) {
     return this.api.fetchJSON({
@@ -47,7 +47,7 @@ export class AuthAPI {
 }
 
 export function useAuthAPI() {
-  const api = useMainApiFetchJSON();
+  const api = useApiFetchJSON();
 
   return new AuthAPI(api);
 }

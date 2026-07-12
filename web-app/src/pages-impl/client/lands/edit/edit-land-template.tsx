@@ -7,11 +7,11 @@ import {
   CommunicatedData,
   CommunicatedDataStatus,
 } from '../../../../core/communicated-data/communicated-data-types';
-import { GetLandDTO } from '../../../../core/main-api/routes/lands/lands-api';
+import { GetLandDTO } from '../../../../core/api/routes/lands/lands-api';
 import { CommunicatedDataGate } from '../../../../core/ui/communicated-data-gate';
 import { useParams } from '@reach/router';
 import { uuid, z } from 'zod';
-import { useLandsAPI } from '../../../../core/main-api/routes/lands/lands-api';
+import { useLandsAPI } from '../../../../core/api/routes/lands/lands-api';
 import { Toast } from 'react-bootstrap';
 import { MainSection } from './main-section/main-section';
 import { BlocksSection } from './blocks-section/blocks-section';

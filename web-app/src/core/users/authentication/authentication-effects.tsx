@@ -1,13 +1,13 @@
 import React from "react";
 import { useContext, useEffect } from "react";
-import { useMainApiFetchJSON } from "../../main-api/fetch-json";
+import { useApiFetchJSON } from "../../api/fetch-json";
 import { z } from "zod";
 import { throwError } from "../../throw-error";
 import { AuthenticationStateContext } from "./authentication-state";
 import { AuthenticationSessionSchema } from "./authentication-schemas";
 
 export function AuthenticationEffects() {
-  const mainApi = useMainApiFetchJSON();
+  const api = useApiFetchJSON();
   const { sessionState, setSessionState } =
     useContext(AuthenticationStateContext) || throwError();
 
@@ -20,7 +20,7 @@ export function AuthenticationEffects() {
       ) {
         setSessionState({ loading: true });
 
-        const res = await mainApi.fetchJSON({
+        const res = await api.fetchJSON({
           path: "/users/auth",
           method: "GET",
           schema: z.union([
@@ -51,7 +51,7 @@ export function AuthenticationEffects() {
         setSessionState({ data: res.response.body });
       }
     })();
-  }, [sessionState, mainApi, setSessionState]);
+  }, [sessionState, api, setSessionState]);
 
   return <></>;
 }

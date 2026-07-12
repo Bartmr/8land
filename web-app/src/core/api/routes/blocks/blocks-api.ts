@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { useMainApiFetchJSON } from '../../fetch-json';
+import { useApiFetchJSON } from '../../fetch-json';
 
 export enum DynamicBlockType {
   Door = 'door',
@@ -73,7 +73,7 @@ const CreateBlockResponseSchema = z.union([
 ]);
 
 export class BlocksAPI {
-  constructor(private api: ReturnType<typeof useMainApiFetchJSON>) {}
+  constructor(private api: ReturnType<typeof useApiFetchJSON>) {}
 
   deleteBlock(args: {
     blockType: DynamicBlockType.Door | DynamicBlockType.App;
@@ -97,7 +97,7 @@ export class BlocksAPI {
 }
 
 export function useBlocksAPI() {
-  const api = useMainApiFetchJSON();
+  const api = useApiFetchJSON();
 
   return new BlocksAPI(api);
 }

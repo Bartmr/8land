@@ -1,5 +1,5 @@
 import React from 'react';
-import { GetLandDTO, CreateLandRequestSchemaObj } from '../../../../../core/main-api/routes/lands/lands-api';
+import { GetLandDTO, CreateLandRequestSchemaObj } from '../../../../../core/api/routes/lands/lands-api';
 import { z } from 'zod';
 
 import { Fragment, useState } from 'react';
@@ -10,7 +10,7 @@ import {
   CommunicatedData,
   CommunicatedDataStatus,
 } from '../../../../../core/communicated-data/communicated-data-types';
-import { useLandsAPI } from '../../../../../core/main-api/routes/lands/lands-api';
+import { useLandsAPI } from '../../../../../core/api/routes/lands/lands-api';
 import { throwError } from '../../../../../core/throw-error';
 import { CommunicationError } from '../../../../../core/communication-errors/communication-errors';
 

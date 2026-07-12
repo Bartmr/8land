@@ -1,5 +1,5 @@
 import React from 'react';
-import { GetTrainDestinationsDTO } from '../../../core/main-api/routes/train/train.api';
+import { GetTrainDestinationsDTO } from '../../../core/api/routes/train/train.api';
 import { useEffect, useState } from 'react';
 import { AppLayout } from '../../layout/app-layout';
 import { CommunicatedDataGate } from '../../../core/ui/communicated-data-gate';
@@ -7,7 +7,7 @@ import {
   CommunicatedData,
   CommunicatedDataStatus,
 } from '../../../core/communicated-data/communicated-data-types';
-import { useTrainAPI } from '../../../core/main-api/routes/train/train.api';
+import { useTrainAPI } from '../../../core/api/routes/train/train.api';
 import { AppContext } from '../../client/index/screens/app/app-screen.types';
 import { AppContextProvider, useAppContext } from '../app-context';
 import InfiniteScroll from 'react-infinite-scroll-component';

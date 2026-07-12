@@ -1,6 +1,6 @@
 import React from 'react';
-import { CreateBlockRequestSchema, DynamicBlockType } from '../../../../../core/main-api/routes/blocks/blocks-api';
-import { GetLandDTO } from '../../../../../core/main-api/routes/lands/lands-api';
+import { CreateBlockRequestSchema, DynamicBlockType } from '../../../../../core/api/routes/blocks/blocks-api';
+import { GetLandDTO } from '../../../../../core/api/routes/lands/lands-api';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { CommunicatedDataGate } from '../../../../../core/ui/communicated-data-gate';
@@ -9,7 +9,7 @@ import {
   CommunicatedData,
   CommunicatedDataStatus,
 } from '../../../../../core/communicated-data/communicated-data-types';
-import { useBlocksAPI } from '../../../../../core/main-api/routes/blocks/blocks-api';
+import { useBlocksAPI } from '../../../../../core/api/routes/blocks/blocks-api';
 import { CommunicationError } from '../../../../../core/communication-errors/communication-errors';
 
 export function AddBlockSection(props: {

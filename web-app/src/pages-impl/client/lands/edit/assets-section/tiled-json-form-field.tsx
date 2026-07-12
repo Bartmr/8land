@@ -1,5 +1,5 @@
 import React from 'react';
-import { createTiledJSONSchema } from '../../../../../core/main-api/routes/lands/lands-api';
+import { createTiledJSONSchema } from '../../../../../core/api/routes/lands/lands-api';
 import { z } from 'zod';
 import { useEffect, useState } from 'react';
 

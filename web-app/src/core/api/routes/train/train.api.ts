@@ -1,4 +1,4 @@
-import { useMainApiFetchJSON } from '../../fetch-json';
+import { useApiFetchJSON } from '../../fetch-json';
 import { useLocalStorage } from '../../../local-storage';
 import { z } from 'zod';
 import {
@@ -6,7 +6,7 @@ import {
   useOptionalAuthenticationStateSessionData,
 } from '../../../users/authentication/authentication-state';
 
-type MainApiFetchJSON = ReturnType<typeof useMainApiFetchJSON>;
+type ApiFetchJSON = ReturnType<typeof useApiFetchJSON>;
 
 const trainDestinationStorageSchema = z.object({
   name: z.string(),
@@ -96,7 +96,7 @@ const getTrainDestinationsResponseSchema: z.ZodType<{
 
 export class TrainAPI {
   constructor(
-    private api: MainApiFetchJSON,
+    private api: ApiFetchJSON,
     private localStorage: ReturnType<typeof useLocalStorage>,
     private session: null | AuthenticationSession,
   ) {}
@@ -176,7 +176,7 @@ export class TrainAPI {
 }
 
 export function useTrainAPI() {
-  const api = useMainApiFetchJSON();
+  const api = useApiFetchJSON();
   const localStorage = useLocalStorage();
   const session = useOptionalAuthenticationStateSessionData();
 

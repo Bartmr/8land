@@ -12,8 +12,8 @@ import {
 } from '../../../core/communicated-data/communicated-data-types';
 import { ChangeEmail } from './components/change-email';
 import { FaPersonThroughWindow } from 'react-icons/fa6';
-import { useLandsAPI } from '../../../core/main-api/routes/lands/lands-api';
-import { useAuthAPI } from '../../../core/main-api/routes/users/auth/auth.api';
+import { useLandsAPI } from '../../../core/api/routes/lands/lands-api';
+import { useAuthAPI } from '../../../core/api/routes/users/auth/auth.api';
 import { useAuthenticationLogout } from '../../../core/users/authentication/logout';
 import { useAuthenticationStateSession } from '../../../core/users/authentication/authentication-state';
 

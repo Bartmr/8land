@@ -9,9 +9,9 @@ import { TiledJSONFieldState } from './tiled-json-form-field';
 import { TilesetImageFieldState } from './tileset-image-form-field';
 import { TiledJSONField } from './tiled-json-form-field';
 import { TilesetImageFormField } from './tileset-image-form-field';
-import { GetLandDTO } from '../../../../../core/main-api/routes/lands/lands-api';
+import { GetLandDTO } from '../../../../../core/api/routes/lands/lands-api';
 import { LinkAnchor } from '../../../../../core/ui/link-anchor';
-import { useLandsAPI } from '../../../../../core/main-api/routes/lands/lands-api';
+import { useLandsAPI } from '../../../../../core/api/routes/lands/lands-api';
 import { START_LANDS_LIMIT_EXCEEDED_MESSAGE } from './assets-section.constants';
 
 export function AssetsSection(props: {

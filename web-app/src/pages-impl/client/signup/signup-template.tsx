@@ -10,7 +10,7 @@ import { CommunicatedDataGate } from '../../../core/ui/communicated-data-gate';
 import { LinkAnchor } from '../../../core/ui/link-anchor';
 import { TERMS_OF_USE_ROUTE } from '../../terms-of-use/terms-of-use-routes';
 import { PRIVACY_POLICY_ROUTE } from '../../privacy-policy/privacy-policy-routes';
-import { useMainApiFetchJSON } from '../../../core/main-api/fetch-json';
+import { useApiFetchJSON } from '../../../core/api/fetch-json';
 import { z } from 'zod';
 import { AuthenticationSessionSchema } from '../../../core/users/authentication/authentication-schemas';
 import { AuthenticationStateContext } from '../../../core/users/authentication/authentication-state';
@@ -33,7 +33,7 @@ const signupResponseSchema = z.union([
 ]);
 
 function Content() {
-  const mainApi = useMainApiFetchJSON();
+  const api = useApiFetchJSON();
   const { setSessionState } = useContext(AuthenticationStateContext)!;
   const location = useLocation();
 
@@ -56,7 +56,7 @@ function Content() {
 
     setFormState({ status: CommunicatedDataStatus.Loading });
 
-    const res = await mainApi.fetchJSON({
+    const res = await api.fetchJSON({
       schema: signupResponseSchema,
       path: '/users/auth/signup',
       method: 'POST',

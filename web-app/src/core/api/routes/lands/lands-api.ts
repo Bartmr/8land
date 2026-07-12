@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import {
-  useMainApiFetchJSON,
+  useApiFetchJSON,
 } from '../../fetch-json';
 import { Logger } from '../../../logging/logger';
 import { CommunicationError } from '../../../communication-errors/communication-errors';
@@ -448,7 +448,7 @@ const getLandsToClaimResponseSchema = z.object({
 export type GetLandsToClaimDTO = z.infer<typeof getLandsToClaimResponseBodySchema>;
 
 export class LandsAPI {
-  constructor(private api: ReturnType<typeof useMainApiFetchJSON>) {}
+  constructor(private api: ReturnType<typeof useApiFetchJSON>) {}
 
   navigate(args: { doorBlockId: string; currentLandId: string }) {
     const query = new URLSearchParams({
@@ -691,7 +691,7 @@ export class LandsAPI {
 }
 
 export function useLandsAPI() {
-  const api = useMainApiFetchJSON();
+  const api = useApiFetchJSON();
 
   return new LandsAPI(api);
 }

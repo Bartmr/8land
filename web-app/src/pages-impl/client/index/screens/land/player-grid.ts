@@ -1,11 +1,11 @@
 import { TILE_SIZE } from '../../game-constants';
 import { Block, DoorBlock } from './land-scene.types';
 import { DialogueService } from '../dialogue/dialogue-screen';
-import { DynamicBlockType } from '../../../../../core/main-api/routes/blocks/blocks-api';
+import { DynamicBlockType } from '../../../../../core/api/routes/blocks/blocks-api';
 import {
   StaticBlockType,
   STATIC_BLOCK_TYPE_VALUES,
-} from '../../../../../core/main-api/routes/lands/lands-api';
+} from '../../../../../core/api/routes/lands/lands-api';
 import { KeypadBroker } from '../../keypad-broker';
 import { throwError } from '../../../../../core/throw-error';
 import { PlayerSprite } from './player-sprite';

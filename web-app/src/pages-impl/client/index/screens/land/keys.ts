@@ -1,4 +1,4 @@
-import { GetLandDTO } from '../../../../../core/main-api/routes/lands/lands-api';
+import { GetLandDTO } from '../../../../../core/api/routes/lands/lands-api';
 
 export function getLandSceneKey(land: GetLandDTO) {
   return `land-scene:${land.id}:scene`;

@@ -1,7 +1,7 @@
 import { useCallback, useContext } from "react";
 import { AuthenticationStateContext } from "./authentication-state";
 import { throwError } from "../../throw-error";
-import { MAIN_API_URL } from "../../main-api/fetch";
+import { API_URL } from "../../api/fetch";
 import { CommunicationError } from "../../communication-errors/communication-errors";
 import { useLogger } from "../../logging/logger";
 
@@ -18,7 +18,7 @@ export function useAuthenticationLogout() {
     let response: Response;
 
     try {
-      response = await fetch(`${MAIN_API_URL}/users/auth`, {
+      response = await fetch(`${API_URL}/users/auth`, {
         method: "DELETE",
         credentials: "include",
       });

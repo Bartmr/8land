@@ -8,11 +8,11 @@ import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
-import { ResumeLandNavigationDTO } from '../../../../../core/main-api/routes/lands/lands-api';
-import { DynamicBlockType } from '../../../../../core/main-api/routes/blocks/blocks-api';
-import { StaticBlockType } from '../../../../../core/main-api/routes/lands/lands-api';
-import { LandsAPI } from '../../../../../core/main-api/routes/lands/lands-api';
-import { TrainAPI } from '../../../../../core/main-api/routes/train/train.api';
+import { ResumeLandNavigationDTO } from '../../../../../core/api/routes/lands/lands-api';
+import { DynamicBlockType } from '../../../../../core/api/routes/blocks/blocks-api';
+import { StaticBlockType } from '../../../../../core/api/routes/lands/lands-api';
+import { LandsAPI } from '../../../../../core/api/routes/lands/lands-api';
+import { TrainAPI } from '../../../../../core/api/routes/train/train.api';
 import { throwError } from '../../../../../core/throw-error';
 import { KeypadBroker } from '../../keypad-broker';
 

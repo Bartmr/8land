@@ -2,12 +2,12 @@ import { useCallback, useContext, useMemo } from "react";
 import { z } from "zod";
 import { CommunicationError } from "../communication-errors/communication-errors";
 import { useLogger } from "../logging/logger";
-import { MAIN_API_URL } from "./fetch";
+import { API_URL } from "./fetch";
 import { useAuthenticationLogout } from "../users/authentication/logout";
 import { AuthenticationStateContext, useAuthenticationStateSessionData, useAuthenticationStateSession } from "../users/authentication/authentication-state";
 import { throwError } from "../throw-error";
 
-export type MainApiFetchJSONResult<T> =
+export type ApiFetchJSONResult<T> =
   | {
       error: CommunicationError;
     }
@@ -16,7 +16,7 @@ export type MainApiFetchJSONResult<T> =
       response: T;
     };
 
-type MainApiFetchJSON = {
+type ApiFetchJSON = {
   <
     ZodSchema extends z.ZodType<{
       status: number;
@@ -27,14 +27,14 @@ type MainApiFetchJSON = {
     path: string;
     body?: unknown;
     method: "HEAD" | "GET" | "DELETE" | "POST" | "PATCH" | "PUT";
-  }): Promise<MainApiFetchJSONResult<z.TypeOf<ZodSchema>>>;
+  }): Promise<ApiFetchJSONResult<z.TypeOf<ZodSchema>>>;
 };
 
-export function useMainApiFetchJSON() {
+export function useApiFetchJSON() {
   const logger = useLogger();
   const { setSessionState } = useContext(AuthenticationStateContext) || throwError();
 
-  const fetchJSON: MainApiFetchJSON = useCallback(async (args) => {
+  const fetchJSON: ApiFetchJSON = useCallback(async (args) => {
     const headers: HeadersInit = {};
     let body: BodyInit | undefined;
 
@@ -50,7 +50,7 @@ export function useMainApiFetchJSON() {
     let response: Response;
 
     try {
-      response = await fetch(`${MAIN_API_URL}${args.path}`, {
+      response = await fetch(`${API_URL}${args.path}`, {
         method: args.method,
         body,
         headers,

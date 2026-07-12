@@ -2,10 +2,10 @@ import { useCallback } from "react";
 import { CommunicationError } from "../communication-errors/communication-errors";
 import { throwError } from "../throw-error";
 
-export const MAIN_API_URL = process.env.GATSBY_MAIN_API_URL || throwError();
+export const API_URL = process.env.GATSBY_API_URL || throwError();
 
 
-export type MainApiFetchResult =
+export type ApiFetchResult =
   | {
       error: CommunicationError;
     }
@@ -14,15 +14,15 @@ export type MainApiFetchResult =
       response: Response;
     };
 
-export type MainApiFetch = ReturnType<typeof useMainApiFetch>;
+export type ApiFetch = ReturnType<typeof useApiFetch>;
 
-export function useMainApiFetch() {
-  const mainApiFetch = useCallback(
+export function useApiFetch() {
+  const apiFetch = useCallback(
     async (path: string, init: RequestInit) => {
       let response: Response;
 
       try {
-        response = await fetch(`${MAIN_API_URL}${path}`, {
+        response = await fetch(`${API_URL}${path}`, {
           ...init,
           credentials: "include",
         });
@@ -39,5 +39,5 @@ export function useMainApiFetch() {
     []
   );
 
-  return mainApiFetch;
+  return apiFetch;
 }

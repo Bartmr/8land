@@ -20,7 +20,7 @@ const schema = z.object({
     )
     .refine((v) => !v.endsWith('/'), 'Cannot have trailing slash'),
   LOG_DEBUG: booleanEnvVar,
-  MAIN_API_URL: requiredString,
+  API_URL: requiredString,
 
   SENTRY_DSN: z.string().optional(),
 
@@ -30,7 +30,7 @@ const schema = z.object({
 
 const result = schema.safeParse({
   SITE_URL: process.env.GATSBY_SITE_URL,
-  MAIN_API_URL: process.env.GATSBY_MAIN_API_URL,
+  API_URL: process.env.GATSBY_API_URL,
 
   SENTRY_DSN: process.env.GATSBY_SENTRY_DSN,
 
