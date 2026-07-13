@@ -18,10 +18,6 @@ export function IframeGate(props: {
   useLayoutEffect(() => {
     if (props.context.url.startsWith(EnvironmentVariables.SITE_URL)) {
       replaceConfirmed(true);
-
-      return () => {
-        // NO-OP
-      };
     } else {
       replaceConfirmed(false);
 

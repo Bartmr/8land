@@ -248,7 +248,7 @@ export class PlayerGrid {
       }
 
       const firstBlockEntry = Object.entries(tileProperties)
-        .filter((c) => ![STATIC_BLOCK_TYPE_VALUES].includes(c[0] as any))
+        .filter(([key]) => !STATIC_BLOCK_TYPE_VALUES.some((sv) => sv === key))
         .find((c): c is [string, string] => typeof c[1] === 'string');
 
       if (firstBlockEntry) {

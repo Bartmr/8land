@@ -56,20 +56,17 @@ export function IframeWrapper(props: {
           content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no"
         />
       </Helmet>
-      <>
-        {loading ? (
-          <div className="p-3" style={{ position: 'absolute' }}>
-            <CommunicatedDataGate
-              dataWrapper={{ status: CommunicatedDataStatus.Loading }}
-            >
-              {() => null}
-            </CommunicatedDataGate>
-          </div>
-        ) : null}
-      </>
-      <>
-        <iframe
-          title="app-screen-iframe"
+      {loading ? (
+        <div className="p-3" style={{ position: 'absolute' }}>
+          <CommunicatedDataGate
+            dataWrapper={{ status: CommunicatedDataStatus.Loading }}
+          >
+            {() => null}
+          </CommunicatedDataGate>
+        </div>
+      ) : null}
+      <iframe
+        title="app-screen-iframe"
           id="app-screen-iframe"
           width="100%"
           height="100%"
@@ -88,7 +85,6 @@ export function IframeWrapper(props: {
             replaceLoading(false);
           }}
         />
-      </>
     </div>
   );
 }

@@ -68,9 +68,7 @@ export function LandScreen(props: {
     })();
 
     const onPressing_Escape = () => {
-      (async () => {
-        await navigate(USER_ROUTE.getHref({ section: "escape" }));
-      })();
+      navigate(USER_ROUTE.getHref({ section: "escape" }));
 
       return "stop-propagation" as const;
     };

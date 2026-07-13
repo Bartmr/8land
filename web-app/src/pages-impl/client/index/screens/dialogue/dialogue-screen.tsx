@@ -97,8 +97,6 @@ export function DialogueScreen(props: {
 
     keypad.onPressing_B(onPressing_B);
 
-    replaceService(sv);
-    props.onService(sv);
 
     const onPressing_Escape = () => {
       if (sv.lockCurrentScreen) {
