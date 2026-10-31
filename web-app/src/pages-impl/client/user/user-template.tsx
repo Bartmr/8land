@@ -5,17 +5,17 @@ import { Layout } from '../../layout/layout';
 import {
   CommunicatedDataGate,
   CommunicatedDataGateLayout,
-} from '../../../core/ui/communicated-data-gate';
+} from '../../../ui/communicated-data-gate';
 import {
   CommunicatedData,
   CommunicatedDataStatus,
-} from '../../../core/communicated-data/communicated-data-types';
+} from '../../../communicated-data/communicated-data-types';
 import { ChangeEmail } from './components/change-email';
 import { FaPersonThroughWindow } from 'react-icons/fa6';
-import { useLandsAPI } from '../../../core/api/routes/lands/lands-api';
-import { useAuthAPI } from '../../../core/api/routes/users/auth/auth.api';
-import { useAuthenticationLogout } from '../../../core/users/authentication/logout';
-import { useAuthenticationStateSession } from '../../../core/users/authentication/authentication-state';
+import { useLandsAPI } from '../../../api/routes/lands/lands-api';
+import { useAuthAPI } from '../../../api/routes/users/auth/auth.api';
+import { useAuthenticationLogout } from '../../../users/authentication/logout';
+import { useAuthenticationStateSession } from '../../../users/authentication/authentication-state';
 
 
 

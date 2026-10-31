@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser';
-import { UserAuthSessionData } from '../../../../../core/users/authentication/user-auth-types';
-import { EnvironmentVariables } from '../../../../../core/environment-variables';
+import { UserAuthSessionData } from '../../../../../users/authentication/user-auth-types';
+import { EnvironmentVariables } from '../../../../../environment-variables';
 import { getLandSceneKey } from './keys';
 import { LandScene } from './land-scene';
 import { LandSceneArguments } from './land-scene.types';
@@ -8,12 +8,12 @@ import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { LandScreenService } from './land-screen.service';
 import { AppService } from '../app/app-screen';
-import { ResumeLandNavigationDTO } from '../../../../../core/api/routes/lands/lands-api';
-import { DynamicBlockType } from '../../../../../core/api/routes/blocks/blocks-api';
-import { StaticBlockType } from '../../../../../core/api/routes/lands/lands-api';
-import { LandsAPI } from '../../../../../core/api/routes/lands/lands-api';
-import { TrainAPI } from '../../../../../core/api/routes/train/train.api';
-import { throwError } from '../../../../../core/throw-error';
+import { ResumeLandNavigationDTO } from '../../../../../api/routes/lands/lands-api';
+import { DynamicBlockType } from '../../../../../api/routes/blocks/blocks-api';
+import { StaticBlockType } from '../../../../../api/routes/lands/lands-api';
+import { LandsAPI } from '../../../../../api/routes/lands/lands-api';
+import { TrainAPI } from '../../../../../api/routes/train/train.api';
+import { throwError } from '../../../../../throw-error';
 import { KeypadBroker } from '../../keypad-broker';
 
 export async function runLandGame(

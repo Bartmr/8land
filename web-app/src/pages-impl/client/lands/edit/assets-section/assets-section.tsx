@@ -3,15 +3,15 @@ import { useState } from 'react';
 import {
   CommunicatedData,
   CommunicatedDataStatus,
-} from '../../../../../core/communicated-data/communicated-data-types';
-import { CommunicatedDataGate } from '../../../../../core/ui/communicated-data-gate';
+} from '../../../../../communicated-data/communicated-data-types';
+import { CommunicatedDataGate } from '../../../../../ui/communicated-data-gate';
 import { TiledJSONFieldState } from './tiled-json-form-field';
 import { TilesetImageFieldState } from './tileset-image-form-field';
 import { TiledJSONField } from './tiled-json-form-field';
 import { TilesetImageFormField } from './tileset-image-form-field';
-import { GetLandDTO } from '../../../../../core/api/routes/lands/lands-api';
-import { LinkAnchor } from '../../../../../core/ui/link-anchor';
-import { useLandsAPI } from '../../../../../core/api/routes/lands/lands-api';
+import { GetLandDTO } from '../../../../../api/routes/lands/lands-api';
+import { LinkAnchor } from '../../../../../ui/link-anchor';
+import { useLandsAPI } from '../../../../../api/routes/lands/lands-api';
 import { START_LANDS_LIMIT_EXCEEDED_MESSAGE } from './assets-section.constants';
 
 export function AssetsSection(props: {

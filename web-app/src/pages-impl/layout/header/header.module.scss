@@ -1,6 +1,6 @@
 
 @import "../../../../node_modules/bootstrap/scss/functions";
-@import '../../../core/ui/variables';
+@import '../../../ui/variables';
 
 .header__backdrop {
   z-index: $zindex-sticky - 1;

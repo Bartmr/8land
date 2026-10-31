@@ -1,16 +1,16 @@
 import React from 'react';
-import { CreateBlockRequestSchema, DynamicBlockType } from '../../../../../core/api/routes/blocks/blocks-api';
-import { GetLandDTO } from '../../../../../core/api/routes/lands/lands-api';
+import { CreateBlockRequestSchema, DynamicBlockType } from '../../../../../api/routes/blocks/blocks-api';
+import { GetLandDTO } from '../../../../../api/routes/lands/lands-api';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { CommunicatedDataGate } from '../../../../../core/ui/communicated-data-gate';
+import { CommunicatedDataGate } from '../../../../../ui/communicated-data-gate';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   CommunicatedData,
   CommunicatedDataStatus,
-} from '../../../../../core/communicated-data/communicated-data-types';
-import { useBlocksAPI } from '../../../../../core/api/routes/blocks/blocks-api';
-import { CommunicationError } from '../../../../../core/communication-errors/communication-errors';
+} from '../../../../../communicated-data/communicated-data-types';
+import { useBlocksAPI } from '../../../../../api/routes/blocks/blocks-api';
+import { CommunicationError } from '../../../../../communication-errors/communication-errors';
 
 export function AddBlockSection(props: {
   land: GetLandDTO;

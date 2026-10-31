@@ -1,18 +1,18 @@
 import React from 'react';
-import { GetLandDTO, CreateLandRequestSchemaObj } from '../../../../../core/api/routes/lands/lands-api';
+import { GetLandDTO, CreateLandRequestSchemaObj } from '../../../../../api/routes/lands/lands-api';
 import { z } from 'zod';
 
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CommunicatedDataGate } from '../../../../../core/ui/communicated-data-gate';
+import { CommunicatedDataGate } from '../../../../../ui/communicated-data-gate';
 import {
   CommunicatedData,
   CommunicatedDataStatus,
-} from '../../../../../core/communicated-data/communicated-data-types';
-import { useLandsAPI } from '../../../../../core/api/routes/lands/lands-api';
-import { throwError } from '../../../../../core/throw-error';
-import { CommunicationError } from '../../../../../core/communication-errors/communication-errors';
+} from '../../../../../communicated-data/communicated-data-types';
+import { useLandsAPI } from '../../../../../api/routes/lands/lands-api';
+import { throwError } from '../../../../../throw-error';
+import { CommunicationError } from '../../../../../communication-errors/communication-errors';
 
 
 
