@@ -7,13 +7,6 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ..:/workspace
-      - claude:/root/.claude
-    environment:
-      # signal that it is running within a restricted, containerized environment
-      # rather than directly on your host machine.
-      # allows to run `--dangerously-skip-permissions` in rootless docker containers
-      - IS_SANDBOX=1
-      - CLAUDE_CONFIG_DIR=/root/.claude
     command: sleep infinity
 
   postgres:
@@ -24,7 +17,3 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - 5432:5432
-
-volumes:
-  claude:
-    name: claude

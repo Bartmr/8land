@@ -14,8 +14,7 @@
     "vscode": {
       "extensions": [
         "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "anthropic.claude-code"
+        "esbenp.prettier-vscode"
       ]
     }
   }
