@@ -1,6 +1,6 @@
 import React from 'react';
-import { LandIdeasTemplate } from '../../../pages-impl/help/lands/land-ideas/land-ideas-template';
-import { HtmlHead } from '../../../pages-impl/html-head/html-head';
+import { LandIdeasTemplate } from '../../../page-components/help/lands/land-ideas/land-ideas-template';
+import { HtmlHead } from '../../../page-components/html-head/html-head';
 import type { PageProps } from 'gatsby';
 
 export default LandIdeasTemplate;

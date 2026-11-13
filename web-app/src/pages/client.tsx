@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { HtmlHead } from '../pages-impl/html-head/html-head';
+import { HtmlHead } from '../page-components/html-head/html-head';
 import type { PageProps } from 'gatsby';
 import { CommunicatedDataGate } from '../ui/communicated-data-gate';
 import { CommunicationError } from '../communication-errors/communication-errors';
@@ -12,7 +12,7 @@ import {
 const Component = () => {
   const [entrypoint, replaceEntrypoint] = useState<
     CommunicatedData<
-      typeof import('../pages-impl/client/client-template')
+      typeof import('../page-components/client/client-template')
     >
   >({ status: CommunicatedDataStatus.NotInitialized });
 
@@ -24,7 +24,7 @@ const Component = () => {
 
       try {
         const ep = await import(
-          '../pages-impl/client/client-template'
+          '../page-components/client/client-template'
         );
 
         replaceEntrypoint({

@@ -1,6 +1,6 @@
 import React from 'react';
-import { NotFoundTemplate } from '../pages-impl/not-found/not-found-template';
-import { HtmlHead } from '../pages-impl/html-head/html-head';
+import { NotFoundTemplate } from '../page-components/not-found/not-found-template';
+import { HtmlHead } from '../page-components/html-head/html-head';
 import type { PageProps } from 'gatsby';
 
 export default NotFoundTemplate;
