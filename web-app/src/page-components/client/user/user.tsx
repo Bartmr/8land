@@ -2,10 +2,6 @@ import React from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { useState } from 'react';
 import { Layout } from '../../layout/layout';
-import {
-  CommunicatedData,
-  CommunicatedDataStatus,
-} from '../../../communicated-data/communicated-data-types';
 import { CommunicationError } from '../../../communication-errors/communication-errors';
 import { ChangeEmail } from './components/change-email';
 import { FaPersonThroughWindow } from 'react-icons/fa6';
@@ -23,9 +19,11 @@ import { useAuthenticationStateSession } from '../../../users/authentication/aut
 
 
 export function User(_props: RouteComponentProps) {
-  const [escapeStatus, replaceEscapeStatus] = useState<
-    CommunicatedData<undefined>
-  >({ status: CommunicatedDataStatus.NotInitialized });
+  const [escapeStatus, replaceEscapeStatus] = useState<{
+    loading?: boolean;
+    error?: CommunicationError;
+    data?: true;
+  }>({});
 
   const session = useAuthenticationStateSession();
   const logout = useAuthenticationLogout();
@@ -38,12 +36,9 @@ export function User(_props: RouteComponentProps) {
     const res = await landsApi.escape();
 
     if (res.error) {
-      replaceEscapeStatus({ status: res.error });
+      replaceEscapeStatus({ error: res.error });
     } else {
-      replaceEscapeStatus({
-        status: CommunicatedDataStatus.Done,
-        data: undefined,
-      });
+      replaceEscapeStatus({ data: true });
     }
   };
 
@@ -51,7 +46,7 @@ export function User(_props: RouteComponentProps) {
     <Layout>
       {() => (
         <div className=" ">
-          {session.status === CommunicatedDataStatus.NotInitialized ? null : session.status === CommunicatedDataStatus.Loading ? (
+          {session.loading && session.data === undefined ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <div
                 className="d-block spinner-lg spinner-border text-primary"
@@ -60,7 +55,8 @@ export function User(_props: RouteComponentProps) {
                 <span className="visually-hidden">Loading...</span>
               </div>
             </div>
-          ) : session.status === CommunicatedDataStatus.Refreshing ? (
+          ) : null}
+          {session.loading && session.data !== undefined ? (
             <div
               style={{
                 zIndex: 1,
@@ -75,30 +71,31 @@ export function User(_props: RouteComponentProps) {
                 <span className="visually-hidden">Loading...</span>
               </div>
             </div>
-          ) : session.status === CommunicationError.NotFound ? (
+          ) : null}
+          {session.error === CommunicationError.NotFound ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaSearch style={{ fontSize: '2rem' }} />
               <p className="mt-3 text-center mb-0">Not Found</p>
             </div>
-          ) : session.status === CommunicationError.ConnectionFailure ? (
+          ) : session.error === CommunicationError.ConnectionFailure ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
               <p className="mt-3 text-center text-danger mb-0">
                 No Internet. Check your connection and try again.
               </p>
             </div>
-          ) : session.status === CommunicationError.Forbidden ? (
+          ) : session.error === CommunicationError.Forbidden ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaLock style={{ fontSize: '2rem' }} />
               <p className="mt-3 text-center mb-0">
                 You are not allowed to access this content
               </p>
             </div>
-          ) : session.status === CommunicationError.AbortedAndDealtWith ? (
+          ) : session.error === CommunicationError.AbortedAndDealtWith ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p className="mt-3 text-center mb-0">Redirecting...</p>
             </div>
-          ) : session.status === CommunicationError.UnexpectedResponse ? (
+          ) : session.error === CommunicationError.UnexpectedResponse ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaExclamationCircle
                 className="text-danger"
@@ -109,8 +106,7 @@ export function User(_props: RouteComponentProps) {
               </p>
             </div>
           ) : null}
-          {session.status === CommunicatedDataStatus.Done ||
-          session.status === CommunicatedDataStatus.Refreshing ? (
+          {session.data !== undefined && !session.error ? (
             <>
               <div className="card mb-3">
                 <div className="card-body row g-2 justify-content-end">
@@ -147,9 +143,7 @@ export function User(_props: RouteComponentProps) {
                   <div className="d-flex align-items-center">
                     <button
                       onClick={handleEscape}
-                      disabled={
-                        escapeStatus.status === CommunicatedDataStatus.Loading
-                      }
+                      disabled={escapeStatus.loading}
                       className="btn btn-danger"
                     >
                       <FaPersonThroughWindow /> Escape
@@ -157,13 +151,12 @@ export function User(_props: RouteComponentProps) {
                     <div className="ms-3">
                       <div
                         className={
-                          escapeStatus.status ===
-                          CommunicatedDataStatus.Refreshing
+                          escapeStatus.loading && escapeStatus.data !== undefined
                             ? 'd-flex flex-row align-items-center'
                             : ' '
                         }
                       >
-                        {escapeStatus.status === CommunicatedDataStatus.NotInitialized ? null : escapeStatus.status === CommunicatedDataStatus.Loading ? (
+                        {escapeStatus.loading && escapeStatus.data === undefined ? (
                           <div className="d-flex flex-row justify-content-center align-items-center">
                             <div
                               className="d-block spinner-sm spinner-border text-primary"
@@ -172,7 +165,8 @@ export function User(_props: RouteComponentProps) {
                               <span className="visually-hidden">Loading...</span>
                             </div>
                           </div>
-                        ) : escapeStatus.status === CommunicatedDataStatus.Refreshing ? (
+                        ) : null}
+                        {escapeStatus.loading && escapeStatus.data !== undefined ? (
                           <div style={{ marginRight: 'var(--spacer-2)' }}>
                             <div
                               className="d-block spinner-sm spinner-border text-primary"
@@ -181,26 +175,27 @@ export function User(_props: RouteComponentProps) {
                               <span className="visually-hidden">Loading...</span>
                             </div>
                           </div>
-                        ) : escapeStatus.status === CommunicationError.NotFound ? (
+                        ) : null}
+                        {escapeStatus.error === CommunicationError.NotFound ? (
                           <div className="d-flex flex-row justify-content-center align-items-center">
                             <FaSearch />
                             <p className="ms-2 mb-0">Not Found</p>
                           </div>
-                        ) : escapeStatus.status === CommunicationError.ConnectionFailure ? (
+                        ) : escapeStatus.error === CommunicationError.ConnectionFailure ? (
                           <div className="d-flex flex-row justify-content-center align-items-center">
                             <FaWifi className="text-danger" />
                             <p className="ms-2 text-danger mb-0">No Internet</p>
                           </div>
-                        ) : escapeStatus.status === CommunicationError.Forbidden ? (
+                        ) : escapeStatus.error === CommunicationError.Forbidden ? (
                           <div className="d-flex flex-row justify-content-center align-items-center">
                             <FaLock />
                             <p className="ms-2 mb-0">Not Allowed</p>
                           </div>
-                        ) : escapeStatus.status === CommunicationError.AbortedAndDealtWith ? (
+                        ) : escapeStatus.error === CommunicationError.AbortedAndDealtWith ? (
                           <div className="d-flex flex-row justify-content-center align-items-center">
                             <p className="ms-2 mb-0">Redirecting...</p>
                           </div>
-                        ) : escapeStatus.status === CommunicationError.UnexpectedResponse ? (
+                        ) : escapeStatus.error === CommunicationError.UnexpectedResponse ? (
                           <div className="d-flex flex-row justify-content-center align-items-center">
                             <FaExclamationCircle className="text-danger" />
                             <p className="text-danger ms-2 mb-0">
@@ -208,9 +203,7 @@ export function User(_props: RouteComponentProps) {
                             </p>
                           </div>
                         ) : null}
-                        {escapeStatus.status === CommunicatedDataStatus.Done ||
-                        escapeStatus.status ===
-                          CommunicatedDataStatus.Refreshing ? (
+                        {escapeStatus.data !== undefined && !escapeStatus.error ? (
                           <span className="text-success">
                             Escape was successful
                           </span>

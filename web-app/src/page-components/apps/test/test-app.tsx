@@ -1,7 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { AppLayout } from '../app-layout';
-import { CommunicatedDataStatus } from '../../../communicated-data/communicated-data-types';
 import { CommunicationError } from '../../../communication-errors/communication-errors';
 import {
   FaExclamationCircle,
@@ -16,7 +15,7 @@ function Content() {
   const [eventData, replaceEventData] = useState<string | undefined>();
 
   useEffect(() => {
-    if (appContext.status === CommunicatedDataStatus.Done) {
+    if (appContext.data !== undefined) {
 
       window.addEventListener('message', (e) => {
         if (
@@ -46,7 +45,7 @@ function Content() {
   return (
     <>
       <div className=" ">
-        {appContext.status === CommunicatedDataStatus.NotInitialized ? null : appContext.status === CommunicatedDataStatus.Loading ? (
+        {appContext.loading && appContext.data === undefined ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <div
               className="d-block spinner-lg spinner-border text-primary"
@@ -55,7 +54,8 @@ function Content() {
               <span className="visually-hidden">Loading...</span>
             </div>
           </div>
-        ) : appContext.status === CommunicatedDataStatus.Refreshing ? (
+        ) : null}
+        {appContext.loading && appContext.data !== undefined ? (
           <div
             style={{
               zIndex: 1,
@@ -70,30 +70,31 @@ function Content() {
               <span className="visually-hidden">Loading...</span>
             </div>
           </div>
-        ) : appContext.status === CommunicationError.NotFound ? (
+        ) : null}
+        {appContext.error === CommunicationError.NotFound ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaSearch style={{ fontSize: '2rem' }} />
             <p className="mt-3 text-center mb-0">Not Found</p>
           </div>
-        ) : appContext.status === CommunicationError.ConnectionFailure ? (
+        ) : appContext.error === CommunicationError.ConnectionFailure ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
             <p className="mt-3 text-center text-danger mb-0">
               No Internet. Check your connection and try again.
             </p>
           </div>
-        ) : appContext.status === CommunicationError.Forbidden ? (
+        ) : appContext.error === CommunicationError.Forbidden ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaLock style={{ fontSize: '2rem' }} />
             <p className="mt-3 text-center mb-0">
               You are not allowed to access this content
             </p>
           </div>
-        ) : appContext.status === CommunicationError.AbortedAndDealtWith ? (
+        ) : appContext.error === CommunicationError.AbortedAndDealtWith ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <p className="mt-3 text-center mb-0">Redirecting...</p>
           </div>
-        ) : appContext.status === CommunicationError.UnexpectedResponse ? (
+        ) : appContext.error === CommunicationError.UnexpectedResponse ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaExclamationCircle
               className="text-danger"
@@ -104,8 +105,7 @@ function Content() {
             </p>
           </div>
         ) : null}
-        {appContext.status === CommunicatedDataStatus.Done ||
-        appContext.status === CommunicatedDataStatus.Refreshing ? (
+        {appContext.data !== undefined && !appContext.error ? (
           <pre>{JSON.stringify(appContext.data, undefined, 2)}</pre>
         ) : null}
       </div>

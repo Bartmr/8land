@@ -2,10 +2,6 @@ import React from 'react';
 import { RouteComponentProps, useLocation } from '@reach/router';
 import { Layout } from '../../layout/layout';
 import { useState, useContext } from 'react';
-import {
-  CommunicatedData,
-  CommunicatedDataStatus,
-} from '../../../communicated-data/communicated-data-types';
 import { CommunicationError } from '../../../communication-errors/communication-errors';
 import {
   FaExclamationCircle,
@@ -45,11 +41,11 @@ function Content() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [formState, setFormState] = useState<
-    CommunicatedData<undefined | 'email-already-in-use'>
-  >({
-    status: CommunicatedDataStatus.NotInitialized,
-  });
+  const [formState, setFormState] = useState<{
+    loading?: boolean;
+    error?: CommunicationError;
+    data?: undefined | 'email-already-in-use';
+  }>({});
 
   const isFormValid = email && isEmail(email) && password.length >= 6;
 
@@ -60,7 +56,7 @@ function Content() {
       return;
     }
 
-    setFormState({ status: CommunicatedDataStatus.Loading });
+    setFormState({ loading: true });
 
     const res = await api.fetchJSON({
       schema: signupResponseSchema,
@@ -70,13 +66,12 @@ function Content() {
     });
 
     if (res.error) {
-      setFormState({ status: res.error });
+      setFormState({ error: res.error });
       return;
     }
 
     if (res.response.status === 409) {
       setFormState({
-        status: CommunicatedDataStatus.Done,
         data: 'email-already-in-use' as const,
       });
       return;
@@ -142,12 +137,9 @@ function Content() {
                 <button
                   type="submit"
                   className="btn btn-primary w-100"
-                  disabled={
-                    formState.status === CommunicatedDataStatus.Loading ||
-                    !isFormValid
-                  }
+                  disabled={formState.loading || !isFormValid}
                 >
-                  {formState.status === CommunicatedDataStatus.Loading ? (
+                  {formState.loading ? (
                     <span
                       className="spinner-border spinner-border-sm"
                       role="status"
@@ -159,7 +151,7 @@ function Content() {
                 </button>
 
                 <div className=" ">
-                  {formState.status === CommunicatedDataStatus.NotInitialized ? null : formState.status === CommunicatedDataStatus.Loading ? (
+                  {formState.loading ? (
                     <div className="d-flex flex-column justify-content-center align-items-center">
                       <div
                         className="d-block spinner-lg spinner-border text-primary"
@@ -168,27 +160,13 @@ function Content() {
                         <span className="visually-hidden">Loading...</span>
                       </div>
                     </div>
-                  ) : formState.status === CommunicatedDataStatus.Refreshing ? (
-                    <div
-                      style={{
-                        zIndex: 1,
-                        right: 'var(--spacer-3)',
-                        position: 'fixed',
-                      }}
-                    >
-                      <div
-                        className="d-block spinner-lg spinner-border text-primary"
-                        role="status"
-                      >
-                        <span className="visually-hidden">Loading...</span>
-                      </div>
-                    </div>
-                  ) : formState.status === CommunicationError.NotFound ? (
+                  ) : null}
+                  {formState.error === CommunicationError.NotFound ? (
                     <div className="d-flex flex-column justify-content-center align-items-center">
                       <FaSearch style={{ fontSize: '2rem' }} />
                       <p className="mt-3 text-center mb-0">Not Found</p>
                     </div>
-                  ) : formState.status === CommunicationError.ConnectionFailure ? (
+                  ) : formState.error === CommunicationError.ConnectionFailure ? (
                     <div className="d-flex flex-column justify-content-center align-items-center">
                       <FaWifi
                         className="text-danger"
@@ -198,18 +176,18 @@ function Content() {
                         No Internet. Check your connection and try again.
                       </p>
                     </div>
-                  ) : formState.status === CommunicationError.Forbidden ? (
+                  ) : formState.error === CommunicationError.Forbidden ? (
                     <div className="d-flex flex-column justify-content-center align-items-center">
                       <FaLock style={{ fontSize: '2rem' }} />
                       <p className="mt-3 text-center mb-0">
                         You are not allowed to access this content
                       </p>
                     </div>
-                  ) : formState.status === CommunicationError.AbortedAndDealtWith ? (
+                  ) : formState.error === CommunicationError.AbortedAndDealtWith ? (
                     <div className="d-flex flex-column justify-content-center align-items-center">
                       <p className="mt-3 text-center mb-0">Redirecting...</p>
                     </div>
-                  ) : formState.status === CommunicationError.UnexpectedResponse ? (
+                  ) : formState.error === CommunicationError.UnexpectedResponse ? (
                     <div className="d-flex flex-column justify-content-center align-items-center">
                       <FaExclamationCircle
                         className="text-danger"
@@ -220,20 +198,17 @@ function Content() {
                       </p>
                     </div>
                   ) : null}
-                  {formState.status === CommunicatedDataStatus.Done ||
-                  formState.status === CommunicatedDataStatus.Refreshing ? (
-                    formState.data === 'email-already-in-use' ? (
-                      <div className="alert alert-warning mt-3 mb-0">
-                        An account with this email already exists.{' '}
-                        <LinkAnchor
-                          href={LOGIN_ROUTE.getHref({
-                            next: new URLSearchParams(location.search).get('next'),
-                          })}
-                        >
-                          Sign In
-                        </LinkAnchor>
-                      </div>
-                    ) : null
+                  {formState.data === 'email-already-in-use' ? (
+                    <div className="alert alert-warning mt-3 mb-0">
+                      An account with this email already exists.{' '}
+                      <LinkAnchor
+                        href={LOGIN_ROUTE.getHref({
+                          next: new URLSearchParams(location.search).get('next'),
+                        })}
+                      >
+                        Sign In
+                      </LinkAnchor>
+                    </div>
                   ) : null}
                 </div>
               </form>

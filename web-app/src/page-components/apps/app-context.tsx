@@ -6,16 +6,17 @@ import {
   useEffect,
   useState,
 } from 'react';
-import {
-  CommunicatedData,
-  CommunicatedDataStatus,
-} from '../../communicated-data/communicated-data-types';
+import { CommunicationError } from '../../communication-errors/communication-errors';
 import { AppContext } from '../client/index/screens/app/app-screen-types';
 import { throwError } from '../../throw-error';
 
-const AppContextContext = createContext<CommunicatedData<
-  AppContext
-> | null>(null);
+type AppContextState = {
+  loading?: boolean;
+  error?: CommunicationError;
+  data?: AppContext;
+};
+
+const AppContextContext = createContext<AppContextState | null>(null);
 
 export function useAppContext() {
   const context = useContext(AppContextContext);
@@ -24,12 +25,8 @@ export function useAppContext() {
 }
 
 export function AppContextProvider(props: { children: ReactNode }) {
-  const [state, replaceState] = useState<
-    CommunicatedData<
-      AppContext 
-    >
-  >({
-    status: CommunicatedDataStatus.Loading,
+  const [state, replaceState] = useState<AppContextState>({
+    loading: true,
   });
 
   useEffect(() => {
@@ -42,7 +39,6 @@ export function AppContextProvider(props: { children: ReactNode }) {
         window.removeEventListener('message', listener);
 
         replaceState({
-          status: CommunicatedDataStatus.Done,
           data: e.data.data,
         });
       }

@@ -2,10 +2,6 @@ import React from 'react';
 import { GetTrainDestinationsDTO } from '../../../api/routes/train/train-api';
 import { useEffect, useState } from 'react';
 import { AppLayout } from '../app-layout';
-import {
-  CommunicatedData,
-  CommunicatedDataStatus,
-} from '../../../communicated-data/communicated-data-types';
 import { CommunicationError } from '../../../communication-errors/communication-errors';
 import { useTrainAPI } from '../../../api/routes/train/train-api';
 import { AppContext } from '../../client/index/screens/app/app-screen-types';
@@ -26,9 +22,11 @@ function Content(props: { appContext: AppContext }) {
 
   const [lastTotal, replaceLastTotal] = useState<number | undefined>();
 
-  const [destinations, replaceDestinations] = useState<
-    CommunicatedData<GetTrainDestinationsDTO['rows']>
-  >({ status: CommunicatedDataStatus.NotInitialized });
+  const [destinations, replaceDestinations] = useState<{
+    loading?: boolean;
+    error?: CommunicationError;
+    data?: GetTrainDestinationsDTO['rows'];
+  }>({});
 
   const [selectedWorld, replaceSelectedWorld] = useState<
     { name: string; worldId: string } | undefined
@@ -42,11 +40,11 @@ function Content(props: { appContext: AppContext }) {
     if (args?.reset || !destinations.data) {
       replaceLastTotal(undefined);
       replaceDestinations({
-        status: CommunicatedDataStatus.Loading,
+        loading: true,
       });
     } else {
       replaceDestinations({
-        status: CommunicatedDataStatus.Refreshing,
+        loading: true,
         data: destinations.data,
       });
     }
@@ -57,10 +55,9 @@ function Content(props: { appContext: AppContext }) {
     });
 
     if (res.error) {
-      replaceDestinations({ status: res.error });
+      replaceDestinations({ error: res.error });
     } else {
       replaceDestinations({
-        status: CommunicatedDataStatus.Done,
         data: [...(destinations.data ?? []), ...res.response.body.rows],
       });
 
@@ -69,7 +66,11 @@ function Content(props: { appContext: AppContext }) {
   };
 
   useEffect(() => {
-    if (destinations.status === CommunicatedDataStatus.NotInitialized) {
+    if (
+      !destinations.loading &&
+      !destinations.error &&
+      destinations.data === undefined
+    ) {
       (async () => {
         await fetchDestinations({ reset: true });
       })();
@@ -105,7 +106,7 @@ function Content(props: { appContext: AppContext }) {
         </p>
       ) : null}
       <div className=" mt-3">
-        {destinations.status === CommunicatedDataStatus.NotInitialized ? null : destinations.status === CommunicatedDataStatus.Loading ? (
+        {destinations.loading && destinations.data === undefined ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <div
               className="d-block spinner-lg spinner-border text-primary"
@@ -114,7 +115,8 @@ function Content(props: { appContext: AppContext }) {
               <span className="visually-hidden">Loading...</span>
             </div>
           </div>
-        ) : destinations.status === CommunicatedDataStatus.Refreshing ? (
+        ) : null}
+        {destinations.loading && destinations.data !== undefined ? (
           <div
             style={{
               zIndex: 1,
@@ -129,30 +131,31 @@ function Content(props: { appContext: AppContext }) {
               <span className="visually-hidden">Loading...</span>
             </div>
           </div>
-        ) : destinations.status === CommunicationError.NotFound ? (
+        ) : null}
+        {destinations.error === CommunicationError.NotFound ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaSearch style={{ fontSize: '2rem' }} />
             <p className="mt-3 text-center mb-0">Not Found</p>
           </div>
-        ) : destinations.status === CommunicationError.ConnectionFailure ? (
+        ) : destinations.error === CommunicationError.ConnectionFailure ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
             <p className="mt-3 text-center text-danger mb-0">
               No Internet. Check your connection and try again.
             </p>
           </div>
-        ) : destinations.status === CommunicationError.Forbidden ? (
+        ) : destinations.error === CommunicationError.Forbidden ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaLock style={{ fontSize: '2rem' }} />
             <p className="mt-3 text-center mb-0">
               You are not allowed to access this content
             </p>
           </div>
-        ) : destinations.status === CommunicationError.AbortedAndDealtWith ? (
+        ) : destinations.error === CommunicationError.AbortedAndDealtWith ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <p className="mt-3 text-center mb-0">Redirecting...</p>
           </div>
-        ) : destinations.status === CommunicationError.UnexpectedResponse ? (
+        ) : destinations.error === CommunicationError.UnexpectedResponse ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaExclamationCircle
               className="text-danger"
@@ -163,8 +166,7 @@ function Content(props: { appContext: AppContext }) {
             </p>
           </div>
         ) : null}
-        {destinations.status === CommunicatedDataStatus.Done ||
-        destinations.status === CommunicatedDataStatus.Refreshing ? (
+        {destinations.data !== undefined && !destinations.error ? (
           <InfiniteScroll
             dataLength={destinations.data.length}
             next={() => fetchDestinations()}
@@ -172,12 +174,7 @@ function Content(props: { appContext: AppContext }) {
               lastTotal != null && destinations.data.length < lastTotal
             }
             loader={
-              (
-                [
-                  CommunicatedDataStatus.Loading,
-                  CommunicatedDataStatus.Refreshing,
-                ] as string[]
-              ).includes(destinations.status) ? (
+              destinations.loading ? (
                 <span className="d-block text-center">Loading...</span>
               ) : null
             }
@@ -242,7 +239,7 @@ function LoadingGate() {
 
   return (
     <div className=" ">
-      {appContext.status === CommunicatedDataStatus.NotInitialized ? null : appContext.status === CommunicatedDataStatus.Loading ? (
+      {appContext.loading && appContext.data === undefined ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <div
             className="d-block spinner-lg spinner-border text-primary"
@@ -251,7 +248,8 @@ function LoadingGate() {
             <span className="visually-hidden">Loading...</span>
           </div>
         </div>
-      ) : appContext.status === CommunicatedDataStatus.Refreshing ? (
+      ) : null}
+      {appContext.loading && appContext.data !== undefined ? (
         <div
           style={{
             zIndex: 1,
@@ -266,30 +264,31 @@ function LoadingGate() {
             <span className="visually-hidden">Loading...</span>
           </div>
         </div>
-      ) : appContext.status === CommunicationError.NotFound ? (
+      ) : null}
+      {appContext.error === CommunicationError.NotFound ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <FaSearch style={{ fontSize: '2rem' }} />
           <p className="mt-3 text-center mb-0">Not Found</p>
         </div>
-      ) : appContext.status === CommunicationError.ConnectionFailure ? (
+      ) : appContext.error === CommunicationError.ConnectionFailure ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
           <p className="mt-3 text-center text-danger mb-0">
             No Internet. Check your connection and try again.
           </p>
         </div>
-      ) : appContext.status === CommunicationError.Forbidden ? (
+      ) : appContext.error === CommunicationError.Forbidden ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <FaLock style={{ fontSize: '2rem' }} />
           <p className="mt-3 text-center mb-0">
             You are not allowed to access this content
           </p>
         </div>
-      ) : appContext.status === CommunicationError.AbortedAndDealtWith ? (
+      ) : appContext.error === CommunicationError.AbortedAndDealtWith ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <p className="mt-3 text-center mb-0">Redirecting...</p>
         </div>
-      ) : appContext.status === CommunicationError.UnexpectedResponse ? (
+      ) : appContext.error === CommunicationError.UnexpectedResponse ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <FaExclamationCircle
             className="text-danger"
@@ -300,8 +299,7 @@ function LoadingGate() {
           </p>
         </div>
       ) : null}
-      {appContext.status === CommunicatedDataStatus.Done ||
-      appContext.status === CommunicatedDataStatus.Refreshing ? (
+      {appContext.data !== undefined && !appContext.error ? (
         <Content appContext={appContext.data} />
       ) : null}
     </div>

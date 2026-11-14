@@ -6,10 +6,6 @@ import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  CommunicatedData,
-  CommunicatedDataStatus,
-} from '../../../../../communicated-data/communicated-data-types';
-import {
   FaExclamationCircle,
   FaLock,
   FaSearch,
@@ -76,9 +72,11 @@ export function MainSection(props: {
     },
   });
 
-  const [formSubmission, replaceFormSubmission] = useState<
-    CommunicatedData<undefined | 'name-already-taken'>
-  >({ status: CommunicatedDataStatus.Done, data: undefined });
+  const [formSubmission, replaceFormSubmission] = useState<{
+    loading?: boolean;
+    error?: CommunicationError;
+    data?: undefined | 'name-already-taken';
+  }>({});
 
   const backgroundMusicUrl = form.watch('backgroundMusicUrl');
 
@@ -86,7 +84,7 @@ export function MainSection(props: {
     <div className="card">
       <div className="card-body">
         <div className=" ">
-          {formSubmission.status === CommunicatedDataStatus.NotInitialized ? null : formSubmission.status === CommunicatedDataStatus.Loading ? (
+          {formSubmission.loading && formSubmission.data === undefined ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <div
                 className="d-block spinner-lg spinner-border text-primary"
@@ -95,7 +93,8 @@ export function MainSection(props: {
                 <span className="visually-hidden">Loading...</span>
               </div>
             </div>
-          ) : formSubmission.status === CommunicatedDataStatus.Refreshing ? (
+          ) : null}
+          {formSubmission.loading && formSubmission.data !== undefined ? (
             <div
               style={{
                 zIndex: 1,
@@ -110,30 +109,31 @@ export function MainSection(props: {
                 <span className="visually-hidden">Loading...</span>
               </div>
             </div>
-          ) : formSubmission.status === CommunicationError.NotFound ? (
+          ) : null}
+          {formSubmission.error === CommunicationError.NotFound ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaSearch style={{ fontSize: '2rem' }} />
               <p className="mt-3 text-center mb-0">Not Found</p>
             </div>
-          ) : formSubmission.status === CommunicationError.ConnectionFailure ? (
+          ) : formSubmission.error === CommunicationError.ConnectionFailure ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
               <p className="mt-3 text-center text-danger mb-0">
                 No Internet. Check your connection and try again.
               </p>
             </div>
-          ) : formSubmission.status === CommunicationError.Forbidden ? (
+          ) : formSubmission.error === CommunicationError.Forbidden ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaLock style={{ fontSize: '2rem' }} />
               <p className="mt-3 text-center mb-0">
                 You are not allowed to access this content
               </p>
             </div>
-          ) : formSubmission.status === CommunicationError.AbortedAndDealtWith ? (
+          ) : formSubmission.error === CommunicationError.AbortedAndDealtWith ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p className="mt-3 text-center mb-0">Redirecting...</p>
             </div>
-          ) : formSubmission.status === CommunicationError.UnexpectedResponse ? (
+          ) : formSubmission.error === CommunicationError.UnexpectedResponse ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaExclamationCircle
                 className="text-danger"
@@ -144,12 +144,11 @@ export function MainSection(props: {
               </p>
             </div>
           ) : null}
-          {formSubmission.status === CommunicatedDataStatus.Done ||
-          formSubmission.status === CommunicatedDataStatus.Refreshing ? (
+          {!formSubmission.loading && !formSubmission.error ? (
             <form
               onSubmit={form.handleSubmit(async (formData) => {
                 replaceFormSubmission({
-                  status: CommunicatedDataStatus.Loading,
+                  loading: true,
                 });
 
                 const res = await api.updateLand({
@@ -158,24 +157,20 @@ export function MainSection(props: {
                 });
 
                 if (res.error) {
-                  replaceFormSubmission({ status: res.error });
+                  replaceFormSubmission({ error: res.error });
                 } else {
                   if (res.response.status === 409) {
                     if (res.response.body?.error === 'name-already-taken') {
                       replaceFormSubmission({
-                        status: CommunicatedDataStatus.Done,
                         data: res.response.body.error,
                       });
                     } else {
                       replaceFormSubmission({
-                        status: CommunicationError.UnexpectedResponse,
+                        error: CommunicationError.UnexpectedResponse,
                       });
                     }
                   } else {
-                    replaceFormSubmission({
-                      status: CommunicatedDataStatus.Done,
-                      data: undefined,
-                    });
+                    replaceFormSubmission({});
 
                     props.onSuccessfulSave();
                   }

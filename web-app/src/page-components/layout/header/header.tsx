@@ -5,7 +5,6 @@ import * as styles from './header.module.scss';
 import { LinkAnchor } from '../../../ui/link-anchor';
 import { PROJECT_NAME } from '../../../project-details';
 import { FaBars, FaUser } from 'react-icons/fa';
-import { CommunicatedDataStatus } from '../../../communicated-data/communicated-data-types';
 import { CommunicationError } from '../../../communication-errors/communication-errors';
 import {
   FaExclamationCircle,
@@ -128,12 +127,12 @@ export function Header(props: Props) {
 
               <div
                 className={
-                  session.status === CommunicatedDataStatus.Refreshing
+                  session.loading && session.data !== undefined
                     ? 'd-flex flex-row align-items-center ms-auto'
                     : ' ms-auto'
                 }
               >
-                {session.status === CommunicatedDataStatus.NotInitialized ? null : session.status === CommunicatedDataStatus.Loading ? (
+                {session.loading && session.data === undefined ? (
                   <div className="d-flex flex-row justify-content-center align-items-center">
                     <div
                       className="d-block spinner-sm spinner-border text-primary"
@@ -142,7 +141,8 @@ export function Header(props: Props) {
                       <span className="visually-hidden">Loading...</span>
                     </div>
                   </div>
-                ) : session.status === CommunicatedDataStatus.Refreshing ? (
+                ) : null}
+                {session.loading && session.data !== undefined ? (
                   <div style={{ marginRight: 'var(--spacer-2)' }}>
                     <div
                       className="d-block spinner-sm spinner-border text-primary"
@@ -151,33 +151,33 @@ export function Header(props: Props) {
                       <span className="visually-hidden">Loading...</span>
                     </div>
                   </div>
-                ) : session.status === CommunicationError.NotFound ? (
+                ) : null}
+                {session.error === CommunicationError.NotFound ? (
                   <div className="d-flex flex-row justify-content-center align-items-center">
                     <FaSearch />
                     <p className="ms-2 mb-0">Not Found</p>
                   </div>
-                ) : session.status === CommunicationError.ConnectionFailure ? (
+                ) : session.error === CommunicationError.ConnectionFailure ? (
                   <div className="d-flex flex-row justify-content-center align-items-center">
                     <FaWifi className="text-danger" />
                     <p className="ms-2 text-danger mb-0">No Internet</p>
                   </div>
-                ) : session.status === CommunicationError.Forbidden ? (
+                ) : session.error === CommunicationError.Forbidden ? (
                   <div className="d-flex flex-row justify-content-center align-items-center">
                     <FaLock />
                     <p className="ms-2 mb-0">Not Allowed</p>
                   </div>
-                ) : session.status === CommunicationError.AbortedAndDealtWith ? (
+                ) : session.error === CommunicationError.AbortedAndDealtWith ? (
                   <div className="d-flex flex-row justify-content-center align-items-center">
                     <p className="ms-2 mb-0">Redirecting...</p>
                   </div>
-                ) : session.status === CommunicationError.UnexpectedResponse ? (
+                ) : session.error === CommunicationError.UnexpectedResponse ? (
                   <div className="d-flex flex-row justify-content-center align-items-center">
                     <FaExclamationCircle className="text-danger" />
                     <p className="text-danger ms-2 mb-0">Unexpected Error</p>
                   </div>
                 ) : null}
-                {session.status === CommunicatedDataStatus.Done ||
-                session.status === CommunicatedDataStatus.Refreshing ? (
+                {session.data !== undefined && !session.error ? (
                   <ul className="navbar-nav">
                     <>
                       {session.data ? (

@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Layout } from '../../layout/layout';
 import { RouteComponentProps } from '@reach/router';
-import {
-  CommunicatedData,
-  CommunicatedDataStatus,
-} from '../../../communicated-data/communicated-data-types';
 import { CommunicationError } from '../../../communication-errors/communication-errors';
 import {
   FaExclamationCircle,
@@ -30,21 +26,22 @@ function Content(props: {
 
   const [pressedStart, replacePressedStart] = useState(false);
 
-  const [landToResumeFrom, replaceLandToResumeFrom] = useState<
-    CommunicatedData<ResumeLandNavigationDTO>
-  >({ status: CommunicatedDataStatus.NotInitialized });
+  const [landToResumeFrom, replaceLandToResumeFrom] = useState<{
+    loading?: boolean;
+    error?: CommunicationError;
+    data?: ResumeLandNavigationDTO;
+  }>({});
 
   useEffect(() => {
     (async () => {
-      replaceLandToResumeFrom({ status: CommunicatedDataStatus.Loading });
+      replaceLandToResumeFrom({ loading: true });
 
       const res = await api.resume();
 
       if (res.error) {
-        replaceLandToResumeFrom({ status: res.error });
+        replaceLandToResumeFrom({ error: res.error });
       } else {
         replaceLandToResumeFrom({
-          status: CommunicatedDataStatus.Done,
           data: res.response.body,
         });
       }
@@ -57,7 +54,7 @@ function Content(props: {
 
   return (
     <div className=" ">
-      {session.status === CommunicatedDataStatus.NotInitialized ? null : session.status === CommunicatedDataStatus.Loading ? (
+      {session.loading && session.data === undefined ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <div
             className="d-block spinner-lg spinner-border text-primary"
@@ -66,7 +63,8 @@ function Content(props: {
             <span className="visually-hidden">Loading...</span>
           </div>
         </div>
-      ) : session.status === CommunicatedDataStatus.Refreshing ? (
+      ) : null}
+      {session.loading && session.data !== undefined ? (
         <div
           style={{
             zIndex: 1,
@@ -81,30 +79,31 @@ function Content(props: {
             <span className="visually-hidden">Loading...</span>
           </div>
         </div>
-      ) : session.status === CommunicationError.NotFound ? (
+      ) : null}
+      {session.error === CommunicationError.NotFound ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <FaSearch style={{ fontSize: '2rem' }} />
           <p className="mt-3 text-center mb-0">Not Found</p>
         </div>
-      ) : session.status === CommunicationError.ConnectionFailure ? (
+      ) : session.error === CommunicationError.ConnectionFailure ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
           <p className="mt-3 text-center text-danger mb-0">
             No Internet. Check your connection and try again.
           </p>
         </div>
-      ) : session.status === CommunicationError.Forbidden ? (
+      ) : session.error === CommunicationError.Forbidden ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <FaLock style={{ fontSize: '2rem' }} />
           <p className="mt-3 text-center mb-0">
             You are not allowed to access this content
           </p>
         </div>
-      ) : session.status === CommunicationError.AbortedAndDealtWith ? (
+      ) : session.error === CommunicationError.AbortedAndDealtWith ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <p className="mt-3 text-center mb-0">Redirecting...</p>
         </div>
-      ) : session.status === CommunicationError.UnexpectedResponse ? (
+      ) : session.error === CommunicationError.UnexpectedResponse ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <FaExclamationCircle
             className="text-danger"
@@ -115,10 +114,9 @@ function Content(props: {
           </p>
         </div>
       ) : null}
-      {session.status === CommunicatedDataStatus.Done ||
-      session.status === CommunicatedDataStatus.Refreshing ? (
+      {session.data !== undefined && !session.error ? (
         <div className=" ">
-          {landToResumeFrom.status === CommunicatedDataStatus.NotInitialized ? null : landToResumeFrom.status === CommunicatedDataStatus.Loading ? (
+          {landToResumeFrom.loading && landToResumeFrom.data === undefined ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <div
                 className="d-block spinner-lg spinner-border text-primary"
@@ -127,7 +125,8 @@ function Content(props: {
                 <span className="visually-hidden">Loading...</span>
               </div>
             </div>
-          ) : landToResumeFrom.status === CommunicatedDataStatus.Refreshing ? (
+          ) : null}
+          {landToResumeFrom.loading && landToResumeFrom.data !== undefined ? (
             <div
               style={{
                 zIndex: 1,
@@ -142,30 +141,31 @@ function Content(props: {
                 <span className="visually-hidden">Loading...</span>
               </div>
             </div>
-          ) : landToResumeFrom.status === CommunicationError.NotFound ? (
+          ) : null}
+          {landToResumeFrom.error === CommunicationError.NotFound ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaSearch style={{ fontSize: '2rem' }} />
               <p className="mt-3 text-center mb-0">Not Found</p>
             </div>
-          ) : landToResumeFrom.status === CommunicationError.ConnectionFailure ? (
+          ) : landToResumeFrom.error === CommunicationError.ConnectionFailure ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
               <p className="mt-3 text-center text-danger mb-0">
                 No Internet. Check your connection and try again.
               </p>
             </div>
-          ) : landToResumeFrom.status === CommunicationError.Forbidden ? (
+          ) : landToResumeFrom.error === CommunicationError.Forbidden ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaLock style={{ fontSize: '2rem' }} />
               <p className="mt-3 text-center mb-0">
                 You are not allowed to access this content
               </p>
             </div>
-          ) : landToResumeFrom.status === CommunicationError.AbortedAndDealtWith ? (
+          ) : landToResumeFrom.error === CommunicationError.AbortedAndDealtWith ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p className="mt-3 text-center mb-0">Redirecting...</p>
             </div>
-          ) : landToResumeFrom.status === CommunicationError.UnexpectedResponse ? (
+          ) : landToResumeFrom.error === CommunicationError.UnexpectedResponse ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaExclamationCircle
                 className="text-danger"
@@ -176,8 +176,7 @@ function Content(props: {
               </p>
             </div>
           ) : null}
-          {landToResumeFrom.status === CommunicatedDataStatus.Done ||
-          landToResumeFrom.status === CommunicatedDataStatus.Refreshing ? (
+          {landToResumeFrom.data !== undefined && !landToResumeFrom.error ? (
             pressedStart ? (
               <GameFrame
                 session={session.data}

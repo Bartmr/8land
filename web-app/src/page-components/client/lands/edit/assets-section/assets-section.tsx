@@ -1,9 +1,5 @@
 import React from 'react';
 import { useState } from 'react';
-import {
-  CommunicatedData,
-  CommunicatedDataStatus,
-} from '../../../../../communicated-data/communicated-data-types';
 import { CommunicationError } from '../../../../../communication-errors/communication-errors';
 import {
   FaExclamationCircle,
@@ -31,8 +27,10 @@ export function AssetsSection(props: {
   const [tilesetImageFieldState, replaceTilesetImageFieldState] =
     useState<TilesetImageFieldState>(undefined);
 
-  const [formSubmissionStatus, replaceFormSubmissionStatus] = useState<
-    CommunicatedData<
+  const [formSubmissionStatus, replaceFormSubmissionStatus] = useState<{
+    loading?: boolean;
+    error?: CommunicationError;
+    data?:
       | {
           error:
             | 'start-lands-limit-exceeded'
@@ -42,12 +40,11 @@ export function AssetsSection(props: {
             | 'must-have-start-block-in-first-land'
             | 'cannot-have-start-block-in-admin-lands';
         }
-      | undefined
-    >
-  >({ status: CommunicatedDataStatus.NotInitialized });
+      | undefined;
+  }>({});
 
   const submitForm = async (args: { mapFile: File; tilesetFile: File }) => {
-    replaceFormSubmissionStatus({ status: CommunicatedDataStatus.Loading });
+    replaceFormSubmissionStatus({ loading: true });
 
     const formData = new FormData();
 
@@ -60,17 +57,14 @@ export function AssetsSection(props: {
     });
 
     if (res.error) {
-      replaceFormSubmissionStatus({ status: res.error });
+      replaceFormSubmissionStatus({ error: res.error });
     } else {
       if (res.response.error) {
         replaceFormSubmissionStatus({
-          status: CommunicatedDataStatus.Done,
           data: res.response,
         });
       } else {
-        replaceFormSubmissionStatus({
-          status: CommunicatedDataStatus.NotInitialized,
-        });
+        replaceFormSubmissionStatus({});
 
         replaceTiledJSONFieldState(undefined);
         replaceTilesetImageFieldState(undefined);
@@ -120,7 +114,7 @@ export function AssetsSection(props: {
 
           <div className="my-3">
             <div className=" ">
-              {formSubmissionStatus.status === CommunicatedDataStatus.NotInitialized ? null : formSubmissionStatus.status === CommunicatedDataStatus.Loading ? (
+              {formSubmissionStatus.loading && formSubmissionStatus.data === undefined ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <div
                     className="d-block spinner-lg spinner-border text-primary"
@@ -129,7 +123,8 @@ export function AssetsSection(props: {
                     <span className="visually-hidden">Loading...</span>
                   </div>
                 </div>
-              ) : formSubmissionStatus.status === CommunicatedDataStatus.Refreshing ? (
+              ) : null}
+              {formSubmissionStatus.loading && formSubmissionStatus.data !== undefined ? (
                 <div
                   style={{
                     zIndex: 1,
@@ -144,12 +139,13 @@ export function AssetsSection(props: {
                     <span className="visually-hidden">Loading...</span>
                   </div>
                 </div>
-              ) : formSubmissionStatus.status === CommunicationError.NotFound ? (
+              ) : null}
+              {formSubmissionStatus.error === CommunicationError.NotFound ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <FaSearch style={{ fontSize: '2rem' }} />
                   <p className="mt-3 text-center mb-0">Not Found</p>
                 </div>
-              ) : formSubmissionStatus.status === CommunicationError.ConnectionFailure ? (
+              ) : formSubmissionStatus.error === CommunicationError.ConnectionFailure ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <FaWifi
                     className="text-danger"
@@ -159,18 +155,18 @@ export function AssetsSection(props: {
                     No Internet. Check your connection and try again.
                   </p>
                 </div>
-              ) : formSubmissionStatus.status === CommunicationError.Forbidden ? (
+              ) : formSubmissionStatus.error === CommunicationError.Forbidden ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <FaLock style={{ fontSize: '2rem' }} />
                   <p className="mt-3 text-center mb-0">
                     You are not allowed to access this content
                   </p>
                 </div>
-              ) : formSubmissionStatus.status === CommunicationError.AbortedAndDealtWith ? (
+              ) : formSubmissionStatus.error === CommunicationError.AbortedAndDealtWith ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <p className="mt-3 text-center mb-0">Redirecting...</p>
                 </div>
-              ) : formSubmissionStatus.status === CommunicationError.UnexpectedResponse ? (
+              ) : formSubmissionStatus.error === CommunicationError.UnexpectedResponse ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <FaExclamationCircle
                     className="text-danger"
@@ -181,8 +177,7 @@ export function AssetsSection(props: {
                   </p>
                 </div>
               ) : null}
-              {formSubmissionStatus.status === CommunicatedDataStatus.Done ||
-              formSubmissionStatus.status === CommunicatedDataStatus.Refreshing ? (
+              {formSubmissionStatus.data !== undefined && !formSubmissionStatus.error ? (
                 <span className="text-danger">
                   {(() => {
                     const data = formSubmissionStatus.data;
@@ -223,9 +218,7 @@ export function AssetsSection(props: {
             <div className="mt-3">
               <button
                 className="d-block w-100 btn btn-success"
-                disabled={
-                  formSubmissionStatus.status === CommunicatedDataStatus.Loading
-                }
+                disabled={formSubmissionStatus.loading}
                 onClick={async () => {
                   await submitForm({
                     mapFile: tiledJSONFieldState.value,

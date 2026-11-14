@@ -3,10 +3,6 @@ import { Layout } from '../../../layout/layout';
 import { RouteComponentProps } from '@reach/router';
 import { AssetsSection } from './assets-section/assets-section';
 import { useEffect, useState } from 'react';
-import {
-  CommunicatedData,
-  CommunicatedDataStatus,
-} from '../../../../communicated-data/communicated-data-types';
 import { GetLandDTO } from '../../../../api/routes/lands/lands-api';
 import { useParams } from '@reach/router';
 import { uuid, z } from 'zod';
@@ -31,15 +27,16 @@ import { LANDS_ROUTE } from '../lands-routes';
 export function EditLandWithRouteProps(props: { id: string }) {
   const api = useLandsAPI();
 
-  const [land, replaceLand] = useState<CommunicatedData<GetLandDTO>>({
-    status: CommunicatedDataStatus.NotInitialized,
-  });
+  const [land, replaceLand] = useState<{
+    loading?: boolean;
+    error?: CommunicationError;
+    data?: GetLandDTO;
+  }>({});
 
-  const [deleteResult, replaceDeleteResult] = useState<
-    CommunicatedData<undefined>
-  >({
-    status: CommunicatedDataStatus.NotInitialized,
-  });
+  const [deleteResult, replaceDeleteResult] = useState<{
+    loading?: boolean;
+    error?: CommunicationError;
+  }>({});
 
   const [successfulSave, replaceSuccessfulSave] = useState(false);
 
@@ -51,22 +48,19 @@ export function EditLandWithRouteProps(props: { id: string }) {
     );
 
     if (confirmed) {
-      replaceDeleteResult({ status: CommunicatedDataStatus.Loading });
+      replaceDeleteResult({ loading: true });
 
       const res = await api.deleteLand({ landId: props.id });
 
       if (res.error) {
-        replaceDeleteResult({ status: res.error });
+        replaceDeleteResult({ error: res.error });
       } else {
         if (res.response.status === 'must-delete-blocks-first') {
           window.alert(
             'You must delete all blocks in this land and all other blocks pointing to it before can delete this land.',
           );
 
-          replaceDeleteResult({
-            status: CommunicatedDataStatus.Done,
-            data: undefined,
-          });
+          replaceDeleteResult({});
         } else {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           navigate(LANDS_ROUTE.getHref({ deleted: true }));
@@ -76,15 +70,14 @@ export function EditLandWithRouteProps(props: { id: string }) {
   };
 
   const fetchLand = async () => {
-    replaceLand({ status: CommunicatedDataStatus.Loading });
+    replaceLand({ loading: true });
 
     const res = await api.getEditableLand({ landId: props.id });
 
     if (res.error) {
-      replaceLand({ status: res.error });
+      replaceLand({ error: res.error });
     } else {
       replaceLand({
-        status: CommunicatedDataStatus.Done,
         data: res.response.body,
       });
     }
@@ -114,7 +107,7 @@ export function EditLandWithRouteProps(props: { id: string }) {
         <Toast.Header closeButton={false}>Changes saved</Toast.Header>
       </Toast>
       <div className=" ">
-        {land.status === CommunicatedDataStatus.NotInitialized ? null : land.status === CommunicatedDataStatus.Loading ? (
+        {land.loading && land.data === undefined ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <div
               className="d-block spinner-lg spinner-border text-primary"
@@ -123,7 +116,8 @@ export function EditLandWithRouteProps(props: { id: string }) {
               <span className="visually-hidden">Loading...</span>
             </div>
           </div>
-        ) : land.status === CommunicatedDataStatus.Refreshing ? (
+        ) : null}
+        {land.loading && land.data !== undefined ? (
           <div
             style={{
               zIndex: 1,
@@ -138,30 +132,31 @@ export function EditLandWithRouteProps(props: { id: string }) {
               <span className="visually-hidden">Loading...</span>
             </div>
           </div>
-        ) : land.status === CommunicationError.NotFound ? (
+        ) : null}
+        {land.error === CommunicationError.NotFound ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaSearch style={{ fontSize: '2rem' }} />
             <p className="mt-3 text-center mb-0">Not Found</p>
           </div>
-        ) : land.status === CommunicationError.ConnectionFailure ? (
+        ) : land.error === CommunicationError.ConnectionFailure ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
             <p className="mt-3 text-center text-danger mb-0">
               No Internet. Check your connection and try again.
             </p>
           </div>
-        ) : land.status === CommunicationError.Forbidden ? (
+        ) : land.error === CommunicationError.Forbidden ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaLock style={{ fontSize: '2rem' }} />
             <p className="mt-3 text-center mb-0">
               You are not allowed to access this content
             </p>
           </div>
-        ) : land.status === CommunicationError.AbortedAndDealtWith ? (
+        ) : land.error === CommunicationError.AbortedAndDealtWith ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <p className="mt-3 text-center mb-0">Redirecting...</p>
           </div>
-        ) : land.status === CommunicationError.UnexpectedResponse ? (
+        ) : land.error === CommunicationError.UnexpectedResponse ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaExclamationCircle
               className="text-danger"
@@ -172,8 +167,7 @@ export function EditLandWithRouteProps(props: { id: string }) {
             </p>
           </div>
         ) : null}
-        {land.status === CommunicatedDataStatus.Done ||
-        land.status === CommunicatedDataStatus.Refreshing ? (
+        {land.data !== undefined && !land.error ? (
           <>
             <div className="mb-4 d-flex justify-content-between align-items-center flex-wrap">
               <h1 className="mb-0">Edit Land</h1>
@@ -183,7 +177,7 @@ export function EditLandWithRouteProps(props: { id: string }) {
                   disabled={!land.data || land.data.isStartLand}
                   className="btn btn-danger"
                 >
-                  {deleteResult.status === CommunicatedDataStatus.Loading ? (
+                  {deleteResult.loading ? (
                     <span className="spinner-border spinner-sm" />
                   ) : (
                     <FaTrash />

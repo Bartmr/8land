@@ -3,10 +3,6 @@ import { DynamicBlockType } from '../../../../../api/routes/blocks/blocks-api';
 import { GetLandDTO } from '../../../../../api/routes/lands/lands-api';
 import { FaTrash } from 'react-icons/fa';
 import { useState } from 'react';
-import {
-  CommunicatedData,
-  CommunicatedDataStatus,
-} from '../../../../../communicated-data/communicated-data-types';
 import { CommunicationError } from '../../../../../communication-errors/communication-errors';
 import {
   FaExclamationCircle,
@@ -24,9 +20,10 @@ export function BlocksSection(props: {
 }) {
   const api = useBlocksAPI();
 
-  const [deletionState, replaceDeletionState] = useState<
-    CommunicatedData<undefined>
-  >({ status: CommunicatedDataStatus.Done, data: undefined });
+  const [deletionState, replaceDeletionState] = useState<{
+    loading?: boolean;
+    error?: CommunicationError;
+  }>({});
 
   const deleteBlock = async (
     blockType: DynamicBlockType.Door | DynamicBlockType.App,
@@ -41,17 +38,14 @@ Players who are currently in this land will be teleported back to the train stat
       return;
     }
 
-    replaceDeletionState({ status: CommunicatedDataStatus.Loading });
+    replaceDeletionState({ loading: true });
 
     const res = await api.deleteBlock({ blockType, blockId });
 
     if (res.error) {
-      replaceDeletionState({ status: res.error });
+      replaceDeletionState({ error: res.error });
     } else {
-      replaceDeletionState({
-        status: CommunicatedDataStatus.Done,
-        data: undefined,
-      });
+      replaceDeletionState({});
       props.onBlockDeleted();
     }
   };
@@ -85,7 +79,7 @@ Players who are currently in this land will be teleported back to the train stat
           <hr />
           <h3>Door Blocks</h3>
           <div className=" ">
-            {deletionState.status === CommunicatedDataStatus.NotInitialized ? null : deletionState.status === CommunicatedDataStatus.Loading ? (
+            {deletionState.loading ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <div
                   className="d-block spinner-lg spinner-border text-primary"
@@ -94,45 +88,31 @@ Players who are currently in this land will be teleported back to the train stat
                   <span className="visually-hidden">Loading...</span>
                 </div>
               </div>
-            ) : deletionState.status === CommunicatedDataStatus.Refreshing ? (
-              <div
-                style={{
-                  zIndex: 1,
-                  right: 'var(--spacer-3)',
-                  position: 'fixed',
-                }}
-              >
-                <div
-                  className="d-block spinner-lg spinner-border text-primary"
-                  role="status"
-                >
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              </div>
-            ) : deletionState.status === CommunicationError.NotFound ? (
+            ) : null}
+            {deletionState.error === CommunicationError.NotFound ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaSearch style={{ fontSize: '2rem' }} />
                 <p className="mt-3 text-center mb-0">Not Found</p>
               </div>
-            ) : deletionState.status === CommunicationError.ConnectionFailure ? (
+            ) : deletionState.error === CommunicationError.ConnectionFailure ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
                 <p className="mt-3 text-center text-danger mb-0">
                   No Internet. Check your connection and try again.
                 </p>
               </div>
-            ) : deletionState.status === CommunicationError.Forbidden ? (
+            ) : deletionState.error === CommunicationError.Forbidden ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaLock style={{ fontSize: '2rem' }} />
                 <p className="mt-3 text-center mb-0">
                   You are not allowed to access this content
                 </p>
               </div>
-            ) : deletionState.status === CommunicationError.AbortedAndDealtWith ? (
+            ) : deletionState.error === CommunicationError.AbortedAndDealtWith ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <p className="mt-3 text-center mb-0">Redirecting...</p>
               </div>
-            ) : deletionState.status === CommunicationError.UnexpectedResponse ? (
+            ) : deletionState.error === CommunicationError.UnexpectedResponse ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaExclamationCircle
                   className="text-danger"
@@ -143,8 +123,7 @@ Players who are currently in this land will be teleported back to the train stat
                 </p>
               </div>
             ) : null}
-            {deletionState.status === CommunicatedDataStatus.Done ||
-            deletionState.status === CommunicatedDataStatus.Refreshing ? (
+            {!deletionState.loading && !deletionState.error ? (
               <ul className="list-group">
                 {props.land.doorBlocks.map((b) => {
                   return (

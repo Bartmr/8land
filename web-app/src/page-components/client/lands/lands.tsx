@@ -2,10 +2,6 @@ import React from 'react';
 import { IndexLandsDTO, GetLandsToClaimDTO } from '../../../api/routes/lands/lands-api';
 import { useEffect, useState } from 'react';
 import {
-  CommunicatedData,
-  CommunicatedDataStatus,
-} from '../../../communicated-data/communicated-data-types';
-import {
   FaExclamationCircle,
   FaLock,
   FaSearch,
@@ -28,36 +24,36 @@ export function Lands(_props: RouteComponentProps) {
 
   const [newLandName, replaceNewLandName] = useState('');
 
-  const [newLandSubmission, replaceNewLandSubmission] = useState<
-    CommunicatedData<
+  const [newLandSubmission, replaceNewLandSubmission] = useState<{
+    loading?: boolean;
+    error?: CommunicationError;
+    data?:
       | undefined
       | { error: 'name-already-taken' }
       | { error: 'lands-limit-exceeded'; limit: number }
-      | { error: 'cannot-create-more-lands-without-start-block' }
-    >
-  >({
-    status: CommunicatedDataStatus.Done,
-    data: undefined,
-  });
+      | { error: 'cannot-create-more-lands-without-start-block' };
+  }>({});
 
-  const [landsToClaim, replaceLandsToClaim] = useState<
-    CommunicatedData<GetLandsToClaimDTO>
-  >({
-    status: CommunicatedDataStatus.NotInitialized,
-  });
+  const [landsToClaim, replaceLandsToClaim] = useState<{
+    loading?: boolean;
+    error?: CommunicationError;
+    data?: GetLandsToClaimDTO;
+  }>({});
 
-  const [lands, replaceLands] = useState<CommunicatedData<IndexLandsDTO>>({
-    status: CommunicatedDataStatus.NotInitialized,
-  });
+  const [lands, replaceLands] = useState<{
+    loading?: boolean;
+    error?: CommunicationError;
+    data?: IndexLandsDTO;
+  }>({});
 
   const fetchLands = async () => {
-    replaceLands({ status: CommunicatedDataStatus.Loading });
+    replaceLands({ loading: true });
 
     const res = await api.getLandsIndex();
 
     if (res.error) {
       replaceLands({
-        status: res.error,
+        error: res.error,
       });
     } else {
       if (res.response.body.total > res.response.body.limit) {
@@ -66,11 +62,10 @@ export function Lands(_props: RouteComponentProps) {
         window.alert('Lands page needs pagination');
 
         replaceLands({
-          status: CommunicationError.UnexpectedResponse,
+          error: CommunicationError.UnexpectedResponse,
         });
       } else {
         replaceLands({
-          status: CommunicatedDataStatus.Done,
           data: res.response.body,
         });
       }
@@ -78,17 +73,16 @@ export function Lands(_props: RouteComponentProps) {
   };
 
   const fetchLandsToClaim = async () => {
-    replaceLandsToClaim({ status: CommunicatedDataStatus.Loading });
+    replaceLandsToClaim({ loading: true });
 
     const res = await api.getLandsToClaim();
 
     if (res.error) {
-      replaceLands({
-        status: res.error,
+      replaceLandsToClaim({
+        error: res.error,
       });
     } else {
       replaceLandsToClaim({
-        status: CommunicatedDataStatus.Done,
         data: res.response.body,
       });
     }
@@ -103,25 +97,21 @@ export function Lands(_props: RouteComponentProps) {
       return;
     }
 
-    replaceNewLandSubmission({ status: CommunicatedDataStatus.Loading });
+    replaceNewLandSubmission({ loading: true });
 
     const res = await api.createLand({ name: newLandName });
 
     if (res.error) {
       replaceNewLandSubmission({
-        status: res.error,
+        error: res.error,
       });
     } else {
       if (res.response.error) {
         replaceNewLandSubmission({
-          status: CommunicatedDataStatus.Done,
           data: res.response,
         });
       } else {
-        replaceNewLandSubmission({
-          status: CommunicatedDataStatus.Done,
-          data: undefined,
-        });
+        replaceNewLandSubmission({});
 
         replaceNewLandName('');
 
@@ -167,7 +157,7 @@ export function Lands(_props: RouteComponentProps) {
               </p>
             </div>
             <div className=" col-12 col-md-6">
-              {landsToClaim.status === CommunicatedDataStatus.NotInitialized ? null : landsToClaim.status === CommunicatedDataStatus.Loading ? (
+              {landsToClaim.loading && landsToClaim.data === undefined ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <div
                     className="d-block spinner-lg spinner-border text-primary"
@@ -176,7 +166,8 @@ export function Lands(_props: RouteComponentProps) {
                     <span className="visually-hidden">Loading...</span>
                   </div>
                 </div>
-              ) : landsToClaim.status === CommunicatedDataStatus.Refreshing ? (
+              ) : null}
+              {landsToClaim.loading && landsToClaim.data !== undefined ? (
                 <div
                   style={{
                     zIndex: 1,
@@ -191,12 +182,13 @@ export function Lands(_props: RouteComponentProps) {
                     <span className="visually-hidden">Loading...</span>
                   </div>
                 </div>
-              ) : landsToClaim.status === CommunicationError.NotFound ? (
+              ) : null}
+              {landsToClaim.error === CommunicationError.NotFound ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <FaSearch style={{ fontSize: '2rem' }} />
                   <p className="mt-3 text-center mb-0">Not Found</p>
                 </div>
-              ) : landsToClaim.status === CommunicationError.ConnectionFailure ? (
+              ) : landsToClaim.error === CommunicationError.ConnectionFailure ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <FaWifi
                     className="text-danger"
@@ -206,18 +198,18 @@ export function Lands(_props: RouteComponentProps) {
                     No Internet. Check your connection and try again.
                   </p>
                 </div>
-              ) : landsToClaim.status === CommunicationError.Forbidden ? (
+              ) : landsToClaim.error === CommunicationError.Forbidden ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <FaLock style={{ fontSize: '2rem' }} />
                   <p className="mt-3 text-center mb-0">
                     You are not allowed to access this content
                   </p>
                 </div>
-              ) : landsToClaim.status === CommunicationError.AbortedAndDealtWith ? (
+              ) : landsToClaim.error === CommunicationError.AbortedAndDealtWith ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <p className="mt-3 text-center mb-0">Redirecting...</p>
                 </div>
-              ) : landsToClaim.status === CommunicationError.UnexpectedResponse ? (
+              ) : landsToClaim.error === CommunicationError.UnexpectedResponse ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <FaExclamationCircle
                     className="text-danger"
@@ -228,8 +220,7 @@ export function Lands(_props: RouteComponentProps) {
                   </p>
                 </div>
               ) : null}
-              {landsToClaim.status === CommunicatedDataStatus.Done ||
-              landsToClaim.status === CommunicatedDataStatus.Refreshing ? (
+              {landsToClaim.data !== undefined && !landsToClaim.error ? (
                 landsToClaim.data.free === 0 ? (
                   <div className="bg-warning p-3">
                     {START_LANDS_LIMIT_EXCEEDED_MESSAGE}
@@ -247,7 +238,7 @@ export function Lands(_props: RouteComponentProps) {
             </div>
           </div>
           <div className=" ">
-            {newLandSubmission.status === CommunicatedDataStatus.NotInitialized ? null : newLandSubmission.status === CommunicatedDataStatus.Loading ? (
+            {newLandSubmission.loading && newLandSubmission.data === undefined ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <div
                   className="d-block spinner-lg spinner-border text-primary"
@@ -256,7 +247,8 @@ export function Lands(_props: RouteComponentProps) {
                   <span className="visually-hidden">Loading...</span>
                 </div>
               </div>
-            ) : newLandSubmission.status === CommunicatedDataStatus.Refreshing ? (
+            ) : null}
+            {newLandSubmission.loading && newLandSubmission.data !== undefined ? (
               <div
                 style={{
                   zIndex: 1,
@@ -271,30 +263,31 @@ export function Lands(_props: RouteComponentProps) {
                   <span className="visually-hidden">Loading...</span>
                 </div>
               </div>
-            ) : newLandSubmission.status === CommunicationError.NotFound ? (
+            ) : null}
+            {newLandSubmission.error === CommunicationError.NotFound ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaSearch style={{ fontSize: '2rem' }} />
                 <p className="mt-3 text-center mb-0">Not Found</p>
               </div>
-            ) : newLandSubmission.status === CommunicationError.ConnectionFailure ? (
+            ) : newLandSubmission.error === CommunicationError.ConnectionFailure ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
                 <p className="mt-3 text-center text-danger mb-0">
                   No Internet. Check your connection and try again.
                 </p>
               </div>
-            ) : newLandSubmission.status === CommunicationError.Forbidden ? (
+            ) : newLandSubmission.error === CommunicationError.Forbidden ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaLock style={{ fontSize: '2rem' }} />
                 <p className="mt-3 text-center mb-0">
                   You are not allowed to access this content
                 </p>
               </div>
-            ) : newLandSubmission.status === CommunicationError.AbortedAndDealtWith ? (
+            ) : newLandSubmission.error === CommunicationError.AbortedAndDealtWith ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <p className="mt-3 text-center mb-0">Redirecting...</p>
               </div>
-            ) : newLandSubmission.status === CommunicationError.UnexpectedResponse ? (
+            ) : newLandSubmission.error === CommunicationError.UnexpectedResponse ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaExclamationCircle
                   className="text-danger"
@@ -305,8 +298,7 @@ export function Lands(_props: RouteComponentProps) {
                 </p>
               </div>
             ) : null}
-            {newLandSubmission.status === CommunicatedDataStatus.Done ||
-            newLandSubmission.status === CommunicatedDataStatus.Refreshing ? (
+            {!newLandSubmission.loading && !newLandSubmission.error ? (
               <div className="input-group mb-3">
                 <input
                   type="text"
@@ -352,7 +344,7 @@ export function Lands(_props: RouteComponentProps) {
           </div>
           <hr />
           <div className=" ">
-            {lands.status === CommunicatedDataStatus.NotInitialized ? null : lands.status === CommunicatedDataStatus.Loading ? (
+            {lands.loading && lands.data === undefined ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <div
                   className="d-block spinner-lg spinner-border text-primary"
@@ -361,7 +353,8 @@ export function Lands(_props: RouteComponentProps) {
                   <span className="visually-hidden">Loading...</span>
                 </div>
               </div>
-            ) : lands.status === CommunicatedDataStatus.Refreshing ? (
+            ) : null}
+            {lands.loading && lands.data !== undefined ? (
               <div
                 style={{
                   zIndex: 1,
@@ -376,30 +369,31 @@ export function Lands(_props: RouteComponentProps) {
                   <span className="visually-hidden">Loading...</span>
                 </div>
               </div>
-            ) : lands.status === CommunicationError.NotFound ? (
+            ) : null}
+            {lands.error === CommunicationError.NotFound ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaSearch style={{ fontSize: '2rem' }} />
                 <p className="mt-3 text-center mb-0">Not Found</p>
               </div>
-            ) : lands.status === CommunicationError.ConnectionFailure ? (
+            ) : lands.error === CommunicationError.ConnectionFailure ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
                 <p className="mt-3 text-center text-danger mb-0">
                   No Internet. Check your connection and try again.
                 </p>
               </div>
-            ) : lands.status === CommunicationError.Forbidden ? (
+            ) : lands.error === CommunicationError.Forbidden ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaLock style={{ fontSize: '2rem' }} />
                 <p className="mt-3 text-center mb-0">
                   You are not allowed to access this content
                 </p>
               </div>
-            ) : lands.status === CommunicationError.AbortedAndDealtWith ? (
+            ) : lands.error === CommunicationError.AbortedAndDealtWith ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <p className="mt-3 text-center mb-0">Redirecting...</p>
               </div>
-            ) : lands.status === CommunicationError.UnexpectedResponse ? (
+            ) : lands.error === CommunicationError.UnexpectedResponse ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaExclamationCircle
                   className="text-danger"
@@ -410,8 +404,7 @@ export function Lands(_props: RouteComponentProps) {
                 </p>
               </div>
             ) : null}
-            {lands.status === CommunicatedDataStatus.Done ||
-            lands.status === CommunicatedDataStatus.Refreshing ? (
+            {lands.data !== undefined && !lands.error ? (
               <div className="list-group">
                 {lands.data.lands.map((land) => {
                   return (
