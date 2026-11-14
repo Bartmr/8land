@@ -15,9 +15,9 @@ import { User } from './user/user';
 import { USER_ROUTE } from './user/user-routes';
 
 function Game(_props: RouteComponentProps) {
-  const LazyLoadedRoute = React.lazy(async () => {
-    const { ClientSideIndex } = await import('./index/index');
-    return { default: ClientSideIndex };
+  const LazyLoadedIndex = React.lazy(async () => {
+    const { Index } = await import('./index/index');
+    return { default: Index };
   });
 
   return (
@@ -30,7 +30,7 @@ function Game(_props: RouteComponentProps) {
         </CommunicatedDataGate>
       }
     >
-      <LazyLoadedRoute />
+      <LazyLoadedIndex />
     </Suspense>
   );
 }
