@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { CommunicationError } from '../../../../../communication-errors/communication-errors';
+import { ApiFetchErrors } from '../../../../../api/fetch-errors';
 import {
   FaExclamationCircle,
   FaWifi,
@@ -27,7 +27,7 @@ export function AssetsSection(props: {
 
   const [formSubmissionStatus, replaceFormSubmissionStatus] = useState<{
     loading?: boolean;
-    error?: CommunicationError;
+    error?: ApiFetchErrors;
     data?:
       | {
           error:
@@ -138,7 +138,7 @@ export function AssetsSection(props: {
                   </div>
                 </div>
               ) : null}
-              {formSubmissionStatus.error === CommunicationError.ConnectionFailure ? (
+              {formSubmissionStatus.error === ApiFetchErrors.ConnectionFailure ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <FaWifi
                     className="text-danger"
@@ -148,11 +148,11 @@ export function AssetsSection(props: {
                     No Internet. Check your connection and try again.
                   </p>
                 </div>
-              ) : formSubmissionStatus.error === CommunicationError.AbortedAndDealtWith ? (
+              ) : formSubmissionStatus.error === ApiFetchErrors.AbortedAndDealtWith ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <p className="mt-3 text-center mb-0">Redirecting...</p>
                 </div>
-              ) : formSubmissionStatus.error === CommunicationError.UnexpectedResponse ? (
+              ) : formSubmissionStatus.error === ApiFetchErrors.UnexpectedResponse ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <FaExclamationCircle
                     className="text-danger"

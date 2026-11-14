@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Layout } from '../../layout/layout';
 import { RouteComponentProps } from '@reach/router';
-import { CommunicationError } from '../../../communication-errors/communication-errors';
+import { ApiFetchErrors } from '../../../api/fetch-errors';
 import {
   FaExclamationCircle,
   FaWifi,
@@ -26,7 +26,7 @@ function Content(props: {
 
   const [landToResumeFrom, replaceLandToResumeFrom] = useState<{
     loading?: boolean;
-    error?: CommunicationError;
+    error?: ApiFetchErrors;
     data?: ResumeLandNavigationDTO;
   }>({});
 
@@ -78,18 +78,18 @@ function Content(props: {
           </div>
         </div>
       ) : null}
-      {session.error === CommunicationError.ConnectionFailure ? (
+      {session.error === ApiFetchErrors.ConnectionFailure ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
           <p className="mt-3 text-center text-danger mb-0">
             No Internet. Check your connection and try again.
           </p>
         </div>
-      ) : session.error === CommunicationError.AbortedAndDealtWith ? (
+      ) : session.error === ApiFetchErrors.AbortedAndDealtWith ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <p className="mt-3 text-center mb-0">Redirecting...</p>
         </div>
-      ) : session.error === CommunicationError.UnexpectedResponse ? (
+      ) : session.error === ApiFetchErrors.UnexpectedResponse ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <FaExclamationCircle
             className="text-danger"
@@ -128,18 +128,18 @@ function Content(props: {
               </div>
             </div>
           ) : null}
-          {landToResumeFrom.error === CommunicationError.ConnectionFailure ? (
+          {landToResumeFrom.error === ApiFetchErrors.ConnectionFailure ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
               <p className="mt-3 text-center text-danger mb-0">
                 No Internet. Check your connection and try again.
               </p>
             </div>
-          ) : landToResumeFrom.error === CommunicationError.AbortedAndDealtWith ? (
+          ) : landToResumeFrom.error === ApiFetchErrors.AbortedAndDealtWith ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p className="mt-3 text-center mb-0">Redirecting...</p>
             </div>
-          ) : landToResumeFrom.error === CommunicationError.UnexpectedResponse ? (
+          ) : landToResumeFrom.error === ApiFetchErrors.UnexpectedResponse ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaExclamationCircle
                 className="text-danger"

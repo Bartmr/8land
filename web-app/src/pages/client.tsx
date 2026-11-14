@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { HtmlHead } from '../page-components/html-head/html-head';
 import type { PageProps } from 'gatsby';
-import { CommunicationError } from '../communication-errors/communication-errors';
+import { ApiFetchErrors } from '../api/fetch-errors';
 import {
   FaExclamationCircle,
   FaWifi,
@@ -11,7 +11,7 @@ import {
 const Component = () => {
   const [entrypoint, replaceEntrypoint] = useState<{
     loading?: boolean;
-    error?: CommunicationError;
+    error?: ApiFetchErrors;
     data?: typeof import('../page-components/client/client');
   }>({});
 
@@ -34,7 +34,7 @@ const Component = () => {
 
         if (error.name === 'ChunkLoadError') {
           replaceEntrypoint({
-            error: CommunicationError.ConnectionFailure,
+            error: ApiFetchErrors.ConnectionFailure,
           });
         } else {
           throw error;
@@ -55,18 +55,18 @@ const Component = () => {
           </div>
         </div>
       ) : null}
-      {entrypoint.error === CommunicationError.ConnectionFailure ? (
+      {entrypoint.error === ApiFetchErrors.ConnectionFailure ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
           <p className="mt-3 text-center text-danger mb-0">
             No Internet. Check your connection and try again.
           </p>
         </div>
-      ) : entrypoint.error === CommunicationError.AbortedAndDealtWith ? (
+      ) : entrypoint.error === ApiFetchErrors.AbortedAndDealtWith ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <p className="mt-3 text-center mb-0">Redirecting...</p>
         </div>
-      ) : entrypoint.error === CommunicationError.UnexpectedResponse ? (
+      ) : entrypoint.error === ApiFetchErrors.UnexpectedResponse ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <FaExclamationCircle
             className="text-danger"

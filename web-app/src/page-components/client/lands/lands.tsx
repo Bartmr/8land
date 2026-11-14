@@ -7,7 +7,7 @@ import {
 } from 'react-icons/fa';
 import { RouteComponentProps } from '@reach/router';
 import { Logger } from '../../../logging/logger';
-import { CommunicationError } from '../../../communication-errors/communication-errors';
+import { ApiFetchErrors } from '../../../api/fetch-errors';
 import { Layout } from '../../layout/layout';
 import { LinkAnchor } from '../../../ui/link-anchor';
 import { EDIT_LAND_ROUTE } from './edit/edit-land-routes';
@@ -24,7 +24,7 @@ export function Lands(_props: RouteComponentProps) {
 
   const [newLandSubmission, replaceNewLandSubmission] = useState<{
     loading?: boolean;
-    error?: CommunicationError;
+    error?: ApiFetchErrors;
     data?:
       | undefined
       | { error: 'name-already-taken' }
@@ -34,13 +34,13 @@ export function Lands(_props: RouteComponentProps) {
 
   const [landsToClaim, replaceLandsToClaim] = useState<{
     loading?: boolean;
-    error?: CommunicationError;
+    error?: ApiFetchErrors;
     data?: GetLandsToClaimDTO;
   }>({});
 
   const [lands, replaceLands] = useState<{
     loading?: boolean;
-    error?: CommunicationError;
+    error?: ApiFetchErrors;
     data?: IndexLandsDTO;
   }>({});
 
@@ -60,7 +60,7 @@ export function Lands(_props: RouteComponentProps) {
         window.alert('Lands page needs pagination');
 
         replaceLands({
-          error: CommunicationError.UnexpectedResponse,
+          error: ApiFetchErrors.UnexpectedResponse,
         });
       } else {
         replaceLands({
@@ -181,7 +181,7 @@ export function Lands(_props: RouteComponentProps) {
                   </div>
                 </div>
               ) : null}
-              {landsToClaim.error === CommunicationError.ConnectionFailure ? (
+              {landsToClaim.error === ApiFetchErrors.ConnectionFailure ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <FaWifi
                     className="text-danger"
@@ -191,11 +191,11 @@ export function Lands(_props: RouteComponentProps) {
                     No Internet. Check your connection and try again.
                   </p>
                 </div>
-              ) : landsToClaim.error === CommunicationError.AbortedAndDealtWith ? (
+              ) : landsToClaim.error === ApiFetchErrors.AbortedAndDealtWith ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <p className="mt-3 text-center mb-0">Redirecting...</p>
                 </div>
-              ) : landsToClaim.error === CommunicationError.UnexpectedResponse ? (
+              ) : landsToClaim.error === ApiFetchErrors.UnexpectedResponse ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <FaExclamationCircle
                     className="text-danger"
@@ -250,18 +250,18 @@ export function Lands(_props: RouteComponentProps) {
                 </div>
               </div>
             ) : null}
-            {newLandSubmission.error === CommunicationError.ConnectionFailure ? (
+            {newLandSubmission.error === ApiFetchErrors.ConnectionFailure ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
                 <p className="mt-3 text-center text-danger mb-0">
                   No Internet. Check your connection and try again.
                 </p>
               </div>
-            ) : newLandSubmission.error === CommunicationError.AbortedAndDealtWith ? (
+            ) : newLandSubmission.error === ApiFetchErrors.AbortedAndDealtWith ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <p className="mt-3 text-center mb-0">Redirecting...</p>
               </div>
-            ) : newLandSubmission.error === CommunicationError.UnexpectedResponse ? (
+            ) : newLandSubmission.error === ApiFetchErrors.UnexpectedResponse ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaExclamationCircle
                   className="text-danger"
@@ -344,18 +344,18 @@ export function Lands(_props: RouteComponentProps) {
                 </div>
               </div>
             ) : null}
-            {lands.error === CommunicationError.ConnectionFailure ? (
+            {lands.error === ApiFetchErrors.ConnectionFailure ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
                 <p className="mt-3 text-center text-danger mb-0">
                   No Internet. Check your connection and try again.
                 </p>
               </div>
-            ) : lands.error === CommunicationError.AbortedAndDealtWith ? (
+            ) : lands.error === ApiFetchErrors.AbortedAndDealtWith ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <p className="mt-3 text-center mb-0">Redirecting...</p>
               </div>
-            ) : lands.error === CommunicationError.UnexpectedResponse ? (
+            ) : lands.error === ApiFetchErrors.UnexpectedResponse ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaExclamationCircle
                   className="text-danger"

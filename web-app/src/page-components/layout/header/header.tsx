@@ -5,7 +5,7 @@ import * as styles from './header.module.scss';
 import { LinkAnchor } from '../../../ui/link-anchor';
 import { PROJECT_NAME } from '../../../project-details';
 import { FaBars, FaUser } from 'react-icons/fa';
-import { CommunicationError } from '../../../communication-errors/communication-errors';
+import { ApiFetchErrors } from '../../../api/fetch-errors';
 import {
   FaExclamationCircle,
   FaWifi,
@@ -150,16 +150,16 @@ export function Header(props: Props) {
                     </div>
                   </div>
                 ) : null}
-                {session.error === CommunicationError.ConnectionFailure ? (
+                {session.error === ApiFetchErrors.ConnectionFailure ? (
                   <div className="d-flex flex-row justify-content-center align-items-center">
                     <FaWifi className="text-danger" />
                     <p className="ms-2 text-danger mb-0">No Internet</p>
                   </div>
-                ) : session.error === CommunicationError.AbortedAndDealtWith ? (
+                ) : session.error === ApiFetchErrors.AbortedAndDealtWith ? (
                   <div className="d-flex flex-row justify-content-center align-items-center">
                     <p className="ms-2 mb-0">Redirecting...</p>
                   </div>
-                ) : session.error === CommunicationError.UnexpectedResponse ? (
+                ) : session.error === ApiFetchErrors.UnexpectedResponse ? (
                   <div className="d-flex flex-row justify-content-center align-items-center">
                     <FaExclamationCircle className="text-danger" />
                     <p className="text-danger ms-2 mb-0">Unexpected Error</p>

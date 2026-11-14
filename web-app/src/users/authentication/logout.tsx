@@ -2,7 +2,7 @@ import { useCallback, useContext } from "react";
 import { AuthenticationStateContext } from "./authentication-state";
 import { throwError } from "../../throw-error";
 import { API_URL } from "../../api/fetch";
-import { CommunicationError } from "../../communication-errors/communication-errors";
+import { ApiFetchErrors } from "../../api/fetch-errors";
 import { useLogger } from "../../logging/logger";
 
 export function useAuthenticationLogout() {
@@ -26,7 +26,7 @@ export function useAuthenticationLogout() {
       logger.logError("logout-connection-failure", err);
 
       setSessionState({
-        error: CommunicationError.ConnectionFailure,
+        error: ApiFetchErrors.ConnectionFailure,
       });
 
       return;
@@ -47,7 +47,7 @@ export function useAuthenticationLogout() {
       });
 
       setSessionState({
-        error: CommunicationError.UnexpectedResponse,
+        error: ApiFetchErrors.UnexpectedResponse,
       });
     }
   }, [logger, setSessionState]);

@@ -2,7 +2,7 @@ import React from 'react';
 import { RouteComponentProps, useLocation } from '@reach/router';
 import { Layout } from '../../layout/layout';
 import { useState, useContext } from 'react';
-import { CommunicationError } from '../../../communication-errors/communication-errors';
+import { ApiFetchErrors } from '../../../api/fetch-errors';
 import {
   FaExclamationCircle,
   FaWifi,
@@ -41,7 +41,7 @@ function Content() {
   const [password, setPassword] = useState('');
   const [formState, setFormState] = useState<{
     loading?: boolean;
-    error?: CommunicationError;
+    error?: ApiFetchErrors;
     data?: undefined | 'email-already-in-use';
   }>({});
 
@@ -159,7 +159,7 @@ function Content() {
                       </div>
                     </div>
                   ) : null}
-                  {formState.error === CommunicationError.ConnectionFailure ? (
+                  {formState.error === ApiFetchErrors.ConnectionFailure ? (
                     <div className="d-flex flex-column justify-content-center align-items-center">
                       <FaWifi
                         className="text-danger"
@@ -169,11 +169,11 @@ function Content() {
                         No Internet. Check your connection and try again.
                       </p>
                     </div>
-                  ) : formState.error === CommunicationError.AbortedAndDealtWith ? (
+                  ) : formState.error === ApiFetchErrors.AbortedAndDealtWith ? (
                     <div className="d-flex flex-column justify-content-center align-items-center">
                       <p className="mt-3 text-center mb-0">Redirecting...</p>
                     </div>
-                  ) : formState.error === CommunicationError.UnexpectedResponse ? (
+                  ) : formState.error === ApiFetchErrors.UnexpectedResponse ? (
                     <div className="d-flex flex-column justify-content-center align-items-center">
                       <FaExclamationCircle
                         className="text-danger"

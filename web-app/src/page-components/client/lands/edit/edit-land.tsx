@@ -10,7 +10,7 @@ import { useLandsAPI } from '../../../../api/routes/lands/lands-api';
 import { Toast } from 'react-bootstrap';
 import { MainSection } from './main-section/main-section';
 import { BlocksSection } from './blocks-section/blocks-section';
-import { CommunicationError } from '../../../../communication-errors/communication-errors';
+import { ApiFetchErrors } from '../../../../api/fetch-errors';
 import {
   FaExclamationCircle,
   FaSearch,
@@ -28,13 +28,13 @@ export function EditLandWithRouteProps(props: { id: string }) {
 
   const [land, replaceLand] = useState<{
     loading?: boolean;
-    error?: CommunicationError;
+    error?: ApiFetchErrors;
     data?: GetLandDTO;
   }>({});
 
   const [deleteResult, replaceDeleteResult] = useState<{
     loading?: boolean;
-    error?: CommunicationError;
+    error?: ApiFetchErrors;
   }>({});
 
   const [successfulSave, replaceSuccessfulSave] = useState(false);
@@ -132,18 +132,18 @@ export function EditLandWithRouteProps(props: { id: string }) {
             </div>
           </div>
         ) : null}
-        {land.error === CommunicationError.ConnectionFailure ? (
+        {land.error === ApiFetchErrors.ConnectionFailure ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
             <p className="mt-3 text-center text-danger mb-0">
               No Internet. Check your connection and try again.
             </p>
           </div>
-        ) : land.error === CommunicationError.AbortedAndDealtWith ? (
+        ) : land.error === ApiFetchErrors.AbortedAndDealtWith ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <p className="mt-3 text-center mb-0">Redirecting...</p>
           </div>
-        ) : land.error === CommunicationError.UnexpectedResponse ? (
+        ) : land.error === ApiFetchErrors.UnexpectedResponse ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaExclamationCircle
               className="text-danger"

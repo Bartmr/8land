@@ -1,7 +1,7 @@
 import { DynamicBlockType } from '../../../../../api/routes/blocks/blocks-api';
 import { StaticBlockType } from '../../../../../api/routes/lands/lands-api';
 import { EnvironmentVariables } from '../../../../../environment-variables';
-import { CommunicationError } from '../../../../../communication-errors/communication-errors';
+import { ApiFetchErrors } from '../../../../../api/fetch-errors';
 import { Direction, PlayerGrid, PlayerGridLandContext } from "./player-grid";
 import {
   getLandSceneKey,
@@ -329,7 +329,7 @@ export class LandScene extends Phaser.Scene {
       });
 
       if (res.error) {
-        if (res.error === CommunicationError.ConnectionFailure) {
+        if (res.error === ApiFetchErrors.ConnectionFailure) {
           this.dependencies.dialogueService.openText(
             "Couldn't connect to the Internet. Check your connection and enter the door again.",
           );
@@ -348,7 +348,7 @@ export class LandScene extends Phaser.Scene {
       const res = await this.dependencies.trainAPI.returnToTrainStation();
 
       if (res.error) {
-        if (res.error === CommunicationError.ConnectionFailure) {
+        if (res.error === ApiFetchErrors.ConnectionFailure) {
           this.dependencies.dialogueService.openText(
             "Couldn't connect to the Internet. Check your connection and enter the door again.",
           );
@@ -386,7 +386,7 @@ export class LandScene extends Phaser.Scene {
       });
 
       if (res.error) {
-        if (res.error === CommunicationError.ConnectionFailure) {
+        if (res.error === ApiFetchErrors.ConnectionFailure) {
           this.dependencies.dialogueService.openText(
             "Couldn't connect to the Internet. Check your connection and enter the door again.",
           );

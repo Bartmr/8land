@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { CommunicationError } from "../communication-errors/communication-errors";
+import { ApiFetchErrors } from "./fetch-errors";
 import { throwError } from "../throw-error";
 
 export const API_URL = process.env.GATSBY_API_URL || throwError();
@@ -7,7 +7,7 @@ export const API_URL = process.env.GATSBY_API_URL || throwError();
 
 export type ApiFetchResult =
   | {
-      error: CommunicationError;
+      error: ApiFetchErrors;
     }
   | {
       error?: undefined;
@@ -28,7 +28,7 @@ export function useApiFetch() {
         });
       } catch {
         return {
-          error: CommunicationError.ConnectionFailure,
+          error: ApiFetchErrors.ConnectionFailure,
         };
       }
 

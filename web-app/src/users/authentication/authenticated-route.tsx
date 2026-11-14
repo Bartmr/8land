@@ -5,7 +5,7 @@ import { getCurrentLocalHref } from '../../navigation/current-local-href';
 import { useLocation } from '@reach/router';
 import { AuthenticationStateContext } from './authentication-state';
 import { throwError } from '../../throw-error';
-import { CommunicationError } from '../../communication-errors/communication-errors';
+import { ApiFetchErrors } from '../../api/fetch-errors';
 import {
   FaExclamationCircle,
   FaWifi,
@@ -26,18 +26,18 @@ export const AuthenticatedRoute = (props: Props) => {
     if (sessionState.error) {
       return (
         <div className=" py-3">
-          {sessionState.error === CommunicationError.ConnectionFailure ? (
+          {sessionState.error === ApiFetchErrors.ConnectionFailure ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
               <p className="mt-3 text-center text-danger mb-0">
                 No Internet. Check your connection and try again.
               </p>
             </div>
-          ) : sessionState.error === CommunicationError.AbortedAndDealtWith ? (
+          ) : sessionState.error === ApiFetchErrors.AbortedAndDealtWith ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p className="mt-3 text-center mb-0">Redirecting...</p>
             </div>
-          ) : sessionState.error === CommunicationError.UnexpectedResponse ? (
+          ) : sessionState.error === ApiFetchErrors.UnexpectedResponse ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaExclamationCircle
                 className="text-danger"

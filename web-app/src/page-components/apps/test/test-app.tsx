@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { AppLayout } from '../app-layout';
-import { CommunicationError } from '../../../communication-errors/communication-errors';
+import { ApiFetchErrors } from '../../../api/fetch-errors';
 import {
   FaExclamationCircle,
   FaWifi,
@@ -69,18 +69,18 @@ function Content() {
             </div>
           </div>
         ) : null}
-        {appContext.error === CommunicationError.ConnectionFailure ? (
+        {appContext.error === ApiFetchErrors.ConnectionFailure ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
             <p className="mt-3 text-center text-danger mb-0">
               No Internet. Check your connection and try again.
             </p>
           </div>
-        ) : appContext.error === CommunicationError.AbortedAndDealtWith ? (
+        ) : appContext.error === ApiFetchErrors.AbortedAndDealtWith ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <p className="mt-3 text-center mb-0">Redirecting...</p>
           </div>
-        ) : appContext.error === CommunicationError.UnexpectedResponse ? (
+        ) : appContext.error === ApiFetchErrors.UnexpectedResponse ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaExclamationCircle
               className="text-danger"

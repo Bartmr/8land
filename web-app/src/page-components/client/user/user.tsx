@@ -2,7 +2,7 @@ import React from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { useState } from 'react';
 import { Layout } from '../../layout/layout';
-import { CommunicationError } from '../../../communication-errors/communication-errors';
+import { ApiFetchErrors } from '../../../api/fetch-errors';
 import { ChangeEmail } from './components/change-email';
 import { FaPersonThroughWindow } from 'react-icons/fa6';
 import {
@@ -19,7 +19,7 @@ import { useAuthenticationStateSession } from '../../../users/authentication/aut
 export function User(_props: RouteComponentProps) {
   const [escapeStatus, replaceEscapeStatus] = useState<{
     loading?: boolean;
-    error?: CommunicationError;
+    error?: ApiFetchErrors;
     data?: true;
   }>({});
 
@@ -70,18 +70,18 @@ export function User(_props: RouteComponentProps) {
               </div>
             </div>
           ) : null}
-          {session.error === CommunicationError.ConnectionFailure ? (
+          {session.error === ApiFetchErrors.ConnectionFailure ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
               <p className="mt-3 text-center text-danger mb-0">
                 No Internet. Check your connection and try again.
               </p>
             </div>
-          ) : session.error === CommunicationError.AbortedAndDealtWith ? (
+          ) : session.error === ApiFetchErrors.AbortedAndDealtWith ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p className="mt-3 text-center mb-0">Redirecting...</p>
             </div>
-          ) : session.error === CommunicationError.UnexpectedResponse ? (
+          ) : session.error === ApiFetchErrors.UnexpectedResponse ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaExclamationCircle
                 className="text-danger"
@@ -162,16 +162,16 @@ export function User(_props: RouteComponentProps) {
                             </div>
                           </div>
                         ) : null}
-                        {escapeStatus.error === CommunicationError.ConnectionFailure ? (
+                        {escapeStatus.error === ApiFetchErrors.ConnectionFailure ? (
                           <div className="d-flex flex-row justify-content-center align-items-center">
                             <FaWifi className="text-danger" />
                             <p className="ms-2 text-danger mb-0">No Internet</p>
                           </div>
-                        ) : escapeStatus.error === CommunicationError.AbortedAndDealtWith ? (
+                        ) : escapeStatus.error === ApiFetchErrors.AbortedAndDealtWith ? (
                           <div className="d-flex flex-row justify-content-center align-items-center">
                             <p className="ms-2 mb-0">Redirecting...</p>
                           </div>
-                        ) : escapeStatus.error === CommunicationError.UnexpectedResponse ? (
+                        ) : escapeStatus.error === ApiFetchErrors.UnexpectedResponse ? (
                           <div className="d-flex flex-row justify-content-center align-items-center">
                             <FaExclamationCircle className="text-danger" />
                             <p className="text-danger ms-2 mb-0">

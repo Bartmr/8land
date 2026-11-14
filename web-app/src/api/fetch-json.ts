@@ -1,6 +1,6 @@
 import { useCallback, useContext, useMemo } from "react";
 import { z } from "zod";
-import { CommunicationError } from "../communication-errors/communication-errors";
+import { ApiFetchErrors } from "./fetch-errors";
 import { useLogger } from "../logging/logger";
 import { API_URL } from "./fetch";
 import { useAuthenticationLogout } from "../users/authentication/logout";
@@ -9,7 +9,7 @@ import { throwError } from "../throw-error";
 
 export type ApiFetchJSONResult<T> =
   | {
-      error: CommunicationError;
+      error: ApiFetchErrors;
     }
   | {
       error?: undefined;
@@ -58,7 +58,7 @@ export function useApiFetchJSON() {
       });
     } catch {
       return {
-        error: CommunicationError.ConnectionFailure,
+        error: ApiFetchErrors.ConnectionFailure,
       };
     }
 
@@ -77,7 +77,7 @@ export function useApiFetchJSON() {
         },
       });
       return {
-        error: CommunicationError.UnexpectedResponse,
+        error: ApiFetchErrors.UnexpectedResponse,
       };
     }
 
@@ -91,7 +91,7 @@ export function useApiFetchJSON() {
         setSessionState({ data: null })
 
         return {
-          error: CommunicationError.AbortedAndDealtWith
+          error: ApiFetchErrors.AbortedAndDealtWith
         }
       } else {
         logger.logError('invalid-response-data', new Error(), {
@@ -107,7 +107,7 @@ export function useApiFetchJSON() {
         });
 
         return {
-          error: CommunicationError.UnexpectedResponse,
+          error: ApiFetchErrors.UnexpectedResponse,
         };
       }
     }

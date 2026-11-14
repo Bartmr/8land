@@ -9,7 +9,7 @@ import {
   FaWifi,
 } from 'react-icons/fa';
 import { useBlocksAPI } from '../../../../../api/routes/blocks/blocks-api';
-import { CommunicationError } from '../../../../../communication-errors/communication-errors';
+import { ApiFetchErrors } from '../../../../../api/fetch-errors';
 
 export function AddBlockSection(props: {
   land: GetLandDTO;
@@ -38,7 +38,7 @@ export function AddBlockSection(props: {
 
   const [formSubmission, replaceFormSubmission] = useState<{
     loading?: boolean;
-    error?: CommunicationError;
+    error?: ApiFetchErrors;
     data?:
       | undefined
       | 'block-limit-exceeded'
@@ -77,18 +77,18 @@ export function AddBlockSection(props: {
             </div>
           </div>
         ) : null}
-        {formSubmission.error === CommunicationError.ConnectionFailure ? (
+        {formSubmission.error === ApiFetchErrors.ConnectionFailure ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
             <p className="mt-3 text-center text-danger mb-0">
               No Internet. Check your connection and try again.
             </p>
           </div>
-        ) : formSubmission.error === CommunicationError.AbortedAndDealtWith ? (
+        ) : formSubmission.error === ApiFetchErrors.AbortedAndDealtWith ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <p className="mt-3 text-center mb-0">Redirecting...</p>
           </div>
-        ) : formSubmission.error === CommunicationError.UnexpectedResponse ? (
+        ) : formSubmission.error === ApiFetchErrors.UnexpectedResponse ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaExclamationCircle
               className="text-danger"
@@ -124,7 +124,7 @@ export function AddBlockSection(props: {
                     });
                   } else {
                     replaceFormSubmission({
-                      error: CommunicationError.UnexpectedResponse,
+                      error: ApiFetchErrors.UnexpectedResponse,
                     });
                   }
                 } else if (res.response.status === 409) {

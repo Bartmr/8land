@@ -7,7 +7,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { CommunicationError } from "../../communication-errors/communication-errors";
+import { ApiFetchErrors } from "../../api/fetch-errors";
 import { z } from "zod";
 import { AuthenticationSessionSchema } from "./authentication-schemas";
 import { throwError } from "../../throw-error";
@@ -16,7 +16,7 @@ export type AuthenticationSession = z.TypeOf<typeof AuthenticationSessionSchema>
 export type UserAuthSessionData = AuthenticationSession;
 export type AuthenticationSessionState = {
   loading?: boolean;
-  error?: CommunicationError;
+  error?: ApiFetchErrors;
   data?: null | AuthenticationSession;
 };
 

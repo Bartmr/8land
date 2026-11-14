@@ -3,7 +3,7 @@ import {
   useApiFetchJSON,
 } from '../../fetch-json';
 import { Logger } from '../../../logging/logger';
-import { CommunicationError } from '../../../communication-errors/communication-errors';
+import { ApiFetchErrors } from '../../fetch-errors';
 
 export const CreateLandRequestSchemaObj = {
   name: z
@@ -491,7 +491,7 @@ export class LandsAPI {
 
   async createLand(args: { name: string }): Promise<
     | {
-        error: CommunicationError;
+        error: ApiFetchErrors;
       }
     | {
         error?: undefined;
@@ -545,7 +545,7 @@ export class LandsAPI {
           };
         } else {
           return {
-            error: CommunicationError.UnexpectedResponse,
+            error: ApiFetchErrors.UnexpectedResponse,
           };
         }
       } else {
@@ -590,7 +590,7 @@ export class LandsAPI {
           };
         } else {
           return {
-            error: CommunicationError.UnexpectedResponse,
+            error: ApiFetchErrors.UnexpectedResponse,
           };
         }
       } else {
@@ -626,7 +626,7 @@ export class LandsAPI {
 
   async deleteLand(args: { landId: string }): Promise<
     | {
-        error: CommunicationError;
+        error: ApiFetchErrors;
       }
     | {
         error?: undefined;
@@ -659,7 +659,7 @@ export class LandsAPI {
           };
         } else {
           return {
-            error: CommunicationError.UnexpectedResponse,
+            error: ApiFetchErrors.UnexpectedResponse,
           };
         }
       } else {

@@ -3,7 +3,7 @@ import { DynamicBlockType } from '../../../../../api/routes/blocks/blocks-api';
 import { GetLandDTO } from '../../../../../api/routes/lands/lands-api';
 import { FaTrash } from 'react-icons/fa';
 import { useState } from 'react';
-import { CommunicationError } from '../../../../../communication-errors/communication-errors';
+import { ApiFetchErrors } from '../../../../../api/fetch-errors';
 import {
   FaExclamationCircle,
   FaWifi,
@@ -20,7 +20,7 @@ export function BlocksSection(props: {
 
   const [deletionState, replaceDeletionState] = useState<{
     loading?: boolean;
-    error?: CommunicationError;
+    error?: ApiFetchErrors;
   }>({});
 
   const deleteBlock = async (
@@ -87,18 +87,18 @@ Players who are currently in this land will be teleported back to the train stat
                 </div>
               </div>
             ) : null}
-            {deletionState.error === CommunicationError.ConnectionFailure ? (
+            {deletionState.error === ApiFetchErrors.ConnectionFailure ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
                 <p className="mt-3 text-center text-danger mb-0">
                   No Internet. Check your connection and try again.
                 </p>
               </div>
-            ) : deletionState.error === CommunicationError.AbortedAndDealtWith ? (
+            ) : deletionState.error === ApiFetchErrors.AbortedAndDealtWith ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <p className="mt-3 text-center mb-0">Redirecting...</p>
               </div>
-            ) : deletionState.error === CommunicationError.UnexpectedResponse ? (
+            ) : deletionState.error === ApiFetchErrors.UnexpectedResponse ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaExclamationCircle
                   className="text-danger"

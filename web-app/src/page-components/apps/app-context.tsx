@@ -6,13 +6,13 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { CommunicationError } from '../../communication-errors/communication-errors';
+import { ApiFetchErrors } from '../../api/fetch-errors';
 import { AppContext } from '../client/index/screens/app/app-screen-types';
 import { throwError } from '../../throw-error';
 
 type AppContextState = {
   loading?: boolean;
-  error?: CommunicationError;
+  error?: ApiFetchErrors;
   data?: AppContext;
 };
 
