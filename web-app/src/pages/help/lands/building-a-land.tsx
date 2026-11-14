@@ -1,5 +1,5 @@
 import React from 'react';
-import { BuildingALandTemplate } from '../../../page-components/help/lands/building-a-land/building-a-land.template';
+import { BuildingALandTemplate } from '../../../page-components/help/lands/building-a-land/building-a-land-template';
 import { HtmlHead } from '../../../page-components/html-head/html-head';
 import type { PageProps } from 'gatsby';
 

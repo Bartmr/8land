@@ -12,7 +12,7 @@ import { TilesetImageFormField } from './tileset-image-form-field';
 import { GetLandDTO } from '../../../../../api/routes/lands/lands-api';
 import { LinkAnchor } from '../../../../../ui/link-anchor';
 import { useLandsAPI } from '../../../../../api/routes/lands/lands-api';
-import { START_LANDS_LIMIT_EXCEEDED_MESSAGE } from './assets-section.constants';
+import { START_LANDS_LIMIT_EXCEEDED_MESSAGE } from './assets-section-constants';
 
 export function AssetsSection(props: {
   land: GetLandDTO;

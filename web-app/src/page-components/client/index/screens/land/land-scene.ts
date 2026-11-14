@@ -8,17 +8,17 @@ import {
   getLandSceneTiledJSONKey,
   getLandSceneTilesetKey,
 } from './keys';
-import { Block, DoorBlock, LandSceneArguments } from './land-scene.types';
+import { Block, DoorBlock, LandSceneArguments } from './land-scene-types';
 import { Player } from './player';
-import { TiledJSON } from './tiled.types';
+import { TiledJSON } from './tiled-types';
 import { TILE_SIZE } from '../../game-constants';
 import { MusicService } from '../../music-ticker';
 import { DialogueService } from '../dialogue/dialogue-screen';
-import { LandScreenService } from './land-screen.service';
+import { LandScreenService } from './land-screen-service';
 import { AppService } from '../app/app-screen';
 import { LandsAPI } from '../../../../../api/routes/lands/lands-api';
 import { NavigateToLandDTO } from '../../../../../api/routes/lands/lands-api';
-import { TrainAPI } from '../../../../../api/routes/train/train.api';
+import { TrainAPI } from '../../../../../api/routes/train/train-api';
 import { throwError } from '../../../../../throw-error';
 import { KeypadBroker } from '../../keypad-broker';
 import { Math } from 'phaser';

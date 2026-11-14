@@ -13,7 +13,7 @@ import {
 import { ChangeEmail } from './components/change-email';
 import { FaPersonThroughWindow } from 'react-icons/fa6';
 import { useLandsAPI } from '../../../api/routes/lands/lands-api';
-import { useAuthAPI } from '../../../api/routes/users/auth/auth.api';
+import { useAuthAPI } from '../../../api/routes/users/auth/auth-api';
 import { useAuthenticationLogout } from '../../../users/authentication/logout';
 import { useAuthenticationStateSession } from '../../../users/authentication/authentication-state';
 

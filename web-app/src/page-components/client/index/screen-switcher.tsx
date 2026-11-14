@@ -9,7 +9,7 @@ import {
   DialogueService,
 } from './screens/dialogue/dialogue-screen';
 import { LandScreen } from './screens/land/land-screen';
-import { LandScreenService } from './screens/land/land-screen.service';
+import { LandScreenService } from './screens/land/land-screen-service';
 import { KeypadBroker } from './keypad-broker';
 
 enum CurrentScreen {

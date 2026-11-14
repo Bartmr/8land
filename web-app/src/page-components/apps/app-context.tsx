@@ -10,7 +10,7 @@ import {
   CommunicatedData,
   CommunicatedDataStatus,
 } from '../../communicated-data/communicated-data-types';
-import { AppContext } from '../client/index/screens/app/app-screen.types';
+import { AppContext } from '../client/index/screens/app/app-screen-types';
 import { throwError } from '../../throw-error';
 
 const AppContextContext = createContext<CommunicatedData<

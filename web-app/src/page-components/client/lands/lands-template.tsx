@@ -14,8 +14,8 @@ import { LinkAnchor } from '../../../ui/link-anchor';
 import { EDIT_LAND_ROUTE } from './edit/edit-land-routes';
 import { useLandsAPI } from '../../../api/routes/lands/lands-api';
 import { Toast } from 'react-bootstrap';
-import { START_LANDS_LIMIT_EXCEEDED_MESSAGE } from './edit/assets-section/assets-section.constants';
-import { BUILDING_A_LAND_ROUTE } from '../../help/lands/building-a-land/building-a-land.routes';
+import { START_LANDS_LIMIT_EXCEEDED_MESSAGE } from './edit/assets-section/assets-section-constants';
+import { BUILDING_A_LAND_ROUTE } from '../../help/lands/building-a-land/building-a-land-routes';
 import { LAND_IDEAS_ROUTE } from '../../help/lands/land-ideas/land-ideas-routes';
 
 export function LandsTemplate(_props: RouteComponentProps) {

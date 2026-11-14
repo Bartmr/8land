@@ -1,5 +1,5 @@
 import { TILE_SIZE } from '../../game-constants';
-import { Block, DoorBlock } from './land-scene.types';
+import { Block, DoorBlock } from './land-scene-types';
 import { DialogueService } from '../dialogue/dialogue-screen';
 import { DynamicBlockType } from '../../../../../api/routes/blocks/blocks-api';
 import {
