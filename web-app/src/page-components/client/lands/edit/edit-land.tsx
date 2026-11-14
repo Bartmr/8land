@@ -8,7 +8,6 @@ import {
   CommunicatedDataStatus,
 } from '../../../../communicated-data/communicated-data-types';
 import { GetLandDTO } from '../../../../api/routes/lands/lands-api';
-import { CommunicatedDataGate } from '../../../../ui/communicated-data-gate';
 import { useParams } from '@reach/router';
 import { uuid, z } from 'zod';
 import { useLandsAPI } from '../../../../api/routes/lands/lands-api';
@@ -16,7 +15,13 @@ import { Toast } from 'react-bootstrap';
 import { MainSection } from './main-section/main-section';
 import { BlocksSection } from './blocks-section/blocks-section';
 import { CommunicationError } from '../../../../communication-errors/communication-errors';
-import { FaTrash } from 'react-icons/fa';
+import {
+  FaExclamationCircle,
+  FaLock,
+  FaSearch,
+  FaTrash,
+  FaWifi,
+} from 'react-icons/fa';
 import { navigate } from 'gatsby';
 import { LANDS_ROUTE } from '../lands-routes';
 // import { useStoreSelector } from '../../../../store/use-store-selector';
@@ -108,47 +113,107 @@ export function EditLandWithRouteProps(props: { id: string }) {
       >
         <Toast.Header closeButton={false}>Changes saved</Toast.Header>
       </Toast>
-      <CommunicatedDataGate dataWrapper={land}>
-        {({ data }) => {
-          return (
-            <>
-              <div className="mb-4 d-flex justify-content-between align-items-center flex-wrap">
-                <h1 className="mb-0">Edit Land</h1>
-                <div>
-                  <button
-                    onClick={deleteLand}
-                    disabled={!land.data || land.data.isStartLand}
-                    className="btn btn-danger"
-                  >
-                    {deleteResult.status === CommunicatedDataStatus.Loading ? (
-                      <span className="spinner-border spinner-sm" />
-                    ) : (
-                      <FaTrash />
-                    )}{' '}
-                    {land.data?.isStartLand
-                      ? 'Cannot delete lands with start block'
-                      : 'Delete land'}
-                  </button>
-                </div>
+      <div className=" ">
+        {land.status === CommunicatedDataStatus.NotInitialized ? null : land.status === CommunicatedDataStatus.Loading ? (
+          <div className="d-flex flex-column justify-content-center align-items-center">
+            <div
+              className="d-block spinner-lg spinner-border text-primary"
+              role="status"
+            >
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        ) : land.status === CommunicatedDataStatus.Refreshing ? (
+          <div
+            style={{
+              zIndex: 1,
+              right: 'var(--spacer-3)',
+              position: 'fixed',
+            }}
+          >
+            <div
+              className="d-block spinner-lg spinner-border text-primary"
+              role="status"
+            >
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        ) : land.status === CommunicationError.NotFound ? (
+          <div className="d-flex flex-column justify-content-center align-items-center">
+            <FaSearch style={{ fontSize: '2rem' }} />
+            <p className="mt-3 text-center mb-0">Not Found</p>
+          </div>
+        ) : land.status === CommunicationError.ConnectionFailure ? (
+          <div className="d-flex flex-column justify-content-center align-items-center">
+            <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
+            <p className="mt-3 text-center text-danger mb-0">
+              No Internet. Check your connection and try again.
+            </p>
+          </div>
+        ) : land.status === CommunicationError.Forbidden ? (
+          <div className="d-flex flex-column justify-content-center align-items-center">
+            <FaLock style={{ fontSize: '2rem' }} />
+            <p className="mt-3 text-center mb-0">
+              You are not allowed to access this content
+            </p>
+          </div>
+        ) : land.status === CommunicationError.AbortedAndDealtWith ? (
+          <div className="d-flex flex-column justify-content-center align-items-center">
+            <p className="mt-3 text-center mb-0">Redirecting...</p>
+          </div>
+        ) : land.status === CommunicationError.UnexpectedResponse ? (
+          <div className="d-flex flex-column justify-content-center align-items-center">
+            <FaExclamationCircle
+              className="text-danger"
+              style={{ fontSize: '2rem' }}
+            />
+            <p className="text-danger mt-3 text-center mb-0">
+              An unexpected error occurred. Try again later.
+            </p>
+          </div>
+        ) : null}
+        {land.status === CommunicatedDataStatus.Done ||
+        land.status === CommunicatedDataStatus.Refreshing ? (
+          <>
+            <div className="mb-4 d-flex justify-content-between align-items-center flex-wrap">
+              <h1 className="mb-0">Edit Land</h1>
+              <div>
+                <button
+                  onClick={deleteLand}
+                  disabled={!land.data || land.data.isStartLand}
+                  className="btn btn-danger"
+                >
+                  {deleteResult.status === CommunicatedDataStatus.Loading ? (
+                    <span className="spinner-border spinner-sm" />
+                  ) : (
+                    <FaTrash />
+                  )}{' '}
+                  {land.data?.isStartLand
+                    ? 'Cannot delete lands with start block'
+                    : 'Delete land'}
+                </button>
               </div>
-              <MainSection onSuccessfulSave={onSuccessfulSave} land={data} />
-              <div className="mt-4">
-                <BlocksSection
-                  onBlockDeleted={onSuccessfulSave}
-                  onBlockCreated={onSuccessfulSave}
-                  land={data}
-                />
-              </div>
-              <div className="mt-4">
-                <AssetsSection
-                  onSuccessfulSave={onSuccessfulSave}
-                  land={data}
-                />
-              </div>
-            </>
-          );
-        }}
-      </CommunicatedDataGate>
+            </div>
+            <MainSection
+              onSuccessfulSave={onSuccessfulSave}
+              land={land.data}
+            />
+            <div className="mt-4">
+              <BlocksSection
+                onBlockDeleted={onSuccessfulSave}
+                onBlockCreated={onSuccessfulSave}
+                land={land.data}
+              />
+            </div>
+            <div className="mt-4">
+              <AssetsSection
+                onSuccessfulSave={onSuccessfulSave}
+                land={land.data}
+              />
+            </div>
+          </>
+        ) : null}
+      </div>
     </>
   );
 }
@@ -164,11 +229,12 @@ export function EditLand(_props: RouteComponentProps) {
     <Layout>
       {() => {
         return !validationResult.success ? (
-          <CommunicatedDataGate
-            dataWrapper={{ status: CommunicationError.NotFound }}
-          >
-            {() => null}
-          </CommunicatedDataGate>
+          <div className=" ">
+            <div className="d-flex flex-column justify-content-center align-items-center">
+              <FaSearch style={{ fontSize: '2rem' }} />
+              <p className="mt-3 text-center mb-0">Not Found</p>
+            </div>
+          </div>
         ) : (
           <EditLandWithRouteProps id={validationResult.data.id} />
         );

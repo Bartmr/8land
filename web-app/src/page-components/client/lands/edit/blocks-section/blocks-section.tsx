@@ -3,11 +3,17 @@ import { DynamicBlockType } from '../../../../../api/routes/blocks/blocks-api';
 import { GetLandDTO } from '../../../../../api/routes/lands/lands-api';
 import { FaTrash } from 'react-icons/fa';
 import { useState } from 'react';
-import { CommunicatedDataGate } from '../../../../../ui/communicated-data-gate';
 import {
   CommunicatedData,
   CommunicatedDataStatus,
 } from '../../../../../communicated-data/communicated-data-types';
+import { CommunicationError } from '../../../../../communication-errors/communication-errors';
+import {
+  FaExclamationCircle,
+  FaLock,
+  FaSearch,
+  FaWifi,
+} from 'react-icons/fa';
 import { useBlocksAPI } from '../../../../../api/routes/blocks/blocks-api';
 import { AddBlockSection } from './add-block-section';
 
@@ -78,39 +84,96 @@ Players who are currently in this land will be teleported back to the train stat
 
           <hr />
           <h3>Door Blocks</h3>
-          <CommunicatedDataGate dataWrapper={deletionState}>
-            {() => {
-              return (
-                <ul className="list-group">
-                  {props.land.doorBlocks.map((b) => {
-                    return (
-                      <li
-                        key={b.id}
-                        className="list-group-item d-flex align-items-center"
+          <div className=" ">
+            {deletionState.status === CommunicatedDataStatus.NotInitialized ? null : deletionState.status === CommunicatedDataStatus.Loading ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <div
+                  className="d-block spinner-lg spinner-border text-primary"
+                  role="status"
+                >
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            ) : deletionState.status === CommunicatedDataStatus.Refreshing ? (
+              <div
+                style={{
+                  zIndex: 1,
+                  right: 'var(--spacer-3)',
+                  position: 'fixed',
+                }}
+              >
+                <div
+                  className="d-block spinner-lg spinner-border text-primary"
+                  role="status"
+                >
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            ) : deletionState.status === CommunicationError.NotFound ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <FaSearch style={{ fontSize: '2rem' }} />
+                <p className="mt-3 text-center mb-0">Not Found</p>
+              </div>
+            ) : deletionState.status === CommunicationError.ConnectionFailure ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
+                <p className="mt-3 text-center text-danger mb-0">
+                  No Internet. Check your connection and try again.
+                </p>
+              </div>
+            ) : deletionState.status === CommunicationError.Forbidden ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <FaLock style={{ fontSize: '2rem' }} />
+                <p className="mt-3 text-center mb-0">
+                  You are not allowed to access this content
+                </p>
+              </div>
+            ) : deletionState.status === CommunicationError.AbortedAndDealtWith ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <p className="mt-3 text-center mb-0">Redirecting...</p>
+              </div>
+            ) : deletionState.status === CommunicationError.UnexpectedResponse ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <FaExclamationCircle
+                  className="text-danger"
+                  style={{ fontSize: '2rem' }}
+                />
+                <p className="text-danger mt-3 text-center mb-0">
+                  An unexpected error occurred. Try again later.
+                </p>
+              </div>
+            ) : null}
+            {deletionState.status === CommunicatedDataStatus.Done ||
+            deletionState.status === CommunicatedDataStatus.Refreshing ? (
+              <ul className="list-group">
+                {props.land.doorBlocks.map((b) => {
+                  return (
+                    <li
+                      key={b.id}
+                      className="list-group-item d-flex align-items-center"
+                    >
+                      <div className="flex-fill">
+                        Block ID:{' '}
+                        <span className="text-highlight">
+                          {DynamicBlockType.Door}:{b.id}
+                        </span>
+                        <br />
+                        Goes to: {b.toLand.name}
+                      </div>
+                      <button
+                        onClick={async () => {
+                          await deleteBlock(DynamicBlockType.Door, b.id);
+                        }}
+                        className="btn btn-danger"
                       >
-                        <div className="flex-fill">
-                          Block ID:{' '}
-                          <span className="text-highlight">
-                            {DynamicBlockType.Door}:{b.id}
-                          </span>
-                          <br />
-                          Goes to: {b.toLand.name}
-                        </div>
-                        <button
-                          onClick={async () => {
-                            await deleteBlock(DynamicBlockType.Door, b.id);
-                          }}
-                          className="btn btn-danger"
-                        >
-                          <FaTrash />
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              );
-            }}
-          </CommunicatedDataGate>
+                        <FaTrash />
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : null}
+          </div>
 
           <hr />
           <h3>App Blocks</h3>

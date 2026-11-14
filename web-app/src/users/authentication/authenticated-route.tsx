@@ -1,12 +1,17 @@
 import React, { ReactNode, useContext } from 'react';
-import { CommunicatedDataGate } from '../../ui/communicated-data-gate';
 import { Redirect } from '../../navigation/redirect/redirect';
 import { LOGIN_ROUTE } from '../../page-components/client/login/login-routes';
 import { getCurrentLocalHref } from '../../navigation/current-local-href';
 import { useLocation } from '@reach/router';
 import { AuthenticationStateContext } from './authentication-state';
 import { throwError } from '../../throw-error';
-import { CommunicatedDataStatus } from '../../communicated-data/communicated-data-types';
+import { CommunicationError } from '../../communication-errors/communication-errors';
+import {
+  FaExclamationCircle,
+  FaLock,
+  FaSearch,
+  FaWifi,
+} from 'react-icons/fa';
 
 type Props = {
   children: ReactNode;
@@ -22,15 +27,55 @@ export const AuthenticatedRoute = (props: Props) => {
   if (typeof sessionState.data === 'undefined') {
     if (sessionState.error) {
       return (
-        <CommunicatedDataGate className="py-3" dataWrapper={{ status: sessionState.error }}>
-          {() => null}
-        </CommunicatedDataGate>
+        <div className=" py-3">
+          {sessionState.error === CommunicationError.NotFound ? (
+            <div className="d-flex flex-column justify-content-center align-items-center">
+              <FaSearch style={{ fontSize: '2rem' }} />
+              <p className="mt-3 text-center mb-0">Not Found</p>
+            </div>
+          ) : sessionState.error === CommunicationError.ConnectionFailure ? (
+            <div className="d-flex flex-column justify-content-center align-items-center">
+              <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
+              <p className="mt-3 text-center text-danger mb-0">
+                No Internet. Check your connection and try again.
+              </p>
+            </div>
+          ) : sessionState.error === CommunicationError.Forbidden ? (
+            <div className="d-flex flex-column justify-content-center align-items-center">
+              <FaLock style={{ fontSize: '2rem' }} />
+              <p className="mt-3 text-center mb-0">
+                You are not allowed to access this content
+              </p>
+            </div>
+          ) : sessionState.error === CommunicationError.AbortedAndDealtWith ? (
+            <div className="d-flex flex-column justify-content-center align-items-center">
+              <p className="mt-3 text-center mb-0">Redirecting...</p>
+            </div>
+          ) : sessionState.error === CommunicationError.UnexpectedResponse ? (
+            <div className="d-flex flex-column justify-content-center align-items-center">
+              <FaExclamationCircle
+                className="text-danger"
+                style={{ fontSize: '2rem' }}
+              />
+              <p className="text-danger mt-3 text-center mb-0">
+                An unexpected error occurred. Try again later.
+              </p>
+            </div>
+          ) : null}
+        </div>
       );
     } else {
       return (
-        <CommunicatedDataGate className="py-3" dataWrapper={{ status: CommunicatedDataStatus.Loading, data: undefined }}>
-          {() => null}
-        </CommunicatedDataGate>
+        <div className=" py-3">
+          <div className="d-flex flex-column justify-content-center align-items-center">
+            <div
+              className="d-block spinner-lg spinner-border text-primary"
+              role="status"
+            >
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        </div>
       );
     }
 

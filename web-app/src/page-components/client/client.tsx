@@ -5,8 +5,6 @@ import { Login } from './login/login';
 import { Signup } from './signup/signup';
 import React, { Suspense } from 'react';
 import { RouteComponentProps } from '@reach/router';
-import { CommunicatedDataGate } from '../../ui/communicated-data-gate';
-import { CommunicatedDataStatus } from '../../communicated-data/communicated-data-types';
 import { EditLand } from './lands/edit/edit-land';
 import { EDIT_LAND_ROUTE } from './lands/edit/edit-land-routes';
 import { LANDS_ROUTE } from './lands/lands-routes';
@@ -23,11 +21,16 @@ function Game(_props: RouteComponentProps) {
   return (
     <Suspense
       fallback={
-        <CommunicatedDataGate
-          dataWrapper={{ status: CommunicatedDataStatus.Loading }}
-        >
-          {() => null}
-        </CommunicatedDataGate>
+        <div className=" ">
+          <div className="d-flex flex-column justify-content-center align-items-center">
+            <div
+              className="d-block spinner-lg spinner-border text-primary"
+              role="status"
+            >
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        </div>
       }
     >
       <LazyLoadedIndex />

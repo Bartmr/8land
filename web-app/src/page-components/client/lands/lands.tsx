@@ -1,11 +1,16 @@
 import React from 'react';
 import { IndexLandsDTO, GetLandsToClaimDTO } from '../../../api/routes/lands/lands-api';
 import { useEffect, useState } from 'react';
-import { CommunicatedDataGate } from '../../../ui/communicated-data-gate';
 import {
   CommunicatedData,
   CommunicatedDataStatus,
 } from '../../../communicated-data/communicated-data-types';
+import {
+  FaExclamationCircle,
+  FaLock,
+  FaSearch,
+  FaWifi,
+} from 'react-icons/fa';
 import { RouteComponentProps } from '@reach/router';
 import { Logger } from '../../../logging/logger';
 import { CommunicationError } from '../../../communication-errors/communication-errors';
@@ -161,98 +166,275 @@ export function Lands(_props: RouteComponentProps) {
                 </LinkAnchor>
               </p>
             </div>
-            <CommunicatedDataGate
-              className="col-12 col-md-6"
-              dataWrapper={landsToClaim}
-            >
-              {({ data }) => {
-                return data.free === 0 ? (
+            <div className=" col-12 col-md-6">
+              {landsToClaim.status === CommunicatedDataStatus.NotInitialized ? null : landsToClaim.status === CommunicatedDataStatus.Loading ? (
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                  <div
+                    className="d-block spinner-lg spinner-border text-primary"
+                    role="status"
+                  >
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              ) : landsToClaim.status === CommunicatedDataStatus.Refreshing ? (
+                <div
+                  style={{
+                    zIndex: 1,
+                    right: 'var(--spacer-3)',
+                    position: 'fixed',
+                  }}
+                >
+                  <div
+                    className="d-block spinner-lg spinner-border text-primary"
+                    role="status"
+                  >
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              ) : landsToClaim.status === CommunicationError.NotFound ? (
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                  <FaSearch style={{ fontSize: '2rem' }} />
+                  <p className="mt-3 text-center mb-0">Not Found</p>
+                </div>
+              ) : landsToClaim.status === CommunicationError.ConnectionFailure ? (
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                  <FaWifi
+                    className="text-danger"
+                    style={{ fontSize: '2rem' }}
+                  />
+                  <p className="mt-3 text-center text-danger mb-0">
+                    No Internet. Check your connection and try again.
+                  </p>
+                </div>
+              ) : landsToClaim.status === CommunicationError.Forbidden ? (
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                  <FaLock style={{ fontSize: '2rem' }} />
+                  <p className="mt-3 text-center mb-0">
+                    You are not allowed to access this content
+                  </p>
+                </div>
+              ) : landsToClaim.status === CommunicationError.AbortedAndDealtWith ? (
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                  <p className="mt-3 text-center mb-0">Redirecting...</p>
+                </div>
+              ) : landsToClaim.status === CommunicationError.UnexpectedResponse ? (
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                  <FaExclamationCircle
+                    className="text-danger"
+                    style={{ fontSize: '2rem' }}
+                  />
+                  <p className="text-danger mt-3 text-center mb-0">
+                    An unexpected error occurred. Try again later.
+                  </p>
+                </div>
+              ) : null}
+              {landsToClaim.status === CommunicatedDataStatus.Done ||
+              landsToClaim.status === CommunicatedDataStatus.Refreshing ? (
+                landsToClaim.data.free === 0 ? (
                   <div className="bg-warning p-3">
                     {START_LANDS_LIMIT_EXCEEDED_MESSAGE}
                   </div>
                 ) : (
                   <div className="bg-info p-3">
-                    8Land has {data.free} lands available for building.
+                    8Land has {landsToClaim.data.free} lands available for
+                    building.
                     <br />
                     We will keep raising the amount of available lands as we
                     grow.
                   </div>
-                );
-              }}
-            </CommunicatedDataGate>
+                )
+              ) : null}
+            </div>
           </div>
-          <CommunicatedDataGate dataWrapper={newLandSubmission}>
-            {({ data }) => {
-              return (
-                <div className="input-group mb-3">
-                  <input
-                    type="text"
-                    value={newLandName}
-                    onChange={(e) => replaceNewLandName(e.target.value)}
-                    placeholder="New land name"
-                    id="add-land-name-input"
-                    className={`form-control ${data ? 'is-invalid' : ''}`}
-                  />
-                  <button
-                    disabled={!newLandName.trim()}
-                    onClick={addLand}
-                    className="btn btn-success"
-                    type="button"
-                    id="button-addon2"
-                  >
-                    Add Land
-                  </button>
+          <div className=" ">
+            {newLandSubmission.status === CommunicatedDataStatus.NotInitialized ? null : newLandSubmission.status === CommunicatedDataStatus.Loading ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <div
+                  className="d-block spinner-lg spinner-border text-primary"
+                  role="status"
+                >
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            ) : newLandSubmission.status === CommunicatedDataStatus.Refreshing ? (
+              <div
+                style={{
+                  zIndex: 1,
+                  right: 'var(--spacer-3)',
+                  position: 'fixed',
+                }}
+              >
+                <div
+                  className="d-block spinner-lg spinner-border text-primary"
+                  role="status"
+                >
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            ) : newLandSubmission.status === CommunicationError.NotFound ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <FaSearch style={{ fontSize: '2rem' }} />
+                <p className="mt-3 text-center mb-0">Not Found</p>
+              </div>
+            ) : newLandSubmission.status === CommunicationError.ConnectionFailure ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
+                <p className="mt-3 text-center text-danger mb-0">
+                  No Internet. Check your connection and try again.
+                </p>
+              </div>
+            ) : newLandSubmission.status === CommunicationError.Forbidden ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <FaLock style={{ fontSize: '2rem' }} />
+                <p className="mt-3 text-center mb-0">
+                  You are not allowed to access this content
+                </p>
+              </div>
+            ) : newLandSubmission.status === CommunicationError.AbortedAndDealtWith ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <p className="mt-3 text-center mb-0">Redirecting...</p>
+              </div>
+            ) : newLandSubmission.status === CommunicationError.UnexpectedResponse ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <FaExclamationCircle
+                  className="text-danger"
+                  style={{ fontSize: '2rem' }}
+                />
+                <p className="text-danger mt-3 text-center mb-0">
+                  An unexpected error occurred. Try again later.
+                </p>
+              </div>
+            ) : null}
+            {newLandSubmission.status === CommunicatedDataStatus.Done ||
+            newLandSubmission.status === CommunicatedDataStatus.Refreshing ? (
+              <div className="input-group mb-3">
+                <input
+                  type="text"
+                  value={newLandName}
+                  onChange={(e) => replaceNewLandName(e.target.value)}
+                  placeholder="New land name"
+                  id="add-land-name-input"
+                  className={`form-control ${
+                    newLandSubmission.data ? 'is-invalid' : ''
+                  }`}
+                />
+                <button
+                  disabled={!newLandName.trim()}
+                  onClick={addLand}
+                  className="btn btn-success"
+                  type="button"
+                  id="button-addon2"
+                >
+                  Add Land
+                </button>
 
-                  {data?.error === 'name-already-taken' ? (
-                    <div className="invalid-feedback">
-                      This name is already taken
-                    </div>
-                  ) : null}
-                  {data?.error === 'lands-limit-exceeded' ? (
-                    <div className="invalid-feedback">
-                      You cannot have more than {data.limit} lands
-                    </div>
-                  ) : null}
-                  {data?.error ===
-                  'cannot-create-more-lands-without-start-block' ? (
-                    <div className="invalid-feedback">
-                      Before you can create any more lands, you need to upload a
-                      tileset and a map with a start block in your first land,
-                      so the player can enter and navigate your many lands
-                    </div>
-                  ) : null}
-                </div>
-              );
-            }}
-          </CommunicatedDataGate>
+                {newLandSubmission.data?.error === 'name-already-taken' ? (
+                  <div className="invalid-feedback">
+                    This name is already taken
+                  </div>
+                ) : null}
+                {newLandSubmission.data?.error === 'lands-limit-exceeded' ? (
+                  <div className="invalid-feedback">
+                    You cannot have more than {newLandSubmission.data.limit}{' '}
+                    lands
+                  </div>
+                ) : null}
+                {newLandSubmission.data?.error ===
+                'cannot-create-more-lands-without-start-block' ? (
+                  <div className="invalid-feedback">
+                    Before you can create any more lands, you need to upload a
+                    tileset and a map with a start block in your first land, so
+                    the player can enter and navigate your many lands
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
           <hr />
-          <CommunicatedDataGate dataWrapper={lands}>
-            {({ data }) => {
-              return (
-                <div className="list-group">
-                  {data.lands.map((land) => {
-                    return (
-                      <LinkAnchor
-                        href={EDIT_LAND_ROUTE.getHref(land.id)}
-                        key={land.id}
-                        className="list-group-item d-flex justify-content-between"
-                      >
-                        <span>{land.name}</span>{' '}
-                        <div>
-                          {land.published ? (
-                            <span className="badge bg-success">Published</span>
-                          ) : null}
-                          {land.isStartingLand ? (
-                            <span className="badge bg-info">Start</span>
-                          ) : null}
-                        </div>
-                      </LinkAnchor>
-                    );
-                  })}
+          <div className=" ">
+            {lands.status === CommunicatedDataStatus.NotInitialized ? null : lands.status === CommunicatedDataStatus.Loading ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <div
+                  className="d-block spinner-lg spinner-border text-primary"
+                  role="status"
+                >
+                  <span className="visually-hidden">Loading...</span>
                 </div>
-              );
-            }}
-          </CommunicatedDataGate>
+              </div>
+            ) : lands.status === CommunicatedDataStatus.Refreshing ? (
+              <div
+                style={{
+                  zIndex: 1,
+                  right: 'var(--spacer-3)',
+                  position: 'fixed',
+                }}
+              >
+                <div
+                  className="d-block spinner-lg spinner-border text-primary"
+                  role="status"
+                >
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            ) : lands.status === CommunicationError.NotFound ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <FaSearch style={{ fontSize: '2rem' }} />
+                <p className="mt-3 text-center mb-0">Not Found</p>
+              </div>
+            ) : lands.status === CommunicationError.ConnectionFailure ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
+                <p className="mt-3 text-center text-danger mb-0">
+                  No Internet. Check your connection and try again.
+                </p>
+              </div>
+            ) : lands.status === CommunicationError.Forbidden ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <FaLock style={{ fontSize: '2rem' }} />
+                <p className="mt-3 text-center mb-0">
+                  You are not allowed to access this content
+                </p>
+              </div>
+            ) : lands.status === CommunicationError.AbortedAndDealtWith ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <p className="mt-3 text-center mb-0">Redirecting...</p>
+              </div>
+            ) : lands.status === CommunicationError.UnexpectedResponse ? (
+              <div className="d-flex flex-column justify-content-center align-items-center">
+                <FaExclamationCircle
+                  className="text-danger"
+                  style={{ fontSize: '2rem' }}
+                />
+                <p className="text-danger mt-3 text-center mb-0">
+                  An unexpected error occurred. Try again later.
+                </p>
+              </div>
+            ) : null}
+            {lands.status === CommunicatedDataStatus.Done ||
+            lands.status === CommunicatedDataStatus.Refreshing ? (
+              <div className="list-group">
+                {lands.data.lands.map((land) => {
+                  return (
+                    <LinkAnchor
+                      href={EDIT_LAND_ROUTE.getHref(land.id)}
+                      key={land.id}
+                      className="list-group-item d-flex justify-content-between"
+                    >
+                      <span>{land.name}</span>{' '}
+                      <div>
+                        {land.published ? (
+                          <span className="badge bg-success">Published</span>
+                        ) : null}
+                        {land.isStartingLand ? (
+                          <span className="badge bg-info">Start</span>
+                        ) : null}
+                      </div>
+                    </LinkAnchor>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
         </>
       )}
     </Layout>

@@ -5,10 +5,14 @@ import * as styles from './header.module.scss';
 import { LinkAnchor } from '../../../ui/link-anchor';
 import { PROJECT_NAME } from '../../../project-details';
 import { FaBars, FaUser } from 'react-icons/fa';
+import { CommunicatedDataStatus } from '../../../communicated-data/communicated-data-types';
+import { CommunicationError } from '../../../communication-errors/communication-errors';
 import {
-  CommunicatedDataGate,
-  CommunicatedDataGateLayout,
-} from '../../../ui/communicated-data-gate';
+  FaExclamationCircle,
+  FaLock,
+  FaSearch,
+  FaWifi,
+} from 'react-icons/fa';
 import { LANDS_ROUTE } from '../../client/lands/lands-routes';
 import { USER_ROUTE } from '../../client/user/user-routes';
 import { INDEX_ROUTE } from '../../index/index-routes';
@@ -122,41 +126,85 @@ export function Header(props: Props) {
                 </li>
               </ul>
 
-              <CommunicatedDataGate
-                layout={CommunicatedDataGateLayout.Tape}
-                dataWrapper={session}
-                className="ms-auto"
+              <div
+                className={
+                  session.status === CommunicatedDataStatus.Refreshing
+                    ? 'd-flex flex-row align-items-center ms-auto'
+                    : ' ms-auto'
+                }
               >
-                {({ data }) => {
-                  return (
-                    <ul className="navbar-nav">
-                      <>
-                        {data ? (
-                          <li className="nav-item d-flex justify-content-center my-2 my-lg-0">
-                            <LinkAnchor
-                              href={USER_ROUTE.getHref()}
-                              className="btn btn-secondary"
-                            >
-                              <FaUser />
-                            </LinkAnchor>
-                          </li>
-                        ) : (
-                          <li className="nav-item">
-                            <LinkAnchor
-                              href={LOGIN_ROUTE.getHref({
-                                next: getCurrentLocalHref(),
-                              })}
-                              className="nav-link"
-                            >
-                              Login
-                            </LinkAnchor>
-                          </li>
-                        )}
-                      </>
-                    </ul>
-                  );
-                }}
-              </CommunicatedDataGate>
+                {session.status === CommunicatedDataStatus.NotInitialized ? null : session.status === CommunicatedDataStatus.Loading ? (
+                  <div className="d-flex flex-row justify-content-center align-items-center">
+                    <div
+                      className="d-block spinner-sm spinner-border text-primary"
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  </div>
+                ) : session.status === CommunicatedDataStatus.Refreshing ? (
+                  <div style={{ marginRight: 'var(--spacer-2)' }}>
+                    <div
+                      className="d-block spinner-sm spinner-border text-primary"
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  </div>
+                ) : session.status === CommunicationError.NotFound ? (
+                  <div className="d-flex flex-row justify-content-center align-items-center">
+                    <FaSearch />
+                    <p className="ms-2 mb-0">Not Found</p>
+                  </div>
+                ) : session.status === CommunicationError.ConnectionFailure ? (
+                  <div className="d-flex flex-row justify-content-center align-items-center">
+                    <FaWifi className="text-danger" />
+                    <p className="ms-2 text-danger mb-0">No Internet</p>
+                  </div>
+                ) : session.status === CommunicationError.Forbidden ? (
+                  <div className="d-flex flex-row justify-content-center align-items-center">
+                    <FaLock />
+                    <p className="ms-2 mb-0">Not Allowed</p>
+                  </div>
+                ) : session.status === CommunicationError.AbortedAndDealtWith ? (
+                  <div className="d-flex flex-row justify-content-center align-items-center">
+                    <p className="ms-2 mb-0">Redirecting...</p>
+                  </div>
+                ) : session.status === CommunicationError.UnexpectedResponse ? (
+                  <div className="d-flex flex-row justify-content-center align-items-center">
+                    <FaExclamationCircle className="text-danger" />
+                    <p className="text-danger ms-2 mb-0">Unexpected Error</p>
+                  </div>
+                ) : null}
+                {session.status === CommunicatedDataStatus.Done ||
+                session.status === CommunicatedDataStatus.Refreshing ? (
+                  <ul className="navbar-nav">
+                    <>
+                      {session.data ? (
+                        <li className="nav-item d-flex justify-content-center my-2 my-lg-0">
+                          <LinkAnchor
+                            href={USER_ROUTE.getHref()}
+                            className="btn btn-secondary"
+                          >
+                            <FaUser />
+                          </LinkAnchor>
+                        </li>
+                      ) : (
+                        <li className="nav-item">
+                          <LinkAnchor
+                            href={LOGIN_ROUTE.getHref({
+                              next: getCurrentLocalHref(),
+                            })}
+                            className="nav-link"
+                          >
+                            Login
+                          </LinkAnchor>
+                        </li>
+                      )}
+                    </>
+                  </ul>
+                ) : null}
+              </div>
             </Navbar.Collapse>
           </div>
         </Navbar>

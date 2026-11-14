@@ -2,16 +2,22 @@ import React from 'react';
 import { GetTrainDestinationsDTO } from '../../../api/routes/train/train-api';
 import { useEffect, useState } from 'react';
 import { AppLayout } from '../app-layout';
-import { CommunicatedDataGate } from '../../../ui/communicated-data-gate';
 import {
   CommunicatedData,
   CommunicatedDataStatus,
 } from '../../../communicated-data/communicated-data-types';
+import { CommunicationError } from '../../../communication-errors/communication-errors';
 import { useTrainAPI } from '../../../api/routes/train/train-api';
 import { AppContext } from '../../client/index/screens/app/app-screen-types';
 import { AppContextProvider, useAppContext } from '../app-context';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { FaCheck } from 'react-icons/fa';
+import {
+  FaCheck,
+  FaExclamationCircle,
+  FaLock,
+  FaSearch,
+  FaWifi,
+} from 'react-icons/fa';
 
 function Content(props: { appContext: AppContext }) {
   const trainsApi = useTrainAPI();
@@ -98,76 +104,135 @@ function Content(props: { appContext: AppContext }) {
           Go throught the station gates to board
         </p>
       ) : null}
-      <CommunicatedDataGate className="mt-3" dataWrapper={destinations}>
-        {({ data }) => {
-          return (
-            <InfiniteScroll
-              dataLength={data.length}
-              next={() => fetchDestinations()}
-              hasMore={lastTotal != null && data.length < lastTotal}
-              loader={
-                (
-                  [
-                    CommunicatedDataStatus.Loading,
-                    CommunicatedDataStatus.Refreshing,
-                  ] as string[]
-                ).includes(destinations.status) ? (
-                  <span className="d-block text-center">Loading...</span>
-                ) : null
-              }
-              endMessage={
-                <span className="d-block text-muted text-center">
-                  There are no more destinations
-                </span>
-              }
+      <div className=" mt-3">
+        {destinations.status === CommunicatedDataStatus.NotInitialized ? null : destinations.status === CommunicatedDataStatus.Loading ? (
+          <div className="d-flex flex-column justify-content-center align-items-center">
+            <div
+              className="d-block spinner-lg spinner-border text-primary"
+              role="status"
             >
-              {data.length === 0 ? (
-                <span className="d-block text-center">{'No results :('}</span>
-              ) : (
-                <ul className="list-unstyled">
-                  {data.map((destination) => {
-                    return (
-                      <li
-                        key={destination.worldId}
-                        className="py-2 d-flex justify-content-between align-items-center"
-                      >
-                        <span>{destination.name}</span>
-                        <button
-                          onClick={() => {
-                            replaceSelectedWorld({
-                              name: destination.name,
-                              worldId: destination.worldId,
-                            });
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        ) : destinations.status === CommunicatedDataStatus.Refreshing ? (
+          <div
+            style={{
+              zIndex: 1,
+              right: 'var(--spacer-3)',
+              position: 'fixed',
+            }}
+          >
+            <div
+              className="d-block spinner-lg spinner-border text-primary"
+              role="status"
+            >
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        ) : destinations.status === CommunicationError.NotFound ? (
+          <div className="d-flex flex-column justify-content-center align-items-center">
+            <FaSearch style={{ fontSize: '2rem' }} />
+            <p className="mt-3 text-center mb-0">Not Found</p>
+          </div>
+        ) : destinations.status === CommunicationError.ConnectionFailure ? (
+          <div className="d-flex flex-column justify-content-center align-items-center">
+            <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
+            <p className="mt-3 text-center text-danger mb-0">
+              No Internet. Check your connection and try again.
+            </p>
+          </div>
+        ) : destinations.status === CommunicationError.Forbidden ? (
+          <div className="d-flex flex-column justify-content-center align-items-center">
+            <FaLock style={{ fontSize: '2rem' }} />
+            <p className="mt-3 text-center mb-0">
+              You are not allowed to access this content
+            </p>
+          </div>
+        ) : destinations.status === CommunicationError.AbortedAndDealtWith ? (
+          <div className="d-flex flex-column justify-content-center align-items-center">
+            <p className="mt-3 text-center mb-0">Redirecting...</p>
+          </div>
+        ) : destinations.status === CommunicationError.UnexpectedResponse ? (
+          <div className="d-flex flex-column justify-content-center align-items-center">
+            <FaExclamationCircle
+              className="text-danger"
+              style={{ fontSize: '2rem' }}
+            />
+            <p className="text-danger mt-3 text-center mb-0">
+              An unexpected error occurred. Try again later.
+            </p>
+          </div>
+        ) : null}
+        {destinations.status === CommunicatedDataStatus.Done ||
+        destinations.status === CommunicatedDataStatus.Refreshing ? (
+          <InfiniteScroll
+            dataLength={destinations.data.length}
+            next={() => fetchDestinations()}
+            hasMore={
+              lastTotal != null && destinations.data.length < lastTotal
+            }
+            loader={
+              (
+                [
+                  CommunicatedDataStatus.Loading,
+                  CommunicatedDataStatus.Refreshing,
+                ] as string[]
+              ).includes(destinations.status) ? (
+                <span className="d-block text-center">Loading...</span>
+              ) : null
+            }
+            endMessage={
+              <span className="d-block text-muted text-center">
+                There are no more destinations
+              </span>
+            }
+          >
+            {destinations.data.length === 0 ? (
+              <span className="d-block text-center">{'No results :('}</span>
+            ) : (
+              <ul className="list-unstyled">
+                {destinations.data.map((destination) => {
+                  return (
+                    <li
+                      key={destination.worldId}
+                      className="py-2 d-flex justify-content-between align-items-center"
+                    >
+                      <span>{destination.name}</span>
+                      <button
+                        onClick={() => {
+                          replaceSelectedWorld({
+                            name: destination.name,
+                            worldId: destination.worldId,
+                          });
 
-                            trainsApi.setTrainDestination({
-                              destinationWorldName: destination.name,
-                              destinationWorldId: destination.worldId,
-                              currentStationLandId: props.appContext.land.id,
-                            });
-                          }}
-                          className={`btn btn-sm btn-${
-                            selectedWorld?.worldId === destination.worldId
-                              ? 'success'
-                              : 'info'
-                          }`}
-                        >
-                          {selectedWorld?.worldId === destination.worldId ? (
-                            <>
-                              <FaCheck /> Picked
-                            </>
-                          ) : (
-                            'Pick'
-                          )}
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </InfiniteScroll>
-          );
-        }}
-      </CommunicatedDataGate>
+                          trainsApi.setTrainDestination({
+                            destinationWorldName: destination.name,
+                            destinationWorldId: destination.worldId,
+                            currentStationLandId: props.appContext.land.id,
+                          });
+                        }}
+                        className={`btn btn-sm btn-${
+                          selectedWorld?.worldId === destination.worldId
+                            ? 'success'
+                            : 'info'
+                        }`}
+                      >
+                        {selectedWorld?.worldId === destination.worldId ? (
+                          <>
+                            <FaCheck /> Picked
+                          </>
+                        ) : (
+                          'Pick'
+                        )}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </InfiniteScroll>
+        ) : null}
+      </div>
     </div>
   );
 }
@@ -176,9 +241,70 @@ function LoadingGate() {
   const appContext = useAppContext();
 
   return (
-    <CommunicatedDataGate dataWrapper={appContext}>
-      {({ data }) => <Content appContext={data} />}
-    </CommunicatedDataGate>
+    <div className=" ">
+      {appContext.status === CommunicatedDataStatus.NotInitialized ? null : appContext.status === CommunicatedDataStatus.Loading ? (
+        <div className="d-flex flex-column justify-content-center align-items-center">
+          <div
+            className="d-block spinner-lg spinner-border text-primary"
+            role="status"
+          >
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      ) : appContext.status === CommunicatedDataStatus.Refreshing ? (
+        <div
+          style={{
+            zIndex: 1,
+            right: 'var(--spacer-3)',
+            position: 'fixed',
+          }}
+        >
+          <div
+            className="d-block spinner-lg spinner-border text-primary"
+            role="status"
+          >
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      ) : appContext.status === CommunicationError.NotFound ? (
+        <div className="d-flex flex-column justify-content-center align-items-center">
+          <FaSearch style={{ fontSize: '2rem' }} />
+          <p className="mt-3 text-center mb-0">Not Found</p>
+        </div>
+      ) : appContext.status === CommunicationError.ConnectionFailure ? (
+        <div className="d-flex flex-column justify-content-center align-items-center">
+          <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
+          <p className="mt-3 text-center text-danger mb-0">
+            No Internet. Check your connection and try again.
+          </p>
+        </div>
+      ) : appContext.status === CommunicationError.Forbidden ? (
+        <div className="d-flex flex-column justify-content-center align-items-center">
+          <FaLock style={{ fontSize: '2rem' }} />
+          <p className="mt-3 text-center mb-0">
+            You are not allowed to access this content
+          </p>
+        </div>
+      ) : appContext.status === CommunicationError.AbortedAndDealtWith ? (
+        <div className="d-flex flex-column justify-content-center align-items-center">
+          <p className="mt-3 text-center mb-0">Redirecting...</p>
+        </div>
+      ) : appContext.status === CommunicationError.UnexpectedResponse ? (
+        <div className="d-flex flex-column justify-content-center align-items-center">
+          <FaExclamationCircle
+            className="text-danger"
+            style={{ fontSize: '2rem' }}
+          />
+          <p className="text-danger mt-3 text-center mb-0">
+            An unexpected error occurred. Try again later.
+          </p>
+        </div>
+      ) : null}
+      {appContext.status === CommunicatedDataStatus.Done ||
+      appContext.status === CommunicatedDataStatus.Refreshing ? (
+        <Content appContext={appContext.data} />
+      ) : null}
+    </div>
   );
 }
 

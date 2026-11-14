@@ -1,8 +1,6 @@
 import React from 'react';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { CommunicatedDataGate } from '../../../../../ui/communicated-data-gate';
-import { CommunicatedDataStatus } from '../../../../../communicated-data/communicated-data-types';
 import { MusicService } from '../../music-ticker';
 import { AppContext } from './app-screen-types';
 import { KeypadBroker } from '../../keypad-broker';
@@ -58,11 +56,16 @@ export function IframeWrapper(props: {
       </Helmet>
       {loading ? (
         <div className="p-3" style={{ position: 'absolute' }}>
-          <CommunicatedDataGate
-            dataWrapper={{ status: CommunicatedDataStatus.Loading }}
-          >
-            {() => null}
-          </CommunicatedDataGate>
+          <div className=" ">
+            <div className="d-flex flex-column justify-content-center align-items-center">
+              <div
+                className="d-block spinner-lg spinner-border text-primary"
+                role="status"
+              >
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </div>
         </div>
       ) : null}
       <iframe
