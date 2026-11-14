@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrainTicketMachineTemplate } from '../../page-components/apps/train-ticket-machine.tsx/train-ticket-machine';
+import { TrainTicketMachineTemplate } from '../../page-components/apps/train-ticket-machine/train-ticket-machine';
 import { HtmlHead } from '../../page-components/html-head/html-head';
 import type { PageProps } from 'gatsby';
 
