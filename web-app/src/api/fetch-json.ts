@@ -68,7 +68,7 @@ export function useApiFetchJSON() {
       const responseText = await response.text();
       responseJSON = responseText ? JSON.parse(responseText) : undefined;
     } catch (error) {
-      logger.logError('invalid-response-format', error, {
+      logger.logException('invalid-response-format', error, {
         request: {
           path: args.path,
           method: args.method,
@@ -97,7 +97,7 @@ export function useApiFetchJSON() {
           error: ApiFetchErrors.Aborted
         }
       } else {
-        logger.logError('invalid-response-data', new Error(), {
+        logger.logException('invalid-response-data', new Error(), {
           request: {
             path: args.path,
             method: args.method,

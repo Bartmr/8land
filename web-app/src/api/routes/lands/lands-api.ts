@@ -2,7 +2,7 @@ import { z } from 'zod';
 import {
   useApiFetchJSON,
 } from '../../fetch-json';
-import { Logger } from '../../../logging/logger';
+import { Logger, useLogger } from '../../../logging/logger';
 import { ApiFetchErrors } from '../../fetch-errors';
 
 export const CreateLandRequestSchemaObj = {
@@ -448,7 +448,7 @@ const getLandsToClaimResponseSchema = z.object({
 export type GetLandsToClaimDTO = z.infer<typeof getLandsToClaimResponseBodySchema>;
 
 export class LandsAPI {
-  constructor(private api: ReturnType<typeof useApiFetchJSON>) {}
+  constructor(private api: ReturnType<typeof useApiFetchJSON>, private logger: Logger) {}
 
   navigate(args: { doorBlockId: string; currentLandId: string }) {
     const query = new URLSearchParams({
@@ -571,7 +571,7 @@ export class LandsAPI {
         const body = res.response.body;
 
         if (body?.error === 'start-lands-limit-exceeded') {
-          Logger.logError(body.error, new Error());
+          this.logger.logException(body.error, new Error());
         }
 
         if (
@@ -692,6 +692,7 @@ export class LandsAPI {
 
 export function useLandsAPI() {
   const api = useApiFetchJSON();
+  const logger = useLogger();
 
-  return new LandsAPI(api);
+  return new LandsAPI(api, logger);
 }

@@ -23,7 +23,7 @@ export function useAuthenticationLogout() {
         credentials: "include",
       });
     } catch (err) {
-      logger.logError("logout-connection-failure", err);
+      logger.logException("logout-connection-failure", err);
 
       setSessionState({
         error: ApiFetchErrors.ConnectionFailure,
@@ -39,7 +39,7 @@ export function useAuthenticationLogout() {
     } else {
       const text = await response.text();
 
-      logger.logError("logout-unexpected-response", new Error(), {
+      logger.logException("logout-unexpected-response", new Error(), {
         response: {
           status: response.status,
           text,

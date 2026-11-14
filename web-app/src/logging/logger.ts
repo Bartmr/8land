@@ -1,53 +1,58 @@
 /* eslint-disable no-console */
+import { useMemo } from 'react';
 import { EnvironmentVariables } from '../environment-variables';
 import { RUNNING_IN_SERVER } from '../runtime';
 
 
-export const LOG_SERVICE_NAME = 'Sentry';
-export const LOG_SERVICE_COMPANY = 'Functional Software, Inc.';
+export class Logger {
 
-
-class LoggerImpl {
-
-  logDebug(key: string, extraData?: { [key: string]: unknown }) {
+  logDebug(message: string, context?: { [key: string]: unknown }) {
     if (EnvironmentVariables.LOG_DEBUG) {
-      console.log('----- DEBUG: ' + key, '\nExtra data:', extraData);
+      console.log('----- DEBUG: ' + message, '\nExtra data:', context);
     }
   }
 
   logWarning(
-    key: string,
     message: string,
-    extraData?: { [key: string]: unknown },
+    context?: { [key: string]: unknown },
   ) {
 
 
       // TODO: Implement remote logging here
 
-      console.warn('Logged warning with key: ' + key + '. ' + message);
-      console.warn('Extra data:', extraData);
+      console.warn('Logged warning with message: ' + message);
+      console.warn('Extra data:', context);
   }
 
   logError(
-    errorKey: string,
+    message: string,
+    context?: { [key: string]: unknown },
+  ) {
+
+
+      // TODO: Implement remote logging here
+
+      console.error('Logged warning with message: ' + message);
+      console.error('Extra data:', context);
+  }
+
+  logException(
+    message: string,
     /*
       In Javascript, any value type can be thrown,
       so we don't know if a caught value is actually an Error instance.
     */
     caughtValue: unknown,
-    extraData?: { [key: string]: unknown },
+    context?: { [key: string]: unknown },
   ) {
-    const caughtValueIsInstanceOfError = caughtValue instanceof Error;
-    const error = caughtValueIsInstanceOfError ? caughtValue : new Error();
+    
 
     // Stop building pages if one of them has an error
     if (RUNNING_IN_SERVER) {
-      this.logErrorToConsole(
-        errorKey,
+      this.logExceptionToConsole(
+        message,
         caughtValue,
-        error,
-        caughtValueIsInstanceOfError,
-        extraData,
+        context,
       );
 
       throw caughtValue;
@@ -61,24 +66,21 @@ class LoggerImpl {
       Maybe it's best to just call either the remote logger or the console,
       and not both, so we don't get twice the events.
     */
-
-
-    this.logErrorToConsole(
-      errorKey,
+    this.logExceptionToConsole(
+      message,
       caughtValue,
-      error,
-      caughtValueIsInstanceOfError,
-      extraData,
+      context,
     );
   }
 
-  private logErrorToConsole(
+  private logExceptionToConsole(
     errorKey: string,
     caughtValue: unknown,
-    error: unknown,
-    caughtValueIsInstanceOfError: boolean,
-    extraData: unknown,
+    context: unknown,
   ) {
+    const caughtValueIsInstanceOfError = caughtValue instanceof Error;
+    const error = caughtValueIsInstanceOfError ? caughtValue : new Error();
+
     console.error('Logged error with key: ' + errorKey);
 
     if (!caughtValueIsInstanceOfError) {
@@ -87,16 +89,12 @@ class LoggerImpl {
 
     console.error(error);
 
-    if (typeof extraData !== 'undefined') {
-      console.error('Error extra data:', extraData);
+    if (typeof context !== 'undefined') {
+      console.error('Error extra data:', context);
     }
   }
 }
 
-const Logger = new LoggerImpl();
-
-export { Logger };
-
 export function useLogger() {
-  return Logger;
+  return useMemo(() => new Logger(), []);
 }

@@ -6,7 +6,7 @@ import {
   FaWifi,
 } from 'react-icons/fa';
 import { RouteComponentProps } from '@reach/router';
-import { Logger } from '../../../logging/logger';
+import { Logger, useLogger } from '../../../logging/logger';
 import { ApiFetchErrors } from '../../../api/fetch-errors';
 import { Layout } from '../../layout/layout';
 import { LinkAnchor } from '../../../ui/link-anchor';
@@ -19,6 +19,7 @@ import { LAND_IDEAS_ROUTE } from '../../help/lands/land-ideas/land-ideas-routes'
 
 export function Lands(_props: RouteComponentProps) {
   const api = useLandsAPI();
+  const logger = useLogger();
 
   const [newLandName, replaceNewLandName] = useState('');
 
@@ -55,7 +56,7 @@ export function Lands(_props: RouteComponentProps) {
       });
     } else {
       if (res.response.body.total > res.response.body.limit) {
-        Logger.logError('lands-page-needs-pagination', new Error());
+        logger.logException('lands-page-needs-pagination', new Error());
 
         window.alert('Lands page needs pagination');
 
