@@ -5,8 +5,6 @@ import { useState, useContext } from 'react';
 import { CommunicationError } from '../../../communication-errors/communication-errors';
 import {
   FaExclamationCircle,
-  FaLock,
-  FaSearch,
   FaWifi,
 } from 'react-icons/fa';
 import { LinkAnchor } from '../../../ui/link-anchor';
@@ -145,12 +143,7 @@ function Content() {
                       </div>
                     </div>
                   ) : null}
-                  {formState.error === CommunicationError.NotFound ? (
-                    <div className="d-flex flex-column justify-content-center align-items-center">
-                      <FaSearch style={{ fontSize: '2rem' }} />
-                      <p className="mt-3 text-center mb-0">Not Found</p>
-                    </div>
-                  ) : formState.error === CommunicationError.ConnectionFailure ? (
+                  {formState.error === CommunicationError.ConnectionFailure ? (
                     <div className="d-flex flex-column justify-content-center align-items-center">
                       <FaWifi
                         className="text-danger"
@@ -158,13 +151,6 @@ function Content() {
                       />
                       <p className="mt-3 text-center text-danger mb-0">
                         No Internet. Check your connection and try again.
-                      </p>
-                    </div>
-                  ) : formState.error === CommunicationError.Forbidden ? (
-                    <div className="d-flex flex-column justify-content-center align-items-center">
-                      <FaLock style={{ fontSize: '2rem' }} />
-                      <p className="mt-3 text-center mb-0">
-                        You are not allowed to access this content
                       </p>
                     </div>
                   ) : formState.error === CommunicationError.AbortedAndDealtWith ? (

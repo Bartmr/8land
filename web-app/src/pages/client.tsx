@@ -5,8 +5,6 @@ import type { PageProps } from 'gatsby';
 import { CommunicationError } from '../communication-errors/communication-errors';
 import {
   FaExclamationCircle,
-  FaLock,
-  FaSearch,
   FaWifi,
 } from 'react-icons/fa';
 
@@ -57,23 +55,11 @@ const Component = () => {
           </div>
         </div>
       ) : null}
-      {entrypoint.error === CommunicationError.NotFound ? (
-        <div className="d-flex flex-column justify-content-center align-items-center">
-          <FaSearch style={{ fontSize: '2rem' }} />
-          <p className="mt-3 text-center mb-0">Not Found</p>
-        </div>
-      ) : entrypoint.error === CommunicationError.ConnectionFailure ? (
+      {entrypoint.error === CommunicationError.ConnectionFailure ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
           <p className="mt-3 text-center text-danger mb-0">
             No Internet. Check your connection and try again.
-          </p>
-        </div>
-      ) : entrypoint.error === CommunicationError.Forbidden ? (
-        <div className="d-flex flex-column justify-content-center align-items-center">
-          <FaLock style={{ fontSize: '2rem' }} />
-          <p className="mt-3 text-center mb-0">
-            You are not allowed to access this content
           </p>
         </div>
       ) : entrypoint.error === CommunicationError.AbortedAndDealtWith ? (

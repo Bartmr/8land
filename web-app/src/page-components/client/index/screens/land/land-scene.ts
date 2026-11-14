@@ -333,10 +333,6 @@ export class LandScene extends Phaser.Scene {
           this.dependencies.dialogueService.openText(
             "Couldn't connect to the Internet. Check your connection and enter the door again.",
           );
-        } else if (res.error === CommunicationError.NotFound) {
-          this.dependencies.dialogueService.openText(
-            "This path's destination no longer exists.",
-          );
         } else {
           this.dependencies.dialogueService.openText(
             "There was an error loading what's further down this path. Try to enter it again later.",
@@ -393,15 +389,6 @@ export class LandScene extends Phaser.Scene {
         if (res.error === CommunicationError.ConnectionFailure) {
           this.dependencies.dialogueService.openText(
             "Couldn't connect to the Internet. Check your connection and enter the door again.",
-          );
-        }
-        if (res.error === CommunicationError.NotFound) {
-          this.dependencies.trainAPI.clearTrainDestination({
-            currentStationLandId: this.args.land.id,
-          });
-
-          this.dependencies.dialogueService.openText(
-            'This destination no longer exists. Please pick another destination in the ticket machines available at this train station.',
           );
         } else {
           this.dependencies.dialogueService.openText(

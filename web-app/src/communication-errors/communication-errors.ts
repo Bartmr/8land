@@ -2,16 +2,12 @@ export enum CommunicationError {
   ConnectionFailure = 'connection-failure',
   UnexpectedResponse = 'unexpected-response',
   AbortedAndDealtWith = 'aborted-and-dealt-with',
-  Forbidden = 'forbidden',
-  NotFound = 'not-found',
 }
 
 export const COMMUNICATION_ERROR_VALUES = [
   CommunicationError.ConnectionFailure,
   CommunicationError.UnexpectedResponse,
-  CommunicationError.AbortedAndDealtWith,
-  CommunicationError.Forbidden,
-  CommunicationError.NotFound
+  CommunicationError.AbortedAndDealtWith
 ]
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

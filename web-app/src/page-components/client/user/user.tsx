@@ -7,8 +7,6 @@ import { ChangeEmail } from './components/change-email';
 import { FaPersonThroughWindow } from 'react-icons/fa6';
 import {
   FaExclamationCircle,
-  FaLock,
-  FaSearch,
   FaWifi,
 } from 'react-icons/fa';
 import { useLandsAPI } from '../../../api/routes/lands/lands-api';
@@ -72,23 +70,11 @@ export function User(_props: RouteComponentProps) {
               </div>
             </div>
           ) : null}
-          {session.error === CommunicationError.NotFound ? (
-            <div className="d-flex flex-column justify-content-center align-items-center">
-              <FaSearch style={{ fontSize: '2rem' }} />
-              <p className="mt-3 text-center mb-0">Not Found</p>
-            </div>
-          ) : session.error === CommunicationError.ConnectionFailure ? (
+          {session.error === CommunicationError.ConnectionFailure ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
               <p className="mt-3 text-center text-danger mb-0">
                 No Internet. Check your connection and try again.
-              </p>
-            </div>
-          ) : session.error === CommunicationError.Forbidden ? (
-            <div className="d-flex flex-column justify-content-center align-items-center">
-              <FaLock style={{ fontSize: '2rem' }} />
-              <p className="mt-3 text-center mb-0">
-                You are not allowed to access this content
               </p>
             </div>
           ) : session.error === CommunicationError.AbortedAndDealtWith ? (
@@ -176,20 +162,10 @@ export function User(_props: RouteComponentProps) {
                             </div>
                           </div>
                         ) : null}
-                        {escapeStatus.error === CommunicationError.NotFound ? (
-                          <div className="d-flex flex-row justify-content-center align-items-center">
-                            <FaSearch />
-                            <p className="ms-2 mb-0">Not Found</p>
-                          </div>
-                        ) : escapeStatus.error === CommunicationError.ConnectionFailure ? (
+                        {escapeStatus.error === CommunicationError.ConnectionFailure ? (
                           <div className="d-flex flex-row justify-content-center align-items-center">
                             <FaWifi className="text-danger" />
                             <p className="ms-2 text-danger mb-0">No Internet</p>
-                          </div>
-                        ) : escapeStatus.error === CommunicationError.Forbidden ? (
-                          <div className="d-flex flex-row justify-content-center align-items-center">
-                            <FaLock />
-                            <p className="ms-2 mb-0">Not Allowed</p>
                           </div>
                         ) : escapeStatus.error === CommunicationError.AbortedAndDealtWith ? (
                           <div className="d-flex flex-row justify-content-center align-items-center">

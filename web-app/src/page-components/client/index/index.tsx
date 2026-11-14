@@ -4,8 +4,6 @@ import { RouteComponentProps } from '@reach/router';
 import { CommunicationError } from '../../../communication-errors/communication-errors';
 import {
   FaExclamationCircle,
-  FaLock,
-  FaSearch,
   FaWifi,
 } from 'react-icons/fa';
 import { GameFrame } from './game-frame';
@@ -80,23 +78,11 @@ function Content(props: {
           </div>
         </div>
       ) : null}
-      {session.error === CommunicationError.NotFound ? (
-        <div className="d-flex flex-column justify-content-center align-items-center">
-          <FaSearch style={{ fontSize: '2rem' }} />
-          <p className="mt-3 text-center mb-0">Not Found</p>
-        </div>
-      ) : session.error === CommunicationError.ConnectionFailure ? (
+      {session.error === CommunicationError.ConnectionFailure ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
           <p className="mt-3 text-center text-danger mb-0">
             No Internet. Check your connection and try again.
-          </p>
-        </div>
-      ) : session.error === CommunicationError.Forbidden ? (
-        <div className="d-flex flex-column justify-content-center align-items-center">
-          <FaLock style={{ fontSize: '2rem' }} />
-          <p className="mt-3 text-center mb-0">
-            You are not allowed to access this content
           </p>
         </div>
       ) : session.error === CommunicationError.AbortedAndDealtWith ? (
@@ -142,23 +128,11 @@ function Content(props: {
               </div>
             </div>
           ) : null}
-          {landToResumeFrom.error === CommunicationError.NotFound ? (
-            <div className="d-flex flex-column justify-content-center align-items-center">
-              <FaSearch style={{ fontSize: '2rem' }} />
-              <p className="mt-3 text-center mb-0">Not Found</p>
-            </div>
-          ) : landToResumeFrom.error === CommunicationError.ConnectionFailure ? (
+          {landToResumeFrom.error === CommunicationError.ConnectionFailure ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
               <p className="mt-3 text-center text-danger mb-0">
                 No Internet. Check your connection and try again.
-              </p>
-            </div>
-          ) : landToResumeFrom.error === CommunicationError.Forbidden ? (
-            <div className="d-flex flex-column justify-content-center align-items-center">
-              <FaLock style={{ fontSize: '2rem' }} />
-              <p className="mt-3 text-center mb-0">
-                You are not allowed to access this content
               </p>
             </div>
           ) : landToResumeFrom.error === CommunicationError.AbortedAndDealtWith ? (

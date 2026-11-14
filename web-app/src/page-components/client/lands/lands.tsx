@@ -3,8 +3,6 @@ import { IndexLandsDTO, GetLandsToClaimDTO } from '../../../api/routes/lands/lan
 import { useEffect, useState } from 'react';
 import {
   FaExclamationCircle,
-  FaLock,
-  FaSearch,
   FaWifi,
 } from 'react-icons/fa';
 import { RouteComponentProps } from '@reach/router';
@@ -183,12 +181,7 @@ export function Lands(_props: RouteComponentProps) {
                   </div>
                 </div>
               ) : null}
-              {landsToClaim.error === CommunicationError.NotFound ? (
-                <div className="d-flex flex-column justify-content-center align-items-center">
-                  <FaSearch style={{ fontSize: '2rem' }} />
-                  <p className="mt-3 text-center mb-0">Not Found</p>
-                </div>
-              ) : landsToClaim.error === CommunicationError.ConnectionFailure ? (
+              {landsToClaim.error === CommunicationError.ConnectionFailure ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <FaWifi
                     className="text-danger"
@@ -196,13 +189,6 @@ export function Lands(_props: RouteComponentProps) {
                   />
                   <p className="mt-3 text-center text-danger mb-0">
                     No Internet. Check your connection and try again.
-                  </p>
-                </div>
-              ) : landsToClaim.error === CommunicationError.Forbidden ? (
-                <div className="d-flex flex-column justify-content-center align-items-center">
-                  <FaLock style={{ fontSize: '2rem' }} />
-                  <p className="mt-3 text-center mb-0">
-                    You are not allowed to access this content
                   </p>
                 </div>
               ) : landsToClaim.error === CommunicationError.AbortedAndDealtWith ? (
@@ -264,23 +250,11 @@ export function Lands(_props: RouteComponentProps) {
                 </div>
               </div>
             ) : null}
-            {newLandSubmission.error === CommunicationError.NotFound ? (
-              <div className="d-flex flex-column justify-content-center align-items-center">
-                <FaSearch style={{ fontSize: '2rem' }} />
-                <p className="mt-3 text-center mb-0">Not Found</p>
-              </div>
-            ) : newLandSubmission.error === CommunicationError.ConnectionFailure ? (
+            {newLandSubmission.error === CommunicationError.ConnectionFailure ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
                 <p className="mt-3 text-center text-danger mb-0">
                   No Internet. Check your connection and try again.
-                </p>
-              </div>
-            ) : newLandSubmission.error === CommunicationError.Forbidden ? (
-              <div className="d-flex flex-column justify-content-center align-items-center">
-                <FaLock style={{ fontSize: '2rem' }} />
-                <p className="mt-3 text-center mb-0">
-                  You are not allowed to access this content
                 </p>
               </div>
             ) : newLandSubmission.error === CommunicationError.AbortedAndDealtWith ? (
@@ -370,23 +344,11 @@ export function Lands(_props: RouteComponentProps) {
                 </div>
               </div>
             ) : null}
-            {lands.error === CommunicationError.NotFound ? (
-              <div className="d-flex flex-column justify-content-center align-items-center">
-                <FaSearch style={{ fontSize: '2rem' }} />
-                <p className="mt-3 text-center mb-0">Not Found</p>
-              </div>
-            ) : lands.error === CommunicationError.ConnectionFailure ? (
+            {lands.error === CommunicationError.ConnectionFailure ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
                 <p className="mt-3 text-center text-danger mb-0">
                   No Internet. Check your connection and try again.
-                </p>
-              </div>
-            ) : lands.error === CommunicationError.Forbidden ? (
-              <div className="d-flex flex-column justify-content-center align-items-center">
-                <FaLock style={{ fontSize: '2rem' }} />
-                <p className="mt-3 text-center mb-0">
-                  You are not allowed to access this content
                 </p>
               </div>
             ) : lands.error === CommunicationError.AbortedAndDealtWith ? (

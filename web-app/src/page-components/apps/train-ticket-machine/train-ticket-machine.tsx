@@ -10,8 +10,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import {
   FaCheck,
   FaExclamationCircle,
-  FaLock,
-  FaSearch,
   FaWifi,
 } from 'react-icons/fa';
 
@@ -132,23 +130,11 @@ function Content(props: { appContext: AppContext }) {
             </div>
           </div>
         ) : null}
-        {destinations.error === CommunicationError.NotFound ? (
-          <div className="d-flex flex-column justify-content-center align-items-center">
-            <FaSearch style={{ fontSize: '2rem' }} />
-            <p className="mt-3 text-center mb-0">Not Found</p>
-          </div>
-        ) : destinations.error === CommunicationError.ConnectionFailure ? (
+        {destinations.error === CommunicationError.ConnectionFailure ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
             <p className="mt-3 text-center text-danger mb-0">
               No Internet. Check your connection and try again.
-            </p>
-          </div>
-        ) : destinations.error === CommunicationError.Forbidden ? (
-          <div className="d-flex flex-column justify-content-center align-items-center">
-            <FaLock style={{ fontSize: '2rem' }} />
-            <p className="mt-3 text-center mb-0">
-              You are not allowed to access this content
             </p>
           </div>
         ) : destinations.error === CommunicationError.AbortedAndDealtWith ? (
@@ -265,23 +251,11 @@ function LoadingGate() {
           </div>
         </div>
       ) : null}
-      {appContext.error === CommunicationError.NotFound ? (
-        <div className="d-flex flex-column justify-content-center align-items-center">
-          <FaSearch style={{ fontSize: '2rem' }} />
-          <p className="mt-3 text-center mb-0">Not Found</p>
-        </div>
-      ) : appContext.error === CommunicationError.ConnectionFailure ? (
+      {appContext.error === CommunicationError.ConnectionFailure ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <FaWifi className="text-danger" style={{ fontSize: '2rem' }} />
           <p className="mt-3 text-center text-danger mb-0">
             No Internet. Check your connection and try again.
-          </p>
-        </div>
-      ) : appContext.error === CommunicationError.Forbidden ? (
-        <div className="d-flex flex-column justify-content-center align-items-center">
-          <FaLock style={{ fontSize: '2rem' }} />
-          <p className="mt-3 text-center mb-0">
-            You are not allowed to access this content
           </p>
         </div>
       ) : appContext.error === CommunicationError.AbortedAndDealtWith ? (

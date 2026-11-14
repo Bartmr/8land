@@ -8,8 +8,6 @@ import { FaBars, FaUser } from 'react-icons/fa';
 import { CommunicationError } from '../../../communication-errors/communication-errors';
 import {
   FaExclamationCircle,
-  FaLock,
-  FaSearch,
   FaWifi,
 } from 'react-icons/fa';
 import { LANDS_ROUTE } from '../../client/lands/lands-routes';
@@ -152,20 +150,10 @@ export function Header(props: Props) {
                     </div>
                   </div>
                 ) : null}
-                {session.error === CommunicationError.NotFound ? (
-                  <div className="d-flex flex-row justify-content-center align-items-center">
-                    <FaSearch />
-                    <p className="ms-2 mb-0">Not Found</p>
-                  </div>
-                ) : session.error === CommunicationError.ConnectionFailure ? (
+                {session.error === CommunicationError.ConnectionFailure ? (
                   <div className="d-flex flex-row justify-content-center align-items-center">
                     <FaWifi className="text-danger" />
                     <p className="ms-2 text-danger mb-0">No Internet</p>
-                  </div>
-                ) : session.error === CommunicationError.Forbidden ? (
-                  <div className="d-flex flex-row justify-content-center align-items-center">
-                    <FaLock />
-                    <p className="ms-2 mb-0">Not Allowed</p>
                   </div>
                 ) : session.error === CommunicationError.AbortedAndDealtWith ? (
                   <div className="d-flex flex-row justify-content-center align-items-center">
