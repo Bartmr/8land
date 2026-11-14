@@ -33,6 +33,7 @@ type ApiFetchJSON = {
 export function useApiFetchJSON() {
   const logger = useLogger();
   const { setSessionState } = useContext(AuthenticationStateContext) || throwError();
+  const logout = useAuthenticationLogout();
 
   const fetchJSON: ApiFetchJSON = useCallback(async (args) => {
     const headers: HeadersInit = {};
@@ -88,6 +89,8 @@ export function useApiFetchJSON() {
 
     if (!validationResult.success) {
       if (response.status == 401) {
+        await logout();
+
         setSessionState({ data: null })
 
         return {

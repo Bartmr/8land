@@ -1,6 +1,8 @@
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 import { ApiFetchErrors } from "./fetch-errors";
 import { throwError } from "../throw-error";
+import { useAuthenticationLogout } from "../users/authentication/logout";
+import { AuthenticationStateContext } from "../users/authentication/authentication-state";
 
 export const API_URL = process.env.GATSBY_API_URL || throwError();
 
@@ -17,6 +19,9 @@ export type ApiFetchResult =
 export type ApiFetch = ReturnType<typeof useApiFetch>;
 
 export function useApiFetch() {
+  const logout = useAuthenticationLogout();
+  const { setSessionState } = useContext(AuthenticationStateContext) || throwError();
+
   const apiFetch = useCallback(
     async (path: string, init: RequestInit) => {
       let response: Response;
@@ -30,6 +35,16 @@ export function useApiFetch() {
         return {
           error: ApiFetchErrors.ConnectionFailure,
         };
+      }
+
+      if (response.status === 401) {
+        await logout();
+
+        setSessionState({ data: null })
+
+        return {
+          error: ApiFetchErrors.Aborted
+        }
       }
 
       return {
