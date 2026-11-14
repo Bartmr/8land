@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { AppLayout } from '../../layout/app-layout';
+import { AppLayout } from '../app-layout';
 import { CommunicatedDataGate } from '../../../ui/communicated-data-gate';
 import { CommunicatedDataStatus } from '../../../communicated-data/communicated-data-types';
 import { AppContextProvider, useAppContext } from '../app-context';

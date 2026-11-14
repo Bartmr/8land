@@ -1,7 +1,7 @@
 import React from 'react';
 import { GetTrainDestinationsDTO } from '../../../api/routes/train/train.api';
 import { useEffect, useState } from 'react';
-import { AppLayout } from '../../layout/app-layout';
+import { AppLayout } from '../app-layout';
 import { CommunicatedDataGate } from '../../../ui/communicated-data-gate';
 import {
   CommunicatedData,
