@@ -191,7 +191,7 @@ export function Lands(_props: RouteComponentProps) {
                     No Internet. Check your connection and try again.
                   </p>
                 </div>
-              ) : landsToClaim.error === ApiFetchErrors.AbortedAndDealtWith ? (
+              ) : landsToClaim.error === ApiFetchErrors.Aborted ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <p className="mt-3 text-center mb-0">Redirecting...</p>
                 </div>
@@ -257,7 +257,7 @@ export function Lands(_props: RouteComponentProps) {
                   No Internet. Check your connection and try again.
                 </p>
               </div>
-            ) : newLandSubmission.error === ApiFetchErrors.AbortedAndDealtWith ? (
+            ) : newLandSubmission.error === ApiFetchErrors.Aborted ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <p className="mt-3 text-center mb-0">Redirecting...</p>
               </div>
@@ -351,7 +351,7 @@ export function Lands(_props: RouteComponentProps) {
                   No Internet. Check your connection and try again.
                 </p>
               </div>
-            ) : lands.error === ApiFetchErrors.AbortedAndDealtWith ? (
+            ) : lands.error === ApiFetchErrors.Aborted ? (
               <div className="d-flex flex-column justify-content-center align-items-center">
                 <p className="mt-3 text-center mb-0">Redirecting...</p>
               </div>

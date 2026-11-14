@@ -155,7 +155,7 @@ export function Header(props: Props) {
                     <FaWifi className="text-danger" />
                     <p className="ms-2 text-danger mb-0">No Internet</p>
                   </div>
-                ) : session.error === ApiFetchErrors.AbortedAndDealtWith ? (
+                ) : session.error === ApiFetchErrors.Aborted ? (
                   <div className="d-flex flex-row justify-content-center align-items-center">
                     <p className="ms-2 mb-0">Redirecting...</p>
                   </div>

@@ -33,7 +33,7 @@ export const AuthenticatedRoute = (props: Props) => {
                 No Internet. Check your connection and try again.
               </p>
             </div>
-          ) : sessionState.error === ApiFetchErrors.AbortedAndDealtWith ? (
+          ) : sessionState.error === ApiFetchErrors.Aborted ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p className="mt-3 text-center mb-0">Redirecting...</p>
             </div>

@@ -1,13 +1,13 @@
 export enum ApiFetchErrors {
   ConnectionFailure = 'connection-failure',
   UnexpectedResponse = 'unexpected-response',
-  AbortedAndDealtWith = 'aborted-and-dealt-with',
+  Aborted = 'aborted',
 }
 
 export const API_FETCH_ERROR_VALUES = [
   ApiFetchErrors.ConnectionFailure,
   ApiFetchErrors.UnexpectedResponse,
-  ApiFetchErrors.AbortedAndDealtWith
+  ApiFetchErrors.Aborted
 ]
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

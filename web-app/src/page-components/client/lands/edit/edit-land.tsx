@@ -139,7 +139,7 @@ export function EditLandWithRouteProps(props: { id: string }) {
               No Internet. Check your connection and try again.
             </p>
           </div>
-        ) : land.error === ApiFetchErrors.AbortedAndDealtWith ? (
+        ) : land.error === ApiFetchErrors.Aborted ? (
           <div className="d-flex flex-column justify-content-center align-items-center">
             <p className="mt-3 text-center mb-0">Redirecting...</p>
           </div>

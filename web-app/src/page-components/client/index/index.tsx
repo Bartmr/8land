@@ -85,7 +85,7 @@ function Content(props: {
             No Internet. Check your connection and try again.
           </p>
         </div>
-      ) : session.error === ApiFetchErrors.AbortedAndDealtWith ? (
+      ) : session.error === ApiFetchErrors.Aborted ? (
         <div className="d-flex flex-column justify-content-center align-items-center">
           <p className="mt-3 text-center mb-0">Redirecting...</p>
         </div>
@@ -135,7 +135,7 @@ function Content(props: {
                 No Internet. Check your connection and try again.
               </p>
             </div>
-          ) : landToResumeFrom.error === ApiFetchErrors.AbortedAndDealtWith ? (
+          ) : landToResumeFrom.error === ApiFetchErrors.Aborted ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p className="mt-3 text-center mb-0">Redirecting...</p>
             </div>

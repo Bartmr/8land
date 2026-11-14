@@ -148,7 +148,7 @@ export function AssetsSection(props: {
                     No Internet. Check your connection and try again.
                   </p>
                 </div>
-              ) : formSubmissionStatus.error === ApiFetchErrors.AbortedAndDealtWith ? (
+              ) : formSubmissionStatus.error === ApiFetchErrors.Aborted ? (
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <p className="mt-3 text-center mb-0">Redirecting...</p>
                 </div>

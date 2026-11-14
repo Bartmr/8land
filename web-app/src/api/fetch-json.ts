@@ -91,7 +91,7 @@ export function useApiFetchJSON() {
         setSessionState({ data: null })
 
         return {
-          error: ApiFetchErrors.AbortedAndDealtWith
+          error: ApiFetchErrors.Aborted
         }
       } else {
         logger.logError('invalid-response-data', new Error(), {

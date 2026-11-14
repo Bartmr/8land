@@ -115,7 +115,7 @@ export function MainSection(props: {
                 No Internet. Check your connection and try again.
               </p>
             </div>
-          ) : formSubmission.error === ApiFetchErrors.AbortedAndDealtWith ? (
+          ) : formSubmission.error === ApiFetchErrors.Aborted ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p className="mt-3 text-center mb-0">Redirecting...</p>
             </div>

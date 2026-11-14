@@ -77,7 +77,7 @@ export function User(_props: RouteComponentProps) {
                 No Internet. Check your connection and try again.
               </p>
             </div>
-          ) : session.error === ApiFetchErrors.AbortedAndDealtWith ? (
+          ) : session.error === ApiFetchErrors.Aborted ? (
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p className="mt-3 text-center mb-0">Redirecting...</p>
             </div>
@@ -167,7 +167,7 @@ export function User(_props: RouteComponentProps) {
                             <FaWifi className="text-danger" />
                             <p className="ms-2 text-danger mb-0">No Internet</p>
                           </div>
-                        ) : escapeStatus.error === ApiFetchErrors.AbortedAndDealtWith ? (
+                        ) : escapeStatus.error === ApiFetchErrors.Aborted ? (
                           <div className="d-flex flex-row justify-content-center align-items-center">
                             <p className="ms-2 mb-0">Redirecting...</p>
                           </div>
