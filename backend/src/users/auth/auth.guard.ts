@@ -8,10 +8,17 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthSessionsService } from './sessions/auth-sessions.service';
-import { AppRequest } from 'src/requests/request-types';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { throwError } from 'src/throw-error';
 import { User } from 'src/users/user.entities';
+
+declare global {
+  namespace Express {
+    interface Request {
+      authContext?: AuthContext;
+    }
+  }
+}
 
 export class AuthContext {
   user: User;
@@ -23,7 +30,7 @@ export class AuthContext {
 
 export const WithAuthContext = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): AuthContext => {
-    const request = ctx.switchToHttp().getRequest<AppRequest>();
+    const request = ctx.switchToHttp().getRequest<Request>();
 
     return request.authContext ?? throwError();
   },
@@ -31,7 +38,7 @@ export const WithAuthContext = createParamDecorator(
 
 export const WithOptionalAuthContext = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): AuthContext | undefined => {
-    const request = ctx.switchToHttp().getRequest<AppRequest>();
+    const request = ctx.switchToHttp().getRequest<Request>();
 
     return request.authContext;
   },
@@ -60,7 +67,7 @@ export class AuthGuard implements CanActivate {
 
     const request = context
       .switchToHttp()
-      .getRequest<AppRequest>();
+      .getRequest<Request>();
 
     const response = context.switchToHttp().getResponse<Response>();
 
