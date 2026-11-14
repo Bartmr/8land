@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout } from '../layout/layout';
-export function ContentPolicyTemplate() {
+export function ContentPolicy() {
   return (
     <Layout>
       {() => (

@@ -57,7 +57,7 @@ function Content() {
   );
 }
 
-export function TestAppTemplate() {
+export function TestApp() {
   return (
     <AppLayout>
       {() => {

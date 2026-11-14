@@ -8,7 +8,7 @@ import bart from './bart.jpg';
 import painting1 from './painting-1.jpg';
 import painting2 from './painting-2.jpg';
 
-export function AboutTemplate() {
+export function About() {
   return (
     <Layout>
       {() => (

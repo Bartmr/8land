@@ -9,7 +9,7 @@ import {
   LOG_SERVICE_COMPANY,
   LOG_SERVICE_NAME,
 } from '../../logging/logger';
-export function PrivacyPolicyTemplate() {
+export function PrivacyPolicy() {
   return (
     <Layout>
       {() => (

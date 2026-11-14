@@ -18,7 +18,7 @@ import { START_LANDS_LIMIT_EXCEEDED_MESSAGE } from './edit/assets-section/assets
 import { BUILDING_A_LAND_ROUTE } from '../../help/lands/building-a-land/building-a-land-routes';
 import { LAND_IDEAS_ROUTE } from '../../help/lands/land-ideas/land-ideas-routes';
 
-export function LandsTemplate(_props: RouteComponentProps) {
+export function Lands(_props: RouteComponentProps) {
   const api = useLandsAPI();
 
   const [newLandName, replaceNewLandName] = useState('');

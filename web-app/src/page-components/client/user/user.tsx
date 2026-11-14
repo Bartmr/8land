@@ -19,7 +19,7 @@ import { useAuthenticationStateSession } from '../../../users/authentication/aut
 
 
 
-export function UserTemplate(_props: RouteComponentProps) {
+export function User(_props: RouteComponentProps) {
   const [escapeStatus, replaceEscapeStatus] = useState<
     CommunicatedData<undefined>
   >({ status: CommunicatedDataStatus.NotInitialized });

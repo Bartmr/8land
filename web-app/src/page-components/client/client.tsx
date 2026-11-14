@@ -1,23 +1,23 @@
 import { Router } from '@reach/router';
 import { AuthenticatedRoute } from '../../users/authentication/authenticated-route';
-import NotFoundTemplate from '../../pages/404';
-import { LoginTemplate } from './login/login-template';
-import { SignupTemplate } from './signup/signup-template';
+import NotFound from '../../pages/404';
+import { Login } from './login/login';
+import { Signup } from './signup/signup';
 import React, { Suspense } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { CommunicatedDataGate } from '../../ui/communicated-data-gate';
 import { CommunicatedDataStatus } from '../../communicated-data/communicated-data-types';
-import { EditLandTemplate } from './lands/edit/edit-land-template';
+import { EditLand } from './lands/edit/edit-land';
 import { EDIT_LAND_ROUTE } from './lands/edit/edit-land-routes';
 import { LANDS_ROUTE } from './lands/lands-routes';
-import { LandsTemplate } from './lands/lands-template';
-import { UserTemplate } from './user/user-template';
+import { Lands } from './lands/lands';
+import { User } from './user/user';
 import { USER_ROUTE } from './user/user-routes';
 
 function Game(_props: RouteComponentProps) {
   const LazyLoadedRoute = React.lazy(async () => {
-    const { ClientSideIndexTemplate } = await import('./index/index-template');
-    return { default: ClientSideIndexTemplate };
+    const { ClientSideIndex } = await import('./index/index');
+    return { default: ClientSideIndex };
   });
 
   return (
@@ -35,27 +35,27 @@ function Game(_props: RouteComponentProps) {
   );
 }
 
-export function ClientTemplate() {
+export function Client() {
   return (
     <Router>
       <Game path="/client/" />
       <AuthenticatedRoute
         path="/client"
       >
-        <LandsTemplate path={`${LANDS_ROUTE.pathSegment}`} />
-        <EditLandTemplate
+        <Lands path={`${LANDS_ROUTE.pathSegment}`} />
+        <EditLand
           path={`${LANDS_ROUTE.pathSegment}${EDIT_LAND_ROUTE.pathSegment}/:id`}
         />
-        <UserTemplate path={USER_ROUTE.pathSegment} />
-        <NotFoundTemplate default />
+        <User path={USER_ROUTE.pathSegment} />
+        <NotFound default />
       </AuthenticatedRoute>
-      <LoginTemplate
+      <Login
         path="/client/login"
       />
-      <SignupTemplate
+      <Signup
         path="/client/signup"
       />
-      <NotFoundTemplate default />
+      <NotFound default />
     </Router>
   );
 }

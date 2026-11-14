@@ -12,7 +12,7 @@ import {
 const Component = () => {
   const [entrypoint, replaceEntrypoint] = useState<
     CommunicatedData<
-      typeof import('../page-components/client/client-template')
+      typeof import('../page-components/client/client')
     >
   >({ status: CommunicatedDataStatus.NotInitialized });
 
@@ -24,7 +24,7 @@ const Component = () => {
 
       try {
         const ep = await import(
-          '../page-components/client/client-template'
+          '../page-components/client/client'
         );
 
         replaceEntrypoint({
@@ -48,9 +48,9 @@ const Component = () => {
   return (
     <CommunicatedDataGate dataWrapper={entrypoint}>
       {({ data }) => {
-        const ClientSideTemplate = data.ClientTemplate;
+        const Client = data.Client;
 
-        return <ClientSideTemplate />;
+        return <Client />;
       }}
     </CommunicatedDataGate>
   );

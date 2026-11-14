@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout } from '../../../layout/layout';
-export function LandIdeasTemplate() {
+export function LandIdeas() {
   return (
     <Layout>
       {() => {

@@ -5,7 +5,7 @@ import { CommunicationError } from '../../communication-errors/communication-err
 import { CommunicatedDataGate } from '../../ui/communicated-data-gate';
 type Props = RouteComponentProps;
 
-export const NotFoundTemplate = (_: Props) => (
+export const NotFound = (_: Props) => (
   <Layout>
     {() => {
       return (

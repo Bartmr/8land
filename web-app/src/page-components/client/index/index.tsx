@@ -87,7 +87,7 @@ function Content(props: {
   );
 }
 
-export const ClientSideIndexTemplate = (_props: RouteComponentProps) => (
+export const ClientSideIndex = (_props: RouteComponentProps) => (
   <Layout disableScroll>
     {(renderProps) => {
       return <Content {...renderProps} />;

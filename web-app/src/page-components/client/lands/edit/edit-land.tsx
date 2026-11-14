@@ -23,7 +23,7 @@ import { LANDS_ROUTE } from '../lands-routes';
 // import { throwError } from '@shared/src/internals/utils/throw-error';
 // import { Role } from '@shared/src/auth/auth.enums';
 
-export function EditLandTemplateWithRouteProps(props: { id: string }) {
+export function EditLandWithRouteProps(props: { id: string }) {
   const api = useLandsAPI();
 
   const [land, replaceLand] = useState<CommunicatedData<GetLandDTO>>({
@@ -153,7 +153,7 @@ export function EditLandTemplateWithRouteProps(props: { id: string }) {
   );
 }
 
-export function EditLandTemplate(_props: RouteComponentProps) {
+export function EditLand(_props: RouteComponentProps) {
   const routeParams = useParams() as unknown;
 
   const validationResult = z.object({
@@ -170,7 +170,7 @@ export function EditLandTemplate(_props: RouteComponentProps) {
             {() => null}
           </CommunicatedDataGate>
         ) : (
-          <EditLandTemplateWithRouteProps id={validationResult.data.id} />
+          <EditLandWithRouteProps id={validationResult.data.id} />
         );
       }}
     </Layout>

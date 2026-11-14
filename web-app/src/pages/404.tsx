@@ -1,9 +1,9 @@
 import React from 'react';
-import { NotFoundTemplate } from '../page-components/not-found/not-found-template';
+import { NotFound } from '../page-components/not-found/not-found';
 import { HtmlHead } from '../page-components/html-head/html-head';
 import type { PageProps } from 'gatsby';
 
-export default NotFoundTemplate;
+export default NotFound;
 
 export function Head({ location }: PageProps) {
   return <HtmlHead location={location} title="404 Not Found" />;

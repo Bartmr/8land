@@ -8,7 +8,7 @@ import { ABOUT_ROUTE } from './about/about-routes';
 import { LAND_IDEAS_ROUTE } from './lands/land-ideas/land-ideas-routes';
 import { BUILDING_A_LAND_ROUTE } from './lands/building-a-land/building-a-land-routes';
 
-export const HelpTemplate = () => {
+export const Help = () => {
   return (
     <Layout>
       {() => (

@@ -4,7 +4,7 @@ import { BUILDING_AN_APP_ROUTE } from './building-an-app-routes';
 
 // TODO
 
-export function BuildingALandTemplate() {
+export function BuildingAnApp() {
   return (
     <Layout>
       {() => {

@@ -5,7 +5,7 @@ import { LinkAnchor } from '../../ui/link-anchor';
 import { CLIENT_SIDE_INDEX_ROUTE } from '../client/index/index-routes';
 import { LANDS_ROUTE } from '../client/lands/lands-routes';
 import { LAND_IDEAS_ROUTE } from '../help/lands/land-ideas/land-ideas-routes';
-export function IndexTemplate() {
+export function Index() {
   return (
     <Layout noContainment>
       {() => (

@@ -7,7 +7,7 @@ import editTileset from './edit-tileset.png';
 import staticBlocks from './static-blocks.png';
 import dynamicBlocks from './dynamic-blocks.png';
 
-export function BuildingALandTemplate() {
+export function BuildingALand() {
   return (
     <Layout>
       {() => {
