@@ -18,7 +18,7 @@ export function useAuthenticationLogout() {
     let response: Response;
 
     try {
-      response = await fetch(`${API_URL}/users/auth`, {
+      response = await fetch(`${API_URL}/users/auth/this`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -32,7 +32,7 @@ export function useAuthenticationLogout() {
       return;
     }
 
-    if (response.status === 200 || response.status === 204 || response.status === 401) {
+    if (response.ok) {
       setSessionState({
         data: null,
       });

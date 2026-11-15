@@ -4,7 +4,7 @@ import {
 } from '@nestjs/common';
 import { User } from 'src/users/user.entities';
 import { UserAuthSession } from './auth-session.entities';
-import { DataSource, EntityManager, Repository } from 'typeorm';
+import { DataSource, EntityManager, LessThan, Repository } from 'typeorm';
 import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
 import * as jwt from 'jsonwebtoken';
 import z from 'zod';
@@ -23,7 +23,11 @@ export class AuthSessionsService {
   }
 
   async createSession(manager: EntityManager, user: User) {
-    const token = await manager.getRepository(UserAuthSession).save(new UserAuthSession({ user }));
+    const expiresAt = new Date();
+
+    expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+
+    const token = await manager.getRepository(UserAuthSession).save(new UserAuthSession({ user, expiresAt }));
 
     return token;
   }
@@ -76,6 +80,12 @@ export class AuthSessionsService {
   deleteSession(tokenString: string) {
     return this.tokensRepository.delete({
       id: tokenString,
+    });
+  }
+
+  deleteExpiredSessions() {
+    return this.tokensRepository.delete({
+      expiresAt: LessThan(new Date()),
     });
   }
 

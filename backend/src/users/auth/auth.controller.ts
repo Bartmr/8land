@@ -29,7 +29,7 @@ import {
 import { DataSource } from 'typeorm';
 import { User } from 'src/users/user.entities';
 import { AuthSessionsService } from './sessions/auth-sessions.service';
-import { type Request as RequestType, type Response as ResponseType } from 'express';
+import { CookieOptions, type Request as RequestType, type Response as ResponseType } from 'express';
 import { v4 } from 'uuid';
 import { EnvironmentVariables } from 'src/environment-variables/environment-variables';
 import * as jwt from 'jsonwebtoken';
@@ -39,7 +39,6 @@ import { ZodValidationPipe } from 'src/validation/zod.pipe';
 
 const SALT_ROUNDS = 10;
 
-@UseGuards(AuthGuard)
 @Controller('/users/auth')
 export class AuthController {
   constructor(
@@ -81,6 +80,8 @@ export class AuthController {
     if (!passwordValid) {
       throw new NotFoundException();
     }
+
+    await this.authSessionsService.deleteExpiredSessions();
 
     return this.createTokenAndReturnResponse({
       user,
@@ -134,20 +135,14 @@ export class AuthController {
     });
   }
 
-  @Get()
-  @PublicRoute()
-  public async getSession(
-    @WithOptionalAuthContext() authContext?: AuthContext,
-  ): Promise<AuthSessionDTO> {
-    if (authContext) {
-      return {
-        userId: authContext.user.id,
-        isAdmin: authContext.user.isAdmin,
-        appId: authContext.user.appId,
-      };
-    } else {
-      throw new NotFoundException();
+  private getTokenCookieOptions(hostname: string): CookieOptions {
+    return {
+      httpOnly: true,
+      secure: EnvironmentVariables.NODE_ENV === "production",
+      domain: hostname,
+      sameSite: EnvironmentVariables.NODE_ENV === "production" ? 'none' : undefined,
     }
+    
   }
 
   private async createTokenAndReturnResponse({
@@ -164,21 +159,18 @@ export class AuthController {
       user,
     );
     
-    const exp = Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 365)
+    const expires = session.expiresAt;
 
     const token = jwt.sign({
-      exp,
+      exp: Math.floor(expires.getTime() / 1000),
       data: {
         sessionId: session.id,
       }
     }, EnvironmentVariables.JWT_SECRET);
 
     response.cookie('user-authentication-token', token, {
-      expires: new Date(exp * 1000),
-      httpOnly: true,
-      secure: EnvironmentVariables.NODE_ENV === "production",
-      domain: hostname,
-      sameSite: EnvironmentVariables.NODE_ENV === "production" ? 'none' : undefined,
+      ...this.getTokenCookieOptions(hostname),
+      expires: expires,
     });
 
     return {
@@ -190,7 +182,34 @@ export class AuthController {
     };
   }
 
+  @Get()
+  @PublicRoute()
+  public async getSession(
+    @WithOptionalAuthContext() authContext?: AuthContext,
+  ): Promise<AuthSessionDTO> {
+    if (authContext) {
+      return {
+        userId: authContext.user.id,
+        isAdmin: authContext.user.isAdmin,
+        appId: authContext.user.appId,
+      };
+    } else {
+      throw new NotFoundException();
+    }
+  }
+
+  @Delete("/this")
+  async logout(
+    @Request() request: RequestType,
+    @Response({ passthrough: true }) response: ResponseType,
+  ) {
+    response.clearCookie('user-authentication-token', this.getTokenCookieOptions(request.hostname));
+
+    return {}
+  }
+
   @Delete()
+  @UseGuards(AuthGuard)
   async logoutFromAllDevices(
     @WithAuthContext() authContext: AuthContext,
   ): Promise<void> {
